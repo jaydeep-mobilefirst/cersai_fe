@@ -4,6 +4,7 @@ import "./App.css";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import Landing from "./pages/Landing";
+import AboutBuds from "./components/landingPage/AboutBuds";
 
 function App() {
   const { value } = useSelector((state: RootState) => state.common);
@@ -11,7 +12,8 @@ function App() {
   console.log({ value });
   return (
     <div>
-      <Landing />
+      {/* <Landing /> */}
+      <AboutBuds/>
     </div>
   );
 }

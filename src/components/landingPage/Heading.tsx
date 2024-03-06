@@ -3,7 +3,7 @@ import React from 'react'
 const Heading = () => {
     return(
         <div>
-            heading
+            heading abc
         </div>
     )
 }
