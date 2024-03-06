@@ -1,1 +1,1 @@
-export const languageData = ["English", "Hindi"];
+export const languageData = ["English", "हिन्दी"];
