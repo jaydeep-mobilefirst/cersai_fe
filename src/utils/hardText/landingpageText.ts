@@ -4,7 +4,7 @@ import Download from "../../assets/images/download.svg";
 
 export const languageData = ["English", "हिन्दी"];
 
-export const languageText = "Language: " 
+export const languageLable = "Language: " 
 
 export const contactDetails = [
   {
