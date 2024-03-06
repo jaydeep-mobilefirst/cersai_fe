@@ -6,7 +6,7 @@ const LanguageBar = () => {
     <div>
       <div className="w-screen h-6 relative bg-[#ECECEB] flex items-center lg:justify-start overflow-auto">
         <div className="ml-[8px] lg:ml-[161px] text-center text-[#797979] text-xs font-normal leading-none flex items-center justify-start">
-          <div className="mx-[8px] text-gilroy-regular">{languageLable} </div>
+          <div className="mx-[8px] text-gilroy-regular">{languageLable}</div>
           {languageData.map((languagename, idx) => {
             return (
               <div
