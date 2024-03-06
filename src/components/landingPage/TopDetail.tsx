@@ -44,8 +44,8 @@ const TopDetail = () => {
         })}
       </div>
       <div className="flex items-center m-4 md:m-0">
-        <AuthButton buttontext={authlable[0]} />
         <AuthButton buttontext={authlable[1]} />
+        <AuthButton buttontext={authlable[0]} />
       </div>
     </div>
   );
@@ -54,8 +54,14 @@ const TopDetail = () => {
 const AuthButton: React.FC<AuthButtonProps> = ({ buttontext }) => {
   return (
     <div className="ml-2">
-      <button className="w-full px-[24px] h-10 bg-[#338218] rounded-lg justify-center items-center inline-flex">
-        <div className="text-center text-white text-base font-normal text-gilroy-medium  leading-normal">
+      <button
+        className={`w-full px-[24px] h-10 border rounded-[8px] ${
+          buttontext === "Register"
+            ? "bg-white text-[#338218] border-[#338218]"
+            : "bg-[#338218] text-white"
+        } rounded-lg justify-center items-center inline-flex`}
+      >
+        <div className="text-center text-base font-normal text-gilroy-medium  leading-normal">
           {buttontext}
         </div>
       </button>
