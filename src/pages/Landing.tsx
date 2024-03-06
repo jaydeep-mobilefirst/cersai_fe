@@ -1,10 +1,10 @@
 import React from "react";
-import Heading from "../components/landingPage/Heading";
+import LanguageBar from "../components/landingPage/LanguageBar";
 
 const Landing = () => {
   return (
     <div>
-      <Heading />
+      <LanguageBar />
     </div>
   );
 };
