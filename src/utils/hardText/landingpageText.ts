@@ -2,7 +2,9 @@ import PhoneIcon from "../../assets/images/phoneicon.svg";
 import Sms from "../../assets/images/sms.svg";
 import Download from "../../assets/images/download.svg";
 import mobile from "../../assets/images/mobile.svg";
-// import Download from "../../assets/images/download.svg";
+import link from "../../assets/images/link.svg";
+import shieldSearch from "../../assets/images/shieldSearch.svg";
+import global from "../../assets/images/global.svg";
 
 
 export const languageData = ["English", "हिन्दी"];
@@ -48,7 +50,25 @@ export const queryResolutionComp=[
   {button:"Book Now"}
 ]
 export const aboutBudsHeadingComp =[
+  {heading:"About BUDS"},
   {description:"Central KYC Registry is a centralized repository of KYC records of customers in the financial sector with uniform."},
-  {imageSrc:""}
+  {
+    imageSrc:mobile,
+    text:"Ask for your CKYC Identifier now and open account faster with reduced paper-work"
+  },
+  {
+    imageSrc:link,
+    text:"CKYC identifier is linked to your KYC data"
+  },
+  {
+    imageSrc:shieldSearch,
+    text:"No need to submit your KYC documents at any financial Institution if you have your CKYC identifier"
+  },
+  {
+    imageSrc:global,
+    text:"To know more login to ",
+    link:"www.ckycindia.in"
+  }
+
 
 ]

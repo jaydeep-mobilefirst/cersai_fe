@@ -18,10 +18,12 @@ function App() {
   return (
     <div>
       {/* <Landing/> */}
-      <AboutBuds/>
-      <QueryResolutoinComp />
-      <LatestNewsComp/>
+      
+      {/* <LatestNewsComp/> */}
       <AboutBudsHeadingComp/>
+      
+      {/* <AboutBuds/> */}
+      {/* <QueryResolutoinComp /> */}
       {/* <Footer/> */}
     </div>
   );
