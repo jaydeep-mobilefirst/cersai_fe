@@ -8,3 +8,20 @@
 .video-border{
     border-radius: 5px ;
 }
+@font-face {
+  font-family: "Gilroy-Regular";
+  src: url("./assets/font/Gilroy-Regular.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Gilroy-Medium";
+  src: url("./assets/font/Gilroy-Medium.ttf") format("ttf");
+}
+
+.text-gilroy-regular {
+  font-family: "Gilroy-Regular", sans-serif;
+}
+
+.text-gilroy-medium {
+  font-family: "Gilroy-medium", sans-serif;
+}
