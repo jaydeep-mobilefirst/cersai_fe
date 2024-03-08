@@ -54,6 +54,8 @@ export const queryResolutionComp=[
 export const aboutBudsHeadingComp =[
   {heading:"About BUDS"},
   {description:"Central KYC Registry is a centralized repository of KYC records of customers in the financial sector with uniform."},
+]
+export const aboutBudsHeadingComp1 =[
   {
     imageSrc:mobile,
     text:"Ask for your CKYC Identifier now and open account faster with reduced paper-work"
@@ -71,8 +73,6 @@ export const aboutBudsHeadingComp =[
     text:"To know more login to ",
     link:"www.ckycindia.in"
   }
-
-
 ]
 
 export const footer = {
