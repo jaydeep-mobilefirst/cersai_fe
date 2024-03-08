@@ -4,7 +4,7 @@ import Download from "../../assets/images/download.svg";
 
 export const languageData = ["English", "हिन्दी"];
 
-export const languageLable = "Language: " 
+export const languageLable = "Language: ";
 
 export const contactDetails = [
   {
@@ -21,6 +21,26 @@ export const contactDetails = [
   },
 ];
 
-export const authlable = ["Login", "Register"]
+export const authlable = ["Login", "Register"];
 
+export const navbar = [
+  "HOME",
+  "FAQ",
+  "NOTIFICATIONS",
+  "OPERATING GUIDELINES",
+  "DOWNLOADS",
+  "TRAINING",
+  "CONTACT US",
+];
 
+export const hero = [
+  {
+    title: "Public Search",
+    subtitle:
+      "General Public can undertake an online search in the Central Register on payment of prescribed fee.",
+    btn1: "Scheme Search",
+    btn2: "Deposit Taker Search",
+  },
+  {},
+  {},
+];
