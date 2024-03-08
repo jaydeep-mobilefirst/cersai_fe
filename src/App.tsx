@@ -11,6 +11,9 @@ import AboutBudsHeadingComp from "./components/landingPage/AboutBudsHeadingComp"
 import Footer from "./components/landingPage/Footer";
 import PrivateRoutes from "./utils/PrivateRoute";
 import DepositeTakerSignup from "./pages/depositeTaker/DepositeTakerSignup";
+import SingUpPopup from "./components/userFlow/common/Modal";
+import RegisterModel from "./components/userFlow/common/RegisterModal";
+import VerificationSuccess from "./components/userFlow/common/VerificationSuccess";
 
 function App() {
   const { value } = useSelector((state: RootState) => state.common);
@@ -21,19 +24,21 @@ function App() {
       {/* <Landing/> */}
       
       {/* <LatestNewsComp/> */}
-      <AboutBudsHeadingComp/>
+      {/* <AboutBudsHeadingComp/> */}
       
       {/* <AboutBuds/> */}
       {/* <QueryResolutoinComp /> */}
       {/* <Footer/> */}
-      <Router>
+      {/* <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
             <Route element={<DepositeTakerSignup />} path="/depositetaker/signup" />
           </Route>
           <Route element={<Landing />} path="/" />
         </Routes>
-      </Router>
+      </Router> */}
+      <RegisterModel/>
+      <VerificationSuccess/>
     </div>
   );
 }

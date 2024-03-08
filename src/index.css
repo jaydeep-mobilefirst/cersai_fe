@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.font-Gilroy-Regular{
-    font-family: Gilroy-Regular;
-}
 .video-border{
     border-radius: 5px ;
 }
