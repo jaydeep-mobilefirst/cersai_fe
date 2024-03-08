@@ -15,11 +15,11 @@ const AboutBudsHeadingComp = () => {
         </p>
       </div>
       <>
-        {aboutBudsHeadingComp1.map((item) => {
+        {aboutBudsHeadingComp1.map((item, idx) => {
           if (item.text !== "To know more login to ") {
             return (
               <>
-                <div className=" flex flex-col items-center md:flex-row justify-start md:items-center">
+                <div className=" flex flex-col items-center md:flex-row justify-start md:items-center" key={idx}>
                   <div className="mr-4 md:mr-6 mb-0 w-14 h-14 rounded-full bg-[#D8E5D3] flex justify-center items-center">
                     <img src={item.imageSrc} alt="icon" />
                   </div>
@@ -32,7 +32,7 @@ const AboutBudsHeadingComp = () => {
             );
           }
           return (
-            <div className=" flex flex-col items-center md:flex-row justify-start md:items-center">
+            <div className=" flex flex-col items-center md:flex-row justify-start md:items-center" key={idx}>
               <div className="mr-4 md:mr-6 mb-0 w-14 h-14 rounded-full bg-[#D8E5D3] flex justify-center items-center">
                 <img src={item.imageSrc} alt="icon" />
               </div>

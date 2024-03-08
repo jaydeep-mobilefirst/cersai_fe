@@ -22,16 +22,16 @@ export const Footer = (props: Props) => {
         {/* primary nav */}
         <div className="w-full md:flex md:items-center md:w-auto md:space-x-4 md:justify-center flex-wrap">
           <>
-            {arr.map((link) => {
+            {arr.map((link, idx) => {
               if (link.heading === "Sitemap") {
                 return (
-                  <p className="block px-2 py-1 border-white md:inline-block pr-6">
+                  <p className="block px-2 py-1 border-white md:inline-block pr-6" key={idx}>
                     {link.heading.toUpperCase()}
                   </p>
                 );
               }
               return (
-                <p className="block px-2 py-1 md:border-r border-white md:inline-block pr-6">
+                <p className="block px-2 py-1 md:border-r border-white md:inline-block pr-6" key={idx}>
                   {link.heading.toUpperCase()}
                 </p>
               );
