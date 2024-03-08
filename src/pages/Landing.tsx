@@ -7,7 +7,7 @@ import Footer from "../components/landingPage/Footer";
 import AboutBuds from "../components/landingPage/AboutBuds";
 import QueryResolutoinComp from "../components/landingPage/QueryResolutionCom";
 import Navbar from "../components/landingPage/Navbar";
-import Hero2 from "../components/landingPage/Hero2";
+import HeroHome from "../components/landingPage/HeroHome";
 
 const Landing = () => {
   return (
@@ -15,7 +15,7 @@ const Landing = () => {
       <LanguageBar />
       <TopDetail />
       <Navbar />
-      <Hero2 />
+      <HeroHome />
       <LatestNewsComp />
       <AboutBudsHeadingComp />
       <AboutBuds />

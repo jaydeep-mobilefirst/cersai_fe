@@ -2,11 +2,11 @@ import { queryResolutionComp } from "../../utils/hardText/landingpageText";
 
 const QueryResolutionComp = () => {
   return (
-    <div className="px-4 lg:px-[56px] lg:pb-[180px] query-bg-image">
-      <h1 className="mt-8 px-3 md:pl-10 text-[#1D1D1B] text-2xl md:text-3xl font-normal font-Gilroy-Medium leading-normal">
+    <div className="p-4 lg:p-[56px] lg:pb-[180px] query-bg-image">
+      <h1 className="mt-8 text-[#1D1D1B] text-2xl md:text-3xl font-normal font-Gilroy-Medium leading-normal">
         {queryResolutionComp[0].heading}
       </h1>
-      <div className="mx-2 lg:ml-10 mt-6 md:mt-8 w-full h-auto md:w-auto md:h-40 lg:w-[80%] bg-[#EEF7EB] rounded-lg flex flex-col items-center md:flex-row md:justify-around md:items-center">
+      <div className="mt-6 md:mt-8 w-full h-auto md:w-auto md:h-40 lg:w-[80%] bg-[#EEF7EB] rounded-lg flex flex-col items-center md:flex-row md:justify-around md:items-center">
         <div className="flex flex-col justify-around items-center mt-6">
           <h1 className="text-gilroy-medium text-black text-2xl font-normal leading-tight md:text-4xl">
             {queryResolutionComp[1].date}

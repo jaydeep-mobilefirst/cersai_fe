@@ -5,7 +5,7 @@ import {
 
 const AboutBudsHeadingComp = () => {
   return (
-    <div className="px-4 lg:px-[78px] bg-[#EEF7EB] text-center md:text-start buds-background-image buds-background-image2">
+    <div className="p-4 lg:p-[78px] bg-[#EEF7EB] text-center md:text-start buds-background-image buds-background-image2">
       <div className="flex flex-col justify-center items-center md:flex-start md:items-start">
         <h1 className="text-gilroy-medium text-black text-3xl md:text-4xl font-normal leading-10 md:leading-11">
           {aboutBudsHeadingComp[0].heading}

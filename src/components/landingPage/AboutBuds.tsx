@@ -3,7 +3,7 @@ import { aboutBuds } from "../../utils/hardText/landingpageText";
 
 const AboutBuds = () => {
   return (
-    <div className="bg-white flex flex-col md:flex-row md:items-center md:justify-between px-4 lg:px-[56px]">
+    <div className="bg-white flex flex-col md:flex-row md:items-center md:justify-between p-4 lg:p-[56px] md:mt-8">
       <div className="mt-10 md:mt-0 w-[100%] md:w-[40%]">
         <h1 className="text-[#000000] text-[34px] font-normal leading-[37.40px]">
           {aboutBuds[0].heading}

@@ -11,7 +11,7 @@ const Navbar = () => {
     <div>
       {/* Hamburger Icon */}
       <div
-        className={`lg:hidden cursor-pointer fixed top-0 left-0 mt-4 ml-4 z-10 ${
+        className={`bg-white lg:hidden cursor-pointer fixed top-0 left-0 mt-4 ml-4 z-10 ${
           showMenu ? "hidden" : "block"
         }`}
         onClick={() => setShowMenu(true)}

@@ -5,16 +5,16 @@ import user_search from "../../assets/images/user-search.svg";
 import archive_book from "../../assets/images/archive-book.svg";
 import cards from "../../assets/images/cards.svg";
 
-const Hero2 = () => {
+const HeroHome = () => {
   const buttons = [{ text: "Scheme Search" }, { text: "Deposit Taker Search" }];
   return (
-    <div className="flex items-center justify-between px-4 lg:px-[100px] flex-col lg:flex-row landing-hero-bg-image">
+    <div className="flex items-center justify-between px-4 lg:px-[100px] py-4 lg:py-[48px] flex-col lg:flex-row landing-hero-bg-image">
       <div className="md:mr-2">
         {" "}
         <div className="text-[34px] w-full text-gilroy-medium text-center lg:text-start">
           Public Search
         </div>
-        <div className="xl:w-[485px] w-full text-[16px] leading-[24px] mt-[16px] text-gilroy-regular">
+        <div className="xl:w-[485px] w-full text-[16px] leading-[24px] mt-[16px] text-gilroy-regular text-center lg:text-start">
           General Public can undertake an online search in the Central Register
           on payment of prescribed fee.
         </div>
@@ -101,4 +101,4 @@ const cardData2 = [
   },
 ];
 
-export default Hero2;
+export default HeroHome;
