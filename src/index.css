@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.font-Gilroy-Regular{
+    font-family: Gilroy-Regular;
+}
+.video-border{
+    border-radius: 5px ;
+}
 @font-face {
   font-family: "Gilroy-Regular";
   src: url("./assets/font/Gilroy-Regular.ttf") format("ttf");
@@ -18,4 +24,14 @@
 
 .text-gilroy-medium {
   font-family: "Gilroy-medium", sans-serif;
+}
+.text-gilroy-light{
+  font-family: "Gilroy-Light", sans-serif;
+}
+.text-gilroy-semibold{
+  font-family: "Gilroy-Semibold", sans-serif;
+
+}
+.text-gilroy-mediumItalic{
+  font-family: "Gilroy-MediumItalic", sans-serif;
 }
