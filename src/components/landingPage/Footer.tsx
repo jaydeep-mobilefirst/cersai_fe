@@ -21,13 +21,13 @@ export const Footer = (props: Props) => {
           <>{
             arr.map((link) => {
                 if (link.heading === "Sitemap"){
-                    return <a href="#" className="block px-2 py-1 border-white md:inline-block pr-6">
+                    return <p className="block px-2 py-1 border-white md:inline-block pr-6">
                     {link.heading.toUpperCase()}
-                  </a>
+                  </p>
                 }
-              return <a href="#" className="block px-2 py-1 md:border-r border-white md:inline-block pr-6">
+              return <p className="block px-2 py-1 md:border-r border-white md:inline-block pr-6">
               {link.heading.toUpperCase()}
-            </a>
+            </p>
             })
           }
           {/* <div className="w-[157.55px] h-6 relative border-r border-white" /> */}

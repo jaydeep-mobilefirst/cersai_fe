@@ -40,6 +40,7 @@ export const latestNewsComp=[
   {button:"Latest News"},
   {description:"Are you aware about Public Interest Disclosure & Protection of Informer (PIDPI) ? Click here to know.Rejection in upload of KYC records due to mismatch of PIN Code and other matters."}
 ]
+// QueryResolutionComp Component
 export const queryResolutionComp=[
   {heading:"Query Resolution Session"},
   {date:"13",
@@ -49,6 +50,7 @@ export const queryResolutionComp=[
   {onlineHeading:"Online Hand-holding session",descritpion:"Link for the online training session 1 will be shared few hours prior to the meeting."},
   {button:"Book Now"}
 ]
+// AboutBudsHeadingComp Component
 export const aboutBudsHeadingComp =[
   {heading:"About BUDS"},
   {description:"Central KYC Registry is a centralized repository of KYC records of customers in the financial sector with uniform."},
@@ -72,3 +74,16 @@ export const aboutBudsHeadingComp =[
 
 
 ]
+
+export const footer = {
+   arr : [
+    {"heading": "Home", "link": "#"},
+    {"heading": "FAQ", "link": "#"},
+    {"heading": "Notifications", "link": "#"},
+    {"heading": "Operating Guidelines", "link": "#"},
+    {"heading": "Downloads", "link": "#"},
+    {"heading": "Training", "link": "#"},
+    {"heading": "Contact Us", "link": "#"},
+    {"heading": "Sitemap", "link": "#"}
+  ]
+}
