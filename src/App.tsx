@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import Landing from "./pages/Landing";
 import Review from "./pages/Review";
-import ModelDiv from "./components/ModelPage/ModelDiv";
 import PrivateRoutes from "./utils/PrivateRoute";
 import DepositeTakerSignup from "./pages/depositeTaker/DepositeTakerSignup";
 
@@ -20,9 +19,15 @@ function App() {
       <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
-            <Route element={<DepositeTakerSignup />} path="/depositetaker/signup" />
+            <Route
+              element={<DepositeTakerSignup />}
+              path="/depositetaker/signup"
+            />
           </Route>
-          <Route element={<Landing />} path="/" />
+          {/* <Route element={<Landing />} path="/" /> */}
+
+          <Route path="/landingpage" element={<Landing />} />
+          <Route path="/" element={<Review />} />
         </Routes>
       </Router>
     </div>

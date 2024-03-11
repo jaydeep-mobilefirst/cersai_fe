@@ -5,6 +5,7 @@ import mobile from "../../assets/images/mobile.svg";
 import link from "../../assets/images/link.svg";
 import shieldSearch from "../../assets/images/shieldSearch.svg";
 import global from "../../assets/images/global.svg";
+import closeCircle from "../../assets/images/white_close.png";
 
 export const languageData = ["English", "हिन्दी"];
 
@@ -119,4 +120,13 @@ export const hero = [
   {},
 ];
 
-
+export const registrationFirstPage = [
+  { heading: "Entity Type", removeBtn: closeCircle },
+  { btn1: "Cacel", btn2: "Select" },
+];
+export const radioButtons = [
+  { id: 1, text: "Deposit Taker" },
+  { id: 2, text: "Regulator" },
+  { id: 3, text: "Designated Court" },
+  { id: 4, text: "Competent Authority" },
+];
