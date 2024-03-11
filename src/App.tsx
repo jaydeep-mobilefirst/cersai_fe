@@ -3,14 +3,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import Landing from "./pages/Landing";
-<<<<<<<<< Temporary merge branch 1
-import LatestNewsComp from "./components/landingPage/LatestNewsComp";
-import AboutBudsHeadingComp from "./components/landingPage/AboutBudsHeadingComp";
-import Footer from "./components/landingPage/Footer";
-=========
 import PrivateRoutes from "./utils/PrivateRoute";
 import DepositeTakerSignup from "./pages/depositeTaker/DepositeTakerSignup";
->>>>>>>>> Temporary merge branch 2
+import UploadDocumentComp from "./components/userFlow/common/UploadDocumenetComp";
+import DocumentDeleteComp from "./components/userFlow/common/DocmentDeleteComp";
+import VerificationFailedComp from "./components/userFlow/common/VerificationFailedComp";
+import RegistrationSuccessComp from "./components/userFlow/common/RegistrationSuccessComp";
+import SignUpSideBar from "./components/userFlow/depositeTaker/SignUpSideBar";
 
 function App() {
   const { value } = useSelector((state: RootState) => state.common);
@@ -18,25 +17,16 @@ function App() {
   console.log({ value });
   return (
     <div>
-<<<<<<<<< Temporary merge branch 1
-      {/* <Landing/> */}
-      
-      {/* <LatestNewsComp/> */}
-      <AboutBudsHeadingComp/>
-      
-      {/* <AboutBuds/> */}
-      {/* <QueryResolutoinComp /> */}
-      {/* <Footer/> */}
-=========
-      <Router>
+      {/* <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
             <Route element={<DepositeTakerSignup />} path="/depositetaker/signup" />
           </Route>
           <Route element={<Landing />} path="/" />
         </Routes>
-      </Router>
->>>>>>>>> Temporary merge branch 2
+      </Router> */}
+      {/* <UploadDocumentComp/> */}
+      <SignUpSideBar/>
     </div>
   );
 }

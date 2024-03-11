@@ -34,6 +34,9 @@
 .text-gilroy-mediumItalic {
   font-family: "Gilroy-MediumItalic", sans-serif;
 }
+.text-gilroy-bold {
+  font-family: "Gilroy-Bold", sans-serif;
+}
 
 .buds-background-image {
   background-image: url("./assets/images/bg.svg");
