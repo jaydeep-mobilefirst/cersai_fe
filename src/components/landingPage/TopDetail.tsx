@@ -144,13 +144,7 @@ const TopDetail: React.FC = () => {
       <div className="flex items-center m-4 md:m-0">
         <AuthButton
           buttontext={authlable[1]}
-          // onClick={() => setIsModalOpen(true)}
         />
-        {/* <SingUpPopup
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          onSelect={handleSelect}
-        /> */}
         <AuthButton buttontext={authlable[0]} />
       </div>
     </div>

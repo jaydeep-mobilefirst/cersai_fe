@@ -30,14 +30,12 @@ export const Footer = (props: Props) => {
             </p>
             })
           }
-          {/* <div className="w-[157.55px] h-6 relative border-r border-white" /> */}
           </>
         </div>
         {/* secondary nav */}
 
       </nav>
-      {/* <div className="lg:w-[1102px] h-[0px] origin-top-left md:rotate-180 border text-[#5DAF4C]"></div> */}
-      <hr className='mt-2 bg-[#5DAF4C] w-[85%] mx-[5%] lg:mx-[8%] flex justify-center'></hr>
+     <hr className='mt-2 bg-[#5DAF4C] w-[85%] mx-[5%] lg:mx-[8%] flex justify-center'></hr>
       <div
         className="py-4 text-center mt-6"
         style={{fontSize : "10px"}}

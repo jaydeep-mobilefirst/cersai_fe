@@ -2,149 +2,56 @@ import closeCircle from "../../../assets/images/closeCircle.svg";
 import Modal from 'react-modal';
 import React, { useState } from "react";
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSelect: (entityType: string) => void;
-}
+const ModelDiv = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-const SingUpPopup: React.FC<ModalProps> = ({ isOpen, onClose, onSelect }) => {
-  // This function will be called when the user clicks on the 'Select' button
-  const handleSelect = (entityType: string) => {
-    // onSelect(entityType);
-    onClose();
+  const openModal = () => {
+    setIsOpen(true);
   };
 
-  // This renders nothing if the 'isOpen' prop is false
-  if (!isOpen) {
-    return null;
-  }
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   return (
-    <div className="w-[586px] h-[370px] p-10 rounded-3xl flex flex-col justify-start gap-4 inline-flex">
-      <div className="modal w-[50%]">
-        <div className="flex flex-row justify-between items-center">
-        <h2 className="text-black text-2xl font-normal font-['Gilroy-Medium'] leading-loose">
-          Entity Type
-        </h2>
-        <div className="modal-header flex">
-          <button onClick={onClose}>&times;</button>
-        </div>
-        </div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSelect("selected-entity-type");
-          }}
+    <div className="flex flex-col justify-center items-center h-screen">
+      <h1 className="">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro placeat,
+        eum eveniet cum, praesentium laudantium corrupti officiis facilis ipsa,
+        modi quod. Quam, consequuntur facere nobis dicta animi consectetur!
+        Velit, quidem!
+      </h1>
+      {isOpen && (
+        <div
+          className="fixed top-0 left-0 w-full h-full bg-gray-800 opacity-30"
+          onClick={closeModal}
+        ></div>
+      )}
+      <div className="relative">
+        <button
+          onClick={openModal}
+          className="bg-blue-500 text-white px-4 py-2 rounded-md"
         >
-          <div className="w-[244px] h-14 pl-4 pr-[18px] py-4 bg-green-50 rounded-xl flex-col justify-start items-start gap-2 inline-flex">
-            <div className="justify-start items-center gap-4 inline-flex">
-              <div className="w-6 h-6 justify-center items-center flex">
-                <div className="w-6 h-6 relative"></div>
-              </div>
-              <div className="text-lime-900 text-lg font-normal font-['Gilroy-Medium']">
-                <label>
-                  <input type="radio" name="entity" value="Deposit Taker" />{" "}
-                  Deposit Taker
-                </label>
-              </div>
+          Open Modal
+        </button>
+        {/* Modal */}
+        {isOpen && (
+          <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
+            <div className="bg-white p-4 rounded-md shadow-lg w-[400px] h-[250px] relative">
+              <h1 className="text-xl font-bold">Model Div</h1>
+              <button
+                onClick={closeModal}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              >
+                <img src={closeCircle} alt="icon"/>
+              </button>
             </div>
           </div>
-          <div className="modal-footer">
-            <button type="button" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit">Select</button>
-          </div>
-        </form>
+        )}
       </div>
     </div>
   );
 };
 
-export default SingUpPopup;
-
-// // App Component
-// const Abc: React.FC = () => {
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-
-//   // Function to handle closing the modal
-//   const closeModal = () => {
-//     setIsModalOpen(false);
-//   };
-
-//   // Function to handle the selection of an entity type
-//   const handleSelect = (entityType: string) => {
-//     console.log("Entity Selected:", entityType);
-//   };
-
-//   return (
-//     <div className="App">
-//       <button onClick={() => setIsModalOpen(true)}>Entity Type</button>
-//       <Modal
-//         isOpen={isModalOpen}
-//         onClose={closeModal}
-//         onSelect={handleSelect}
-//       />
-//     </div>
-//   );
-// };
-
-// export default Abc;
-
-
-// import React, { useRef, useState, useEffect } from "react";
-// import righttick from "../../assets/righttick.svg";
-// import fileuploadsuccess from "../../assets/fileuploadsuccess.svg";
-// import Modal from "react-modal";
-// import { useNavigate } from "react-router-dom";
-
-// const customStyles = {
-//   content: {
-//     top: "50%",
-//     left: "50%",
-//     right: "auto",
-//     bottom: "auto",
-//     marginRight: "-50%",
-//     transform: "translate(-50%, -50%)",
-//     padding: "0px",
-//     border: 'none',
-//     backgroundColor:'transparent',
-//   },
-//   overlay: {
-//     backgroundColor: "rgb(8 8 8 / 75%)",
-//   },
-// };
-
-// interface SignupModalProps {
-//   isSuccessModalOpen: boolean;
-//   SuccessModalopen: () => void;
-//   handleSuccessClose: () => void;
-// }
-
-
-// const SignupModal: React.FC<SignupModalProps> = ({
-//   isSuccessModalOpen,
-//   SuccessModalopen,
-//   handleSuccessClose,
-// }) => {
-
-//   return (
-//     <Modal
-//       isOpen={isSuccessModalOpen}
-//       onRequestClose={handleSuccessClose}
-//       style={customStyles}
-//     >
-//       {isSuccessModalOpen && (
-//         <>
-//           <div>
-//             <h1>hai</h1>
-//           </div>
-//         </>
-//       )}
-//       </Modal>
-      
-//   );
-// };
-// export default SignupModal;
+export default ModelDiv;
 

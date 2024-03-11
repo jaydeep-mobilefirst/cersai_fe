@@ -43,39 +43,7 @@ const AboutBudsHeadingComp = () => {
       }
 
       </>
-      {/* <div className="mt-6 md:mt-0 md:mb-0 flex flex-col items-center md:flex-row md:items-center">
-        <div className="mr-4 md:mr-6 w-14 h-14 rounded-full bg-[#D8E5D3] flex justify-center items-center">
-          <img src={aboutBudsHeadingComp[3].imageSrc} alt="icon" className="w-auto h-auto" />
-        </div>
-        <p className="mt-2 md:mt-0 text-base text-gilroy-medium text-black font-normal leading-6">
-        {aboutBudsHeadingComp[3].text}
-        </p>
-      </div>
-      <div className="md:ml-[24px] w-[8px] h-[27px] bg-[#D8E5D3] hidden md:block" /> */}
-      {/* <div className="mt-6 md:mt-0 flex flex-col items-center md:flex-row md:items-center">
-        <div className="mr-4 md:mr-6 w-14 h-14 rounded-full bg-[#D8E5D3] flex justify-center items-center">
-          <img src={aboutBudsHeadingComp[4].imageSrc} alt="icon" className="w-[24.241px] h-auto" />
-        </div>
-        <p className="mt-2 text-gilroy-medium text-base md:text-lg text-black font-normal leading-6">
-        {aboutBudsHeadingComp[4].text}
-        </p>
-      // </div> */}
-        {/* <div className="mt-6 md:mt-0 flex flex-col items-center md:flex-row md:items-center">
-                 <div className='mr-4 md:mr-6 w-[56px] h-14 rounded-full bg-[#D8E5D3] flex flex-col justify-center items-center'>
-                     <img src={aboutBudsHeadingComp[4].imageSrc} alt="icon"/>
-                 </div>
-                <p className="mt-2 md:mt-0 text-gilroy-medium text-base text-black font-normal leading-6">No need to submit your KYC documents at any financial Institution if you have your CKYC identifier</p> */}
-      {/* //   </div>
-      <div className="md:ml-[24px] w-[8px] h-[27px] bg-[#D8E5D3] hidden md:block" />
-      <div className="mt-6 md:mt-0 flex flex-col items-center md:flex-row md:items-center">
-        <div className="mr-4 md:mr-6 w-14 h-14 rounded-full bg-[#D8E5D3] flex justify-center items-center">
-          <img src={aboutBudsHeadingComp[5].imageSrc} alt="icon" className="w-auto h-auto" />
-        </div>
-        <p className="mt-2 md:mt-0 text-gilroy-medium text-base text-black font-normal leading-6">
-        {aboutBudsHeadingComp[5].text}
-          <span className="text-[#52AE32] underline">{aboutBudsHeadingComp[5].link}</span>
-        </p>
-      </div> */}
+     
     </div>
   );
 };

@@ -14,6 +14,7 @@ import DepositeTakerSignup from "./pages/depositeTaker/DepositeTakerSignup";
 import SingUpPopup from "./components/userFlow/common/Modal";
 import RegisterModel from "./components/userFlow/common/RegisterModal";
 import VerificationSuccess from "./components/userFlow/common/VerificationSuccess";
+import ModelDiv from "./components/userFlow/common/Modal";
 
 function App() {
   const { value } = useSelector((state: RootState) => state.common);
@@ -37,8 +38,9 @@ function App() {
           <Route element={<Landing />} path="/" />
         </Routes>
       </Router> */}
-      <RegisterModel/>
-      <VerificationSuccess/>
+      {/* <RegisterModel/> */}
+      {/* <VerificationSuccess/> */}
+      <ModelDiv/>
     </div>
   );
 }
