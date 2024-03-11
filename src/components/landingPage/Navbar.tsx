@@ -11,7 +11,7 @@ const Navbar = () => {
     <div>
       {/* Hamburger Icon */}
       <div
-        className={`lg:hidden cursor-pointer fixed top-0 left-0 mt-4 ml-4 z-10 ${
+        className={`bg-white lg:hidden cursor-pointer fixed top-0 left-0 mt-4 ml-4 z-10 ${
           showMenu ? "hidden" : "block"
         }`}
         onClick={() => setShowMenu(true)}
@@ -20,8 +20,8 @@ const Navbar = () => {
       </div>
 
       {/* Desktop Menu Items */}
-      <nav className="hidden lg:flex w-full h-[48px] bg-gradient-to-r from-[#54AD47] to-[#338118]">
-        <div className="mx-auto flex justify-between items-center lg:w-[896px] md:w-1/8 sm:w-full text-[#ffffff]">
+      <nav className="hidden w-full lg:flex h-[48px] bg-gradient-to-r from-[#54AD47] to-[#338118]">
+        <div className="w-full text-[#ffffff] flex items-center justify-center">
           <ul className="flex lg:flex-row items-center">
             {navbar.map((menuItem, index) => (
               <MenuItem key={index} text={menuItem} />

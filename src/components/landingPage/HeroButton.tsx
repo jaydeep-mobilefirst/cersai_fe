@@ -3,8 +3,10 @@ interface SearchButtonProps {
 }
 const HeroButton: React.FC<SearchButtonProps> = ({ text }) => {
   return (
-    <div className="rounded-[1px] border-[#52AE32]">
-      <button>{text}</button>
+    <div className="">
+      <button className="rounded-[8px] border-[#52AE32] text-[#52AE32] border px-4 py-2">
+        {text}
+      </button>
     </div>
   );
 };
