@@ -1,53 +1,5 @@
-// import React, { useState } from 'react';
-// import closeCircle from '../../../assets/images/closeCircle.svg';
-// import {radioButtons,registrationFirstPage} from '../../../utils/hardText/signuppageText';
-
-
-// const RegisterModel =()=>{
-//     const [radioButton, setRadioBtn] = useState(radioButtons[0].text);
-//     return (
-//         <div className="text-gilroy-regular p-[40px] w-[100vw] md:w-[50%] bg-[#EEF7EB] rounded-3xl">
-//             <div className="flex flex-row justify-between items-center mb-[16px]">
-//                 <h1 className='text-[24px]'>{registrationFirstPage[0].heading}</h1>
-//                 <img src={registrationFirstPage[0].removeBtn} alt="icon"/>
-//             </div>
-//             <form
-//           onSubmit={(e) => {
-//             e.preventDefault();
-//           }}
-//         >  {
-//             radioButtons.map((item)=>{
-//                 return(
-//                 <div className={`pl-4 text-[18px] md:mr-[18px] text-gilroy-regular w-[100%] md:w-[244px] mb-[18px] h-14 md:pl-4 pr-[18px] py-4 bg-green-50 rounded-xl flex flex-row  md:flex-col md:justify-start md:items-start gap-2 inline-flex ${
-//                     radioButton ===item.text ?"bg-[#EEF7EB] text-[#385723]" : "bg-white text-black"
-//                 }`}>
-//                   <div className="flex flex-row justify-between items-center md:gap-4 inline-flex">
-//                     <div className="text-lg font-normal  ">
-//                       <label  onClick={() => setRadioBtn(item.text)}>
-//                         <input type="radio" name="entity" value="Deposit Taker" />{" "}
-//                         {item.text}
-//                       </label>    
-//                     </div>
-//                   </div>
-//                 </div>
-//                 )
-//             })
-//         }   
-//           <div className="text-[20px] modal-footer flex flex-start md:flex-row">
-//             <button type="button" className='text-[#385723] Rectangle151 w-[40%] md:w-[244px] h-14 rounded-xl border border-[#385723] mr-2'>
-//               Cancel
-//             </button>
-//             <button type="submit" className='text-white Rectangle151 w-[40%] md:w-[244px] h-14 rounded-xl border bg-[#385723]'>Select</button>
-//           </div>
-//         </form>
-
-//         </div>
-//     )
-// }
-// export default RegisterModel;
 
 import React, { useState } from 'react';
-import closeCircle from '../../../assets/images/closeCircle.svg';
 import { radioButtons, registrationFirstPage } from '../../../utils/hardText/signuppageText';
 
 interface ModelDivProps {
