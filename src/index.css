@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.video-border{
-    border-radius: 5px ;
+.font-Gilroy-Regular {
+  font-family: Gilroy-Regular;
+}
+.video-border {
+  border-radius: 5px;
 }
 @font-face {
   font-family: "Gilroy-Regular";
@@ -22,13 +25,40 @@
 .text-gilroy-medium {
   font-family: "Gilroy-medium", sans-serif;
 }
-.text-gilroy-light{
+.text-gilroy-light {
   font-family: "Gilroy-Light", sans-serif;
 }
-.text-gilroy-semibold{
+.text-gilroy-semibold {
   font-family: "Gilroy-Semibold", sans-serif;
-
 }
-.text-gilroy-mediumItalic{
+.text-gilroy-mediumItalic {
   font-family: "Gilroy-MediumItalic", sans-serif;
+}
+
+.buds-background-image {
+  background-image: url("./assets/images/bg.svg");
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position: right bottom;
+}
+
+.query-bg-image {
+  background-image: url("./assets/images/landingpagebg2.svg");
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position: right bottom;
+}
+
+.shadow-custom {
+  box-shadow: 0px 24.102px 96.407px 0px rgba(0, 0, 0, 0.05);
+}
+
+.landing-hero-bg-image {
+  background-image: url("./assets/images/herobg.svg");
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position: right bottom;
 }
