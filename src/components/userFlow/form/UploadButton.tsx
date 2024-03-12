@@ -27,7 +27,6 @@ const UploadButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>
                 </div>
             </div>
             <UploadButtonSvg1 />
-            <UploadDocumentComp />
         </button>
     );
 })
