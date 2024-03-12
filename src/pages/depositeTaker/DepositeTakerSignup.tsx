@@ -3,7 +3,6 @@ import SignupModal from "../../components/userFlow/depositeTaker/SignupModal";
 import InputField from "../../components/userFlow/form/InputField";
 import SelectButton from "../../components/userFlow/form/SelectButton";
 import TextArea from "../../components/userFlow/form/TextArea";
-import VarificationForm from "./VarificationForm";
 
 const DepositeTakerSignup = () => {
   const [option, setoption] = useState(null)
@@ -13,6 +12,8 @@ const DepositeTakerSignup = () => {
     { value: 'chhattisgarh', label: 'Chhattisgarh' },
     { value: 'gujarat', label: 'Gujarat' },
 ];
+
+console.log(option);
 
   return (
     <div>
@@ -24,8 +25,8 @@ const DepositeTakerSignup = () => {
         options={options}
         placeholder="Select State"
       />
+
       <TextArea/>
-      <VarificationForm/>
     </div>
   );
 };
