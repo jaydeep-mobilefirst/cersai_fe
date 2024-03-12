@@ -21,7 +21,7 @@ const SignUpSideBar: React.FC =()=>{
                     <p className="text-lime-900 text-xl font-normal text-gilroy-semibold">Deposit Taker</p>
                     <p className="mt-[16px] text-zinc-800 text-base font-normal text-gilroy-medium"><span className="text-zinc-800 text-base font-normal text-gilroy-bold">{percent}%</span> Completed </p>
                     <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px]" >
-                    <div className={` w-[${percent}%] h-2 bg-lime-600 rounded-[32px]`} />
+                    <div className={` w-[${percent}%] w-[15px] h-2 bg-lime-600 rounded-[32px]`} />
                     </div>
                 </div>
                 <div className='pt-[16px]'>
@@ -33,9 +33,17 @@ const SignUpSideBar: React.FC =()=>{
                         item.description===page?"bg-[#385723] text-white":"bg-white text-black"
                     }`}>
                     <div className='w-[234px] h-10 justify-start items-center gap-0.5 inline-flex'>
-                        <img src={item.imgSrc} className={`${
-                            item.description===page?"text-red-500":"text-[#666666]"
-                        }`} alt="icon"/>
+                        {
+                            item.description===page?(
+                                <img src={item.imgSrcHighlighted} className={` ${
+                                    item.description===page?"text-red-500 block":"text-[#666666] hidden"
+                                }`} alt="icon"/>
+                            ):(
+                                <img src={item.imgSrc} className={`${
+                                    item.description===page?"text-red-500":"text-[#666666]"
+                                }`} alt="icon"/>
+                            )
+                        }
                         <p className="ml-[10px]  text-base font-normal leading-tight">{item.description}</p>
                     </div>
                     <img src={item.tickImgSrc} className='w-6 h-6' alt="icon"/>

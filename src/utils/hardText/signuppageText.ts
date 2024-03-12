@@ -11,6 +11,9 @@ import buildings from "../../assets/images/buildings.svg";
 import documentTest from "../../assets/images/documentText.svg";
 import tickCircleWhite from "../../assets/images/tickCircleWhite.svg";
 import clipboardText from "../../assets/images/clipboardText.svg";
+import typeVerification from '../../assets/images/typeVerification.svg';
+import profileCircleHighlighted from '../../assets/images/profileCircleHighlighted.svg';
+import clickboardTextHigh from '../../assets/images/clickboardTextHigh.svg';
 
 //RegisterModel Component
 export const registrationFirstPage = [
@@ -74,7 +77,8 @@ export const registrationSuccessModal = [
 export const signupSideBar = [
   {
     id: 1,
-    imgSrc: shieldTick,
+    imgSrc: typeVerification,
+    imgSrcHighlighted:shieldTick,
     description: "Verification",
     tickImgSrc: tickCircleWhite,
     percentage: 0,
@@ -82,6 +86,7 @@ export const signupSideBar = [
   {
     id: 2,
     imgSrc: profieCircle,
+    imgSrcHighlighted:profileCircleHighlighted,
     description: "Entity Details",
     tickImgSrc: tickCircleWhite,
     percentage: 25,
@@ -89,6 +94,7 @@ export const signupSideBar = [
   {
     id: 3,
     imgSrc: clipboardText,
+    imgSrcHighlighted:clickboardTextHigh,
     description: "Regulators Details",
     tickImgSrc: tickCircleWhite,
     percentage: 50,
