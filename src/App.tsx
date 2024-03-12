@@ -11,6 +11,7 @@ import VerificationFailedComp from "./components/userFlow/common/VerificationFai
 import RegistrationSuccessComp from "./components/userFlow/common/RegistrationSuccessComp";
 import SignUpSideBar from "./components/userFlow/depositeTaker/SignUpSideBar";
 import VerificationSuccessComp from "./components/userFlow/common/VerificationSuccessComp";
+import HeadComp from "./components/userFlow/depositeTaker/HeadComp";
 
 function App() {
   const { value } = useSelector((state: RootState) => state.common);
