@@ -10,6 +10,7 @@ import DocumentDeleteComp from "./components/userFlow/common/DocmentDeleteComp";
 import VerificationFailedComp from "./components/userFlow/common/VerificationFailedComp";
 import RegistrationSuccessComp from "./components/userFlow/common/RegistrationSuccessComp";
 import SignUpSideBar from "./components/userFlow/depositeTaker/SignUpSideBar";
+import VerificationSuccessComp from "./components/userFlow/common/VerificationSuccessComp";
 
 function App() {
   const { value } = useSelector((state: RootState) => state.common);
@@ -24,8 +25,7 @@ function App() {
           </Route>
           <Route element={<Landing />} path="/" />
         </Routes>
-      </Router> */}
-      {/* <UploadDocumentComp/> */}
+      </Router>  */}
       <SignUpSideBar/>
     </div>
   );

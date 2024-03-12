@@ -19,7 +19,7 @@ export const radioButtons=[
 ]
 //UploadDocumentComp Component
 export const uploadModal=[
-  {heading:"Upload Document"},
+  {heading:"Upload DSC"},
   {cancelImgSrc:add},
   {uploadImgSrc:directboxSend},
   {formats:"Supported formates: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT"},
@@ -43,6 +43,14 @@ export const verificationFiledModal=[
   {description:"We were unable to verify your DSC details."},
   {okayBtn:"Okay"},
   {circleImgSrc:circleForModal}
+]
+//VerificationSuccessComp Component
+export const verificationSuccessModal=[
+  {cancelImgSrc:add},
+  {successImgSrc:tickCircle},
+  {heading:"Verification Successful"},
+  {description:"Your PAN Details have been successfully verified."},
+  {okayBtn:"Okay"}
 ]
 // RegistrationSuccessComp Component
 
