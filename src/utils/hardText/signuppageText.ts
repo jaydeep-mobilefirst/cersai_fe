@@ -22,7 +22,7 @@ export const uploadModal=[
   {heading:"Upload DSC"},
   {cancelImgSrc:add},
   {uploadImgSrc:directboxSend},
-  {formats:"Supported formates: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT"},
+  {formats:"Supported formates: .cer, .txt"},
   {size:"File size : Less than 500kb"},
   {buttonText:"Browse files"}
 ]

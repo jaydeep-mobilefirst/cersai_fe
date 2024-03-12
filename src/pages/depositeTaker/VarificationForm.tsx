@@ -12,7 +12,7 @@ const VarificationForm = (props: Props) => {
   });
 
   const onSubmit = (data : any) => {
-
+    console.log({data});
   }
   return (
     <form className="flex" onSubmit={handleSubmit(onSubmit)}>

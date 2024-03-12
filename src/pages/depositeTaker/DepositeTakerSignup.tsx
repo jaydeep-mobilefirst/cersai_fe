@@ -4,6 +4,7 @@ import InputField from "../../components/userFlow/form/InputField";
 import SelectButton from "../../components/userFlow/form/SelectButton";
 import TextArea from "../../components/userFlow/form/TextArea";
 import VarificationForm from "./VarificationForm";
+import UploadButton from "../../components/userFlow/form/UploadButton";
 
 const DepositeTakerSignup = () => {
   const [option, setoption] = useState(null)
@@ -26,6 +27,7 @@ const DepositeTakerSignup = () => {
       />
       <TextArea/>
       <VarificationForm/>
+      <UploadButton/>
     </div>
   );
 };
