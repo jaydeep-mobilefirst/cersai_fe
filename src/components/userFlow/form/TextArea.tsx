@@ -6,13 +6,13 @@ interface InputProps extends InputHTMLAttributes<HTMLTextAreaElement> {
 const TextArea: FC<InputProps> = forwardRef<HTMLTextAreaElement, InputProps>((props, ref) => {
     return (
         <>
-            <div className="relative">
+            <div className="relative w-[317px] ">
                 <textarea
-                    className="form-textarea mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 textarea-component"
+                    className="form-textarea mt-1 block w-full border-gray-300 shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 textarea-component px-[8px] py-[16px] border h-[56px] rounded-[8px]"
                     {...props}
                     ref={ref}
                 ></textarea>
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                <div className="absolute bottom-0 right-0 pr-3 pb-2.5 flex items-center pointer-events-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <g id="Mask group">
                             <mask id="mask0_493_5164" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
@@ -27,6 +27,8 @@ const TextArea: FC<InputProps> = forwardRef<HTMLTextAreaElement, InputProps>((pr
                     </svg>
                 </div>
             </div>
+
+            
         </>)
 })
 
