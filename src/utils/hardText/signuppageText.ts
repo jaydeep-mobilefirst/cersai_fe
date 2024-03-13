@@ -29,16 +29,14 @@ export const radioButtons = [
   { id: 4, text: "Competent Authority" },
 ];
 //UploadDocumentComp Component
-export const uploadModal = [
-  { heading: "Upload DSC" },
-  { cancelImgSrc: add },
-  { uploadImgSrc: directboxSend },
-  {
-    formats: "Supported formates: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT",
-  },
-  { size: "File size : Less than 500kb" },
-  { buttonText: "Browse files" },
-];
+export const uploadModal=[
+  {heading:"Upload DSC"},
+  {cancelImgSrc:add},
+  {uploadImgSrc:directboxSend},
+  {formats:"Supported formates: .cer, .txt"},
+  {size:"File size : Less than 500kb"},
+  {buttonText:"Browse files"}
+]
 //DocumentDeleteComp Component
 export const documentDeleteModal = [
   { cancelImgSrc: add },
