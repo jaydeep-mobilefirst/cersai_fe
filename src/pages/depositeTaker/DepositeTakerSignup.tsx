@@ -38,12 +38,12 @@ const dateHandler = (event : any) => {
     //   <UploadButton/>
     // </div>
     <>
-    <DepositTakerRegisterFlow>
-      {/* <VarificationForm/> */}
-      {/* <RegularDetailsForm/> */}
+    {/* <DepositTakerRegisterFlow>
+      <VarificationForm/>
+      <RegularDetailsForm/>
       <NodalDetails/>
       
-    </DepositTakerRegisterFlow>
+    </DepositTakerRegisterFlow> */}
     </>
   );
 };

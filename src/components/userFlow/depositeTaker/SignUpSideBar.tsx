@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import HeadComp from './HeadComp';
 import {signupSideBar} from '../../../utils/hardText/signuppageText';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const SignUpSideBar: React.FC =()=>{
+    
+  
+  const Navigate = useNavigate();
+
     const [page, setPage] = useState<string>(signupSideBar[0].description);
     const [percent, setPercentage] = useState<any>(0);
     const widthPercentage : any = {
@@ -16,9 +21,10 @@ const SignUpSideBar: React.FC =()=>{
         100 : 'w-full'
     }
 
-    const handleClick=(des:string,num:number)=>{
+    const handleClick=(des:string,num:number,path:string)=>{
         setPercentage(num);
         setPage(des)
+        Navigate(path);
     }
 
     return(
@@ -37,8 +43,8 @@ const SignUpSideBar: React.FC =()=>{
                     <>
                     {signupSideBar.map((item)=>{
                         return(
-                            
-                    <div onClick={()=> handleClick(item.description,item.percentage)} key={item.id} className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#385723] rounded-lg justify-between items-center inline-flex ${
+                        
+                    <div onClick={()=> handleClick(item.description,item.percentage,item.path)} key={item.id} className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#385723] rounded-lg justify-between items-center inline-flex ${
                         item.description===page?"bg-[#385723] text-white":"bg-white text-black"
                     }`}>
                     <div className='w-[234px] h-10 justify-start items-center gap-0.5 inline-flex'>
@@ -52,6 +58,7 @@ const SignUpSideBar: React.FC =()=>{
                                     item.description===page?"stroke-white":"text-[#666666]"
                                 }`} alt="icon"/>
                             )
+
                         }
                         
                         <p className="ml-[10px]  text-base font-normal leading-tight">{item.description}</p>
@@ -59,7 +66,8 @@ const SignUpSideBar: React.FC =()=>{
                     </div>
                     <img src={item.tickImgSrc} className='w-6 h-6' alt="icon"/>
                 </div>
-                        )
+                       
+                 )
                     })}
                     </>
                 </div>

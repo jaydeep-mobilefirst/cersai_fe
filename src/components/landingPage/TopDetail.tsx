@@ -5,12 +5,14 @@ import Logo from "../../assets/images/logo.svg";
 import { contactDetails, authlable } from "../../utils/hardText/landingpageText";
 import RegisterModel from "../userFlow/common/RegisterModal";
 
+
 interface AuthButtonProps {
   buttontext: string;
   onClick?: () => void; // Adding onClick function prop
 }
 
 const TopDetail = () => {
+
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
@@ -63,7 +65,7 @@ const TopDetail = () => {
       </div>
       <div className="flex items-center m-4 md:m-0">
         <AuthButton buttontext={authlable[1]} onClick={openModal} />
-        <AuthButton buttontext={authlable[0]} />
+        <AuthButton buttontext={authlable[0]}  />
       </div>
       {/* Conditionally render ModelDiv based on isOpen state */}
       {isOpen && 
