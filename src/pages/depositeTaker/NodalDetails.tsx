@@ -31,6 +31,7 @@ const NodalDetails = (props: Props) => {
                                 type="text"
                                 id="nodalOfficerName"
                                 placeholder="Type here"
+                                {...register('nodalOfficerName')}
                             //   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                             <span className="text-red-500">{errors.nodalOfficerName?.message}</span>
@@ -43,6 +44,7 @@ const NodalDetails = (props: Props) => {
                                 type="email"
                                 id="nodalOfficerEmail"
                                 placeholder="Type here"
+                                {...register('nodalOfficerEmail')}
                             //   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                             <span className="text-red-500">{errors.nodalOfficerEmail?.message}</span>
@@ -54,6 +56,7 @@ const NodalDetails = (props: Props) => {
                             <InputFields
                                 type="text"
                                 id="nodalMobileNumber"
+                                {...register('nodalOfficerMobileNumber')}
                             //   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                             <span className="text-red-500">{errors.nodalOfficerMobileNumber?.message}</span>
@@ -68,6 +71,7 @@ const NodalDetails = (props: Props) => {
                                 type="text"
                                 id="nodalOfficerDesgnation"
                                 placeholder="Type here"
+                                {...register('nodalOfficerDesignation')}
                             //   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             />
                             <span className="text-red-500">{errors.nodalOfficerDesignation?.message}</span>

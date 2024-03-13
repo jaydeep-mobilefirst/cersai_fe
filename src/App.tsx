@@ -16,15 +16,15 @@ function App() {
   console.log({ value });
   return (
     <div>
-      {/* <Router>
+      <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
             <Route element={<DepositeTakerSignup />} path="/depositetaker/signup" />
           </Route>
           <Route element={<Landing />} path="/" />
         </Routes>
-      </Router>  */}
-      <SignUpSideBar/>
+      </Router> 
+      {/* <SignUpSideBar/> */}
       {/* <VarificationForm/> */}
     </div>
   );
