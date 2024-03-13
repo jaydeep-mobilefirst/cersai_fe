@@ -21,7 +21,7 @@ const SignUpSideBar: React.FC =()=>{
                     <p className="text-lime-900 text-xl font-normal text-gilroy-semibold">Deposit Taker</p>
                     <p className="mt-[16px] text-zinc-800 text-base font-normal text-gilroy-medium"><span className="text-zinc-800 text-base font-normal text-gilroy-bold">{percent}%</span> Completed </p>
                     <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px]" >
-                    <div className={` w-[${percent}%] w-[15px] h-2 bg-lime-600 rounded-[32px]`} />
+                    <div className={`w-[${percent}%] h-2 bg-lime-600 rounded-[32px]`} />
                     </div>
                 </div>
                 <div className='pt-[16px]'>
@@ -36,11 +36,11 @@ const SignUpSideBar: React.FC =()=>{
                         {
                             item.description===page?(
                                 <img src={item.imgSrcHighlighted} className={` ${
-                                    item.description===page?"text-red-500 block":"text-[#666666] hidden"
+                                    item.description===page?"stroke-white block":"text-[#666666] hidden"
                                 }`} alt="icon"/>
                             ):(
                                 <img src={item.imgSrc} className={`${
-                                    item.description===page?"text-red-500":"text-[#666666]"
+                                    item.description===page?"stroke-white":"text-[#666666]"
                                 }`} alt="icon"/>
                             )
                         }
