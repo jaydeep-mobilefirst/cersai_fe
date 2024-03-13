@@ -7,6 +7,7 @@ import PrivateRoutes from "./utils/PrivateRoute";
 import DepositeTakerSignup from "./pages/depositeTaker/DepositeTakerSignup";
 
 
+
 function App() {
   const { value } = useSelector((state: RootState) => state.common);
 
@@ -21,7 +22,6 @@ function App() {
           <Route element={<Landing />} path="/" />
         </Routes>
       </Router> 
-      {/* <SignUpSideBar/> */}
     </div>
   );
 }
