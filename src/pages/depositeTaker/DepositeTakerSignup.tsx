@@ -5,6 +5,10 @@ import SelectButton from "../../components/userFlow/form/SelectButton";
 import TextArea from "../../components/userFlow/form/TextArea";
 import UploadButton from "../../components/userFlow/form/UploadButton";
 import VarificationForm from "./VarificationForm";
+import SignUpSideBar from "../../components/userFlow/depositeTaker/SignUpSideBar";
+import DepositTakerRegisterFlow from "../../layouts/depositTakerRegisterFlow/DepositTakerRegisterFlow";
+import RegularDetailsForm from "./RegularDetailsForm";
+import NodalDetails from "./NodalDetails";
 
 const DepositeTakerSignup = () => {
   const [option, setoption] = useState(null)
@@ -20,19 +24,27 @@ const dateHandler = (event : any) => {
 }
 
   return (
-    <div>
-      <SignupModal/>
-      <InputField type="date"/>
-      <SelectButton 
-        selectedOption={option}
-        setOption={setoption}
-        options={options}
-        placeholder="Select State"
-      />
-      <TextArea/>
-      <VarificationForm/>
-      <UploadButton/>
-    </div>
+    // <div>
+    //   <SignupModal/>
+    //   <InputField type="date"/>
+    //   <SelectButton 
+    //     selectedOption={option}
+    //     setOption={setoption}
+    //     options={options}
+    //     placeholder="Select State"
+    //   />
+    //   <TextArea/>
+    //   <VarificationForm/>
+    //   <UploadButton/>
+    // </div>
+    <>
+    <DepositTakerRegisterFlow>
+      {/* <VarificationForm/> */}
+      {/* <RegularDetailsForm/> */}
+      <NodalDetails/>
+      
+    </DepositTakerRegisterFlow>
+    </>
   );
 };
 
