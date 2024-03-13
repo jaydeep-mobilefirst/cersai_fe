@@ -6,7 +6,14 @@ import Logo from '../../../assets/images/logo.svg';
 
 const SignUpSideBar: React.FC =()=>{
     const [page, setPage] = useState<string>(signupSideBar[0].description);
-    const [percent, setPercentage] = useState<number>(0);
+    const [percent, setPercentage] = useState<any>(0);
+    const widthPercentage : any = {
+        0 : 'w-0',
+        25 : 'w-1/4',
+        50 : 'w-1/2',
+        75 : 'w-3/4',
+        100 : 'w-full'
+    }
 
     const handleClick=(des:string,num:number)=>{
         setPercentage(num);
@@ -21,7 +28,7 @@ const SignUpSideBar: React.FC =()=>{
                     <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">Deposit Taker</p>
                     <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium"><span className="text-zinc-800 text-base font-normal text-gilroy-bold">{percent}%</span> Completed </p>
                     <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px]" >
-                    <div className={` w-[${percent}%] h-2 bg-[#52AE32] rounded-[32px]`} />
+                    <div className={` ${widthPercentage[percent]} h-2 bg-[#52AE32] rounded-[32px]`} />
                     </div>
                 </div>
                 <div className='pt-[16px]'>
@@ -51,7 +58,6 @@ const SignUpSideBar: React.FC =()=>{
                         )
                     })}
                     </>
-
                 </div>
             </div>
         </div>
