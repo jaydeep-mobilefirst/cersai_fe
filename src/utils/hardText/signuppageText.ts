@@ -77,6 +77,7 @@ export const registrationSuccessModal = [
 export const signupSideBar = [
   {
     id: 1,
+    path:"/",
     imgSrc: typeVerification,
     imgSrcHighlighted:shieldTick,
     description: "Verification",

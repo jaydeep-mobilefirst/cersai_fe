@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import HeadComp from './HeadComp';
 import {signupSideBar} from '../../../utils/hardText/signuppageText';
+import { Link } from 'react-router-dom';
+
 
 
 const SignUpSideBar: React.FC =()=>{
@@ -22,7 +24,7 @@ const SignUpSideBar: React.FC =()=>{
     return(
         <div className='w-full h-[100vh] md:w-[349px] bg-[#EEF7EB]'>
             <HeadComp/>
-            <hr className="bg-[#000000] w-full md:w-[349px] mb-[16px]"></hr>
+            <hr className="bg-[#000000] w-full md:w-[349px]"></hr>
             <div className="px-[28px] mt-[16px]">
                 <div className='h-[101px]'>
                     <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">Deposit Taker</p>
@@ -51,7 +53,9 @@ const SignUpSideBar: React.FC =()=>{
                                 }`} alt="icon"/>
                             )
                         }
+                        
                         <p className="ml-[10px]  text-base font-normal leading-tight">{item.description}</p>
+                        
                     </div>
                     <img src={item.tickImgSrc} className='w-6 h-6' alt="icon"/>
                 </div>
