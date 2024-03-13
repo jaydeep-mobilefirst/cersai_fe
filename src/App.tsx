@@ -5,7 +5,7 @@ import { RootState } from "./redux/store";
 import Landing from "./pages/Landing";
 import PrivateRoutes from "./utils/PrivateRoute";
 import DepositeTakerSignup from "./pages/depositeTaker/DepositeTakerSignup";
-
+import EntityDetails from "./pages/entityDetails/EntityDetails";
 
 function App() {
   const { value } = useSelector((state: RootState) => state.common);
@@ -16,11 +16,15 @@ function App() {
       <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
-            <Route element={<DepositeTakerSignup />} path="/depositetaker/signup" />
+            <Route
+              element={<DepositeTakerSignup />}
+              path="/depositetaker/signup"
+            />
           </Route>
           <Route element={<Landing />} path="/" />
+          <Route element={<EntityDetails />} path="/entity-details" />
         </Routes>
-      </Router> 
+      </Router>
       {/* <SignUpSideBar/> */}
     </div>
   );
