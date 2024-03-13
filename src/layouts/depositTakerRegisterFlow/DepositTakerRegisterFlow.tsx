@@ -1,15 +1,12 @@
 import React from 'react'
 import SignUpSideBar from '../../components/userFlow/depositeTaker/SignUpSideBar';
+import { Outlet } from 'react-router-dom';
 
-interface LayoutProps {
-    children: React.ReactNode;
-  }
-
-const DepositTakerRegisterFlow = ({children}: LayoutProps) => {
+const DepositTakerRegisterFlow = () => {
   return (
     <div className='flex'>
     <SignUpSideBar/>
-    {children}
+    <Outlet/>
     </div>
   )
 }

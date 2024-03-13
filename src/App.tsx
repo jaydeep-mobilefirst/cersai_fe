@@ -7,9 +7,10 @@ import PrivateRoutes from "./utils/PrivateRoute";
 import DepositeTakerSignup from "./pages/depositeTaker/DepositeTakerSignup";
 import SignUpSideBar from "./components/userFlow/depositeTaker/SignUpSideBar";
 import VarificationForm from "./pages/depositeTaker/VarificationForm";
-import NodalDetails from "./pages/depositeTaker/NodalDetails";
-import DepositeTaker from "./components/userFlow/depositeTaker/DepositeTaker";
 import DepositTakerRegisterFlow from "./layouts/depositTakerRegisterFlow/DepositTakerRegisterFlow";
+import NodalDetails from "./pages/depositeTaker/NodalDetails";
+import RegularDetailsForm from "./pages/depositeTaker/RegularDetailsForm";
+import ReviewMain from "./pages/depositeTaker/ReviewMain";
 
 
 
@@ -22,18 +23,17 @@ function App() {
       <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
-            <Route element={<DepositTakerRegisterFlow />} path="/depositetaker/signup" >
-              
+            <Route element={<DepositTakerRegisterFlow />} path="/depositetaker/signup">
               <Route element={<NodalDetails />} path="nodaldetails" />
+              <Route element={<VarificationForm />} path="verification" />
+              <Route element={<NodalDetails />} path="entitydetials" />
+              <Route element={<RegularDetailsForm />} path="regulatordetails" />
+              <Route element={<ReviewMain />} path="reviewdetails" />
             </Route>
           </Route>
           <Route element={<Landing />} path="/" />
-          <Route element={<SignUpSideBar />} path="/sidebar" />
         </Routes>
       </Router> 
-      {/* <SignUpSideBar/> */}
-      {/* <VarificationForm/> */}
-      {/* <DepositeTaker/> */}
     </div>
   );
 }
