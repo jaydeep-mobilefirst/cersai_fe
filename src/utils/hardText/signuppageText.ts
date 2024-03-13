@@ -14,6 +14,8 @@ import clipboardText from "../../assets/images/clipboardText.svg";
 import typeVerification from '../../assets/images/typeVerification.svg';
 import profileCircleHighlighted from '../../assets/images/profileCircleHighlighted.svg';
 import clickboardTextHigh from '../../assets/images/clickboardTextHigh.svg';
+import buildingsHigh from '../../assets/images/buildingsHigh.svg';
+import documentTestHigh from '../../assets/images/documentTestHigh.svg';
 
 //RegisterModel Component
 export const registrationFirstPage = [
@@ -102,6 +104,7 @@ export const signupSideBar = [
   {
     id: 4,
     imgSrc: buildings,
+    imgSrcHighlighted:buildingsHigh,
     description: "Nodal Details",
     tickImgSrc: tickCircleWhite,
     percentage: 75,
@@ -109,6 +112,7 @@ export const signupSideBar = [
   {
     id: 5,
     imgSrc: documentTest,
+    imgSrcHighlighted:documentTestHigh,
     description: "Review Details",
     tickImgSrc: tickCircleWhite,
     percentage: 100,

@@ -14,14 +14,14 @@ const SignUpSideBar: React.FC =()=>{
     }
 
     return(
-        <div className='h-[100%] w-full md:w-[349px] bg-[#EEF7EB] h-[100%]'>
+        <div className='w-full md:w-[349px] bg-[#EEF7EB]'>
             <HeadComp/>
             <div className="px-[28px]">
                 <div className='h-[101px]'>
-                    <p className="text-lime-900 text-xl font-normal text-gilroy-semibold">Deposit Taker</p>
-                    <p className="mt-[16px] text-zinc-800 text-base font-normal text-gilroy-medium"><span className="text-zinc-800 text-base font-normal text-gilroy-bold">{percent}%</span> Completed </p>
+                    <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">Deposit Taker</p>
+                    <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium"><span className="text-zinc-800 text-base font-normal text-gilroy-bold">{percent}%</span> Completed </p>
                     <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px]" >
-                    <div className={`w-[${percent}%] h-2 bg-lime-600 rounded-[32px]`} />
+                    <div className={` w-[${percent}%] h-2 bg-[#52AE32] rounded-[32px]`} />
                     </div>
                 </div>
                 <div className='pt-[16px]'>
