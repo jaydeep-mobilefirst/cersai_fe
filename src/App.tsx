@@ -28,6 +28,7 @@ function App() {
 
           <Route path="/landingpage" element={<Landing />} />
           <Route path="/" element={<Review />} />
+          {/* <Route path="/" element={<VerifyDetailsBtn />} /> */}
         </Routes>
       </Router>
     </div>

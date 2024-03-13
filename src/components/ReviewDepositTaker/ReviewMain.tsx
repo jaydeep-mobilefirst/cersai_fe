@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ModelDiv from "../ModelPage/ModelDiv";
 
 const ReviewMain = () => {
@@ -10,10 +10,9 @@ const ReviewMain = () => {
     Navigate("/landingpage");
   };
 
-  const openModelDiv =() =>{
+  const openModelDiv = () => {
     setModalOPen(true);
-  }
-  
+  };
 
   const sections = [
     {
@@ -51,7 +50,7 @@ const ReviewMain = () => {
       ],
     },
     {
-      title: "Verification Status", // Duplicate title for demonstration
+      title: "Verification Status", // Duplicate? Can be removed if not needed
       buttonText: "Edit",
       onClick: navigeToLandingPage,
       fields: [
@@ -62,7 +61,6 @@ const ReviewMain = () => {
       ],
     },
   ];
-
 
   return (
     <>
@@ -75,17 +73,20 @@ const ReviewMain = () => {
               </p>
               <button
                 onClick={section.onClick}
-                className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal "
+                className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal"
               >
                 {section.buttonText}
               </button>
             </div>
 
-            <div className="ml-[16px] mt-[24px] mr-[16px] mb-[24px] ">
+            <div className="ml-[16px] mt-[24px] mr-[16px] mb-[24px]">
               <div className="flex flex-col justify-between w-full sm:flex-row">
-                <div className="  w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px]">
-                  {section.fields.map((field, index) => (
-                    <div className="sm:mr-[48px] flex justify-between key={index}">
+                <div className="w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px]">
+                  {section.fields.map((field, idx) => (
+                    <div
+                      className="sm:mr-[48px] flex justify-between"
+                      key={idx}
+                    >
                       <div className="opacity-60">
                         {field.label}
                         <span className="text-[#ff0000]">*</span>
@@ -100,7 +101,7 @@ const ReviewMain = () => {
         ))}
       </div>
       <div className="absolute">
-        <ModelDiv modalOpen={modalOpen} setModalOPen={setModalOPen} />
+        <ModelDiv modalOpen={modalOpen} setModalOpen={setModalOpen} />
       </div>
     </>
   );
