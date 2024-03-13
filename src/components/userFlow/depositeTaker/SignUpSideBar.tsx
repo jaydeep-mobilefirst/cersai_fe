@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import HeadComp from './HeadComp';
 import {signupSideBar} from '../../../utils/hardText/signuppageText';
 
-import Logo from '../../../assets/images/logo.svg';
 
 const SignUpSideBar: React.FC =()=>{
     const [page, setPage] = useState<string>(signupSideBar[0].description);
@@ -21,9 +20,10 @@ const SignUpSideBar: React.FC =()=>{
     }
 
     return(
-        <div className='w-full md:w-[349px] bg-[#EEF7EB]'>
+        <div className='w-full h-[100vh] md:w-[349px] bg-[#EEF7EB]'>
             <HeadComp/>
-            <div className="px-[28px]">
+            <hr className="bg-[#000000] w-full md:w-[349px] mb-[16px]"></hr>
+            <div className="px-[28px] mt-[16px]">
                 <div className='h-[101px]'>
                     <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">Deposit Taker</p>
                     <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium"><span className="text-zinc-800 text-base font-normal text-gilroy-bold">{percent}%</span> Completed </p>
