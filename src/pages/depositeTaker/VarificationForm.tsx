@@ -15,7 +15,7 @@ const VarificationForm = (props: Props) => {
     console.log({data});
   }
   return (
-    <form className="flex" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex mt-[76px]" onSubmit={handleSubmit(onSubmit)}>
       <div>
         Company Name<span className="text-[#ff0000]">*</span>
         <div className="mt-[8px]">

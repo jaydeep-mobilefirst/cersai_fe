@@ -34,9 +34,9 @@ const ReviewMain = () => {
 
   return (
     <>
-      <div className="container mx-auto">
+      <div className="container mx-auto mt-[76px] p-3 md:px-[36px]">
         <div id="reviewContent">
-          <div className="text[20px] text-gilroy-bold mb-[24px]">Review</div>
+          <div className="text-xl text-gilroy-bold mb-[24px] font-bold">Review</div>
           {sections.map((section, index) => (
             <div className="mb-[16px]">
               <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px;] text-gilroy-bold">

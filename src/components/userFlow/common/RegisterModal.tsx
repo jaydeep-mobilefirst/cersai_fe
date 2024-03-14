@@ -11,7 +11,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   
   const Navigate = useNavigate();
   const navigateToSideBarPage = () => {
-    Navigate("/sidebar");
+    Navigate("/depositetaker/signup/verification");
   };
 
   const [radioButton, setRadioBtn] = useState(radioButtons[0].text);

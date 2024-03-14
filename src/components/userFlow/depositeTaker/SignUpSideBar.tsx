@@ -12,7 +12,7 @@ const SignUpSideBar: React.FC =()=>{
   const Navigate = useNavigate();
     const location = useLocation()
 
-    const [page, setPage] = useState<string>(location.pathname);
+    const [page, setPage] = useState<string>(signupSideBar[0].path);
     
     const [percent, setPercentage] = useState<any>(0);
     const widthPercentage : any = {
@@ -33,7 +33,7 @@ const SignUpSideBar: React.FC =()=>{
         <div className='w-full h-[100vh] md:w-[349px] bg-[#EEF7EB]'>
             <HeadComp/>
             <hr className="bg-[#000000] w-full md:w-[349px]"></hr>
-            <div className="px-[28px] mt-[16px]">
+            <div className="px-[28px] mt-[16px] h-auto">
                 <div className='h-[101px]'>
                     <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">Deposit Taker</p>
                     <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium"><span className="text-zinc-800 text-base font-normal text-gilroy-bold">{percent}%</span> Completed </p>

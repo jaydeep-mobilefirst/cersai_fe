@@ -25,9 +25,9 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route element={<DepositTakerRegisterFlow />} path="/depositetaker/signup">
               <Route element={<NodalDetails />} path="nodaldetails" />
-              <Route element={<VarificationForm />} path="verification" />
+              <Route element={<VarificationForm />}  path="verification" />
               <Route element={<NodalDetails />} path="entitydetials" />
-              <Route element={<RegularDetailsForm />} path="regulatordetails" />
+              <Route element={<RegularDetailsForm />}  path="regulatordetails" />
               <Route element={<ReviewMain />} path="reviewdetails" />
             </Route>
           </Route>
