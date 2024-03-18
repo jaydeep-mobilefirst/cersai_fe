@@ -11,26 +11,39 @@ const VarificationForm = (props: Props) => {
     resolver: yupResolver(VerificationFormSchema)
   });
 
-  const onSubmit = (data : any) => {
-    console.log({data});
+  const onSubmit = (data: any) => {
+    console.log({ data });
   }
   return (
-    <form className="flex" onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        Company Name<span className="text-[#ff0000]">*</span>
-        <div className="mt-[8px]">
-          <InputFields placeholder="Type here" {...register("companyName")}/>
-          {errors.companyName?.message && <span className="text-red-500">{errors.companyName.message}</span>}
+    <form className="p-4 flex flex-col w-full max-w-[80%] justify-between" onSubmit={handleSubmit(onSubmit)}>
+      <div className="bg-white p-6 w-full">
+        <h1 className="text-2xl font-bold mb-6">Verification</h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label htmlFor="nodalOfficerName" className="block text-gray-700 text-sm font-bold mb-2">
+              Company Name<span className="text-[#ff0000]">*</span>
+            </label>
+            <InputFields placeholder="Type here" {...register("companyName")} />
+            {errors.companyName?.message && <span className="text-red-500">{errors.companyName.message}</span>}
+          </div>
+          <div>
+            <label htmlFor="nodalOfficerEmail" className="block text-gray-700 text-sm font-bold mb-2">
+              Pan Number<span className="text-[#ff0000]">*</span>
+            </label>
+            <InputFields placeholder="Type here" {...register("panNumber")} />
+            {errors.panNumber?.message && <span className="text-red-500">{errors.panNumber?.message}</span>}
+          </div>
         </div>
       </div>
-      <div className="ml-[24px]">
-        Pan Number<span className="text-[#ff0000]">*</span>
-        <div className="mt-[8px]">
-          <InputFields placeholder="Type here" {...register("panNumber")}/>
-          {errors.panNumber?.message && <span className="text-red-500">{errors.panNumber?.message}</span>}
-        </div>
+      <div className="flex justify-between items-center">
+        <span></span>
+        <button
+          type={'submit'}
+          className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm  w-[224px]"
+        >
+          Save and Continue
+        </button>
       </div>
-      <button>Submit</button>
     </form>
   );
 };

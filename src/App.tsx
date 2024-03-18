@@ -11,6 +11,7 @@ import DepositTakerRegisterFlow from "./layouts/depositTakerRegisterFlow/Deposit
 import NodalDetails from "./pages/depositeTaker/NodalDetails";
 import RegularDetailsForm from "./pages/depositeTaker/RegularDetailsForm";
 import ReviewMain from "./pages/depositeTaker/ReviewMain";
+import EntityDetails from "./pages/depositeTaker/EntityDetails";
 
 
 
@@ -26,7 +27,7 @@ function App() {
             <Route element={<DepositTakerRegisterFlow />} path="/depositetaker/signup">
               <Route element={<NodalDetails />} path="nodaldetails" />
               <Route element={<VarificationForm />} path="verification" />
-              <Route element={<NodalDetails />} path="entitydetials" />
+              <Route element={<EntityDetails />} path="entitydetials" />
               <Route element={<RegularDetailsForm />} path="regulatordetails" />
               <Route element={<ReviewMain />} path="reviewdetails" />
             </Route>

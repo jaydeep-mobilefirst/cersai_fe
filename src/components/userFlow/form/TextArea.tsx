@@ -6,7 +6,7 @@ interface InputProps extends InputHTMLAttributes<HTMLTextAreaElement> {
 const TextArea: FC<InputProps> = forwardRef<HTMLTextAreaElement, InputProps>((props, ref) => {
     return (
         <>
-            <div className="relative w-[317px] ">
+            <div className="relative w-[250px] ">
                 <textarea
                     className="form-textarea mt-1 block w-full border-gray-300 shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 textarea-component px-[8px] py-[16px] border h-[56px] rounded-[8px]"
                     {...props}
