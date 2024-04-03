@@ -1,12 +1,19 @@
 
 import React, { useState } from 'react';
 import { radioButtons, registrationFirstPage } from '../../../utils/hardText/signuppageText';
+import { useNavigate } from "react-router-dom";
 
 interface ModelDivProps {
   closeModal: () => void; // Define the closeModal prop
 }
 
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
+  
+  const Navigate = useNavigate();
+  const navigateToSideBarPage = () => {
+    Navigate("/depositetaker/signup/verification");
+  };
+
   const [radioButton, setRadioBtn] = useState(radioButtons[0].text);
 
   return (
@@ -49,6 +56,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
           <button
             type="submit"
             className="text-white Rectangle151 w-[35%] md:w-[244px] h-14 rounded-xl border bg-[#385723]"
+            onClick={navigateToSideBarPage}
           >
             Select
           </button>

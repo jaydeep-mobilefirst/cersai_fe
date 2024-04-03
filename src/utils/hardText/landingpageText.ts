@@ -119,3 +119,51 @@ export const hero = [
   {},
 ];
 
+export const sections = [
+  {
+    title: "Verification Status",
+    buttonText: "Success",
+    fieldsLeft: [{ label: "Name", value: "Lorem ipsum" }],
+    fieldsRight: [{ label: "PAN Details", value: "Lorem ipsum" }],
+  },
+  {
+    title: "Entity Details",
+    buttonText: "Edit",
+
+    fieldsLeft: [
+      { label: "Name of Deposit Taker", value: "Lorem ipsum" },
+      { label: "Type of Entity", value: "Lorem ipsum" },
+      { label: "Address Line 1", value: "Lorem ipsum" },
+      { label: "Address Line 2", value: "Lorem ipsum" },
+    ],
+    fieldsRight: [
+      { label: "Unique Registration ID", value: "Lorem ipsum" },
+      { label: "PIN code", value: "Lorem ipsum" },
+      { label: "State", value: "Lorem ipsum" },
+      { label: "District", value: "Lorem ipsum" },
+    ],
+  },
+  {
+    title: "Regulator Details",
+    buttonText: "Edit",
+    fieldsLeft: [
+      { label: "Regulator Name", value: "Lorem ipsum" },
+      { label: "Registration Approval Date", value: "Lorem ipsum" },
+    ],
+    fieldsRight: [
+      { label: "Regulator Registered Number", value: "Lorem ipsum" },
+    ],
+  },
+  {
+    title: "Nodal Details",
+    buttonText: "Edit",
+    fieldsLeft: [
+      { label: "Nodal Officer Name", value: "Lorem ipsum" },
+      { label: "Nodal Officer Email", value: "Lorem ipsum" },
+    ],
+    fieldsRight: [
+      { label: "Nodal Officer Name", value: "Lorem ipsum" },
+      { label: "Nodal Officer Designation", value: "Lorem ipsum" },
+    ],
+  },
+];

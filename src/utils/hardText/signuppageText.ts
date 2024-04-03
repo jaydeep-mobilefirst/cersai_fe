@@ -77,6 +77,7 @@ export const registrationSuccessModal = [
 export const signupSideBar = [
   {
     id: 1,
+    path:"/depositetaker/signup/verification",
     imgSrc: typeVerification,
     imgSrcHighlighted:shieldTick,
     description: "Verification",
@@ -85,6 +86,7 @@ export const signupSideBar = [
   },
   {
     id: 2,
+    path:"/depositetaker/signup/entitydetials",
     imgSrc: profieCircle,
     imgSrcHighlighted:profileCircleHighlighted,
     description: "Entity Details",
@@ -93,6 +95,7 @@ export const signupSideBar = [
   },
   {
     id: 3,
+    path:"/depositetaker/signup/regulatordetails",
     imgSrc: clipboardText,
     imgSrcHighlighted:clickboardTextHigh,
     description: "Regulators Details",
@@ -101,6 +104,7 @@ export const signupSideBar = [
   },
   {
     id: 4,
+    path:"/depositetaker/signup/nodaldetails",
     imgSrc: buildings,
     imgSrcHighlighted:buildingsHigh,
     description: "Nodal Details",
@@ -109,6 +113,7 @@ export const signupSideBar = [
   },
   {
     id: 5,
+    path:"/depositetaker/signup/reviewdetails",
     imgSrc: documentTest,
     imgSrcHighlighted:documentTestHigh,
     description: "Review Details",
