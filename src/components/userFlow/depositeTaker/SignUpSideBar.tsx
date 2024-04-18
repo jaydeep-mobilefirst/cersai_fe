@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import HeadComp from './HeadComp';
 import {signupSideBar} from '../../../utils/hardText/signuppageText';
 import { Link, useLocation } from 'react-router-dom';
@@ -13,7 +13,6 @@ const SignUpSideBar: React.FC =()=>{
     const location = useLocation()
 
     const [page, setPage] = useState<string>(location.pathname);
-    
     const [percent, setPercentage] = useState<any>(0);
     const widthPercentage : any = {
         0 : 'w-0',
@@ -28,6 +27,12 @@ const SignUpSideBar: React.FC =()=>{
         setPage(path)
         Navigate(path);
     }
+
+    useEffect(() => {
+    const obj : any = signupSideBar.find((s) => s.path === location.pathname);
+        setPercentage(obj?.percentage);
+        setPage(obj?.path)
+    }, [location.pathname])
 
     return(
         <div className='w-full h-[100vh] md:w-[349px] bg-[#EEF7EB]'>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SelectButton from "../../components/userFlow/form/SelectButton";
@@ -7,81 +7,132 @@ import TextArea from "../../components/userFlow/form/TextArea";
 import Button from "../../components/userFlow/form/Button";
 import ArrowIcon from "../../assets/images/Arrow.svg";
 import { EntityDetailschema } from "../../formValidationSchema/deposit_taker/EntityValidation.schema";
+import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../../utils/axios";
+import { useDTStore } from "../../zust/deposit-taker-registration/verificationData";
 
 const EntityDetails: React.FC = () => {
-  const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
-  const [searchInputValue1, setSearchInputValue1] = useState<string>("");
+  const navigate = useNavigate();
+  const {entityFormData, setEntityFormData} = useDTStore((state) => state)
 
-  const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
-  const [searchInputValue2, setSearchInputValue2] = useState<string>("");
-
-  const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
-  const [searchInputValue3, setSearchInputValue3] = useState<string>("");
-
+  const [states, setStates] = useState([]);
+  const [districts, setDistrict] = useState([]);
+  const [selectedState, setSelectedState] = useState<string | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [selectedEntity, setSelectedEntity] = useState<string | null>(null);
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
     { value: "LLP", label: "LLP" },
     { value: "Sole PArtnership", label: "Sole PArtnership" },
   ];
 
-  const options3 = [
-    { value: "kashmir", label: "kashmir" },
-    { value: "Jammu", label: "Jammu" },
-    { value: "Doda", label: "Doda" },
-  ];
-
-  const options2 = [
-    { value: "Andhra Pradesh", label: "Andhra Pradesh" },
-    { value: "Bihar", label: "Bihar" },
-    { value: "Chhattisgarh", label: "Chhattisgarh" },
-    { value: "Gujarat", label: "Gujarat" },
-  ];
-
-  const handleSetOption1 = (value: string) => {
-    setSelectedOption1(value);
-  };
-
-  const handleSearchInputChange1 = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchInputValue1(event.target.value);
-  };
-
-  const handleSetOption2 = (value: string) => {
-    setSelectedOption2(value);
-  };
-
-  const handleSearchInputChange2 = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchInputValue2(event.target.value);
-  };
-
-  const handleSetOption3 = (value: string) => {
-    setSelectedOption3(value);
-  };
-
-  const handleSearchInputChange3 = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchInputValue3(event.target.value);
-  };
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    clearErrors
   } = useForm({
     resolver: yupResolver(EntityDetailschema),
   });
   const onSubmit = (data: any) => {
-    alert("Form submitted successfully!");
-    console.log({ data });
-
-    reset();
+    setEntityFormData(Object.keys(data).map((k) => ({name : k, value : data[k]})))
+    navigate("/depositetaker/signup/regulatordetails")
   };
 
+  const handleSelectState = (value: any) => {
+    setDistrict([]);
+    setSelectedDistrict("");
+    setValue("district", "");
+    setSelectedState(value.label);
+    setValue("state", value.label);
+    clearErrors("state");
+    handleStateSelect(value.value);
+  };
+  const handleSelectDistrict = (value: any) => {
+    setSelectedDistrict(value.label);
+    setValue("district", value.label);
+    clearErrors("district");
+  };
+
+
+  const handleStateSelect = (id: number) => {
+    axiosInstance
+      .get(`/cms/location/district/${id}/list?pagesize=50`)
+      .then((res : any) => {
+        if (res.data.status === "success") {
+          setDistrict(
+            res.data.data.map((state: { id: number; name: string }) => ({
+              label: state.name,
+              value: state.id,
+            }))
+          );
+        }
+      })
+      .catch((e : any) => alert("Error fetching States"));
+  };
+
+  // ---------- Fetch States ------------------
+  const fetchStates = () => {
+    axiosInstance
+      .get(`/cms/location/state/95/list?pagesize=50`)
+      .then((res : any) => {
+        if (res.data.status === "success") {
+          setStates(
+            res.data.data.map((state: { id: number; name: string }) => ({
+              label: state.name,
+              value: state.id,
+            }))
+          );
+        }
+      })
+      .catch((e : any) => alert("Error fetching States"));
+  };
+
+  const handleSelectEntity = (data :any) => {
+    setSelectedEntity(data.label)
+    setValue("entityType", data.label)
+    clearErrors("entityType")
+  }
+  useEffect(() => {
+    fetchStates();
+  }, []);
+
+  useEffect(() => {
+    if (entityFormData.length > 0) {
+     const uniqueId = entityFormData.find((d) => d.name === "uniqueId").value
+     const addressLine1 = entityFormData.find((d) => d.name === "addressLine1").value
+     const addressLine2 = entityFormData.find((d) => d.name === "addressLine2").value
+     const pinCode = entityFormData.find((d) => d.name === "pinCode").value
+     const gstNumber = entityFormData.find((d) => d.name === "gstNumber").value
+     const entityType = entityFormData.find((d) => d.name === "entityType").value
+     const state = entityFormData.find((d) => d.name === "state").value
+     const district = entityFormData.find((d) => d.name === "district").value
+    
+     setValue("uniqueId", uniqueId)
+     setValue("addressLine1", addressLine1)
+     setValue("addressLine2", addressLine2)
+     setValue("pinCode", pinCode)
+     setValue("gstNumber", gstNumber)
+     setValue("entityType", entityType)
+     setValue("state", state)
+     setValue("district", district)
+     setSelectedDistrict(district)
+     setSelectedState(state)
+     setSelectedEntity(entityType)
+    }
+  }, [entityFormData])
+
+  useEffect(() => {
+    if (states.length > 0) {
+      let stateId : any = states?.find((s : any) => s.label === selectedState);      
+      if (stateId) {
+        stateId = stateId.value
+        handleStateSelect(stateId)
+      }
+    }
+  }, [states])
   return (
     <div className="flex flex-col p-6 w-full">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between h-full">
@@ -94,14 +145,15 @@ const EntityDetails: React.FC = () => {
               </label>
 
               <SelectButton
-                setOption={handleSetOption1}
+                setOption={handleSelectEntity}
                 options={options1}
-                selectedOption={selectedOption1}
+                selectedOption={selectedEntity}
                 placeholder="Select"
-                searchInputOnchange={handleSearchInputChange1}
-                searchInputValue={searchInputValue1}
                 showSearchInput={false}
               />
+              <span className="text-red-400">
+                {errors.entityType?.message}
+              </span>
             </div>
             <div>
               <label htmlFor="uniqueId" className="text-base font-normal">
@@ -157,14 +209,15 @@ const EntityDetails: React.FC = () => {
                 State <span className="text-red-500">*</span>
               </label>
               <SelectButton
-                setOption={handleSetOption2}
-                options={options2}
-                selectedOption={selectedOption2}
+                setOption={handleSelectState}
+                options={states}
+                selectedOption={selectedState}
                 placeholder="Select"
-                searchInputOnchange={handleSearchInputChange2}
-                searchInputValue={searchInputValue2}
                 showSearchInput={true}
               />
+              <span className="text-red-400">
+                {errors.state?.message}
+              </span>
             </div>
 
             <div>
@@ -172,14 +225,15 @@ const EntityDetails: React.FC = () => {
                 District <span className="text-red-500">*</span>
               </label>
               <SelectButton
-                setOption={handleSetOption3}
-                options={options3}
-                selectedOption={selectedOption3}
+                setOption={handleSelectDistrict}
+                options={districts}
+                selectedOption={selectedDistrict}
                 placeholder="Select"
-                searchInputOnchange={handleSearchInputChange3}
-                searchInputValue={searchInputValue3}
                 showSearchInput={true}
               />
+              <span className="text-red-400">
+                {errors.district?.message}
+              </span>
             </div>
             <div>
               <label htmlFor="gstNumber" className="text-base font-normal">
@@ -194,7 +248,7 @@ const EntityDetails: React.FC = () => {
         </div>
 
         <div className="flex justify-between items-center ">
-          <div className="flex cursor-pointer ">
+          <div className="flex cursor-pointer" onClick={() => navigate("/depositetaker/signup/verification")}>
             <img src={ArrowIcon} alt="" />
             <h1 className="text-sm font-normal text-black">Back</h1>
           </div>

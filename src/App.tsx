@@ -1,7 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
 import Landing from "./pages/Landing";
 import PrivateRoutes from "./utils/PrivateRoute";
 import DepositeTakerSignup from "./pages/depositeTaker/DepositeTakerSignup";
@@ -16,9 +14,6 @@ import EntityDetails from "./pages/depositeTaker/EntityDetails";
 
 
 function App() {
-  const { value } = useSelector((state: RootState) => state.common);
-
-  console.log({ value });
   return (
     <div>
       <Router>

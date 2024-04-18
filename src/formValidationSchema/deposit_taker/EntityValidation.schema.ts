@@ -19,4 +19,7 @@ export const EntityDetailschema = yup.object().shape({
   addressLine2: yup.string().required("Address Line 2 is required"),
   pinCode: yup.string().required("Pin Code is required"),
   gstNumber: yup.string().required("GST Number is required"),
+  state: yup.string().required("State is required"),
+  district: yup.string().required("District is required"),
+  entityType : yup.string().required("Entity Type is required")
 });
