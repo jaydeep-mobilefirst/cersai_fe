@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import InputFields from "../../components/userFlow/form/InputField";
 import { useForm } from "react-hook-form";
 import { VerificationFormSchema } from "../../formValidationSchema/deposit_taker/Verification.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDTStore } from "../../zust/deposit-taker-registration/verificationData";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 type Props = {};
 
@@ -15,6 +16,7 @@ const VarificationForm = (props: Props) => {
     resolver: yupResolver(VerificationFormSchema)
   });
 
+  const [validatingPan, setValidatingPan] = useState(false)
   useEffect(() => {
     if (verificationFormData.length > 0) {
      const companyName = verificationFormData.find((d) => d.name === "companyName").value
@@ -24,11 +26,28 @@ const VarificationForm = (props: Props) => {
      setValue("panNumber", panNumber)
     }
   }, [verificationFormData])
-  const onSubmit = (data: any) => {    
+  const onSubmit = async (data: any) => {    
+    const response = await verifyPan(data['panNumber'])
+    if (response.status === 'INCORRECT') {
+      alert(response.message)
+      setValidatingPan(false)
+      return
+    }
+    setValidatingPan(false)
     setVerificationFormData(Object.keys(data).map((k) => ({name : k, value : data[k]})))
     navigate("/depositetaker/signup/entitydetials")
   }
   
+  const verifyPan = async (panNumber : string) => {
+    setValidatingPan(true)
+    const response = await axios.post("http://34.149.91.231/cms/pandirectory/api", {
+      name:"JAYDEEP PRAVINBHAI PATEL",
+      pan_no: panNumber.toUpperCase()
+    })
+    const data = response.data;
+
+    return data
+  }
   return (
     <form className="p-4 flex flex-col w-full max-w-[80%] justify-between" onSubmit={handleSubmit(onSubmit)}>
       <div className="bg-white p-6 w-full">
@@ -53,10 +72,11 @@ const VarificationForm = (props: Props) => {
       <div className="flex justify-between items-center">
         <span></span>
         <button
+          disabled={validatingPan}
           type={'submit'}
           className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm  w-[224px]"
         >
-          Save and Continue
+          {validatingPan ? "...validating pan" : "Save and Continue"}
         </button>
       </div>
     </form>

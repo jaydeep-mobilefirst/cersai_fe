@@ -22,22 +22,20 @@ const NodalDetails = (props: Props) => {
   } = useForm({
     resolver: yupResolver(NodalDetailsSchema),
   });
-  const { setNodalDetails } = useFormStore();
+  const { setNodalDetails, nodalOfficerDesignation, nodalOfficerEmail, nodalOfficerMobileNumber, nodalOfficerName } = useFormStore();
 
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
-    const stateData = location.state;
-
-    setValue("nodalOfficerName", stateData?.nodalOfficerName || "");
-    setValue("nodalOfficerEmail", stateData?.nodalOfficerEmail || "");
+    setValue("nodalOfficerName", nodalOfficerName);
+    setValue("nodalOfficerEmail", nodalOfficerEmail);
     setValue(
       "nodalOfficerMobileNumber",
-      stateData?.nodalOfficerMobileNumber || ""
+      nodalOfficerMobileNumber
     );
     setValue(
       "nodalOfficerDesignation",
-      stateData?.nodalOfficerDesignation || ""
+      nodalOfficerDesignation
     );
   }, [setValue, location.state]);
 
@@ -48,7 +46,7 @@ const NodalDetails = (props: Props) => {
     navigate("/depositetaker/signup/reviewdetails");
   };
   const handleBack = () => {
-    navigate(-1); // Go back one step in history
+    navigate("/depositetaker/signup/regulatordetails"); // Go back one step in history
   };
 
   return (
