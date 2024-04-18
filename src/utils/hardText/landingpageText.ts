@@ -154,16 +154,16 @@ export const sections = [
       { label: "Regulator Registered Number", value: "Lorem ipsum" },
     ],
   },
-  {
-    title: "Nodal Details",
-    buttonText: "Edit",
-    fieldsLeft: [
-      { label: "Nodal Officer Name", value: "Lorem ipsum" },
-      { label: "Nodal Officer Email", value: "Lorem ipsum" },
-    ],
-    fieldsRight: [
-      { label: "Nodal Officer Name", value: "Lorem ipsum" },
-      { label: "Nodal Officer Designation", value: "Lorem ipsum" },
-    ],
-  },
+  // {
+  //   title: "Nodal Details",
+  //   buttonText: "Edit",
+  //   fieldsLeft: [
+  //     { label: "Nodal Officer Name", value: "Lorem ipsum" },
+  //     { label: "Nodal Officer Email", value: "Lorem ipsum" },
+  //   ],
+  //   fieldsRight: [
+  //     { label: "Nodal Officer Name", value: "Lorem ipsum" },
+  //     { label: "Nodal Officer Designation", value: "Lorem ipsum" },
+  //   ],
+  // },
 ];
