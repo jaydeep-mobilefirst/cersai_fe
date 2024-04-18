@@ -1,19 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import InputFields from "../../components/userFlow/form/InputField";
 import { useForm } from "react-hook-form";
 import { VerificationFormSchema } from "../../formValidationSchema/deposit_taker/Verification.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useDTStore } from "../../zust/deposit-taker-registration/verificationData";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const VarificationForm = (props: Props) => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+  const {verificationFormData, setVerificationFormData} = useDTStore((state) => state)
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors }, reset, setValue} = useForm({
     resolver: yupResolver(VerificationFormSchema)
   });
 
-  const onSubmit = (data: any) => {
-    console.log({ data });
+  useEffect(() => {
+    if (verificationFormData.length > 0) {
+     const companyName = verificationFormData.find((d) => d.name === "companyName").value
+     const panNumber = verificationFormData.find((d) => d.name === "panNumber").value
+
+     setValue("companyName", companyName)
+     setValue("panNumber", panNumber)
+    }
+  }, [verificationFormData])
+  const onSubmit = (data: any) => {    
+    setVerificationFormData(Object.keys(data).map((k) => ({name : k, value : data[k]})))
+    navigate("/depositetaker/signup/entitydetials")
   }
+  
   return (
     <form className="p-4 flex flex-col w-full max-w-[80%] justify-between" onSubmit={handleSubmit(onSubmit)}>
       <div className="bg-white p-6 w-full">
