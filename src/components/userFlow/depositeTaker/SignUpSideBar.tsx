@@ -51,7 +51,7 @@ const SignUpSideBar: React.FC =()=>{
                     {signupSideBar.map((item)=>{
                         return(
                         
-                    <div onClick={()=> handleClick(item.description,item.percentage,item.path)} key={item.id} className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#385723] rounded-lg justify-between items-center inline-flex ${
+                    <div key={item.id} className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#385723] rounded-lg justify-between items-center inline-flex ${
                         item.path===page?"bg-[#385723] text-white":"bg-white text-black"
                     }`}>
                     <div className='w-[234px] h-10 justify-start items-center gap-0.5 inline-flex'>
