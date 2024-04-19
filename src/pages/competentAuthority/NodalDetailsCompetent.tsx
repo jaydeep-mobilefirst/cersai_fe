@@ -78,8 +78,8 @@ const NodalDetails = (props: Props) => {
                             <span className="text-red-500">{errors.nodalOfficerDesignation?.message}</span>
                         </div>
                         <div>
-                            <label htmlFor="Dsc" className="block text-gray-700 text-sm font-bold mb-2">
-                                DSC
+                            <label htmlFor="Dsc" className="block text-gray-700 text-sm font-bold mb-2 mt-7">
+                               
                             </label>
                             <UploadButton
                                 id="Dsc"
@@ -110,4 +110,4 @@ const NodalDetails = (props: Props) => {
     )
 }
 
-export default NodalDetails
+export default NodalDetails;

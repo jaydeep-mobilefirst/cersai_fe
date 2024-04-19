@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/arrow-down.svg";
 import html2pdf from "html2pdf.js";
-import { sections } from "../../utils/hardText/landingpageText";
+import { competentSections } from "../../utils/hardText/landingpageText";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -19,7 +19,7 @@ const useDownloadPDF = () => {
   return { downloadPDF, isDownloading };
 };
 
-const ReviewMain = () => {
+const ReviewDetails = () => {
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
@@ -28,16 +28,14 @@ const ReviewMain = () => {
     Navigate("/Landing");
   };
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(event.target.checked);
-  };
+ 
 
   return (
     <>
       <div className="container mx-auto p-6 w-full">
         <div id="reviewContent">
-        <h1 className="text-2xl font-bold mb-6">Review Details</h1>
-          {sections.map((section, index) => (
+        <h1 className="text-2xl font-bold mb-6">Review</h1>
+          {competentSections.map((section, index) => (
             <div className="mb-[16px]">
               <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px;] text-gilroy-bold">
                 <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
@@ -86,19 +84,7 @@ const ReviewMain = () => {
           ))}
         </div>
 
-        <div className="flex flex-shrink-0 mt-[20px]">
-          <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={handleCheckboxChange}
-            />
-          </div>
-          <div className="leading-[24px]">
-            I here by declare that all information provided is best of my
-            knowledge
-          </div>
-        </div>
+       
 
         <div className="flex text-nowrap justify-between mt-[52px] sm:flex-row">
           <button className="flex text-gilroy-regulartext-[14px]">
@@ -133,4 +119,4 @@ const ReviewMain = () => {
   );
 };
 
-export default ReviewMain;
+export default ReviewDetails;

@@ -22,11 +22,18 @@ export const registrationFirstPage = [
   { heading: "Entity Type", removeBtn: closeCircle },
   { btn1: "Cacel", btn2: "Select" },
 ];
+// export const radioButtons = [
+//   { id: 1, text: "Deposit Taker",path },
+//   { id: 2, text: "Regulator" },
+//   { id: 3, text: "Designated Court" },
+//   { id: 4, text: "Competent Authority" },
+// ];
+
 export const radioButtons = [
-  { id: 1, text: "Deposit Taker" },
-  { id: 2, text: "Regulator" },
-  { id: 3, text: "Designated Court" },
-  { id: 4, text: "Competent Authority" },
+  { id: 1, text: "Deposit Taker",path: "/depositetaker/signup/verification" },
+  { id: 2, text: "Regulator",path:"/depositetaker/signup/verification"},
+  { id: 3, text: "Designated Court",path:"/depositetaker/signup/verification" },
+  { id: 4, text: "Competent Authority",path:"/competent/authority/competentdetails" },
 ];
 //UploadDocumentComp Component
 export const uploadModal=[
@@ -121,3 +128,4 @@ export const signupSideBar = [
     percentage: 100,
   },
 ];
+
