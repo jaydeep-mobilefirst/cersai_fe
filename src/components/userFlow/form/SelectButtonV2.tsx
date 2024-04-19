@@ -14,9 +14,14 @@ type Props = {
   searchInputOnchange?: any;
   searchInputValue?: string;
   showSearchInput?: boolean;
+  variant ?: "basic" | "outline",
+  className ?: string
+  multiselect ?: boolean,
+  allSelectedOptions ?: any[],
+  remove ?: (data : any) => void
 };
 
-const SelectButton = ({
+const SelectButtonV2 = ({
   setOption,
   options,
   placeholder,
@@ -24,43 +29,68 @@ const SelectButton = ({
   searchInputValue,
   selectedOption,
   showSearchInput,
+  className,
+  variant,
+  allSelectedOptions,
+  multiselect,
+  remove = (data : any) => {}
 }: Props) => {
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const variantOptions = {
+    basic : `w-full h-[50px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
+    outline : `w-full h-[36px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-green-600 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
+    multiselect : `w-full px-[8px] py-[16px] pr-[17px] flex flex-wrap gap-2 bg-white border border-green-600 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`
+  }
 
+  const variantDropdown = {
+    basic : `block w-full rounded-md bg-white shadow-lg relative`,
+    outline : `block w-full rounded-md bg-white shadow-lg relative`
+  }
   useEffect(() => {
     setArrowDirectionToggle(false);
   }, [selectedOption]);
-
-  const handleClickOutside = (event : any) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setArrowDirectionToggle(false);
-    }
-  };
-  useEffect(() => {
-    if (arrowDirectionToggle) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-    
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+    // Close the dropdown if the user clicks outside of it
+    const handleClickOutside = (event : any) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setArrowDirectionToggle(false);
+      }
     };
-  }, [arrowDirectionToggle]); 
+    useEffect(() => {
+      if (arrowDirectionToggle) {
+        document.addEventListener("mousedown", handleClickOutside);
+      } else {
+        document.removeEventListener("mousedown", handleClickOutside);
+      }
+      
+
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [arrowDirectionToggle]); 
+
   return (
-    <>
+    <div className={className}>
       <button
-        className="w-[250px] h-[56px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left"
+        className={multiselect ? variantOptions['multiselect']  : variantOptions[variant ?? "basic"]}
         type="button" 
-        onClick={() => setArrowDirectionToggle(!arrowDirectionToggle)}
+        
       >
-        {selectedOption ? selectedOption : placeholder}
-        <div>
+        {!multiselect && selectedOption ? selectedOption : !multiselect && placeholder}
+        {multiselect && allSelectedOptions && allSelectedOptions?.length > 0 
+        ?
+          allSelectedOptions?.map((s) => {
+            return <span className="bg-green-100 py-1 px-1">{s.label}<span className="text-red-500 ml-1 hover:bg-red-100 p-1" onClick={() => remove(s)}>X</span></span>
+          })
+          :
+          "Select"
+        }
+        <div           ref={dropdownRef}
+ className={`p-2 rounded-md hover:bg-gray-200 absolute right-0 ${className === "relative" && "absolute right-2 top-[13px]"}`}>
           {!arrowDirectionToggle ? (
             <svg
-              className="w-4 h-4 ml-2 -mr-1"
+              onClick={() => setArrowDirectionToggle(true)}
+              className="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -75,7 +105,8 @@ const SelectButton = ({
             </svg>
           ) : (
             <svg
-              className="w-4 h-4 ml-2 -mr-1"
+              onClick={() => setArrowDirectionToggle(false)}
+              className="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -94,14 +125,10 @@ const SelectButton = ({
       {arrowDirectionToggle && (
         <div
           ref={dropdownRef}
-          className="absolute z-10 mt-2 w-[250px] rounded-md bg-white shadow-lg"
+          className={variantDropdown[variant ?? "basic"]}
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu"
-          style={{
-            width: "317px",
-            padding: "8px 16px",
-          }}
         >
           {showSearchInput && searchInputOnchange && (
             <div className="relative p-2">
@@ -142,17 +169,28 @@ const SelectButton = ({
             </div>
           )}
           <div
-            className="overflow-auto max-h-40 custom-scrollbar"
+            className="overflow-auto max-h-40 custom-scrollbar flex flex-col absolute bg-white w-full rounded-md"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            {options.map((option, index) => (
+            {!multiselect && options.map((option, index) => (
               <a
                 key={index}
                 onClick={() => setOption(option)}
                 href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900"
+                className="px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900"
+                role="menuitem"
+              >
+                {option.label}
+              </a>
+            ))}
+            {multiselect && options.map((option, index) => (
+              <a
+                key={index}
+                onClick={() => setOption(option)}
+                href="#"
+                className={`px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 ${allSelectedOptions?.find((f) => f.value === option.value) && 'bg-green-50'}`}
                 role="menuitem"
               >
                 {option.label}
@@ -161,8 +199,8 @@ const SelectButton = ({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
-export default SelectButton;
+export default SelectButtonV2;

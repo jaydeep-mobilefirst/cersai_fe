@@ -121,49 +121,51 @@ export const hero = [
 
 export const sections = [
   {
+    link : "/depositetaker/signup/verification",
     title: "Verification Status",
     buttonText: "Success",
-    fieldsLeft: [{ label: "Name", value: "Lorem ipsum" }],
-    fieldsRight: [{ label: "PAN Details", value: "Lorem ipsum" }],
+    fieldsLeft: [{ label: "Name", value: "Lorem ipsum", key : "companyName" }],
+    fieldsRight: [{ label: "PAN Details", value: "Lorem ipsum", key : "panNumber" }],
   },
   {
     title: "Entity Details",
     buttonText: "Edit",
-
+    link : "/depositetaker/signup/entitydetials",
     fieldsLeft: [
-      { label: "Name of Deposit Taker", value: "Lorem ipsum" },
-      { label: "Type of Entity", value: "Lorem ipsum" },
-      { label: "Address Line 1", value: "Lorem ipsum" },
-      { label: "Address Line 2", value: "Lorem ipsum" },
+      { label: "Type of Entity", value: "Lorem ipsum" , key : "entityType"},
+      { label: "Address Line 1", value: "Lorem ipsum" , key : "addressLine1"},
+      { label: "Address Line 2", value: "Lorem ipsum" , key : "addressLine2"},
+      { label: "GST Number", value: "Lorem ipsum" , key : "gstNumber"},
     ],
     fieldsRight: [
-      { label: "Unique Registration ID", value: "Lorem ipsum" },
-      { label: "PIN code", value: "Lorem ipsum" },
-      { label: "State", value: "Lorem ipsum" },
-      { label: "District", value: "Lorem ipsum" },
+      { label: "Unique Registration ID", value: "Lorem ipsum" , key : "uniqueId"},
+      { label: "PIN code", value: "Lorem ipsum" , key : "pinCode"},
+      { label: "State", value: "Lorem ipsum" , key : "state"},
+      { label: "District", value: "Lorem ipsum" , key : "district"},
     ],
   },
   {
+    link : "/depositetaker/signup/regulatordetails",
     title: "Regulator Details",
     buttonText: "Edit",
     fieldsLeft: [
-      { label: "Regulator Name", value: "Lorem ipsum" },
-      { label: "Registration Approval Date", value: "Lorem ipsum" },
+      { label: "Regulator Name", value: "Lorem ipsum", key : "regulatorName" },
+      { label: "Registration Approval Date", value: "Lorem ipsum", key : "registrationDate" },
     ],
     fieldsRight: [
-      { label: "Regulator Registered Number", value: "Lorem ipsum" },
+      { label: "Regulator Registered Number", value: "Lorem ipsum", key : "registrationNo" },
     ],
   },
-  {
-    title: "Nodal Details",
-    buttonText: "Edit",
-    fieldsLeft: [
-      { label: "Nodal Officer Name", value: "Lorem ipsum" },
-      { label: "Nodal Officer Email", value: "Lorem ipsum" },
-    ],
-    fieldsRight: [
-      { label: "Nodal Officer Name", value: "Lorem ipsum" },
-      { label: "Nodal Officer Designation", value: "Lorem ipsum" },
-    ],
-  },
+  // {
+  //   title: "Nodal Details",
+  //   buttonText: "Edit",
+  //   fieldsLeft: [
+  //     { label: "Nodal Officer Name", value: "Lorem ipsum" },
+  //     { label: "Nodal Officer Email", value: "Lorem ipsum" },
+  //   ],
+  //   fieldsRight: [
+  //     { label: "Nodal Officer Name", value: "Lorem ipsum" },
+  //     { label: "Nodal Officer Designation", value: "Lorem ipsum" },
+  //   ],
+  // },
 ];
