@@ -21,7 +21,20 @@ import ReviewDetails from "./pages/competentAuthority/ReviewDetails";
 import ComponentDetails from "./pages/competentAuthority/CompetentDetails";
 import CompetentAuthorityRegister from "./layouts/competentAuthorityRegister/CompetentAuthorityRegister";
 import UploadDocuments from "./pages/competentAuthority/UploadDocuments";
-//import CompetentAuthorityRegister from "./layouts/competentAuthorityRegister/CompetentAuthorityRegister";
+
+
+
+import DesignatedCourtRegister  from "./layouts/designatedCourtRegister/DesignatedCourtRegister";
+import DesignatedCourtDetails from "./pages/designatedCourt/DesignatedCourtDetails";
+import NodalDetailsDesignated from "./pages/designatedCourt/NodalDetailsDesignated";
+import UploloadDocumentsDesignated from './pages/designatedCourt/UploadDocumentsDesignated';
+import ReviewDetailsDesignated from "./pages/designatedCourt/ReviewDetailsDesignated";
+
+import RegulatorRegister from "./layouts/regulatorRegister/RegulatorRegister";
+import RegulatorDetails from "./pages/regulator/RegulatorDetails";
+import NodalDetailsRegulator from "./pages/regulator/NodalDetailsRegulator";
+import UploadDocumentsRegulator from "./pages/regulator/UploadDocumentsRegulator";
+import ReviewDetailsRegulator from "./pages/regulator/ReviewDetailsRegulator";
 
 function App() {
   const { value } = useSelector((state: RootState) => state.common);
@@ -45,6 +58,27 @@ function App() {
   </Route>
 
   <Route element= 
+  {<RegulatorRegister/>} path="/regulator/court">
+
+  <Route element={<RegulatorDetails />} path="regulatordetails" />
+  <Route element={<UploadDocumentsRegulator />} path="uploaddocuments" />
+  <Route element={<NodalDetailsRegulator />} path="nodaldetails" />
+  <Route element={<ReviewDetailsRegulator />} path="reviewdetails" />
+    
+  </Route>
+
+
+  <Route element= 
+  {<DesignatedCourtRegister/>} path="/designated/court">
+
+  <Route element={<DesignatedCourtDetails />} path="designateddetails" />
+  <Route element={<UploloadDocumentsDesignated />} path="uploaddocuments" />
+  <Route element={<NodalDetailsDesignated />} path="nodaldetails" />
+  <Route element={<ReviewDetailsDesignated />} path="reviewdetails" />
+    
+  </Route>
+
+  <Route element= 
   {<CompetentAuthorityRegister/>} path="/competent/authority">
 
   <Route element={<ComponentDetails />} path="competentdetails" />
@@ -53,6 +87,7 @@ function App() {
   <Route element={<ReviewDetails />} path="reviewdetails" />
     
   </Route>
+
 
           </Route>
           <Route element={<Landing />} path="/" />

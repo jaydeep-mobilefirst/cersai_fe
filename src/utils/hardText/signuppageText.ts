@@ -31,8 +31,8 @@ export const registrationFirstPage = [
 
 export const radioButtons = [
   { id: 1, text: "Deposit Taker",path: "/depositetaker/signup/verification" },
-  { id: 2, text: "Regulator",path:"/depositetaker/signup/verification"},
-  { id: 3, text: "Designated Court",path:"/depositetaker/signup/verification" },
+  { id: 2, text: "Regulator",path:"/regulator/court/regulatordetails"},
+  { id: 3, text: "Designated Court",path:"/designated/court/designateddetails" },
   { id: 4, text: "Competent Authority",path:"/competent/authority/competentdetails" },
 ];
 //UploadDocumentComp Component

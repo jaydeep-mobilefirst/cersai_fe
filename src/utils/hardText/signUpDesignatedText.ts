@@ -9,19 +9,19 @@ import uploadImage from '../../assets/images/export.svg'
 import exportTestHigh from '../../assets/images/exportTestHigh.svg'
 
 
-export const signupSideBarCompetent = [
+export const signupSideBarDesignated = [
     {
       id: 1,
-      path:"/competent/authority/competentdetails",
+      path:"/designated/court/designatedDetails",
       imgSrc: profile,
       imgSrcHighlighted:profileCircleHighlighted,
-      description: "Competent Details",
+      description: "Court Details",
       tickImgSrc: tickCircleWhite,
       percentage: 0,
     },
     {
       id: 2,
-      path:"/competent/authority/uploaddocuments",
+      path:"/designated/court/uploaddocuments",
       imgSrc: uploadImage,
       imgSrcHighlighted:exportTestHigh,
       description: "Upload Documents",
@@ -30,7 +30,7 @@ export const signupSideBarCompetent = [
     },
     {
       id: 3,
-      path:"/competent/authority/nodaldetails",
+      path:"/designated/court/nodaldetails",
       imgSrc: buildings,
       imgSrcHighlighted:buildingsHigh,
       description: "Nodal Details",
@@ -39,7 +39,7 @@ export const signupSideBarCompetent = [
     },
     {
         id: 4,
-        path:"/competent/authority/reviewdetails",
+        path:"/designated/court/reviewdetails",
         imgSrc: documentTest,
         imgSrcHighlighted:documentTestHigh,
         description: "Review Details",

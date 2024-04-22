@@ -1,5 +1,5 @@
 import * as yup from "yup";
 
-export const UploadDocumentsSchema = yup.object().shape({
+export const DesignatedUploadDocumentsSchema = yup.object().shape({
     file:yup.mixed().required('File is required')
 });
