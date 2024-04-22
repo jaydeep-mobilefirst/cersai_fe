@@ -1,23 +1,13 @@
-import closeCircle from "../../assets/images/closeCircle.svg";
-import add from "../../assets/images/add.svg";
-import directboxSend from "../../assets/images/directboxSend.svg";
-import trash from "../../assets/images/trash.svg";
-import failedImg from "../../assets/images/failedImg.svg";
-import circleForModal from "../../assets/images/circleForModal.svg";
-import tickCircle from "../../assets/images/tickCircle.svg";
-import shieldTick from "../../assets/images/shieldTick.svg";
-import profieCircle from "../../assets/images/profileCircle.svg";
 import buildings from "../../assets/images/buildings.svg";
 import documentTest from "../../assets/images/documentText.svg";
 import tickCircleWhite from "../../assets/images/tickCircleWhite.svg";
-import clipboardText from "../../assets/images/clipboardText.svg";
-import typeVerification from '../../assets/images/typeVerification.svg';
 import profileCircleHighlighted from '../../assets/images/profileCircleHighlighted.svg';
-import clickboardTextHigh from '../../assets/images/clickboardTextHigh.svg';
 import buildingsHigh from '../../assets/images/buildingsHigh.svg';
 import documentTestHigh from '../../assets/images/documentTestHigh.svg';
 import profile from '../../assets/images/profile-circle.svg'
 import uploadImage from '../../assets/images/export.svg'
+import exportTestHigh from '../../assets/images/exportTestHigh.svg'
+
 
 export const signupSideBarCompetent = [
     {
@@ -33,7 +23,7 @@ export const signupSideBarCompetent = [
       id: 2,
       path:"/competent/authority/uploaddocuments",
       imgSrc: uploadImage,
-      imgSrcHighlighted:uploadImage,
+      imgSrcHighlighted:exportTestHigh,
       description: "Upload documents",
       tickImgSrc: tickCircleWhite,
       percentage: 25,

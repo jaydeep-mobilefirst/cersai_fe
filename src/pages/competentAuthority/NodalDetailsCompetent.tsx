@@ -4,12 +4,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputFields from '../../components/userFlow/form/InputField';
 import UploadButton from '../../components/userFlow/form/UploadButton';
-import SignUpSideBar from '../../components/userFlow/depositeTaker/SignUpSideBar';
+
 
 type Props = {}
 
 const NodalDetails = (props: Props) => {
-    const { register, handleSubmit, formState: { errors }, reset, setValue, setError, clearErrors} = useForm({
+    const { register, handleSubmit, formState: { errors }} = useForm({
         resolver: yupResolver(NodalDetailsSchema)
     });
 

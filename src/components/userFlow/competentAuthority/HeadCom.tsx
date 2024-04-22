@@ -1,4 +1,4 @@
-import Logo from '../../../assets/images/logo.svg';
+//import Logo from '../../../assets/images/logo.svg';
 const HeadComp =()=>{
     return(
         <div className="flex flex-row ">

@@ -12,6 +12,7 @@
     "@types/node": "^16.18.86",
     "@types/react": "^18.2.63",
     "@types/react-dom": "^18.2.19",
+    "axios": "^1.6.8",
     "html2pdf": "^0.0.11",
     "html2pdf.js": "^0.9.3",
     "react": "^18.2.0",

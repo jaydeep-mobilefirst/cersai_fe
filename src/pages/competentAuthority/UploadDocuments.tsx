@@ -1,8 +1,7 @@
-import React from 'react'
-import UploadButton from '../../components/userFlow/form/UploadButton';
-import Button from '../../components/userFlow/form/Button';
-import document from '../../assets/images/documentTestHigh.svg'
-import upload from '../../assets/images/export.svg'
+import React from 'react';
+import  folderOpen from   "../../assets/images/folder-open.svg";
+import exportTestHigh from '../../assets/images/exportTestHigh.svg'
+
 type Props = {}
 
 const UploadDocuments = (props: Props) => {
@@ -22,14 +21,14 @@ const UploadDocuments = (props: Props) => {
                       <div className="flex p-7 space-x-2 ">
                         <div className="mt-2">
                           <img
-                            src={document}
-                            alt={document}
-                            className="w-6"
+                            src={folderOpen}
+                            alt={folderOpen}
+                            className=" bg-[#52AE3226]  rounded p-1 text-white"
                           />
                         </div>
-                        <div className="">
+                        <div>
                           <h1 className="text-sm font-normal text-gilroy-medium text-[#1D1D1B]">
-                          Office Order / Any other supporting document for appointment of Nodal Officer<span className='text-[#E43625;]'></span>
+                          Office Order / Any other supporting document for appointment of Nodal Officer<span className='text-red-500'>*</span>
                           </h1>
                           <p className="text-base font-normal text-gilroy-medium text-gray-400">
                           No Document uploaded
@@ -38,8 +37,8 @@ const UploadDocuments = (props: Props) => {
                       </div>
                       <div className="mr-3">
                       <img
-                            src={upload}
-                            alt={upload}
+                            src={exportTestHigh}
+                            alt={exportTestHigh}
                             className="bg-[#385723] rounded p-3 text-white"
                           />
                       
@@ -59,7 +58,7 @@ const UploadDocuments = (props: Props) => {
                         type={'submit'}
                         className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm  w-[224px]"
                     >
-                        Save and Continue
+                        Save & Continue
                     </button>
                 </div>
            

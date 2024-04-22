@@ -48,6 +48,7 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>((pr
                             id='datePicker'
                             className='absolute -z-10'
                             onChange={onChangeHandler}
+                            placeholder='date'
                         />
                     </div>
                     

@@ -73,24 +73,25 @@ import { radioButtons, registrationFirstPage } from '../../../utils/hardText/sig
 import { useNavigate } from "react-router-dom";
 
 interface ModelDivProps {
-  closeModal: () => void; // Define the closeModal prop
+  closeModal: () => void; 
+  
 }
 
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   
   const Navigate = useNavigate();
   
-  // State to track the selected radio button, defaulting to the first option
+  
   const [selectedRadio, setSelectedRadio] = useState(radioButtons[0]);
 
-  // Form submission handler that navigates based on the selected radio button's path
+  
   const handleSubmit = (e:any) => {
     e.preventDefault();
     Navigate(selectedRadio.path);
   };
 
   return (
-    <div className="text-gilroy-regular md:p-[40px] m-[2.5%] w-[95%] md:w-[586px] md:h-[370px] p-8 bg-white rounded-3xl">
+    <div className="text-gilroy-regular md:p-[40px] m-[2.5%] w-[95%] md:w-[586px] md:h-[370px] p-8  bg-white rounded-3xl">
       <div className="flex flex-row justify-between items-center md:w-[506px] h-12 mb-[16px]">
         <h1 className='text-black text-2xl font-normal text-gilroy-medium leading-loose'>
           {registrationFirstPage[0].heading}
@@ -102,10 +103,10 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
           <div
             key={item.id}
             className={`md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex ${
-              selectedRadio.id === item.id ? 'bg-[#EEF7EB] text-[#385723]' : 'bg-white text-black'
+              selectedRadio.id === item.id ? 'bg-[#EEF7EB] text-[#385723] border-[#385723] mr-2' : 'bg-white text-black border border-gray-300 mr-2'
             }`}
           >
-            <div className="flex flex-row justify-between items-center md:gap-4 inline-flex">
+            <div className=" flex-row justify-between items-center  md:gap-4 inline-flex">
               <div className="text-lg font-normal">
                 <label onClick={() => setSelectedRadio(item)}>
                   <input 
@@ -113,6 +114,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
                     name="entity" 
                     checked={selectedRadio.id === item.id} 
                     onChange={() => setSelectedRadio(item)} 
+                    className='mr-2'
                   /> 
                   {item.text}
                 </label>

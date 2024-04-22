@@ -92,6 +92,7 @@ const ReviewMain = () => {
               type="checkbox"
               checked={isChecked}
               onChange={handleCheckboxChange}
+              placeholder="ischecked"
             />
           </div>
           <div className="leading-[24px]">
