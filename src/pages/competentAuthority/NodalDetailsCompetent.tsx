@@ -1,12 +1,11 @@
-import React from 'react'
+import React from 'react';
 import NodalDetailsSchema from '../../formValidationSchema/deposit_taker/NodalDetails.schema';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputFields from '../../components/userFlow/form/InputField';
 import UploadButton from '../../components/userFlow/form/UploadButton';
 
-
-type Props = {}
+type Props = {};
 
 const NodalDetails = (props: Props) => {
     const { register, handleSubmit, formState: { errors }} = useForm({
@@ -19,94 +18,88 @@ const NodalDetails = (props: Props) => {
     }
 
     return (
-        <>
-            <form onSubmit={handleSubmit(handleOnSubmit)} className="p-4 flex flex-col w-full max-w-[80%] justify-between">
-                <div className="bg-white p-6 w-full">
-                    <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        <div>
-                            <label htmlFor="nodalOfficerName" className="block text-gray-700 text-sm font-bold mb-2">
-                                Nodal Officer Name<span className='text-red-500'>*</span>
-                            </label>
-                            <InputFields
-                                type="text"
-                                id="nodalOfficerName"
-                                placeholder="Type here"
-                                {...register('nodalOfficerName')}
-                            //   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            />
-                            <span className="text-red-500">{errors.nodalOfficerName?.message}</span>
-                        </div>
-                        <div>
-                            <label htmlFor="nodalOfficerEmail" className="block text-gray-700 text-sm font-bold mb-2">
-                                Nodal Officer Email <span className='text-red-500'>*</span>
-                            </label>
-                            <InputFields
-                                type="email"
-                                id="nodalOfficerEmail"
-                                placeholder="Type here"
-                                {...register('nodalOfficerEmail')}
-                            //   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            />
-                            <span className="text-red-500">{errors.nodalOfficerEmail?.message}</span>
-                        </div>
-                        <div>
-                            <label htmlFor="nodalMobileNumber" className="block text-gray-700 text-sm font-bold mb-2">
-                                Nodal Officer Mobile Number<span className='text-red-500'>*</span>
-                            </label>
-                            <InputFields
-                                type="text"
-                                id="nodalMobileNumber"
-                                {...register('nodalOfficerMobileNumber')}
-                            //   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            />
-                            <span className="text-red-500">{errors.nodalOfficerMobileNumber?.message}</span>
-                        </div>
+        <form onSubmit={handleSubmit(handleOnSubmit)} className="p-4 flex flex-col w-full max-w-[80%] justify-between">
+            <div className="bg-white p-6 w-full">
+                <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label htmlFor="nodalOfficerName" className="block text-gray-700 text-sm font-bold mb-2">
+                            Nodal Officer Name<span className='text-red-500'>*</span>
+                        </label>
+                        <InputFields
+                            type="text"
+                            id="nodalOfficerName"
+                            placeholder="Type here"
+                            {...register('nodalOfficerName')}
+                        />
+                        <span className="text-red-500">{errors.nodalOfficerName?.message}</span>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        <div>
-                            <label htmlFor="nodalOfficerDesgnation" className="block text-gray-700 text-sm font-bold mb-2">
-                                Nodal Officer Designation<span className='text-red-500'>*</span>
-                            </label>
-                            <InputFields
-                                type="text"
-                                id="nodalOfficerDesgnation"
-                                placeholder="Type here"
-                                {...register('nodalOfficerDesignation')}
-                            //   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            />
-                            <span className="text-red-500">{errors.nodalOfficerDesignation?.message}</span>
-                        </div>
-                        <div>
-                            <label htmlFor="Dsc" className="block text-gray-700 text-sm font-bold mb-2 mt-7">
-                               
-                            </label>
-                            <UploadButton
-                                id="Dsc"
-                                type='button'
-                            />
-                        </div>
+                    <div>
+                        <label htmlFor="nodalOfficerEmail" className="block text-gray-700 text-sm font-bold mb-2">
+                            Nodal Officer Email <span className='text-red-500'>*</span>
+                        </label>
+                        <InputFields
+                            type="email"
+                            id="nodalOfficerEmail"
+                            placeholder="Type here"
+                            {...register('nodalOfficerEmail')}
+                        />
+                        <span className="text-red-500">{errors.nodalOfficerEmail?.message}</span>
+                    </div>
+                    <div>
+                        <label htmlFor="nodalMobileNumber" className="block text-gray-700 text-sm font-bold mb-2">
+                            Nodal Officer Mobile Number<span className='text-red-500'>*</span>
+                        </label>
+                        <InputFields
+                            type="text"
+                            id="nodalMobileNumber"
+                            {...register('nodalOfficerMobileNumber')}
+                        />
+                        <span className="text-red-500">{errors.nodalOfficerMobileNumber?.message}</span>
                     </div>
                 </div>
-                <div className="flex justify-between items-center">
-                    <div className='flex flex-row'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M15 6L9 12L15 18" stroke="#1D1D1B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        <button className="text-black transition duration-300">
-                            Back
-                        </button>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label htmlFor="nodalOfficerDesgnation" className="block text-gray-700 text-sm font-bold mb-2">
+                            Nodal Officer Designation<span className='text-red-500'>*</span>
+                        </label>
+                        <InputFields
+                            type="text"
+                            id="nodalOfficerDesgnation"
+                            placeholder="Type here"
+                            {...register('nodalOfficerDesignation')}
+                        />
+                        <span className="text-red-500">{errors.nodalOfficerDesignation?.message}</span>
                     </div>
-                    <button
-                        type={'submit'}
-                        className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm  w-[224px]"
-                    >
-                        Save and Continue
+                    <div className="mt-7 lg:mt-0">
+                        <label htmlFor="nodalOfficerDesgnation" className="block text-gray-700 text-sm font-bold mb-2">
+                            Upload Document
+                        </label>
+                        <UploadButton
+                            id="Dsc"
+                            type='button'
+                            className="w-full"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className="flex justify-between items-center">
+                <div className='flex flex-row'>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 6L9 12L15 18" stroke="#1D1D1B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <button className="text-black transition duration-300">
+                        Back
                     </button>
                 </div>
-            </form>
-        </>
-
+                <button
+                    type={'submit'}
+                    className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full lg:w-auto"
+                >
+                    Save and Continue
+                </button>
+            </div>
+        </form>
     )
 }
 

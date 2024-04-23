@@ -101,16 +101,15 @@ const ComponentDetails: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col p-6 w-full">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between h-full">
+    <div className="flex flex-col h-screen p-4 md:p-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between flex-1">
         <div>
-          <h1 className="text-2xl font-bold mb-6">Competent Details</h1>
-          <div className="grid grid-cols-3 gap-5">
+          <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Competent Details</h1>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
             <div>
               <label htmlFor="Typeofentity" className="text-base font-normal">
                 Name of Competent Authority <span className="text-red-500">*</span>
               </label>
-
               <SelectButton
                 setOption={handleSetOption1}
                 options={options1}
@@ -129,12 +128,13 @@ const ComponentDetails: React.FC = () => {
               <TextArea
                 placeholder="Type Here"
                 {...register("addressLine1")}
-                width="315px"
+                width="full"
               />
               {errors.addressLine1 && (
                 <p className="text-red-500">{errors.addressLine1.message}</p>
               )}
             </div>
+  
             <div>
               <label htmlFor="addressLine2" className="text-base font-normal">
                 Address Line 2
@@ -142,11 +142,10 @@ const ComponentDetails: React.FC = () => {
               <TextArea
                 placeholder="Type Here"
                 {...register("addressLine2")}
-                width="315px"
+                width="full"
               />
-
-             
             </div>
+  
             <div>
               <label htmlFor="pinCode" className="text-base font-normal">
                 Pin Code <span className="text-red-500">*</span>
@@ -161,7 +160,7 @@ const ComponentDetails: React.FC = () => {
                 showSearchInput={true}
               />
             </div>
-
+  
             <div>
               <label htmlFor="state" className="text-base font-normal">
                 State <span className="text-red-500">*</span>
@@ -176,7 +175,7 @@ const ComponentDetails: React.FC = () => {
                 showSearchInput={true}
               />
             </div>
-
+  
             <div>
               <label htmlFor="district" className="text-base font-normal">
                 Jurisdiction <span className="text-red-500">*</span>
@@ -194,20 +193,21 @@ const ComponentDetails: React.FC = () => {
            
           </div>
         </div>
-
-        <div className="flex justify-between items-center ">
+        <div className="mt-auto">
+                  <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex cursor-pointer ">
             <img src={ArrowIcon} alt="" />
-            <h1 className="text-sm font-normal text-black">Back</h1>
+            <h1 className="text-sm font-normal text-black ml-2">Back</h1>
           </div>
           <div>
             <Button type="submit" label="Save & Continue" />
           </div>
         </div>
-
+        </div>
       </form>
     </div>
   );
+  
 };
 
 export default ComponentDetails;
