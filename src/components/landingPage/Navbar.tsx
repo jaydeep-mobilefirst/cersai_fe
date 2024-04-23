@@ -27,6 +27,7 @@ const Navbar = () => {
               <MenuItem key={index} text={menuItem} />
             ))}
           </ul>
+          
         </div>
       </nav>
 
@@ -36,10 +37,12 @@ const Navbar = () => {
           showMenu ? "flex" : "hidden"
         } lg:hidden w-1/8 h-screen bg-gradient-to-r from-[#54AD47] to-[#338118] fixed top-0 left-0 z-20`}
       >
-        <ul className="flex flex-col h-full text-white">
+  <ul className="flex flex-col h-full text-white">
           {navbar.map((menuItem, index) => (
             <MenuItem key={index} text={menuItem} />
+            
           ))}
+      
         </ul>
 
         {/* Close Icon*/}

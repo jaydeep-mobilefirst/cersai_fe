@@ -32,7 +32,7 @@ const SignUpSideBar: React.FC =()=>{
     }
 
     return(
-        <div className='w-full h-[100vh] md:w-[349px] bg-[#EEF7EB]'>
+        <div className='  md:block sm:block h-[100vh] w-[349px] bg-[#EEF7EB]'>
             <HeadComp/>
             <hr className="bg-[#000000] w-full md:w-[349px]"></hr>
             <div className="px-[28px] mt-[16px]">

@@ -104,7 +104,7 @@ const ComponentDetails: React.FC = () => {
     <div className="flex flex-col h-screen p-4 md:p-6">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between flex-1">
         <div>
-          <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Competent Details</h1>
+          <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 mt-7 ">Competent Details</h1>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
             <div>
               <label htmlFor="Typeofentity" className="text-base font-normal">
