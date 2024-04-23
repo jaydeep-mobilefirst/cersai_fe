@@ -34,8 +34,8 @@ const SelectButton = ({
   return (
     <>
       <button
-        className="w-[250px] h-[56px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left"
-        type="button" 
+        className="h-[56px] px-2 md:px-8 py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left w-full md:w-[370px]"
+        type="button"
         onClick={() => setArrowDirectionToggle(!arrowDirectionToggle)}
       >
         {selectedOption ? selectedOption : placeholder}
@@ -66,7 +66,7 @@ const SelectButton = ({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth={2}
                 d="M5 15l7-7 7 7"
               ></path>
             </svg>
@@ -80,7 +80,6 @@ const SelectButton = ({
           aria-orientation="vertical"
           aria-labelledby="options-menu"
           style={{
-            width: "317px",
             padding: "8px 16px",
           }}
         >

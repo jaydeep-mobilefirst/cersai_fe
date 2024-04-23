@@ -78,7 +78,6 @@ interface ModelDivProps {
 }
 
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
-  
   const Navigate = useNavigate();
   
   
