@@ -30,11 +30,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState(false);
   const [formError, setFormError] = useState("");
-
-  const options = [
-    { value: "Regulator", label: "Regulator" },
-    { value: "Deposit taker", label: "Deposit taker" },
-  ];
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const {
     register,
@@ -53,6 +50,14 @@ const LoginModel: React.FC<LoginModelProps> = ({
     setFormError("");
   };
 
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
+
   const handleFileUpload = (file: any) => {
     setIsFileUploaded(file ? true : false);
   };
@@ -68,16 +73,13 @@ const LoginModel: React.FC<LoginModelProps> = ({
       return;
     }
 
-    setFormError("");
     setLoader(true);
     setError(false);
-    // Replace with your actual login API call
     try {
       const response = await axios.post(`your_api_endpoint/login`, {
         username: data.email,
         password: data.password,
       });
-      // Handle response here
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
@@ -132,13 +134,17 @@ const LoginModel: React.FC<LoginModelProps> = ({
                     </label>
                     <SelectButton
                       setOption={handleSelectOption}
-                      options={options}
+                      options={[
+                        { value: "Regulator", label: "Regulator" },
+                        { value: "Deposit taker", label: "Deposit taker" },
+                      ]}
                       selectedOption={selected || "Regulator"}
                       placeholder="Select an option"
                       showSearchInput={false}
                     />
                     {formError && <p className="text-red-500">{formError}</p>}
                   </div>
+
                   <div className="mt-5">
                     <label
                       htmlFor="email"
@@ -156,11 +162,13 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       })}
                       placeholder="Email id / Mobile no."
                       error={error || !!errors.email}
+                      onChange={handleEmailChange}
                     />
                     {errors.email && (
                       <p className="text-red-500">{errors.email.message}</p>
                     )}
                   </div>
+
                   <div className="mt-5">
                     <label
                       htmlFor="password"
@@ -174,16 +182,18 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       })}
                       placeholder="Password"
                       error={error || !!errors.password}
+                      onChange={handlePasswordChange}
                     />
                     {errors.password && (
                       <p className="text-red-500">{errors.password.message}</p>
                     )}
-                    <p className="text-xs font-normal text-gilroy-medium text-end text-[#385723] cursor-pointer">
-                      Forgot password?
-                    </p>
                   </div>
-                  <div className="mt-6">
-                    <UploadButtonV2 onFileUpload={handleFileUpload}>
+
+                  <div className="mt-5">
+                    <UploadButtonV2
+                      onFileUpload={handleFileUpload}
+                      disabled={!email || !password}
+                    >
                       Upload Document
                     </UploadButtonV2>
                   </div>
