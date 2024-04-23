@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SelectButton from "../../components/userFlow/form/SelectButton";
-import InputFields from "../../components/userFlow/form/InputField";
 import TextArea from "../../components/userFlow/form/TextArea";
 import Button from "../../components/userFlow/form/Button";
 import ArrowIcon from "../../assets/images/Arrow.svg";
-import { EntityDetailschema } from "../../formValidationSchema/deposit_taker/EntityValidation.schema";
+import { EntityDetailschema } from "../../formValidationSchema/designated_court/EntityValidation.schema";
 
-const EntityDetails: React.FC = () => {
+const DesignatedCourtDetails: React.FC = () => {
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
   const [searchInputValue1, setSearchInputValue1] = useState<string>("");
 
@@ -17,6 +16,9 @@ const EntityDetails: React.FC = () => {
 
   const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
   const [searchInputValue3, setSearchInputValue3] = useState<string>("");
+   
+  const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
+  const [searchInputValue4, setSearchInputValue4] = useState<string>("");
 
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
@@ -24,17 +26,23 @@ const EntityDetails: React.FC = () => {
     { value: "Sole PArtnership", label: "Sole PArtnership" },
   ];
 
-  const options3 = [
-    { value: "kashmir", label: "kashmir" },
-    { value: "Jammu", label: "Jammu" },
-    { value: "Doda", label: "Doda" },
-  ];
-
   const options2 = [
     { value: "Andhra Pradesh", label: "Andhra Pradesh" },
     { value: "Bihar", label: "Bihar" },
     { value: "Chhattisgarh", label: "Chhattisgarh" },
     { value: "Gujarat", label: "Gujarat" },
+  ];
+
+  const options3 = [
+    { value: "Anantapur", label: "Anantapur" },
+    { value: "Bathalapalle", label: "Bathalapalle" },
+    { value: "Upparlapalle", label: "Upparlapalle" },
+  ];
+
+  const options4 = [
+    { value: "515661", label: "515661" },
+    { value: "515672", label: "515672" },
+    { value: "515662", label: "515662" },
   ];
 
   const handleSetOption1 = (value: string) => {
@@ -67,6 +75,16 @@ const EntityDetails: React.FC = () => {
     setSearchInputValue3(event.target.value);
   };
 
+  const handleSetOption4 = (value: string) => {
+    setSelectedOption4(value);
+  };
+
+  const handleSearchInputChange4 = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchInputValue4(event.target.value);
+  };
+
   const {
     register,
     handleSubmit,
@@ -86,11 +104,11 @@ const EntityDetails: React.FC = () => {
     <div className="flex flex-col p-6 w-full">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between h-full">
         <div>
-          <h1 className="text-2xl font-bold mb-6">Entity Details</h1>
+          <h1 className="text-2xl font-bold mb-6">Court Details</h1>
           <div className="grid grid-cols-3 gap-5">
             <div>
               <label htmlFor="Typeofentity" className="text-base font-normal">
-                Type of Entity <span className="text-red-500">*</span>
+                Name of Designated Court <span className="text-red-500">*</span>
               </label>
 
               <SelectButton
@@ -103,24 +121,13 @@ const EntityDetails: React.FC = () => {
                 showSearchInput={false}
               />
             </div>
-            <div>
-              <label htmlFor="uniqueId" className="text-base font-normal">
-                Unique Id <span className="text-red-500">*</span>
-              </label>
-              <InputFields
-                placeholder="Enter Unique Id"
-                {...register("uniqueId")}
-              />
-              {errors.uniqueId && (
-                <p className="text-red-500">{errors.uniqueId.message}</p>
-              )}
-            </div>
+            
             <div>
               <label htmlFor="addressLine1" className="text-base font-normal">
-                Address line <span className="text-red-500">*</span>1
+                Address Line 1<span className="text-red-500">*</span>
               </label>
               <TextArea
-                placeholder="Enter address"
+                placeholder="Type Here"
                 {...register("addressLine1")}
                 width="315px"
               />
@@ -130,26 +137,29 @@ const EntityDetails: React.FC = () => {
             </div>
             <div>
               <label htmlFor="addressLine2" className="text-base font-normal">
-                Address line <span className="text-red-500">*</span>2
+                Address Line 2
               </label>
               <TextArea
-                placeholder="Enter address"
+                placeholder="Type Here"
                 {...register("addressLine2")}
                 width="315px"
               />
 
-              {errors.addressLine2 && (
-                <p className="text-red-500">{errors.addressLine2.message}</p>
-              )}
+             
             </div>
             <div>
               <label htmlFor="pinCode" className="text-base font-normal">
-                Pine code <span className="text-red-500">*</span>
+                Pin Code <span className="text-red-500">*</span>
               </label>
-              <InputFields placeholder="Type Here" {...register("pinCode")} />
-              {errors?.pinCode && (
-                <p className="text-red-500">{errors?.pinCode?.message}</p>
-              )}
+              <SelectButton
+                setOption={handleSetOption4}
+                options={options4}
+                selectedOption={selectedOption4}
+                placeholder="Select"
+                searchInputOnchange={handleSearchInputChange4}
+                searchInputValue={searchInputValue4}
+                showSearchInput={true}
+              />
             </div>
 
             <div>
@@ -169,7 +179,7 @@ const EntityDetails: React.FC = () => {
 
             <div>
               <label htmlFor="district" className="text-base font-normal">
-                District <span className="text-red-500">*</span>
+                Jurisdiction <span className="text-red-500">*</span>
               </label>
               <SelectButton
                 setOption={handleSetOption3}
@@ -181,15 +191,7 @@ const EntityDetails: React.FC = () => {
                 showSearchInput={true}
               />
             </div>
-            <div>
-              <label htmlFor="gstNumber" className="text-base font-normal">
-                GST Number <span className="text-red-500">*</span>
-              </label>
-              <InputFields placeholder="Type here" {...register("gstNumber")} />
-              {errors?.gstNumber && (
-                <p className="text-red-500">{errors?.gstNumber?.message}</p>
-              )}
-            </div>
+           
           </div>
         </div>
 
@@ -208,4 +210,4 @@ const EntityDetails: React.FC = () => {
   );
 };
 
-export default EntityDetails;
+export default DesignatedCourtDetails;

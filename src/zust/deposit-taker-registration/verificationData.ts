@@ -11,7 +11,7 @@ interface verificationStateTypes {
 }
 
 // Create your store, which includes both state and (optionally) actions
-export const useDTStore = create<verificationStateTypes>((set) => ({
+export const useDTStore = create<verificationStateTypes>((set:any) => ({
     verificationFormData : [],
     entityFormData : [],
     regulatorFormData : [],
