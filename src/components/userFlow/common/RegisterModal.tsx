@@ -1,6 +1,9 @@
-
-import React, { useState } from 'react';
-import { radioButtons, registrationFirstPage } from '../../../utils/hardText/signuppageText';
+import React, { useState } from "react";
+import "./Register.css";
+import {
+  radioButtons,
+  registrationFirstPage,
+} from "../../../utils/hardText/signuppageText";
 import { useNavigate } from "react-router-dom";
 
 interface ModelDivProps {
@@ -8,7 +11,6 @@ interface ModelDivProps {
 }
 
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
-  
   const Navigate = useNavigate();
   const navigateToSideBarPage = () => {
     Navigate("/depositetaker/signup/verification");
@@ -19,32 +21,78 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   return (
     <div className="text-gilroy-regular md:p-[40px] m-[2.5%] w-[95%] md:w-[586px] md:h-[370px] p-8 bg-white rounded-3xl">
       <div className="flex flex-row justify-between items-center md:w-[506px] h-12 mb-[16px]">
-        <h1 className='text-black text-2xl font-normal text-gilroy-medium  leading-loose'>{registrationFirstPage[0].heading}</h1>
-        <img src={registrationFirstPage[0].removeBtn} className='w-6 h-6' alt="icon" onClick={closeModal} />
+        <h1 className="text-black text-2xl font-normal text-gilroy-medium  leading-loose">
+          {registrationFirstPage[0].heading}
+        </h1>
+        <img
+          src={registrationFirstPage[0].removeBtn}
+          className="w-6 h-6"
+          alt="icon"
+          onClick={closeModal}
+        />
       </div>
-      <form 
+      <form
         onSubmit={(e) => {
           e.preventDefault();
         }}
       >
-        {radioButtons.map((item) => {
+        {/* {radioButtons.map((item) => {
           return (
             <div
               key={item.id} // Assuming there's an id in radioButtons data
               className={`md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex ${
-                radioButton === item.text ? 'bg-[#EEF7EB] text-[#385723]' : 'bg-white text-black'
+                radioButton === item.text
+                  ? "bg-[#EEF7EB] text-[#385723]"
+                  : "bg-white text-black"
               }`}
             >
               <div className=" flex flex-row justify-between items-center md:gap-4 inline-flex">
                 <div className="text-lg font-normal  ">
                   <label onClick={() => setRadioBtn(item.text)}>
-                    <input type="radio" name="entity" value="Deposit Taker" /> {item.text}
+                    <input type="radio" name="entity" value="Deposit Taker" />{" "}
+                    {item.text}
                   </label>
                 </div>
               </div>
             </div>
           );
+        })} */}
+        {radioButtons.map((item) => {
+          const isSelected = radioButton === item.text;
+
+          return (
+            <div
+              key={item.id}
+              className={`md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex cursor-pointer ${
+                isSelected
+                  ? "bg-[#EEF7EB] text-[#385723]"
+                  : "bg-white text-black"
+              }`}
+              onClick={() => setRadioBtn(item.text)}
+            >
+              <div className=" flex flex-row justify-between items-center md:gap-4 inline-flex cursor-pointer">
+                <div className="text-lg font-normal">
+                  <input
+                    type="radio"
+                    name="entity"
+                    value={item.text}
+                    checked={isSelected}
+                    onChange={() => {}}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      marginRight: "8px",
+                      backgroundColor: "black ",
+                      borderRadius: "50%",
+                    }}
+                  />
+                  <label>{item.text}</label>
+                </div>
+              </div>
+            </div>
+          );
         })}
+
         <div className="mt-[22px] text-[20px] modal-footer flex justify-around md:flex-row md:justify-between">
           <button
             type="button"

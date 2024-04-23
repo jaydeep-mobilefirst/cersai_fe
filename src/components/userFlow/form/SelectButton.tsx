@@ -32,28 +32,29 @@ const SelectButton = ({
     setArrowDirectionToggle(false);
   }, [selectedOption]);
 
-  const handleClickOutside = (event : any) => {
+  const handleClickOutside = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setArrowDirectionToggle(false);
     }
   };
+
   useEffect(() => {
     if (arrowDirectionToggle) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
     }
-    
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [arrowDirectionToggle]); 
+  }, [arrowDirectionToggle]);
+
   return (
     <>
       <button
-        className="w-[250px] h-[56px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left"
-        type="button" 
+        className="h-[56px] px-2 md:px-8 py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left w-full md:w-[370px]"
+        type="button"
         onClick={() => setArrowDirectionToggle(!arrowDirectionToggle)}
       >
         {selectedOption ? selectedOption : placeholder}
@@ -84,7 +85,7 @@ const SelectButton = ({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth={2}
                 d="M5 15l7-7 7 7"
               ></path>
             </svg>
@@ -94,12 +95,11 @@ const SelectButton = ({
       {arrowDirectionToggle && (
         <div
           ref={dropdownRef}
-          className="absolute z-10 mt-2 w-[250px] rounded-md bg-white shadow-lg"
+          className="absolute z-10 mt-2 w-full md:w-80 rounded-md bg-white shadow-lg"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu"
           style={{
-            width: "317px",
             padding: "8px 16px",
           }}
         >

@@ -1,5 +1,8 @@
 import React from "react";
-import { languageData, languageLable } from "../../utils/hardText/landingpageText";
+import {
+  languageData,
+  languageLable,
+} from "../../utils/hardText/landingpageText";
 
 const LanguageBar = () => {
   return (
