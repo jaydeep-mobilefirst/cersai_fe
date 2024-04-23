@@ -4,12 +4,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputFields from '../../components/userFlow/form/InputField';
 import UploadButton from '../../components/userFlow/form/UploadButton';
-import SignUpSideBar from '../../components/userFlow/depositeTaker/SignUpSideBar';
+
 
 type Props = {}
 
-const NodalDetails = (props: Props) => {
-    const { register, handleSubmit, formState: { errors }, reset, setValue, setError, clearErrors} = useForm({
+const NodalDetailsRegulator = (props: Props) => {
+    const { register, handleSubmit, formState: { errors }} = useForm({
         resolver: yupResolver(NodalDetailsSchema)
     });
 
@@ -78,8 +78,8 @@ const NodalDetails = (props: Props) => {
                             <span className="text-red-500">{errors.nodalOfficerDesignation?.message}</span>
                         </div>
                         <div>
-                            <label htmlFor="Dsc" className="block text-gray-700 text-sm font-bold mb-2">
-                                DSC
+                            <label htmlFor="Dsc" className="block text-gray-700 text-sm font-bold mb-2 mt-7">
+                               
                             </label>
                             <UploadButton
                                 id="Dsc"
@@ -110,4 +110,4 @@ const NodalDetails = (props: Props) => {
     )
 }
 
-export default NodalDetails
+export default NodalDetailsRegulator;

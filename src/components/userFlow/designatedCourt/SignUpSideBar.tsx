@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import HeadComp from './HeadComp';
-import {signupSideBar} from '../../../utils/hardText/signuppageText';
+
+
 import { Link, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import HeadComp from './HeadCom';
+import { signupSideBarDesignated } from '../../../utils/hardText/signUpDesignatedText';
 
 
 
@@ -35,7 +37,7 @@ const SignUpSideBar: React.FC =()=>{
             <hr className="bg-[#000000] w-full md:w-[349px]"></hr>
             <div className="px-[28px] mt-[16px]">
                 <div className='h-[101px]'>
-                    <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">Deposit Taker</p>
+                    <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">Designated Court</p>
                     <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium"><span className="text-zinc-800 text-base font-normal text-gilroy-bold">{percent}%</span> Completed </p>
                     <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px]" >
                     <div className={` ${widthPercentage[percent]} h-2 bg-[#52AE32] rounded-[32px]`} />
@@ -43,7 +45,7 @@ const SignUpSideBar: React.FC =()=>{
                 </div>
                 <div className='pt-[16px]'>
                     <>
-                    {signupSideBar.map((item)=>{
+                    {signupSideBarDesignated.map((item:any)=>{
                         return(
                         
                     <div onClick={()=> handleClick(item.description,item.percentage,item.path)} key={item.id} className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#385723] rounded-lg justify-between items-center inline-flex ${

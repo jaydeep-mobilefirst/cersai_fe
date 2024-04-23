@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./select_button.css";
 
 interface Option {
@@ -26,29 +26,10 @@ const SelectButton = ({
   showSearchInput,
 }: Props) => {
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setArrowDirectionToggle(false);
   }, [selectedOption]);
-
-  const handleClickOutside = (event: any) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setArrowDirectionToggle(false);
-    }
-  };
-
-  useEffect(() => {
-    if (arrowDirectionToggle) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [arrowDirectionToggle]);
 
   return (
     <>
@@ -94,8 +75,7 @@ const SelectButton = ({
       </button>
       {arrowDirectionToggle && (
         <div
-          ref={dropdownRef}
-          className="absolute z-10 mt-2 w-full md:w-80 rounded-md bg-white shadow-lg"
+          className="absolute z-10 mt-2 w-[250px] rounded-md bg-white shadow-lg"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu"
@@ -150,7 +130,7 @@ const SelectButton = ({
             {options.map((option, index) => (
               <a
                 key={index}
-                onClick={() => setOption(option)}
+                onClick={() => setOption(option.value)}
                 href="#"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900"
                 role="menuitem"

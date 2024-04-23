@@ -1,15 +1,13 @@
-import React, { FC, InputHTMLAttributes, forwardRef, useEffect, useRef, useState } from 'react'
+import React, { FC, InputHTMLAttributes, forwardRef, useRef, useState } from 'react'
 import { dateFormattor } from '../../../utils/commonFunction';
 import Calender from './svgs/Calender';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-    date ?: string
- }
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> { }
 
 const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-    const { onChange, type, date } = props
+    const { onChange, type } = props
     const hiddenDateInput = useRef<HTMLInputElement>(null);
-    const [dateSelected, setDateSelected] = useState<any>(date)
+    const [dateSelected, setDateSelected] = useState<any>(undefined)
     const handleDateButtonClick = (event : any) => {
         const element: any = document.getElementById('datePicker')
         if (element && 'showPicker' in element) {
@@ -30,14 +28,6 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>((pr
             setDateSelected(dateFormattor(new Date(value)))
         }
     }
-
-    useEffect(() => {
-        if (date) {
-            setDateSelected(date)
-        }
-
-    }, [date])
-    
     return (
         <>
             {
@@ -58,6 +48,7 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>((pr
                             id='datePicker'
                             className='absolute -z-10'
                             onChange={onChangeHandler}
+                            placeholder='date'
                         />
                     </div>
                     
