@@ -1,10 +1,11 @@
-
-
 import React, { useState } from "react";
 import Logo from "../../assets/images/logo.svg";
-import { contactDetails, authlable } from "../../utils/hardText/landingpageText";
+import {
+  contactDetails,
+  authlable,
+} from "../../utils/hardText/landingpageText";
 import RegisterModel from "../userFlow/common/RegisterModal";
-
+import LoginModel from "../userFlow/common/LoginModel";
 
 interface AuthButtonProps {
   buttontext: string;
@@ -12,15 +13,27 @@ interface AuthButtonProps {
 }
 
 const TopDetail = () => {
-
   const [isOpen, setIsOpen] = useState(false);
+  const [showLoginModel, setShowLoginModel] = useState(false);
 
   const openModal = () => {
+    setIsOpen(true);
+  };
+  const openLoginModel = () => {
+    setShowLoginModel(true);
+  };
+
+  const showRegisterModel = () => {
+    setShowLoginModel(false);
     setIsOpen(true);
   };
 
   const closeModal = () => {
     setIsOpen(false);
+  };
+
+  const CloseLoginModal = () => {
+    setShowLoginModel(false);
   };
 
   const downloadReport = () => {};
@@ -65,12 +78,20 @@ const TopDetail = () => {
       </div>
       <div className="flex items-center m-4 md:m-0">
         <AuthButton buttontext={authlable[1]} onClick={openModal} />
-        <AuthButton buttontext={authlable[0]}  />
+        <AuthButton buttontext={authlable[0]} onClick={openLoginModel} />
       </div>
       {/* Conditionally render ModelDiv based on isOpen state */}
-      {isOpen && 
-      <div className="fixed flex-row justify-center items-center mt-[35%] md:mt-[50%] lg:mt-[30%] md:ml-[15%]"><RegisterModel closeModal={closeModal} />
-      </div>}
+      {isOpen && (
+        <div className="fixed flex-row justify-center items-center mt-[35%] md:mt-[50%] lg:mt-[30%] md:ml-[15%]">
+          <RegisterModel closeModal={closeModal} />
+        </div>
+      )}
+      {showLoginModel && (
+        <LoginModel
+          closeModal={CloseLoginModal}
+          showRegisterModel={showRegisterModel}
+        />
+      )}
     </div>
   );
 };

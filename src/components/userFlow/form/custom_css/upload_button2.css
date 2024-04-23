@@ -1,0 +1,27 @@
+.upload-button {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  transition: background-color 0.3s ease;
+}
+
+.upload-button.no-file {
+  background-color: gray; /* Gray background when no file is selected */
+}
+
+.upload-button.file-selected {
+  background-color: #4caf50; /* Change to your selected color when a file is selected */
+}
+
+@media (max-width: 600px) {
+  .upload-button {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+}
