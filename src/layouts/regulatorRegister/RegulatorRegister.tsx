@@ -12,33 +12,35 @@ const RegulatorRegister = () => {
   };
 
   return (
-    <div className="flex relative">
-      {/* Menu Icon */}
-      <div className="lg:hidden absolute top-0 left-0 m-4 z-50" onClick={toggleMenu}>
-        {isMenuOpen ? (
-          <img src={CrossIcon} alt="Close Menu" className="w-6 h-6" />
-        ) : (
-          <img src={MenuIcon} alt="Open Menu" className="w-6 h-6" />
-        )}
-      </div>
+    <div className="flex relative min-h-screen">
+  {/* Menu Icon */}
+  <div className="lg:hidden fixed top-0 left-0 m-4 z-50" onClick={toggleMenu}>
+    {isMenuOpen ? (
+      <img src={CrossIcon} alt="Close Menu" className="w-6 h-6" />
+    ) : (
+      <img src={MenuIcon} alt="Open Menu" className="w-6 h-6" />
+    )}
+  </div>
 
-      {/* Sidebar */}
-      <div  className={`${
-          isMenuOpen ? "flex" : "hidden"
-        } lg:hidden  h-screen w-1/2 sm:w-1/3 fixed top-0 left-0 z-20`}>
-        <SignUpSideBar />
-      </div>
+  {/* Sidebar */}
+  <div className={`${
+  isMenuOpen ? "flex" : "hidden"
+} lg:hidden fixed top-0 left-0 z-20 h-screen w-1/8`}>
+  <SignUpSideBar />
+</div>
 
-      {/* Sidebar (always visible on larger devices) */}
-      <div className="hidden lg:block h-screen">
-        <SignUpSideBar />
-      </div>
 
-      {/* Main Content */}
-      <div className="flex-1">
-        <Outlet />
-      </div>
-    </div>
+  {/* Sidebar (always visible on larger devices) */}
+  <div className="hidden lg:block h-full">
+    <SignUpSideBar />
+  </div>
+
+  {/* Main Content */}
+  <div className="flex-1">
+    <Outlet />
+  </div>
+</div>
+
   );
 };
 

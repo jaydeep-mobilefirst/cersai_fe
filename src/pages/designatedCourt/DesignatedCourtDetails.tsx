@@ -104,7 +104,7 @@ const DesignatedCourtDetails: React.FC = () => {
     <div className="flex flex-col p-6 w-full">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between h-full">
         <div>
-          <h1 className="text-2xl font-bold mb-6">Court Details</h1>
+          <h1 className="text-2xl font-bold mb-6 mt-7">Court Details</h1>
           <div className="grid grid-cols-3 gap-5">
             <div>
               <label htmlFor="Typeofentity" className="text-base font-normal">

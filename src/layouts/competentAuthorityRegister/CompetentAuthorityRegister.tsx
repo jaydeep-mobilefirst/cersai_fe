@@ -14,9 +14,9 @@ const CompetentAuthorityRegister = () => {
   };
 
   return (
-    <div className="flex relative">
+    <div className="flex relative min-h-screen">
       {/* Menu Icon */}
-      <div className="lg:hidden absolute top-0 left-0 m-4 z-50" onClick={toggleMenu}>
+      <div className="lg:hidden fixed top-0 left-0 m-4 z-50" onClick={toggleMenu}>
         {isMenuOpen ? (
           <img src={CrossIcon} alt="Close Menu" className="w-6 h-6" />
         ) : (
@@ -27,12 +27,12 @@ const CompetentAuthorityRegister = () => {
       {/* Sidebar */}
       <div  className={`${
           isMenuOpen ? "flex" : "hidden"
-        } lg:hidden w-1/8 h-screen bg-gradient-to-r from-[#54AD47] to-[#338118] fixed top-0 left-0 z-20`}>
+        } lg:hidden fixed top-0 left-0 z-20 h-screen w-1/8`}>
         <SignUpSideBar />
       </div>
 
       {/* Sidebar (always visible on larger devices) */}
-      <div className="hidden lg:block  flex-col h-full">
+      <div className="hidden lg:block h-full">
         <SignUpSideBar />
       </div>
 

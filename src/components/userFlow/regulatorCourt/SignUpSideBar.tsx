@@ -32,10 +32,10 @@ const SignUpSideBar: React.FC =()=>{
     }
 
     return(
-        <div className=' md:block sm:block  h-[100vh] w-[349px] bg-[#EEF7EB]'>
+        <div className=' md:block sm:block  h-screen w-[349px] bg-[#EEF7EB]'>
             <HeadComp/>
             <hr className="bg-[#000000] w-full md:w-[349px]"></hr>
-            <div className="px-[28px] mt-[16px]">
+            <div className="px-[28px] mt-[16px] ">
                 <div className='h-[101px]'>
                     <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">Regulator Details</p>
                     <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium"><span className="text-zinc-800 text-base font-normal text-gilroy-bold">{percent}%</span> Completed </p>
