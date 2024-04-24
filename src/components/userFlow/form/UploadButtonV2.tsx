@@ -41,9 +41,7 @@ const UploadButtonV2: FC<ButtonProps> = forwardRef<
         {...restProps}
         type="button"
         ref={ref}
-        className={`upload-button ${
-          fileSelected ? "file-selected" : "no-file"
-        }`}
+        className={`upload-button ${fileSelected ? "" : "no-file"}`}
         onClick={handleButtonClick}
       >
         <div className="flex items-center justify-between gap-2 md:w-[350px]">

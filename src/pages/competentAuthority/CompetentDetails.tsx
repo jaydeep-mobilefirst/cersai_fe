@@ -16,7 +16,7 @@ const ComponentDetails: React.FC = () => {
 
   const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
   const [searchInputValue3, setSearchInputValue3] = useState<string>("");
-   
+
   const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
   const [searchInputValue4, setSearchInputValue4] = useState<string>("");
 
@@ -101,113 +101,120 @@ const ComponentDetails: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen p-4 md:p-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between flex-1">
-        <div>
-          <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Competent Details</h1>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-            <div>
-              <label htmlFor="Typeofentity" className="text-base font-normal">
-                Name of Competent Authority <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSetOption1}
-                options={options1}
-                selectedOption={selectedOption1}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange1}
-                searchInputValue={searchInputValue1}
-                showSearchInput={false}
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="addressLine1" className="text-base font-normal">
-                Address Line 1<span className="text-red-500">*</span>
-              </label>
-              <TextArea
-                placeholder="Type Here"
-                {...register("addressLine1")}
-                width="full"
-              />
-              {errors.addressLine1 && (
-                <p className="text-red-500">{errors.addressLine1.message}</p>
-              )}
-            </div>
-  
-            <div>
-              <label htmlFor="addressLine2" className="text-base font-normal">
-                Address Line 2
-              </label>
-              <TextArea
-                placeholder="Type Here"
-                {...register("addressLine2")}
-                width="full"
-              />
-            </div>
-  
-            <div>
-              <label htmlFor="pinCode" className="text-base font-normal">
-                Pin Code <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSetOption4}
-                options={options4}
-                selectedOption={selectedOption4}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange4}
-                searchInputValue={searchInputValue4}
-                showSearchInput={true}
-              />
-            </div>
-  
-            <div>
-              <label htmlFor="state" className="text-base font-normal">
-                State <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSetOption2}
-                options={options2}
-                selectedOption={selectedOption2}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange2}
-                searchInputValue={searchInputValue2}
-                showSearchInput={true}
-              />
-            </div>
-  
-            <div>
-              <label htmlFor="district" className="text-base font-normal">
-                Jurisdiction <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSetOption3}
-                options={options3}
-                selectedOption={selectedOption3}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange3}
-                searchInputValue={searchInputValue3}
-                showSearchInput={true}
-              />
-            </div>
-           
-          </div>
-        </div>
-        <div className="mt-auto">
-                  <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="flex cursor-pointer ">
-            <img src={ArrowIcon} alt="" />
-            <h1 className="text-sm font-normal text-black ml-2">Back</h1>
-          </div>
+    <>
+      <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
+      <div className="flex flex-col h-screen p-4 md:p-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col justify-between flex-1"
+        >
           <div>
-            <Button type="submit" label="Save & Continue" />
+            <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
+              Competent Details
+            </h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+              <div>
+                <label htmlFor="Typeofentity" className="text-base font-normal">
+                  Name of Competent Authority{" "}
+                  <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption1}
+                  options={options1}
+                  selectedOption={selectedOption1}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange1}
+                  searchInputValue={searchInputValue1}
+                  showSearchInput={false}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="addressLine1" className="text-base font-normal">
+                  Address Line 1<span className="text-red-500">*</span>
+                </label>
+                <TextArea
+                  placeholder="Type Here"
+                  {...register("addressLine1")}
+                  // width="full"
+                />
+                {errors.addressLine1 && (
+                  <p className="text-red-500">{errors.addressLine1.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="addressLine2" className="text-base font-normal">
+                  Address Line 2
+                </label>
+                <TextArea
+                  placeholder="Type Here"
+                  {...register("addressLine2")}
+                  // width="full"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="pinCode" className="text-base font-normal">
+                  Pin Code <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption4}
+                  options={options4}
+                  selectedOption={selectedOption4}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange4}
+                  searchInputValue={searchInputValue4}
+                  showSearchInput={true}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="state" className="text-base font-normal">
+                  State <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption2}
+                  options={options2}
+                  selectedOption={selectedOption2}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange2}
+                  searchInputValue={searchInputValue2}
+                  showSearchInput={true}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="district" className="text-base font-normal">
+                  Jurisdiction <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption3}
+                  options={options3}
+                  selectedOption={selectedOption3}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange3}
+                  searchInputValue={searchInputValue3}
+                  showSearchInput={true}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        </div>
-      </form>
-    </div>
+          <div className="mt-auto">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div className="flex cursor-pointer ">
+                <img src={ArrowIcon} alt="" />
+                <h1 className="text-sm font-normal text-black ml-2">Back</h1>
+              </div>
+              <div>
+                <Button type="submit" label="Save & Continue" />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </>
   );
-  
 };
 
 export default ComponentDetails;

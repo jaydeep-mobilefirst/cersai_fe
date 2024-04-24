@@ -75,19 +75,23 @@ const EntityDetails: React.FC = () => {
   } = useForm({
     resolver: yupResolver(EntityDetailschema),
   });
+
   const onSubmit = (data: any) => {
     alert("Form submitted successfully!");
     console.log({ data });
-
     reset();
   };
 
   return (
-    <div className="flex flex-col p-6 w-full">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between h-full">
-        <div>
+    <>
+      <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
+      <div className="flex flex-col p-6 w-full">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col justify-between h-full"
+        >
           <h1 className="text-2xl font-bold mb-6">Entity Details</h1>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <div>
               <label htmlFor="Typeofentity" className="text-base font-normal">
                 Type of Entity <span className="text-red-500">*</span>
@@ -122,7 +126,6 @@ const EntityDetails: React.FC = () => {
               <TextArea
                 placeholder="Enter address"
                 {...register("addressLine1")}
-                width="315px"
               />
               {errors.addressLine1 && (
                 <p className="text-red-500">{errors.addressLine1.message}</p>
@@ -135,7 +138,6 @@ const EntityDetails: React.FC = () => {
               <TextArea
                 placeholder="Enter address"
                 {...register("addressLine2")}
-                width="315px"
               />
 
               {errors.addressLine2 && (
@@ -191,20 +193,46 @@ const EntityDetails: React.FC = () => {
               )}
             </div>
           </div>
-        </div>
 
-        <div className="flex justify-between items-center ">
-          <div className="flex cursor-pointer ">
-            <img src={ArrowIcon} alt="" />
-            <h1 className="text-sm font-normal text-black">Back</h1>
+          <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center space-y-4 sm:space-y-0 lg:mt-40 md:mt-40 mt-4 ">
+            <div className="flex flex-row items-center space-x-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="shrink-0"
+              >
+                <path
+                  d="M15 6L9 12L15 18"
+                  stroke="#1D1D1B"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
+                Back
+              </button>
+            </div>
+            <div className="flex items-center">
+              <button
+                type="submit"
+                className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+              >
+                Save and Continue
+              </button>
+            </div>
           </div>
-          <div>
-            <Button type="submit" label="Save & Continue" />
-          </div>
-        </div>
+          <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
 
-      </form>
-    </div>
+          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            © 2024 Protean BUDs, All Rights Reserved.
+          </p>
+        </form>
+      </div>
+    </>
   );
 };
 

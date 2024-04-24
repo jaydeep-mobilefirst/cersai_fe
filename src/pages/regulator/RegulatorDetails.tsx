@@ -16,7 +16,7 @@ const RegulatorDetails: React.FC = () => {
 
   const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
   const [searchInputValue3, setSearchInputValue3] = useState<string>("");
-   
+
   const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
   const [searchInputValue4, setSearchInputValue4] = useState<string>("");
 
@@ -101,112 +101,118 @@ const RegulatorDetails: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col p-6 w-full">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between h-full">
-        <div>
-          <h1 className="text-2xl font-bold mb-6">Regulator Details</h1>
-          <div className="grid grid-cols-3 gap-5">
-            <div>
-              <label htmlFor="Typeofentity" className="text-base font-normal">
-              Regulator Name<span className="text-red-500">*</span>
-              </label>
-
-              <SelectButton
-                setOption={handleSetOption1}
-                options={options1}
-                selectedOption={selectedOption1}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange1}
-                searchInputValue={searchInputValue1}
-                showSearchInput={false}
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="addressLine1" className="text-base font-normal">
-                Address Line 1<span className="text-red-500">*</span>
-              </label>
-              <TextArea
-                placeholder="Type Here"
-                {...register("addressLine1")}
-                width="315px"
-              />
-              {errors.addressLine1 && (
-                <p className="text-red-500">{errors.addressLine1.message}</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="addressLine2" className="text-base font-normal">
-                Address Line 2
-              </label>
-              <TextArea
-                placeholder="Type Here"
-                {...register("addressLine2")}
-                width="315px"
-              />
-
-             
-            </div>
-            <div>
-              <label htmlFor="pinCode" className="text-base font-normal">
-                Pin Code <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSetOption4}
-                options={options4}
-                selectedOption={selectedOption4}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange4}
-                searchInputValue={searchInputValue4}
-                showSearchInput={true}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="state" className="text-base font-normal">
-                State <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSetOption2}
-                options={options2}
-                selectedOption={selectedOption2}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange2}
-                searchInputValue={searchInputValue2}
-                showSearchInput={true}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="district" className="text-base font-normal">
-                District <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSetOption3}
-                options={options3}
-                selectedOption={selectedOption3}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange3}
-                searchInputValue={searchInputValue3}
-                showSearchInput={true}
-              />
-            </div>
-           
-          </div>
-        </div>
-
-        <div className="flex justify-between items-center ">
-          <div className="flex cursor-pointer ">
-            <img src={ArrowIcon} alt="" />
-            <h1 className="text-sm font-normal text-black">Back</h1>
-          </div>
+    <>
+      <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
+      <div className="flex flex-col p-6 w-full">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col justify-between h-full"
+        >
           <div>
-            <Button type="submit" label="Save & Continue" />
-          </div>
-        </div>
+            <h1 className="text-2xl font-bold mb-6">Regulator Details</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div>
+                <label htmlFor="Typeofentity" className="text-base font-normal">
+                  Regulator Name<span className="text-red-500">*</span>
+                </label>
 
-      </form>
-    </div>
+                <SelectButton
+                  setOption={handleSetOption1}
+                  options={options1}
+                  selectedOption={selectedOption1}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange1}
+                  searchInputValue={searchInputValue1}
+                  showSearchInput={false}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="addressLine1" className="text-base font-normal">
+                  Address Line 1<span className="text-red-500">*</span>
+                </label>
+                <TextArea
+                  placeholder="Type Here"
+                  {...register("addressLine1")}
+                  // width="315px"
+                />
+                {errors.addressLine1 && (
+                  <p className="text-red-500">{errors.addressLine1.message}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="addressLine2" className="text-base font-normal">
+                  Address Line 2
+                </label>
+                <TextArea
+                  placeholder="Type Here"
+                  {...register("addressLine2")}
+                  // width="315px"
+                />
+              </div>
+              <div>
+                <label htmlFor="pinCode" className="text-base font-normal">
+                  Pin Code <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption4}
+                  options={options4}
+                  selectedOption={selectedOption4}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange4}
+                  searchInputValue={searchInputValue4}
+                  showSearchInput={true}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="state" className="text-base font-normal">
+                  State <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption2}
+                  options={options2}
+                  selectedOption={selectedOption2}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange2}
+                  searchInputValue={searchInputValue2}
+                  showSearchInput={true}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="district" className="text-base font-normal">
+                  District <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption3}
+                  options={options3}
+                  selectedOption={selectedOption3}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange3}
+                  searchInputValue={searchInputValue3}
+                  showSearchInput={true}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center lg:mt-60 md:mt-60 mb-4  mt-4">
+            <div className="flex cursor-pointer ">
+              <img src={ArrowIcon} alt="" />
+              <h1 className="text-sm font-normal text-black">Back</h1>
+            </div>
+            <div>
+              <Button type="submit" label="Save & Continue" />
+            </div>
+          </div>
+          <div className="border-[#E6E6E6] border-[1px] "></div>
+          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            © 2024 Protean BUDs, All Rights Reserved.
+          </p>
+        </form>
+      </div>
+    </>
   );
 };
 

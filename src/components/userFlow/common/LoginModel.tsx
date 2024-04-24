@@ -45,8 +45,10 @@ const LoginModel: React.FC<LoginModelProps> = ({
   });
 
   const handleSelectOption = (option: any) => {
-    setSelected(option.value);
+    // console.log(option, "option");
+    setSelected(option);
     setIsOptionSelected(option.value ? true : false);
+
     setFormError("");
   };
 

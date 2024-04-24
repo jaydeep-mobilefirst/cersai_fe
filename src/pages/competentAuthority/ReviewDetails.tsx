@@ -63,6 +63,7 @@ const ReviewDetails = () => {
 
   return (
     <>
+     <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
       <div className="container mx-auto p-6 w-full">
         <div id="reviewContent">
         <h1 className="text-2xl font-bold mb-6">Review</h1>
