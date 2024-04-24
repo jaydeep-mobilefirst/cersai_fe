@@ -48,7 +48,7 @@ const RegularDetailsForm = (props: Props) => {
         <div className="bg-white p-6 w-full">
           <h1 className="text-2xl font-bold mb-6">Regulator Details</h1>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div>
+            <div className="mt-[2px]">
               <label
                 htmlFor="regulatorName"
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -88,7 +88,7 @@ const RegularDetailsForm = (props: Props) => {
                 {errors.registrationNo?.message}
               </span>
             </div>
-            <div>
+            <div className="mt-[2px]">
               <label
                 htmlFor="registrationDate"
                 className="block text-gray-700 text-sm font-bold mb-2"

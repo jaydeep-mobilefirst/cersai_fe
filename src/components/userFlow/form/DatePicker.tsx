@@ -76,7 +76,7 @@ const DatePicker = ({ onChange }: Props) => {
   };
 
   return (
-    <div className="flex justify-start items-center h-14 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg border rounded-md">
+    <div className="flex justify-start items-center h-14 w-full max-w-[35rem] sm:max-w-sm md:max-w-md lg:max-w-2xl border rounded-md">
       <button
         onClick={handleDateButtonClick}
         className="flex justify-between items-center h-full w-full px-2 py-2 rounded-lg text-gray-600 bg-white hover:bg-gray-100 focus:outline-none"
