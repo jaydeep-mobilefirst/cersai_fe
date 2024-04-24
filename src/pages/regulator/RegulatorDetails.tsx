@@ -103,7 +103,7 @@ const RegulatorDetails: React.FC = () => {
   return (
     <>
       <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
-      <div className="flex flex-col p-6 w-full">
+      <div className="flex flex-col p-6 w-full ">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col justify-between h-full"
@@ -197,7 +197,7 @@ const RegulatorDetails: React.FC = () => {
             </div>
           </div>
           <div>
-            <div className="flex justify-between items-center lg:mt-60 md:mt-60 mb-4  mt-4">
+            <div className="flex justify-between items-center lg:mt-80 md:mt-60 mb-4  mt-4">
               <div className="flex cursor-pointer ">
                 <img src={ArrowIcon} alt="" />
                 <h1 className="text-sm font-normal text-black">Back</h1>

@@ -103,7 +103,7 @@ const ComponentDetails: React.FC = () => {
   return (
     <>
       <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
-      <div className="flex flex-col h-screen p-4 md:p-6">
+      <div className="flex flex-col h-[90vh] p-4 md:p-6">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col justify-between flex-1"

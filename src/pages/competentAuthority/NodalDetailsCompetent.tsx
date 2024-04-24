@@ -25,7 +25,7 @@ const NodalDetails = (props: Props) => {
       <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
       <form
         onSubmit={handleSubmit(handleOnSubmit)}
-        className="p-4 flex flex-col w-full max-w-[100%] justify-between"
+        className="p-4 flex flex-col w-full max-w-[100%] justify-between space-y-40"
       >
         <div className="bg-white p-6 w-full">
           <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
