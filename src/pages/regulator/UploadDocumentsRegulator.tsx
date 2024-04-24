@@ -33,7 +33,7 @@ const UploadDocumentsRegulator = (props: Props) => {
   return (
     <>
       <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
-      <form className="p-4 flex flex-col w-full max-w-[80%] justify-between">
+      <form className="p-4 flex flex-col w-full max-w-[100%] justify-between">
         {showUploadPopup && (
           <div className="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
             <div

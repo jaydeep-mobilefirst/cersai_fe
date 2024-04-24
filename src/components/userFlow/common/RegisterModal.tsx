@@ -1,4 +1,3 @@
-
 // import React, { useState } from 'react';
 // import { radioButtons, registrationFirstPage } from '../../../utils/hardText/signuppageText';
 // import { useNavigate } from "react-router-dom";
@@ -8,7 +7,7 @@
 // }
 
 // const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
-  
+
 //   const Navigate = useNavigate();
 //   const navigateToSideBarPage = () => {
 //     Navigate("/depositetaker/signup/verification");
@@ -22,7 +21,7 @@
 //         <h1 className='text-black text-2xl font-normal text-gilroy-medium  leading-loose'>{registrationFirstPage[0].heading}</h1>
 //         <img src={registrationFirstPage[0].removeBtn} className='w-6 h-6' alt="icon" onClick={closeModal} />
 //       </div>
-//       <form 
+//       <form
 //         onSubmit={(e) => {
 //           e.preventDefault();
 //         }}
@@ -68,23 +67,23 @@
 
 // export default RegisterModel;
 
-import React, { useState } from 'react';
-import { radioButtons, registrationFirstPage } from '../../../utils/hardText/signuppageText';
+import React, { useState } from "react";
+import {
+  radioButtons,
+  registrationFirstPage,
+} from "../../../utils/hardText/signuppageText";
 import { useNavigate } from "react-router-dom";
 
 interface ModelDivProps {
-  closeModal: () => void; 
-  
+  closeModal: () => void;
 }
 
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const Navigate = useNavigate();
-  
-  
+
   const [selectedRadio, setSelectedRadio] = useState(radioButtons[0]);
 
-  
-  const handleSubmit = (e:any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     Navigate(selectedRadio.path);
   };
@@ -92,29 +91,36 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   return (
     <div className="text-gilroy-regular md:p-[40px] m-[2.5%] w-[95%] md:w-[586px] md:h-[370px] p-8  bg-white rounded-3xl">
       <div className="flex flex-row justify-between items-center md:w-[506px] h-12 mb-[16px]">
-        <h1 className='text-black text-2xl font-normal text-gilroy-medium leading-loose'>
+        <h1 className="text-black text-2xl font-normal text-gilroy-medium leading-loose">
           {registrationFirstPage[0].heading}
         </h1>
-        <img src={registrationFirstPage[0].removeBtn} className='w-6 h-6' alt="icon" onClick={closeModal} />
+        <img
+          src={registrationFirstPage[0].removeBtn}
+          className="w-6 h-6 cursor-pointer"
+          alt="icon"
+          onClick={closeModal}
+        />
       </div>
       <form onSubmit={handleSubmit}>
         {radioButtons.map((item) => (
           <div
             key={item.id}
             className={`md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex ${
-              selectedRadio.id === item.id ? 'bg-[#EEF7EB] text-[#385723] border-[#385723] mr-2' : 'bg-white text-black border border-gray-300 mr-2'
+              selectedRadio.id === item.id
+                ? "bg-[#EEF7EB] text-[#385723] border-[#385723] mr-2"
+                : "bg-white text-black border border-gray-300 mr-2"
             }`}
           >
             <div className=" flex-row justify-between items-center  md:gap-4 inline-flex">
               <div className="text-lg font-normal">
                 <label onClick={() => setSelectedRadio(item)}>
-                  <input 
-                    type="radio" 
-                    name="entity" 
-                    checked={selectedRadio.id === item.id} 
-                    onChange={() => setSelectedRadio(item)} 
-                    className='mr-2'
-                  /> 
+                  <input
+                    type="radio"
+                    name="entity"
+                    checked={selectedRadio.id === item.id}
+                    onChange={() => setSelectedRadio(item)}
+                    className="mr-2"
+                  />
                   {item.text}
                 </label>
               </div>

@@ -119,7 +119,7 @@ const EntityDetails: React.FC = () => {
                 <p className="text-red-500">{errors.uniqueId.message}</p>
               )}
             </div>
-            <div>
+            <div className="-mt-[6px]">
               <label htmlFor="addressLine1" className="text-base font-normal">
                 Address line <span className="text-red-500">*</span>1
               </label>
@@ -131,7 +131,7 @@ const EntityDetails: React.FC = () => {
                 <p className="text-red-500">{errors.addressLine1.message}</p>
               )}
             </div>
-            <div>
+            <div className="-mt-[6px]">
               <label htmlFor="addressLine2" className="text-base font-normal">
                 Address line <span className="text-red-500">*</span>2
               </label>

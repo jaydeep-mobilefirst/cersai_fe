@@ -11,7 +11,7 @@ const TextArea: FC<InputProps> = forwardRef<HTMLTextAreaElement, InputProps>(
           {" "}
           {/* Adjust max width as needed */}
           <textarea
-            className="form-textarea mt-1 block w-full border-gray-300 shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 textarea-component px-3 py-2 border h-14 sm:h-14 rounded-md" // Adjust padding and height as needed
+            className="form-textarea mt-1 block w-full border-gray-300 shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 textarea-component px-3 py-2 border h-[55px] sm:h-[55px] rounded-md" // Adjust padding and height as needed
             {...props}
             ref={ref}
           ></textarea>
