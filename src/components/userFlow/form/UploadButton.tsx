@@ -46,7 +46,7 @@ const UploadButton: FC<ButtonProps> = forwardRef<
         }`}
         onClick={handleButtonClick}
       >
-        <div className="flex items-center space-between gap-2 md:w-[300px]">
+        <div className="flex items-center space-between gap-2 md:w-[280px]">
           <UploadButtonFolderSvg />
           <div className="text-left">
             <span>{UploadButtonTexts.uploadDocument}</span>

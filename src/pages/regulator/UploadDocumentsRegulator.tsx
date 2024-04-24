@@ -177,7 +177,7 @@ const UploadDocumentsRegulator = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center lg:mt-80 md:72">
           <div className="flex flex-row">
             <svg
               xmlns="http://www.w3.org/2000/svg"
