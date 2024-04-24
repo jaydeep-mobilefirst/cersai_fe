@@ -136,7 +136,7 @@ const NodalDetails = (props: Props) => {
                         Save and Continue
                     </button>
                 </div> */}
-        <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center space-y-4 sm:space-y-0 lg:mt-52 md:mt-52">
+        <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center space-y-4 sm:space-y-0 lg:mt-60 md:mt-60">
           <div className="flex flex-row items-center space-x-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"

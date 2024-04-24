@@ -96,13 +96,7 @@ const RegularDetailsForm = (props: Props) => {
                 Registration approval Date
                 <span className="text-red-500">*</span>
               </label>
-              {/* <InputFields
-                type="date"
-                id="registrationDate"
-                {...register("registrationDate")}
-                onChange={handleDateChange}
-                //   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              /> */}
+
               <DatePicker onChange={handleDateChange} />
               <span className="text-red-500">
                 {errors.registrationDate?.message}
@@ -126,7 +120,7 @@ const RegularDetailsForm = (props: Props) => {
                         Save and Continue
                     </button>
                 </div> */}
-        <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center space-y-4 sm:space-y-0 lg:mt-80 md:mt-80">
+        <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center space-y-4 sm:space-y-0 lg:mt-96 md:mt-96">
           <div className="flex flex-row items-center space-x-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
