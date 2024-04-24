@@ -92,9 +92,9 @@ const VerificationForm = (props: Props) => {
   return (
     <>
       <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
-      <div className=" flex flex-col justify-between max-h-full">
+      <div className=" flex flex-col justify-between h-full">
         <form
-          className="p-4 flex flex-col w-full max-w-xs md:max-w-2xl lg:max-w-4xl xl:max-w-[100rem] mx-auto justify-between"
+          className="p-4 flex flex-col w-full max-w-xs md:max-w-2xl lg:max-w-4xl xl:max-w-full  justify-between"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="bg-white p-6 w-full">
