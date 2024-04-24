@@ -39,7 +39,7 @@ const DepositTakerRegisterFlow = () => {
       </div>
 
       <div className=" flex w-full flex-col">
-        <div className="w-full mt-20">
+        <div className="w-full mt-20 lg:mt-0">
           <Outlet />
         </div>
       </div>
