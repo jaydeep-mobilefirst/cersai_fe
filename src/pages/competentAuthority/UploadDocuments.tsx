@@ -6,8 +6,8 @@ type Props = {};
 
 const UploadDocuments = (props: Props) => {
   return (
-    <form className="p-4 flex flex-col w-full max-w-[100%] justify-between">
-      <div className="mb-4">
+    <form className="p-4 flex flex-col w-full max-w-[100%] justify-between space-y-60 ">
+      <div className="mb-20">
         <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between items-center h-[57px] text-gilroy-bold mb-4">
           <p className="ml-[16px] text-xl lg:text-[20px]">Upload Documents</p>
         </div>
@@ -38,6 +38,7 @@ const UploadDocuments = (props: Props) => {
           </div>
         </div>
       </div>
+      <div className='mt-10'>
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <svg
@@ -65,6 +66,13 @@ const UploadDocuments = (props: Props) => {
           Save & Continue
         </button>
       </div>
+      <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
+
+          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            © 2024 Protean BUDs, All Rights Reserved.
+          </p>
+      </div>
+      
     </form>
   );
 };

@@ -127,7 +127,7 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
         ) : (
           <input
             type="text"
-            className={`form-input border h-[56px] w-full max-w-xs sm:max-w-md md:max-w-full px-2 py-2 flex items-center border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-300 ${props.className}`}
+            className={`form-input border h-[56px] w-full max-w-xl sm:max-w-md md:max-w-full px-2 py-2 flex items-center border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-300 ${props.className}`}
             {...props}
             ref={ref}
           />

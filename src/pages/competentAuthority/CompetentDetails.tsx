@@ -103,7 +103,7 @@ const ComponentDetails: React.FC = () => {
   return (
     <>
       <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
-      <div className="flex flex-col h-screen p-4 md:p-6">
+      <div className="flex flex-col h-[90vh] p-4 md:p-6">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col justify-between flex-1"
@@ -210,7 +210,13 @@ const ComponentDetails: React.FC = () => {
                 <Button type="submit" label="Save & Continue" />
               </div>
             </div>
+            <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
+
+          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            © 2024 Protean BUDs, All Rights Reserved.
+          </p>
           </div>
+          
         </form>
       </div>
     </>

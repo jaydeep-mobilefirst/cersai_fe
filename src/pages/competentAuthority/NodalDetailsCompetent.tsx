@@ -25,7 +25,7 @@ const NodalDetails = (props: Props) => {
       <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
       <form
         onSubmit={handleSubmit(handleOnSubmit)}
-        className="p-4 flex flex-col w-full max-w-[100%] justify-between"
+        className="p-4 flex flex-col w-full max-w-[100%] justify-between space-y-40"
       >
         <div className="bg-white p-6 w-full">
           <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
@@ -111,6 +111,7 @@ const NodalDetails = (props: Props) => {
             </div>
           </div>
         </div>
+        <div>
         <div className="flex justify-between items-center">
           <div className="flex flex-row">
             <svg
@@ -136,7 +137,14 @@ const NodalDetails = (props: Props) => {
           >
             Save and Continue
           </button>
+          
         </div>
+        <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
+
+          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            © 2024 Protean BUDs, All Rights Reserved.
+          </p>
+          </div>
       </form>
     </>
   );

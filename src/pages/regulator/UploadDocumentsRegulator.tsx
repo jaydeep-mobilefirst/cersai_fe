@@ -33,7 +33,7 @@ const UploadDocumentsRegulator = (props: Props) => {
   return (
     <>
       <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
-      <form className="p-4 flex flex-col w-full max-w-[80%] justify-between">
+      <form className="p-4 flex flex-col w-full max-w-[100%] justify-between">
         {showUploadPopup && (
           <div className="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
             <div
@@ -177,7 +177,9 @@ const UploadDocumentsRegulator = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className="flex justify-between items-center">
+
+        <div>
+        <div className="flex justify-between items-center lg:mt-80 md:72">
           <div className="flex flex-row">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -203,6 +205,11 @@ const UploadDocumentsRegulator = (props: Props) => {
             Save & Continue
           </button>
         </div>
+        <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
+            <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+              © 2024 Protean BUDs, All Rights Reserved.
+            </p>
+            </div>
       </form>
     </>
   );
