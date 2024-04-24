@@ -209,7 +209,7 @@ const ReviewDetailsDesignated = () => {
             <span className="text-[#385723] underline">BUDs act 2019</span>
           </div>
         </div>
-
+<div>
         <div className="mt-18">
           <div className="flex justify-between mt-[52px] items-center">
             <button className="text-gilroy-regular text-[14px] flex items-center">
@@ -235,6 +235,12 @@ const ReviewDetailsDesignated = () => {
             </div>
           </div>
         </div>
+        <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
+
+          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            © 2024 Protean BUDs, All Rights Reserved.
+          </p>
+          </div>
       </div>
     </>
   );

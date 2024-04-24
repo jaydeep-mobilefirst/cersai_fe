@@ -9,7 +9,7 @@ const UploadDocumentsDesignated = (props: Props) => {
     <>
       <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
       <form className="p-4 flex flex-col w-full max-w-[100%] justify-between">
-        <div>
+        <div className="mb-60">
           <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold mb-4">
             <p className="lg:w-[152px] ml-[16px] mt-[16px] text-xl lg:text-[20px] pb-2 text-nowrap">
               Upload Documents
@@ -46,6 +46,7 @@ const UploadDocumentsDesignated = (props: Props) => {
             supporting document for appointment of Nodal Officer.
           </h1>
         </div>
+        <div>
         <div className="flex justify-between items-center">
           <div className="flex flex-row">
             <svg
@@ -72,6 +73,12 @@ const UploadDocumentsDesignated = (props: Props) => {
             Save & Continue
           </button>
         </div>
+        <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
+
+          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            © 2024 Protean BUDs, All Rights Reserved.
+          </p>
+          </div>
       </form>
     </>
   );

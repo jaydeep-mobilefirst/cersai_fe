@@ -101,7 +101,7 @@ const ReviewMain = () => {
             knowledge
           </div>
         </div>
-
+<div>
         <div className="flex text-nowrap justify-between mt-[52px] sm:flex-row">
           <button className="flex text-gilroy-regulartext-[14px]">
             <div>
@@ -130,6 +130,11 @@ const ReviewMain = () => {
             </div>
           </div>
         </div>
+        <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
+            <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+              © 2024 Protean BUDs, All Rights Reserved.
+            </p>
+            </div>
       </div>
     </>
   );

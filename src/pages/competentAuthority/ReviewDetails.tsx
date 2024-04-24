@@ -198,6 +198,7 @@ const ReviewDetails = () => {
                     ))}
                   </div>
 <div className="mt-18">
+  <div>
         <div className="flex justify-between mt-[52px] items-center">
                  <button className="text-gilroy-regular text-[14px] flex items-center">
                   <img src={Arrow} alt="back Arrow" className="mr-2" />
@@ -220,7 +221,15 @@ const ReviewDetails = () => {
       Submit
     </button>
   </div>
+  
+  
 </div>
+<div className="border-[#E6E6E6] border-[1px] mt-2"></div>
+
+          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            © 2024 Protean BUDs, All Rights Reserved.
+          </p>
+          </div>
 </div>
 
                 </div>
