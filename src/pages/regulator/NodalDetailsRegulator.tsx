@@ -75,6 +75,7 @@ const NodalDetailsRegulator = () => {
                 type="text"
                 id="nodalMobileNumber"
                 {...register("nodalOfficerMobileNumber")}
+                placeholder="type"
               />
               <span className="text-red-500">
                 {errors.nodalOfficerMobileNumber?.message}
