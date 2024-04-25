@@ -3,12 +3,15 @@ import folderOpen from "../../assets/images/folder-open.svg";
 import directboxsend from "../../assets/images/directboxSend.svg";
 import trashIcon from "../../assets/images/trash.svg";
 import add from "../../assets/images/add.svg";
+import { useScreenWidth } from "../../utils/screenSize";
+
 type Props = {};
 
 const UploadDocumentsRegulator = (props: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const screenWidth = useScreenWidth();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -179,37 +182,39 @@ const UploadDocumentsRegulator = (props: Props) => {
         </div>
 
         <div>
-        <div className="flex justify-between items-center lg:mt-80 md:72">
-          <div className="flex flex-row">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M15 6L9 12L15 18"
-                stroke="#1D1D1B"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <button className="text-black transition duration-300">Back</button>
-          </div>
-          <button
-            type={"submit"}
-            className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm  w-[224px]"
-          >
-            Save & Continue
-          </button>
-        </div>
-        <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
-            <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
-              © 2024 Protean BUDs, All Rights Reserved.
-            </p>
+          <div className="flex justify-between items-center lg:mt-80 md:72">
+            <div className="flex flex-row">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M15 6L9 12L15 18"
+                  stroke="#1D1D1B"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <button className="text-black transition duration-300">
+                Back
+              </button>
             </div>
+            <button
+              type={"submit"}
+              className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm  w-[224px]"
+            >
+              Save & Continue
+            </button>
+          </div>
+          <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
+          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            © 2024 Protean BUDs, All Rights Reserved.
+          </p>
+        </div>
       </form>
     </>
   );
