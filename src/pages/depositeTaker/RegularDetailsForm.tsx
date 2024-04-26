@@ -116,7 +116,7 @@ const RegularDetailsForm = (props: Props) => {
 
         <div>
           <div
-            className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
+            className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
             style={{
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}

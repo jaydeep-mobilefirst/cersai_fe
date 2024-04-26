@@ -119,7 +119,7 @@ const NodalDetailsRegulator = () => {
 
         <div>
           <div
-            className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
+            className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
             style={{
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
@@ -150,7 +150,7 @@ const NodalDetailsRegulator = () => {
                 type="submit"
                 className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
               >
-                Save and Continue
+                Save & Review
               </button>
             </div>
           </div>

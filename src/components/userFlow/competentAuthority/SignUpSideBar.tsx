@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import HeadComp from "./HeadCom";
 import { signupSideBarCompetent } from "../../../utils/hardText/signUpCompetentText";
+import Logo from "../../../assets/images/logo.svg";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
 interface SignUpSideBarProps {
   isMenuOpen?: boolean;
@@ -38,17 +39,22 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
   return (
     <div className="sidebar-container h-screen bg-[#EEF7EB] flex flex-col">
       <div className=" sm:w-[300px] w-[250px] h-[100vh] md:w-[349px] bg-[#EEF7EB]  ">
-        {isMenuOpen && (
-          <div
-            className="lg:hidden w-full  flex justify-end items-center p-2"
-            onClick={toggleMenu}
-          >
-            <img src={CrossIcon} alt="Close Menu" className="w-6 h-6" />
-          </div>
-        )}
-        <HeadComp />
+        {/* {isMenuOpen && (
+          <>
+            <div
+              className="lg:hidden w-full  flex justify-between items-center p-2"
+              onClick={toggleMenu}
+            >
+              <img src={Logo} alt="logo" className="rounded-full  w-10" />
+              <img src={CrossIcon} alt="Close Menu" className="w-6 h-6" />
+            </div>
+          </>
+        )} */}
+
+        <HeadComp isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+
         <hr className="bg-[#000000] w-full md:w-[349px]"></hr>
-        <div className="px-[28px] mt-[16px]">
+        <div className="px-[28px] lg:mt-[16px]">
           <div className="h-[101px]">
             <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">
               Competent Authority

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import NodalDetailsSchema from "../../formValidationSchema/deposit_taker/NodalDetails.schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -6,11 +6,13 @@ import InputFields from "../../components/userFlow/form/InputField";
 import UploadButton from "../../components/userFlow/form/UploadButton";
 import SignUpSideBar from "../../components/userFlow/depositeTaker/SignUpSideBar";
 import { useScreenWidth } from "../../utils/screenSize";
+import OtpPage from "./OtpPage";
 
 type Props = {};
 
 const NodalDetails = (props: Props) => {
   const screenWidth = useScreenWidth();
+  const [showOTPModel, setShowOTPModel] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -25,6 +27,11 @@ const NodalDetails = (props: Props) => {
 
   const handleOnSubmit = (data: any) => {
     console.log({ data });
+    setShowOTPModel(true);
+  };
+
+  const closeShowOtpModel = () => {
+    setShowOTPModel(false);
   };
 
   return (
@@ -90,6 +97,7 @@ const NodalDetails = (props: Props) => {
                   type="text"
                   id="nodalMobileNumber"
                   {...register("nodalOfficerMobileNumber")}
+                  placeholder="Type "
                   //   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
                 <span className="text-red-500">
@@ -129,10 +137,11 @@ const NodalDetails = (props: Props) => {
             </div>
           </div>
         </div>
+        {showOTPModel && <OtpPage closeShowOtpModel={closeShowOtpModel} />}
 
         <div>
           <div
-            className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
+            className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
             style={{
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}

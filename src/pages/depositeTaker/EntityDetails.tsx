@@ -149,8 +149,8 @@ const EntityDetails: React.FC = () => {
                   htmlFor="addressLine1"
                   className="text-base font-normal text-text-gilroy-medium"
                 >
-                  Registered Address Line{" "}
-                  <span className="text-red-500">*</span>1
+                  Registered Address Line 1
+                  <span className="text-red-500">*</span>
                 </label>
                 <TextArea
                   placeholder="Enter address"
@@ -245,7 +245,7 @@ const EntityDetails: React.FC = () => {
 
         <div>
           <div
-            className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
+            className="flex w-full p-4 lg:px-[29px] flex-row justify-between items-center"
             style={{
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}

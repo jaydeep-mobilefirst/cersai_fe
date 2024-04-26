@@ -37,20 +37,21 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
 
   return (
     <div className="sm:w-[300px] h-[100vh] md:w-[349px] w-[250px] bg-[#EEF7EB]">
-      {isMenuOpen && (
+      {/* {isMenuOpen && (
         <div
           className="lg:hidden w-full  flex justify-end items-center p-2"
           onClick={toggleMenu}
         >
           <img src={CrossIcon} alt="Close Menu" className="w-6 h-6" />
         </div>
-      )}
-      <HeadComp />
+      )} */}
+      {/* <HeadComp /> */}
+      <HeadComp isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
       <hr className="bg-[#000000] w-full md:w-[349px]"></hr>
       <div className="px-[28px] mt-[16px]">
         <div className="h-[101px]">
           <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">
-            Regulator Details
+            Regulator
           </p>
           <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium">
             <span className="text-zinc-800 text-base font-normal text-gilroy-bold">
