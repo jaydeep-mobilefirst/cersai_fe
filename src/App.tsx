@@ -33,6 +33,8 @@ import MainPortalLayout from "./layouts/portal/MainPortalLayout";
 import Dashboard from "./pages/mainPortal/Dashboard";
 import DashboardProfile from "./pages/mainPortal/DashboardProfile";
 import ResetPassword from "./pages/mainPortal/ResetPassword";
+import SchemaCreationForm from "./pages/mainPortal/SchemaManagemet/SchemaCreationForm";
+import SchemaCreation from "./pages/mainPortal/SchemaManagemet/SchemaCreation";
 
 function App() {
   return (
@@ -40,14 +42,21 @@ function App() {
       <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
-            <Route element={<MainPortalLayout/>} path="/portal">
+            <Route element={<MainPortalLayout />} path="/portal">
               <Route element={<Dashboard />} path="dashboard">
-              <Route element={<DashboardProfile />} path="profile" />
-              <Route element={<ResetPassword />} path="resetpassword" />
+                <Route element={<DashboardProfile />} path="profile" />
+                <Route element={<ResetPassword />} path="resetpassword" />
               </Route>
+
+              {/* <Route element={<LayoutSchemaCreation />} path="mytask" /> */}
+              <Route element={<SchemaCreation />} path="mytask" />
+              <Route element={<SchemaCreationForm />} path="form" />
             </Route>
 
-            <Route element={<DepositTakerRegisterFlow />} path="/depositetaker/signup">
+            <Route
+              element={<DepositTakerRegisterFlow />}
+              path="/depositetaker/signup"
+            >
               <Route element={<NodalDetails />} path="nodaldetails" />
               <Route element={<VarificationForm />} path="verification" />
               <Route element={<EntityDetails />} path="entitydetials" />
