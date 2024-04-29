@@ -6,6 +6,7 @@ import TextArea from "../../components/userFlow/form/TextArea";
 import Button from "../../components/userFlow/form/Button";
 import ArrowIcon from "../../assets/images/Arrow.svg";
 import { EntityDetailschema } from "../../formValidationSchema/deposit_taker/EntityValidation.schema";
+import { useScreenWidth } from "../../utils/screenSize";
 
 const RegulatorDetails: React.FC = () => {
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
@@ -19,6 +20,7 @@ const RegulatorDetails: React.FC = () => {
 
   const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
   const [searchInputValue4, setSearchInputValue4] = useState<string>("");
+  const screenWidth = useScreenWidth();
 
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
@@ -102,17 +104,24 @@ const RegulatorDetails: React.FC = () => {
 
   return (
     <>
-      <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
-      <div className="flex flex-col p-6 w-full ">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col justify-between h-full"
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+      >
+        <div
+          style={{
+            width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+          }}
         >
-          <div>
+          <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+          <div className="flex flex-col p-6 w-full ">
             <h1 className="text-2xl font-bold mb-6">Regulator Details</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              <div>
-                <label htmlFor="Typeofentity" className="text-base font-normal">
+              <div className="mt-1">
+                <label
+                  htmlFor="Typeofentity"
+                  className="text-base font-normal text-gilroy-medium"
+                >
                   Regulator Name<span className="text-red-500">*</span>
                 </label>
 
@@ -128,7 +137,10 @@ const RegulatorDetails: React.FC = () => {
               </div>
 
               <div className="">
-                <label htmlFor="addressLine1" className="text-base font-normal">
+                <label
+                  htmlFor="addressLine1"
+                  className="text-base font-normal text-gilroy-medium"
+                >
                   Address Line 1<span className="text-red-500">*</span>
                 </label>
                 <TextArea
@@ -141,7 +153,10 @@ const RegulatorDetails: React.FC = () => {
                 )}
               </div>
               <div>
-                <label htmlFor="addressLine2" className="text-base font-normal">
+                <label
+                  htmlFor="addressLine2"
+                  className="text-base font-normal text-gilroy-medium"
+                >
                   Address Line 2
                 </label>
                 <TextArea
@@ -151,7 +166,10 @@ const RegulatorDetails: React.FC = () => {
                 />
               </div>
               <div>
-                <label htmlFor="pinCode" className="text-base font-normal">
+                <label
+                  htmlFor="pinCode"
+                  className="text-base font-normal text-gilroy-medium"
+                >
                   Pin Code <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
@@ -166,7 +184,10 @@ const RegulatorDetails: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="state" className="text-base font-normal">
+                <label
+                  htmlFor="state"
+                  className="text-base font-normal text-gilroy-medium"
+                >
                   State <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
@@ -181,7 +202,10 @@ const RegulatorDetails: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="district" className="text-base font-normal">
+                <label
+                  htmlFor="district"
+                  className="text-base font-normal text-gilroy-medium"
+                >
                   District <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
@@ -196,23 +220,54 @@ const RegulatorDetails: React.FC = () => {
               </div>
             </div>
           </div>
-          <div>
-            <div className="flex justify-between items-center lg:mt-80 md:mt-60 mb-4  mt-4">
-              <div className="flex cursor-pointer ">
-                <img src={ArrowIcon} alt="" />
-                <h1 className="text-sm font-normal text-black">Back</h1>
-              </div>
-              <div>
-                <Button type="submit" label="Save & Continue" />
-              </div>
+        </div>
+
+        <div>
+          <div
+            className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
+            style={{
+              width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+            }}
+          >
+            <div className="flex flex-row items-center space-x-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="shrink-0"
+              >
+                <path
+                  d="M15 6L9 12L15 18"
+                  stroke="#1D1D1B"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
+                Back
+              </button>
             </div>
-            <div className="border-[#E6E6E6] border-[1px] "></div>
-            <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            <div className="flex items-center">
+              <button
+                type="submit"
+                className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+              >
+                Save and Continue
+              </button>
+            </div>
+          </div>
+          <div>
+            <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
+
+            <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
               © 2024 Protean BUDs, All Rights Reserved.
             </p>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 };

@@ -7,6 +7,8 @@ import TextArea from "../../components/userFlow/form/TextArea";
 import Button from "../../components/userFlow/form/Button";
 import ArrowIcon from "../../assets/images/Arrow.svg";
 import { EntityDetailschema } from "../../formValidationSchema/deposit_taker/EntityValidation.schema";
+import { useScreenWidth } from "../../utils/screenSize";
+import InfoCircle from "../../assets/images/info-circle (1).svg";
 
 const EntityDetails: React.FC = () => {
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
@@ -17,6 +19,7 @@ const EntityDetails: React.FC = () => {
 
   const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
   const [searchInputValue3, setSearchInputValue3] = useState<string>("");
+  const screenWidth = useScreenWidth();
 
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
@@ -85,116 +88,168 @@ const EntityDetails: React.FC = () => {
   return (
     <>
       <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
-      <div className="flex flex-col p-6 w-full">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col justify-between h-full"
+      {/* <div className="flex flex-col p-6 w-full"> */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        // className="flex flex-col justify-between h-full"
+        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+      >
+        <div
+          style={{
+            width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+          }}
         >
-          <h1 className="text-2xl font-bold mb-6">Entity Details</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div>
-              <label htmlFor="Typeofentity" className="text-base font-normal">
-                Type of Entity <span className="text-red-500">*</span>
-              </label>
+          <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+          <div className="bg-white p-6 w-full">
+            <h1 className="text-2xl font-bold mb-6">Entity Details</h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div>
+                <label
+                  htmlFor="Typeofentity"
+                  className="text-base font-normal text-text-gilroy-medium"
+                >
+                  Type of Entity <span className="text-red-500">*</span>
+                </label>
 
-              <SelectButton
-                setOption={handleSetOption1}
-                options={options1}
-                selectedOption={selectedOption1}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange1}
-                searchInputValue={searchInputValue1}
-                showSearchInput={false}
-              />
-            </div>
-            <div>
-              <label htmlFor="uniqueId" className="text-base font-normal">
-                Unique Id <span className="text-red-500">*</span>
-              </label>
-              <InputFields
-                placeholder="Enter Unique Id"
-                {...register("uniqueId")}
-              />
-              {errors.uniqueId && (
-                <p className="text-red-500">{errors.uniqueId.message}</p>
-              )}
-            </div>
-            <div className="-mt-[6px]">
-              <label htmlFor="addressLine1" className="text-base font-normal">
-                Address line <span className="text-red-500">*</span>1
-              </label>
-              <TextArea
-                placeholder="Enter address"
-                {...register("addressLine1")}
-              />
-              {errors.addressLine1 && (
-                <p className="text-red-500">{errors.addressLine1.message}</p>
-              )}
-            </div>
-            <div className="-mt-[6px]">
-              <label htmlFor="addressLine2" className="text-base font-normal">
-                Address line <span className="text-red-500">*</span>2
-              </label>
-              <TextArea
-                placeholder="Enter address"
-                {...register("addressLine2")}
-              />
+                <SelectButton
+                  setOption={handleSetOption1}
+                  options={options1}
+                  selectedOption={selectedOption1}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange1}
+                  searchInputValue={searchInputValue1}
+                  showSearchInput={false}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="uniqueId"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  {/* Unique ID Number <span className="text-red-500">*</span> */}
+                  <div className="flex">
+                    Unique ID Number <span className="text-red-500">*</span>
+                    <img
+                      src={InfoCircle}
+                      alt=" InfoCircle "
+                      className="w-5 mx-2"
+                    />
+                  </div>
+                </label>
+                <InputFields
+                  placeholder="Enter Unique Id"
+                  {...register("uniqueId")}
+                />
+                {errors.uniqueId && (
+                  <p className="text-red-500">{errors.uniqueId.message}</p>
+                )}
+              </div>
+              <div className="-mt-[6px]">
+                <label
+                  htmlFor="addressLine1"
+                  className="text-base font-normal text-text-gilroy-medium"
+                >
+                  Registered Address Line 1
+                  <span className="text-red-500">*</span>
+                </label>
+                <TextArea
+                  placeholder="Enter address"
+                  {...register("addressLine1")}
+                />
+                {errors.addressLine1 && (
+                  <p className="text-red-500">{errors.addressLine1.message}</p>
+                )}
+              </div>
+              <div className="-mt-[6px]">
+                <label
+                  htmlFor="addressLine2"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  Registered Address Line 2
+                </label>
+                <TextArea
+                  placeholder="Enter address"
+                  {...register("addressLine2")}
+                />
 
-              {errors.addressLine2 && (
-                <p className="text-red-500">{errors.addressLine2.message}</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="pinCode" className="text-base font-normal">
-                Pine code <span className="text-red-500">*</span>
-              </label>
-              <InputFields placeholder="Type Here" {...register("pinCode")} />
-              {errors?.pinCode && (
-                <p className="text-red-500">{errors?.pinCode?.message}</p>
-              )}
-            </div>
+                {errors.addressLine2 && (
+                  <p className="text-red-500">{errors.addressLine2.message}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="pinCode"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  Pine code <span className="text-red-500">*</span>
+                </label>
+                <InputFields placeholder="Type Here" {...register("pinCode")} />
+                {errors?.pinCode && (
+                  <p className="text-red-500">{errors?.pinCode?.message}</p>
+                )}
+              </div>
 
-            <div>
-              <label htmlFor="state" className="text-base font-normal">
-                State <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSetOption2}
-                options={options2}
-                selectedOption={selectedOption2}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange2}
-                searchInputValue={searchInputValue2}
-                showSearchInput={true}
-              />
-            </div>
+              <div>
+                <label
+                  htmlFor="state"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  State <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption2}
+                  options={options2}
+                  selectedOption={selectedOption2}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange2}
+                  searchInputValue={searchInputValue2}
+                  showSearchInput={true}
+                />
+              </div>
 
-            <div>
-              <label htmlFor="district" className="text-base font-normal">
-                District <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSetOption3}
-                options={options3}
-                selectedOption={selectedOption3}
-                placeholder="Select"
-                searchInputOnchange={handleSearchInputChange3}
-                searchInputValue={searchInputValue3}
-                showSearchInput={true}
-              />
-            </div>
-            <div>
-              <label htmlFor="gstNumber" className="text-base font-normal">
-                GST Number <span className="text-red-500">*</span>
-              </label>
-              <InputFields placeholder="Type here" {...register("gstNumber")} />
-              {errors?.gstNumber && (
-                <p className="text-red-500">{errors?.gstNumber?.message}</p>
-              )}
+              <div>
+                <label
+                  htmlFor="district"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  District <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption3}
+                  options={options3}
+                  selectedOption={selectedOption3}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange3}
+                  searchInputValue={searchInputValue3}
+                  showSearchInput={true}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="gstNumber"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  GST Number <span className="text-red-500">*</span>
+                </label>
+                <InputFields
+                  placeholder="Type here"
+                  {...register("gstNumber")}
+                />
+                {errors?.gstNumber && (
+                  <p className="text-red-500">{errors?.gstNumber?.message}</p>
+                )}
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center space-y-4 sm:space-y-0 lg:mt-40 md:mt-40 mt-4 ">
+        <div>
+          <div
+            className="flex w-full p-4 lg:px-[29px] flex-row justify-between items-center"
+            style={{
+              width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+            }}
+          >
             <div className="flex flex-row items-center space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -225,13 +280,16 @@ const EntityDetails: React.FC = () => {
               </button>
             </div>
           </div>
-          <div className="border-[#E6E6E6] border-[1px] mt-2"></div>
+          <div>
+            <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 
-          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
-            © 2024 Protean BUDs, All Rights Reserved.
-          </p>
-        </form>
-      </div>
+            <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+              © 2024 Protean BUDs, All Rights Reserved.
+            </p>
+          </div>
+        </div>
+      </form>
+      {/* </div> */}
     </>
   );
 };

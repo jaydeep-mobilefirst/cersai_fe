@@ -34,11 +34,14 @@ const VerificationForm = (props: Props) => {
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className="border-[#E6E6E6] border-[1px] lg:mt-20 w-full"></div>
+            <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+            <h1 className="text-xl md:text-2xl font-bold mx-10 ">
+              Verification
+            </h1>
             <div className="bg-white p-4 lg:p-[48px]">
-              <h1 className="text-xl md:text-2xl font-bold mb-6">
+              {/* <h1 className="text-xl md:text-2xl font-bold mb-6">
                 Verification
-              </h1>
+              </h1> */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                 <div>
                   <label
@@ -81,7 +84,9 @@ const VerificationForm = (props: Props) => {
             <div
               className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
               style={{
-                width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+                width: `${
+                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                }`,
               }}
             >
               <div className="flex flex-row items-center space-x-2">
