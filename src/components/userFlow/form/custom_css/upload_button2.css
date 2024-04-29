@@ -16,7 +16,7 @@
 }
 
 .upload-button.file-selected {
-  background-color: #4caf50; /* Change to your selected color when a file is selected */
+  background-color: #EEF7EB; /* Change to your selected color when a file is selected */
 }
 
 @media (max-width: 600px) {

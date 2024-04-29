@@ -18,7 +18,6 @@ import ReviewDetails from "./pages/competentAuthority/ReviewDetails";
 import ComponentDetails from "./pages/competentAuthority/CompetentDetails";
 import CompetentAuthorityRegister from "./layouts/competentAuthorityRegister/CompetentAuthorityRegister";
 import UploadDocuments from "./pages/competentAuthority/UploadDocuments";
-
 import DesignatedCourtRegister from "./layouts/designatedCourtRegister/DesignatedCourtRegister";
 import DesignatedCourtDetails from "./pages/designatedCourt/DesignatedCourtDetails";
 import NodalDetailsDesignated from "./pages/designatedCourt/NodalDetailsDesignated";
@@ -30,6 +29,10 @@ import RegulatorDetails from "./pages/regulator/RegulatorDetails";
 import NodalDetailsRegulator from "./pages/regulator/NodalDetailsRegulator";
 import UploadDocumentsRegulator from "./pages/regulator/UploadDocumentsRegulator";
 import ReviewDetailsRegulator from "./pages/regulator/ReviewDetailsRegulator";
+import MainPortalLayout from "./layouts/portal/MainPortalLayout";
+import Dashboard from "./pages/mainPortal/Dashboard";
+import DashboardProfile from "./pages/mainPortal/DashboardProfile";
+import ResetPassword from "./pages/mainPortal/ResetPassword";
 
 function App() {
   return (
@@ -37,10 +40,14 @@ function App() {
       <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
-            <Route
-              element={<DepositTakerRegisterFlow />}
-              path="/depositetaker/signup"
-            >
+            <Route element={<MainPortalLayout/>} path="/portal">
+              <Route element={<Dashboard />} path="dashboard">
+              <Route element={<DashboardProfile />} path="profile" />
+              <Route element={<ResetPassword />} path="resetpassword" />
+              </Route>
+            </Route>
+
+            <Route element={<DepositTakerRegisterFlow />} path="/depositetaker/signup">
               <Route element={<NodalDetails />} path="nodaldetails" />
               <Route element={<VarificationForm />} path="verification" />
               <Route element={<EntityDetails />} path="entitydetials" />

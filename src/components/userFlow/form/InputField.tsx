@@ -77,11 +77,13 @@ import React, {
 import { dateFormattor } from "../../../utils/commonFunction";
 import Calender from "./svgs/Calender";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  bgColor ?: string
+}
 
 const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
   (props, ref) => {
-    const { onChange, type } = props;
+    const { onChange, type, className } = props;
     const hiddenDateInput = useRef<HTMLInputElement>(null);
     const [dateSelected, setDateSelected] = useState<string | undefined>(
       undefined
@@ -127,7 +129,7 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
         ) : (
           <input
             type="text"
-            className={`form-input border h-[56px] w-full max-w-xl sm:max-w-md md:max-w-full px-2 py-2 flex items-center border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-300 ${props.className}`}
+            className={`form-input border h-[56px] w-full sm:w-full md:max-w-full px-2 py-2 flex items-center border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-300 ${props?.bgColor}`}
             {...props}
             ref={ref}
           />
