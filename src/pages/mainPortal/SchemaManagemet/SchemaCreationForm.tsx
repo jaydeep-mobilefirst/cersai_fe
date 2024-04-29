@@ -209,7 +209,7 @@ const SchemaCreationForm = () => {
                     {/* {errors.registrationDate?.message} */}
                   </span>
                 </div>
-                <div className="mt-[2px]">
+                <div className="-mt-2">
                   <label
                     htmlFor="registrationDate"
                     className="block text-gray-700 text-sm font-bold mb-2"
