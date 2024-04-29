@@ -185,7 +185,7 @@ const SelectButton = ({
     placeholder;
 
   return (
-    <>
+    <div className="w-full relative">
       <button
         className="h-[56px] px-2 md:px-8 py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left w-full"
         type="button"
@@ -228,7 +228,7 @@ const SelectButton = ({
       </button>
       {arrowDirectionToggle && (
         <div
-          className="absolute z-10 mt-2 w-full md:max-w-[370px] rounded-md bg-white shadow-lg"
+          className="absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu"
@@ -268,7 +268,7 @@ const SelectButton = ({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
