@@ -1,44 +1,47 @@
-import { useEffect, useState } from 'react';
-import {portalSideBarList} from '../../../utils/hardText/portalText';
-import { Link, useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { portalSideBarList } from "../../../utils/hardText/portalText";
+import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ArrowClose from "../../../assets/images/arrowclose.svg";
 import Logo from "../../../assets/images/logo2.svg";
 
-import Header from './Header';
+import Header from "./Header";
 type Props = {
-  layout : React.ReactElement | null
-}
+  layout: React.ReactElement | null;
+};
 
-const MainPortalSidebar = ({layout}: Props) => {
-    const [mSidebar, setMsidebar] = useState<boolean>(false);
-    const [url, setUrl] = useState<String>("");
-  
-    const location = useLocation();
-    const { pathname } = location;
-    const navigate = useNavigate();
-  
-    useEffect(() => {
-      const cmsPath = pathname.split("/")[1];
-      // Extracting the first part after the domain
-      // console.log(cmsPath, "dashboard");
-      setUrl("/" + cmsPath);
-    }, []);
-  
-    const sidebarOnclick = () => {
-      setMsidebar(!mSidebar);
-    };
-  
-    const goBackRoute = () => {
-      navigate(-1);
-    };
+const MainPortalSidebar = ({ layout }: Props) => {
+  const [mSidebar, setMsidebar] = useState<boolean>(false);
+  const [url, setUrl] = useState<String>("");
+  console.log(url, "url");
 
-    const optionOnclick = (url: String) => {};
+  const location = useLocation();
+  const { pathname } = location;
+  console.log(pathname, "pathname");
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const cmsPath = pathname.split("/")[1];
+    // Extracting the first part after the domain
+    console.log(cmsPath, "dashboard cms path");
+    setUrl("/" + cmsPath);
+  }, []);
 
-    return(
-        <>
-        <button
+  const sidebarOnclick = () => {
+    setMsidebar(!mSidebar);
+  };
+
+  const goBackRoute = () => {
+    navigate(-1);
+  };
+
+  const optionOnclick = (url: String) => {
+    setUrl(url);
+  };
+
+  return (
+    <>
+      <button
         data-drawer-target="default-sidebar"
         data-drawer-toggle="default-sidebar"
         aria-controls="default-sidebar"
@@ -85,6 +88,7 @@ const MainPortalSidebar = ({layout}: Props) => {
               </div>
             </li>
             {portalSideBarList?.map((data, idx) => {
+              console.log(data, "data");
               return (
                 <li className="px-4 py-2" key={idx}>
                   <Link to={data?.rurl}>
@@ -125,9 +129,8 @@ const MainPortalSidebar = ({layout}: Props) => {
         </div>
         <div className="overflow-x-hidden">{layout}</div>
       </div>
-      </>
+    </>
+  );
+};
 
-        )
-}
-
-export default MainPortalSidebar
+export default MainPortalSidebar;

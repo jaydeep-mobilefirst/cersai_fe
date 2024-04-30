@@ -105,7 +105,7 @@ const SchemaCreation = () => {
 
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/portal/form"}>
+            <Link to={"/portal/mytask/form"}>
               <div>
                 <img src={Eye} alt="Eye " className="cursor-pointer" />
               </div>

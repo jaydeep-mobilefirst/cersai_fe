@@ -1,17 +1,89 @@
-import React, { useState } from "react";
-import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
-import { useScreenWidth } from "../../../utils/screenSize";
-import { EntityDetailschema } from "../../../formValidationSchema/deposit_taker/EntityValidation.schema";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import SelectButton from "../../../components/userFlow/form/SelectButton";
-import TextArea from "../../../components/userFlow/form/TextArea";
-import DatePicker from "../../../components/userFlow/form/DatePicker";
-import InputFields from "../../../components/userFlow/common/InputField";
-import { useNavigate, useNavigation } from "react-router-dom";
-import SchemeCreationSuccess from "../../../components/ScehmaManagement/SchemeCrationSucess";
+import { createColumnHelper } from "@tanstack/table-core";
 
-const SchemaCreationForm = () => {
+import { useState } from "react";
+import InputFields from "../userFlow/common/InputField";
+import TextArea from "../userFlow/form/TextArea";
+import DatePicker from "../userFlow/form/DatePicker";
+import SelectButton from "../userFlow/form/SelectButton";
+import ReactTable from "../userFlow/common/ReactTable";
+import { EntityDetailschema } from "../../formValidationSchema/deposit_taker/EntityValidation.schema";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useScreenWidth } from "../../utils/screenSize";
+
+const TableType = {
+  sno: String,
+  branchName: String,
+  addressLine1: String,
+  addressLine2: String,
+  state: String,
+  district: String,
+};
+
+const SchemeDetails = () => {
+  const columnHelper = createColumnHelper<typeof TableType>();
+
+  const defaultData = [
+    {
+      sno: "01",
+      branchName: "Department of PR",
+      addressLine1: "123 Main St",
+      addressLine2: "Apt 101",
+      state: "California",
+      district: "Los Angeles",
+    },
+    {
+      sno: "02",
+      branchName: "Department of HR",
+      addressLine1: "456 Elm St",
+      addressLine2: "Suite 202",
+      state: "California",
+      district: "San Francisco",
+    },
+    {
+      sno: "02",
+      branchName: "Department of HR",
+      addressLine1: "456 Elm St",
+      addressLine2: "Suite 202",
+      state: "California",
+      district: "San Francisco",
+    },
+    {
+      sno: "02",
+      branchName: "Department of HR",
+      addressLine1: "456 Elm St",
+      addressLine2: "Suite 202",
+      state: "California",
+      district: "San Francisco",
+    },
+  ];
+
+  const columns = [
+    columnHelper.accessor("sno", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Sr. No.</span>,
+    }),
+    columnHelper.accessor("branchName", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Branch Name</span>,
+    }),
+    columnHelper.accessor("addressLine1", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Address Line 1</span>,
+    }),
+    columnHelper.accessor("addressLine2", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Address Line 2</span>,
+    }),
+    columnHelper.accessor("state", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>State</span>,
+    }),
+    columnHelper.accessor("district", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>District</span>,
+    }),
+  ];
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
   const [searchInputValue1, setSearchInputValue1] = useState<string>("");
 
@@ -25,17 +97,6 @@ const SchemaCreationForm = () => {
   const [searchInputValue4, setSearchInputValue4] = useState<string>("");
   const screenWidth = useScreenWidth();
   const [isChecked, setIsChecked] = useState(false);
-  const [showPopup, setShowPopup] = useState<boolean>(false);
-  const navigate = useNavigate();
-
-  const closePopup = () => {
-    setShowPopup(false);
-  };
-  const SuccessPopup = () => {
-    setShowPopup(false);
-    navigate("/portal/mytask/schema");
-  };
-
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
     { value: "LLP", label: "LLP" },
@@ -124,18 +185,15 @@ const SchemaCreationForm = () => {
   const onSubmit = (data: any) => {
     alert("Form submitted successfully!");
     console.log({ data });
-    setShowPopup(true);
 
     reset();
   };
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
+
   return (
-    <div className="relative xl:ml-[40px]">
-      <div className="mt-6">
-        <TaskTabs />
-      </div>
+    <div className="mt-6">
       <div>
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -148,25 +206,6 @@ const SchemaCreationForm = () => {
           >
             <div className="flex flex-col p-6 w-full ">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {/* <div className="mt-1">
-                  <label
-                    htmlFor="Typeofentity"
-                    className="text-base font-normal text-gilroy-medium"
-                  >
-                    Regulator Name<span className="text-red-500">*</span>
-                  </label>
-
-                  <SelectButton
-                    setOption={handleSetOption1}
-                    options={options1}
-                    selectedOption={selectedOption1}
-                    placeholder="Select"
-                    searchInputOnchange={handleSearchInputChange1}
-                    searchInputValue={searchInputValue1}
-                    showSearchInput={false}
-                  />
-                </div> */}
-
                 <div className="">
                   <label
                     htmlFor="ABCD Scheme"
@@ -350,56 +389,12 @@ const SchemaCreationForm = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-shrink-0 mt-[20px]">
-              <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  placeholder="ischecked"
-                />
-              </div>
-              <div className="leading-[24px]">
-                I declare all the Information provided is correct as per my
-                knowledge.
-              </div>
-            </div>
           </div>
-          {showPopup && (
-            <SchemeCreationSuccess
-              closePopup={closePopup}
-              SuccessPopup={SuccessPopup}
-            />
-          )}
-
-          <div>
-            <div
-              className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
-              style={{
-                width: `${
-                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
-                }`,
-              }}
-            >
-              <div className="flex items-center space-x-6">
-                <p className="text-[#52AE32] text-gilroy-medium cursor-pointer">
-                  Discord
-                </p>
-                <button
-                  type="submit"
-                  className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
-                >
-                  Create Scheme
-                </button>
-              </div>
-            </div>
-            <div>
-              <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
-
-              <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
-                © 2024 Protean BUDs, All Rights Reserved.
-              </p>
-            </div>
+          <div
+            className="custom-scrollbar mt-10 w-full"
+            style={{ maxHeight: "300px", overflowY: "auto" }}
+          >
+            <ReactTable defaultData={defaultData} columns={columns} />
           </div>
         </form>
       </div>
@@ -407,4 +402,4 @@ const SchemaCreationForm = () => {
   );
 };
 
-export default SchemaCreationForm;
+export default SchemeDetails;

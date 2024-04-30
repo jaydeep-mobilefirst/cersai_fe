@@ -35,6 +35,8 @@ import DashboardProfile from "./pages/mainPortal/DashboardProfile";
 import ResetPassword from "./pages/mainPortal/ResetPassword";
 import SchemaCreationForm from "./pages/mainPortal/SchemaManagemet/SchemaCreationForm";
 import SchemaCreation from "./pages/mainPortal/SchemaManagemet/SchemaCreation";
+import SchemeMasterForm from "./pages/mainPortal/SchemaManagemet/SchemaMasterDetail";
+import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 
 function App() {
   return (
@@ -42,15 +44,27 @@ function App() {
       <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
+            {/* <Route element={<MainPortalLayout />} path="/portal">
+              <Route element={<Dashboard />} path="dashboard">
+                <Route element={<DashboardProfile />} path="profile" />
+                <Route element={<ResetPassword />} path="resetpassword" />
+              </Route>
+
+              <Route element={<SchemaCreation />} path="mytask" />
+              <Route element={<SchemaCreationForm />} path="/mytask/form" />
+              <Route element={<SchemeMasterForm />} path="schema" />
+              <Route element={<UserCreation />} path="usermanagement" />
+            </Route> */}
             <Route element={<MainPortalLayout />} path="/portal">
               <Route element={<Dashboard />} path="dashboard">
                 <Route element={<DashboardProfile />} path="profile" />
                 <Route element={<ResetPassword />} path="resetpassword" />
               </Route>
 
-              {/* <Route element={<LayoutSchemaCreation />} path="mytask" /> */}
               <Route element={<SchemaCreation />} path="mytask" />
-              <Route element={<SchemaCreationForm />} path="form" />
+              <Route element={<SchemaCreationForm />} path="mytask/form" />
+              <Route element={<SchemeMasterForm />} path="mytask/schema" />
+              <Route element={<UserCreation />} path="usermanagement" />
             </Route>
 
             <Route
