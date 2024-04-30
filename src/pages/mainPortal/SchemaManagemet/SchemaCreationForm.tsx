@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 import { useScreenWidth } from "../../../utils/screenSize";
-import { EntityDetailschema } from "../../../formValidationSchema/deposit_taker/EntityValidation.schema";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import SelectButton from "../../../components/userFlow/form/SelectButton";
@@ -10,6 +10,7 @@ import DatePicker from "../../../components/userFlow/form/DatePicker";
 import InputFields from "../../../components/userFlow/common/InputField";
 import { useNavigate, useNavigation } from "react-router-dom";
 import SchemeCreationSuccess from "../../../components/ScehmaManagement/SchemeCrationSucess";
+import { SchemaFormValidation } from "../../../components/ScehmaManagement/SchemaMangementValidation";
 
 const SchemaCreationForm = () => {
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
@@ -98,19 +99,6 @@ const SchemaCreationForm = () => {
   ) => {
     setSearchInputValue4(event.target.value);
   };
-  const handleDateChange = (event: any) => {
-    const { value } = event.target;
-    const today = new Date();
-    const selected = new Date(value);
-    today.setHours(0, 0, 0, 0);
-
-    // if (!(selected <= today)) {
-    //   setError("registrationDate", { message: "Date should not be in future" });
-    // } else {
-    //   clearErrors("registrationDate");
-    // }
-    // setValue("registrationDate", value);
-  };
 
   const {
     register,
@@ -118,10 +106,14 @@ const SchemaCreationForm = () => {
     setError,
     formState: { errors },
     reset,
+    setValue,
+    clearErrors,
+    getValues,
   } = useForm({
-    resolver: yupResolver(EntityDetailschema),
+    resolver: yupResolver(SchemaFormValidation),
   });
   const onSubmit = (data: any) => {
+    console.log(data, "data");
     alert("Form submitted successfully!");
     console.log({ data });
     setShowPopup(true);
@@ -130,6 +122,57 @@ const SchemaCreationForm = () => {
   };
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
+  };
+  // const handleDateChange = (event: any) => {
+  //   const { value } = event.target;
+  //   const today = new Date();
+  //   const selected = new Date(value);
+  //   today.setHours(0, 0, 0, 0);
+
+  //   if (!(selected <= today)) {
+  //     setError("registrationDate", { message: "Date should not be in future" });
+  //   } else {
+  //     clearErrors("registrationDate");
+  //   }
+  //   setValue("registrationDate", value);
+  // };
+  // const handleDateChange1 = (event: any) => {
+  //   const { value } = event.target;
+  //   const today = new Date();
+  //   const selected = new Date(value);
+  //   today.setHours(0, 0, 0, 0);
+
+  //   if (!(selected <= today)) {
+  //     setError("registrationDate", { message: "Date should not be in future" });
+  //   } else {
+  //     clearErrors("registrationDate");
+  //   }
+  //   setValue("registrationDate", value);
+  // };
+  const handleDateChange = (event: any) => {
+    const { value } = event.target;
+    setValue("startSchemaDate", value, { shouldValidate: true });
+  };
+
+  const handleDateChangeEnd = (event: any) => {
+    const { value } = event.target;
+    const startValue = getValues("startSchemaDate");
+    const startDate = startValue ? new Date(startValue) : null; // Handle undefined values
+
+    if (!startDate || isNaN(startDate.getTime())) {
+      setError("endSchemaDate", { message: "Invalid start date" });
+      return; // Exit if no valid start date
+    }
+
+    const selectedDate = new Date(value);
+    if (selectedDate <= startDate) {
+      setError("endSchemaDate", {
+        message: "End date must be after the start date",
+      });
+    } else {
+      clearErrors("endSchemaDate");
+      setValue("endSchemaDate", value, { shouldValidate: true });
+    }
   };
   return (
     <div className="relative xl:ml-[40px]">
@@ -148,46 +191,22 @@ const SchemaCreationForm = () => {
           >
             <div className="flex flex-col p-6 w-full ">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {/* <div className="mt-1">
-                  <label
-                    htmlFor="Typeofentity"
-                    className="text-base font-normal text-gilroy-medium"
-                  >
-                    Regulator Name<span className="text-red-500">*</span>
-                  </label>
-
-                  <SelectButton
-                    setOption={handleSetOption1}
-                    options={options1}
-                    selectedOption={selectedOption1}
-                    placeholder="Select"
-                    searchInputOnchange={handleSearchInputChange1}
-                    searchInputValue={searchInputValue1}
-                    showSearchInput={false}
-                  />
-                </div> */}
-
                 <div className="">
                   <label
-                    htmlFor="ABCD Scheme"
+                    htmlFor="SchemeName"
                     className="text-base font-normal text-gilroy-medium"
                   >
                     Scheme Name
                   </label>
                   <TextArea
                     placeholder="ABCD Scheme"
-                    {...register("addressLine1")}
-                    // width="315px"
+                    {...register("SchemeName")}
                   />
-                  {errors.addressLine1 && (
-                    <p className="text-red-500">
-                      {errors.addressLine1.message}
-                    </p>
+                  {errors.SchemeName && (
+                    <p className="text-red-500">{errors.SchemeName.message}</p>
                   )}
-                  <span className="text-[#00000066] text-xs text-gilroy-medium flex justify-end items-end">
-                    0 / 50
-                  </span>
                 </div>
+
                 <div className="">
                   <label
                     htmlFor="Scheme  Description"
@@ -196,22 +215,18 @@ const SchemaCreationForm = () => {
                     Scheme Description
                   </label>
                   <TextArea
-                    placeholder="Scheme  Description"
-                    {...register("addressLine1")}
-                    // width="315px"
+                    placeholder="Scheme Description"
+                    {...register("schemeDescription")}
                   />
-                  {errors.addressLine1 && (
+                  {errors.schemeDescription && (
                     <p className="text-red-500">
-                      {errors.addressLine1.message}
+                      {errors.schemeDescription.message}
                     </p>
                   )}
-                  <span className="text-[#00000066] text-xs text-gilroy-medium flex justify-end items-end">
-                    0 / 50
-                  </span>
                 </div>
                 <div className="mt-[2px]">
                   <label
-                    htmlFor="registrationDate"
+                    htmlFor="startSchemaDate"
                     className="block text-gray-700 text-sm font-bold mb-2"
                   >
                     Scheme Start Date
@@ -220,69 +235,61 @@ const SchemaCreationForm = () => {
 
                   <DatePicker onChange={handleDateChange} />
                   <span className="text-red-500">
-                    {/* {errors.registrationDate?.message} */}
+                    {errors.startSchemaDate?.message}
                   </span>
                 </div>
                 <div className="-mt-2">
                   <label
-                    htmlFor="registrationDate"
+                    htmlFor="endSchemaDate"
                     className="block text-gray-700 text-sm font-bold mb-2"
                   >
                     Last day to enter scheme
                     <span className="text-red-500">*</span>
                   </label>
 
-                  <DatePicker onChange={handleDateChange} />
+                  <DatePicker onChange={handleDateChangeEnd} />
                   <span className="text-red-500">
-                    {/* {errors.registrationDate?.message} */}
+                    {errors.endSchemaDate?.message}
                   </span>
                 </div>
-                {/* <div>
-                  <label
-                    htmlFor="addressLine2"
-                    className="text-base font-normal text-gilroy-medium"
-                  >
-                    Address Line 2
-                  </label>
-                  <TextArea
-                    placeholder="Type Here"
-                    {...register("addressLine2")}
-                    // width="315px"
-                  />
-                </div> */}
+
                 <div>
                   <label
-                    htmlFor="gstNumber"
+                    htmlFor="minInvestment"
                     className="text-base font-normal text-gilroy-medium"
                   >
                     Minimum Investment amount
                   </label>
                   <InputFields
                     placeholder="Type here"
-                    {...register("gstNumber")}
+                    {...register("minInvestment")}
                   />
-                  {/* {errors?.gstNumber && (
-                    <p className="text-red-500">{errors?.gstNumber?.message}</p>
-                  )} */}
+                  {errors?.minInvestment && (
+                    <p className="text-red-500">
+                      {errors?.minInvestment?.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
-                    htmlFor="gstNumber"
+                    htmlFor="numberOfInvestors"
                     className="text-base font-normal text-gilroy-medium"
                   >
                     Maximum Investment amount
                   </label>
                   <InputFields
                     placeholder="Type here"
-                    {...register("gstNumber")}
+                    {...register("maxInvestment")}
                   />
-                  {/* {errors?.gstNumber && (
-                    <p className="text-red-500">{errors?.gstNumber?.message}</p>
-                  )} */}
+                  {errors?.maxInvestment && (
+                    <p className="text-red-500">
+                      {errors?.maxInvestment?.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
-                    htmlFor="pinCode"
+                    htmlFor="Regulator Name"
                     className="text-base font-normal text-gilroy-medium"
                   >
                     Regulator Name
@@ -335,18 +342,20 @@ const SchemaCreationForm = () => {
                 </div>
                 <div>
                   <label
-                    htmlFor="gstNumber"
+                    htmlFor="minInvestment"
                     className="text-base font-normal text-gilroy-medium"
                   >
                     Number of investers
                   </label>
                   <InputFields
                     placeholder="Type here"
-                    {...register("gstNumber")}
+                    {...register("numberOfInvestors")}
                   />
-                  {/* {errors?.gstNumber && (
-                    <p className="text-red-500">{errors?.gstNumber?.message}</p>
-                  )} */}
+                  {errors?.numberOfInvestors && (
+                    <p className="text-red-500">
+                      {errors?.numberOfInvestors?.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

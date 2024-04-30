@@ -28,7 +28,7 @@ const TaskTabs = (props: Props) => {
     setActiveTab(tabName);
   };
 
-  console.log({ url });
+  // console.log({ url });
 
   return (
     <div className="flex-col justify-center items-start max-sm:items-center inline-flex border-b w-full">
