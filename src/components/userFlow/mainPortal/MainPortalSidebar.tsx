@@ -364,7 +364,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
               <div
                 className={`absolute right-20 ${
-                  collapsed ? "md:-right-[-0.7rem]" : "md:-right-4"
+                  collapsed ? "md:-right-[-0.1rem]" : "md:-right-4"
                 }  ${collapsed ? "top-14" : "top-16"} p-2`}
                 onClick={toggleCollapse}
               >
