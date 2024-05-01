@@ -142,7 +142,6 @@
 //   );
 // };
 
-// export default MainPortalSidebar;
 import { useEffect, useState } from "react";
 import { portalSideBarList } from "../../../utils/hardText/portalText";
 import { Link, useLocation } from "react-router-dom";
@@ -151,13 +150,14 @@ import ArrowClose from "../../../assets/images/arrowclose.svg";
 import Logo from "../../../assets/images/logo2.svg";
 
 import Header from "./Header";
+
 type Props = {
   layout: React.ReactElement | null;
 };
 
 const MainPortalSidebar = ({ layout }: Props) => {
   const [mSidebar, setMsidebar] = useState<boolean>(false);
-  const [url, setUrl] = useState<String>("");
+  const [url, setUrl] = useState<string>("");
   const [activeTab, setActiveTab] = useState<string>(() => {
     return localStorage.getItem("activeTab") || "dashboard";
   });
@@ -236,21 +236,17 @@ const MainPortalSidebar = ({ layout }: Props) => {
               console.log(data.url, url, "data portalsidebar");
               return (
                 <li className="px-4 py-2" key={idx}>
-                  <Link to={data?.rurl}>
+                  <Link to={data.url}>
                     <div
-                      onClick={(e) => handleTabClick(data?.url)}
+                      onClick={(e) => handleTabClick(data.url)}
                       className={`w-[190px] md:w-[290px] h-auto md:h-14 ${
-                        activeTab === data?.url
-                          ? "bg-[#385723]"
-                          : "bg-[#EEF7EB]"
+                        activeTab === data.url ? "bg-[#385723]" : "bg-[#EEF7EB]"
                       }  rounded-lg flex items-center justify-start cursor-pointer`}
                     >
                       <div className="m-4 h-[24px] w-[24px]">
                         <img
                           src={
-                            activeTab === data?.url
-                              ? data?.selectlogo
-                              : data?.logo
+                            activeTab === data.url ? data.selectlogo : data.logo
                           }
                           alt="logo"
                           className="object-fit"
@@ -259,12 +255,12 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
                       <div
                         className={`${
-                          activeTab === data?.url
+                          activeTab === data.url
                             ? "text-white"
                             : "text-[#666666]"
                         }  text-base font-normal text-gilroy-medium leading-normal`}
                       >
-                        {data?.title}
+                        {data.title}
                       </div>
                     </div>
                   </Link>
