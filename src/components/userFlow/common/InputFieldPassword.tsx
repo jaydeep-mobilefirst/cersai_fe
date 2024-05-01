@@ -15,16 +15,13 @@ const InputFieldPassword: FC<InputProps> = forwardRef<
     setShowPassword((prev) => !prev);
   };
 
-  // Correct Tailwind CSS error class application
-  const errorClasses = error
-    ? "border-red-500 text-red-500"
-    : "border-gray-300 text-gray-700";
-
   return (
     <div className="relative">
       <input
         type={showPassword ? "text" : "password"}
-        className={`form-input border flex rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 justify-between align-middle pr-12 ${errorClasses} ${className}`}
+        className={`${
+          error && "border-[red] text-[red]"
+        } form-input border flex border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 ${className} justify-between align-middle pr-12`}
         style={{
           height: "56px",
           width: "100%",
@@ -38,7 +35,7 @@ const InputFieldPassword: FC<InputProps> = forwardRef<
         onClick={togglePasswordVisibility}
         className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 focus:outline-none"
       >
-        <img src={Eye} alt="Toggle visibility" className="h-5 w-5 m-[10px]" />
+        <img src={Eye} alt="Eye" className="h-5 w-5 m-[10px]" />
       </button>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -13,7 +13,6 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SelectButton from "../form/SelectButton";
 import UploadButtonV2 from "../form/UploadButtonV2";
-import { bffUrl } from "../../../utils/api";
 
 interface LoginModelProps {
   closeModal: () => void;
@@ -25,46 +24,44 @@ const LoginModel: React.FC<LoginModelProps> = ({
   showRegisterModel,
 }) => {
   const navigate = useNavigate();
-  const [selected, setSelected] = useState<string | null>("DT");
-  const [loader, setLoader] = useState(false);
-  const [formError, setFormError] = useState("");
+  const [selected, setSelected] = useState<string | null>(null);
+  const [isOptionSelected, setIsOptionSelected] = useState(false);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
-  const [error, setError] = useState<boolean>(false);
+  const [loader, setLoader] = useState(false);
+  const [error, setError] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const {
     register,
     handleSubmit,
-    setValue,
-    reset,
-    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
-    mode: "onChange",
   });
 
-  // Effect to detect autofill
-  useEffect(() => {
-    register("email");
-    register("password");
-  }, [register]);
-
   const handleSelectOption = (option: any) => {
+    // console.log(option, "option");
     setSelected(option);
+    setIsOptionSelected(option.value ? true : false);
+
     setFormError("");
   };
 
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setValue("email", value, { shouldValidate: true });
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
   };
 
-  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setValue("password", value, { shouldValidate: true });
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
+
+  const handleFileUpload = (file: any) => {
+    setIsFileUploaded(file ? true : false);
   };
 
   const handleFormSubmit = async (data: any) => {
@@ -73,42 +70,24 @@ const LoginModel: React.FC<LoginModelProps> = ({
       return;
     }
 
+    if (!data.email || !data.password) {
+      setFormError("Please enter both email and password!");
+      return;
+    }
+
     setLoader(true);
     setError(false);
-
     try {
-      const response = await axios.post(`${bffUrl}/auth/login`, {
-        // username: data.email,
-        username: watch("email"),
-        // password: data.password,
-        password: watch("password"),
-        entityType: selected,
+      const response = await axios.post(`your_api_endpoint/login`, {
+        username: data.email,
+        password: data.password,
       });
-
-      sessionStorage.setItem(
-        "access_token",
-        response?.data?.response?.access_token
-      );
-      sessionStorage.setItem(
-        "refresh_token",
-        response?.data?.response?.refresh_token
-      );
-      sessionStorage.setItem("firstName", response?.data?.user?.firstName);
-      sessionStorage.setItem("lastName", response?.data?.user?.lastName);
-      reset();
-      setError(false);
-      navigate("/portal");
-    } catch (err: any) {
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
       setError(true);
-      if (err.response?.data?.error) {
-        setFormError(err.response.data.error);
-        setError(true);
-      } else {
-        setFormError("An error occurred. Please try again.");
-      }
     } finally {
       setLoader(false);
-      // setError(false);
     }
   };
 
@@ -120,9 +99,6 @@ const LoginModel: React.FC<LoginModelProps> = ({
     closeModal();
     showRegisterModel();
   };
-  //   // const handleFileUpload = (file: any) => {
-  //   //   setIsFileUploaded(file ? true : false);
-  //   // };
 
   return (
     <Modal
@@ -161,21 +137,14 @@ const LoginModel: React.FC<LoginModelProps> = ({
                     <SelectButton
                       setOption={handleSelectOption}
                       options={[
-                        { value: "RG", label: "Regulator" },
-                        { value: "DT", label: "Deposit Taker" },
-                        {
-                          value: "DC",
-                          label: "Designated Court",
-                        },
-                        {
-                          value: "CA",
-                          label: "Competent Authority",
-                        },
+                        { value: "Regulator", label: "Regulator" },
+                        { value: "Deposit taker", label: "Deposit taker" },
                       ]}
-                      selectedOption={selected}
+                      selectedOption={selected || "Regulator"}
                       placeholder="Select an option"
                       showSearchInput={false}
                     />
+                    {formError && <p className="text-red-500">{formError}</p>}
                   </div>
 
                   <div className="mt-5">
@@ -194,8 +163,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
                         },
                       })}
                       placeholder="Email id / Mobile no."
+                      error={error || !!errors.email}
                       onChange={handleEmailChange}
-                      error={error}
                     />
                     {errors.email && (
                       <p className="text-red-500">{errors.email.message}</p>
@@ -214,21 +183,22 @@ const LoginModel: React.FC<LoginModelProps> = ({
                         required: "Password is required",
                       })}
                       placeholder="Password"
+                      error={error || !!errors.password}
                       onChange={handlePasswordChange}
-                      error={error}
                     />
                     {errors.password && (
                       <p className="text-red-500">{errors.password.message}</p>
                     )}
                   </div>
-                  {/* <div className="mt-5">
-//                     <UploadButtonV2
-//                       onFileUpload={handleFileUpload}
-//                       disabled={!email || !password}
-//                     >
-//                       Upload Document
-//                     </UploadButtonV2>
-//                   </div> */}
+
+                  <div className="mt-5">
+                    <UploadButtonV2
+                      onFileUpload={handleFileUpload}
+                      disabled={!email || !password}
+                    >
+                      Upload Document
+                    </UploadButtonV2>
+                  </div>
 
                   <div className="flex justify-center items-center mt-14 md:mt-12 ">
                     <Button
@@ -239,10 +209,6 @@ const LoginModel: React.FC<LoginModelProps> = ({
                   </div>
                   <div className="mt-14">
                     <p className="text-base font-normal text-gilroy-regular">
-                      {/* {formError && (
-                        <span className="text-red-500">{formError}</span>
-                      )} */}
-                      <br />
                       Not registered with CERSAI account?{" "}
                       <span
                         className="text-green-500 cursor-pointer"
