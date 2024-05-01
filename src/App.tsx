@@ -44,17 +44,6 @@ function App() {
       <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
-            {/* <Route element={<MainPortalLayout />} path="/portal">
-              <Route element={<Dashboard />} path="dashboard">
-                <Route element={<DashboardProfile />} path="profile" />
-                <Route element={<ResetPassword />} path="resetpassword" />
-              </Route>
-
-              <Route element={<SchemaCreation />} path="mytask" />
-              <Route element={<SchemaCreationForm />} path="mytask/form" />
-              <Route element={<SchemeMasterForm />} path="mytask/schema" />
-              <Route element={<UserCreation />} path="usermanagement" />
-            </Route> */}
             <Route element={<MainPortalLayout />} path="/portal">
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<DashboardProfile />} path="profile" />
