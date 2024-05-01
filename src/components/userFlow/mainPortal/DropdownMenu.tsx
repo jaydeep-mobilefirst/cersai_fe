@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { bffUrl } from "../../../utils/api";
 // import { authBaseUrl } from "../../utils/api";
 
 const DropdownMenu: React.FC = () => {
@@ -12,26 +13,26 @@ const DropdownMenu: React.FC = () => {
     setIsOpen(!isOpen);
   };
 
-  // const handleLogOut = () => {
-  //   logoutApiHandle();
-  // };
+  const handleLogOut = () => {
+    logoutApiHandle();
+  };
 
-  // const logoutApiHandle = () => {
-  //   setLoader(true);
-  //   const refreshToken = sessionStorage.getItem("refresh_token");
-  //   axios
-  //     .post(`${authBaseUrl}/logout`, {
-  //       refresh_token: refreshToken,
-  //     })
-  //     .then((responce) => {
-  //       navigate("/");
-  //       sessionStorage.clear();
-  //     })
-  //     .catch((error) => {
-  //       navigate("/");
-  //       sessionStorage.clear();
-  //     });
-  // };
+  const logoutApiHandle = () => {
+    setLoader(true);
+    const refreshToken = sessionStorage.getItem("refresh_token");
+    axios
+      .post(`${bffUrl}/logout`, {
+        refresh_token: refreshToken,
+      })
+      .then((responce) => {
+        navigate("/");
+        sessionStorage.clear();
+      })
+      .catch((error) => {
+        navigate("/");
+        sessionStorage.clear();
+      });
+  };
 
   return (
     <div className="relative z-50">
@@ -98,7 +99,7 @@ const DropdownMenu: React.FC = () => {
             ) : (
               <div
                 className="block px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100"
-                // onClick={handleLogOut}
+                onClick={handleLogOut}
               >
                 Logout
               </div>

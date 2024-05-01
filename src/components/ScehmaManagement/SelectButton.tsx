@@ -1,49 +1,46 @@
 import React, { useEffect, useState } from "react";
-import "./select_button.css";
-
 interface Option {
   value: string;
   label: string;
 }
 
 type Props = {
-  setOption: (value: string) => void;
+  setOption: any;
   options: Option[];
   selectedOption?: string | null;
   placeholder: string;
-  searchInputOnchange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  searchInputOnchange?: any;
   searchInputValue?: string;
-  showSearchInput?: boolean;
 };
 
-const SelectButton = ({
+const SelectButtonTask = ({
   setOption,
   options,
   placeholder,
   searchInputOnchange,
   searchInputValue,
   selectedOption,
-  showSearchInput,
 }: Props) => {
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
-
   useEffect(() => {
     setArrowDirectionToggle(false);
+    return () => {};
   }, [selectedOption]);
-
-  // Find the label of the currently selected option
-  const selectedLabel =
-    options.find((option) => option.value === selectedOption)?.label ||
-    placeholder;
-
   return (
-    <div className="w-full relative">
+    <>
       <button
-        className="h-[56px] px-2 md:px-8 py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left w-full"
+        className=" w-full md:w-[210px]  flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left"
         type="button"
         onClick={() => setArrowDirectionToggle(!arrowDirectionToggle)}
+        style={{
+          height: "50px",
+          padding: "8px 16px",
+          marginTop: "8px",
+          border: "1px solid #E6E6E6",
+          borderRadius: "8px",
+        }}
       >
-        {selectedLabel}
+        {selectedOption ? selectedOption : placeholder}
         <div>
           {!arrowDirectionToggle ? (
             <svg
@@ -69,9 +66,9 @@ const SelectButton = ({
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
                 d="M5 15l7-7 7 7"
               ></path>
             </svg>
@@ -80,24 +77,11 @@ const SelectButton = ({
       </button>
       {arrowDirectionToggle && (
         <div
-          className="absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg"
+          className="absolute w-[65%] md:w-[210px]  rounded-md bg-white shadow-lg"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu"
-          style={{ padding: "8px 16px" }}
         >
-          {showSearchInput && searchInputOnchange && (
-            <div className="relative p-2">
-              <input
-                type="search"
-                value={searchInputValue}
-                className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 focus:border-gray-300 focus:ring-1 focus:ring-gray-100 focus:outline-none"
-                placeholder="Search"
-                style={{ paddingLeft: "2.5rem" }}
-                onChange={searchInputOnchange}
-              />
-            </div>
-          )}
           <div
             className="overflow-auto max-h-40 custom-scrollbar"
             role="menu"
@@ -107,11 +91,9 @@ const SelectButton = ({
             {options.map((option, index) => (
               <a
                 key={index}
-                onClick={() => {
-                  setOption(option.value);
-                  setArrowDirectionToggle(false);
-                }}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 cursor-pointer"
+                onClick={() => setOption(option.value)}
+                href="#"
+                className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900"
                 role="menuitem"
               >
                 {option.label}
@@ -120,8 +102,8 @@ const SelectButton = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
-export default SelectButton;
+export default SelectButtonTask;
