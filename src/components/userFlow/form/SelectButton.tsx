@@ -111,7 +111,7 @@ const SelectButton = ({
                   setOption(option.value);
                   setArrowDirectionToggle(false);
                 }}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 cursor-pointer"
                 role="menuitem"
               >
                 {option.label}

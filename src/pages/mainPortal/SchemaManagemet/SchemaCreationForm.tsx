@@ -11,6 +11,7 @@ import InputFields from "../../../components/userFlow/common/InputField";
 import { useNavigate, useNavigation } from "react-router-dom";
 import SchemeCreationSuccess from "../../../components/ScehmaManagement/SchemeCrationSucess";
 import { SchemaFormValidation } from "../../../components/ScehmaManagement/SchemaMangementValidation";
+import useSidebarStore from "../../../store/SidebarStore";
 
 const SchemaCreationForm = () => {
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
@@ -28,6 +29,7 @@ const SchemaCreationForm = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { collapsed } = useSidebarStore();
 
   const closePopup = () => {
     setShowPopup(false);
@@ -186,7 +188,12 @@ const SchemaCreationForm = () => {
         >
           <div
             style={{
-              width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+              // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+              width: `${
+                screenWidth > 1024
+                  ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
+                  : "100vw"
+              }`,
             }}
           >
             <div className="flex flex-col p-6 w-full ">

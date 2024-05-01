@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import BackArrow from "../../assets/images/BackArrow.svg";
-import RightArrow from "../../assets/images/RightArrow.svg";
+import RightArrow from "../../assets/images/RightArrow1.svg";
 
 interface CustomPaginationProps {
   totalItems: number;

@@ -10,6 +10,7 @@ import { EntityDetailschema } from "../../formValidationSchema/deposit_taker/Ent
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useScreenWidth } from "../../utils/screenSize";
+import useSidebarStore from "../../store/SidebarStore";
 
 const TableType = {
   sno: String,
@@ -97,6 +98,7 @@ const SchemeDetails = () => {
   const [searchInputValue4, setSearchInputValue4] = useState<string>("");
   const screenWidth = useScreenWidth();
   const [isChecked, setIsChecked] = useState(false);
+  const { collapsed } = useSidebarStore();
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
     { value: "LLP", label: "LLP" },
@@ -201,7 +203,12 @@ const SchemeDetails = () => {
         >
           <div
             style={{
-              width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+              // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+              width: `${
+                screenWidth > 1024
+                  ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
+                  : "100vw"
+              }`,
             }}
           >
             <div className="flex flex-col p-6 w-full ">
