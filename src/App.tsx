@@ -46,7 +46,7 @@ function App() {
       <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
-            <Route element={<MainPortalLayout />} path="/portal">
+            <Route element={<MainPortalLayout />} path="/dt">
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<DashboardProfile />} path="profile" />
               <Route element={<ResetPassword />} path="resetpassword" />

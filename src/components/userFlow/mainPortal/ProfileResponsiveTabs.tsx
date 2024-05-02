@@ -6,17 +6,17 @@ import { profileSideBarList } from "../../../utils/hardText/portalText";
 type Props = {};
 
 // const tabs = [
-//   { title: "Profile", url: "profile", rurl: "/portal/dashboard/profile" },
-//   { title: "Reset Password", url: "resetpassword", rurl: "/portal/dashboard/resetpassword" },
+//   { title: "Profile", url: "profile", rurl: "/dt/dashboard/profile" },
+//   { title: "Reset Password", url: "resetpassword", rurl: "/dt/dashboard/resetpassword" },
 // ];
 
 const ProfileResponsiveTabs = (props: Props) => {
   const [activeTab, setActiveTab] = useState<string>("entity");
   const [url, setUrl] = useState<String>("");
   const [searchParams, setSearchParams] = useSearchParams();
-  const current = searchParams.get("current")
+  const current = searchParams.get("current");
   if (!current) {
-    setSearchParams({current: "entity"})  
+    setSearchParams({ current: "entity" });
   }
   const location = useLocation();
   const { pathname } = location;
@@ -28,7 +28,7 @@ const ProfileResponsiveTabs = (props: Props) => {
 
   const handleTabClick = (tabName: string) => {
     setActiveTab(tabName);
-  };  
+  };
 
   return (
     <div className="flex-col justify-center items-center inline-flex border-b w-full">

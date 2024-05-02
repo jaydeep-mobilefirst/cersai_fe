@@ -5,12 +5,12 @@ import TaskTabsItem from "./TaskTabItems";
 type Props = {};
 
 const tabs = [
-  { title: "Profile", url: "profile", rurl: "/portal/dashboard/profile" },
-  { title: "Reset Password", url: "resetpassword", rurl: "/portal/dashboard/resetpassword" },
+  { title: "Profile", url: "profile", rurl: "/dt/profile" },
+  { title: "Reset Password", url: "resetpassword", rurl: "/dt/resetpassword" },
 ];
 
 const TaskTabs = (props: Props) => {
-  const [activeTab, setActiveTab] = useState<string>("Deposite Taker");
+  const [activeTab, setActiveTab] = useState<string>("Profile");
   const [url, setUrl] = useState<String>("");
 
   const location = useLocation();

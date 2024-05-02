@@ -71,19 +71,19 @@ const SchemaCreation = () => {
 
   const columns = [
     columnHelper.accessor("sno", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>S.No.</span>,
     }),
     columnHelper.accessor("depositTakerID", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Deposit Taker ID</span>,
     }),
     columnHelper.accessor("depositTakerName", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Deposit Taker Name</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info : any) => {
+      cell: (info: any) => {
         const value = info?.row?.original?.action;
 
         return (
@@ -98,14 +98,14 @@ const SchemaCreation = () => {
       },
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor((row : any) => row, {
+    columnHelper.accessor((row: any) => row, {
       id: "action",
-      cell: (info : any) => {
+      cell: (info: any) => {
         const value = info.getValue();
 
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/portal/mytask/form"}>
+            <Link to={"/dt/mytask/form"}>
               <div>
                 <img src={Eye} alt="Eye " className="cursor-pointer" />
               </div>

@@ -36,7 +36,7 @@ const SchemaCreationForm = () => {
   };
   const SuccessPopup = () => {
     setShowPopup(false);
-    navigate("/portal/mytask/schema");
+    navigate("/dt/mytask/schema");
   };
 
   const options1 = [
