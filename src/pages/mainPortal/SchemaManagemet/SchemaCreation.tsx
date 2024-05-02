@@ -71,19 +71,19 @@ const SchemaCreation = () => {
 
   const columns = [
     columnHelper.accessor("sno", {
-      cell: (info) => info.renderValue(),
+      cell: (info : any) => info.renderValue(),
       header: () => <span>S.No.</span>,
     }),
     columnHelper.accessor("depositTakerID", {
-      cell: (info) => info.renderValue(),
+      cell: (info : any) => info.renderValue(),
       header: () => <span>Deposit Taker ID</span>,
     }),
     columnHelper.accessor("depositTakerName", {
-      cell: (info) => info.renderValue(),
+      cell: (info : any) => info.renderValue(),
       header: () => <span>Deposit Taker Name</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info) => {
+      cell: (info : any) => {
         const value = info?.row?.original?.action;
 
         return (
@@ -98,9 +98,9 @@ const SchemaCreation = () => {
       },
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor((row) => row, {
+    columnHelper.accessor((row : any) => row, {
       id: "action",
-      cell: (info) => {
+      cell: (info : any) => {
         const value = info.getValue();
 
         return (

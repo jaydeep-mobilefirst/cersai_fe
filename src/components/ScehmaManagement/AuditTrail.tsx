@@ -53,23 +53,23 @@ const AuditTrail = () => {
 
   const columns = [
     columnHelper.accessor("sno", {
-      cell: (info) => info.renderValue(),
+      cell: (info : any) => info.renderValue(),
       header: () => <span>S.No.</span>,
     }),
     columnHelper.accessor("statusChangeBy", {
-      cell: (info) => info.renderValue(),
+      cell: (info : any) => info.renderValue(),
       header: () => <span>Status Change By</span>,
     }),
     columnHelper.accessor("from", {
-      cell: (info) => info.renderValue(),
+      cell: (info : any) => info.renderValue(),
       header: () => <span>From</span>,
     }),
     columnHelper.accessor("to", {
-      cell: (info) => info.renderValue(),
+      cell: (info : any) => info.renderValue(),
       header: () => <span>To</span>,
     }),
     columnHelper.accessor("remarks", {
-      cell: (info) => (
+      cell: (info : any) => (
         <>
           <div
             className=" flex items-center justify-between"
@@ -85,7 +85,7 @@ const AuditTrail = () => {
       header: () => <span>Remarks</span>,
     }),
     columnHelper.accessor("date", {
-      cell: (info) => info.renderValue(),
+      cell: (info : any) => info.renderValue(),
       header: () => <span>Date</span>,
     }),
   ];

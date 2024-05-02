@@ -28,9 +28,9 @@ const ReactTable = ({ columns, defaultData, borderB = true }: Props) => {
       <div className="overflow-auto">
         <table className="w-full table-auto min-w-full shrink-0">
           <thead className="justify-between bg-[#EEF7EB] ">
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map((headerGroup : any) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header, index: number) => (
+                {headerGroup.headers.map((header : any, index: number) => (
                   <th
                     key={header.id}
                     className={`py-2 h-[36px] px-2 text-base font-bold text-[#24222B] text-gilroy-semibold ${
@@ -51,12 +51,12 @@ const ReactTable = ({ columns, defaultData, borderB = true }: Props) => {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
+            {table.getRowModel().rows.map((row : any) => (
               <tr
                 key={row.id}
                 className="text-center border-gray-500 text-gilroy-medium"
               >
-                {row.getVisibleCells().map((cell, index: number) => (
+                {row.getVisibleCells().map((cell : any, index: number) => (
                   <td
                     key={cell.id}
                     className={`relative text-gilroy-medium text-sm md:text-base ${
@@ -78,9 +78,9 @@ const ReactTable = ({ columns, defaultData, borderB = true }: Props) => {
             ))}
           </tbody>
           <tfoot>
-            {table.getFooterGroups().map((footerGroup) => (
+            {table.getFooterGroups().map((footerGroup : any) => (
               <tr key={footerGroup.id}>
-                {footerGroup.headers.map((header) => (
+                {footerGroup.headers.map((header : any) => (
                   <th key={header.id}>
                     {header.isPlaceholder
                       ? null
