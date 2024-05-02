@@ -38,6 +38,8 @@ import SchemaCreation from "./pages/mainPortal/SchemaManagemet/SchemaCreation";
 import SchemeMasterForm from "./pages/mainPortal/SchemaManagemet/SchemaMasterDetail";
 import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 
+import SetPassword from "./pages/SetPassowrd";
+
 function App() {
   return (
     <div>
@@ -108,6 +110,7 @@ function App() {
             </Route>
           </Route>
           <Route element={<Landing />} path="/" />
+          <Route element={<SetPassword />} path="/set-password" />
         </Routes>
       </Router>
     </div>
