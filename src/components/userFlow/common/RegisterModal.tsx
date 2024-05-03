@@ -67,25 +67,120 @@
 
 // export default RegisterModel;
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   radioButtons,
   registrationFirstPage,
 } from "../../../utils/hardText/signuppageText";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { backendBaseUrl } from "../../../utils/api";
+import LoaderSpin from "../../LoaderSpin";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 
 interface ModelDivProps {
   closeModal: () => void;
 }
 
+
+type EntityType = {
+  id: number;
+  entityName: string;
+  registrationAllowed: boolean;
+  autoApproval: boolean;
+};
+
+export const paths : any = {
+  DT : "/depositetaker/signup/verification",
+  RG : "/regulator/court/regulatordetails",
+  DC : "designated/court/designateddetails",
+  CA : "/competent/authority/competentdetails",
+
+}
+;
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const Navigate = useNavigate();
+  const {entities, setEntities, setAllFormData} = useDepositTakerRegistrationStore(state => state)
+  const [data, setData] = useState<EntityType[]>(entities);
+  const [loader, setLoader] = useState<boolean>(false);
+  useEffect(() => {
+    if (entities.length <= 0) {
+      apiCall();
+    }
+  }, []);
 
-  const [selectedRadio, setSelectedRadio] = useState(radioButtons[0]);
+  const apiCall = () => {
+    setLoader(true);
+    axios
+      .get(`${backendBaseUrl}/cms/registration/entities`)
+      .then((responce) => {
+        const data = responce?.data?.data;
+        let sortedData = data.sort(
+          (a: { id: number }, b: { id: number }) => a.id - b.id
+        );
+        sortedData = sortedData?.map((d : any) => ({ ...d, path: paths[d?.entityCode]}));
+        setData(sortedData);
+        setEntities(sortedData)
+        setLoader(false);
+        setSelectedRadio(sortedData[0])
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
+
+  const fetchFormFields = () => {
+    axios
+        .get(`${backendBaseUrl}/cms/registration/field-data/${selectedRadio?.id}`)
+        .then(async (response) => {
+          if (response?.data?.success) {
+            let dropdownData = undefined;
+            try {
+              let dropdownOptionsRes = await axios.get(`${backendBaseUrl}/cms/registration/dropdown-components`)
+              dropdownData = dropdownOptionsRes?.data?.data;
+            } catch (error) {
+              console.log("Error");
+              
+            }
+            let modifiedFormFields = response?.data?.data?.formFields?.form_fields?.map((o : any) => ({...o, userInput : "", error : ""}))
+            let districtDropDownId = dropdownData?.find((d : any) => d.name === "district")?.id; 
+            
+            modifiedFormFields = modifiedFormFields?.map((f : any) => {
+              if (f?.dropdown_Components === districtDropDownId) {
+                return {...f, dropdown_options : {...f.dropdown_options, options : []}}
+              }
+              else{
+                return f
+              }
+            })
+
+            console.log({modifiedFormFields});
+            
+            let obj = {
+              dropdownData,
+              ...response?.data?.data,
+              formFields : {form_fields : modifiedFormFields}
+            }            
+            setAllFormData(obj)
+          }
+          else{
+            throw new Error("Error getting data, Please try later!")
+          }
+          setLoader(false);
+        })
+        .catch((error: any) => {
+          console.log(error);
+          setLoader(false);
+        });
+
+  }
+  const [selectedRadio, setSelectedRadio] = useState<any>(entities[0]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    Navigate(selectedRadio.path);
+    fetchFormFields()
+    Navigate(selectedRadio?.path);
   };
 
   return (
@@ -101,27 +196,27 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
           onClick={closeModal}
         />
       </div>
-      <form onSubmit={handleSubmit}>
-        {radioButtons.map((item) => (
+     {loader ? <LoaderSpin/> :  <form onSubmit={handleSubmit}>
+        {data?.length > 0 && data?.map((item) => (
           <div
+            onClick={() => setSelectedRadio(item)}
             key={item.id}
-            className={`md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex ${
-              selectedRadio.id === item.id
+            className={`md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex hover:cursor-pointer ${selectedRadio.id === item.id
                 ? "bg-[#EEF7EB] text-[#385723] border-[#385723] mr-2"
                 : "bg-white text-black border border-gray-300 mr-2"
-            }`}
+              }`}
           >
-            <div className=" flex-row justify-between items-center  md:gap-4 inline-flex">
-              <div className="text-lg font-normal">
-                <label onClick={() => setSelectedRadio(item)}>
+            <div className=" flex-row justify-between items-center  md:gap-4 inline-flex hover:cursor-pointer">
+              <div className="text-lg font-normal hover:cursor-pointer">
+                <label>
                   <input
                     type="radio"
                     name="entity"
-                    checked={selectedRadio.id === item.id}
+                    checked={selectedRadio?.id === item?.id}
                     onChange={() => setSelectedRadio(item)}
-                    className="mr-2"
+                    className="mr-2 hover:cursor-pointer"
                   />
-                  {item.text}
+                  {item?.entityName}
                 </label>
               </div>
             </div>
@@ -142,7 +237,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
             Select
           </button>
         </div>
-      </form>
+      </form>}
     </div>
   );
 };

@@ -30,10 +30,10 @@ export const registrationFirstPage = [
 // ];
 
 export const radioButtons = [
-  { id: 1, text: "Deposit Taker",path: "/depositetaker/signup/verification" },
-  { id: 2, text: "Regulator",path:"/regulator/court/regulatordetails"},
-  { id: 3, text: "Designated Court",path:"/designated/court/designateddetails" },
-  { id: 4, text: "Competent Authority",path:"/competent/authority/competentdetails" },
+  { id: 1, text: "Deposit Taker",path: "/depositetaker/signup/verification", entityCode : "DT" },
+  { id: 2, text: "Regulator",path:"/regulator/court/regulatordetails", entityCode : "RG"},
+  { id: 3, text: "Designated Court",path:"/designated/court/designateddetails", entityCode : "DC" },
+  { id: 4, text: "Competent Authority",path:"/competent/authority/competentdetails", entityCode : "CA" },
 ];
 //UploadDocumentComp Component
 export const uploadModal=[
@@ -93,7 +93,7 @@ export const signupSideBar = [
   },
   {
     id: 2,
-    path:"/depositetaker/signup/entitydetials",
+    path:"/depositetaker/signup/entitydetails",
     imgSrc: profieCircle,
     imgSrcHighlighted:profileCircleHighlighted,
     description: "Entity Details",

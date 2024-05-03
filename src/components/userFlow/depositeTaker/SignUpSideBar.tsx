@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HeadComp from "./HeadComp";
 import { signupSideBar } from "../../../utils/hardText/signuppageText";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 interface SignUpSideBarProps {
   isMenuOpen?: boolean;
   toggleMenu?: () => void;
@@ -15,6 +16,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
 }) => {
   const Navigate = useNavigate();
   const location = useLocation();
+  const {allFormData} = useDepositTakerRegistrationStore(state => state)
 
   const [page, setPage] = useState<string>(location.pathname);
 
@@ -33,6 +35,18 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
     Navigate(path);
   };
 
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!allFormData) {
+        Navigate('/')
+      }
+    }, 5000)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  },[allFormData])
   return (
     <div className="sm:w-[300px]  w-[250px] h-[100vh] md:w-[349px] bg-[#EEF7EB]">
       {/* {isMenuOpen && (

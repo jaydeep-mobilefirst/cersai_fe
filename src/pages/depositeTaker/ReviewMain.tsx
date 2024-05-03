@@ -1,11 +1,13 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/arrow-down.svg";
-import html2pdf from "html2pdf.js";
-import { sections } from "../../utils/hardText/landingpageText";
-import Button from "../../components/userFlow/common/Button";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import axios from "axios";
+import Swal from "sweetalert2";
+import LoaderSpin from "../../components/LoaderSpin";
+import { backendBudsPortalBFFUrl } from "../../utils/api";
+// import html2pdf from "html2pdf.js";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -13,7 +15,7 @@ const useDownloadPDF = () => {
   const downloadPDF = () => {
     setIsDownloading(true);
     const element = document.getElementById("reviewContent");
-    html2pdf().from(element).save();
+    // html2pdf().from(element).save();
     setIsDownloading(false);
   };
 
@@ -21,13 +23,58 @@ const useDownloadPDF = () => {
 };
 
 const ReviewMain = () => {
+  const { allFormData } = useDepositTakerRegistrationStore(state => state)
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
+  const [loader, setLoader] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
+  const sectionCodes : any = {
+    1 : "de_verification",
+    2 : "de_entity_details",
+    3 : "de_regulations_details",
+    4 : "de_nodal_details",
+  }
+  console.log({ allFormData });
 
-  const navigateToLandingPage = () => {
-    Navigate("/Landing");
-  };
+  const handleFinalSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoader(true);
+    const finalResult = allFormData && allFormData?.formFields?.form_fields?.map((field: any) => {
+      return {
+        fieldId: field?.id,
+        label: field?.label,
+        sectionCode: sectionCodes[field?.sectionId],
+        value: field?.userInput
+      }
+    })
+
+    try {
+      const response = await axios.post(backendBudsPortalBFFUrl + "/deposit-taker/add-form-fields/", { formData: finalResult })
+      const data = await response.data;
+
+      if (data?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Data submitted successfully!"
+        })
+        Navigate("/")
+      }
+      else {
+        Swal.fire({
+          icon: "error",
+          title: "Something went wrong"
+        })
+      }
+
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong"
+      })
+      setLoader(false);
+    }
+  }
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
@@ -40,22 +87,27 @@ const ReviewMain = () => {
         <main className="flex-grow p-8 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             <h1 className="text-2xl font-bold mb-6">Review</h1>
-            {sections.map((section, index) => (
+            {allFormData && allFormData?.entitySections?.map((section: any, index: number) => (
               <div className="mb-[16px]" key={index}>
                 <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold">
                   <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                    {section.title}
+                    {section?.sectionName}
                   </p>
                   <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
-                    {section.buttonText}
+                    {/* {section.buttonText} */} Edit
                   </button>
                 </div>
 
                 <div className="shadow-sm p-5 rounded-md ">
                   <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                    <div className="w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px]">
-                      {section.fieldsLeft.map((field, idx) => (
-                        <div
+                    <div className="w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px] grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      {allFormData?.formFields?.form_fields?.filter((f: any) => f?.sectionId === section?.id)?.map((field: any, idx: number) => {
+
+                        console.log({
+                          field
+                        });
+
+                        return <div
                           className="sm:mr-[48px] flex justify-between"
                           key={idx}
                         >
@@ -63,23 +115,11 @@ const ReviewMain = () => {
                             {field.label}
                             <span className="text-[#ff0000]">*</span>
                           </div>
-                          <div>{field.value}</div>
+                          <div>{field.userInput}</div>
                         </div>
-                      ))}
-                    </div>
-                    <div className="w-full grid gap-y-[16px]">
-                      {section.fieldsRight.map((field, idx) => (
-                        <div
-                          className="sm:ml-[48px] flex justify-between"
-                          key={idx}
-                        >
-                          <div className="opacity-60">
-                            {field.label}
-                            <span className="text-[#ff0000]">*</span>
-                          </div>
-                          <div>{field.value}</div>
-                        </div>
-                      ))}
+                      }
+
+                      )}
                     </div>
                   </div>
                 </div>
@@ -87,15 +127,16 @@ const ReviewMain = () => {
             ))}
 
             <div className="flex flex-shrink-0 mt-[20px]">
-              <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
+              <div className="justify-center align-center">
                 <input
                   type="checkbox"
+                  className="h-4 w-4 accent-[#385723]"
                   checked={isChecked}
                   onChange={handleCheckboxChange}
                   placeholder="ischecked"
                 />
               </div>
-              <div className="leading-[24px]">
+              <div className="leading-[24px] ml-4">
                 I here by declare that all information provided is best of my
                 knowledge
               </div>
@@ -123,11 +164,11 @@ const ReviewMain = () => {
             </div>
             <div>
               <button
-                onClick={navigateToLandingPage} // Assuming this action should be tied to the Submit button
-                disabled={!isChecked}
-                className="ml-[16px] w-auto md:w-[208px] rounded-[12px] bg-[#385723] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
+                disabled={!isChecked || loader}
+                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${isChecked ? "bg-[#385723]" : "bg-[#a3cf85]"}  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
-                Submit
+                {loader ? <LoaderSpin /> : "Submit"}
               </button>
             </div>
           </div>
