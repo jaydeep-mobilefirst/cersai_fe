@@ -8,7 +8,7 @@ const tabs = [
   {
     title: "Schema Creation",
     url: "mytask",
-    rurl: "/portal/mytask",
+    rurl: "/dt/mytask",
   },
 ];
 

@@ -38,13 +38,15 @@ import SchemaCreation from "./pages/mainPortal/SchemaManagemet/SchemaCreation";
 import SchemeMasterForm from "./pages/mainPortal/SchemaManagemet/SchemaMasterDetail";
 import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 
+import SetPassword from "./pages/SetPassowrd";
+
 function App() {
   return (
     <div>
       <Router>
         <Routes>
           <Route element={<PrivateRoutes />}>
-            <Route element={<MainPortalLayout />} path="/portal">
+            <Route element={<MainPortalLayout />} path="/dt">
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<DashboardProfile />} path="profile" />
               <Route element={<ResetPassword />} path="resetpassword" />
@@ -108,6 +110,7 @@ function App() {
             </Route>
           </Route>
           <Route element={<Landing />} path="/" />
+          <Route element={<SetPassword />} path="/set-password" />
         </Routes>
       </Router>
     </div>

@@ -102,7 +102,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       sessionStorage.setItem("lastName", response?.data?.user?.lastName);
       reset();
       setError(false);
-      navigate("/portal");
+      navigate("/dt/dashboard");
     } catch (err: any) {
       setError(true);
       if (err.response?.data?.error) {
