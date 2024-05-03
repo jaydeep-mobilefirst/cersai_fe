@@ -14,6 +14,7 @@ import Modal from "@mui/material/Modal";
 import SelectButton from "../form/SelectButton";
 import UploadButtonV2 from "../form/UploadButtonV2";
 import { bffUrl } from "../../../utils/api";
+import { convertFileToBase64 } from "../../../utils/fileConversion";
 
 interface LoginModelProps {
   closeModal: () => void;
@@ -30,6 +31,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [formError, setFormError] = useState("");
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [error, setError] = useState<boolean>(false);
+  const [base64Data, setBase64Data] = useState<string>("");
+  const [hexData, setHexData] = useState("");
 
   const {
     register,
@@ -51,6 +54,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
     register("email");
     register("password");
   }, [register]);
+  const email = watch("email");
+  const password = watch("password");
 
   const handleSelectOption = (option: any) => {
     setSelected(option);
@@ -120,9 +125,28 @@ const LoginModel: React.FC<LoginModelProps> = ({
     closeModal();
     showRegisterModel();
   };
-  //   // const handleFileUpload = (file: any) => {
-  //   //   setIsFileUploaded(file ? true : false);
-  //   // };
+
+  const handleFileUpload = (file: File | null) => {
+    if (file) {
+      setIsFileUploaded(true);
+
+      convertFileToBase64(
+        file,
+        (hex) => {
+          setHexData(hex);
+          console.log(hex, "hexstring");
+        },
+        (base64) => {
+          setBase64Data(base64);
+          console.log("Base64 Encoded:", base64);
+        }
+      );
+    } else {
+      setIsFileUploaded(false);
+      setBase64Data(""); // Clear the base64 data if no file is uploaded
+      setHexData(""); // Clear the hex data as well
+    }
+  };
 
   return (
     <Modal
@@ -140,6 +164,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                     Login
                   </h1>
                 </div>
+
                 <div className="top-2 right-10 relative">
                   <img
                     src={CrossIcon}
@@ -149,6 +174,11 @@ const LoginModel: React.FC<LoginModelProps> = ({
                   />
                 </div>
               </div>
+              {formError && (
+                <p className="text-red-500  flex  justify-center">
+                  {formError}
+                </p>
+              )}
               <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <div className="mt-5 md:mt-[36px] px-4 md:px-[40px]">
                   <div>
@@ -221,14 +251,14 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       <p className="text-red-500">{errors.password.message}</p>
                     )}
                   </div>
-                  {/* <div className="mt-5">
-//                     <UploadButtonV2
-//                       onFileUpload={handleFileUpload}
-//                       disabled={!email || !password}
-//                     >
-//                       Upload Document
-//                     </UploadButtonV2>
-//                   </div> */}
+                  <div className="mt-5">
+                    <UploadButtonV2
+                      onFileUpload={handleFileUpload}
+                      disabled={!email || !password}
+                    >
+                      Upload Document
+                    </UploadButtonV2>
+                  </div>
 
                   <div className="flex justify-center items-center mt-14 md:mt-12 ">
                     <Button
@@ -239,9 +269,6 @@ const LoginModel: React.FC<LoginModelProps> = ({
                   </div>
                   <div className="mt-14">
                     <p className="text-base font-normal text-gilroy-regular">
-                      {/* {formError && (
-                        <span className="text-red-500">{formError}</span>
-                      )} */}
                       <br />
                       Not registered with CERSAI account?{" "}
                       <span

@@ -1,5 +1,7 @@
 import { FC, InputHTMLAttributes, forwardRef, useState } from "react";
 import Eye from "../../../assets/images/eye2.svg";
+import HideEye from "../../../assets/images/hide-eyeIcon.png";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
@@ -38,7 +40,16 @@ const InputFieldPassword: FC<InputProps> = forwardRef<
         onClick={togglePasswordVisibility}
         className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 focus:outline-none"
       >
-        <img src={Eye} alt="Toggle visibility" className="h-5 w-5 m-[10px]" />
+        {showPassword ? (
+          <img src={Eye} alt="Toggle visibility" className="h-5 w-5 m-[10px]" />
+        ) : (
+          <img
+            src={HideEye}
+            alt="Toggle visibility"
+            className="h-5 w-5 m-[10px]"
+          />
+          // <VisibilityOffOutlinedIcon />
+        )}
       </button>
     </div>
   );
