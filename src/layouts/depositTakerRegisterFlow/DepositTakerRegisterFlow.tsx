@@ -3,7 +3,6 @@ import SignUpSideBar from "../../components/userFlow/depositeTaker/SignUpSideBar
 import { Outlet } from "react-router-dom";
 import FormHandlerProviders from "../../contextAPI/useFormFieldHandlers";
 
-
 const DepositTakerRegisterFlow = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
