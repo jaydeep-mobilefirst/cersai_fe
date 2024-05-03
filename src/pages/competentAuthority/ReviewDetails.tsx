@@ -7,14 +7,42 @@ import html2pdf from "html2pdf.js";
 import Button from "../../components/userFlow/form/Button";
 import folderOpen from "../../assets/images/folder-open.svg";
 
+// const useDownloadPDF = () => {
+//   const [isDownloading, setIsDownloading] = useState(false);
+
+//   const downloadPDF = () => {
+//     setIsDownloading(true);
+//     const element = document.getElementById("reviewContent");
+//     html2pdf().from(element).save();
+//     setIsDownloading(false);
+//   };
+
+//   return { downloadPDF, isDownloading };
+// };
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
-
   const downloadPDF = () => {
     setIsDownloading(true);
     const element = document.getElementById("reviewContent");
-    html2pdf().from(element).save();
-    setIsDownloading(false);
+    const isMobile = window.innerWidth <= 768;
+    const options = {
+      margin: 1,
+      filename: "details.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: isMobile ? 1 : 2 },
+      jsPDF: {
+        unit: "in",
+        format: isMobile ? "a4" : "letter",
+        orientation: "portrait",
+      },
+    };
+    html2pdf()
+      .set(options)
+      .from(element)
+      .save()
+      .finally(() => {
+        setIsDownloading(false);
+      });
   };
 
   return { downloadPDF, isDownloading };

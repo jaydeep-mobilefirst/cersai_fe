@@ -7,14 +7,42 @@ import html2pdf from "html2pdf.js";
 import Button from "../../components/userFlow/form/Button";
 import folderOpen from "../../assets/images/folder-open.svg";
 
+// const useDownloadPDF = () => {
+//   const [isDownloading, setIsDownloading] = useState(false);
+
+//   const downloadPDF = () => {
+//     setIsDownloading(true);
+//     const element = document.getElementById("reviewContent");
+//     html2pdf().from(element).save();
+//     setIsDownloading(false);
+//   };
+
+//   return { downloadPDF, isDownloading };
+// };
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
-
   const downloadPDF = () => {
     setIsDownloading(true);
     const element = document.getElementById("reviewContent");
-    html2pdf().from(element).save();
-    setIsDownloading(false);
+    const isMobile = window.innerWidth <= 768;
+    const options = {
+      margin: 1,
+      filename: "details.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: isMobile ? 1 : 2 },
+      jsPDF: {
+        unit: "in",
+        format: isMobile ? "a4" : "letter",
+        orientation: "portrait",
+      },
+    };
+    html2pdf()
+      .set(options)
+      .from(element)
+      .save()
+      .finally(() => {
+        setIsDownloading(false);
+      });
   };
 
   return { downloadPDF, isDownloading };
@@ -223,7 +251,13 @@ const ReviewDetailsDesignated = () => {
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className="w-auto md:w-[208px] gap-[8px] flex rounded-[12px] text-[#52AE32] border border-[#52AE32] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className={`"w-auto md:w-[208px] ${
+                  isChecked ? "bg-slate-50" : "bg-gray-300"
+                } gap-[8px] flex rounded-[12px] ${
+                  isChecked ? "text-[#52AE32] " : "text-white"
+                }  border  ${
+                  isChecked ? "border-[#52AE32]" : "border-gray-300"
+                } p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"`}
               >
                 <img src={download} alt="download" className="mr-2" />
                 {isDownloading ? "Downloading..." : "Download PDF"}
