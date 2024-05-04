@@ -132,11 +132,11 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
       convertFileToBase64(
         file,
-        (hex) => {
+        (hex: string) => {
           setHexData(hex);
           console.log(hex, "hexstring");
         },
-        (base64) => {
+        (base64: string) => {
           setBase64Data(base64);
           console.log("Base64 Encoded:", base64);
         }
