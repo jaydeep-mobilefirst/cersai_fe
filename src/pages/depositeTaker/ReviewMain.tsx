@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import LoaderSpin from "../../components/LoaderSpin";
 import { backendBudsPortalBFFUrl } from "../../utils/api";
 import html2pdf from "html2pdf.js";
+import SuccessPopup from "../../components/userFlow/common/SuccessPopup";
 
 // const useDownloadPDF = () => {
 //   const [isDownloading, setIsDownloading] = useState(false);
@@ -57,6 +58,15 @@ const ReviewMain = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
+  const CloseSuccessPopup = () => {
+    setShowSuccessPopup(false);
+  };
+
+  const showPopup = () => {
+    Navigate("/");
+  };
   const sectionCodes: any = {
     1: "de_verification",
     2: "de_entity_details",
@@ -92,7 +102,8 @@ const ReviewMain = () => {
           title: "Success",
           text: "Data submitted successfully!",
         });
-        Navigate("/");
+        setShowSuccessPopup(true);
+        // Navigate("/");
       } else {
         Swal.fire({
           icon: "error",
@@ -178,6 +189,9 @@ const ReviewMain = () => {
             knowledge
           </div>
         </div>
+        {showSuccessPopup && (
+          <SuccessPopup closePopup={CloseSuccessPopup} showPopup={showPopup} />
+        )}
 
         <div className="flex justify-between items-center my-3">
           <div className=" ml-5">

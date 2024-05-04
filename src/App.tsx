@@ -39,6 +39,7 @@ import SchemeMasterForm from "./pages/mainPortal/SchemaManagemet/SchemaMasterDet
 import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 
 import SetPassword from "./pages/SetPassowrd";
+import EmailActivation from "./components/userFlow/common/EmailActivate";
 
 function App() {
   return (
@@ -55,6 +56,10 @@ function App() {
               <Route element={<SchemeMasterForm />} path="mytask/schema" />
               <Route element={<UserCreation />} path="usermanagement" />
             </Route>
+            <Route
+              element={<EmailActivation userName="owais" />}
+              path="reset-password"
+            />
 
             <Route
               element={<DepositTakerRegisterFlow />}
