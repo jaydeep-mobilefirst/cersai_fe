@@ -18,7 +18,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
   const location = useLocation();
   const {allFormData} = useDepositTakerRegistrationStore(state => state)
 
-  const [page, setPage] = useState<string>(location.pathname);
+  const [page, setPage] = useState<string | undefined>(location.pathname);
 
   const [percent, setPercentage] = useState<any>(0);
   const widthPercentage: any = {
@@ -30,11 +30,15 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
   };
 
   const handleClick = (des: string, num: number, path: string) => {
-    setPercentage(num);
-    setPage(path);
+
     Navigate(path);
   };
 
+  useEffect(() => {
+    const data = signupSideBar.find((p) => p.path === location.pathname);
+    setPercentage(data?.percentage);
+    setPage(data?.path);
+  }, [location.pathname])
 
   useEffect(() => {
     const timeout = setTimeout(() => {

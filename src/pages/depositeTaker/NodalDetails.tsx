@@ -8,6 +8,7 @@ import SelectButton from "../../components/userFlow/form/SelectButton";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "../../components/userFlow/form/DatePicker";
 
 type Props = {};
 
@@ -62,6 +63,7 @@ const NodalDetails = (props: Props) => {
                       case 'text':
                       case 'number':
                       case 'password':
+                      case "phone_number":
                         return <div>
                           <label
                             htmlFor={field?.label}
@@ -79,6 +81,7 @@ const NodalDetails = (props: Props) => {
                             type={fieldType}
                             id={field?.label}
                             placeholder={field?.placeholder}
+                            disabled={field?.disabled || false}
                           />
                           <span className="text-red-500">
                             {field?.error}
@@ -126,7 +129,46 @@ const NodalDetails = (props: Props) => {
                         <span className="text-red-500">
                             {field?.error}
                           </span>
-                      </div>                          
+                      </div>  
+                      
+                      case 'pincode':
+                        return <div>
+                          <label
+                            htmlFor={field?.label}
+                            className="block text-gray-700 text-sm font-bold mb-2"
+                          >
+                            {field?.label}
+                            {field?.regFormFieldsValidations && 
+                              field?.regFormFieldsValidations?.some((v : any) => v?.id === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
+                              &&
+                              <span className="text-[#ff0000]">*</span>}
+                          </label>
+                          <InputFields
+                            max={6}
+                            min={6}
+                            value={field?.userInput}
+                            onChange={(e) => onChange(e, field, fieldType)}
+                            type={"number"}
+                            id={field?.label}
+                            placeholder={field?.placeholder}
+                          />
+                          <span className="text-red-500">
+                            {field?.error}
+                          </span>
+                        </div>
+                      case 'date_picker':
+                        return <div>
+                        <label
+                          htmlFor="district"
+                          className="text-base font-normal text-gilroy-medium"
+                        >
+                          {field?.label} <span className="text-red-500">*</span>
+                        </label>
+                        <DatePicker onChange={(e) => onChange(e, field, fieldType) } userValue={field?.userInput}/>
+                        <span className="text-red-500">
+                            {field?.error}
+                          </span>
+                      </div>
                       default:
                         return <></>;
                     }

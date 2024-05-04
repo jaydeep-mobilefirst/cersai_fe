@@ -8,6 +8,7 @@ import { useContext, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 type Props = {};
 
@@ -57,7 +58,14 @@ const VerificationForm = (props: Props) => {
     setLoader(false)
     
     if (noError && panVerified) {
-      Navigate('/depositetaker/signup/entitydetails')
+      Swal.fire({
+        icon : "success",
+        text : "Pan Verified Successfully!",
+        confirmButtonText : "Ok"
+      })
+      .then((confirm : any) => {
+        Navigate('/depositetaker/signup/entitydetails')
+      })
     }
   };  
   

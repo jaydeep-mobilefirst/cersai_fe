@@ -74,6 +74,7 @@ const RegularDetailsForm = (props: Props) => {
                       case 'text':
                       case 'number':
                       case 'password':
+                      case "phone_number":
                         return <div>
                           <label
                             htmlFor={field?.label}
@@ -152,7 +153,31 @@ const RegularDetailsForm = (props: Props) => {
                             {field?.error}
                           </span>
                       </div>
-                                              
+                     case 'pincode':
+                      return <div>
+                        <label
+                          htmlFor={field?.label}
+                          className="block text-gray-700 text-sm font-bold mb-2"
+                        >
+                          {field?.label}
+                          {field?.regFormFieldsValidations && 
+                            field?.regFormFieldsValidations?.some((v : any) => v?.id === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
+                            &&
+                            <span className="text-[#ff0000]">*</span>}
+                        </label>
+                        <InputFields
+                          max={6}
+                          min={6}
+                          value={field?.userInput}
+                          onChange={(e) => onChange(e, field, fieldType)}
+                          type={"number"}
+                          id={field?.label}
+                          placeholder={field?.placeholder}
+                        />
+                        <span className="text-red-500">
+                          {field?.error}
+                        </span>
+                      </div>                     
                       default:
                         return <></>;
                     }

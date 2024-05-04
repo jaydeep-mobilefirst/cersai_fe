@@ -51,7 +51,7 @@ const ReviewMain = () => {
     1: "de_verification",
     2: "de_entity_details",
     3: "de_regulations_details",
-    4: "de_nodal_details",
+    4: "Nodal Officer",
   };
   console.log({ allFormData });
 
