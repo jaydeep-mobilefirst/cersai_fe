@@ -18,7 +18,7 @@ const DepositTakerRegisterFlow = () => {
         className="lg:hidden fixed top-0 left-0 m-4 z-50"
         onClick={toggleMenu}
       >
-        <h1>yooo</h1>
+    
         {isMenuOpen ? (
           // <img src={CrossIcon} alt="Close Menu" className="w-6 h-6" />
           <div></div>
