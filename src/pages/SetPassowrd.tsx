@@ -51,7 +51,7 @@ const SetPasswordPage = () => {
   const apiCall = () => {
     setLoader(true);
     axios
-      .post(`${bffUrl}/admin/user/setpassword`, {
+      .post(`${bffUrl}/user/setpassword`, {
         identity: identity,
         password: watch("confirmPassword"),
       })
