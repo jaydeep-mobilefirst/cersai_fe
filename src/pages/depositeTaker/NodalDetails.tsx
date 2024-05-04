@@ -1,10 +1,5 @@
-import React, { useContext, useState } from "react";
-import NodalDetailsSchema from "../../formValidationSchema/deposit_taker/NodalDetails.schema";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useContext, useState } from "react";
 import InputFields from "../../components/userFlow/form/InputField";
-import UploadButton from "../../components/userFlow/form/UploadButton";
-import SignUpSideBar from "../../components/userFlow/depositeTaker/SignUpSideBar";
 import { useScreenWidth } from "../../utils/screenSize";
 import OtpPage from "./OtpPage";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
@@ -33,10 +28,14 @@ const NodalDetails = (props: Props) => {
     setLoader(true)
     const noError = await handleValidationChecks(formFields)    
     setLoader(false)
-    
+
     if (noError) {
-      Navigate('/depositetaker/signup/reviewdetails')
+      setShowOTPModel(true)
     }
+
+    // if (noError) {
+    //   Navigate('/depositetaker/signup/reviewdetails')
+    // }
   }; 
 
 
@@ -136,7 +135,7 @@ const NodalDetails = (props: Props) => {
             </div>
           </div>
         </div>
-        {/* {showOTPModel && <OtpPage closeShowOtpModel={closeShowOtpModel} />} */}
+        {showOTPModel && <OtpPage closeShowOtpModel={() => setShowOTPModel(false)} />}
 
         <div>
           <div
