@@ -28,7 +28,7 @@ const VerificationForm = (props: Props) => {
 
     const verifyPan = async () : Promise<boolean> => {
       try {
-        let company = formFields?.find((field : any, i : number) => field?.label === "Company Name");
+        let company = formFields?.find((field : any, i : number) => field?.label === "Company Name (As per Pan)");
         let pan = formFields?.find((field : any, i : number) =>  field?.label === "Pan Number");
         
         let response = await axios.post("http://34.149.91.231/cms/pandirectory/api", {
