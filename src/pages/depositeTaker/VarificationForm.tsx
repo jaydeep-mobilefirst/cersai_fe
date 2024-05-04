@@ -1,33 +1,79 @@
-import React from "react";
 import InputFields from "../../components/userFlow/form/InputField";
-import { useForm } from "react-hook-form";
-import { VerificationFormSchema } from "../../formValidationSchema/deposit_taker/Verification.schema";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useScreenWidth } from "../../utils/screenSize";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import { useNavigate } from "react-router-dom";
+import TextArea from "../../components/userFlow/form/TextArea";
+import SelectButton from "../../components/userFlow/form/SelectButton";
+import { useContext, useState } from "react";
+import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
+import LoaderSpin from "../../components/LoaderSpin";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 type Props = {};
 
 const VerificationForm = (props: Props) => {
+  const [loader, setLoader] = useState(false);
+  const {onChange, handleValidationChecks, updatePanFormField} = useContext(FormHandlerContext)
+  const Navigate = useNavigate();
+  const {allFormData, setAllFormData} = useDepositTakerRegistrationStore(state => state)
+  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Verification");
+  const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
   const screenWidth = useScreenWidth();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
-    resolver: yupResolver(VerificationFormSchema),
-  });
 
-  const onSubmit = (data: any) => {
-    console.log({ data });
-  };
+ 
+  const onSubmit = async (event : any) => {
+    event?.preventDefault();
 
+    // Verify Pan
+
+    const verifyPan = async () : Promise<boolean> => {
+      try {
+        let company = formFields?.find((field : any, i : number) => field?.label === "Company Name (As per Pan)");
+        let pan = formFields?.find((field : any, i : number) =>  field?.label === "Pan Number");
+        
+        let response = await axios.post("http://34.149.91.231/cms/pandirectory/api", {
+          name:company?.userInput?.toUpperCase(),
+          pan_no: pan?.userInput
+        })
+        const data = response.data;
+        
+        const panUpdate = updatePanFormField(data, pan);
+
+        return panUpdate;
+        
+      } catch (error) {
+        alert("Error while verifying pan, Please try later!")
+        return false
+      }
+
+    }
+
+    setLoader(true)
+    const noError = await handleValidationChecks(formFields)
+    let panVerified = undefined;
+    if (noError) {
+     panVerified = await verifyPan();  
+    } 
+    setLoader(false)
+    
+    if (noError && panVerified) {
+      Swal.fire({
+        icon : "success",
+        text : "Pan Verified Successfully!",
+        confirmButtonText : "Ok"
+      })
+      .then((confirm : any) => {
+        Navigate('/depositetaker/signup/entitydetails')
+      })
+    }
+  };  
+  
   return (
     <>
       <div className="">
         <form
           className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
-          onSubmit={handleSubmit(onSubmit)}
         >
           <div
             style={{
@@ -39,11 +85,116 @@ const VerificationForm = (props: Props) => {
               Verification
             </h1>
             <div className="bg-white p-4 lg:p-[48px]">
-              {/* <h1 className="text-xl md:text-2xl font-bold mb-6">
-                Verification
-              </h1> */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                <div>
+                {
+                  formFields && formFields?.length > 0 && formFields?.map((field : any, idx : number) => {
+                    const fieldType = allFormData?.fieldTypes?.find((type : any) => type?.id === field?.typeId)?.name;
+                    // console.log({fieldType});
+
+                    switch (fieldType) {
+                      case 'text':
+                      case 'number':
+                      case 'password':
+                      case "phone_number":
+                        return <div>
+                          <label
+                            htmlFor={field?.label}
+                            className="block text-gray-700 text-sm font-bold mb-2"
+                          >
+                            {field?.label}
+                            {field?.regFormFieldsValidations && 
+                              field?.regFormFieldsValidations?.some((v : any) => v?.id === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
+                              &&
+                              <span className="text-[#ff0000]">*</span>}
+                          </label>
+                          <InputFields
+                            value={field?.userInput}
+                            onChange={(e) => onChange(e, field, fieldType)}
+                            type={fieldType}
+                            id={field?.label}
+                            placeholder={field?.placeholder}
+                            disabled={field?.disabled || false}
+                          />
+                          <span className="text-red-500">
+                            {field?.error}
+                          </span>
+                        </div>
+                      case 'textarea':
+                         return  <div className="">
+                         <label
+                           htmlFor={field?.label}
+                           className="text-base font-normal text-text-gilroy-medium"
+                         >
+                           {field?.label}
+                            {field?.regFormFieldsValidations && 
+                              field?.regFormFieldsValidations?.some((v : any) => v?.id === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
+                              &&
+                              <span className="text-[#ff0000]">*</span>}
+                         </label>
+                         <TextArea
+                           value={field?.userInput}
+                           onChange={(e) => onChange(e, field, fieldType)}
+                           id={field?.label}
+                           placeholder={field?.placeholder}
+                         />
+                         <span className="text-red-500">
+                            {field?.error}
+                          </span>
+                       </div>
+                      case 'select':
+                        return                <div>
+                        <label
+                          htmlFor="district"
+                          className="text-base font-normal text-gilroy-medium"
+                        >
+                          {field?.label} <span className="text-red-500">*</span>
+                        </label>
+                        <SelectButton
+                          onSelect={(data) => onChange(data, field, fieldType)}
+                          options={field?.dropdown_options?.options?.map((d : any) => ({value : d?.name, label : d?.name, id : d?.id}))}
+                          selectedOption={field?.userInput}
+                          placeholder={field?.placeholder}
+                         //  searchInputOnchange={handleSearchInputChange3}
+                         //  searchInputValue={searchInputValue3}
+                          showSearchInput={true}
+                        />
+                        <span className="text-red-500">
+                            {field?.error}
+                          </span>
+                      </div>  
+                      
+                      case 'pincode':
+                        return <div>
+                          <label
+                            htmlFor={field?.label}
+                            className="block text-gray-700 text-sm font-bold mb-2"
+                          >
+                            {field?.label}
+                            {field?.regFormFieldsValidations && 
+                              field?.regFormFieldsValidations?.some((v : any) => v?.id === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
+                              &&
+                              <span className="text-[#ff0000]">*</span>}
+                          </label>
+                          <InputFields
+                            max={6}
+                            min={6}
+                            value={field?.userInput}
+                            onChange={(e) => onChange(e, field, fieldType)}
+                            type={"number"}
+                            id={field?.label}
+                            placeholder={field?.placeholder}
+                          />
+                          <span className="text-red-500">
+                            {field?.error}
+                          </span>
+                        </div>
+
+                      default:
+                        return <></>;
+                    }
+                  })
+                }
+                {/* <div>
                   <label
                     htmlFor="companyName"
                     className="block text-gray-700 text-sm font-bold mb-2"
@@ -76,7 +227,7 @@ const VerificationForm = (props: Props) => {
                       {errors.panNumber?.message}
                     </span>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -88,34 +239,15 @@ const VerificationForm = (props: Props) => {
                   screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
                 }`,
               }}
-            >
-              <div className="flex flex-row items-center space-x-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="shrink-0"
-                >
-                  <path
-                    d="M15 6L9 12L15 18"
-                    stroke="#1D1D1B"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
-                  Back
-                </button>
-              </div>
-              <div className="flex items-center">
+            > 
+              <div className="flex items-center ml-auto">
                 <button
                   type="submit"
+                  disabled={loader}
+                  onClick={onSubmit}
                   className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
-                  Verify details
+                  {loader ? <LoaderSpin/> : "Verify details"}
                 </button>
               </div>
             </div>

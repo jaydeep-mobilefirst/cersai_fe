@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HeadComp from "./HeadComp";
 import { signupSideBar } from "../../../utils/hardText/signuppageText";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 interface SignUpSideBarProps {
   isMenuOpen?: boolean;
   toggleMenu?: () => void;
@@ -15,8 +16,9 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
 }) => {
   const Navigate = useNavigate();
   const location = useLocation();
+  const {allFormData} = useDepositTakerRegistrationStore(state => state)
 
-  const [page, setPage] = useState<string>(location.pathname);
+  const [page, setPage] = useState<string | undefined>(location.pathname);
 
   const [percent, setPercentage] = useState<any>(0);
   const widthPercentage: any = {
@@ -28,11 +30,27 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
   };
 
   const handleClick = (des: string, num: number, path: string) => {
-    setPercentage(num);
-    setPage(path);
+
     Navigate(path);
   };
 
+  useEffect(() => {
+    const data = signupSideBar.find((p) => p.path === location.pathname);
+    setPercentage(data?.percentage);
+    setPage(data?.path);
+  }, [location.pathname])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!allFormData) {
+        Navigate('/')
+      }
+    }, 5000)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  },[allFormData])
   return (
     <div className="sm:w-[300px]  w-[250px] h-[100vh] md:w-[349px] bg-[#EEF7EB]">
       {/* {isMenuOpen && (

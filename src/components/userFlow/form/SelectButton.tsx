@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./select_button.css";
 
 interface Option {
@@ -7,7 +7,8 @@ interface Option {
 }
 
 type Props = {
-  setOption: (value: string) => void;
+  onSelect ?: (data : any) => void
+  setOption ?: (value: string) => void;
   options: Option[];
   selectedOption?: string | null;
   placeholder: string;
@@ -24,9 +25,10 @@ const SelectButton = ({
   searchInputValue,
   selectedOption,
   showSearchInput,
+  onSelect
 }: Props) => {
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
-
+  const [optionsToShow, setOptionsToShow] = useState<any[]>(options)
   useEffect(() => {
     setArrowDirectionToggle(false);
   }, [selectedOption]);
@@ -36,6 +38,27 @@ const SelectButton = ({
     options.find((option) => option.value === selectedOption)?.label ||
     placeholder;
 
+
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: any) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setArrowDirectionToggle(false);
+    }
+  };
+  useEffect(() => {
+    if (arrowDirectionToggle) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [arrowDirectionToggle]);
+    
+  
   return (
     <div className="w-full relative">
       <button
@@ -103,13 +126,19 @@ const SelectButton = ({
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
+            ref={dropdownRef}
           >
-            {options.map((option, index) => (
+            {options?.map((option, index) => (
               <a
                 key={index}
                 onClick={() => {
-                  setOption(option.value);
+                  if (setOption) {
+                    setOption(option.value);
+                  }
                   setArrowDirectionToggle(false);
+                  if (onSelect) {
+                    onSelect(option)
+                  }
                 }}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 cursor-pointer"
                 role="menuitem"

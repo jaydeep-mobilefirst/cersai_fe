@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SignUpSideBar from "../../components/userFlow/depositeTaker/SignUpSideBar";
 import { Outlet } from "react-router-dom";
+import FormHandlerProviders from "../../contextAPI/useFormFieldHandlers";
 
-import MenuIcon from "../../assets/images/menu.svg";
-import CrossIcon from "../../assets/images/CrossIcon.svg";
 
 const DepositTakerRegisterFlow = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -56,7 +55,9 @@ const DepositTakerRegisterFlow = () => {
 
       <div className=" flex w-full flex-col">
         <div className="w-full mt-20 lg:mt-0">
-          <Outlet />
+          <FormHandlerProviders>
+            <Outlet />
+          </FormHandlerProviders>
         </div>
       </div>
     </div>

@@ -41,7 +41,7 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     return (
       <>
         {type === "date" ? (
-          <div className="flex justify-start items-center border rounded-md overflow-hidden w-full max-w-xs sm:max-w-md md:max-w-lg">
+          <div className="flex justify-start items-center border rounded-md overflow-hidden w-[317px] max-w-xs sm:max-w-md md:max-w-lg">
             <button
               onClick={handleDateButtonClick}
               className="flex justify-between items-center h-[56px] w-full px-2 py-2 rounded-lg text-gray-600 bg-white hover:bg-gray-100 focus:outline-none"
@@ -60,7 +60,7 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
         ) : (
           <input
             type="text"
-            className={`form-input border h-[56px] w-full sm:w-full md:max-w-full px-2 py-2 flex items-center border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-300 ${props?.bgColor}`}
+            className={`form-input border h-[56px]  w-[317px] sm:w-full md:max-w-full px-2 py-2 flex items-center border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-300 ${props?.bgColor}`}
             {...props}
             ref={ref}
           />

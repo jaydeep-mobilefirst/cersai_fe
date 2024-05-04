@@ -62,7 +62,7 @@ function App() {
             >
               <Route element={<NodalDetails />} path="nodaldetails" />
               <Route element={<VarificationForm />} path="verification" />
-              <Route element={<EntityDetails />} path="entitydetials" />
+              <Route element={<EntityDetails />} path="entitydetails" />
               <Route element={<RegularDetailsForm />} path="regulatordetails" />
               <Route element={<ReviewMain />} path="reviewdetails" />
             </Route>

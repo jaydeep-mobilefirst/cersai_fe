@@ -51,12 +51,13 @@ import { dateFormattor } from "../../../utils/commonFunction";
 
 type Props = {
   onChange?: (event: any) => void;
+  userValue ?: string
 };
 
-const DatePicker = ({ onChange }: Props) => {
+const DatePicker = ({ onChange, userValue }: Props) => {
   const hiddenDateInput = useRef<HTMLInputElement>(null);
   const [dateSelected, setDateSelected] = useState<string | undefined>(
-    undefined
+    userValue
   );
 
   const handleDateButtonClick = () => {
@@ -71,10 +72,10 @@ const DatePicker = ({ onChange }: Props) => {
     }
     const { value } = event.target;
     if (value) {
-      setDateSelected(dateFormattor(new Date(value)));
+      setDateSelected(value);
     }
   };
-
+  
   return (
     <div className="flex justify-start items-center h-14 w-full max-w-[35rem] sm:max-w-sm md:max-w-md lg:max-w-2xl border rounded-md">
       <button
@@ -86,6 +87,7 @@ const DatePicker = ({ onChange }: Props) => {
         <Calender />
       </button>
       <input
+        defaultValue={userValue}
         ref={hiddenDateInput}
         type="date"
         className="absolute opacity-0 -z-10"

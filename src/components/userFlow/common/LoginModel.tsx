@@ -14,6 +14,8 @@ import Modal from "@mui/material/Modal";
 import SelectButton from "../form/SelectButton";
 import UploadButtonV2 from "../form/UploadButtonV2";
 import { bffUrl } from "../../../utils/api";
+import Dscbutton from "../form/Dscbutton";
+import { convertFileToBase64 } from "../../../utils/fileConversion";
 
 interface LoginModelProps {
   closeModal: () => void;
@@ -30,6 +32,9 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [formError, setFormError] = useState("");
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [error, setError] = useState<boolean>(false);
+  const [base64Data, setBase64Data] = useState<string>("");
+  const [hexData, setHexData] = useState("");
+  const [roles, setRoles] = useState<any>();
 
   const {
     register,
@@ -96,8 +101,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
       sessionStorage.setItem("firstName", response?.data?.user?.firstName);
       sessionStorage.setItem("lastName", response?.data?.user?.lastName);
       reset();
+      apicallDsc();
       setError(false);
-      navigate("/dt/dashboard");
     } catch (err: any) {
       setError(true);
       if (err.response?.data?.error) {
@@ -112,6 +117,24 @@ const LoginModel: React.FC<LoginModelProps> = ({
     }
   };
 
+  const apicallDsc = () => {
+    setLoader(true);
+    axios
+      .post(bffUrl + `/adminauth/mfa`, {
+        username: watch("email"),
+        dscCertificateFile: base64Data,
+      })
+      .then((respose) => {
+        console.log(respose);
+        setLoader(false);
+        navigate("/dt/dashboard");
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
+
   const handleClose = () => {
     closeModal();
   };
@@ -120,9 +143,26 @@ const LoginModel: React.FC<LoginModelProps> = ({
     closeModal();
     showRegisterModel();
   };
-  //   // const handleFileUpload = (file: any) => {
-  //   //   setIsFileUploaded(file ? true : false);
-  //   // };
+
+  const handleFileUpload = (file: File | null) => {
+    if (file) {
+      setIsFileUploaded(true);
+
+      convertFileToBase64(
+        file,
+        (hex) => {
+          setHexData(hex);
+        },
+        (base64) => {
+          setBase64Data(base64);
+        }
+      );
+    } else {
+      setIsFileUploaded(false);
+      setBase64Data(""); // Clear the base64 data if no file is uploaded
+      setHexData(""); // Clear the hex data as well
+    }
+  };
 
   return (
     <Modal
@@ -221,16 +261,17 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       <p className="text-red-500">{errors.password.message}</p>
                     )}
                   </div>
-                  {/* <div className="mt-5">
-//                     <UploadButtonV2
-//                       onFileUpload={handleFileUpload}
-//                       disabled={!email || !password}
-//                     >
-//                       Upload Document
-//                     </UploadButtonV2>
-//                   </div> */}
-
-                  <div className="flex justify-center items-center mt-14 md:mt-12 ">
+                  <div className="mt-4 lg:mt-8">
+                    {watch("email") && watch("password") && (
+                      <Dscbutton
+                        onFileUpload={handleFileUpload}
+                        disabled={false}
+                      >
+                        Upload Document
+                      </Dscbutton>
+                    )}
+                  </div>
+                  <div className="flex justify-center items-center mt-12 ">
                     <Button
                       type="submit"
                       loader={loader}
