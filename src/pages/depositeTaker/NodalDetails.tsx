@@ -7,12 +7,14 @@ import TextArea from "../../components/userFlow/form/TextArea";
 import SelectButton from "../../components/userFlow/form/SelectButton";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DatePicker from "../../components/userFlow/form/DatePicker";
+import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 
 type Props = {};
 
 const NodalDetails = (props: Props) => {
+  const [params, setParams] = useSearchParams();
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [showOTPModel, setShowOTPModel] = useState<boolean>(false);
@@ -31,12 +33,16 @@ const NodalDetails = (props: Props) => {
     setLoader(false)
 
     if (noError) {
-      setShowOTPModel(true)
+      const edit = params.get('edit');
+      const nodalVerification = localStorage.getItem('nodalVerification');
+      console.log({nodalVerification});
+      if (edit !== undefined && edit !== null && edit !== "" && nodalVerification) {
+        Navigate('/depositetaker/signup/reviewdetails')
+      }
+      else{
+        setShowOTPModel(true)
+      }
     }
-
-    // if (noError) {
-    //   Navigate('/depositetaker/signup/reviewdetails')
-    // }
   }; 
 
 
@@ -53,128 +59,7 @@ const NodalDetails = (props: Props) => {
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
             <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            {
-                  formFields && formFields?.length > 0 && formFields?.map((field : any) => {
-                    const fieldType = allFormData?.fieldTypes?.find((type : any) => type?.id === field?.typeId)?.name;
-                    console.log({fieldType});
-
-                    switch (fieldType) {
-                      case 'text':
-                      case 'number':
-                      case 'password':
-                      case "phone_number":
-                        return <div>
-                          <label
-                            htmlFor={field?.label}
-                            className="block text-gray-700 text-sm font-bold mb-2"
-                          >
-                            {field?.label}
-                            {field?.regFormFieldsValidations && 
-                              field?.regFormFieldsValidations?.some((v : any) => v?.id === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
-                              &&
-                              <span className="text-[#ff0000]">*</span>}
-                          </label>
-                          <InputFields
-                            value={field?.userInput}
-                            onChange={(e) => onChange(e, field, fieldType)}
-                            type={fieldType}
-                            id={field?.label}
-                            placeholder={field?.placeholder}
-                            disabled={field?.disabled || false}
-                          />
-                          <span className="text-red-500">
-                            {field?.error}
-                          </span>
-                        </div>
-                      case 'textarea':
-                         return  <div className="">
-                         <label
-                           htmlFor={field?.label}
-                           className="text-base font-normal text-text-gilroy-medium"
-                         >
-                           {field?.label}
-                            {field?.regFormFieldsValidations && 
-                              field?.regFormFieldsValidations?.some((v : any) => v?.id === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
-                              &&
-                              <span className="text-[#ff0000]">*</span>}
-                         </label>
-                         <TextArea
-                           value={field?.userInput}
-                           onChange={(e) => onChange(e, field, fieldType)}
-                           id={field?.label}
-                           placeholder={field?.placeholder}
-                         />
-                         <span className="text-red-500">
-                            {field?.error}
-                          </span>
-                       </div>
-                      case 'select':
-                        return                <div>
-                        <label
-                          htmlFor="district"
-                          className="text-base font-normal text-gilroy-medium"
-                        >
-                          {field?.label} <span className="text-red-500">*</span>
-                        </label>
-                        <SelectButton
-                          onSelect={(data) => onChange(data, field, fieldType)}
-                          options={field?.dropdown_options?.options?.map((d : any) => ({value : d?.name, label : d?.name, id : d?.id}))}
-                          selectedOption={field?.userInput}
-                          placeholder={field?.placeholder}
-                         //  searchInputOnchange={handleSearchInputChange3}
-                         //  searchInputValue={searchInputValue3}
-                          showSearchInput={true}
-                        />
-                        <span className="text-red-500">
-                            {field?.error}
-                          </span>
-                      </div>  
-                      
-                      case 'pincode':
-                        return <div>
-                          <label
-                            htmlFor={field?.label}
-                            className="block text-gray-700 text-sm font-bold mb-2"
-                          >
-                            {field?.label}
-                            {field?.regFormFieldsValidations && 
-                              field?.regFormFieldsValidations?.some((v : any) => v?.id === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
-                              &&
-                              <span className="text-[#ff0000]">*</span>}
-                          </label>
-                          <InputFields
-                            max={6}
-                            min={6}
-                            value={field?.userInput}
-                            onChange={(e) => onChange(e, field, fieldType)}
-                            type={"number"}
-                            id={field?.label}
-                            placeholder={field?.placeholder}
-                          />
-                          <span className="text-red-500">
-                            {field?.error}
-                          </span>
-                        </div>
-                      case 'date_picker':
-                        return <div>
-                        <label
-                          htmlFor="district"
-                          className="text-base font-normal text-gilroy-medium"
-                        >
-                          {field?.label} <span className="text-red-500">*</span>
-                        </label>
-                        <DatePicker onChange={(e) => onChange(e, field, fieldType) } userValue={field?.userInput}/>
-                        <span className="text-red-500">
-                            {field?.error}
-                          </span>
-                      </div>
-                      default:
-                        return <></>;
-                    }
-                  })
-                }
-            </div>
+            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange}/>
           </div>
         </div>
         {showOTPModel && <OtpPage closeShowOtpModel={() => setShowOTPModel(false)} />}

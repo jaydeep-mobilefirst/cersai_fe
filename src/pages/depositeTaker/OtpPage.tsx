@@ -104,6 +104,7 @@ const OtpPage: React.FC<OtpPageProps> = ({ closeShowOtpModel }) => {
       setLoader(true)
       setLoader(false);
       Navigate("/depositetaker/signup/reviewdetails")
+      localStorage.setItem("nodalVerification", JSON.stringify({verified : true}))
     }
   }
 

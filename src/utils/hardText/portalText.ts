@@ -1,5 +1,4 @@
 import dashboardLogo from "../../assets/images/dashboard.svg";
-
 import dashboardWhiteLogo from "../../assets/images/dashboardWhiteLogo.svg";
 import myTaskIcon from "../../assets/images/myTaskIcon.svg";
 import myTaskWhiteIcon from "../../assets/images/myTaskWhiteIcon.svg";

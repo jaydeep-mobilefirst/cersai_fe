@@ -2,6 +2,7 @@ import React, { createContext } from 'react'
 import { useDepositTakerRegistrationStore } from '../zust/deposit-taker-registration/registrationStore';
 import { backendBaseUrl, backendBudsPortalBFFUrl, pincodeValidationUrl } from '../utils/api';
 import axios from 'axios';
+import { convertFileToBase64Async } from '../utils/fileConversion';
 
 type Props = {
   children : React.ReactElement
@@ -19,10 +20,10 @@ export const FormHandlerContext = createContext({} as IContextProps);
 
 const FormHandlerProviders = ({children}: Props) => {
   const {allFormData, setAllFormData} = useDepositTakerRegistrationStore(state => state)
-  const updateValue = (value : string | any[], fieldId : number) => {
+  const updateValue = (value : string | any[], fieldId : number, dscFileNAme : string = "") => {
     let modifiedFormFields = allFormData?.formFields?.form_fields?.map((o : any) => {
       if (o?.id === fieldId) {
-        return {...o, userInput : value, error : value !== "" ? "" : o?.error};
+        return {...o, userInput : value, error : value !== "" ? "" : o?.error, dscFileNAme};
       }
       else{
         return o;
@@ -147,6 +148,11 @@ const FormHandlerProviders = ({children}: Props) => {
         }
       }
     }
+    else if(fieldType === "DSC3"){
+      const file = event;
+      const base64String : string= await convertFileToBase64Async(file)
+      updateValue(base64String, fieldData?.id, file?.name);
+    }
   }
 
   const handlePincodeSucess = (data : {stateField : any, stateValue : string, districtField : any, districtValue : string, pinCodeField : any, pinCodeValue : string}, disabled : boolean) => {    
@@ -167,7 +173,9 @@ const FormHandlerProviders = ({children}: Props) => {
     let obj = {
       ...allFormData,
       formFields : {form_fields : modifiedFormFields}
-    }            
+    }       
+    console.log({obj});
+         
     setAllFormData(obj)
   }
 
