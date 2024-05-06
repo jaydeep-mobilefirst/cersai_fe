@@ -6,12 +6,14 @@ interface SuccessPopupProps {
     closePopup: () => void;
     showPopup: () => void;
     toggle : boolean
+    dtId : string
   }
 
   const SuccessPopup: React.FC<SuccessPopupProps> = ({
     closePopup,
     showPopup,
-    toggle
+    toggle,
+    dtId
   }) => {
   return (
     <Modal
@@ -54,7 +56,7 @@ interface SuccessPopupProps {
           </div>
           <div>
             <h2 className="text-[#52AE32] text-base text-center text-gilroy-medium my-2">
-              Your registration acknowledgement ID is "DT76545678"
+              Your registration acknowledgement ID is {dtId}
             </h2>
           </div>
 

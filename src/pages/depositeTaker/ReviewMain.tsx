@@ -43,6 +43,7 @@ const useDownloadPDF = () => {
 
 const ReviewMain = () => {
   const [submitModal, setSubmitModal] = useState(false);
+  const [dtId, setDtId] = useState('');
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
@@ -81,14 +82,17 @@ const ReviewMain = () => {
         const data = await response.data;
         
         if (data?.success) {
-        setSubmitModal(true)
-        console.log({data});
-        
-        // Swal.fire({
-        //   icon: "success",
-        //   title: "Success",
-        //   text: "Data submitted successfully!",
-        // });
+          // setSubmitModal( true)
+        setDtId(data?.data?.newDepositTaker?.uniqueId)
+        Swal.fire({
+          icon: "success",
+          title: `Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`,
+          text: `Your registration request has been sent successfully and
+          approval/rejection of your registration will be informed to you
+          via email.`,customClass : {
+            title : 'text-sm'
+          }
+        });
         Navigate("/");
       } else {
         Swal.fire({
@@ -217,7 +221,7 @@ const ReviewMain = () => {
             </div>
           </div>
         </div>
-         <SuccessPopup closePopup={() => {setSubmitModal(false); setLoader(false)}} showPopup={() => setSubmitModal(true)} toggle={submitModal}/>
+         <SuccessPopup closePopup={() => {setSubmitModal(false); setLoader(false); Navigate('/')}} showPopup={() => setSubmitModal(true)} toggle={submitModal} dtID={dtId}/>
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
             © 2024 Protean BUDs, All Rights Reserved.

@@ -35,13 +35,14 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [base64Data, setBase64Data] = useState<string>("");
   const [hexData, setHexData] = useState("");
   const [roles, setRoles] = useState<any>();
-
+  
   const {
     register,
     handleSubmit,
     setValue,
     reset,
     watch,
+    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -100,7 +101,6 @@ const LoginModel: React.FC<LoginModelProps> = ({
       );
       sessionStorage.setItem("firstName", response?.data?.user?.firstName);
       sessionStorage.setItem("lastName", response?.data?.user?.lastName);
-      reset();
       apicallDsc();
       setError(false);
     } catch (err: any) {
@@ -120,11 +120,13 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const apicallDsc = () => {
     setLoader(true);
     axios
-      .post(bffUrl + `/adminauth/mfa`, {
-        username: watch("email"),
+      .post(bffUrl + `/auth/mfa`, {
+        entityType:"DT",
+        username: getValues('email'),
         dscCertificateFile: base64Data,
       })
       .then((respose) => {
+      reset();
         console.log(respose);
         setLoader(false);
         navigate("/dt/dashboard");
