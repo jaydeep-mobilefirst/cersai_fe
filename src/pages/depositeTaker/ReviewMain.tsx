@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/arrow-down.svg";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
@@ -9,6 +9,8 @@ import Swal from "sweetalert2";
 import LoaderSpin from "../../components/LoaderSpin";
 import { backendBudsPortalBFFUrl } from "../../utils/api";
 import html2pdf from "html2pdf.js";
+import { signupSideBar } from "../../utils/hardText/signuppageText";
+import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -40,6 +42,8 @@ const useDownloadPDF = () => {
 };
 
 const ReviewMain = () => {
+  const [submitModal, setSubmitModal] = useState(false);
+  const [dtId, setDtId] = useState('');
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
@@ -69,30 +73,39 @@ const ReviewMain = () => {
         };
       });
 
-    try {
-      const response = await axios.post(
-        backendBudsPortalBFFUrl + "/deposit-taker/add-form-fields/",
-        { formData: finalResult }
-      );
-      const data = await response.data;
-
-      if (data?.success) {
+      
+      try {
+        const response = await axios.post(
+          backendBudsPortalBFFUrl + "/deposit-taker/add-form-fields/",
+          { formData: finalResult }
+        );
+        const data = await response.data;
+        
+        if (data?.success) {
+          // setSubmitModal( true)
+        setDtId(data?.data?.newDepositTaker?.uniqueId)
         Swal.fire({
           icon: "success",
-          title: "Success",
-          text: "Data submitted successfully!",
+          title: `Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`,
+          text: `Your registration request has been sent successfully and
+          approval/rejection of your registration will be informed to you
+          via email.`,customClass : {
+            title : 'text-sm'
+          }
         });
         Navigate("/");
       } else {
         Swal.fire({
           icon: "error",
           title: "Something went wrong",
+          text :"Please try again"
         });
       }
     } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Something went wrong",
+        text :"Please try again"
       });
       setLoader(false);
     }
@@ -118,7 +131,14 @@ const ReviewMain = () => {
                         {section?.sectionName}
                       </p>
                       <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
-                        {/* {section.buttonText} */} Edit
+                       {
+                        section?.sectionName !== "Verification" ?
+                        <Link to={signupSideBar.find((sec) => sec?.description === section?.sectionName)?.path + "?edit=true"}>
+                          Edit
+                        </Link>
+                       :
+                       "Success"
+                       } 
                       </button>
                     </div>
 
@@ -137,11 +157,11 @@ const ReviewMain = () => {
                                   className="sm:mr-[48px] flex justify-between"
                                   key={idx}
                                 >
-                                  <div className="opacity-60">
+                                  <div className="text-gray-500">
                                     {field.label}
                                     <span className="text-[#ff0000]">*</span>
                                   </div>
-                                  <div>{field.userInput}</div>
+                                  <div>{field?.dscFileNAme !== "" && field?.dscFileNAme !== undefined ? field?.dscFileNAme : field.userInput}</div>
                                 </div>
                               );
                             })}
@@ -201,7 +221,7 @@ const ReviewMain = () => {
             </div>
           </div>
         </div>
-
+         <SuccessPopup closePopup={() => {setSubmitModal(false); setLoader(false); Navigate('/')}} showPopup={() => setSubmitModal(true)} toggle={submitModal} dtID={dtId}/>
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
             © 2024 Protean BUDs, All Rights Reserved.

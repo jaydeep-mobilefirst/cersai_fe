@@ -1,5 +1,4 @@
 import closeCircle from "../../../assets/images/closeCircle.svg";
-import Modal from 'react-modal';
 import React, { useState } from "react";
 import RegisterModel from "./RegisterModal";
 

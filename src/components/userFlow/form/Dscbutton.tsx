@@ -11,6 +11,7 @@ import React, {
   
   interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     onFileUpload?: (file: File | null) => void;
+    fname ?: string
   }
   
   const DscButton: FC<ButtonProps> = forwardRef<
@@ -19,6 +20,7 @@ import React, {
   >((props, ref) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [fileSelected, setFileSelected] = useState(false); // State to track file selection
+    const [fileName, setFileName] = useState<string | undefined>(props?.fname)
     const { onFileUpload, ...restProps } = props;
   
     const handleButtonClick = () => {
@@ -27,6 +29,12 @@ import React, {
   
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
+      if (file) {
+        setFileName(file?.name)
+      }
+      else{
+        setFileName('')
+      }
       setFileSelected(!!file); // Update the state based on whether a file is selected
       if (file && onFileUpload) {
         onFileUpload(file);
@@ -59,7 +67,7 @@ import React, {
                     Upload DSC
                   </h6>
                   <p className="text-[#1D1D1B] text-base font-normal text-gilroy-regular ">
-                    Document
+                    {fileName !== "" && fileName !== undefined ? <span className="text-sm">{fileName}</span> : "Document"}
                   </p>
                 </div>
               </div>

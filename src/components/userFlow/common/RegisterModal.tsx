@@ -153,10 +153,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
               else{
                 return f
               }
-            })
-
-            console.log({modifiedFormFields});
-            
+            })            
             let obj = {
               dropdownData,
               ...response?.data?.data,

@@ -28,3 +28,41 @@ export const convertFileToBase64 = (
 
   reader.readAsArrayBuffer(file);
 };
+
+export function convertFileToBase64Async (file : File) : Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const buffer = e.target?.result;
+      if (buffer instanceof ArrayBuffer) {
+        const byteArray = new Uint8Array(buffer);
+
+        // Convert to hexadecimal
+        const hexString = byteArray.reduce(
+          (acc, byte) => acc + byte.toString(16).padStart(2, "0"),
+          ""
+        );
+
+        // Convert hex to Base64
+        const base64Encoded = btoa(
+          hexString
+            .match(/\w{2}/g)
+            ?.map((a) => String.fromCharCode(parseInt(a, 16)))
+            .join("") || ""
+        );
+
+        resolve(base64Encoded);
+      } else {
+        reject(new Error('Failed to read file as ArrayBuffer'));
+      }
+    };
+
+    reader.onerror = function () {
+      reject(new Error('Error occurred while reading the file'));
+    };
+
+    reader.readAsArrayBuffer(file);
+  });
+}
+
