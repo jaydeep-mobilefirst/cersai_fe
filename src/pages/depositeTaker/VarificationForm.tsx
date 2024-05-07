@@ -7,36 +7,51 @@ import SelectButton from "../../components/userFlow/form/SelectButton";
 import { useContext, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
+import VerificationSuccess from "../../components/userFlow/common/VerificationSucess";
+import VerificationFailed from "../../components/userFlow/common/VerificationFailed";
 
 type Props = {};
 
 const VerificationForm = (props: Props) => {
   const [loader, setLoader] = useState(false);
-  const {onChange, handleValidationChecks} = useContext(FormHandlerContext)
+  const { onChange, handleValidationChecks } = useContext(FormHandlerContext);
   const Navigate = useNavigate();
-  const {allFormData, setAllFormData} = useDepositTakerRegistrationStore(state => state)
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Verification");
-  const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
+  const { allFormData, setAllFormData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Verification"
+  );
+  const formFields = allFormData?.formFields?.form_fields?.filter(
+    (f: any) => f?.sectionId === sectionId?.id
+  );
   const screenWidth = useScreenWidth();
 
- 
-  const onSubmit = async (event : any) => {
+  const [showPopupModel, setShowPopupModel] = useState(false);
+  const closePopup = () => {
+    setShowPopupModel(false);
+  };
+
+  const showPopup = () => {
+    Navigate("/depositetaker/signup/entitydetails");
+  };
+
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true)
-    const noError = await handleValidationChecks(formFields)    
-    setLoader(false)
-    
+    setLoader(true);
+    const noError = await handleValidationChecks(formFields);
+    setLoader(false);
+
     if (noError) {
-      Navigate('/depositetaker/signup/entitydetails')
+      // Navigate("/depositetaker/signup/entitydetails");
+      setShowPopupModel(true);
     }
-  };  
-  
+  };
+
   return (
     <>
       <div className="">
-        <form
-          className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
-        >
+        <form className="flex items-center justify-between flex-col h-full lg:h-[100vh]">
           <div
             style={{
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
@@ -48,85 +63,120 @@ const VerificationForm = (props: Props) => {
             </h1>
             <div className="bg-white p-4 lg:p-[48px]">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                {
-                  formFields && formFields?.length > 0 && formFields?.map((field : any, idx : number) => {
-                    const fieldType = allFormData?.fieldTypes?.find((type : any) => type?.id === field?.typeId)?.name;
+                {formFields &&
+                  formFields?.length > 0 &&
+                  formFields?.map((field: any, idx: number) => {
+                    const fieldType = allFormData?.fieldTypes?.find(
+                      (type: any) => type?.id === field?.typeId
+                    )?.name;
                     // console.log({fieldType});
 
                     switch (fieldType) {
-                      case 'text':
-                      case 'number':
-                      case 'password':
-                        return <div>
-                          <label
-                            htmlFor={field?.label}
-                            className="block text-gray-700 text-sm font-bold mb-2"
-                          >
-                            {field?.label}
-                            {field?.regFormFieldsValidations && 
-                              field?.regFormFieldsValidations?.some((v : any) => v?.id === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
-                              &&
-                              <span className="text-[#ff0000]">*</span>}
-                          </label>
-                          <InputFields
-                            value={field?.userInput}
-                            onChange={(e) => onChange(e, field, fieldType)}
-                            type={fieldType}
-                            id={field?.label}
-                            placeholder={field?.placeholder}
-                          />
-                          <span className="text-red-500">
-                            {field?.error}
-                          </span>
-                        </div>
-                      case 'textarea':
-                         return  <div className="">
-                         <label
-                           htmlFor={field?.label}
-                           className="text-base font-normal text-text-gilroy-medium"
-                         >
-                           {field?.label}
-                            {field?.regFormFieldsValidations && 
-                              field?.regFormFieldsValidations?.some((v : any) => v?.id === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
-                              &&
-                              <span className="text-[#ff0000]">*</span>}
-                         </label>
-                         <TextArea
-                           value={field?.userInput}
-                           onChange={(e) => onChange(e, field, fieldType)}
-                           id={field?.label}
-                           placeholder={field?.placeholder}
-                         />
-                         <span className="text-red-500">
-                            {field?.error}
-                          </span>
-                       </div>
-                      case 'select':
-                        return                <div>
-                        <label
-                          htmlFor="district"
-                          className="text-base font-normal text-gilroy-medium"
-                        >
-                          {field?.label} <span className="text-red-500">*</span>
-                        </label>
-                        <SelectButton
-                          onSelect={(data) => onChange(data, field, fieldType)}
-                          options={field?.dropdown_options?.options?.map((d : any) => ({value : d?.name, label : d?.name, id : d?.id}))}
-                          selectedOption={field?.userInput}
-                          placeholder={field?.placeholder}
-                         //  searchInputOnchange={handleSearchInputChange3}
-                         //  searchInputValue={searchInputValue3}
-                          showSearchInput={true}
-                        />
-                        <span className="text-red-500">
-                            {field?.error}
-                          </span>
-                      </div>                          
+                      case "text":
+                      case "number":
+                      case "password":
+                        return (
+                          <div>
+                            <label
+                              htmlFor={field?.label}
+                              className="block text-gray-700 text-sm font-bold mb-2"
+                            >
+                              {field?.label}
+                              {field?.regFormFieldsValidations &&
+                                field?.regFormFieldsValidations?.some(
+                                  (v: any) =>
+                                    v?.id ===
+                                    allFormData?.validations?.find(
+                                      (d: any) =>
+                                        d?.vld_type_name === "Required"
+                                    )?.id
+                                ) && <span className="text-[#ff0000]">*</span>}
+                            </label>
+                            <InputFields
+                              value={field?.userInput}
+                              onChange={(e) => onChange(e, field, fieldType)}
+                              type={fieldType}
+                              id={field?.label}
+                              placeholder={field?.placeholder}
+                            />
+                            <span className="text-red-500">{field?.error}</span>
+                          </div>
+                        );
+                      case "textarea":
+                        return (
+                          <div className="">
+                            <label
+                              htmlFor={field?.label}
+                              className="text-base font-normal text-text-gilroy-medium"
+                            >
+                              {field?.label}
+                              {field?.regFormFieldsValidations &&
+                                field?.regFormFieldsValidations?.some(
+                                  (v: any) =>
+                                    v?.id ===
+                                    allFormData?.validations?.find(
+                                      (d: any) =>
+                                        d?.vld_type_name === "Required"
+                                    )?.id
+                                ) && <span className="text-[#ff0000]">*</span>}
+                            </label>
+                            <TextArea
+                              value={field?.userInput}
+                              onChange={(e) => onChange(e, field, fieldType)}
+                              id={field?.label}
+                              placeholder={field?.placeholder}
+                            />
+                            <span className="text-red-500">{field?.error}</span>
+                          </div>
+                        );
+                      case "select":
+                        return (
+                          <div>
+                            <label
+                              htmlFor="district"
+                              className="text-base font-normal text-gilroy-medium"
+                            >
+                              {field?.label}{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <SelectButton
+                              onSelect={(data) =>
+                                onChange(data, field, fieldType)
+                              }
+                              options={field?.dropdown_options?.options?.map(
+                                (d: any) => ({
+                                  value: d?.name,
+                                  label: d?.name,
+                                  id: d?.id,
+                                })
+                              )}
+                              selectedOption={field?.userInput}
+                              placeholder={field?.placeholder}
+                              //  searchInputOnchange={handleSearchInputChange3}
+                              //  searchInputValue={searchInputValue3}
+                              showSearchInput={true}
+                            />
+                            <span className="text-red-500">{field?.error}</span>
+                          </div>
+                        );
                       default:
                         return <></>;
                     }
-                  })
-                }
+                  })}
+
+                {showPopupModel && (
+                  <VerificationSuccess
+                    closePopup={closePopup}
+                    showPopup={showPopup}
+                  />
+                )}
+
+                {showPopupModel && (
+                  <VerificationFailed
+                    closePopup={closePopup}
+                    showPopup={showPopup}
+                  />
+                )}
                 {/* <div>
                   <label
                     htmlFor="companyName"
@@ -172,7 +222,7 @@ const VerificationForm = (props: Props) => {
                   screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
                 }`,
               }}
-            > 
+            >
               <div className="flex items-center ml-auto">
                 <button
                   type="submit"
@@ -180,7 +230,7 @@ const VerificationForm = (props: Props) => {
                   onClick={onSubmit}
                   className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
-                  {loader ? <LoaderSpin/> : "Verify details"}
+                  {loader ? <LoaderSpin /> : "Verify details"}
                 </button>
               </div>
             </div>
