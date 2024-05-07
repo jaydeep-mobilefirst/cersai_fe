@@ -1,6 +1,6 @@
 import React, { createContext } from 'react'
 import { useDepositTakerRegistrationStore } from '../zust/deposit-taker-registration/registrationStore';
-import { backendBaseUrl, backendBudsPortalBFFUrl } from '../utils/api';
+import { backendBaseUrl, backendBudsPortalBFFUrl, pincodeValidationUrl } from '../utils/api';
 import axios from 'axios';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 
 interface IContextProps {
   onChange: (event: any | undefined, fieldData: any, fieldType: string) => Promise<void>
-  // handleValidations : (data : any) => Promise<void>
+  updatePanFormField: (responseData: any, panFormField: any) => Promise<boolean>
   handleValidationChecks: (formFields: any[]) => Promise<boolean>
 }
 
@@ -35,23 +35,7 @@ const FormHandlerProviders = ({children}: Props) => {
     setAllFormData(obj)
   }
 
-  const updateErrorForField = (error : string, fieldId : number) => {
-    let modifiedFormFields = allFormData?.formFields?.form_fields?.map((o : any) => {
-      if (o?.id === fieldId) {
-        return {...o, error : error};
-      }
-      else{
-        return o;
-      }
-    })
-    let obj = {
-      ...allFormData,
-      formFields : {form_fields : modifiedFormFields}
-    }            
-    setAllFormData(obj)
-  }
-
-  const updateDropdownOptions = (value : any[], fieldId : number, stateValue : string, stateId : number) => {    
+  const updateDropdownOptionsForStateAndDistrict = (value : any[], fieldId : number, stateValue : string, stateId : number) => {    
     let modifiedFormFields = allFormData?.formFields?.form_fields?.map((o : any) => {
       if (o?.id === fieldId) {
         let data = {...o, dropdown_options : {...o.dropdown_options, options : value}, error : ""}        
@@ -87,6 +71,10 @@ const FormHandlerProviders = ({children}: Props) => {
         inputValue = inputValue.toUpperCase();
       }
 
+      if (fieldData?.label) {
+        
+      }
+
       updateValue(inputValue, fieldData?.id);     
     }
     else if (fieldType === "date_picker"){
@@ -107,7 +95,7 @@ const FormHandlerProviders = ({children}: Props) => {
                   alert("Error Fetching Districts! Please try again later!")
                 }
                 let districts = await fetchDistricts.data?.data?.list;
-                updateDropdownOptions(districts, districtFormField?.id, event?.value, fieldData?.id)
+                updateDropdownOptionsForStateAndDistrict(districts, districtFormField?.id, event?.value, fieldData?.id)
               }
               break;
           
@@ -118,6 +106,69 @@ const FormHandlerProviders = ({children}: Props) => {
         }
       }
     }
+    else if(fieldType === "pincode"){
+      const { value } = event.target;
+      if (value?.length <= 6) {
+        updateValue(value, fieldData?.id);
+      }
+
+      if (value.length === 6) {
+       const response = await axios.get(`${pincodeValidationUrl}/${value}`)
+       const data = response?.data;  
+       console.log({data});
+       let stateFormField = allFormData?.formFields?.form_fields?.find((o : any) => o?.label?.toLowerCase() === "state" && fieldData?.sectionId === o?.sectionId);
+       let districtFormField = allFormData?.formFields?.form_fields?.find((o : any) => o?.label?.toLowerCase() === "district" && fieldData?.sectionId === o?.sectionId);
+        if (data[0]?.Status === "Success") {
+          let locationData = data[0]?.PostOffice[0]
+          console.log({locationData});
+          
+          handlePincodeSucess({
+              districtField : districtFormField, 
+              stateField : stateFormField, 
+              stateValue : locationData?.State, 
+              districtValue : locationData?.District,
+              pinCodeField : fieldData,
+              pinCodeValue : value         
+            },
+          true
+          )          
+        }
+        else{
+          handlePincodeSucess({
+            districtField : districtFormField, 
+            stateField : stateFormField, 
+            stateValue : "", 
+            districtValue : "",
+            pinCodeField : fieldData,
+            pinCodeValue : value         
+          },
+        false
+        )     
+        }
+      }
+    }
+  }
+
+  const handlePincodeSucess = (data : {stateField : any, stateValue : string, districtField : any, districtValue : string, pinCodeField : any, pinCodeValue : string}, disabled : boolean) => {    
+    let modifiedFormFields = allFormData?.formFields?.form_fields?.map((o : any) => {
+      if (o?.id === data?.stateField?.id) {
+        return {...o, userInput : data?.stateValue, error : "", disabled : disabled};
+      }
+      else if(o?.id === data?.districtField?.id){
+        return {...o, userInput : data?.districtValue, error : "", disabled : disabled};
+      }
+      else if (o?.id === data?.pinCodeField?.id){
+        return {...o, userInput : data?.pinCodeValue, error : ""};
+      }
+      else{
+        return o;
+      }
+    })
+    let obj = {
+      ...allFormData,
+      formFields : {form_fields : modifiedFormFields}
+    }            
+    setAllFormData(obj)
   }
 
   const handleValidations = async(errorData : any) : Promise<void> => {
@@ -178,8 +229,29 @@ const FormHandlerProviders = ({children}: Props) => {
     return await ValidationSubmitAPI(formFieldsForValidations);
   }
 
+   const updatePanFormField = async (responseData : any, panFormField  : any) : Promise<boolean> => {
+    if (responseData?.status !== "success") {
+      let modifiedFormFields = allFormData?.formFields?.form_fields?.map((o : any) => {
+        if (o?.id === panFormField?.id) {
+          return {...o, error : responseData?.message}
+        }
+        else{
+          return o;
+        }
+      })
+      let obj = {
+        ...allFormData,
+        formFields : {form_fields : modifiedFormFields}
+      }            
+      setAllFormData(obj)
+
+      return false;
+    }
+    return true;
+  }
+
   return (
-    <FormHandlerContext.Provider  value={{onChange, handleValidationChecks}}>
+    <FormHandlerContext.Provider  value={{onChange, handleValidationChecks, updatePanFormField}}>
       {children}
     </FormHandlerContext.Provider>
   )

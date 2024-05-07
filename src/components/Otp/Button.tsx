@@ -3,16 +3,17 @@ import React from "react";
 interface ButtonProps {
   label: string;
   variant: "outlined" | "filled";
-  onClick?: () => void;
+  onClick?: (event:  any) => void;
+  disabled ?: boolean
 }
 
-const Button: React.FC<ButtonProps> = ({ label, variant, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ label, variant, onClick, disabled}) => {
   const className =
     variant === "filled"
-      ? "bg-green-500 text-white font-medium py-2 px-4 rounded-xl w-[150px] "
-      : "border border-green-500 text-green-500 font-medium py-2 px-4 rounded-xl w-[150px] ";
+      ? "bg-[#54B749] text-white py-3 px-4 rounded-xl w-[200px] "
+      : "border border-[#54B749] py-3 px-4 rounded-xl w-[200px] text-[#54B749]";
   return (
-    <button onClick={onClick} className={className}>
+    <button onClick={onClick} className={className} disabled={disabled ? disabled : false}>
       {label}
     </button>
   );

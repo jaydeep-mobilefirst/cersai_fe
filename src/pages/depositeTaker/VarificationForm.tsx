@@ -9,12 +9,15 @@ import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
 import VerificationSuccess from "../../components/userFlow/common/VerificationSucess";
 import VerificationFailed from "../../components/userFlow/common/VerificationFailed";
+import axios from "axios";
 
 type Props = {};
 
 const VerificationForm = (props: Props) => {
   const [loader, setLoader] = useState(false);
   const { onChange, handleValidationChecks } = useContext(FormHandlerContext);
+  const { onChange, handleValidationChecks, updatePanFormField } =
+    useContext(FormHandlerContext);
   const Navigate = useNavigate();
   const { allFormData, setAllFormData } = useDepositTakerRegistrationStore(
     (state) => state
@@ -38,13 +41,47 @@ const VerificationForm = (props: Props) => {
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
+
+    // Verify Pan
+
+    const verifyPan = async (): Promise<boolean> => {
+      try {
+        let company = formFields?.find(
+          (field: any, i: number) =>
+            field?.label === "Company Name (As per Pan)"
+        );
+        let pan = formFields?.find(
+          (field: any, i: number) => field?.label === "Pan Number"
+        );
+
+        let response = await axios.post(
+          "http://34.149.91.231/cms/pandirectory/api",
+          {
+            name: company?.userInput?.toUpperCase(),
+            pan_no: pan?.userInput,
+          }
+        );
+        const data = response.data;
+
+        const panUpdate = updatePanFormField(data, pan);
+
+        return panUpdate;
+      } catch (error) {
+        alert("Error while verifying pan, Please try later!");
+        return false;
+      }
+    };
+
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
+    let panVerified = undefined;
+    if (noError) {
+      panVerified = await verifyPan();
+    }
     setLoader(false);
 
-    if (noError) {
-      // Navigate("/depositetaker/signup/entitydetails");
-      setShowPopupModel(true);
+    if (noError && panVerified) {
+      Navigate("/depositetaker/signup/entitydetails");
     }
   };
 
@@ -75,6 +112,7 @@ const VerificationForm = (props: Props) => {
                       case "text":
                       case "number":
                       case "password":
+                      case "phone_number":
                         return (
                           <div>
                             <label
@@ -98,6 +136,7 @@ const VerificationForm = (props: Props) => {
                               type={fieldType}
                               id={field?.label}
                               placeholder={field?.placeholder}
+                              disabled={field?.disabled || false}
                             />
                             <span className="text-red-500">{field?.error}</span>
                           </div>
@@ -159,6 +198,38 @@ const VerificationForm = (props: Props) => {
                             <span className="text-red-500">{field?.error}</span>
                           </div>
                         );
+
+                      case "pincode":
+                        return (
+                          <div>
+                            <label
+                              htmlFor={field?.label}
+                              className="block text-gray-700 text-sm font-bold mb-2"
+                            >
+                              {field?.label}
+                              {field?.regFormFieldsValidations &&
+                                field?.regFormFieldsValidations?.some(
+                                  (v: any) =>
+                                    v?.id ===
+                                    allFormData?.validations?.find(
+                                      (d: any) =>
+                                        d?.vld_type_name === "Required"
+                                    )?.id
+                                ) && <span className="text-[#ff0000]">*</span>}
+                            </label>
+                            <InputFields
+                              max={6}
+                              min={6}
+                              value={field?.userInput}
+                              onChange={(e) => onChange(e, field, fieldType)}
+                              type={"number"}
+                              id={field?.label}
+                              placeholder={field?.placeholder}
+                            />
+                            <span className="text-red-500">{field?.error}</span>
+                          </div>
+                        );
+
                       default:
                         return <></>;
                     }
