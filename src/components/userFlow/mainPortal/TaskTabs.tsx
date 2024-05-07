@@ -17,7 +17,7 @@ const TaskTabs = (props: Props) => {
   const { pathname } = location;
 
   useEffect(() => {
-    const cmsPath = pathname.split("/")[3];
+    const cmsPath = pathname.split("/")[2];
     setUrl(cmsPath);
   }, [pathname]);
 
@@ -25,8 +25,7 @@ const TaskTabs = (props: Props) => {
     setActiveTab(tabName);
   };
 
-  console.log({url});
-  
+  console.log({ url });
 
   return (
     <div className="flex-col justify-center items-start max-sm:items-center inline-flex border-b w-full">

@@ -1,17 +1,45 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 // import { authBaseUrl } from "../../utils/api";
+type DropdownMenuProps = {
+  toggleDropdown: () => void; // This is a function prop
+  isOpen: boolean; // This is a boolean state
+};
 
-const DropdownMenu: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const DropdownMenu: React.FC<DropdownMenuProps> = ({
+  isOpen,
+  toggleDropdown,
+}) => {
+  // const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+  // const toggleDropdown = () => {
+  //   setIsOpen(!isOpen);
+  // };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        toggleDropdown();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, toggleDropdown]);
 
   const handleLogOut = () => {
     logoutApiHandle();
@@ -35,8 +63,8 @@ const DropdownMenu: React.FC = () => {
   };
 
   return (
-    <div className="relative z-50">
-      <div onClick={toggleDropdown}>
+    <div className="relative z-50" ref={dropdownRef}>
+      <div className="cursor-pointer" onClick={toggleDropdown}>
         {isOpen ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -84,12 +112,15 @@ const DropdownMenu: React.FC = () => {
             >
               Dashboard
             </div>
-            <div
-              className="block px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100"
-              role="menuitem"
-            >
-              Setting
-            </div>
+            <Link to={"/dt/profile?current=entity"}>
+              <div
+                className="block px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+              >
+                Setting
+              </div>
+            </Link>
+
             {loader ? (
               <div className="flex items-start px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100">
                 <div>
