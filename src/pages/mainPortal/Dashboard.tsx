@@ -1,18 +1,17 @@
-import React from 'react'
-import TaskTabs from '../../components/userFlow/mainPortal/TaskTabs'
-import { Outlet } from 'react-router-dom'
+import React from "react";
+import TaskTabs from "../../components/userFlow/mainPortal/TaskTabs";
+import { Outlet } from "react-router-dom";
 
-type Props = {}
+type Props = {};
 
 const Dashboard = (props: Props) => {
   return (
-    <div className='relative xl:ml-[40px]'>
-      <div className="mt-6">
-        <TaskTabs />
-      </div>
-      <Outlet />
+    <div className="relative xl:ml-[40px]">
+      <div className="mt-6">{/* <TaskTabs /> */}</div>
+      {/* <Outlet /> */}
+      in progress page
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

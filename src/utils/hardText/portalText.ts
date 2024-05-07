@@ -32,33 +32,33 @@ export const profileSideBarList = [
   {
     title: "Entity Details",
     url: "entity",
-    rurl: "/dt/dashboard/profile?current=entity",
+    rurl: "/dt/profile?current=entity",
     percentage: 0,
   },
   {
     title: "Nodal Details",
     url: "nodal",
-    rurl: "/dt/dashboard/profile?current=nodal",
+    rurl: "/dt/profile?current=nodal",
     percentage: 25,
   },
   {
     title: "Regulator Details",
     url: "regulator",
-    rurl: "/dt/dashboard/profile?current=regulator",
+    rurl: "/dt/profile?current=regulator",
     percentage: 50,
   },
 
   {
     title: "Upload Documents",
     url: "documents",
-    rurl: "/dt/dashboard/profile?current=documents",
+    rurl: "/dt/profile?current=documents",
     percentage: 75,
   },
 
   {
     title: "Branches",
     url: "branches",
-    rurl: "/dt/dashboard/profile?current=branches",
+    rurl: "/dt/profile?current=branches",
     percentage: 100,
   },
 ];

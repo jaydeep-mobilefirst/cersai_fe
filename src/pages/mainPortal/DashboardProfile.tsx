@@ -20,6 +20,9 @@ const DashboardProfile = (props: Props) => {
       <div className="lg:hidden mt-4">
         <ProfileResponsiveTabs />
       </div>
+      <div className="mt-6 mx-6">
+        <TaskTabs />
+      </div>
       <div className="flex flex-row">
         <div className="hidden lg:block">
           <DashboardProfileSidebar />
