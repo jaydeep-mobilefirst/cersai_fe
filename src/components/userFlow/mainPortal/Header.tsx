@@ -20,6 +20,10 @@ const Header = () => {
   const [title, setTitle] = useState(key);
   const firstName = sessionStorage.getItem("firstName");
   const lastName = sessionStorage.getItem("lastName");
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <>
@@ -47,7 +51,10 @@ const Header = () => {
           <div className="mr-4">
             <img src={Setting} alt="Setting" />
           </div>
-          <div className="flex items-center justify-center cursor-pointer">
+          <div
+            className="flex items-center justify-center cursor-pointer"
+            onClick={toggleDropdown}
+          >
             <div className="mr-3">
               <img src={G1} alt="user logo" />
             </div>
@@ -59,9 +66,8 @@ const Header = () => {
                 CERSAI
               </div>
             </div>
-
-            <DropdownMenu />
           </div>
+          <DropdownMenu toggleDropdown={toggleDropdown} isOpen={isOpen} />
         </div>
       </div>
     </>
