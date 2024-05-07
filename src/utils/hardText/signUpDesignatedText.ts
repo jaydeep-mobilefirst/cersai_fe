@@ -12,7 +12,7 @@ import exportTestHigh from '../../assets/images/exportTestHigh.svg'
 export const signupSideBarDesignated = [
     {
       id: 1,
-      path:"/designated/court/designatedDetails",
+      path:"/designated/court/designateddetails", 
       imgSrc: profile,
       imgSrcHighlighted:profileCircleHighlighted,
       description: "Court Details",

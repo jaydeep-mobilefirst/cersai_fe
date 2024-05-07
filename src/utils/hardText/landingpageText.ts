@@ -41,7 +41,7 @@ export const latestNewsComp = [
   { button: "Latest News" },
   {
     description:
-      "Are you aware about Public Interest Disclosure & Protection of Informer (PIDPI) ? Click here to know.Rejection in upload of KYC records due to mismatch of PIN Code and other matters.",
+      "Are you aware about Public Interest Disclosure & Protection of Informer (PIDPI) ? Click here to know. Rejection in upload of KYC records due to mismatch of PIN Code and other matters.",
   },
 ];
 // QueryResolutionComp Component

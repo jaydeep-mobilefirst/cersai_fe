@@ -1,29 +1,44 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import NodalDetailsSchema from "../../formValidationSchema/deposit_taker/NodalDetails.schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputFields from "../../components/userFlow/form/InputField";
 import UploadButton from "../../components/userFlow/form/UploadButton";
 import { useScreenWidth } from "../../utils/screenSize";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
+import LoaderSpin from "../../components/LoaderSpin";
 
 const NodalDetailsDesignated = () => {
   const screenWidth = useScreenWidth();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(NodalDetailsSchema),
-  });
+  const [params, setParams] = useSearchParams();
+  const { onChange, handleValidationChecks } = useContext(FormHandlerContext)
+  const [loader, setLoader] = useState(false);
+  const Navigate = useNavigate();
 
-  const handleOnSubmit = (data: any) => {
-    console.log({ data });
-  };
+  const { allFormData } = useDepositTakerRegistrationStore(state => state)
+
+  const sectionId = allFormData?.entitySections?.find((s: any) => s?.sectionName === "Nodal Details");
+  const formFields = allFormData?.formFields?.form_fields?.filter((f: any) => f?.sectionId === sectionId?.id);
+
+
+  const onSubmit = async (event: any) => {
+    event?.preventDefault();
+    setLoader(true)
+    const noError = await handleValidationChecks(formFields)
+    setLoader(false)
+
+    if (noError) {
+      Navigate('/designated/court/reviewdetails')
+    };
+  }
 
   return (
     <>
       <form
-        onSubmit={handleSubmit(handleOnSubmit)}
+        onSubmit={onSubmit}
         className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
       >
         <div
@@ -36,88 +51,7 @@ const NodalDetailsDesignated = () => {
             <h1 className="text-2xl font-bold mb-6 text-gilroy-medium">
               Nodal Details
             </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-              <div>
-                <label
-                  htmlFor="nodalOfficerName"
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                >
-                  Nodal Officer Name
-                  <span className="text-red-500 text-gilroy-medium">*</span>
-                </label>
-                <InputFields
-                  type="text"
-                  id="nodalOfficerName"
-                  placeholder="Type here"
-                  {...register("nodalOfficerName")}
-                />
-                <span className="text-red-500">
-                  {errors.nodalOfficerName?.message}
-                </span>
-              </div>
-              <div>
-                <label
-                  htmlFor="nodalOfficerEmail"
-                  className="block text-gray-700 text-sm font-bold mb-2 text-gilroy-medium"
-                >
-                  Nodal Officer Email <span className="text-red-500">*</span>
-                </label>
-                <InputFields
-                  type="email"
-                  id="nodalOfficerEmail"
-                  placeholder="Type here"
-                  {...register("nodalOfficerEmail")}
-                />
-                <span className="text-red-500">
-                  {errors.nodalOfficerEmail?.message}
-                </span>
-              </div>
-              <div>
-                <label
-                  htmlFor="nodalMobileNumber"
-                  className="block text-gray-700 text-sm font-bold mb-2 text-gilroy-medium"
-                >
-                  Nodal Officer Mobile Number
-                  <span className="text-red-500">*</span>
-                </label>
-                <InputFields
-                  type="text"
-                  id="nodalMobileNumber"
-                  placeholder="type"
-                  {...register("nodalOfficerMobileNumber")}
-                />
-                <span className="text-red-500">
-                  {errors.nodalOfficerMobileNumber?.message}
-                </span>
-              </div>
-              <div>
-                <label
-                  htmlFor="nodalOfficerDesgnation"
-                  className="block text-gray-700 text-sm font-bold mb-2 text-gilroy-medium"
-                >
-                  Nodal Officer Designation
-                  <span className="text-red-500">*</span>
-                </label>
-                <InputFields
-                  type="text"
-                  id="nodalOfficerDesgnation"
-                  placeholder="Type here"
-                  {...register("nodalOfficerDesignation")}
-                />
-                <span className="text-red-500">
-                  {errors.nodalOfficerDesignation?.message}
-                </span>
-              </div>
-              <div className="mt-7">
-                {/* <label
-                  htmlFor="Dsc"
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                >
-                  DSC
-                </label> */}
-                <UploadButton id="Dsc" type="button" />
-              </div>
-            </div>
+            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} />
           </div>
         </div>
 
@@ -145,7 +79,10 @@ const NodalDetailsDesignated = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-              <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
+              <button
+                role="button"
+                onClick={() => Navigate('/designated/court/uploaddocuments')}
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
                 Back
               </button>
             </div>
@@ -154,7 +91,7 @@ const NodalDetailsDesignated = () => {
                 type="submit"
                 className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold"
               >
-                Save and Continue
+                {loader ? <LoaderSpin /> : "Save And Continue"}
               </button>
             </div>
           </div>
