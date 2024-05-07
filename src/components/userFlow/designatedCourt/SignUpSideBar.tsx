@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import HeadComp from "./HeadCom";
@@ -29,11 +29,21 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
   };
 
   const handleClick = (des: string, num: number, path: string) => {
-    setPercentage(num);
-    setPage(path);
+    // setPercentage(num);
+    // setPage(path);
     Navigate(path);
   };
 
+  useEffect(() => {
+    const data = signupSideBarDesignated.find((p) => p.path === location.pathname);
+    setPercentage(data?.percentage);
+    if (data) {
+      setPage(data?.path);
+    }
+  }, [location.pathname])
+
+  console.log(location.pathname);
+  
   return (
     <div className="sm:w-[300px] w-[250px] h-[100vh] md:w-[349px] bg-[#EEF7EB]">
       {/* {isMenuOpen && (
@@ -73,7 +83,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
                     handleClick(item.description, item.percentage, item.path)
                   }
                   key={item.id}
-                  className={`mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#385723] rounded-lg justify-between items-center inline-flex ${
+                  className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#385723] rounded-lg justify-between items-center inline-flex ${
                     item.path === page
                       ? "bg-[#385723] text-white"
                       : "bg-white text-black"
@@ -100,7 +110,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
                       />
                     )}
 
-                    <p className="ml-[10px] text-base font-normal leading-tight">
+                    <p className="ml-[10px]  text-base font-normal leading-tight">
                       {item.description}
                     </p>
                   </div>

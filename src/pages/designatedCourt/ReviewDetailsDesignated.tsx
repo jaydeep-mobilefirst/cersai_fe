@@ -1,11 +1,13 @@
 // @ts-nocheck
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/arrow-down.svg";
 import html2pdf from "html2pdf.js";
 import Button from "../../components/userFlow/form/Button";
 import folderOpen from "../../assets/images/folder-open.svg";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import { signupSideBarDesignated } from "../../utils/hardText/signUpDesignatedText";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -21,6 +23,7 @@ const useDownloadPDF = () => {
 };
 
 const ReviewDetailsDesignated = () => {
+  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
@@ -71,52 +74,55 @@ const ReviewDetailsDesignated = () => {
         <main className="flex-grow p-6 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             <h1 className="text-2xl font-bold mb-6">Review</h1>
-            {sections.map((section, index) => (
-              <div className="mb-[16px]" key={index}>
-                <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold">
-                  <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                    {section.title}
-                  </p>
-                  <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
-                    {section.buttonText}
-                  </button>
-                </div>
-
-                <div className="shadow-sm p-5 rounded-md ">
-                  <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                    <div className="w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px]">
-                      {section.fieldsLeft.map((field, idx) => (
-                        <div
-                          className="sm:mr-[48px] flex justify-between"
-                          key={idx}
-                        >
-                          <div className="opacity-60">
-                            {field.label}
-                            <span className="text-[#ff0000]">*</span>
-                          </div>
-                          <div>{field.value}</div>
-                        </div>
-                      ))}
+            {allFormData &&
+              allFormData?.entitySections?.map(
+                (section: any, index: number) => (
+                  <div className="mb-[16px]" key={index}>
+                    <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold">
+                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                        {section?.sectionName}
+                      </p>
+                      <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                       {
+                        section?.sectionName !== "Verification" ?
+                        <Link to={signupSideBarDesignated.find((sec) => sec?.description === section?.sectionName)?.path + "?edit=true"}>
+                          Edit
+                        </Link>
+                       :
+                       "Success"
+                       } 
+                      </button>
                     </div>
-                    <div className="w-full grid gap-y-[16px]">
-                      {section.fieldsRight.map((field, idx) => (
-                        <div
-                          className="sm:ml-[48px] flex justify-between"
-                          key={idx}
-                        >
-                          <div className="opacity-60">
-                            {field.label}
-                            <span className="text-[#ff0000]">*</span>
-                          </div>
-                          <div>{field.value}</div>
+
+                    <div className="shadow-sm p-5 rounded-md ">
+                      <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
+                        <div className="w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px] grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          {allFormData?.formFields?.form_fields
+                            ?.filter((f: any) => f?.sectionId === section?.id)
+                            ?.map((field: any, idx: number) => {
+                              console.log({
+                                field,
+                              });
+
+                              return (
+                                <div
+                                  className="sm:mr-[48px] flex justify-between"
+                                  key={idx}
+                                >
+                                  <div className="text-gray-500">
+                                    {field.label}
+                                    <span className="text-[#ff0000]">*</span>
+                                  </div>
+                                  <div>{field?.dscFileNAme !== "" && field?.dscFileNAme !== undefined ? field?.dscFileNAme : field.userInput}</div>
+                                </div>
+                              );
+                            })}
                         </div>
-                      ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
-            <div></div>
+                )
+              )}
             <div>
               <div>
                 <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold mb-4">
@@ -148,52 +154,6 @@ const ReviewDetailsDesignated = () => {
                 </div>
               </div>
             </div>
-            {sections1.map((section, index) => (
-              <div className="mb-[16px]" key={index}>
-                <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold">
-                  <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                    {section.title}
-                  </p>
-                  <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
-                    {section.buttonText}
-                  </button>
-                </div>
-
-                <div className="shadow-sm p-5 rounded-md ">
-                  <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                    <div className="  w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px]">
-                      {section.fieldsLeft.map((field, idx) => (
-                        <div
-                          className="sm:mr-[48px] flex justify-between "
-                          key={idx}
-                        >
-                          <div className="opacity-60">
-                            {field.label}
-                            <span className="text-[#ff0000]">*</span>
-                          </div>
-                          <div>{field.value}</div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="w-full grid gap-y-[16px]">
-                      {section.fieldsRight.map((field, idx) => (
-                        <div
-                          className="sm:ml-[48px] flex justify-between"
-                          key={idx}
-                        >
-                          <div className="opacity-60">
-                            {field.label}
-                            <span className="text-[#ff0000]">*</span>
-                          </div>
-                          <div>{field.value}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
           <div className="flex flex-shrink-0 mt-[20px]">
             <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">

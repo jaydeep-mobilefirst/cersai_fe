@@ -5,6 +5,7 @@ import SignUpSideBar from "../../components/userFlow/designatedCourt/SignUpSideB
 
 import MenuIcon from "../../assets/images/menu.svg";
 import CrossIcon from "../../assets/images/CrossIcon.svg";
+import FormHandlerProviders from "../../contextAPI/useFormFieldHandlers";
 
 const DesignatedCourtRegister = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,7 +59,9 @@ const DesignatedCourtRegister = () => {
       {/* <Outlet/> */}
       <div className=" flex w-full flex-col">
         <div className="w-full mt-20 lg:mt-0">
+        <FormHandlerProviders>
           <Outlet />
+        </FormHandlerProviders>
         </div>
       </div>
     </div>
