@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import SignUpSideBar from "../../components/userFlow/regulatorCourt/SignUpSideBar";
 
-import MenuIcon from "../../assets/images/menu.svg";
-import CrossIcon from "../../assets/images/CrossIcon.svg";
+import FormHandlerProviders from "../../contextAPI/useFormFieldHandlers";
 
 const RegulatorRegister = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,7 +56,9 @@ const RegulatorRegister = () => {
       {/* <Outlet/> */}
       <div className=" flex w-full flex-col">
         <div className="w-full mt-20 lg:mt-0">
-          <Outlet />
+          <FormHandlerProviders>
+            <Outlet />
+          </FormHandlerProviders>
         </div>
       </div>
     </div>
