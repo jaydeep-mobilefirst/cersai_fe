@@ -6,11 +6,13 @@ import { bffUrl } from "../../../utils/api";
 type DropdownMenuProps = {
   toggleDropdown: () => void; // This is a function prop
   isOpen: boolean; // This is a boolean state
+  setIsOpen: (open: boolean) => void; // This is a function
 };
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
   isOpen,
   toggleDropdown,
+  setIsOpen,
 }) => {
   // const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
@@ -60,6 +62,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         navigate("/");
         sessionStorage.clear();
       });
+  };
+
+  const handleSetting = () => {
+    setIsOpen(false);
+    navigate("/dt/profile?current=entity");
   };
 
   return (
@@ -112,14 +119,15 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             >
               Dashboard
             </div>
-            <Link to={"/dt/profile?current=entity"}>
-              <div
-                className="block px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100"
-                role="menuitem"
-              >
-                Setting
-              </div>
-            </Link>
+            {/* <Link to={"/dt/profile?current=entity"}> */}
+            <div
+              onClick={handleSetting}
+              className="block px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100 cursor-pointer"
+              role="menuitem"
+            >
+              Setting
+            </div>
+            {/* </Link> */}
 
             {loader ? (
               <div className="flex items-start px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100">
