@@ -18,21 +18,36 @@ const NodalDetails = (props: Props) => {
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [showOTPModel, setShowOTPModel] = useState<boolean>(false);
-  const {onChange, handleValidationChecks} = useContext(FormHandlerContext)
+  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
   const [loader, setLoader] = useState(false);
 
   const {allFormData} = useDepositTakerRegistrationStore(state => state)
 
   const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Nodal Details");
-  const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
+  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  ? allFormData?.formFields?.form_fields?.filter(
+      (f: any) => f?.sectionId === sectionId?.id
+    )
+  : [];
+  const fileFields = Array.isArray(allFormData?.registrationDocumentFields)
+  ? allFormData?.registrationDocumentFields?.filter(
+      (f: any) => f?.sectionId === sectionId?.id
+    )
+  : [];
   
   const onSubmit = async (event : any) => {
     event?.preventDefault();
     setLoader(true)
-    const noError = await handleValidationChecks(formFields)    
+    // False means validation fail
+    const noError = await handleValidationChecks(formFields)
+    let documentErrors = false
+    // False means validation fail
+    if (noError) {
+      documentErrors = await handleDocumentValidations(sectionId?.id);  
+    }
     setLoader(false)
 
-    if (noError) {
+    if (noError && documentErrors) {
       const edit = params.get('edit');
       const nodalVerification = localStorage.getItem('nodalVerification');
       console.log({nodalVerification});
@@ -45,6 +60,8 @@ const NodalDetails = (props: Props) => {
     }
   }; 
 
+  console.log({allFormData});
+  
 
   return (
     <>
@@ -59,7 +76,7 @@ const NodalDetails = (props: Props) => {
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
             <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange}/>
+            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={fileFields} onFileChange={onFileChange}/>
           </div>
         </div>
         {showOTPModel && <OtpPage closeShowOtpModel={() => setShowOTPModel(false)} />}
