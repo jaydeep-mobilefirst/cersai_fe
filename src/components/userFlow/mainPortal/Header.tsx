@@ -17,7 +17,7 @@ const Header = () => {
   //   ?.map((k) => k.slice(0, 1).toUpperCase() + k.slice(1).toLowerCase())
   //   ?.join(" ");
 
-  const title = localStorage.getItem('current_tab');
+  const title = localStorage.getItem("current_tab");
 
   const firstName = sessionStorage.getItem("firstName");
   const lastName = sessionStorage.getItem("lastName");
@@ -68,7 +68,11 @@ const Header = () => {
               </div>
             </div>
           </div>
-          <DropdownMenu toggleDropdown={toggleDropdown} isOpen={isOpen} />
+          <DropdownMenu
+            toggleDropdown={toggleDropdown}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          />
         </div>
       </div>
     </>
