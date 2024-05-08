@@ -20,8 +20,6 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const [loader, setLoader] = useState<boolean>(false);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { entities, setEntities, setAllFormData } =
-    useDepositTakerRegistrationStore((state) => state);
 
   // const toggleDropdown = () => {
   //   setIsOpen(!isOpen);
@@ -67,60 +65,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         sessionStorage.clear();
       });
   };
-  const fetchFormFields = () => {
-    axios
-      .get(`${backendBaseUrl}/cms/registration/field-data/1`)
-      .then(async (response) => {
-        if (response?.data?.success) {
-          let dropdownData = undefined;
-          try {
-            let dropdownOptionsRes = await axios.get(
-              `${backendBaseUrl}/cms/registration/dropdown-components`
-            );
-            dropdownData = dropdownOptionsRes?.data?.data;
-          } catch (error) {
-            console.log("Error");
-          }
-          let modifiedFormFields =
-            response?.data?.data?.formFields?.form_fields?.map((o: any) => ({
-              ...o,
-              userInput: "",
-              error: "",
-            }));
-          let districtDropDownId = dropdownData?.find(
-            (d: any) => d.name === "district"
-          )?.id;
-
-          modifiedFormFields = modifiedFormFields?.map((f: any) => {
-            if (f?.dropdown_Components === districtDropDownId) {
-              return {
-                ...f,
-                dropdown_options: { ...f.dropdown_options, options: [] },
-              };
-            } else {
-              return f;
-            }
-          });
-          let obj = {
-            dropdownData,
-            ...response?.data?.data,
-            formFields: { form_fields: modifiedFormFields },
-          };
-          setAllFormData(obj);
-        } else {
-          throw new Error("Error getting data, Please try later!");
-        }
-        setLoader(false);
-      })
-      .catch((error: any) => {
-        console.log(error);
-        setLoader(false);
-      });
-  };
 
   const handleSetting = () => {
-    fetchFormFields();
-
     setIsOpen(false);
     navigate("/dt/profile?current=entity");
   };
