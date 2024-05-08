@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DashboardProfileSidebar from "../../components/userFlow/mainPortal/DashboardProfileSidebar";
 import { useSearchParams } from "react-router-dom";
 import ProfileEntityDetails from "./Edit Profile/ProfileEntityDetails";
@@ -8,12 +8,62 @@ import ProfileNodalDetails from "./Edit Profile/ProfileNodalDetails";
 import ProfileRegulatorDetails from "./Edit Profile/ProfileRegulatorDetails";
 import ProfileUploadDocuments from "./Edit Profile/ProfileUploadDocuments";
 import ProfileBranches from "./Edit Profile/ProfileBranches";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import axios from "axios";
+import { backendBaseUrl } from "../../utils/api";
 
 type Props = {};
 
 const DashboardProfile = (props: Props) => {
+  const [loader, setLoader] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { entities, setEntities, setAllFormData } =
+    useDepositTakerRegistrationStore((state) => state);
+  const fetchFormFields = () => {
+    axios
+      .get(`${backendBaseUrl}/cms/registration/field-data/1`)
+      .then(async (response) => {
+        if (response?.data?.success) {
+          let dropdownData = undefined;
+          try {
+            let dropdownOptionsRes = await axios.get(
+              `${backendBaseUrl}/cms/registration/dropdown-components`
+            );
+            dropdownData = dropdownOptionsRes?.data?.data;
+          } catch (error) {
+            console.log("Error");
+          }
+          console.log(response.data.data?.formFields, "respnse--------------");
+          let modifiedFormFields = response.data.data?.formFields?.map(
+            (o: any) => ({
+              ...o,
+              userInput: "",
+              error: "",
+            })
+          );
+          console.log(modifiedFormFields, "modified data");
 
+          let obj = {
+            dropdownData,
+            ...response?.data?.data,
+            formFields: { form_fields: modifiedFormFields },
+          };
+          console.log(obj, "obj-----");
+          setAllFormData(obj);
+        } else {
+          throw new Error("Error getting data, Please try later!");
+        }
+        setLoader(false);
+      })
+      .catch((error: any) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchFormFields();
+  }, []);
   const current = searchParams.get("current");
   return (
     <>
