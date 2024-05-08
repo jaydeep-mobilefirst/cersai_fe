@@ -10,11 +10,15 @@ import Footer from "../../../components/userFlow/userProfile/Footer";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const ProfileEntityDetails = (props: Props) => {
+  const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
+  const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
@@ -29,8 +33,19 @@ const ProfileEntityDetails = (props: Props) => {
       )
     : [];
 
-  const onSubmit = (event: any) => {
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
+    setLoader(true);
+    const noError = await handleValidationChecks(formFields);
+    if (noError) {
+      Swal.fire({
+        icon: "success",
+        text: "Entity detail is successfully  created",
+        confirmButtonText: "Ok",
+      }).then((confirm: any) => {
+        Navigate("/dt/profile?current=nodal");
+      });
+    }
   };
   return (
     <>
