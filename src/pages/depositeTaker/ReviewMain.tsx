@@ -42,7 +42,10 @@ const useDownloadPDF = () => {
 };
 
 const ReviewMain = () => {
+  const [para1, setPara1] = useState('')
+  const [para2, setPara2] = useState('')
   const [submitModal, setSubmitModal] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [dtId, setDtId] = useState('');
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
@@ -73,42 +76,37 @@ const ReviewMain = () => {
         };
       });
 
-      
-      try {
-        const response = await axios.post(
-          bffUrl + "/deposit-taker/add-form-fields/",
-          { formData: finalResult }
-        );
-        const data = await response.data;
-        
+
+    axios.post(
+      bffUrl + "/deposit-taker/add-form-fields",
+      { formData: finalResult }
+    )
+      .then((response: any) => {
+        const data = response.data;
         if (data?.success) {
           // setSubmitModal( true)
-        setDtId(data?.data?.newDepositTaker?.uniqueId)
-        Swal.fire({
-          icon: "success",
-          title: `Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`,
-          text: `Your registration request has been sent successfully and
+          setPara1(`Your registration request has been sent successfully and
           approval/rejection of your registration will be informed to you
-          via email.`,customClass : {
-            title : 'text-sm'
-          }
-        });
-        Navigate("/");
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Something went wrong",
-          text :"Please try again"
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Something went wrong",
-        text :"Please try again"
-      });
-      setLoader(false);
-    }
+          via email.`)
+          setPara2(`Your registration acknowledgement ID is RT48726398745923`)
+          setSubmitted(true)
+          setSubmitModal(true)
+          Navigate("/");
+        } else {
+          setPara1(`Something went wrong`)
+          setPara2(`Please try again later`)
+          setSubmitted(false)
+          setSubmitModal(true)
+        }
+      })
+      .catch((e: any) => {
+        setLoader(false);
+        setPara1(`Something went wrong`)
+        setPara2(`Please try again later`)
+        setSubmitted(false)
+        setSubmitModal(true)
+        setLoader(false);
+      })
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,14 +129,14 @@ const ReviewMain = () => {
                         {section?.sectionName}
                       </p>
                       <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
-                       {
-                        section?.sectionName !== "Verification" ?
-                        <Link to={signupSideBar.find((sec) => sec?.description === section?.sectionName)?.path + "?edit=true"}>
-                          Edit
-                        </Link>
-                       :
-                       "Success"
-                       } 
+                        {
+                          section?.sectionName !== "Verification" ?
+                            <Link to={signupSideBar.find((sec) => sec?.description === section?.sectionName)?.path + "?edit=true"}>
+                              Edit
+                            </Link>
+                            :
+                            "Success"
+                        }
                       </button>
                     </div>
 
@@ -212,16 +210,22 @@ const ReviewMain = () => {
               <button
                 onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked || loader}
-                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${
-                  isChecked ? "bg-[#385723]" : "bg-[#a3cf85]"
-                }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
+                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${isChecked ? "bg-[#385723]" : "bg-[#a3cf85]"
+                  }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}
               </button>
             </div>
           </div>
         </div>
-         <SuccessPopup closePopup={() => {setSubmitModal(false); setLoader(false); Navigate('/')}} showPopup={() => setSubmitModal(true)} toggle={submitModal} dtID={dtId}/>
+        <SuccessPopup
+          closePopup={() => {setSubmitModal(false); Navigate('/') }}
+          showPopup={() => setSubmitModal(true)}
+          toggle={submitModal}
+          para1={para1}
+          para2={para2}
+          success={submitted}
+        />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
             © 2024 Protean BUDs, All Rights Reserved.
