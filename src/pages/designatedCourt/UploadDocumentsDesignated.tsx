@@ -8,14 +8,17 @@ import { useScreenWidth } from "../../utils/screenSize";
 import DeleteUpload from "./DeleteUpload";
 import UploadFile from "./UploadFile";
 import UploadIcon from "../../assets/images/UploadIcon.png";
+import LoaderSpin from "../../components/LoaderSpin";
+import { useNavigate } from "react-router-dom";
 type Props = {};
 
 const UploadDocumentsRegulator = (props: Props) => {
   const screenWidth = useScreenWidth();
-
+  const Navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -47,7 +50,7 @@ const UploadDocumentsRegulator = (props: Props) => {
       <div>
         <div className="border-[#E6E6E6] border-[1px] -mt-[6px]"></div>
 
-        <form className="flex items-center justify-between flex-col h-full lg:h-[100vh] ">
+        <form className="flex items-center justify-between flex-col h-full lg:h-[100vh]" onSubmit={() => Navigate('/designated/court/nodaldetails')}>
           {showUploadPopup && (
             <UploadFile
               showUploadPopup={showUploadPopup}
@@ -251,7 +254,10 @@ const UploadDocumentsRegulator = (props: Props) => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
+                <button 
+                role="button"
+                onClick={() => Navigate('/designated/court/designateddetails')}
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
                   Back
                 </button>
               </div>
@@ -260,7 +266,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                   type="submit"
                   className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
-                  Save and continue
+                   {loader ? <LoaderSpin /> : "Save And Continue"}
                 </button>
               </div>
             </div>

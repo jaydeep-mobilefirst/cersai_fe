@@ -74,7 +74,7 @@ import {
 } from "../../../utils/hardText/signuppageText";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { backendBaseUrl } from "../../../utils/api";
+import { backendBaseUrl, bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../LoaderSpin";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 
@@ -112,7 +112,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const apiCall = () => {
     setLoader(true);
     axios
-      .get(`${backendBaseUrl}/cms/registration/entities`)
+      .get(`${bffUrl}/registration/entities`)
       .then((responce) => {
         const data = responce?.data?.data;
         let sortedData = data.sort(
@@ -132,18 +132,18 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
 
   const fetchFormFields = () => {
     axios
-        .get(`${backendBaseUrl}/cms/registration/field-data/${selectedRadio?.id}`)
+        .get(`${bffUrl}/registration/field-data/${selectedRadio?.id}`)
         .then(async (response) => {
           if (response?.data?.success) {
             let dropdownData = undefined;
             try {
-              let dropdownOptionsRes = await axios.get(`${backendBaseUrl}/cms/registration/dropdown-components`)
+              let dropdownOptionsRes = await axios.get(`${bffUrl}/registration/dropdown-components`)
               dropdownData = dropdownOptionsRes?.data?.data;
             } catch (error) {
               console.log("Error");
               
             }
-            let modifiedFormFields = response?.data?.data?.formFields?.form_fields?.map((o : any) => ({...o, userInput : "", error : ""}))
+            let modifiedFormFields = response?.data?.data?.formFields?.map((o : any) => ({...o, userInput : "", error : ""}))
             let districtDropDownId = dropdownData?.find((d : any) => d.name === "district")?.id; 
             
             modifiedFormFields = modifiedFormFields?.map((f : any) => {
