@@ -7,7 +7,7 @@ import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-regis
 import axios from "axios";
 import Swal from "sweetalert2";
 import LoaderSpin from "../../components/LoaderSpin";
-import { backendBudsPortalBFFUrl } from "../../utils/api";
+import { backendBudsPortalBFFUrl, bffUrl } from "../../utils/api";
 import html2pdf from "html2pdf.js";
 import { signupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
@@ -76,7 +76,7 @@ const ReviewMain = () => {
       
       try {
         const response = await axios.post(
-          backendBudsPortalBFFUrl + "/deposit-taker/add-form-fields/",
+          bffUrl + "/deposit-taker/add-form-fields/",
           { formData: finalResult }
         );
         const data = await response.data;

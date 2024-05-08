@@ -35,37 +35,10 @@ const ReviewDetailsDesignated = () => {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
-  const sections = [
-    {
-      title: "Court Details",
-      buttonText: "Edit",
-      fieldsLeft: [
-        { label: "Name of Designated Court", value: "Lorem ipsum" },
-        { label: "Address Line 1", value: "Lorem ipsum" },
-        { label: "Address Line 2", value: "Lorem ipsum" },
-        { label: "Jurisdiction", value: "Lorem ipsum" },
-      ],
-      fieldsRight: [
-        { label: "PIN code", value: "Lorem ipsum" },
-        { label: "State", value: "Lorem ipsum" },
-        { label: "District", value: "Lorem ipsum" },
-      ],
-    },
-  ];
-  const sections1 = [
-    {
-      title: "Nodal Details",
-      buttonText: "Edit",
-      fieldsLeft: [
-        { label: "Nodal Officer Name", value: "Lorem ipsum" },
-        { label: "Nodal Officer Email", value: "Lorem ipsum" },
-      ],
-      fieldsRight: [
-        { label: "Nodal Officer Name", value: "Lorem ipsum" },
-        { label: "Nodal Officer Designation", value: "Lorem ipsum" },
-      ],
-    },
-  ];
+
+  const submit = () => {
+    
+  }
 
   return (
     <>
@@ -156,17 +129,18 @@ const ReviewDetailsDesignated = () => {
             </div>
           </div>
           <div className="flex flex-shrink-0 mt-[20px]">
-            <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
+            <div className="w-[24px] h-[24px] justify-center align-center">
               <input
                 type="checkbox"
                 checked={isChecked}
                 onChange={handleCheckboxChange}
                 placeholder="ischecked"
+                className="h-4 w-4 accent-[#385723]"
               />
             </div>
             <div className="leading-[24px]">
-              I provide my consent to{" "}
-              <span className="text-[#385723] underline">BUDs act 2019</span>
+              I provide my consent to &nbsp;
+              <span className="text-[#385723] underline">BUDS act 2019</span>
             </div>
           </div>
         </main>
@@ -191,7 +165,7 @@ const ReviewDetailsDesignated = () => {
             </div>
             <div>
               <button
-                onClick={navigateToLandingPage} // Assuming this action should be tied to the Submit button
+                onClick={submit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked}
                 className="ml-[16px] w-auto md:w-[130px] cursor-pointer rounded-[12px] bg-[#385723] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
