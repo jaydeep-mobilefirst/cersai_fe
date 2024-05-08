@@ -33,20 +33,22 @@ const DashboardProfile = (props: Props) => {
           } catch (error) {
             console.log("Error");
           }
-          console.log(response.data.data, "respnse");
-          let modifiedFormFields = response?.data?.data?.formFields?.map(
+          console.log(response.data.data?.formFields, "respnse--------------");
+          let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
               userInput: "",
               error: "",
             })
           );
+          console.log(modifiedFormFields, "modified data");
 
           let obj = {
             dropdownData,
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
+          console.log(obj, "obj-----");
           setAllFormData(obj);
         } else {
           throw new Error("Error getting data, Please try later!");

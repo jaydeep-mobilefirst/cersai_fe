@@ -23,14 +23,15 @@ const ProfileEntityDetails = (props: Props) => {
     (s: any) => s?.sectionName === "Entity Details"
   );
 
-  const formFields = allFormData?.formFields?.filter(
-    (f: any) => f?.sectionId === sectionId?.id
-  );
+  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+    ? allFormData?.formFields?.form_fields?.filter(
+        (f: any) => f?.sectionId === sectionId?.id
+      )
+    : [];
 
-  console.log("====================================");
-  console.log({ allFormData });
-  console.log("====================================");
-  const onSubmit = (data: any) => {};
+  const onSubmit = (event: any) => {
+    event?.preventDefault();
+  };
   return (
     <>
       <div className="flex flex-col w-full h-full">

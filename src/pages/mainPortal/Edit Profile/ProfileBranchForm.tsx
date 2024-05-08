@@ -8,6 +8,8 @@ import { useScreenWidth } from "../../../utils/screenSize";
 
 type Props = {
   i: number;
+  onRemove: (index: number) => void;
+  addBranch: (index: number) => void;
 };
 
 const ProfileBranchForm = (props: Props) => {
@@ -27,9 +29,18 @@ const ProfileBranchForm = (props: Props) => {
     <div>
       <div className="flex flex-row justify-between bg-[#EEF7EB] p-2 rounded-md">
         <span>Branch {props.i}</span>{" "}
-        <div className="flex flex-row">
-          <img src={addCircle} alt="" />{" "}
-          <img src={minusCircle} alt="" className="ml-2" />
+        <div className="flex flex-row cursor-pointer">
+          <img
+            src={addCircle}
+            alt=""
+            onClick={() => props.addBranch(props.i)}
+          />{" "}
+          <img
+            src={minusCircle}
+            alt=""
+            className="ml-2"
+            onClick={() => props.onRemove(props.i)}
+          />
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
