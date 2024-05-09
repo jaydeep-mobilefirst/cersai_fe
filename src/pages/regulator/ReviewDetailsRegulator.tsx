@@ -74,11 +74,10 @@ const ReviewDetailsRegulator = () => {
       });
 
     try {
-      const response = await axios.post(
-        bffUrl + "/regulator/add-form-fields/",
-        { formData: finalResult }
-      );
-      const data = await response.data; 
+      const response = await axios.post(bffUrl + "/regulator/add-form-fields", {
+        formData: finalResult,
+      });
+      const data = await response.data;
 
       if (data?.success) {
         // setSubmitModal( true)

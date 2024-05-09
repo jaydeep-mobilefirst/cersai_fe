@@ -50,7 +50,7 @@ const RegulatorDetails = (props: Props) => {
           >
             <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
             <h1 className="text-xl md:text-2xl font-bold mx-10 ">
-              Verification
+              Regulator Details
             </h1>
             <div className="bg-white p-4 lg:p-[48px]">
               <DynamicFields

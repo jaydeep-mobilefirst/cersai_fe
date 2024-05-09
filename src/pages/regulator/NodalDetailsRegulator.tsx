@@ -46,7 +46,7 @@ const NodalDetailsRegulator = () => {
     setLoader(false);
 
     if (noError) {
-      Navigate("/regulator/court/uploaddocuments");
+      Navigate("/regulator/court/reviewdetails");
     }
   };
 
