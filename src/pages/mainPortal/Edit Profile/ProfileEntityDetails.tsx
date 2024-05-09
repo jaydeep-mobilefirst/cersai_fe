@@ -23,13 +23,17 @@ const ProfileEntityDetails = (props: Props) => {
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
 
-  const sectionId = allFormData?.entitySections?.find(
+  const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
   );
-
+  const verificationSectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Verification"
+  );
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields?.filter(
-        (f: any) => f?.sectionId === sectionId?.id
+        (f: any) =>
+          f?.sectionId === entityDetailsSectionId?.id ||
+          f?.sectionId === verificationSectionId?.id
       )
     : [];
 
@@ -40,21 +44,22 @@ const ProfileEntityDetails = (props: Props) => {
     if (noError) {
       Swal.fire({
         icon: "success",
-        text: "Entity detail is successfully  created",
+        text: "Entity Detail  update  successfully ",
         confirmButtonText: "Ok",
       }).then((confirm: any) => {
         Navigate("/dt/profile?current=nodal");
       });
     }
+    setLoader(false);
   };
   return (
     <>
       <div className="flex flex-col w-full h-full">
         <form
-          onSubmit={onSubmit}
+          // onSubmit={onSubmit}
           className="flex flex-col justify-between px-6 py-4"
           style={{
-            height: `${screenWidth > 1024 ? "calc(100vh - 0px)" : "100%"}`,
+            height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
           }}
         >
           <DynamicFields
@@ -64,7 +69,7 @@ const ProfileEntityDetails = (props: Props) => {
           />
 
           <div>
-            <Footer />
+            <Footer onSubmit={onSubmit} loader={loader} />
           </div>
         </form>
       </div>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import NodalDetailsSchema from "../../../formValidationSchema/deposit_taker/NodalDetails.schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,11 +9,15 @@ import Footer from "../../../components/userFlow/userProfile/Footer";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 type Props = {};
 
 const ProfileNodalDetails = (props: Props) => {
+  const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
+  const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
@@ -37,15 +41,27 @@ const ProfileNodalDetails = (props: Props) => {
 
   console.log({ allFormData }, "allFormData");
 
-  const handleOnSubmit = (event: any) => {
-    event.preventDefault();
+  const onSubmit = async (event: any) => {
+    event?.preventDefault();
+    setLoader(true);
+    const noError = await handleValidationChecks(formFields);
+    if (noError) {
+      Swal.fire({
+        icon: "success",
+        text: "Nodal Detail  update  successfully ",
+        confirmButtonText: "Ok",
+      }).then((confirm: any) => {
+        Navigate("/dt/profile?current=regulator");
+      });
+    }
+    setLoader(false);
   };
 
   return (
     <>
       <div className="flex flex-col justify-between w-full">
         <form
-          onSubmit={handleOnSubmit}
+          // onSubmit={handleOnSubmit}
           className="p-4 flex flex-col w-full  justify-between"
           style={{
             height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
@@ -152,7 +168,7 @@ const ProfileNodalDetails = (props: Props) => {
           />
 
           <div>
-            <Footer />
+            <Footer onSubmit={onSubmit} loader={loader} />
           </div>
         </form>
       </div>

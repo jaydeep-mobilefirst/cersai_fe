@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import infoIcon from "../../../assets/images/info-circle.svg";
 import ProfileBranchForm from "./ProfileBranchForm";
 import Footer from "../../../components/userFlow/userProfile/Footer";
-import useBranchStore from "../../../store/upate-profile/branch";
+import { useBranchStore } from "../../../store/upate-profile/branch";
+// import useBranchStore from "../../../store/upate-profile/branch";
 
 const ProfileBranches = () => {
   const { branches, addBranch, removeBranch } = useBranchStore((state) => ({

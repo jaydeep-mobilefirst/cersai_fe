@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import InputFields from "../../../components/userFlow/form/InputField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -9,10 +9,15 @@ import Footer from "../../../components/userFlow/userProfile/Footer";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 type Props = {};
 
 const ProfileRegulatorDetails = (props: Props) => {
+  const [loader, setLoader] = useState(false);
+  const Navigate = useNavigate();
+
   const screenWidth = useScreenWidth();
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
@@ -53,15 +58,27 @@ const ProfileRegulatorDetails = (props: Props) => {
   //   setValue("registrationDate", value);
   // };
 
-  const onSubmitClick = (event: any) => {
-    event.preventDefault();
+  const onSubmit = async (event: any) => {
+    event?.preventDefault();
+    setLoader(true);
+    const noError = await handleValidationChecks(formFields);
+    if (noError) {
+      Swal.fire({
+        icon: "success",
+        text: "Regulator Detail  update  successfully ",
+        confirmButtonText: "Ok",
+      }).then((confirm: any) => {
+        Navigate("/dt/profile?current=documents");
+      });
+    }
+    setLoader(false);
   };
 
   return (
     <>
       <div className="flex flex-col w-full">
         <form
-          onSubmit={onSubmitClick}
+          // onSubmit={onSubmitClick}
           className="p-4 flex flex-col w-full max-w-[100%] justify-between h-screen"
           style={{
             height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
@@ -73,7 +90,7 @@ const ProfileRegulatorDetails = (props: Props) => {
             onChange={onChange}
           />
           <div>
-            <Footer />
+            <Footer onSubmit={onSubmit} loader={loader} />
           </div>
         </form>
       </div>
