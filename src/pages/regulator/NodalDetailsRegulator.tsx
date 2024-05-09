@@ -1,13 +1,36 @@
-import React from "react";
 import NodalDetailsSchema from "../../formValidationSchema/deposit_taker/NodalDetails.schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputFields from "../../components/userFlow/form/InputField";
 import UploadButton from "../../components/userFlow/form/UploadButton";
 import { useScreenWidth } from "../../utils/screenSize";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
+import LoaderSpin from "../../components/LoaderSpin";
+import axios from "axios";
+import Swal from "sweetalert2";
+import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 
 const NodalDetailsRegulator = () => {
+  const [loader, setLoader] = useState(false);
+  const { onChange, handleValidationChecks, updatePanFormField } =
+    useContext(FormHandlerContext);
+  const Navigate = useNavigate();
+  const { allFormData, setAllFormData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Nodal Details"
+  );
+  const formFields = allFormData?.formFields?.form_fields?.filter(
+    (f: any) => f?.sectionId === sectionId?.id
+  );
   const screenWidth = useScreenWidth();
+
+  console.log(formFields, "allFormData");
+
   const {
     register,
     handleSubmit,
@@ -16,103 +39,37 @@ const NodalDetailsRegulator = () => {
     resolver: yupResolver(NodalDetailsSchema),
   });
 
-  const handleOnSubmit = (data: any) => {
-    console.log({ data });
+  const onSubmit = async (event: any) => {
+    event?.preventDefault();
+    setLoader(true);
+    const noError = await handleValidationChecks(formFields);
+    setLoader(false);
+
+    if (noError) {
+      Navigate("/regulator/court/reviewdetails");
+    }
   };
 
   return (
     <>
-      {/* <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div> */}
-
-      <form
-        onSubmit={handleSubmit(handleOnSubmit)}
-        // className="p-4 flex flex-col w-full max-w-[100%] justify-between"
-        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
-      >
+      <form className="flex items-center justify-between flex-col h-full lg:h-[100vh]">
         <div
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
           }}
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
-          <div className="bg-white p-6 w-full">
-            <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div>
-                <label
-                  htmlFor="nodalOfficerName"
-                  className="block text-gray-700 text-sm font-bold mb-2 text-gilroy-medium"
-                >
-                  Nodal Officer Name<span className="text-red-500">*</span>
-                </label>
-                <InputFields
-                  type="text"
-                  id="nodalOfficerName"
-                  placeholder="Type here"
-                  {...register("nodalOfficerName")}
-                />
-                <span className="text-red-500">
-                  {errors.nodalOfficerName?.message}
-                </span>
-              </div>
-              <div>
-                <label
-                  htmlFor="nodalOfficerEmail"
-                  className="block text-gray-700 text-sm font-bold mb-2 text-gilroy-medium"
-                >
-                  Nodal Officer Email <span className="text-red-500">*</span>
-                </label>
-                <InputFields
-                  type="email"
-                  id="nodalOfficerEmail"
-                  placeholder="Type here"
-                  {...register("nodalOfficerEmail")}
-                />
-                <span className="text-red-500">
-                  {errors.nodalOfficerEmail?.message}
-                </span>
-              </div>
-              <div>
-                <label
-                  htmlFor="nodalMobileNumber"
-                  className="block text-gray-700 text-sm font-bold mb-2 text-gilroy-medium"
-                >
-                  Nodal Officer Mobile Number
-                  <span className="text-red-500">*</span>
-                </label>
-                <InputFields
-                  type="text"
-                  id="nodalMobileNumber"
-                  {...register("nodalOfficerMobileNumber")}
-                  placeholder="type"
-                />
-                <span className="text-red-500">
-                  {errors.nodalOfficerMobileNumber?.message}
-                </span>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div>
-                <label
-                  htmlFor="nodalOfficerDesgnation"
-                  className="block text-gray-700 text-sm font-bold mb-2 text-gilroy-medium"
-                >
-                  Nodal Officer Designation
-                  <span className="text-red-500">*</span>
-                </label>
-                <InputFields
-                  type="text"
-                  id="nodalOfficerDesgnation"
-                  placeholder="Type here"
-                  {...register("nodalOfficerDesignation")}
-                />
-                <span className="text-red-500">
-                  {errors.nodalOfficerDesignation?.message}
-                </span>
-              </div>
-              <div className="mt-7">
-                <UploadButton id="Dsc" type="button" />
-              </div>
+          <div className="bg-white p-0 w-full">
+            <h1 className="text-xl md:text-2xl font-bold mx-10">
+              Nodal Details
+            </h1>
+
+            <div className="bg-white p-4 lg:p-[48px]">
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+              />
             </div>
           </div>
         </div>
@@ -148,9 +105,11 @@ const NodalDetailsRegulator = () => {
             <div className="flex items-center">
               <button
                 type="submit"
-                className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
               >
-                Save & Review
+                {loader ? <LoaderSpin /> : "Verify details"}
               </button>
             </div>
           </div>
