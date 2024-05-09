@@ -82,7 +82,6 @@ interface ModelDivProps {
   closeModal: () => void;
 }
 
-
 type EntityType = {
   id: number;
   entityName: string;
@@ -90,17 +89,16 @@ type EntityType = {
   autoApproval: boolean;
 };
 
-export const paths : any = {
-  DT : "/depositetaker/signup/verification",
-  RG : "/regulator/court/regulatordetails",
-  DC : "designated/court/designateddetails",
-  CA : "/competent/authority/competentdetails",
-
-}
-;
+export const paths: any = {
+  DT: "/depositetaker/signup/verification",
+  RG: "/regulator/court/regulatordetails",
+  DC: "designated/court/designateddetails",
+  CA: "/competent/authority/competentdetails",
+};
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const Navigate = useNavigate();
-  const {entities, setEntities, setAllFormData, setAllDocumentData} = useDepositTakerRegistrationStore(state => state)
+  const { entities, setEntities, setAllFormData, setAllDocumentData } =
+    useDepositTakerRegistrationStore((state) => state);
   const [data, setData] = useState<EntityType[]>(entities);
   const [loader, setLoader] = useState<boolean>(false);
   useEffect(() => {
@@ -118,11 +116,14 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
         let sortedData = data.sort(
           (a: { id: number }, b: { id: number }) => a.id - b.id
         );
-        sortedData = sortedData?.map((d : any) => ({ ...d, path: paths[d?.entityCode]}));
+        sortedData = sortedData?.map((d: any) => ({
+          ...d,
+          path: paths[d?.entityCode],
+        }));
         setData(sortedData);
-        setEntities(sortedData)
+        setEntities(sortedData);
         setLoader(false);
-        setSelectedRadio(sortedData[0])
+        setSelectedRadio(sortedData[0]);
       })
       .catch((error) => {
         console.log(error);
@@ -132,43 +133,50 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
 
   const fetchFormFields = () => {
     axios
-        .get(`${bffUrl}/registration/field-data/${selectedRadio?.id}`)
-        .then(async (response) => {
-          if (response?.data?.success) {
-            let dropdownData = undefined;
-            try {
-              let dropdownOptionsRes = await axios.get(`${bffUrl}/registration/dropdown-components`)
-              dropdownData = dropdownOptionsRes?.data?.data;
-            } catch (error) {
-              console.log("Error");
-              
-            }
-            let modifiedFormFields = response?.data?.data?.formFields?.map((o : any) => ({...o, userInput : "", error : ""}))
-            let modifiedFileFields = response?.data?.data?.registrationDocumentFields?.map((o : any) => ({...o, file : "", error : "", fileName : ""}))
-            let obj = {
-              dropdownData,
-              ...response?.data?.data,
-              formFields : {form_fields : modifiedFormFields}
-            }            
-            setAllFormData(obj)
-            setAllDocumentData(modifiedFileFields)
+      .get(`${bffUrl}/registration/field-data/${selectedRadio?.id}`)
+      .then(async (response) => {
+        if (response?.data?.success) {
+          let dropdownData = undefined;
+          try {
+            let dropdownOptionsRes = await axios.get(
+              `${bffUrl}/registration/dropdown-components`
+            );
+            dropdownData = dropdownOptionsRes?.data?.data;
+          } catch (error) {
+            console.log("Error");
           }
-          else{
-            throw new Error("Error getting data, Please try later!")
-          }
-          setLoader(false);
-        })
-        .catch((error: any) => {
-          console.log(error);
-          setLoader(false);
-        });
-
-  }
+          let modifiedFormFields = response?.data?.data?.formFields?.map(
+            (o: any) => ({ ...o, userInput: "", error: "" })
+          );
+          let modifiedFileFields =
+            response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
+              ...o,
+              file: "",
+              error: "",
+              fileName: "",
+            }));
+          let obj = {
+            dropdownData,
+            ...response?.data?.data,
+            formFields: { form_fields: modifiedFormFields },
+          };
+          setAllFormData(obj);
+          setAllDocumentData(modifiedFileFields);
+        } else {
+          throw new Error("Error getting data, Please try later!");
+        }
+        setLoader(false);
+      })
+      .catch((error: any) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
   const [selectedRadio, setSelectedRadio] = useState<any>(entities[0]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    fetchFormFields()
+    fetchFormFields();
     Navigate(selectedRadio?.path);
   };
 
@@ -185,48 +193,54 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
           onClick={closeModal}
         />
       </div>
-     {loader ? <LoaderSpin/> :  <form onSubmit={handleSubmit}>
-        {data?.length > 0 && data?.map((item) => (
-          <div
-            onClick={() => setSelectedRadio(item)}
-            key={item.id}
-            className={`md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex hover:cursor-pointer ${selectedRadio.id === item.id
-                ? "bg-[#EEF7EB] text-[#385723] border-[#385723] mr-2"
-                : "bg-white text-black border border-gray-300 mr-2"
-              }`}
-          >
-            <div className=" flex-row justify-between items-center  md:gap-4 inline-flex hover:cursor-pointer">
-              <div className="text-lg font-normal hover:cursor-pointer">
-                <label>
-                  <input
-                    type="radio"
-                    name="entity"
-                    checked={selectedRadio?.id === item?.id}
-                    onChange={() => setSelectedRadio(item)}
-                    className="mr-2 hover:cursor-pointer"
-                  />
-                  {item?.entityName}
-                </label>
+      {loader ? (
+        <LoaderSpin />
+      ) : (
+        <form onSubmit={handleSubmit}>
+          {data?.length > 0 &&
+            data?.map((item) => (
+              <div
+                onClick={() => setSelectedRadio(item)}
+                key={item.id}
+                className={`md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex hover:cursor-pointer ${
+                  selectedRadio.id === item.id
+                    ? "bg-[#EEF7EB] text-[#385723] border-[#385723] mr-2"
+                    : "bg-white text-black border border-gray-300 mr-2"
+                }`}
+              >
+                <div className=" flex-row justify-between items-center  md:gap-4 inline-flex hover:cursor-pointer">
+                  <div className="text-lg font-normal hover:cursor-pointer">
+                    <label>
+                      <input
+                        type="radio"
+                        name="entity"
+                        checked={selectedRadio?.id === item?.id}
+                        onChange={() => setSelectedRadio(item)}
+                        className="mr-2 hover:cursor-pointer"
+                      />
+                      {item?.entityName}
+                    </label>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
+          <div className="mt-[22px] text-[20px] modal-footer flex justify-around md:flex-row md:justify-between">
+            <button
+              type="button"
+              className="text-[#385723] Rectangle151 w-[35%] md:w-[244px] h-14 rounded-xl border border-[#385723]"
+              onClick={closeModal}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="text-white Rectangle151 w-[35%] md:w-[244px] h-14 rounded-xl border bg-[#385723]"
+            >
+              Select
+            </button>
           </div>
-        ))}
-        <div className="mt-[22px] text-[20px] modal-footer flex justify-around md:flex-row md:justify-between">
-          <button
-            type="button"
-            className="text-[#385723] Rectangle151 w-[35%] md:w-[244px] h-14 rounded-xl border border-[#385723]"
-            onClick={closeModal}
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="text-white Rectangle151 w-[35%] md:w-[244px] h-14 rounded-xl border bg-[#385723]"
-          >
-            Select
-          </button>
-        </div>
-      </form>}
+        </form>
+      )}
     </div>
   );
 };

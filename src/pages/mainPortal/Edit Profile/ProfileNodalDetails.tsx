@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import NodalDetailsSchema from "../../../formValidationSchema/deposit_taker/NodalDetails.schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,11 +9,17 @@ import Footer from "../../../components/userFlow/userProfile/Footer";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { bffUrl } from "../../../utils/api";
 
 type Props = {};
 
 const ProfileNodalDetails = (props: Props) => {
+  const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
+  const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
@@ -27,25 +33,52 @@ const ProfileNodalDetails = (props: Props) => {
         (f: any) => f?.sectionId === sectionId?.id
       )
     : [];
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm({
-  //   resolver: yupResolver(NodalDetailsSchema),
-  // });
 
-  console.log({ allFormData }, "allFormData");
+  const formData =
+    formFields &&
+    formFields?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: field.entityRegSection?.sectionName,
+      label: field.label,
+      value: field.userInput,
+    }));
 
-  const handleOnSubmit = (event: any) => {
-    event.preventDefault();
+  console.log(formData, "formData");
+
+  const onSubmit = async (event: any) => {
+    event?.preventDefault();
+    setLoader(true);
+    const noError = await handleValidationChecks(formFields);
+    if (noError) {
+      axios
+        .patch(`${bffUrl}/deposit-taker/DT1714567103716`, {
+          formData: formData,
+        })
+        .then((response) => {
+          console.log(response, "response");
+          Swal.fire({
+            icon: "success",
+            text: "Nodal Detail  update  successfully ",
+            confirmButtonText: "Ok",
+          });
+          Navigate("/dt/profile?current=regulator");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            text: "Failed to update Nodal Details",
+            confirmButtonText: "Ok",
+          });
+        });
+    }
+    setLoader(false);
   };
 
   return (
     <>
       <div className="flex flex-col justify-between w-full">
         <form
-          onSubmit={handleOnSubmit}
+          // onSubmit={handleOnSubmit}
           className="p-4 flex flex-col w-full  justify-between"
           style={{
             height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
@@ -152,7 +185,7 @@ const ProfileNodalDetails = (props: Props) => {
           />
 
           <div>
-            <Footer />
+            <Footer onSubmit={onSubmit} loader={loader} />
           </div>
         </form>
       </div>
