@@ -1,33 +1,34 @@
 import React, { useContext, useState } from "react";
-import SelectButton from "../../components/userFlow/form/SelectButton";
-import InputFields from "../../components/userFlow/form/InputField";
-import TextArea from "../../components/userFlow/form/TextArea";
 import { useScreenWidth } from "../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import DatePicker from "../../components/userFlow/form/DatePicker";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 
 const EntityDetails: React.FC = () => {
   const screenWidth = useScreenWidth();
   const [params, setParams] = useSearchParams();
-  const {onChange, handleValidationChecks} = useContext(FormHandlerContext)
+  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
   const [loader, setLoader] = useState(false);
   const Navigate = useNavigate();
 
-  const {allFormData} = useDepositTakerRegistrationStore(state => state)
+  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
 
   const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Entity Details");
-  const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
-
+  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  ? allFormData?.formFields?.form_fields?.filter(
+      (f: any) => f?.sectionId === sectionId?.id
+    )
+  : [];
 
   const onSubmit = async (event : any) => {
     event?.preventDefault();
     setLoader(true)
     const noError = await handleValidationChecks(formFields)    
     setLoader(false)
+    
+    console.log({noError});
     
     if (noError) {
       const edit = params.get('edit');
@@ -57,8 +58,7 @@ const EntityDetails: React.FC = () => {
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
             <h1 className="text-2xl font-bold mb-6">Entity Details</h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange}/>
-
+            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
           </div>
         </div>
 

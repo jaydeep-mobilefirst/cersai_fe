@@ -13,9 +13,9 @@ type Props = {};
 
 const VerificationForm = (props: Props) => {
   const [loader, setLoader] = useState(false);
-  const {onChange, handleValidationChecks, updatePanFormField} = useContext(FormHandlerContext)
+  const {onChange, handleValidationChecks, updatePanFormField, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
   const Navigate = useNavigate();
-  const {allFormData, setAllFormData} = useDepositTakerRegistrationStore(state => state)
+  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
   const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Verification");
   const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
   const screenWidth = useScreenWidth();
@@ -106,7 +106,7 @@ const VerificationForm = (props: Props) => {
               Verification
             </h1>
             <div className="bg-white p-4 lg:p-[48px]">
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange}/>
+            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
 
             </div>
           </div>

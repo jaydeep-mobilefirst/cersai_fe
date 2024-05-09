@@ -5,6 +5,7 @@ import SignUpSideBar from "../../components/userFlow/competentAuthority/SignUpSi
 
 import MenuIcon from "../../assets/images/menu.svg";
 import CrossIcon from "../../assets/images/CrossIcon.svg";
+import FormHandlerProviders from "../../contextAPI/useFormFieldHandlers";
 
 const CompetentAuthorityRegister = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,9 +44,8 @@ const CompetentAuthorityRegister = () => {
 
       {/* Sidebar */}
       <div
-        className={`${
-          isMenuOpen ? "flex" : "hidden"
-        } lg:hidden fixed top-0 left-0 z-20 h-screen w-1/8`}
+        className={`${isMenuOpen ? "flex" : "hidden"
+          } lg:hidden fixed top-0 left-0 z-20 h-screen w-1/8`}
       >
         <SignUpSideBar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
       </div>
@@ -58,7 +58,9 @@ const CompetentAuthorityRegister = () => {
       {/* <Outlet /> */}
       <div className=" flex w-full flex-col">
         <div className="w-full mt-20 lg:mt-0">
-          <Outlet />
+          <FormHandlerProviders>
+            <Outlet />
+          </FormHandlerProviders>
         </div>
       </div>
     </div>

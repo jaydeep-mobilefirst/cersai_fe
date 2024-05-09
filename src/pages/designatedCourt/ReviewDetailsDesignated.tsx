@@ -35,12 +35,6 @@ const ReviewDetailsDesignated = () => {
   const [isChecked, setIsChecked] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
   const [loader, setLoader] = useState(false);
-
-  const navigateToLandingPage = () => {
-    Navigate("/Landing");
-  };
-
-  console.log({allFormData});
   
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
@@ -52,10 +46,14 @@ const ReviewDetailsDesignated = () => {
     const finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
+        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
+        if (sectionCode === 'Nodal Details') {
+          sectionCode = 'Nodal Officer'
+        }
         return {
           fieldId: field?.id,
           label: field?.label,
-          sectionCode: allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName,
+          sectionCode: sectionCode,
           value: field?.userInput,
         };
       });
