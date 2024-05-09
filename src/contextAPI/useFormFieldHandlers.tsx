@@ -21,7 +21,7 @@ interface IContextProps {
 export const FormHandlerContext = createContext({} as IContextProps);
 
 const FormHandlerProviders = ({children}: Props) => {
-  const {allFormData, setAllFormData} = useDepositTakerRegistrationStore(state => state)
+  const {allFormData, setAllFormData, documentData, setAllDocumentData} = useDepositTakerRegistrationStore(state => state)
   const updateValue = (value : string | any[], fieldId : number, dscFileNAme : string = "") => {
     let modifiedFormFields = allFormData?.formFields?.form_fields?.map((o : any) => {
       if (o?.id === fieldId) {
@@ -38,19 +38,16 @@ const FormHandlerProviders = ({children}: Props) => {
     setAllFormData(obj)
   }
   const updateDocumentValue = (value : string | File | File[], fieldData : any, fileName : string ) => {
-    let modifiedFileFields = allFormData?.registrationDocumentFields?.map((o : any) => {
+    let modifiedFileFields = documentData?.map((o : any) => {
       if (o?.id === fieldData?.id) {
-        return {...o, file : value, error : value ? "" : "", fileName : fileName};
+        return {...o, file : value, error : "", fileName : fileName};
       }
       else{
         return o;
       }
     })
-    let obj = {
-      ...allFormData,
-      registrationDocumentFields : modifiedFileFields 
-    }            
-    setAllFormData(obj)
+            
+    setAllDocumentData(modifiedFileFields)
   }
 
   const onFileChange = async (event : any, field : any, fieldType : string) : Promise<void> => {
@@ -60,7 +57,10 @@ const FormHandlerProviders = ({children}: Props) => {
         const base64String : string = await convertFileToBase64Async(file)
         updateDocumentValue(base64String, field, file?.name);
         break;
-    
+      case 'pdf' :
+      case 'jpg/png/jpeg' :
+        updateDocumentValue(event, field, event?.name);
+        break;
       default:
         break;
     }
@@ -220,15 +220,20 @@ const FormHandlerProviders = ({children}: Props) => {
         })
       }
     })   
-    return await ValidationSubmitAPI(formFieldsForValidations);
+    let formValidations =  await ValidationSubmitAPI(formFieldsForValidations);
+    let documentValidations = documentData?.length > 0 ? await handleDocumentValidations(formFields[0]?.sectionId) : true;
+
+    console.log({formValidations, documentValidations, documentData});
+    
+
+    return formValidations && documentValidations;
   }
 
   //  If false means validation failed
   const handleDocumentValidations = async (sectionId : number) : Promise<boolean> => {
     let errorCount = 0;
-    console.log({sectionId});
     
-    let modifiedFileFields = allFormData?.registrationDocumentFields?.map((o : any) => {
+    let modifiedFileFields = documentData?.map((o : any) => {
       if (o?.sectionId === sectionId) {
         console.log({o});
         
@@ -246,11 +251,7 @@ const FormHandlerProviders = ({children}: Props) => {
         return o;
       }
     })
-    let obj = {
-      ...allFormData,
-      registrationDocumentFields : modifiedFileFields 
-    }            
-    setAllFormData(obj)
+    setAllDocumentData(modifiedFileFields)
     return errorCount === 0;
   }
 

@@ -23,9 +23,10 @@ const style = {
 
 interface OtpPageProps {
   closeShowOtpModel: () => void;
+  redirectLink : string
 }
 
-const OtpPage: React.FC<OtpPageProps> = ({ closeShowOtpModel }) => {
+const OtpPage: React.FC<OtpPageProps> = ({ closeShowOtpModel, redirectLink }) => {
   const Navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const {allFormData} = useDepositTakerRegistrationStore(state => state)
@@ -103,7 +104,7 @@ const OtpPage: React.FC<OtpPageProps> = ({ closeShowOtpModel }) => {
     if (mobileTimer > 0 && Object.values(mobileOtp)?.length === 6 &&  Object.values(emailOtp)?.length === 6 ) {
       setLoader(true)
       setLoader(false);
-      Navigate("/depositetaker/signup/reviewdetails")
+      Navigate(redirectLink)
       localStorage.setItem("nodalVerification", JSON.stringify({verified : true}))
     }
   }

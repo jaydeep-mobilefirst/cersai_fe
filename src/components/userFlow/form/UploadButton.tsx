@@ -11,7 +11,7 @@ import UploadButtonSvg1 from "./svgs/UploadButtonSvg1";
 import { UploadButtonTexts } from "../../../utils/hardText/formComponents";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  onFileUpload?: (file: File | null) => void;
+  onFileUpload?: (file: File) => void;
 }
 
 const UploadButton: FC<ButtonProps> = forwardRef<
@@ -27,12 +27,10 @@ const UploadButton: FC<ButtonProps> = forwardRef<
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0];    
     setFileSelected(!!file); // Update the state based on whether a file is selected
     if (file && onFileUpload) {
       onFileUpload(file);
-    } else if (onFileUpload) {
-      onFileUpload(null);
     }
   };
 
@@ -45,6 +43,7 @@ const UploadButton: FC<ButtonProps> = forwardRef<
           fileSelected ? "file-selected" : "no-file"
         }`}
         onClick={handleButtonClick}
+        type="button"
       >
         <div className="flex items-center space-between gap-2 md:w-[280px]">
           <UploadButtonFolderSvg />

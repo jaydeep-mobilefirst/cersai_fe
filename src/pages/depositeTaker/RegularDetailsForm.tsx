@@ -14,28 +14,18 @@ type Props = {};
 
 const RegularDetailsForm = (props: Props) => {
   const screenWidth = useScreenWidth();
-  const {onChange, handleValidationChecks} = useContext(FormHandlerContext)
+  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
   const [loader, setLoader] = useState(false);
-  const {allFormData} = useDepositTakerRegistrationStore(state => state)
+  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
   const Navigate = useNavigate();
   const [params, setParams] = useSearchParams();
 
   const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Regulators Details");
-  const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
-  // const handleDateChange = (event: any) => {
-  //   const { value } = event.target;
-  //   const today = new Date();
-  //   const selected = new Date(value);
-  //   today.setHours(0, 0, 0, 0);
-
-  //   if (!(selected <= today)) {
-  //     setError("registrationDate", { message: "Date should not be in future" });
-  //   } else {
-  //     clearErrors("registrationDate");
-  //   }
-  //   setValue("registrationDate", value);
-  // };
-
+  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  ? allFormData?.formFields?.form_fields?.filter(
+      (f: any) => f?.sectionId === sectionId?.id
+    )
+  : [];  
 
   const onSubmit = async (event : any) => {
     event?.preventDefault();
@@ -69,7 +59,7 @@ const RegularDetailsForm = (props: Props) => {
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
             <h1 className="text-2xl font-bold mb-6">Regulator Details</h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange}/>
+            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
           </div>
         </div>
 

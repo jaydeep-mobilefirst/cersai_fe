@@ -5,6 +5,7 @@ import SelectButton from "../form/SelectButton";
 import DatePicker from "../form/DatePicker";
 import DscButton from "../form/Dscbutton";
 import RequiredStar from "./RequiredStar";
+import UploadButton from "../form/UploadButton";
 
 type Props = {
   allFormData: any
@@ -146,12 +147,31 @@ const DynamicFields = ({ formFields, onChange, allFormData, documentFields, onFi
       }
 
       {
-        documentFields && documentFields?.map((fileField: any) => {
+        documentFields && documentFields?.filter((f : any) => f.sectionId === formFields[0]?.sectionId)?.map((fileField: any) => {
           const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fileField?.fileType)?.name;
 
           switch (fieldType) {
             case 'pdf':
-              return <></>
+
+            const onChange = (file : File | null) => {
+              if (onFileChange) {
+                  console.log(file);
+                  onFileChange(file, fileField, fieldType);
+                }
+                }
+              return <div className='flex flex-col'>
+              <label
+                htmlFor={fileField?.documentName}
+                className="block text-gray-700 text-sm font-semibold mb-2"
+              >
+                {fileField?.documentName}
+                {fileField?.required && <span className="text-[#ff0000] ml-1">*</span>}
+              </label>
+              <DscButton onFileUpload={onChange} fname={fileField?.fileName} />
+              <span className="text-red-500">
+                {fileField?.error}
+              </span>
+            </div>
 
             case 'jpg/png/jpeg':
               return <>
@@ -159,27 +179,27 @@ const DynamicFields = ({ formFields, onChange, allFormData, documentFields, onFi
                 
               </>;
 
-            case "DSC":
-              const onChange = (file : File | null) => {
-                if (onFileChange) {
-                  onFileChange(file, fileField, fieldType);
-                }
-              }
-              return <>
-                <div className='flex flex-col'>
-                  <label
-                    htmlFor={fileField?.documentName}
-                    className="block text-gray-700 text-sm font-semibold mb-2"
-                  >
-                    {fileField?.documentName}
-                    {fileField?.required && <span className="text-[#ff0000] ml-1">*</span>}
-                  </label>
-                  <DscButton onFileUpload={onChange} fname={fileField?.fileName} />
-                  <span className="text-red-500">
-                    {fileField?.error}
-                  </span>
-                </div>
-              </>;
+            // case "DSC":
+            //   const onChange = (file : File | null) => {
+            //     if (onFileChange) {
+            //       onFileChange(file, fileField, fieldType);
+            //     }
+            //   }
+            //   return <>
+            //     <div className='flex flex-col'>
+            //       <label
+            //         htmlFor={fileField?.documentName}
+            //         className="block text-gray-700 text-sm font-semibold mb-2"
+            //       >
+            //         {fileField?.documentName}
+            //         {fileField?.required && <span className="text-[#ff0000] ml-1">*</span>}
+            //       </label>
+            //       <DscButton onFileUpload={onChange} fname={fileField?.fileName} />
+            //       <span className="text-red-500">
+            //         {fileField?.error}
+            //       </span>
+            //     </div>
+            //   </>;
 
             default:
               return <></>;
