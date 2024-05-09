@@ -9,9 +9,11 @@ type Props = {
 }
 
 interface IContextProps {
+  onFileChange: (event : any | undefined, field : any, fieldType : string) => Promise<void>
   onChange: (event: any | undefined, fieldData: any, fieldType: string) => Promise<void>
   updatePanFormField: (responseData: any, panFormField: any) => Promise<boolean>
   handleValidationChecks: (formFields: any[]) => Promise<boolean>
+  handleDocumentValidations :  (sectionId: number) => Promise<boolean>
 }
 
 // declare function handleValidations(errors: any): void;
@@ -19,7 +21,7 @@ interface IContextProps {
 export const FormHandlerContext = createContext({} as IContextProps);
 
 const FormHandlerProviders = ({children}: Props) => {
-  const {allFormData, setAllFormData} = useDepositTakerRegistrationStore(state => state)
+  const {allFormData, setAllFormData, documentData, setAllDocumentData} = useDepositTakerRegistrationStore(state => state)
   const updateValue = (value : string | any[], fieldId : number, dscFileNAme : string = "") => {
     let modifiedFormFields = allFormData?.formFields?.form_fields?.map((o : any) => {
       if (o?.id === fieldId) {
@@ -35,29 +37,35 @@ const FormHandlerProviders = ({children}: Props) => {
     }            
     setAllFormData(obj)
   }
-
-  const updateDropdownOptionsForStateAndDistrict = (value : any[], fieldId : number, stateValue : string, stateId : number) => {    
-    let modifiedFormFields = allFormData?.formFields?.form_fields?.map((o : any) => {
-      if (o?.id === fieldId) {
-        let data = {...o, dropdown_options : {...o.dropdown_options, options : value}, error : ""}        
-        return data;
-      }
-      if (o?.id === stateId) {
-        let data = {...o, userInput : stateValue,  error : ""}        
-        return data;
+  const updateDocumentValue = (value : string | File | File[], fieldData : any, fileName : string ) => {
+    let modifiedFileFields = documentData?.map((o : any) => {
+      if (o?.id === fieldData?.id) {
+        return {...o, file : value, error : "", fileName : fileName};
       }
       else{
         return o;
       }
     })
-    
-    let obj = {
-      ...allFormData,
-      formFields : {form_fields : modifiedFormFields}
-    }            
-    setAllFormData(obj)
+            
+    setAllDocumentData(modifiedFileFields)
   }
 
+  const onFileChange = async (event : any, field : any, fieldType : string) : Promise<void> => {
+    switch (fieldType) {
+      case 'DSC':
+        const file = event;
+        const base64String : string = await convertFileToBase64Async(file)
+        updateDocumentValue(base64String, field, file?.name);
+        break;
+      case 'pdf' :
+      case 'jpg/png/jpeg' :
+        updateDocumentValue(event, field, event?.name);
+        break;
+      default:
+        break;
+    }
+    
+  }
 
   const onChange = async (event : any = undefined, fieldData : any, fieldType : string) => {
     const inputFieldTypes = ["text", "textarea", "password", "number", "email", "phone_number"];
@@ -83,29 +91,7 @@ const FormHandlerProviders = ({children}: Props) => {
     updateValue(value, fieldData?.id);
     }
     else if (fieldType === "select") {
-      if (fieldData?.dropdown_Components) {
-        const dropdownData = allFormData?.dropdownData?.find((d : any) => d.id === fieldData?.dropdown_Components);
-          if (dropdownData) {
-          switch (dropdownData?.name) {
-            case "state":
-              let districtDropDownId = allFormData?.dropdownData?.find((d : any) => d.name === "district")?.id; 
-              if (districtDropDownId) {
-                let districtFormField = allFormData?.formFields?.form_fields?.find((f : any) => f?.dropdown_Components === districtDropDownId);
-                let fetchDistricts = await axios.get(`${backendBaseUrl}/cms/location/district/${event?.id}?page=1&pagesize=50`)
-                if (fetchDistricts.status > 300 || fetchDistricts?.status < 200) {
-                  alert("Error Fetching Districts! Please try again later!")
-                }
-                let districts = await fetchDistricts.data?.data?.list;
-                updateDropdownOptionsForStateAndDistrict(districts, districtFormField?.id, event?.value, fieldData?.id)
-              }
-              break;
-          
-            default:
-              updateValue(event?.value, fieldData?.id);
-              break;
-          }
-        }
-      }
+      updateValue(event?.value, fieldData?.id);
     }
     else if(fieldType === "pincode"){
       const { value } = event.target;
@@ -116,7 +102,6 @@ const FormHandlerProviders = ({children}: Props) => {
       if (value.length === 6) {
        const response = await axios.get(`${pincodeValidationUrl}/${value}`)
        const data = response?.data;  
-       console.log({data});
        let stateFormField = allFormData?.formFields?.form_fields?.find((o : any) => o?.label?.toLowerCase() === "state" && fieldData?.sectionId === o?.sectionId);
        let districtFormField = allFormData?.formFields?.form_fields?.find((o : any) => o?.label?.toLowerCase() === "district" && fieldData?.sectionId === o?.sectionId);
         if (data[0]?.Status === "Success") {
@@ -148,7 +133,7 @@ const FormHandlerProviders = ({children}: Props) => {
         }
       }
     }
-    else if(fieldType === "DSC3"){
+    else if(fieldType === "DSC"){
       const file = event;
       const base64String : string= await convertFileToBase64Async(file)
       updateValue(base64String, fieldData?.id, file?.name);
@@ -214,6 +199,7 @@ const FormHandlerProviders = ({children}: Props) => {
       else{
         handleValidations(true);
       }
+
       return success
     } catch (error) {
       return true
@@ -234,7 +220,39 @@ const FormHandlerProviders = ({children}: Props) => {
         })
       }
     })   
-    return await ValidationSubmitAPI(formFieldsForValidations);
+    let formValidations =  await ValidationSubmitAPI(formFieldsForValidations);
+    let documentValidations = documentData?.length > 0 ? await handleDocumentValidations(formFields[0]?.sectionId) : true;
+
+    console.log({formValidations, documentValidations, documentData});
+    
+
+    return formValidations && documentValidations;
+  }
+
+  //  If false means validation failed
+  const handleDocumentValidations = async (sectionId : number) : Promise<boolean> => {
+    let errorCount = 0;
+    
+    let modifiedFileFields = documentData?.map((o : any) => {
+      if (o?.sectionId === sectionId) {
+        console.log({o});
+        
+        let error = "";
+        if(o?.required && (o?.file === "" || o?.file === undefined || o?.file === null)){
+          error = "File Required";
+          errorCount += 1;
+          return {...o, error : error};
+        }
+        else { 
+          return o;
+        }
+      }
+      else{
+        return o;
+      }
+    })
+    setAllDocumentData(modifiedFileFields)
+    return errorCount === 0;
   }
 
    const updatePanFormField = async (responseData : any, panFormField  : any) : Promise<boolean> => {
@@ -259,7 +277,7 @@ const FormHandlerProviders = ({children}: Props) => {
   }
 
   return (
-    <FormHandlerContext.Provider  value={{onChange, handleValidationChecks, updatePanFormField}}>
+    <FormHandlerContext.Provider  value={{onChange, handleValidationChecks, updatePanFormField, onFileChange, handleDocumentValidations}}>
       {children}
     </FormHandlerContext.Provider>
   )

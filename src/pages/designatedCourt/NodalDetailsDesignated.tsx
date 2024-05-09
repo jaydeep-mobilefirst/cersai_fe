@@ -1,39 +1,49 @@
-import React, { useContext, useState } from "react";
-import NodalDetailsSchema from "../../formValidationSchema/deposit_taker/NodalDetails.schema";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import InputFields from "../../components/userFlow/form/InputField";
-import UploadButton from "../../components/userFlow/form/UploadButton";
+import { useContext, useState } from "react";
 import { useScreenWidth } from "../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import LoaderSpin from "../../components/LoaderSpin";
+import OtpPage from "../depositeTaker/OtpPage";
 
 const NodalDetailsDesignated = () => {
-  const screenWidth = useScreenWidth();
   const [params, setParams] = useSearchParams();
-  const { onChange, handleValidationChecks } = useContext(FormHandlerContext)
-  const [loader, setLoader] = useState(false);
   const Navigate = useNavigate();
+  const screenWidth = useScreenWidth();
+  const [showOTPModel, setShowOTPModel] = useState<boolean>(false);
+  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
+  const [loader, setLoader] = useState(false);
 
-  const { allFormData } = useDepositTakerRegistrationStore(state => state)
+  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
 
-  const sectionId = allFormData?.entitySections?.find((s: any) => s?.sectionName === "Nodal Details");
-  const formFields = allFormData?.formFields?.form_fields?.filter((f: any) => f?.sectionId === sectionId?.id);
-
-
-  const onSubmit = async (event: any) => {
+  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Nodal Details");
+  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  ? allFormData?.formFields?.form_fields?.filter(
+      (f: any) => f?.sectionId === sectionId?.id
+    )
+  : [];
+  
+  const onSubmit = async (event : any) => {
     event?.preventDefault();
     setLoader(true)
+    // False means validation fail
     const noError = await handleValidationChecks(formFields)
+  
     setLoader(false)
 
     if (noError) {
-      Navigate('/designated/court/reviewdetails')
-    };
-  }
+      const edit = params.get('edit');
+      const nodalVerification = localStorage.getItem('nodalVerification');
+      console.log({nodalVerification});
+      if (edit !== undefined && edit !== null && edit !== "" && nodalVerification) {
+        Navigate('/depositetaker/signup/reviewdetails')
+      }
+      else{
+        setShowOTPModel(true)
+      }
+    }
+  };  
 
   return (
     <>
@@ -51,9 +61,10 @@ const NodalDetailsDesignated = () => {
             <h1 className="text-2xl font-bold mb-6 text-gilroy-medium">
               Nodal Details
             </h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} />
+            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
           </div>
         </div>
+        {showOTPModel && <OtpPage redirectLink="/designated/court/reviewdetails" closeShowOtpModel={() => setShowOTPModel(false)} />}
 
         <div>
           <div

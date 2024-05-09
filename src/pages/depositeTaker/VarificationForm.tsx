@@ -7,19 +7,25 @@ import LoaderSpin from "../../components/LoaderSpin";
 import axios from "axios";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
+import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 
 type Props = {};
 
 const VerificationForm = (props: Props) => {
   const [loader, setLoader] = useState(false);
-  const {onChange, handleValidationChecks, updatePanFormField} = useContext(FormHandlerContext)
+  const {onChange, handleValidationChecks, updatePanFormField, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
   const Navigate = useNavigate();
-  const {allFormData, setAllFormData} = useDepositTakerRegistrationStore(state => state)
+  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
   const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Verification");
   const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
   const screenWidth = useScreenWidth();
 
- 
+  // Pan modal data 
+  const [para1, setPara1] = useState('')
+  const [para2, setPara2] = useState('')
+  const [panSuccessModal, setPanSuccessModal] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [allVerified, setAllVerified] = useState(false);
   const onSubmit = async (event : any) => {
     event?.preventDefault();
 
@@ -35,6 +41,12 @@ const VerificationForm = (props: Props) => {
           pan_no: pan?.userInput
         })
         const data = response.data;
+        if (data?.status !== "success") {
+          setPara1(`Verification Failed`)
+          setPara2(`${data?.message}`)
+          setSubmitted(false)
+          setPanSuccessModal(true)
+        }
         
         const panUpdate = updatePanFormField(data, pan);
 
@@ -56,17 +68,28 @@ const VerificationForm = (props: Props) => {
     setLoader(false)
     
     if (noError && panVerified) {
-      Swal.fire({
-        icon : "success",
-        text : "Pan Verified Successfully!",
-        confirmButtonText : "Ok"
-      })
-      .then((confirm : any) => {
-        Navigate('/depositetaker/signup/entitydetails')
-      })
+      setAllVerified(true);
+      setPara1(`Verification Successful`)
+      setPara2(`Your PAN Details have been successfully verified.`)
+      setSubmitted(true)
+      setPanSuccessModal(true)
+      // Swal.fire({
+      //   icon : "success",
+      //   text : "Pan Verified Successfully!",
+      //   confirmButtonText : "Ok"
+      // })
+      // .then((confirm : any) => {
+      //   
+      // })
     }
   };  
   
+  const handleClosePopup = () =>{
+    setPanSuccessModal(false)
+    if (allVerified) {
+      Navigate('/depositetaker/signup/entitydetails')
+    }
+  }
   return (
     <>
       <div className="">
@@ -83,7 +106,7 @@ const VerificationForm = (props: Props) => {
               Verification
             </h1>
             <div className="bg-white p-4 lg:p-[48px]">
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange}/>
+            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
 
             </div>
           </div>
@@ -107,6 +130,14 @@ const VerificationForm = (props: Props) => {
                 </button>
               </div>
             </div>
+            <SuccessPopup
+              closePopup={handleClosePopup}
+              showPopup={() => setPanSuccessModal(true)}
+              toggle={panSuccessModal}
+              para1={para1}
+              para2={para2}
+              success={submitted}
+            />
             <div>
               <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 

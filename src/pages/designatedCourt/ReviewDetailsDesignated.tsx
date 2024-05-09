@@ -8,10 +8,13 @@ import Button from "../../components/userFlow/form/Button";
 import folderOpen from "../../assets/images/folder-open.svg";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { signupSideBarDesignated } from "../../utils/hardText/signUpDesignatedText";
+import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
+import LoaderSpin from "../../components/LoaderSpin";
+import axios from "axios";
+import { bffUrl } from "../../utils/api";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
-
   const downloadPDF = () => {
     setIsDownloading(true);
     const element = document.getElementById("reviewContent");
@@ -23,22 +26,69 @@ const useDownloadPDF = () => {
 };
 
 const ReviewDetailsDesignated = () => {
+  const [para1, setPara1] = useState('') 
+  const [para2, setPara2] = useState('') 
+  const [submitModal, setSubmitModal] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
-
-  const navigateToLandingPage = () => {
-    Navigate("/Landing");
-  };
-
+  const [loader, setLoader] = useState(false);
+  
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
 
-  const submit = () => {
-    
-  }
+  const submit = async (e : any) => {
+    e.preventDefault();
+    setLoader(true);
+    const finalResult =
+      allFormData &&
+      allFormData?.formFields?.form_fields?.map((field: any) => {
+        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
+        if (sectionCode === 'Nodal Details') {
+          sectionCode = 'Nodal Officer'
+        }
+        return {
+          fieldId: field?.id,
+          label: field?.label,
+          sectionCode: sectionCode,
+          value: field?.userInput,
+        };
+      });
+     
+      axios.post(
+          bffUrl + "/designated-court/add-form-fields",
+          { formData: finalResult }
+        )
+        .then((response : any) => {
+          const data = response.data;
+          if (data?.success) {
+            // setSubmitModal( true)
+            setPara1(`Your registration request has been sent successfully and
+            approval/rejection of your registration will be informed to you
+            via email.`)
+            setPara2(`Your registration acknowledgement ID is RT48726398745923`)
+            setSubmitted(true)
+            setSubmitModal(true)
+            Navigate("/");
+        } else {
+          setPara1(`Something went wrong`)
+          setPara2(`Please try again later`)
+          setSubmitted(false)
+          setSubmitModal(true)
+        }
+        })
+        .catch((e : any) => {
+          setLoader(false);
+          setPara1(`Something went wrong`)
+          setPara2(`Please try again later`)
+          setSubmitted(false)
+          setSubmitModal(true)
+          setLoader(false);
+        })
+}
 
   return (
     <>
@@ -169,12 +219,19 @@ const ReviewDetailsDesignated = () => {
                 disabled={!isChecked}
                 className="ml-[16px] w-auto md:w-[130px] cursor-pointer rounded-[12px] bg-[#385723] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
-                Submit
+              {loader ? <LoaderSpin /> : "Submit"}
               </button>
             </div>
           </div>
         </div>
-
+        <SuccessPopup 
+           closePopup={() => {setSubmitModal(false); setSubmitModal(false);Navigate('/')}} 
+           showPopup={() => setSubmitModal(true)} 
+           toggle={submitModal} 
+           para1={para1}
+           para2={para2}
+           success={submitted}
+        />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
             © 2024 Protean BUDs, All Rights Reserved.

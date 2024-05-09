@@ -42,8 +42,10 @@ const useDownloadPDF = () => {
 };
 
 const ReviewMain = () => {
+  const [para1, setPara1] = useState("");
+  const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
-  const [dtId, setDtId] = useState("");
+  const [submitted, setSubmitted] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
@@ -72,42 +74,41 @@ const ReviewMain = () => {
         };
       });
 
-    try {
-      const response = await axios.post(
-        bffUrl + "/deposit-taker/add-form-fields/",
-        { formData: finalResult }
-      );
-      const data = await response.data;
+    axios
+      .post(bffUrl + "/deposit-taker/add-form-fields", {
+        formData: finalResult,
+      })
+      .then((response: any) => {
+        console.log({ response });
 
-      if (data?.success) {
-        // setSubmitModal( true)
-        setDtId(data?.data?.newDepositTaker?.uniqueId);
-        Swal.fire({
-          icon: "success",
-          title: `Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`,
-          text: `Your registration request has been sent successfully and
+        const data = response.data;
+        console.log({ data });
+
+        if (data?.success) {
+          // setSubmitModal( true)
+          setPara1(`Your registration request has been sent successfully and
           approval/rejection of your registration will be informed to you
-          via email.`,
-          customClass: {
-            title: "text-sm",
-          },
-        });
-        Navigate("/");
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Something went wrong",
-          text: "Please try again",
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Something went wrong",
-        text: "Please try again",
+          via email.`);
+          setPara2(
+            `Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`
+          );
+          setSubmitted(true);
+          setSubmitModal(true);
+        } else {
+          setPara1(`Something went wrong`);
+          setPara2(`Please try again later`);
+          setSubmitted(false);
+          setSubmitModal(true);
+        }
+      })
+      .catch((e: any) => {
+        setLoader(false);
+        setPara1(`Something went wrong`);
+        setPara2(`Please try again later`);
+        setSubmitted(false);
+        setSubmitModal(true);
+        setLoader(false);
       });
-      setLoader(false);
-    }
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -234,12 +235,13 @@ const ReviewMain = () => {
         <SuccessPopup
           closePopup={() => {
             setSubmitModal(false);
-            setLoader(false);
             Navigate("/");
           }}
           showPopup={() => setSubmitModal(true)}
           toggle={submitModal}
-          dtID={dtId}
+          para1={para1}
+          para2={para2}
+          success={submitted}
         />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">

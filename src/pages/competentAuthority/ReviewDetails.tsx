@@ -1,11 +1,16 @@
 // @ts-nocheck
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/arrow-down.svg";
 import html2pdf from "html2pdf.js";
 import Button from "../../components/userFlow/form/Button";
 import folderOpen from "../../assets/images/folder-open.svg";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
+import { signupSideBarCompetent } from "../../utils/hardText/signUpCompetentText";
+import axios from "axios";
+import { bffUrl } from "../../utils/api";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -24,44 +29,63 @@ const ReviewDetails = () => {
   const Navigate = useNavigate();
   const { downloadPDF, isDownloading } = useDownloadPDF();
   const [isChecked, setIsChecked] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [para1, setPara1] = useState('')
+  const [para2, setPara2] = useState('')
+  const [submitModal, setSubmitModal] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
 
-  const navigateToLandingPage = () => {
-    Navigate("/Landing");
-  };
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(event.target.checked);
-  };
 
-  const sections = [
-    {
-      title: "Competent Authority",
-      buttonText: "Edit",
-      fieldsLeft: [
-        { label: "Name of Competent Authority", value: "Lorem ipsum" },
-        { label: "Address Line 1", value: "Lorem ipsum" },
-        { label: "Address Line 2", value: "Lorem ipsum" },
-      ],
-      fieldsRight: [
-        { label: "PIN code", value: "Lorem ipsum" },
-        { label: "State", value: "Lorem ipsum" },
-        { label: "Jurisdiction", value: "Lorem ipsum" },
-      ],
-    },
-  ];
-  const sections1 = [
-    {
-      title: "Nodal Details",
-      buttonText: "Edit",
-      fieldsLeft: [
-        { label: "Nodal Officer Name", value: "Lorem ipsum" },
-        { label: "Nodal Officer Email", value: "Lorem ipsum" },
-      ],
-      fieldsRight: [
-        { label: "Nodal Officer Name", value: "Lorem ipsum" },
-        { label: "Nodal Officer Designation", value: "Lorem ipsum" },
-      ],
-    },
-  ];
+  const submit = async (e : any) => {
+    e.preventDefault();
+    setLoader(true);
+    const finalResult =
+      allFormData &&
+      allFormData?.formFields?.form_fields?.map((field: any) => {
+        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
+        if (sectionCode === 'Nodal Details') {
+          sectionCode = 'Nodal Officer'
+        }
+        return {
+          fieldId: field?.id,
+          label: field?.label,
+          sectionCode: sectionCode,
+          value: field?.userInput,
+        };
+      });
+     
+      axios.post(
+          bffUrl + "/competent-authority/add-form-fields",
+          { formData: finalResult }
+        )
+        .then((response : any) => {
+          const data = response.data;
+          if (data?.success) {
+            // setSubmitModal( true)
+            setPara1(`Your registration request has been sent successfully and
+            approval/rejection of your registration will be informed to you
+            via email.`)
+            setPara2(`Your registration acknowledgement ID is RT48726398745923`)
+            setSubmitted(true)
+            setSubmitModal(true)
+            Navigate("/");
+        } else {
+          setPara1(`Something went wrong`)
+          setPara2(`Please try again later`)
+          setSubmitted(false)
+          setSubmitModal(true)
+        }
+        })
+        .catch((e : any) => {
+          setLoader(false);
+          setPara1(`Something went wrong`)
+          setPara2(`Please try again later`)
+          setSubmitted(false)
+          setSubmitModal(true)
+          setLoader(false);
+        })
+}
 
   return (
     <>
@@ -70,99 +94,55 @@ const ReviewDetails = () => {
         <main className="flex-grow p-6 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             <h1 className="text-2xl font-bold mb-6">Review</h1>
-            {sections.map((section, index) => (
-              <div className="mb-[16px]" key={index}>
-                <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold">
-                  <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                    {section.title}
-                  </p>
-                  <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
-                    {section.buttonText}
-                  </button>
-                </div>
-
-                <div className="shadow-sm p-5 rounded-md ">
-                  <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                    <div className="w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px]">
-                      {section.fieldsLeft.map((field, idx) => (
-                        <div
-                          className="sm:mr-[48px] flex justify-between"
-                          key={idx}
-                        >
-                          <div className="opacity-60">
-                            {field.label}
-                            <span className="text-[#ff0000]">*</span>
-                          </div>
-                          <div>{field.value}</div>
-                        </div>
-                      ))}
+            {allFormData &&
+              allFormData?.entitySections?.map(
+                (section: any, index: number) => (
+                  <div className="mb-[16px]" key={index}>
+                    <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold">
+                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                        {section?.sectionName}
+                      </p>
+                      <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                        {
+                          section?.sectionName !== "Verification" ?
+                            <Link to={signupSideBarCompetent.find((sec) => sec?.description === section?.sectionName)?.path + "?edit=true"}>
+                              Edit
+                            </Link>
+                            :
+                            "Success"
+                        }
+                      </button>
                     </div>
-                    <div className="w-full grid gap-y-[16px]">
-                      {section.fieldsRight.map((field, idx) => (
-                        <div
-                          className="sm:ml-[48px] flex justify-between"
-                          key={idx}
-                        >
-                          <div className="opacity-60">
-                            {field.label}
-                            <span className="text-[#ff0000]">*</span>
-                          </div>
-                          <div>{field.value}</div>
+
+                    <div className="shadow-sm p-5 rounded-md ">
+                      <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
+                        <div className="w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px] grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          {allFormData?.formFields?.form_fields
+                            ?.filter((f: any) => f?.sectionId === section?.id)
+                            ?.map((field: any, idx: number) => {
+                              console.log({
+                                field,
+                              });
+
+                              return (
+                                <div
+                                  className="sm:mr-[48px] flex justify-between"
+                                  key={idx}
+                                >
+                                  <div className="text-gray-500">
+                                    {field.label}
+                                    <span className="text-[#ff0000]">*</span>
+                                  </div>
+                                  <div>{field?.dscFileNAme !== "" && field?.dscFileNAme !== undefined ? field?.dscFileNAme : field.userInput}</div>
+                                </div>
+                              );
+                            })}
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-            <div>
-              {sections1.map((section, index) => (
-                <div className="mb-[16px]" key={index}>
-                  <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold">
-                    <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                      {section.title}
-                    </p>
-                    <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
-                      {section.buttonText}
-                    </button>
-                  </div>
-
-                  <div className="shadow-sm p-5 rounded-md ">
-                    <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                      <div className="  w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px]">
-                        {section.fieldsLeft.map((field, idx) => (
-                          <div
-                            className="sm:mr-[48px] flex justify-between "
-                            key={idx}
-                          >
-                            <div className="opacity-60">
-                              {field.label}
-                              <span className="text-[#ff0000]">*</span>
-                            </div>
-                            <div>{field.value}</div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="w-full grid gap-y-[16px]">
-                        {section.fieldsRight.map((field, idx) => (
-                          <div
-                            className="sm:ml-[48px] flex justify-between"
-                            key={idx}
-                          >
-                            <div className="opacity-60">
-                              {field.label}
-                              <span className="text-[#ff0000]">*</span>
-                            </div>
-                            <div>{field.value}</div>
-                          </div>
-                        ))}
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                )
+              )}
             <div>
               <div>
                 <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold mb-4">
@@ -208,7 +188,6 @@ const ReviewDetails = () => {
             <div>
               <button
                 onClick={downloadPDF}
-                disabled={!isChecked}
                 className="w-auto md:w-[208px] gap-[8px] flex rounded-[12px] text-[#52AE32] border border-[#52AE32] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
                 <img src={download} alt="download" className="mr-2" />
@@ -217,8 +196,8 @@ const ReviewDetails = () => {
             </div>
             <div>
               <button
-                onClick={navigateToLandingPage} // Assuming this action should be tied to the Submit button
-                disabled={!isChecked}
+                type="submit"
+                onClick={submit} // Assuming this action should be tied to the Submit button
                 className="ml-[16px] w-auto md:w-[208px] rounded-[12px] bg-[#385723] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
                 Submit
@@ -226,7 +205,14 @@ const ReviewDetails = () => {
             </div>
           </div>
         </div>
-
+        <SuccessPopup 
+           closePopup={() => {setSubmitModal(false); setSubmitModal(false);Navigate('/')}} 
+           showPopup={() => setSubmitModal(true)} 
+           toggle={submitModal} 
+           para1={para1}
+           para2={para2}
+           success={submitted}
+        />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
             © 2024 Protean BUDs, All Rights Reserved.
