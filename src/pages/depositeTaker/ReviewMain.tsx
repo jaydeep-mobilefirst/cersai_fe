@@ -43,13 +43,12 @@ const useDownloadPDF = () => {
 
 const ReviewMain = () => {
   const [submitModal, setSubmitModal] = useState(false);
-  const [dtId, setDtId] = useState('');
+  const [dtId, setDtId] = useState("");
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
-
 
   const sectionCodes: any = {
     1: "de_verification",
@@ -73,39 +72,39 @@ const ReviewMain = () => {
         };
       });
 
-      
-      try {
-        const response = await axios.post(
-          bffUrl + "/deposit-taker/add-form-fields/",
-          { formData: finalResult }
-        );
-        const data = await response.data;
-        
-        if (data?.success) {
-          // setSubmitModal( true)
-        setDtId(data?.data?.newDepositTaker?.uniqueId)
+    try {
+      const response = await axios.post(
+        bffUrl + "/deposit-taker/add-form-fields/",
+        { formData: finalResult }
+      );
+      const data = await response.data;
+
+      if (data?.success) {
+        // setSubmitModal( true)
+        setDtId(data?.data?.newDepositTaker?.uniqueId);
         Swal.fire({
           icon: "success",
           title: `Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`,
           text: `Your registration request has been sent successfully and
           approval/rejection of your registration will be informed to you
-          via email.`,customClass : {
-            title : 'text-sm'
-          }
+          via email.`,
+          customClass: {
+            title: "text-sm",
+          },
         });
         Navigate("/");
       } else {
         Swal.fire({
           icon: "error",
           title: "Something went wrong",
-          text :"Please try again"
+          text: "Please try again",
         });
       }
     } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Something went wrong",
-        text :"Please try again"
+        text: "Please try again",
       });
       setLoader(false);
     }
@@ -131,14 +130,20 @@ const ReviewMain = () => {
                         {section?.sectionName}
                       </p>
                       <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
-                       {
-                        section?.sectionName !== "Verification" ?
-                        <Link to={signupSideBar.find((sec) => sec?.description === section?.sectionName)?.path + "?edit=true"}>
-                          Edit
-                        </Link>
-                       :
-                       "Success"
-                       } 
+                        {section?.sectionName !== "Verification" ? (
+                          <Link
+                            to={
+                              signupSideBar.find(
+                                (sec) =>
+                                  sec?.description === section?.sectionName
+                              )?.path + "?edit=true"
+                            }
+                          >
+                            Edit
+                          </Link>
+                        ) : (
+                          "Success"
+                        )}
                       </button>
                     </div>
 
@@ -161,7 +166,12 @@ const ReviewMain = () => {
                                     {field.label}
                                     <span className="text-[#ff0000]">*</span>
                                   </div>
-                                  <div>{field?.dscFileNAme !== "" && field?.dscFileNAme !== undefined ? field?.dscFileNAme : field.userInput}</div>
+                                  <div>
+                                    {field?.dscFileNAme !== "" &&
+                                    field?.dscFileNAme !== undefined
+                                      ? field?.dscFileNAme
+                                      : field.userInput}
+                                  </div>
                                 </div>
                               );
                             })}
@@ -221,7 +231,16 @@ const ReviewMain = () => {
             </div>
           </div>
         </div>
-         <SuccessPopup closePopup={() => {setSubmitModal(false); setLoader(false); Navigate('/')}} showPopup={() => setSubmitModal(true)} toggle={submitModal} dtID={dtId}/>
+        <SuccessPopup
+          closePopup={() => {
+            setSubmitModal(false);
+            setLoader(false);
+            Navigate("/");
+          }}
+          showPopup={() => setSubmitModal(true)}
+          toggle={submitModal}
+          dtID={dtId}
+        />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
             © 2024 Protean BUDs, All Rights Reserved.
