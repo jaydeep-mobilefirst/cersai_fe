@@ -46,7 +46,6 @@ const ReviewMain = () => {
   const [para2, setPara2] = useState('')
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [dtId, setDtId] = useState('');
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
@@ -82,16 +81,19 @@ const ReviewMain = () => {
       { formData: finalResult }
     )
       .then((response: any) => {
+        console.log({response});
+        
         const data = response.data;
+        console.log({data});
+        
         if (data?.success) {
           // setSubmitModal( true)
           setPara1(`Your registration request has been sent successfully and
           approval/rejection of your registration will be informed to you
           via email.`)
-          setPara2(`Your registration acknowledgement ID is RT48726398745923`)
+          setPara2(`Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`)
           setSubmitted(true)
           setSubmitModal(true)
-          Navigate("/");
         } else {
           setPara1(`Something went wrong`)
           setPara2(`Please try again later`)
@@ -219,7 +221,7 @@ const ReviewMain = () => {
           </div>
         </div>
         <SuccessPopup
-          closePopup={() => {setSubmitModal(false); Navigate('/') }}
+          closePopup={() => {setSubmitModal(false); Navigate('/')}}
           showPopup={() => setSubmitModal(true)}
           toggle={submitModal}
           para1={para1}

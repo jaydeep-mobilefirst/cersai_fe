@@ -100,7 +100,7 @@ export const paths : any = {
 ;
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const Navigate = useNavigate();
-  const {entities, setEntities, setAllFormData} = useDepositTakerRegistrationStore(state => state)
+  const {entities, setEntities, setAllFormData, setAllDocumentData} = useDepositTakerRegistrationStore(state => state)
   const [data, setData] = useState<EntityType[]>(entities);
   const [loader, setLoader] = useState<boolean>(false);
   useEffect(() => {
@@ -148,10 +148,10 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
             let obj = {
               dropdownData,
               ...response?.data?.data,
-              registrationDocumentFields : modifiedFileFields,
               formFields : {form_fields : modifiedFormFields}
             }            
             setAllFormData(obj)
+            setAllDocumentData(modifiedFileFields)
           }
           else{
             throw new Error("Error getting data, Please try later!")

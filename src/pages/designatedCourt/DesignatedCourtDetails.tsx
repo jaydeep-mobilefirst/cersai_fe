@@ -9,11 +9,11 @@ import LoaderSpin from "../../components/LoaderSpin";
 const DesignatedCourtDetails: React.FC = () => {
   const screenWidth = useScreenWidth();
   const [params, setParams] = useSearchParams();
-  const {onChange, handleValidationChecks} = useContext(FormHandlerContext)
+  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
   const [loader, setLoader] = useState(false);
   const Navigate = useNavigate();
 
-  const {allFormData} = useDepositTakerRegistrationStore(state => state)
+  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
 
   const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Court Details");
   const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
@@ -52,7 +52,7 @@ const DesignatedCourtDetails: React.FC = () => {
             <h1 className="text-2xl font-bold mb-6 text-gilroy-medium">
               Court Details
             </h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange}/>
+            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
           </div>
         </div>
 
