@@ -11,6 +11,8 @@ import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import axios from "axios";
+import { bffUrl } from "../../../utils/api";
 
 type Props = {};
 
@@ -31,28 +33,43 @@ const ProfileNodalDetails = (props: Props) => {
         (f: any) => f?.sectionId === sectionId?.id
       )
     : [];
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm({
-  //   resolver: yupResolver(NodalDetailsSchema),
-  // });
 
-  console.log({ allFormData }, "allFormData");
+  const formData =
+    formFields &&
+    formFields?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: field.entityRegSection?.sectionName,
+      label: field.label,
+      value: field.userInput,
+    }));
+
+  console.log(formData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
     if (noError) {
-      Swal.fire({
-        icon: "success",
-        text: "Nodal Detail  update  successfully ",
-        confirmButtonText: "Ok",
-      }).then((confirm: any) => {
-        Navigate("/dt/profile?current=regulator");
-      });
+      axios
+        .patch(`${bffUrl}/deposit-taker/DT1714567103716`, {
+          formData: formData,
+        })
+        .then((response) => {
+          console.log(response, "response");
+          Swal.fire({
+            icon: "success",
+            text: "Nodal Detail  update  successfully ",
+            confirmButtonText: "Ok",
+          });
+          Navigate("/dt/profile?current=regulator");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            text: "Failed to update Nodal Details",
+            confirmButtonText: "Ok",
+          });
+        });
     }
     setLoader(false);
   };

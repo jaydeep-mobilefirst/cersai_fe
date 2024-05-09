@@ -3,18 +3,22 @@ import LoaderSpin from "../../LoaderSpin";
 interface FooterProps {
   onSubmit?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   loader?: boolean;
+  disabled?: boolean;
 }
 
-const Footer: React.FC<FooterProps> = ({ onSubmit, loader }) => {
+const Footer: React.FC<FooterProps> = ({ onSubmit, loader, disabled }) => {
   return (
     <div>
       {" "}
       <div className="flex flex-col sm:flex-row justify-end sm:justify-end items-center space-y-4 sm:space-y-0 pt-4 pb-4">
         <div className="flex items-center">
           <button
+            disabled={disabled}
             onClick={onSubmit}
             type="submit"
-            className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+            className={`${
+              disabled ? "bg-gray-500" : "bg-[#385723]"
+            } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
           >
             {loader ? <LoaderSpin /> : " Save and Continue"}
           </button>

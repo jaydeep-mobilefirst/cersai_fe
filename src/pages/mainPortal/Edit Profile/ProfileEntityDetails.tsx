@@ -12,6 +12,8 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { bffUrl } from "../../../utils/api";
 
 type Props = {};
 
@@ -36,19 +38,42 @@ const ProfileEntityDetails = (props: Props) => {
           f?.sectionId === verificationSectionId?.id
       )
     : [];
+  const formData =
+    formFields &&
+    formFields?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: field.entityRegSection?.sectionName,
+      label: field.label,
+      value: field.userInput,
+    }));
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
     if (noError) {
-      Swal.fire({
-        icon: "success",
-        text: "Entity Detail  update  successfully ",
-        confirmButtonText: "Ok",
-      }).then((confirm: any) => {
-        Navigate("/dt/profile?current=nodal");
-      });
+      if (noError) {
+        axios
+          .patch(`${bffUrl}/deposit-taker/DT1714567103716`, {
+            formData: formData,
+          })
+          .then((response) => {
+            console.log(response, "response");
+            Swal.fire({
+              icon: "success",
+              text: "Entity Detail  update  successfully ",
+              confirmButtonText: "Ok",
+            });
+            Navigate("/dt/profile?current=nodal");
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              text: "Failed to update Entity Details",
+              confirmButtonText: "Ok",
+            });
+          });
+      }
     }
     setLoader(false);
   };

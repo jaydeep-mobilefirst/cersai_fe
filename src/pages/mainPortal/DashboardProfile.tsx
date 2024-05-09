@@ -10,7 +10,7 @@ import ProfileUploadDocuments from "./Edit Profile/ProfileUploadDocuments";
 import ProfileBranches from "./Edit Profile/ProfileBranches";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import axios from "axios";
-import { backendBaseUrl } from "../../utils/api";
+import { backendBaseUrl, bffUrl } from "../../utils/api";
 
 type Props = {};
 
@@ -21,30 +21,32 @@ const DashboardProfile = (props: Props) => {
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
     axios
-      .get(`${backendBaseUrl}/cms/registration/field-data/1`)
+      .get(`${bffUrl}/registration/field-data/1`)
       .then(async (response) => {
         if (response?.data?.success) {
-          let dropdownData = undefined;
+          let dtData: any = [];
           try {
-            let dropdownOptionsRes = await axios.get(
-              `${backendBaseUrl}/cms/registration/dropdown-components`
+            let depositTakerData = await axios.get(
+              `${bffUrl}/deposit-taker/DT1715261417146`
             );
-            dropdownData = dropdownOptionsRes?.data?.data;
+            dtData =
+              depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
           } catch (error) {
             console.log("Error");
           }
-          console.log(response.data.data?.formFields, "respnse--------------");
+          console.log(dtData, "respnse--------------");
           let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
-              userInput: "",
+              userInput: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
               error: "",
             })
           );
           console.log(modifiedFormFields, "modified data");
 
           let obj = {
-            dropdownData,
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
