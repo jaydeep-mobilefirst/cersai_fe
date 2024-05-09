@@ -144,19 +144,11 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
               
             }
             let modifiedFormFields = response?.data?.data?.formFields?.map((o : any) => ({...o, userInput : "", error : ""}))
-            let districtDropDownId = dropdownData?.find((d : any) => d.name === "district")?.id; 
-            
-            modifiedFormFields = modifiedFormFields?.map((f : any) => {
-              if (f?.dropdown_Components === districtDropDownId) {
-                return {...f, dropdown_options : {...f.dropdown_options, options : []}}
-              }
-              else{
-                return f
-              }
-            })            
+            let modifiedFileFields = response?.data?.data?.registrationDocumentFields?.map((o : any) => ({...o, file : "", error : "", fileName : ""}))
             let obj = {
               dropdownData,
               ...response?.data?.data,
+              registrationDocumentFields : modifiedFileFields,
               formFields : {form_fields : modifiedFormFields}
             }            
             setAllFormData(obj)
