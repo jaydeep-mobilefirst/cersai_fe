@@ -69,17 +69,14 @@ import infoIcon from "../../../assets/images/info-circle.svg";
 import { bffUrl } from "../../../utils/api";
 import { useBranchStore } from "../../../store/upate-profile/branch";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 
 const ProfileBranches = () => {
-  // const { branches, addBranch, removeBranch } = useBranchStore();
   const { branches, addBranch, removeBranch } = useBranchStore((state) => ({
     branches: state.branches,
     addBranch: state.addBranch,
     removeBranch: state.removeBranch,
   }));
   const [isChecked, setChecked] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const {
     register,
@@ -102,7 +99,7 @@ const ProfileBranches = () => {
 
   const onSubmit = async (data: any) => {
     console.log(data, "data from all branches");
-    setFormSubmitted(true);
+
     try {
       const response = await axios.post(
         `${bffUrl}/deposit-taker/branch/DT1715261417146`,
@@ -145,14 +142,14 @@ const ProfileBranches = () => {
         <div className="mt-4">
           {branches.map((branch, index: any) => (
             <ProfileBranchForm
-              key={index}
-              i={index}
+              key={branch.id}
+              i={branch.id}
               control={control}
               register={register}
               errors={errors}
               setValue={setValue}
               getValues={getValues}
-              removeBranch={() => removeBranch(index)}
+              removeBranch={() => removeBranch(branch.id)}
               addBranch={() => addBranch()}
             />
           ))}

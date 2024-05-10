@@ -449,7 +449,7 @@ const ProfileBranchForm: React.FC<Props> = ({
         <span>Branch {i}</span>
         <div className="flex flex-row cursor-pointer">
           <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
-          {i > 0 && (
+          {i > 1 && (
             <img
               src={minusCircle}
               alt="Remove"
@@ -507,6 +507,14 @@ const ProfileBranchForm: React.FC<Props> = ({
             placeholder="Enter pin code"
             {...register(`branches[${i}].pinCode`, {
               required: "Pin code is required",
+              minLength: {
+                value: 6,
+                message: "Pin code must be 6 digits",
+              },
+              pattern: {
+                value: /^[0-9]{6}$/,
+                message: "Invalid pin code",
+              },
             })}
           />
           {errors?.branches?.[i]?.pinCode && (
