@@ -28,11 +28,33 @@ const ProfileNodalDetails = (props: Props) => {
     (s: any) => s?.sectionName === "Nodal Details"
   );
 
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields?.filter(
+  //       (f: any) => f?.sectionId === sectionId?.id
+  //     )
+  //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-    ? allFormData?.formFields?.form_fields?.filter(
-        (f: any) => f?.sectionId === sectionId?.id
-      )
+    ? allFormData?.formFields?.form_fields
+        .filter((field: any) => {
+          // Filtering fields based on sectionId
+          return field?.sectionId === sectionId?.id;
+        })
+        .map((field: any) => {
+          // Adding a 'disabled' property based on specific field labels
+          return {
+            ...field,
+            disabled: [
+              "Nodal Officer FirstName",
+              "Nodal Officer MiddleName",
+              "Nodal Officer LastName",
+              "Nodal Officer Mobile Number",
+              "Nodal Officer Email",
+              "DSC3 Certificate",
+            ].includes(field.label),
+          };
+        })
     : [];
+  // console.log(formFields, "nodalDetail");
 
   const formData =
     formFields &&

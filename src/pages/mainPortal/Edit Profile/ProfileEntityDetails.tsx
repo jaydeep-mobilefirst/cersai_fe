@@ -25,19 +25,44 @@ const ProfileEntityDetails = (props: Props) => {
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
 
+  console.log(allFormData, "allform data ");
+
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
   );
   const verificationSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Verification"
   );
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields?.filter(
+  //       (f: any) =>
+  //         f?.sectionId === entityDetailsSectionId?.id ||
+  //         f?.sectionId === verificationSectionId?.id
+  //     )
+  //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-    ? allFormData?.formFields?.form_fields?.filter(
-        (f: any) =>
-          f?.sectionId === entityDetailsSectionId?.id ||
-          f?.sectionId === verificationSectionId?.id
-      )
+    ? allFormData?.formFields?.form_fields
+        .filter((field: any) => {
+          // Filtering fields based on sectionId
+          return (
+            field?.sectionId === entityDetailsSectionId?.id ||
+            field?.sectionId === verificationSectionId?.id
+          );
+        })
+        .map((field: any) => {
+          // Adding a 'disabled' property based on specific field labels
+          return {
+            ...field,
+            disabled: [
+              "Pin Code",
+              "Pan Number",
+              "Company Name (As per Pan)",
+            ].includes(field.label),
+          };
+        })
     : [];
+  // console.log(formFields, "formfield entitydetail");
+
   const formData =
     formFields &&
     formFields?.map((field: any) => ({
@@ -46,6 +71,7 @@ const ProfileEntityDetails = (props: Props) => {
       label: field.label,
       value: field.userInput,
     }));
+  console.log(formData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
