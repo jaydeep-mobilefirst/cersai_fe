@@ -1,6 +1,6 @@
 import { useScreenWidth } from "../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useContext, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
@@ -12,6 +12,7 @@ type Props = {};
 
 const RegulatorDetails = (props: Props) => {
   const [loader, setLoader] = useState(false);
+  const [params, setParams] = useSearchParams();
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
   const Navigate = useNavigate();
@@ -26,18 +27,25 @@ const RegulatorDetails = (props: Props) => {
   );
   const screenWidth = useScreenWidth();
 
-  console.log(allFormData?.formFields?.form_fields, "allFormData");
+  console.log(allFormData, "allFormData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
     setLoader(false);
-
+    
     if (noError) {
-      Navigate("/regulator/court/uploaddocuments");
+      const edit = params.get('edit');
+      if (edit !== undefined && edit !== null && edit !== "") {
+        Navigate('/regulator/court/reviewdetails')
+      }
+      else{
+        Navigate('/regulator/court/uploaddocuments')
+      }
     }
   };
+  
 
   return (
     <>

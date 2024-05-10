@@ -207,7 +207,7 @@ const ReviewMain = () => {
 
         <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
           <div className=" ml-5">
-            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0">
+            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0" role="button" onClick={() => Navigate('/depositetaker/signup/nodaldetails')}>
               <img src={Arrow} alt="back Arrow" className="mr-2" />
               Back
             </button>
@@ -239,7 +239,9 @@ const ReviewMain = () => {
         <SuccessPopup
           closePopup={() => {
             setSubmitModal(false);
-            Navigate("/");
+            if (submitted) {
+              Navigate('/')
+            }
           }}
           showPopup={() => setSubmitModal(true)}
           toggle={submitModal}

@@ -19,25 +19,23 @@ import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields
 type Props = {};
 
 const UploadDocumentsRegulator = (props: Props) => {
-  const screenWidth = useScreenWidth();
-
-  const [file, setFile] = useState<File | null>(null);
-  const [showUploadPopup, setShowUploadPopup] = useState(false);
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
-
-  const [loader, setLoader] = useState(false);
-  const { onChange, handleValidationChecks, updatePanFormField } =
-    useContext(FormHandlerContext);
-  const Navigate = useNavigate();
-  const { allFormData, setAllFormData } = useDepositTakerRegistrationStore(
+  const { documentData, allFormData} = useDepositTakerRegistrationStore(
     (state) => state
   );
-
-  console.log(allFormData?.registrationDocumentFields, "allFormData");
+  const { onFileChange } = useContext(FormHandlerContext);
+  const screenWidth = useScreenWidth();
+  const Navigate = useNavigate();
+  const [file, setFile] = useState<File | null>(null);
+  const [fieldData, setFieldData] = useState<any>(null);
+  const [showUploadPopup, setShowUploadPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+   const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fieldData?.fileType)?.name;
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0]);
+      onFileChange(event.target.files[0], fieldData, fieldType);
       toggleUploadPopup();
       closePopup();
     }
@@ -56,10 +54,11 @@ const UploadDocumentsRegulator = (props: Props) => {
   };
 
   const handleDeleteFile = () => {
+    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fieldData?.fileType)?.name;
+    onFileChange("", fieldData, fieldType);
     setFile(null);
     toggleDeletePopup();
   };
-
   return (
     <>
       <div>
@@ -91,7 +90,7 @@ const UploadDocumentsRegulator = (props: Props) => {
             <div className="border-[#E6E6E6] border-[1px] lg:mt-20 w-full"></div>
             <div className=" p-4 lg:p-[48px]">
               <h1 className="text-2xl font-bold mb-6">Upload Documents</h1>
-              {allFormData?.registrationDocumentFields.map(
+              {documentData && documentData?.map(
                 (data: any, idx: number) => {
                   return (
                     <div key={idx}>
@@ -102,7 +101,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                               src={folderOpen}
                               alt="Folder Open Icon"
                               className="bg-[#EEF7EB] rounded p-1 text-white cursor-pointer"
-                              onClick={toggleUploadPopup}
+                              onClick={() =>{toggleUploadPopup(); setFieldData(data)}}
                             />
                           </div>
                           <div className="flex flex-col">
@@ -111,18 +110,18 @@ const UploadDocumentsRegulator = (props: Props) => {
                               <span className="text-red-500">*</span>
                             </h1>
                             <p className="text-xs md:text-base font-normal text-gilroy-medium text-gray-400">
-                              {file ? file.name : "No Document uploaded"}
+                              {data?.fileName !== "" && data?.fileName !== undefined ? data?.fileName : "No Document uploaded"}
                             </p>
                           </div>
                         </div>
                         <div className="flex flex-row mt-1 justify-end w-full md:w-auto">
-                          {file && (
+                          {data?.file && (
                             <div className="bg-white mt-1 mr-1 flex justify-center items-center h-10 w-10 rounded">
                               <img
                                 src={trashIcon}
                                 alt="Delete"
                                 className="rounded h-5 cursor-pointer"
-                                onClick={toggleDeletePopup}
+                                onClick={() => { toggleDeletePopup(); setFieldData(data)}}
                               />
                             </div>
                           )}
@@ -130,9 +129,9 @@ const UploadDocumentsRegulator = (props: Props) => {
                             <button
                               type="button"
                               className="bg-green-800 rounded-lg p-3 text-white flex justify-center items-center cursor-pointer mr-2 h-10"
-                              onClick={toggleUploadPopup}
+                              onClick={() =>{toggleUploadPopup(); setFieldData(data)}}
                             >
-                              {file ? (
+                              {data?.file ? (
                                 "View"
                               ) : (
                                 <img
@@ -149,6 +148,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                   );
                 }
               )}
+
             </div>
           </div>
 
@@ -178,7 +178,10 @@ const UploadDocumentsRegulator = (props: Props) => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
+                <button 
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+                onClick={() => Navigate('/regulator/court/regulatordetails')}
+                >
                   Back
                 </button>
               </div>

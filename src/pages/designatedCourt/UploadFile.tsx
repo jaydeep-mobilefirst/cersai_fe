@@ -8,7 +8,7 @@ interface UploadFileProps {
   showUploadPopup: boolean;
   file: File | null;
   handleFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  toggleUploadPopup: () => void;
+  toggleUploadPopup ?: () => void;
   closePopup: () => void;
 }
 

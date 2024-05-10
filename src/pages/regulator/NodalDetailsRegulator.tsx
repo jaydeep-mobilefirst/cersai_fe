@@ -5,15 +5,18 @@ import InputFields from "../../components/userFlow/form/InputField";
 import UploadButton from "../../components/userFlow/form/UploadButton";
 import { useScreenWidth } from "../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useContext, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
 import axios from "axios";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
+import OtpPage from "../depositeTaker/OtpPage";
 
 const NodalDetailsRegulator = () => {
+  const [params, setParams] = useSearchParams();
+  const [showOTPModel, setShowOTPModel] = useState<boolean>(false);
   const [loader, setLoader] = useState(false);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
@@ -31,24 +34,26 @@ const NodalDetailsRegulator = () => {
 
   console.log(formFields, "allFormData");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(NodalDetailsSchema),
-  });
-
-  const onSubmit = async (event: any) => {
+  const onSubmit = async (event : any) => {
     event?.preventDefault();
-    setLoader(true);
-    const noError = await handleValidationChecks(formFields);
-    setLoader(false);
+    setLoader(true)
+    // False means validation fail
+    const noError = await handleValidationChecks(formFields)
+  
+    setLoader(false)
 
     if (noError) {
-      Navigate("/regulator/court/reviewdetails");
+      const edit = params.get('edit');
+      const nodalVerification = localStorage.getItem('nodalVerification');
+      console.log({nodalVerification});
+      if (edit !== undefined && edit !== null && edit !== "" && nodalVerification) {
+        Navigate('/regulator/court/reviewdetails')
+      }
+      else{
+        setShowOTPModel(true)
+      }
     }
-  };
+  }; 
 
   return (
     <>
@@ -70,6 +75,8 @@ const NodalDetailsRegulator = () => {
                 formFields={formFields}
                 onChange={onChange}
               />
+
+            {showOTPModel && <OtpPage redirectLink="/regulator/court/reviewdetails" closeShowOtpModel={() => setShowOTPModel(false)} />}
             </div>
           </div>
         </div>
@@ -98,7 +105,10 @@ const NodalDetailsRegulator = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-              <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
+              <button 
+              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+              onClick={() => Navigate('/regulator/court/uploaddocuments')}
+              >
                 Back
               </button>
             </div>
