@@ -15,7 +15,7 @@ const DepositTakerRegisterFlow = () => {
     <div className="flex relative min-h-screen">
       {/* Menu Icon */}
       <div
-        className="lg:hidden fixed top-0 left-0 m-4 z-50"
+        className="lg:hidden fixed top-0 left-0 m-4 z-50 bg-white"
         onClick={toggleMenu}
       >
         {isMenuOpen ? (
