@@ -129,3 +129,44 @@ export const signupSideBar = [
   },
 ];
 
+export const regulatorSignupSideBar = [
+  
+ 
+  {
+    id: 1,
+    path:"/regulator/court/regulatordetails",
+    imgSrc: clipboardText,
+    imgSrcHighlighted:clickboardTextHigh,
+    description: "Regulators Details",
+    tickImgSrc: tickCircleWhite,
+    percentage: 0,
+  },
+  {
+    id: 2,
+    path:"/regulator/court/uploaddocuments",
+    imgSrc: buildings,
+    imgSrcHighlighted:buildingsHigh,
+    description: "Nodal Details",
+    tickImgSrc: tickCircleWhite,
+    percentage: 75,
+  },
+  {
+    id: 3,
+    path:"/regulator/court/nodaldetails",
+    imgSrc: buildings,
+    imgSrcHighlighted:buildingsHigh,
+    description: "Nodal Details",
+    tickImgSrc: tickCircleWhite,
+    percentage: 75,
+  },
+  {
+    id: 4,
+    path:"/regulator/court/reviewdetails",
+    imgSrc: documentTest,
+    imgSrcHighlighted:documentTestHigh,
+    description: "Review Details",
+    tickImgSrc: tickCircleWhite,
+    percentage: 100,
+  },
+];
+

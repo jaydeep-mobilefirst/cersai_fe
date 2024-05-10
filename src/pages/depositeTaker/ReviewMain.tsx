@@ -42,8 +42,8 @@ const useDownloadPDF = () => {
 };
 
 const ReviewMain = () => {
-  const [para1, setPara1] = useState('')
-  const [para2, setPara2] = useState('')
+  const [para1, setPara1] = useState("");
+  const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
@@ -51,7 +51,6 @@ const ReviewMain = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
-
 
   const sectionCodes: any = {
     1: "de_verification",
@@ -75,40 +74,41 @@ const ReviewMain = () => {
         };
       });
 
-
-    axios.post(
-      bffUrl + "/deposit-taker/add-form-fields",
-      { formData: finalResult }
-    )
+    axios
+      .post(bffUrl + "/deposit-taker/add-form-fields", {
+        formData: finalResult,
+      })
       .then((response: any) => {
-        console.log({response});
-        
+        console.log({ response });
+
         const data = response.data;
-        console.log({data});
-        
+        console.log({ data });
+
         if (data?.success) {
           // setSubmitModal( true)
           setPara1(`Your registration request has been sent successfully and
           approval/rejection of your registration will be informed to you
-          via email.`)
-          setPara2(`Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`)
-          setSubmitted(true)
-          setSubmitModal(true)
+          via email.`);
+          setPara2(
+            `Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`
+          );
+          setSubmitted(true);
+          setSubmitModal(true);
         } else {
-          setPara1(`Something went wrong`)
-          setPara2(`Please try again later`)
-          setSubmitted(false)
-          setSubmitModal(true)
+          setPara1(`Something went wrong`);
+          setPara2(`Please try again later`);
+          setSubmitted(false);
+          setSubmitModal(true);
         }
       })
       .catch((e: any) => {
         setLoader(false);
-        setPara1(`Something went wrong`)
-        setPara2(`Please try again later`)
-        setSubmitted(false)
-        setSubmitModal(true)
+        setPara1(`Something went wrong`);
+        setPara2(`Please try again later`);
+        setSubmitted(false);
+        setSubmitModal(true);
         setLoader(false);
-      })
+      });
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,14 +131,20 @@ const ReviewMain = () => {
                         {section?.sectionName}
                       </p>
                       <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
-                        {
-                          section?.sectionName !== "Verification" ?
-                            <Link to={signupSideBar.find((sec) => sec?.description === section?.sectionName)?.path + "?edit=true"}>
-                              Edit
-                            </Link>
-                            :
-                            "Success"
-                        }
+                        {section?.sectionName !== "Verification" ? (
+                          <Link
+                            to={
+                              signupSideBar.find(
+                                (sec) =>
+                                  sec?.description === section?.sectionName
+                              )?.path + "?edit=true"
+                            }
+                          >
+                            Edit
+                          </Link>
+                        ) : (
+                          "Success"
+                        )}
                       </button>
                     </div>
 
@@ -161,7 +167,12 @@ const ReviewMain = () => {
                                     {field.label}
                                     <span className="text-[#ff0000]">*</span>
                                   </div>
-                                  <div>{field?.dscFileNAme !== "" && field?.dscFileNAme !== undefined ? field?.dscFileNAme : field.userInput}</div>
+                                  <div>
+                                    {field?.dscFileNAme !== "" &&
+                                    field?.dscFileNAme !== undefined
+                                      ? field?.dscFileNAme
+                                      : field.userInput}
+                                  </div>
                                 </div>
                               );
                             })}
@@ -212,8 +223,9 @@ const ReviewMain = () => {
               <button
                 onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked || loader}
-                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${isChecked ? "bg-[#385723]" : "bg-[#a3cf85]"
-                  }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
+                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${
+                  isChecked ? "bg-[#385723]" : "bg-[#a3cf85]"
+                }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}
               </button>
@@ -221,7 +233,10 @@ const ReviewMain = () => {
           </div>
         </div>
         <SuccessPopup
-          closePopup={() => {setSubmitModal(false); Navigate('/')}}
+          closePopup={() => {
+            setSubmitModal(false);
+            Navigate("/");
+          }}
           showPopup={() => setSubmitModal(true)}
           toggle={submitModal}
           para1={para1}

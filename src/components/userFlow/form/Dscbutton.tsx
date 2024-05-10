@@ -49,10 +49,10 @@ import React, {
           {...restProps}
           type="button"
           ref={ref}
-          className={`upload-button ${fileSelected ? "" : "no-file"}`}
+          className={`upload-button w-full ${fileSelected ? "" : "no-file"}`}
           onClick={handleButtonClick}
         >
-          <div className="flex items-center justify-between gap-2 md:w-[350px]">
+          <div className="flex items-center justify-between gap-2 w-full">
             <div className="flex items-center justify-center">
               <div>
                 <img
