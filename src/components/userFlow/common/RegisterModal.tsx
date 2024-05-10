@@ -202,13 +202,13 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
               <div
                 onClick={() => setSelectedRadio(item)}
                 key={item.id}
-                className={`md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex hover:cursor-pointer ${
+                className={`mt-1 lg:mt-0 md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex hover:cursor-pointer ${
                   selectedRadio.id === item.id
                     ? "bg-[#EEF7EB] text-[#385723] border-[#385723] mr-2"
                     : "bg-white text-black border border-gray-300 mr-2"
                 }`}
               >
-                <div className=" flex-row justify-between items-center  md:gap-4 inline-flex hover:cursor-pointer">
+                <div className="flex-row justify-between items-center  md:gap-4 inline-flex hover:cursor-pointer">
                   <div className="text-lg font-normal hover:cursor-pointer">
                     <label>
                       <input
