@@ -9,7 +9,7 @@ type Props = {
 }
 
 interface IContextProps {
-  onFileChange: (event : any | undefined, field : any, fieldType : string) => Promise<void>
+  onFileChange: (event : any | undefined | File, field : any, fieldType : string) => Promise<void>
   onChange: (event: any | undefined, fieldData: any, fieldType: string) => Promise<void>
   updatePanFormField: (responseData: any, panFormField: any) => Promise<boolean>
   handleValidationChecks: (formFields: any[]) => Promise<boolean>
@@ -38,6 +38,8 @@ const FormHandlerProviders = ({children}: Props) => {
     setAllFormData(obj)
   }
   const updateDocumentValue = (value : string | File | File[], fieldData : any, fileName : string ) => {
+    console.log({value});
+    
     let modifiedFileFields = documentData?.map((o : any) => {
       if (o?.id === fieldData?.id) {
         return {...o, file : value, error : "", fileName : fileName};
@@ -51,6 +53,8 @@ const FormHandlerProviders = ({children}: Props) => {
   }
 
   const onFileChange = async (event : any, field : any, fieldType : string) : Promise<void> => {
+    console.log({fieldType});
+    
     switch (fieldType) {
       case 'DSC':
         const file = event;
@@ -59,7 +63,8 @@ const FormHandlerProviders = ({children}: Props) => {
         break;
       case 'pdf' :
       case 'jpg/png/jpeg' :
-        updateDocumentValue(event, field, event?.name);
+        let fileName = event?.name ? event?.name : ""
+        updateDocumentValue(event, field, fileName);
         break;
       default:
         break;
@@ -68,6 +73,8 @@ const FormHandlerProviders = ({children}: Props) => {
   }
 
   const onChange = async (event : any = undefined, fieldData : any, fieldType : string) => {
+    console.log({fieldType});
+    
     const inputFieldTypes = ["text", "textarea", "password", "number", "email", "phone_number"];
     if (inputFieldTypes.includes(fieldType) && event) {
       const {value} = event?.target;

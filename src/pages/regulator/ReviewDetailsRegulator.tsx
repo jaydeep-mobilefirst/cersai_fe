@@ -1,15 +1,12 @@
 // @ts-nocheck
 import React, { useState } from "react";
-import Button from "../../components/userFlow/form/Button";
-import folderOpen from "../../assets/images/folder-open.svg";
 import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/arrow-down.svg";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import axios from "axios";
-import Swal from "sweetalert2";
 import LoaderSpin from "../../components/LoaderSpin";
-import { backendBudsPortalBFFUrl, bffUrl } from "../../utils/api";
+import { bffUrl } from "../../utils/api";
 import html2pdf from "html2pdf.js";
 import { regulatorSignupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
@@ -43,7 +40,10 @@ const useDownloadPDF = () => {
 };
 
 const ReviewDetailsRegulator = () => {
+  const [para1, setPara1] = useState('') 
+  const [para2, setPara2] = useState('') 
   const [submitModal, setSubmitModal] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [dtId, setDtId] = useState("");
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
@@ -65,49 +65,47 @@ const ReviewDetailsRegulator = () => {
     const finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
+        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
+        if (sectionCode === 'Nodal Details') {
+          sectionCode = 'Nodal Officer'
+        }
         return {
           fieldId: field?.id,
           label: field?.label,
-          sectionCode: sectionCodes[field?.sectionId],
+          sectionCode: sectionCode,
           value: field?.userInput,
         };
       });
-
-    try {
-      const response = await axios.post(bffUrl + "/regulator/add-form-fields", {
-        formData: finalResult,
-      });
-      const data = await response.data;
-
-      if (data?.success) {
-        // setSubmitModal( true)
-        setDtId(data?.data?.newDepositTaker?.uniqueId);
-        Swal.fire({
-          icon: "success",
-          title: `Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`,
-          text: `Your registration request has been sent successfully and
-          approval/rejection of your registration will be informed to you
-          via email.`,
-          customClass: {
-            title: "text-sm",
-          },
-        });
-        Navigate("/");
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Something went wrong",
-          text: "Please try again",
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Something went wrong",
-        text: "Please try again",
-      });
-      setLoader(false);
-    }
+     
+      axios.post(
+          bffUrl + "/regulator/add-form-fields",
+          { formData: finalResult }
+        )
+        .then((response : any) => {
+          const data = response.data;
+          if (data?.success) {
+            // setSubmitModal( true)
+            setPara1(`Your registration request has been sent successfully and
+            approval/rejection of your registration will be informed to you
+            via email.`)
+            setPara2(`Your registration acknowledgement ID is RT48726398745923`)
+            setSubmitted(true)
+            setSubmitModal(true)
+        } else {
+          setPara1(`Something went wrong`)
+          setPara2(`Please try again later`)
+          setSubmitted(false)
+          setSubmitModal(true)
+        }
+        })
+        .catch((e : any) => {
+          setLoader(false);
+          setPara1(`Something went wrong`)
+          setPara2(`Please try again later`)
+          setSubmitted(false)
+          setSubmitModal(true)
+          setLoader(false);
+        })
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -206,7 +204,9 @@ const ReviewDetailsRegulator = () => {
 
         <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
           <div className=" ml-5">
-            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0">
+            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0"
+              onClick={() => Navigate('/regulator/court/nodaldetails')}
+            >
               <img src={Arrow} alt="back Arrow" className="mr-2" />
               Back
             </button>
@@ -235,15 +235,18 @@ const ReviewDetailsRegulator = () => {
             </div>
           </div>
         </div>
-        <SuccessPopup
-          closePopup={() => {
-            setSubmitModal(false);
-            setLoader(false);
-            Navigate("/");
-          }}
-          showPopup={() => setSubmitModal(true)}
-          toggle={submitModal}
-          dtID={dtId}
+        <SuccessPopup 
+           closePopup={() => {
+            setSubmitModal(false); 
+            if (submitted) {
+              Navigate('/')
+            }
+           }} 
+           showPopup={() => setSubmitModal(true)} 
+           toggle={submitModal} 
+           para1={para1}
+           para2={para2}
+           success={submitted}
         />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">

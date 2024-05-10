@@ -146,7 +146,7 @@ export const regulatorSignupSideBar = [
     path:"/regulator/court/uploaddocuments",
     imgSrc: buildings,
     imgSrcHighlighted:buildingsHigh,
-    description: "Nodal Details",
+    description: "Upload Documents",
     tickImgSrc: tickCircleWhite,
     percentage: 75,
   },

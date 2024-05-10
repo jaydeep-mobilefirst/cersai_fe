@@ -43,15 +43,14 @@ const ReviewDetailsDesignated = () => {
   const submit = async (e: any) => {
     e.preventDefault();
     setLoader(true);
-    const finalResult =
-      allFormData &&
-      allFormData?.formFields?.form_fields?.map((field: any) => {
-        let sectionCode = allFormData.entitySections?.find(
-          (section: any) => section?.id === field?.sectionId
-        )?.sectionName;
-        if (sectionCode === "Nodal Details") {
-          sectionCode = "Nodal Officer";
+    const finalResult = allFormData?.formFields?.form_fields?.map((field: any) => {
+        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
+        if (sectionCode === 'Nodal Details') {
+          sectionCode = 'Nodal Officer'
         }
+
+        console.log({sectionCode});
+        
         return {
           fieldId: field?.id,
           label: field?.label,
@@ -59,22 +58,23 @@ const ReviewDetailsDesignated = () => {
           value: field?.userInput,
         };
       });
-
-    axios
-      .post(bffUrl + "/designated-court/add-form-fields", {
-        formData: finalResult,
-      })
-      .then((response: any) => {
-        const data = response.data;
-        if (data?.success) {
-          // setSubmitModal( true)
-          setPara1(`Your registration request has been sent successfully and
+      
+      console.log({finalResult});
+      
+      axios.post(
+          bffUrl + "/designated-court/add-form-fields",
+          { formData: finalResult }
+        )
+        .then((response : any) => {
+          const data = response.data;
+          if (data?.success) {
+            // setSubmitModal( true)
+            setPara1(`Your registration request has been sent successfully and
             approval/rejection of your registration will be informed to you
-            via email.`);
-          setPara2(`Your registration acknowledgement ID is RT48726398745923`);
-          setSubmitted(true);
-          setSubmitModal(true);
-          Navigate("/");
+            via email.`)
+            setPara2(`Your registration acknowledgement ID is RT48726398745923`)
+            setSubmitted(true)
+            setSubmitModal(true)
         } else {
           setPara1(`Something went wrong`);
           setPara2(`Please try again later`);
@@ -131,11 +131,7 @@ const ReviewDetailsDesignated = () => {
                           {allFormData?.formFields?.form_fields
                             ?.filter((f: any) => f?.sectionId === section?.id)
                             ?.map((field: any, idx: number) => {
-                              console.log({
-                                field,
-                              });
-
-                              return (
+                               return (
                                 <div
                                   className={`sm:mr-[48px] flex justify-between ${
                                     idx % 2 === 0
@@ -241,17 +237,18 @@ const ReviewDetailsDesignated = () => {
             </div>
           </div>
         </div>
-        <SuccessPopup
-          closePopup={() => {
-            setSubmitModal(false);
-            setSubmitModal(false);
-            Navigate("/");
-          }}
-          showPopup={() => setSubmitModal(true)}
-          toggle={submitModal}
-          para1={para1}
-          para2={para2}
-          success={submitted}
+        <SuccessPopup 
+           closePopup={() => {
+            setSubmitModal(false); 
+            if (submitted) {
+              Navigate('/')
+            }
+          }} 
+           showPopup={() => setSubmitModal(true)} 
+           toggle={submitModal} 
+           para1={para1}
+           para2={para2}
+           success={submitted}
         />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">

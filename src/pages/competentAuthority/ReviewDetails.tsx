@@ -11,6 +11,7 @@ import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 import { signupSideBarCompetent } from "../../utils/hardText/signUpCompetentText";
 import axios from "axios";
 import { bffUrl } from "../../utils/api";
+import LoaderSpin from "../../components/LoaderSpin";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -42,11 +43,11 @@ const ReviewDetails = () => {
     const finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
-        let sectionCode = allFormData.entitySections?.find(
-          (section: any) => section?.id === field?.sectionId
-        )?.sectionName;
-        if (sectionCode === "Nodal Details") {
-          sectionCode = "Nodal Officer";
+        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
+        console.log({sectionCode});
+        
+        if (sectionCode === 'Nodal Details') {
+          sectionCode = 'Nodal Officer'
         }
         return {
           fieldId: field?.id,
@@ -55,22 +56,23 @@ const ReviewDetails = () => {
           value: field?.userInput,
         };
       });
-
-    axios
-      .post(bffUrl + "/competent-authority/add-form-fields", {
-        formData: finalResult,
-      })
-      .then((response: any) => {
-        const data = response.data;
-        if (data?.success) {
-          // setSubmitModal( true)
-          setPara1(`Your registration request has been sent successfully and
+     
+      console.log({finalResult});
+      
+      axios.post(
+          bffUrl + "/competent-authority/add-form-fields",
+          { formData: finalResult }
+        )
+        .then((response : any) => {
+          const data = response.data;
+          if (data?.success) {           
+            // setSubmitModal( true)
+            setPara1(`Your registration request has been sent successfully and
             approval/rejection of your registration will be informed to you
-            via email.`);
-          setPara2(`Your registration acknowledgement ID is RT48726398745923`);
-          setSubmitted(true);
-          setSubmitModal(true);
-          Navigate("/");
+            via email.`)
+            setPara2(`Your registration acknowledgement ID is ${data?.data?.newCompetentAuthority?.uniqueId}`)
+            setSubmitted(true)
+            setSubmitModal(true)
         } else {
           setPara1(`Something went wrong`);
           setPara2(`Please try again later`);
@@ -127,9 +129,7 @@ const ReviewDetails = () => {
                           {allFormData?.formFields?.form_fields
                             ?.filter((f: any) => f?.sectionId === section?.id)
                             ?.map((field: any, idx: number) => {
-                              console.log({
-                                field,
-                              });
+
 
                               return (
                                 <div
@@ -159,37 +159,6 @@ const ReviewDetails = () => {
                   </div>
                 )
               )}
-            <div>
-              <div>
-                <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold mb-4">
-                  <p className="lg:w-[152px] ml-[16px] mt-[16px] text-xl lg:text-[20px] pb-2 text-nowrap">
-                    Upload Documents
-                  </p>
-                </div>
-                <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between items-center h-16 text-gilroy-bold mb-4">
-                  <div className="flex p-7 space-x-2 ">
-                    <div className="mt-1">
-                      <img
-                        src={folderOpen}
-                        alt={folderOpen}
-                        className=" bg-[#52AE3226] rounded p-3 h-10 "
-                      />
-                    </div>
-                    <div className="">
-                      <h1 className="text-sm font-normal text-gilroy-medium text-[#1D1D1B]">
-                        Document Uploaded
-                      </h1>
-                      <p className="text-base font-normal text-gilroy-medium text-gray-400">
-                        Document.pdf
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mr-3">
-                    <Button label="View" type="button" width="100px" />
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </main>
 
@@ -216,22 +185,23 @@ const ReviewDetails = () => {
                 onClick={submit} // Assuming this action should be tied to the Submit button
                 className="ml-[16px] w-auto md:w-[208px] rounded-[12px] bg-[#385723] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
-                Submit
+              {loader ? <LoaderSpin /> : "Submit"}
               </button>
             </div>
           </div>
         </div>
-        <SuccessPopup
-          closePopup={() => {
+        <SuccessPopup 
+            closePopup={() => {
             setSubmitModal(false);
-            setSubmitModal(false);
-            Navigate("/");
+            if (submitted) {
+              Navigate('/')
+            }
           }}
-          showPopup={() => setSubmitModal(true)}
-          toggle={submitModal}
-          para1={para1}
-          para2={para2}
-          success={submitted}
+           showPopup={() => setSubmitModal(true)} 
+           toggle={submitModal} 
+           para1={para1}
+           para2={para2}
+           success={submitted}
         />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
