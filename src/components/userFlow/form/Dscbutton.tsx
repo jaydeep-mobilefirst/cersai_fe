@@ -1,39 +1,37 @@
 import React, {
-    ButtonHTMLAttributes,
-    FC,
-    forwardRef,
-    useRef,
-    useState,
-  } from "react";
-  import "./custom_css/upload_button2.css";
-  import UploadButtonFolderSvg from "../../../assets/images/uploadFile-2.svg";
-  import UploadButtonSvg1 from "../../../assets/images/UploadIcon.png";
-  
-  interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    onFileUpload?: (file: File | null) => void;
-    fname ?: string
-  }
-  
-  const DscButton: FC<ButtonProps> = forwardRef<
-    HTMLButtonElement,
-    ButtonProps
-  >((props, ref) => {
+  ButtonHTMLAttributes,
+  FC,
+  forwardRef,
+  useRef,
+  useState,
+} from "react";
+import "./custom_css/upload_button2.css";
+import UploadButtonFolderSvg from "../../../assets/images/uploadFile-2.svg";
+import UploadButtonSvg1 from "../../../assets/images/UploadIcon.png";
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  onFileUpload?: (file: File | null) => void;
+  fname?: string;
+  disabled?: boolean;
+}
+
+const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
+  (props, ref) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [fileSelected, setFileSelected] = useState(false); // State to track file selection
-    const [fileName, setFileName] = useState<string | undefined>(props?.fname)
-    const { onFileUpload, ...restProps } = props;
-  
+    const [fileName, setFileName] = useState<string | undefined>(props?.fname);
+    const { onFileUpload, disabled, ...restProps } = props;
+
     const handleButtonClick = () => {
       fileInputRef.current?.click();
     };
-  
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (file) {
-        setFileName(file?.name)
-      }
-      else{
-        setFileName('')
+        setFileName(file?.name);
+      } else {
+        setFileName("");
       }
       setFileSelected(!!file); // Update the state based on whether a file is selected
       if (file && onFileUpload) {
@@ -42,11 +40,12 @@ import React, {
         onFileUpload(null);
       }
     };
-  
+
     return (
       <div>
         <button
           {...restProps}
+          disabled={disabled}
           type="button"
           ref={ref}
           className={`upload-button w-full ${fileSelected ? "" : "no-file"}`}
@@ -67,7 +66,11 @@ import React, {
                     Upload DSC
                   </h6>
                   <p className="text-[#1D1D1B] text-base font-normal text-gilroy-regular ">
-                    {fileName !== "" && fileName !== undefined ? <span className="text-sm">{fileName}</span> : "Document"}
+                    {fileName !== "" && fileName !== undefined ? (
+                      <span className="text-sm">{fileName}</span>
+                    ) : (
+                      "Document"
+                    )}
                   </p>
                 </div>
               </div>
@@ -99,7 +102,7 @@ import React, {
         />
       </div>
     );
-  });
-  
-  export default DscButton;
-  
+  }
+);
+
+export default DscButton;
