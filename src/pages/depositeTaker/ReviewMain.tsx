@@ -118,7 +118,7 @@ const ReviewMain = () => {
   return (
     <>
       <div className="flex flex-col justify-between h-screen">
-        <header className="p-[38px] border-b border-gray-200"></header>
+        <header className="lg:p-[38px] border-b border-gray-200"></header>
         <main className="flex-grow p-8 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             <h1 className="text-2xl font-bold mb-6">Review</h1>
@@ -150,7 +150,7 @@ const ReviewMain = () => {
 
                     <div className="shadow-sm p-5 rounded-md ">
                       <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                        <div className="w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px] grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                           {allFormData?.formFields?.form_fields
                             ?.filter((f: any) => f?.sectionId === section?.id)
                             ?.map((field: any, idx: number) => {
@@ -160,7 +160,11 @@ const ReviewMain = () => {
 
                               return (
                                 <div
-                                  className="sm:mr-[48px] flex justify-between"
+                                  className={`sm:mr-[48px] flex justify-between ${
+                                    idx % 2 === 0
+                                      ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                      : ""
+                                  } `}
                                   key={idx}
                                 >
                                   <div className="text-gray-500">
@@ -201,9 +205,9 @@ const ReviewMain = () => {
           </div>
         </main>
 
-        <div className="flex justify-between items-center my-3">
+        <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
           <div className=" ml-5">
-            <button className="text-gilroy-regular text-sm flex items-center">
+            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0">
               <img src={Arrow} alt="back Arrow" className="mr-2" />
               Back
             </button>
