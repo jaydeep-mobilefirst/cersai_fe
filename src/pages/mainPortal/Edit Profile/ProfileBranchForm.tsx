@@ -14,6 +14,7 @@ interface Branch {
 }
 
 interface Props {
+  branchId: number;
   i: number;
   control: any; // Update with proper types
   register: any; // Update with proper types
@@ -123,7 +124,7 @@ const ProfileBranchForm: React.FC<Props> = ({
           >
             Address line 2
           </label>
-          <InputFields
+          <TextArea
             placeholder="Enter address line 2"
             {...register(`branches[${i}].addressLine2`, {
               required: "Address Line 2 is required",

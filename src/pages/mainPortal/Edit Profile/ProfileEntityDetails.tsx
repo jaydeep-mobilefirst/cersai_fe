@@ -25,7 +25,7 @@ const ProfileEntityDetails = (props: Props) => {
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
 
-  console.log(allFormData, "allform data ");
+  // console.log(allFormData, "allform data ");
 
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
@@ -71,7 +71,7 @@ const ProfileEntityDetails = (props: Props) => {
       label: field.label,
       value: field.userInput,
     }));
-  console.log(formData, "formData");
+  // console.log(formData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();

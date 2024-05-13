@@ -6,6 +6,8 @@ import {
 } from "../../utils/hardText/landingpageText";
 import RegisterModel from "../userFlow/common/RegisterModal";
 import LoginModel from "../userFlow/common/LoginModel";
+import ForgetPasswordModel from "../userFlow/common/ForgetPasswordModel";
+import RegisterMailPopup from "../userFlow/common/RegisterMailPopup";
 
 interface AuthButtonProps {
   buttontext: string;
@@ -15,6 +17,8 @@ interface AuthButtonProps {
 const TopDetail = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showLoginModel, setShowLoginModel] = useState(false);
+  const [showForgetModel, setShowForgetModel] = useState(false);
+  const [showRegisterMailModel, setShowRegisterMailModel] = useState(false);
 
   const openModal = () => {
     setIsOpen(true);
@@ -34,6 +38,31 @@ const TopDetail = () => {
 
   const CloseLoginModal = () => {
     setShowLoginModel(false);
+  };
+
+  const ShowForgetModel = () => {
+    setShowLoginModel(false);
+    setShowForgetModel(true);
+  };
+  const CloseForgetModel = () => {
+    setShowForgetModel(false);
+  };
+  const closeforgetModelShowLoginModel = () => {
+    setShowForgetModel(false);
+    setShowLoginModel(true);
+  };
+  const closeRegisterMailPopup = () => {
+    setShowRegisterMailModel(false);
+  };
+
+  const closeRegisterMailPopupandShowLoginPopup = () => {
+    setShowRegisterMailModel(false);
+    setShowLoginModel(true);
+  };
+
+  const closeForgetPasswordandShowRegisterMail = () => {
+    setShowRegisterMailModel(false);
+    setShowRegisterMailModel(true);
   };
 
   const downloadReport = () => {};
@@ -90,6 +119,24 @@ const TopDetail = () => {
         <LoginModel
           closeModal={CloseLoginModal}
           showRegisterModel={showRegisterModel}
+          ShowForgetModel={ShowForgetModel}
+        />
+      )}
+
+      {showForgetModel && (
+        <ForgetPasswordModel
+          closeForgetModel={CloseForgetModel}
+          closeforgetModelShowLoginModel={closeforgetModelShowLoginModel}
+          closeForgetPasswordandShowRegisterMail={
+            closeForgetPasswordandShowRegisterMail
+          }
+        />
+      )}
+
+      {showRegisterMailModel && (
+        <RegisterMailPopup
+          closeRegisterMailPopup={closeRegisterMailPopup}
+          showLoginPopup={closeRegisterMailPopupandShowLoginPopup}
         />
       )}
     </div>

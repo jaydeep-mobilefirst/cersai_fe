@@ -8,8 +8,10 @@ import { bffUrl } from "../../../utils/api";
 
 import Swal from "sweetalert2";
 import { useBranchStore } from "../../../store/upate-profile/branch";
+import { useScreenWidth } from "../../../utils/screenSize";
 
 const ProfileBranches = () => {
+  const screenWidth = useScreenWidth();
   const { branches, addBranch, removeBranch, setBranches } = useBranchStore(
     (state) => ({
       branches: state.branches,
@@ -30,41 +32,71 @@ const ProfileBranches = () => {
     reset,
   } = useForm();
 
-  useEffect(() => {
-    const fetchBranches = async () => {
-      try {
-        const response = await axios.get(
-          `${bffUrl}/deposit-taker/branch/DT1715261417146`
-        );
-        console.log(response.data.data.branches, "fetched data");
-        setBranches(response.data.data.branches);
-        reset({
-          branches: response.data.data.branches.map((branch: any) => ({
-            addressLine1: branch.addressLine1,
-            addressLine2: branch.addressLine2,
-            pinCode: branch.pinCode,
-            state: branch.state,
-            district: branch.district,
-          })),
-        }); // Properly initializing form with fetched data
-      } catch (error) {
-        console.error("Failed to fetch branches:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchBranches = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${bffUrl}/deposit-taker/branch/DT1715261417146`
+  //       );
+  //       console.log(response.data.data.branches, "fetched data");
+  //       setBranches(response.data.data.branches);
+  //       reset({
+  //         branches: response.data.data.branches.map((branch: any) => ({
+  //           addressLine1: branch.addressLine1,
+  //           addressLine2: branch.addressLine2,
+  //           pinCode: branch.pinCode,
+  //           state: branch.state,
+  //           district: branch.district,
+  //         })),
+  //       }); // Properly initializing form with fetched data
+  //     } catch (error) {
+  //       console.error("Failed to fetch branches:", error);
+  //     }
+  //   };
 
+  //   fetchBranches();
+  // }, [reset, setBranches]);
+  const fetchBranches = async () => {
+    try {
+      const response = await axios.get(
+        `${bffUrl}/deposit-taker/branch/DT1715261417146`
+      );
+      console.log(response.data.data.branches, "fetched data");
+      setBranches(response.data.data.branches);
+      reset({
+        branches: response.data.data.branches.map((branch: any) => ({
+          ...branch, // Spread the entire branch object
+        })),
+      }); // Properly initializing form with fetched data including IDs
+    } catch (error) {
+      console.error("Failed to fetch branches:", error);
+    }
+  };
+  useEffect(() => {
     fetchBranches();
   }, [reset, setBranches]);
 
   const onSubmit = async (data: any) => {
     console.log(data, "data from all branches");
     try {
+      // const response = await axios.post(
+      //   `${bffUrl}/deposit-taker/branch/DT1715261417146`,
+      //   {
+      //     branches: data.branches,
+      //   }
+      // );
       const response = await axios.post(
         `${bffUrl}/deposit-taker/branch/DT1715261417146`,
         {
-          branches: data.branches,
+          branches: data.branches.map((branch: any) => ({
+            id: branch.id,
+            ...branch,
+          })),
         }
       );
       console.log(response.data);
+      await fetchBranches();
+
       Swal.fire({
         icon: "success",
         text: "Branch update successfully",
@@ -83,7 +115,7 @@ const ProfileBranches = () => {
   const handleCheckboxChange = () => setChecked(!isChecked);
   // h-screen custom-scrollbar overflow-auto
   return (
-    <div className="bg-white p-7 w-full h-full">
+    <div className="bg-white p-7 w-full h-full ">
       <h1 className="font-semibold text-2xl mb-3">Upload Branches</h1>
       <div className="flex flex-row justify-start align-middle text-gray-400">
         <img
@@ -100,8 +132,10 @@ const ProfileBranches = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {branches.map((branch: any, index: any) => (
           <ProfileBranchForm
-            key={index}
+            // key={index}
+            key={branch.id}
             branch={branch}
+            branchId={branch.id}
             i={index}
             control={control}
             register={register}
@@ -124,8 +158,11 @@ const ProfileBranches = () => {
             knowledge.
           </label>
         </div>
-        <Footer disabled={!isChecked} />
-        <button type="submit" className="mt-4 btn-primary"></button>
+
+        <div>
+          <Footer disabled={!isChecked} />
+          <button type="submit" className="mt-4 btn-primary"></button>
+        </div>
       </form>
     </div>
   );
