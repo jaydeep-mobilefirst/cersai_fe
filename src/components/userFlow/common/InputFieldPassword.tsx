@@ -1,5 +1,6 @@
 import { FC, InputHTMLAttributes, forwardRef, useState } from "react";
 import Eye from "../../../assets/images/eye2.svg";
+import EyeHide from "../../../assets/images/eye-slash.svg";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
@@ -38,7 +39,11 @@ const InputFieldPassword: FC<InputProps> = forwardRef<
         onClick={togglePasswordVisibility}
         className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 focus:outline-none"
       >
-        <img src={Eye} alt="Toggle visibility" className="h-5 w-5 m-[10px]" />
+        <img
+          src={showPassword ? Eye : EyeHide}
+          alt="Toggle visibility"
+          className="h-5 w-5 m-[10px]"
+        />
       </button>
     </div>
   );

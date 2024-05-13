@@ -18,9 +18,9 @@ const Button: React.FC<ButtonProps> = ({
   loader,
   width = "224px",
   height = "auto", // Default height
-  borderColor = "#385723", // Default border color
+  borderColor = "#1C468E", // Default border color
   textColor = "#FFFFFF", // Default text color
-  backgroundColor = "#385723", // Default background color
+  backgroundColor = "#1C468E", // Default background color
   onClick,
 }) => {
   const buttonStyle = {
