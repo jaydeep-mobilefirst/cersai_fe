@@ -6,21 +6,21 @@ import Loginticketcircel from "../../../assets/images/Login-tick-circle.svg";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
-interface RegisterMailPopupModelProps {
-  closeRegisterMailPopup: () => void;
-  showLoginPopup: () => void;
+interface PasswordUpdateModelProps {
+  closeUpdatePasswordModel: () => void;
+  closeUpdatePasswordandShowLogin: () => void;
 }
 
-const RegisterMailPopup: React.FC<RegisterMailPopupModelProps> = ({
-  closeRegisterMailPopup,
-  showLoginPopup,
+const PasswordUpdateModel: React.FC<PasswordUpdateModelProps> = ({
+  closeUpdatePasswordModel,
+  closeUpdatePasswordandShowLogin,
 }) => {
   const handleClose = () => {
-    closeRegisterMailPopup();
+    closeUpdatePasswordModel();
   };
 
   const handleNavigateLogin = () => {
-    showLoginPopup();
+    closeUpdatePasswordandShowLogin();
   };
 
   return (
@@ -44,42 +44,6 @@ const RegisterMailPopup: React.FC<RegisterMailPopupModelProps> = ({
                 </div>
               </div>
 
-              {/* <div className=" mt-5 md:mt-[130px] px-4 md:px-[40px]">
-                <div className="">
-                  <div className="flex justify-center items-center  ">
-                    <img src={Loginticketcircel} alt="" />
-                  </div>
-                  <div>
-                    <h1 className="text-gilroy-medium  text-2xl my-5 text-[#000000]">
-                      Please check the Registered mail
-                    </h1>
-
-                    <div className="flex justify-center items-center flex-col">
-                      <p className="text-[#646464] text-gilroy-medium text-base">
-                        {" "}
-                        We have sent you a link on your
-                      </p>
-                      <p className="text-[#646464] text-gilroy-medium">
-                        {" "}
-                        registered email address to reset the
-                      </p>
-                      <p className="text-[#646464] text-gilroy-medium">
-                        {" "}
-                        password.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-32 flex justify-center">
-                  <p
-                    className="text-base font-normal text-gilroy-regular text-[#1C468E] cursor-pointer"
-                    onClick={handleNavigateLogin}
-                  >
-                    Back to Login
-                  </p>
-                </div>
-              </div> */}
               <div className="mt-5 md:mt-[150px] px-4 md:px-[40px]">
                 <div className="">
                   <div className="flex justify-center items-center">
@@ -87,17 +51,14 @@ const RegisterMailPopup: React.FC<RegisterMailPopupModelProps> = ({
                   </div>
                   <div>
                     <h1 className="text-gilroy-medium text-2xl my-5 text-[#000000] text-center">
-                      Please check the Registered mail
+                      Password Updated !
                     </h1>
                     <div className="flex justify-center items-center flex-col text-center">
                       <p className="text-[#646464] text-gilroy-medium text-base">
-                        We have sent you a link on your
+                        Your new password has been
                       </p>
                       <p className="text-[#646464] text-gilroy-medium">
-                        registered email address to reset the
-                      </p>
-                      <p className="text-[#646464] text-gilroy-medium">
-                        password.
+                        updated Successfully!.
                       </p>
                     </div>
                   </div>
@@ -133,4 +94,4 @@ const RegisterMailPopup: React.FC<RegisterMailPopupModelProps> = ({
   );
 };
 
-export default RegisterMailPopup;
+export default PasswordUpdateModel;
