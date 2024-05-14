@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TextArea from "../../../components/userFlow/form/TextArea";
 import SelectButton from "../../../components/userFlow/form/SelectButton";
 import addCircle from "../../../assets/images/add-circle.svg";
 import minusCircle from "../../../assets/images/minus-cirlce.svg";
 import InputFields from "../../../components/userFlow/common/InputField";
+import axios from "axios";
+import { pincodeValidationUrl } from "../../../utils/api";
 
 interface Branch {
   addressLine1: string;
@@ -43,43 +45,92 @@ const ProfileBranchForm: React.FC<Props> = ({
   addBranch,
   branch,
 }) => {
-  const [selectedState, setSelectedState] = useState<string | null>(
-    branch.state
-  );
-  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(
-    branch.district
-  );
+  // const [selectedState, setSelectedState] = useState<string | null>(
+  //   branch.state
+  // );
+  // const [selectedDistrict, setSelectedDistrict] = useState<string | null>(
+  //   branch.district
+  // );
 
-  useEffect(() => {
-    setValue(`branches[${i}].state`, selectedState);
-    setValue(`branches[${i}].district`, selectedDistrict);
-  }, [selectedState, selectedDistrict, setValue, i]);
+  // useEffect(() => {
+  //   setValue(`branches[${i}].state`, selectedState);
+  //   setValue(`branches[${i}].district`, selectedDistrict);
+  // }, [selectedState, selectedDistrict, setValue, i]);
 
-  const handleSetState = (value: string) => {
-    console.log(value, "value");
-    setSelectedState(value);
-    setValue(`branches[${i}].state`, value); // Set state value
+  // const handleSetState = (value: string) => {
+  //   console.log(value, "value");
+  //   setSelectedState(value);
+  //   setValue(`branches[${i}].state`, value); // Set state value
+  // };
+  // const handleSetDistrict = (value: string) => {
+  //   setSelectedDistrict(value);
+  //   setValue(`branches[${i}].district`, value); // Set district value
+  // };
+
+  // const Districtoptions = [
+  //   { value: "Anantapur", label: "Anantapur" }, // Andhra Pradesh
+  //   { value: "Gaya", label: "Gaya" }, // Bihar
+  //   { value: "Raipur", label: "Raipur" }, // Chhattisgarh
+  //   { value: "Ahmedabad", label: "Ahmedabad" }, // Gujarat
+  //   { value: "Hyderabad", label: "Hyderabad" }, // Telangana
+  // ];
+
+  // const Stateoptions = [
+  //   { value: "Andhra Pradesh", label: "Andhra Pradesh" },
+  //   { value: "Bihar", label: "Bihar" },
+  //   { value: "Chhattisgarh", label: "Chhattisgarh" },
+  //   { value: "Gujarat", label: "Gujarat" },
+  //   { value: "Telangana", label: "Telangana" },
+  // ];
+  const [pinCodeError, setPinCodeError] = useState("");
+  const debounce = (
+    func: (...args: any[]) => void,
+    delay: number
+  ): ((...args: any[]) => void) => {
+    let timer: NodeJS.Timeout;
+    return function (...args: any[]) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
   };
-  const handleSetDistrict = (value: string) => {
-    setSelectedDistrict(value);
-    setValue(`branches[${i}].district`, value); // Set district value
+  const fetchLocationData = async (pinCode: string): Promise<void> => {
+    if (!pinCode || pinCode.length !== 6) {
+      setPinCodeError("Pin code must be 6 digits");
+      return;
+    }
+    setPinCodeError("");
+    if (pinCode.length === 6) {
+      try {
+        const response = await axios.get(`${pincodeValidationUrl}/${pinCode}`);
+        // console.log(response?.data[0].PostOffice[0].District, "pinCode");
+
+        // const state = response.data[0].PostOffice[0].State;
+        // const district = response.data[0].PostOffice[0].District;
+        // console.log(state, district, "state and district");
+        // setSelectedState(state);
+        // setSelectedDistrict(district);
+        // setValue(`branches[${i}].state`, state);
+        // setValue(`branches[${i}].district`, district);
+        if (response.data[0] && response.data[0].PostOffice[0]) {
+          const state = response.data[0].PostOffice[0].State;
+          const district = response.data[0].PostOffice[0].District;
+          setValue(`branches[${i}].state`, state);
+          setValue(`branches[${i}].district`, district);
+        } else {
+          setPinCodeError("No data found for this pin code");
+        }
+      } catch (error) {
+        console.error("Failed to fetch location data:", error);
+        setPinCodeError("Failed to fetch data for the pin code");
+      }
+    }
   };
-
-  const Districtoptions = [
-    { value: "Anantapur", label: "Anantapur" }, // Andhra Pradesh
-    { value: "Gaya", label: "Gaya" }, // Bihar
-    { value: "Raipur", label: "Raipur" }, // Chhattisgarh
-    { value: "Ahmedabad", label: "Ahmedabad" }, // Gujarat
-    { value: "Hyderabad", label: "Hyderabad" }, // Telangana
-  ];
-
-  const Stateoptions = [
-    { value: "Andhra Pradesh", label: "Andhra Pradesh" },
-    { value: "Bihar", label: "Bihar" },
-    { value: "Chhattisgarh", label: "Chhattisgarh" },
-    { value: "Gujarat", label: "Gujarat" },
-    { value: "Telangana", label: "Telangana" },
-  ];
+  const debouncedFetchLocation = useCallback(
+    debounce(fetchLocationData, 500),
+    []
+  );
 
   return (
     <div className="my-3">
@@ -153,32 +204,21 @@ const ProfileBranchForm: React.FC<Props> = ({
                 value: /^[0-9]{6}$/,
                 message: "Invalid pin code",
               },
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                debouncedFetchLocation(e.target.value),
             })}
           />
           {errors?.branches?.[i]?.pinCode && (
             <p className="text-red-500">{errors.branches[i].pinCode.message}</p>
           )}
+          {pinCodeError && <p className="text-red-500">{pinCodeError}</p>}
         </div>
-        {/* <div>
-          <label htmlFor={`state-${i}`} className="text-base font-normal">
-            State
-          </label>
-          <SelectButton
-            options={Stateoptions}
-            setOption={handleSetState}
-            selectedOption={selectedState}
-            placeholder="Select"
-            showSearchInput={true}
-          />
-          {errors?.branches?.[i]?.state && (
-            <p className="text-red-500">{errors.branches[i].state.message}</p>
-          )}
-        </div> */}
+
         <div>
           <label htmlFor={`state-${i}`} className="text-base font-normal">
             State <span className="text-red-500">*</span>
           </label>
-          <SelectButton
+          {/* <SelectButton
             options={Stateoptions}
             setOption={(value) => {
               handleSetState(value);
@@ -193,30 +233,30 @@ const ProfileBranchForm: React.FC<Props> = ({
           />
           {errors?.branches?.[i]?.state && (
             <p className="text-red-500">{errors.branches[i].state.message}</p>
-          )}
-        </div>
-        {/* <div>
-          <label htmlFor={`district-${i}`} className="text-base font-normal">
-            District
-          </label>
-          <SelectButton
-            options={Districtoptions}
-            setOption={handleSetDistrict}
-            selectedOption={selectedDistrict}
-            placeholder="Select"
-            showSearchInput={true}
+          )} */}
+          <InputFields
+            type="text"
+            disabled={true}
+            placeholder="type here"
+            {...register(`branches[${i}].state`, {
+              required: " state is required",
+            })}
           />
-          {errors?.branches?.[i]?.district && (
-            <p className="text-red-500">
-              {errors.branches[i].district.message}
-            </p>
-          )}
-        </div> */}
+        </div>
+
         <div>
           <label htmlFor={`district-${i}`} className="text-base font-normal">
             District <span className="text-red-500">*</span>
           </label>
-          <SelectButton
+          <InputFields
+            disabled={true}
+            type="text"
+            placeholder="type here"
+            {...register(`branches[${i}].district`, {
+              required: " district is required",
+            })}
+          />
+          {/* <SelectButton
             options={Districtoptions}
             setOption={(value) => {
               handleSetDistrict(value);
@@ -235,7 +275,7 @@ const ProfileBranchForm: React.FC<Props> = ({
             <p className="text-red-500">
               {errors.branches[i].district.message}
             </p>
-          )}
+          )} */}
         </div>
       </div>
     </div>
