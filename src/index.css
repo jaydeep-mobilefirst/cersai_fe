@@ -83,3 +83,11 @@
   background-color: #385723;
   border-radius: 16px;
 }
+
+.inputStyle {
+  width: 3rem !important;
+  height: 3rem !important;
+  border-radius: 7px;
+  background: #e7e7e7;
+  margin: 12px;
+}
