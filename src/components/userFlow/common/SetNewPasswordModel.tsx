@@ -123,11 +123,11 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({
                       placeholder="New Password"
                       error={error}
                     />
-                    {errors.password?.message && (
+                    {/* {errors.password?.message && (
                       <p className="text-red-500">
                         {errors.password.message as string}
                       </p>
-                    )}
+                    )} */}
                     <div>
                       <ul className="flex flex-col md:flex-row flex-wrap p-0 list-disc w-full">
                         {passwordValidations.map((validation, index) => (

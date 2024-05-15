@@ -16,6 +16,8 @@ type Props = {};
 
 const DashboardProfile = (props: Props) => {
   const [loader, setLoader] = useState(false);
+  const entityUniqueId = sessionStorage.getItem("entityUniqueId");
+
   const [searchParams, setSearchParams] = useSearchParams();
   const { entities, setEntities, setAllFormData } =
     useDepositTakerRegistrationStore((state) => state);
@@ -27,14 +29,14 @@ const DashboardProfile = (props: Props) => {
           let dtData: any = [];
           try {
             let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/DT1715261417146`
+              `${bffUrl}/deposit-taker/${entityUniqueId}`
             );
             dtData =
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
           } catch (error) {
             console.log("Error");
           }
-          console.log(dtData, "respnse--------------");
+          // console.log(dtData, "respnse--------------");
           let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
@@ -50,7 +52,7 @@ const DashboardProfile = (props: Props) => {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
-          console.log(obj, "obj-----");
+          // console.log(obj, "obj-----");
           setAllFormData(obj);
         } else {
           throw new Error("Error getting data, Please try later!");

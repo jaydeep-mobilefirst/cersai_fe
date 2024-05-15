@@ -93,6 +93,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         password: watch("password"),
         entityType: selected,
       });
+      console.log(response, "login model");
 
       sessionStorage.setItem(
         "access_token",
@@ -104,6 +105,12 @@ const LoginModel: React.FC<LoginModelProps> = ({
       );
       sessionStorage.setItem("firstName", response?.data?.user?.firstName);
       sessionStorage.setItem("lastName", response?.data?.user?.lastName);
+      sessionStorage.setItem("emailId", response.data.user?.emailId);
+      sessionStorage.setItem("entityType", response.data.user?.entityType);
+      sessionStorage.setItem(
+        "entityUniqueId",
+        response.data.user?.entityUniqueId
+      );
       apicallDsc();
       setError(false);
     } catch (err: any) {

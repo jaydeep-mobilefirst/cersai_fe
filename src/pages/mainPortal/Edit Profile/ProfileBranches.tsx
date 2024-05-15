@@ -12,6 +12,7 @@ import { useScreenWidth } from "../../../utils/screenSize";
 
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
+  const entityUniqueId = sessionStorage.getItem("entityUniqueId");
   const { branches, addBranch, removeBranch, setBranches } = useBranchStore(
     (state) => ({
       branches: state.branches,
@@ -59,9 +60,9 @@ const ProfileBranches = () => {
   const fetchBranches = async () => {
     try {
       const response = await axios.get(
-        `${bffUrl}/deposit-taker/branch/DT1715261417146`
+        `${bffUrl}/deposit-taker/branch/${entityUniqueId}`
       );
-      console.log(response.data.data.branches, "fetched data");
+      // console.log(response.data.data.branches, "fetched data");
       setBranches(response.data.data.branches);
       reset({
         branches: response.data.data.branches.map((branch: any) => ({
@@ -77,7 +78,7 @@ const ProfileBranches = () => {
   }, [reset, setBranches]);
 
   const onSubmit = async (data: any) => {
-    console.log(data, "data from all branches");
+    // console.log(data, "data from all branches");
     try {
       // const response = await axios.post(
       //   `${bffUrl}/deposit-taker/branch/DT1715261417146`,
@@ -86,7 +87,7 @@ const ProfileBranches = () => {
       //   }
       // );
       const response = await axios.post(
-        `${bffUrl}/deposit-taker/branch/DT1715261417146`,
+        `${bffUrl}/deposit-taker/branch/${entityUniqueId}`,
         {
           branches: data.branches.map((branch: any) => ({
             id: branch.id,
