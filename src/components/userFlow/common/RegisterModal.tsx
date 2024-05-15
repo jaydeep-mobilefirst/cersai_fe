@@ -133,7 +133,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
 
   const fetchFormFields = () => {
     axios
-      .get(`${bffUrl}/registration/field-data/${selectedRadio?.id}`)
+      .get(`${bffUrl}/registration/field-data/${selectedRadio?.id}?status=addToRegistration`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dropdownData = undefined;

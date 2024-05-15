@@ -21,7 +21,7 @@ const DashboardProfile = (props: Props) => {
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
     axios
-      .get(`${bffUrl}/registration/field-data/1`)
+      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dtData: any = [];
