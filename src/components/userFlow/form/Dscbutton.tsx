@@ -80,7 +80,7 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
                 <button
                   type="button"
                   className={`text-white Rectangle151 w-10 h-10 rounded-md ${
-                    fileSelected ? "bg-[#385723]" : "bg-gray-600"
+                    fileSelected ? "bg-[#1C468E]" : "bg-gray-600"
                   }  flex justify-center items-center `}
                 >
                   <img

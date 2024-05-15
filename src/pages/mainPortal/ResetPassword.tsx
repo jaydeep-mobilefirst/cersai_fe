@@ -9,6 +9,9 @@ type Props = {};
 const ResetPassword = (props: Props) => {
   const screenWidth = useScreenWidth();
   const customclass = `flex flex-col w-full mt-4 justify-between w-full`;
+  const emailId = sessionStorage.getItem("emailId");
+  const entityType = sessionStorage.getItem("entityType");
+  // console.log(entityType, "entityType");
 
   return (
     <>

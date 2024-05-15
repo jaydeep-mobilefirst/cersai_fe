@@ -93,6 +93,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         password: watch("password"),
         entityType: selected,
       });
+      console.log(response, "login model");
 
       sessionStorage.setItem(
         "access_token",
@@ -104,6 +105,12 @@ const LoginModel: React.FC<LoginModelProps> = ({
       );
       sessionStorage.setItem("firstName", response?.data?.user?.firstName);
       sessionStorage.setItem("lastName", response?.data?.user?.lastName);
+      sessionStorage.setItem("emailId", response.data.user?.emailId);
+      sessionStorage.setItem("entityType", response.data.user?.entityType);
+      sessionStorage.setItem(
+        "entityUniqueId",
+        response.data.user?.entityUniqueId
+      );
       apicallDsc();
       setError(false);
     } catch (err: any) {
@@ -145,7 +152,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
   };
 
   const handleNavigateRegistration = () => {
-    closeModal();
+    // closeModal();
     showRegisterModel();
   };
 
@@ -185,7 +192,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                     Login
                   </h1>
                 </div>
-                <div className="top-2 right-10 relative">
+                <div className="lg:top-2 lg:right-10 relative md:top-2 md:right-10 top-[-6rem]">
                   <img
                     src={CrossIcon}
                     alt="CrossIcon"
@@ -314,7 +321,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                 className="w-[200px] h-auto md:w-full"
               />
             </div>
-            <div className="md:order-1 flex justify-center items-center md:hidden">
+            <div className="md:order-1 flex justify-center items-center md:hidden ">
               <img
                 src={MobileIcon}
                 alt="MobileIcon"

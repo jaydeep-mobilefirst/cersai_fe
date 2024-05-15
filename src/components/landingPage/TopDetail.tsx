@@ -8,10 +8,12 @@ import RegisterModel from "../userFlow/common/RegisterModal";
 import LoginModel from "../userFlow/common/LoginModel";
 import ForgetPasswordModel from "../userFlow/common/ForgetPasswordModel";
 import RegisterMailPopup from "../userFlow/common/RegisterMailPopup";
+import SetNewPasswordModel from "../userFlow/common/SetNewPasswordModel";
+import PasswordUpdateModel from "../userFlow/common/PasswordUpdateModel";
 
 interface AuthButtonProps {
   buttontext: string;
-  onClick?: () => void; // Adding onClick function prop
+  onClick?: () => void;
 }
 
 const TopDetail = () => {
@@ -19,6 +21,9 @@ const TopDetail = () => {
   const [showLoginModel, setShowLoginModel] = useState(false);
   const [showForgetModel, setShowForgetModel] = useState(false);
   const [showRegisterMailModel, setShowRegisterMailModel] = useState(false);
+  const [showsNewPasswordModel, setShowsNewPasswordModel] = useState(true);
+  const [showsPasswordUpdateModel, setShowsPasswordUpdateModel] =
+    useState(false);
 
   const openModal = () => {
     setIsOpen(true);
@@ -47,22 +52,46 @@ const TopDetail = () => {
   const CloseForgetModel = () => {
     setShowForgetModel(false);
   };
-  const closeforgetModelShowLoginModel = () => {
+  const CloseforgetModelShowLoginModel = () => {
     setShowForgetModel(false);
     setShowLoginModel(true);
   };
-  const closeRegisterMailPopup = () => {
-    setShowRegisterMailModel(false);
+
+  const CloseForgetPasswordShowRegisterMail = () => {
+    // setShowRegisterMailModel(false);
+    setShowRegisterMailModel(true);
   };
 
-  const closeRegisterMailPopupandShowLoginPopup = () => {
+  const closeRegisterMailPopup = () => {
+    setShowForgetModel(false);
+    setShowRegisterMailModel(false);
+  };
+  const closeRegisterMailPopupShowLoginPopup = () => {
+    setShowForgetModel(false);
     setShowRegisterMailModel(false);
     setShowLoginModel(true);
   };
 
-  const closeForgetPasswordandShowRegisterMail = () => {
-    setShowRegisterMailModel(false);
-    setShowRegisterMailModel(true);
+  const CloseSetNewPasswordModel = () => {
+    setShowsNewPasswordModel(false);
+  };
+
+  const CloseNewPasswordandshowUpdatePassword = () => {
+    setShowsNewPasswordModel(false);
+    setShowsPasswordUpdateModel(true);
+  };
+  const CloseNewPasswordAndshowLoginModel = () => {
+    setShowsNewPasswordModel(false);
+    setShowLoginModel(true);
+  };
+
+  const CloseUpdatePasswordModel = () => {
+    setShowsPasswordUpdateModel(false);
+  };
+
+  const CloseUpdatePasswordandShowLogin = () => {
+    setShowsPasswordUpdateModel(false);
+    setShowLoginModel(true);
   };
 
   const downloadReport = () => {};
@@ -126,9 +155,9 @@ const TopDetail = () => {
       {showForgetModel && (
         <ForgetPasswordModel
           closeForgetModel={CloseForgetModel}
-          closeforgetModelShowLoginModel={closeforgetModelShowLoginModel}
+          closeforgetModelShowLoginModel={CloseforgetModelShowLoginModel}
           closeForgetPasswordandShowRegisterMail={
-            closeForgetPasswordandShowRegisterMail
+            CloseForgetPasswordShowRegisterMail
           }
         />
       )}
@@ -136,7 +165,22 @@ const TopDetail = () => {
       {showRegisterMailModel && (
         <RegisterMailPopup
           closeRegisterMailPopup={closeRegisterMailPopup}
-          showLoginPopup={closeRegisterMailPopupandShowLoginPopup}
+          showLoginPopup={closeRegisterMailPopupShowLoginPopup}
+        />
+      )}
+      {showsNewPasswordModel && (
+        <SetNewPasswordModel
+          closeSetNewPasswordModel={CloseSetNewPasswordModel}
+          closeNewPasswordandshowUpdatePassword={
+            CloseNewPasswordandshowUpdatePassword
+          }
+          closeNewPasswordAndshowLoginModel={CloseNewPasswordAndshowLoginModel}
+        />
+      )}
+      {showsPasswordUpdateModel && (
+        <PasswordUpdateModel
+          closeUpdatePasswordModel={CloseUpdatePasswordModel}
+          closeUpdatePasswordandShowLogin={CloseUpdatePasswordandShowLogin}
         />
       )}
     </div>

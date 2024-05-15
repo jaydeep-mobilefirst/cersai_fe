@@ -28,6 +28,7 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
   closeForgetModel,
   closeforgetModelShowLoginModel,
   closeForgetPasswordandShowRegisterMail,
+
   showLoginPopup,
 }) => {
   const navigate = useNavigate();
@@ -182,7 +183,7 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
           <div className="bg-white p-3 rounded-lg md:w-[946px] w-full grid grid-cols-1 md:grid-cols-2 gap-4 shadow-lg m-4">
             <div className="order-1 md:order-2 mt-3">
               <div className="flex justify-end mt-[4px]">
-                <div className="">
+                <div className="lg:top-2 lg:right-10 relative md:top-2 md:right-10 top-[-6rem]">
                   <img
                     src={CrossIcon}
                     alt="CrossIcon"
@@ -248,9 +249,9 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
                       onChange={handleEmailChange}
                       error={error}
                     />
-                    {errors.email && (
+                    {/* {errors.email && (
                       <p className="text-red-500">{errors.email.message}</p>
-                    )}
+                    )} */}
                   </div>
 
                   {/* <div className="mt-5">

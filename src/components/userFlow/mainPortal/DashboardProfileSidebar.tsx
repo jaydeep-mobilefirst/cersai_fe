@@ -1,53 +1,53 @@
-import { useEffect, useState } from 'react';
-import {profileSideBarList} from '../../../utils/hardText/portalText';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import rightArrow from "../../../assets/images/ArrowDark.svg"
-import whiteRightArrow from "../../../assets/images/rightArrowWhiteallWhite.svg"
-type Props = {
-}
-const widthPercentage : any = {
-    0 : 'w-5',
-    25 : 'w-1/4',
-    50 : 'w-1/2',
-    75 : 'w-3/4',
-    100 : 'w-full'
-}
+import { useEffect, useState } from "react";
+import { profileSideBarList } from "../../../utils/hardText/portalText";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import rightArrow from "../../../assets/images/ArrowDark.svg";
+import whiteRightArrow from "../../../assets/images/rightArrowWhiteallWhite.svg";
+type Props = {};
+const widthPercentage: any = {
+  0: "w-5",
+  25: "w-1/4",
+  50: "w-1/2",
+  75: "w-3/4",
+  100: "w-full",
+};
 
 const DashboardProfileSidebar = ({}: Props) => {
-    const [percent, setPercentage] = useState<any>(0);
-    const [mSidebar, setMsidebar] = useState<boolean>(false);
-    const [url, setUrl] = useState<String>("");
-    const [searchParams, setSearchParams] = useSearchParams();
-    const current = searchParams.get("current")
-    if (!current) {
-      setSearchParams({current: "entity"})  
-    }
-    const location = useLocation();
-    const { pathname } = location;
-    const navigate = useNavigate();
-  
-    useEffect(() => {
-      const cmsPath = pathname.split("/")[1];
-      // Extracting the first part after the domain
-      // console.log(cmsPath, "dashboard");
-      setUrl("/" + cmsPath);
-    }, []);
-  
-    const sidebarOnclick = () => {
-      setMsidebar(!mSidebar);
-    };
-  
-    const goBackRoute = () => {
-      navigate(-1);
-    };
+  const [percent, setPercentage] = useState<any>(0);
+  const [mSidebar, setMsidebar] = useState<boolean>(false);
+  const [url, setUrl] = useState<String>("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const current = searchParams.get("current");
+  if (!current) {
+    setSearchParams({ current: "entity" });
+  }
+  const location = useLocation();
+  const { pathname } = location;
+  const navigate = useNavigate();
 
-    const optionOnclick = (url: String) => {};
+  useEffect(() => {
+    const cmsPath = pathname.split("/")[1];
+    // Extracting the first part after the domain
+    // console.log(cmsPath, "dashboard");
+    setUrl("/" + cmsPath);
+  }, []);
 
+  const sidebarOnclick = () => {
+    setMsidebar(!mSidebar);
+  };
 
-    return(
-        <>
-        <button
+  const goBackRoute = () => {
+    navigate(-1);
+  };
+
+  const optionOnclick = (url: String) => {};
+  const firstName = sessionStorage.getItem("firstName");
+  const lastName = sessionStorage.getItem("lastName");
+
+  return (
+    <>
+      <button
         data-drawer-target="default-sidebar"
         data-drawer-toggle="default-sidebar"
         aria-controls="default-sidebar"
@@ -81,18 +81,32 @@ const DashboardProfileSidebar = ({}: Props) => {
         <div className="h-full overflow-y-auto bg-[#ffffff] w-[225px] md:w-[322px] border-r-2">
           <ul className="">
             <li className="border-b border-[#E6E6E6] p-4">
-              <h1 className='text-2xl font-semibold'>Rohan Gaikwad</h1>
-              <h1 className='text-xl'>CERSAI</h1>
-              <div className='h-12'>
-                    <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium"><span className="text-zinc-800 text-base font-normal text-gilroy-bold">{percent}%</span> Completed </p>
-                    <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px] border border-black-200" >
-                    <div className={` ${widthPercentage[percent]} h-2 bg-[#52AE32] rounded-[32px] `} />
-                    </div>
+              <h1 className="text-2xl font-semibold">
+                {firstName}
+                {lastName}
+              </h1>
+              <h1 className="text-xl">CERSAI</h1>
+              <div className="h-12">
+                <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium">
+                  <span className="text-zinc-800 text-base font-normal text-gilroy-bold">
+                    {percent}%
+                  </span>{" "}
+                  Completed{" "}
+                </p>
+                <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px] border border-black-200">
+                  <div
+                    className={` ${widthPercentage[percent]} h-2 bg-[#52AE32] rounded-[32px] `}
+                  />
                 </div>
+              </div>
             </li>
             {profileSideBarList?.map((data, idx) => {
               return (
-                <li className="px-4 py-2 relative" key={idx} onClick={() => setPercentage(data.percentage)}>
+                <li
+                  className="px-4 py-2 relative"
+                  key={idx}
+                  onClick={() => setPercentage(data.percentage)}
+                >
                   <Link to={data?.rurl}>
                     <div
                       onClick={(e) => optionOnclick(data?.url)}
@@ -102,23 +116,31 @@ const DashboardProfileSidebar = ({}: Props) => {
                     >
                       <div
                         className={`${
-                          current === data?.url ? "text-white" : "text-[#666666]"
+                          current === data?.url
+                            ? "text-white"
+                            : "text-[#666666]"
                         }  text-base font-normal text-gilroy-medium leading-normal pl-2`}
                       >
                         {data?.title}
                       </div>
                     </div>
                   </Link>
-                        <span className='absolute right-6 top-7'><img src={current === data.url ? whiteRightArrow : rightArrow} alt="" height={20} width={20}/></span>
+                  <span className="absolute right-6 top-7">
+                    <img
+                      src={current === data.url ? whiteRightArrow : rightArrow}
+                      alt=""
+                      height={20}
+                      width={20}
+                    />
+                  </span>
                 </li>
               );
             })}
           </ul>
         </div>
       </aside>
-      </>
+    </>
+  );
+};
 
-        )
-}
-
-export default DashboardProfileSidebar
+export default DashboardProfileSidebar;
