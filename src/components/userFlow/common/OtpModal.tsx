@@ -185,10 +185,9 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
               <div className="flex justify-between mt-[4px]">
                 <div className="w-full text-center">
                   <h1 className="text-[24px] font-bold text-black text-gilroy-medium">
-                    Otp Verification
+                    OTP Verification
                   </h1>
-
-                  <div className="text-center">
+                {sentOtp && <div className="text-center">
                     <span className="text-stone-500 text-base font-normal text-gilroy-medium">
                       Enter the OTP sent to
                       <br />
@@ -204,14 +203,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                         : ""}
                     </div>
                   </div>
-                </div>
-                <div className="top-2 right-10 relative">
-                  <img
-                    src={CrossIcon}
-                    alt="CrossIcon"
-                    className="cursor-pointer"
-                    onClick={handleClose}
-                  />
+                }
                 </div>
               </div>
               {sentOtp ? (
@@ -283,12 +275,15 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                   </div>
                 </form>
               ) : (
-                <div className=" flex justify-center items-center mt-36">
+                <div className=" flex justify-center items-center mt-36 flex-col">
+                  <span className="text-center mb-3">
+                    Click on send button to send OTP to your registered email and phone number
+                  </span>
                   <button
                     className=" bg-[#1C468E] rounded-xl p-3 text-sm font-semibold text-gilroy-medium text-white w-80"
                     onClick={sendOtp}
                   >
-                    Send Otp
+                    Send
                   </button>
                 </div>
               )}
