@@ -130,7 +130,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
     setLoader(true);
     axios
       .post(bffUrl + `/auth/mfa`, {
-        entityType: "DT",
+        entityType: selected,
         username: getValues("email"),
         dscCertificateFile: base64Data,
       })

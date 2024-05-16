@@ -129,7 +129,6 @@ import CrossIcon from "../../../assets/images/CrossIcon.svg";
 
 // import MobileIcon from "../../assets/images/MobileIcon.svg";
 import MobileIcon from "../../../assets/images/MobileIcon.svg";
-import Button from "./Button";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import OtpInput from "react-otp-input";
@@ -138,8 +137,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { bffUrl } from "../../utils/api";
 import { bffUrl } from "../../../utils/api";
-
-import Swal from "sweetalert2";
 import ButtonAuth from "./ButtonAuth";
 
 interface LoginModelProps {}
@@ -164,7 +161,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
     mobile: "",
   });
   const [timeLeft, setTimeLeft] = useState(
-    parseInt(localStorage.getItem("timerSec") ?? "")
+    parseInt(sessionStorage.getItem("timerSec") ?? "")
   );
 
   const formatTime = (totalSeconds: number) => {
@@ -176,8 +173,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   };
   useEffect(() => {
     if (
-      localStorage.getItem("otp-sent") &&
-      localStorage.getItem("otp-sent") === "false"
+      sessionStorage.getItem("otp-sent") &&
+      sessionStorage.getItem("otp-sent") !== "true"
     ) {
       sendOtp();
     }
@@ -225,12 +222,11 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
       })
       .then((response: any) => {
         let data = response.data;
-        console.log({ data });
         if (data.success) {
-          localStorage.setItem("otp-sent", "false");
-          localStorage.setItem("timerSec", "120");
-          navigate("/setpassword?identity=" + token);
-          localStorage.setItem("otp-verified", "true");
+          sessionStorage.setItem("otp-sent", "false");
+          sessionStorage.setItem("timerSec", "120");
+          navigate("/set-password?identity=" + token);
+          sessionStorage.setItem("otp-verified", "true");
         }
       })
       .catch((err: any) => {
@@ -249,8 +245,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
         })
         .then((response: any) => {
           if (response.data.success) {
-            localStorage.setItem("otp-sent", "true");
-            localStorage.setItem("timerSec", "120");
+            sessionStorage.setItem("otp-sent", "true");
+            sessionStorage.setItem("timerSec", "120");
             setSentOtp(true);
             setTimeLeft(120);
           }
@@ -266,14 +262,14 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
     if (timeLeft > 0 && sentOtp) {
       const intervalId = setInterval(() => {
         setTimeLeft(timeLeft - 1);
-        localStorage.setItem("timerSec", (timeLeft - 1).toString());
+        sessionStorage.setItem("timerSec", (timeLeft - 1).toString());
       }, 1000);
       // Clear the interval on component unmount or when timeLeft reaches 0
       return () => clearInterval(intervalId);
     }
     // else{
-    localStorage.setItem("otp-sent", "false");
-    //   localStorage.setItem('timerSec', '120')
+    sessionStorage.setItem("otp-sent", "false");
+    //   sessionStorage.setItem('timerSec', '120')
     //   setTimeLeft(120)
     //   setSentOtp(false)
     // }

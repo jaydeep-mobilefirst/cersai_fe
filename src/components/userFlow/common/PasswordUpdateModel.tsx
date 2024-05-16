@@ -2,9 +2,9 @@ import LoginPageIcon from "../../../assets/images/Login-bud.svg";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
 import MobileIcon from "../../../assets/images/MobileIcon.svg";
 import Loginticketcircel from "../../../assets/images/Login-tick-circle.svg";
-
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { useNavigate } from "react-router-dom";
 
 interface PasswordUpdateModelProps {
   closeUpdatePasswordModel?: () => void;
@@ -15,12 +15,13 @@ const PasswordUpdateModel: React.FC<PasswordUpdateModelProps> = ({
   closeUpdatePasswordModel,
   closeUpdatePasswordandShowLogin,
 }) => {
+  const navigate = useNavigate();
   const handleClose = () => {
     // closeUpdatePasswordModel();
   };
 
   const handleNavigateLogin = () => {
-    // closeUpdatePasswordandShowLogin();
+    navigate('/')
   };
 
   return (
