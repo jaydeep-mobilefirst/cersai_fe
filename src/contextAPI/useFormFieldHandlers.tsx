@@ -1,6 +1,6 @@
 import React, { createContext } from 'react'
 import { useDepositTakerRegistrationStore } from '../zust/deposit-taker-registration/registrationStore';
-import { backendBaseUrl, backendBudsPortalBFFUrl, pincodeValidationUrl } from '../utils/api';
+import { backendBaseUrl, backendBudsPortalBFFUrl, bffUrl, pincodeValidationUrl } from '../utils/api';
 import axios from 'axios';
 import { convertFileToBase64Async } from '../utils/fileConversion';
 
@@ -37,12 +37,10 @@ const FormHandlerProviders = ({children}: Props) => {
     }            
     setAllFormData(obj)
   }
-  const updateDocumentValue = (value : string | File | File[], fieldData : any, fileName : string ) => {
-    console.log({value});
-    
+  const updateDocumentValue = (value : string | File | File[], fieldData : any, fileName : string, uploadFileId : string = "" ) => {    
     let modifiedFileFields = documentData?.map((o : any) => {
       if (o?.id === fieldData?.id) {
-        return {...o, file : value, error : "", fileName : fileName};
+        return {...o, file : value, error : "", fileName : fileName, uploadFileId};
       }
       else{
         return o;
@@ -52,9 +50,7 @@ const FormHandlerProviders = ({children}: Props) => {
     setAllDocumentData(modifiedFileFields)
   }
 
-  const onFileChange = async (event : any, field : any, fieldType : string) : Promise<void> => {
-    console.log({fieldType});
-    
+  const onFileChange = async (event : any, field : any, fieldType : string) : Promise<void> => {   
     switch (fieldType) {
       case 'DSC':
         const file = event;
@@ -63,8 +59,28 @@ const FormHandlerProviders = ({children}: Props) => {
         break;
       case 'pdf' :
       case 'jpg/png/jpeg' :
-        let fileName = event?.name ? event?.name : ""
-        updateDocumentValue(event, field, fileName);
+        let uploadFileId = ""
+        if (event?.name && event?.type) {
+          var formData = new FormData();
+          formData.append("file", event);
+          const fileUpload = await axios.post(`${bffUrl}/openkm/save/temp/file`,  formData,{
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+            )
+            const data = await fileUpload?.data;
+            uploadFileId = data?.data[0]?.fileId
+            let fileName = event?.name ? event?.name : ""
+            updateDocumentValue(event, field, fileName, uploadFileId);
+          }
+          else{
+            if ((event === '' || event === undefined || event === null) && field?.uploadFileId && field?.uploadFileId !== "") {
+              await axios.delete(`${bffUrl}/openkm/file/delete/${field?.uploadFileId}`);
+            }            
+            let fileName = event?.name ? event?.name : ""
+            updateDocumentValue(event, field, fileName, uploadFileId);
+        }       
         break;
       default:
         break;

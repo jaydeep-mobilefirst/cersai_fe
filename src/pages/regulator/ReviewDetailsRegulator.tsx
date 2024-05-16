@@ -40,12 +40,11 @@ const useDownloadPDF = () => {
 };
 
 const ReviewDetailsRegulator = () => {
-  const [para1, setPara1] = useState('') 
-  const [para2, setPara2] = useState('') 
+  const [para1, setPara1] = useState('')
+  const [para2, setPara2] = useState('')
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [dtId, setDtId] = useState("");
-  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -62,10 +61,10 @@ const ReviewDetailsRegulator = () => {
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();
     setLoader(true);
-    const finalResult =
+    let finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
-        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
+        let sectionCode = allFormData.entitySections?.find((section: any) => section?.id === field?.sectionId)?.sectionName;
         if (sectionCode === 'Nodal Details') {
           sectionCode = 'Nodal Officer'
         }
@@ -76,36 +75,47 @@ const ReviewDetailsRegulator = () => {
           value: field?.userInput,
         };
       });
-     
-      axios.post(
-          bffUrl + "/regulator/add-form-fields",
-          { formData: finalResult }
-        )
-        .then((response : any) => {
-          const data = response.data;
-          if (data?.success) {
-            // setSubmitModal( true)
-            setPara1(`Your registration request has been sent successfully and
+
+    let docs = documentData?.length > 0 && documentData?.map((doc: any) => {
+      return {
+        fieldId: doc?.id,
+        label: doc?.documentName,
+        sectionCode: "Upload Documents",
+        value: doc?.uploadFileId,
+      };
+    })
+
+    finalResult = [...finalResult, ...docs]
+
+    axios.post(
+      bffUrl + "/regulator/add-form-fields",
+      { formData: finalResult }
+    )
+      .then((response: any) => {
+        const data = response.data;
+        if (data?.success) {
+          // setSubmitModal( true)
+          setPara1(`Your registration request has been sent successfully and
             approval/rejection of your registration will be informed to you
             via email.`)
-            setPara2(`Your registration acknowledgement ID is RT48726398745923`)
-            setSubmitted(true)
-            setSubmitModal(true)
+          setPara2(`Your registration acknowledgement ID is RT48726398745923`)
+          setSubmitted(true)
+          setSubmitModal(true)
         } else {
           setPara1(`Something went wrong`)
           setPara2(`Please try again later`)
           setSubmitted(false)
           setSubmitModal(true)
         }
-        })
-        .catch((e : any) => {
-          setLoader(false);
-          setPara1(`Something went wrong`)
-          setPara2(`Please try again later`)
-          setSubmitted(false)
-          setSubmitModal(true)
-          setLoader(false);
-        })
+      })
+      .catch((e: any) => {
+        setLoader(false);
+        setPara1(`Something went wrong`)
+        setPara2(`Please try again later`)
+        setSubmitted(false)
+        setSubmitModal(true)
+        setLoader(false);
+      })
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,11 +167,10 @@ const ReviewDetailsRegulator = () => {
 
                               return (
                                 <div
-                                  className={`sm:mr-[48px] flex justify-between ${
-                                    idx % 2 === 0
-                                      ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
-                                      : ""
-                                  } `}
+                                  className={`sm:mr-[48px] flex justify-between ${idx % 2 === 0
+                                    ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                    : ""
+                                    } `}
                                   key={idx}
                                 >
                                   <div className="text-gray-500">
@@ -170,13 +179,35 @@ const ReviewDetailsRegulator = () => {
                                   </div>
                                   <div>
                                     {field?.dscFileNAme !== "" &&
-                                    field?.dscFileNAme !== undefined
+                                      field?.dscFileNAme !== undefined
                                       ? field?.dscFileNAme
                                       : field.userInput}
                                   </div>
                                 </div>
                               );
                             })}
+                          {
+                            section?.sectionName === "Upload Documents" &&
+                            documentData?.map((doc: any, idx: number) => {
+                              return <div
+                                className={`sm:mr-[48px] flex justify-between ${idx % 2 === 0
+                                  ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                  : ""
+                                  } `}
+                                key={idx}
+                              >
+                                <div className="text-gray-500">
+                                  {doc?.documentName}
+                                  <span className="text-[#ff0000]">*</span>
+                                </div>
+                                <div>
+                                  {
+                                    doc?.fileName
+                                  }
+                                </div>
+                              </div>
+                            })
+                          }
                         </div>
                       </div>
                     </div>
@@ -226,27 +257,26 @@ const ReviewDetailsRegulator = () => {
               <button
                 onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked || loader}
-                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${
-                  isChecked ? "bg-[#385723]" : "bg-[#a3cf85]"
-                }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
+                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${isChecked ? "bg-[#385723]" : "bg-[#a3cf85]"
+                  }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}
               </button>
             </div>
           </div>
         </div>
-        <SuccessPopup 
-           closePopup={() => {
-            setSubmitModal(false); 
+        <SuccessPopup
+          closePopup={() => {
+            setSubmitModal(false);
             if (submitted) {
               Navigate('/')
             }
-           }} 
-           showPopup={() => setSubmitModal(true)} 
-           toggle={submitModal} 
-           para1={para1}
-           para2={para2}
-           success={submitted}
+          }}
+          showPopup={() => setSubmitModal(true)}
+          toggle={submitModal}
+          para1={para1}
+          para2={para2}
+          success={submitted}
         />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">

@@ -30,7 +30,7 @@ const ReviewDetailsDesignated = () => {
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
@@ -43,38 +43,48 @@ const ReviewDetailsDesignated = () => {
   const submit = async (e: any) => {
     e.preventDefault();
     setLoader(true);
-    const finalResult = allFormData?.formFields?.form_fields?.map((field: any) => {
-        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
-        if (sectionCode === 'Nodal Details') {
-          sectionCode = 'Nodal Officer'
-        }
+    let finalResult = allFormData?.formFields?.form_fields?.map((field: any) => {
+      let sectionCode = allFormData.entitySections?.find((section: any) => section?.id === field?.sectionId)?.sectionName;
+      if (sectionCode === 'Nodal Details') {
+        sectionCode = 'Nodal Officer'
+      }
 
-        console.log({sectionCode});
-        
-        return {
-          fieldId: field?.id,
-          label: field?.label,
-          sectionCode: sectionCode,
-          value: field?.userInput,
-        };
-      });
-      
-      console.log({finalResult});
-      
-      axios.post(
-          bffUrl + "/designated-court/add-form-fields",
-          { formData: finalResult }
-        )
-        .then((response : any) => {
-          const data = response.data;
-          if (data?.success) {
-            // setSubmitModal( true)
-            setPara1(`Your registration request has been sent successfully and
+      console.log({ sectionCode });
+
+      return {
+        fieldId: field?.id,
+        label: field?.label,
+        sectionCode: sectionCode,
+        value: field?.userInput,
+      };
+    });
+
+    let docs = documentData?.length > 0 && documentData?.map((doc: any) => {
+      return {
+        fieldId: doc?.id,
+        label: doc?.documentName,
+        sectionCode: "Upload Documents",
+        value: doc?.uploadFileId,
+      };
+    })
+
+    finalResult = [...finalResult, ...docs]
+    console.log({ finalResult });
+
+    axios.post(
+      bffUrl + "/designated-court/add-form-fields",
+      { formData: finalResult }
+    )
+      .then((response: any) => {
+        const data = response.data;
+        if (data?.success) {
+          // setSubmitModal( true)
+          setPara1(`Your registration request has been sent successfully and
             approval/rejection of your registration will be informed to you
             via email.`)
-            setPara2(`Your registration acknowledgement ID is RT48726398745923`)
-            setSubmitted(true)
-            setSubmitModal(true)
+          setPara2(`Your registration acknowledgement ID is RT48726398745923`)
+          setSubmitted(true)
+          setSubmitModal(true)
         } else {
           setPara1(`Something went wrong`);
           setPara2(`Please try again later`);
@@ -131,13 +141,12 @@ const ReviewDetailsDesignated = () => {
                           {allFormData?.formFields?.form_fields
                             ?.filter((f: any) => f?.sectionId === section?.id)
                             ?.map((field: any, idx: number) => {
-                               return (
+                              return (
                                 <div
-                                  className={`sm:mr-[48px] flex justify-between ${
-                                    idx % 2 === 0
+                                  className={`sm:mr-[48px] flex justify-between ${idx % 2 === 0
                                       ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
                                       : ""
-                                  } `}
+                                    } `}
                                   key={idx}
                                 >
                                   <div className="text-gray-500">
@@ -146,19 +155,42 @@ const ReviewDetailsDesignated = () => {
                                   </div>
                                   <div>
                                     {field?.dscFileNAme !== "" &&
-                                    field?.dscFileNAme !== undefined
+                                      field?.dscFileNAme !== undefined
                                       ? field?.dscFileNAme
                                       : field.userInput}
                                   </div>
                                 </div>
                               );
                             })}
+                          {
+                            section?.sectionName === "Upload Documents" &&
+                            documentData?.map((doc: any, idx: number) => {
+                              return <div
+                                className={`sm:mr-[48px] flex justify-between ${idx % 2 === 0
+                                    ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                    : ""
+                                  } `}
+                                key={idx}
+                              >
+                                <div className="text-gray-500">
+                                  {doc?.documentName}
+                                  <span className="text-[#ff0000]">*</span>
+                                </div>
+                                <div>
+                                  {
+                                    doc?.fileName
+                                  }
+                                </div>
+                              </div>
+                            })
+                          }
                         </div>
                       </div>
                     </div>
                   </div>
                 )
               )}
+
             <div>
               <div>
                 <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold mb-4">
@@ -237,18 +269,18 @@ const ReviewDetailsDesignated = () => {
             </div>
           </div>
         </div>
-        <SuccessPopup 
-           closePopup={() => {
-            setSubmitModal(false); 
+        <SuccessPopup
+          closePopup={() => {
+            setSubmitModal(false);
             if (submitted) {
               Navigate('/')
             }
-          }} 
-           showPopup={() => setSubmitModal(true)} 
-           toggle={submitModal} 
-           para1={para1}
-           para2={para2}
-           success={submitted}
+          }}
+          showPopup={() => setSubmitModal(true)}
+          toggle={submitModal}
+          para1={para1}
+          para2={para2}
+          success={submitted}
         />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">

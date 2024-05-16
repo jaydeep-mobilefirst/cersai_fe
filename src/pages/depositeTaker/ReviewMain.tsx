@@ -5,9 +5,8 @@ import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/arrow-down.svg";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import axios from "axios";
-import Swal from "sweetalert2";
 import LoaderSpin from "../../components/LoaderSpin";
-import { backendBudsPortalBFFUrl, bffUrl } from "../../utils/api";
+import { bffUrl } from "../../utils/api";
 import html2pdf from "html2pdf.js";
 import { signupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
@@ -46,7 +45,7 @@ const ReviewMain = () => {
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -63,7 +62,7 @@ const ReviewMain = () => {
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();
     setLoader(true);
-    const finalResult =
+    let finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
         return {
@@ -73,6 +72,17 @@ const ReviewMain = () => {
           value: field?.userInput,
         };
       });
+
+      let docs = documentData?.length > 0 ? documentData?.map((doc : any) => {
+        return {
+          fieldId: doc?.id,
+          label: doc?.documentName,
+          sectionCode: "Upload Documents",
+          value: doc?.uploadFileId,
+        };
+      }) : []
+
+      finalResult = [...finalResult, ...docs]
 
     axios
       .post(bffUrl + "/deposit-taker/add-form-fields", {
@@ -180,6 +190,29 @@ const ReviewMain = () => {
                                 </div>
                               );
                             })}
+                            {
+                              section?.sectionName === "Upload Documents" && 
+                              documentData?.map((doc : any, idx : number) => {
+                                return <div
+                                className={`sm:mr-[48px] flex justify-between ${
+                                  idx % 2 === 0
+                                    ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                    : ""
+                                } `}
+                                key={idx}
+                              >
+                                <div className="text-gray-500">
+                                  {doc?.documentName}
+                                  <span className="text-[#ff0000]">*</span>
+                                </div>
+                                <div>
+                                  {
+                                    doc?.fileName
+                                  }
+                                </div>
+                              </div>
+                              })
+                            }
                         </div>
                       </div>
                     </div>

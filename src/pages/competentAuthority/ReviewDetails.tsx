@@ -29,18 +29,17 @@ const useDownloadPDF = () => {
 const ReviewDetails = () => {
   const Navigate = useNavigate();
   const { downloadPDF, isDownloading } = useDownloadPDF();
-  const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
   const [para1, setPara1] = useState("");
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
 
   const submit = async (e: any) => {
     e.preventDefault();
     setLoader(true);
-    const finalResult =
+    let finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
         let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
@@ -56,9 +55,18 @@ const ReviewDetails = () => {
           value: field?.userInput,
         };
       });
-     
-      console.log({finalResult});
-      
+
+      let docs = documentData?.length > 0 && documentData?.map((doc : any) => {
+        return {
+          fieldId: doc?.id,
+          label: doc?.documentName,
+          sectionCode: "Upload Documents",
+          value: doc?.uploadFileId,
+        };
+      })
+
+      finalResult = [...finalResult, ...docs]
+           
       axios.post(
           bffUrl + "/competent-authority/add-form-fields",
           { formData: finalResult }
@@ -153,6 +161,29 @@ const ReviewDetails = () => {
                                 </div>
                               );
                             })}
+                            {
+                              section?.sectionName === "Upload Documents" && 
+                              documentData?.map((doc : any, idx : number) => {
+                                return <div
+                                className={`sm:mr-[48px] flex justify-between ${
+                                  idx % 2 === 0
+                                    ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                    : ""
+                                } `}
+                                key={idx}
+                              >
+                                <div className="text-gray-500">
+                                  {doc?.documentName}
+                                  <span className="text-[#ff0000]">*</span>
+                                </div>
+                                <div>
+                                  {
+                                    doc?.fileName
+                                  }
+                                </div>
+                              </div>
+                              })
+                            }
                         </div>
                       </div>
                     </div>
