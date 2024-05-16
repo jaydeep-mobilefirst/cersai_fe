@@ -1,133 +1,9 @@
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import LoginPageIcon from "../../../assets/images/Login-bud.svg";
-// import CrossIcon from "../../../assets/images/CrossIcon.svg";
-// import MobileIcon from "../../../assets/images/MobileIcon.svg";
-// import Button from "./Button";
-// import Box from "@mui/material/Box";
-// import Modal from "@mui/material/Modal";
-// import OtpInput from "react-otp-input";
-
-// interface LoginModelProps {}
-
-// const OtpModel: React.FC<LoginModelProps> = ({}) => {
-//   const [loader, setLoader] = useState(false);
-//   const [otp, setOtp] = useState<any>("");
-//   const [isValid, setIsValid] = useState<boolean>(true);
-//   const [isVerified, setIsVerified] = useState<any>(false);
-
-//   const handleChange = (otpValue: any) => {
-//     // Custom validation logic (e.g., allowing only digits)
-//     const validInput = /^[0-9]*$/.test(otpValue);
-
-//     if (validInput) {
-//       setOtp(otpValue);
-//       setIsValid(true);
-//     } else {
-//       setIsValid(false);
-//     }
-//   };
-
-//   const onSubmit = async () => {
-//     alert(otp);
-//   };
-
-//   const handleClose = () => {};
-
-//   return (
-//     <Modal
-//       open={true}
-//       aria-labelledby="modal-modal-title"
-//       aria-describedby="modal-modal-description"
-//     >
-//       <Box>
-//         <div className="bg-black bg-opacity-30 absolute inset-0 flex justify-center items-center shadow-lg">
-//           <div className="bg-white p-3 rounded-lg md:w-[946px] w-full grid grid-cols-1 md:grid-cols-2 gap-4 shadow-lg m-4">
-//             <div className="order-1 md:order-2 mt-3">
-//               <div className="flex justify-between mt-[4px]">
-//                 <div className="w-full text-center">
-//                   <h1 className="text-[24px] font-bold text-black text-gilroy-medium">
-//                     Otp Verification
-//                   </h1>
-
-//                   <div className="text-center">
-//                     <span className="text-stone-500 text-base font-normal text-gilroy-medium">
-//                       Enter the OTP sent to
-//                       <br />
-//                     </span>
-//                     <span className="text-black text-base font-normal text-gilroy-medium">
-//                       saurabh123@gmail.com
-//                     </span>
-//                   </div>
-//                 </div>
-//                 <div className="top-2 right-10 relative">
-//                   <img
-//                     src={CrossIcon}
-//                     alt="CrossIcon"
-//                     className="cursor-pointer"
-//                     onClick={handleClose}
-//                   />
-//                 </div>
-//               </div>
-//               <form>
-//                 <div className="mt-6 md:mt-[24px] relative flex items-center justify-center">
-//                   <OtpInput
-//                     value={otp}
-//                     numInputs={4}
-//                     onChange={handleChange}
-//                     renderSeparator={<span></span>}
-//                     inputStyle="inputStyle"
-//                     renderInput={(props) => <input {...props} />}
-//                   />
-//                   {!isValid && (
-//                     <p className="absolute text-[red] -bottom-6">
-//                       Please enter number only
-//                     </p>
-//                   )}
-//                 </div>
-
-//                 <div className="mt-5 md:mt-[36px] px-4 md:px-[40px]">
-//                   <div className="flex justify-center items-center mt-12 ">
-//                     <Button
-//                       type="submit"
-//                       loader={loader}
-//                       label={!loader ? "Submit" : "Loading..."}
-//                       onClick={onSubmit}
-//                     />
-//                   </div>
-//                 </div>
-//               </form>
-//             </div>
-//             <div className="md:order-1 hidden md:flex justify-center items-center">
-//               <img
-//                 src={LoginPageIcon}
-//                 alt="LoginPageIcon"
-//                 className="w-[200px] h-auto md:w-full"
-//               />
-//             </div>
-//             <div className="md:order-1 flex justify-center items-center md:hidden">
-//               <img
-//                 src={MobileIcon}
-//                 alt="MobileIcon"
-//                 className="w-[200px] h-auto md:w-full"
-//               />
-//             </div>
-//           </div>
-//         </div>
-//       </Box>
-//     </Modal>
-//   );
-// };
-
-// export default OtpModel;
 import React, { useEffect, useState } from "react";
-// import LoginPageIcon from "../../assets/images/Login-bud.svg";
+
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
 
-// import CrossIcon from "../../assets/images/CrossIcon.svg";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
 
-// import MobileIcon from "../../assets/images/MobileIcon.svg";
 import MobileIcon from "../../../assets/images/MobileIcon.svg";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -135,7 +11,7 @@ import OtpInput from "react-otp-input";
 import { jwtDecode } from "jwt-decode";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-// import { bffUrl } from "../../utils/api";
+
 import { bffUrl } from "../../../utils/api";
 import ButtonAuth from "./ButtonAuth";
 
@@ -150,7 +26,6 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const [loader, setLoader] = useState(false);
   const [button, setButton] = useState("Submit");
   const [startTimer, setStartTimer] = useState(false);
-  const [sentOtp, setSentOtp] = useState(false);
   const [decodedToken, setDecodedToken] = useState<any>(decoded);
   const [mobileOtp, setMobileOtp] = useState<string>("");
   const [emailOtp, setEmailOtp] = useState<string>("");
@@ -160,6 +35,9 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
     email: "",
     mobile: "",
   });
+  const [sentOtp, setSentOtp] = useState(
+    sessionStorage.getItem("otp-sent") === "true" ? true : false
+  );
   const [timeLeft, setTimeLeft] = useState(
     parseInt(sessionStorage.getItem("timerSec") ?? "")
   );
@@ -171,14 +49,30 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
       .toString()
       .padStart(2, "0")}`;
   };
-  useEffect(() => {
-    if (
-      sessionStorage.getItem("otp-sent") &&
-      sessionStorage.getItem("otp-sent") !== "true"
-    ) {
-      sendOtp();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     sessionStorage.getItem("otp-sent") &&
+  //     sessionStorage.getItem("otp-sent") !== "true"
+  //   ) {
+  //     sendOtp();
+  //   }
+  // }, []);
+  const maskEmail = (email: string) => {
+    const [localPart, domain] = email.split("@");
+    const maskedLocalPart =
+      localPart.length > 4
+        ? localPart.slice(0, 3) + "xxx" + localPart.slice(-2)
+        : localPart;
+    return `${maskedLocalPart}@${domain}`;
+  };
+
+  const maskMobile = (mobile: string) => {
+    const maskedMobile =
+      mobile.length > 4
+        ? mobile.slice(0, 2) + "xxx" + mobile.slice(-2)
+        : mobile;
+    return maskedMobile;
+  };
 
   useEffect(() => {
     if (emailOtp.length === 6 && mobileOtp.length === 6) {
@@ -234,7 +128,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
       });
   };
 
-  const sendOtp = () => {
+  const sendOtp = (event: any) => {
+    event.preventDefault();
     if (Object.keys(decodedToken).length > 0) {
       console.log({ decodedToken }, "-------------------");
 
@@ -298,9 +193,16 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                       Enter the OTP sent to
                       <br />
                     </span>
-                    <span className="text-black text-base font-normal text-gilroy-medium">
-                      saurabh123@gmail.com
-                    </span>
+                    <div className="text-black text-base font-normal text-gilroy-medium mt-2">
+                      {/* {decodedToken?.email} */}
+                      {decodedToken?.email ? maskEmail(decodedToken.email) : ""}
+                    </div>
+                    <div className="text-black text-base font-normal text-gilroy-medium mt-2">
+                      {/* {decodedToken?.mobile} */}
+                      {decodedToken?.mobile
+                        ? maskMobile(decodedToken.mobile)
+                        : ""}
+                    </div>
                   </div>
                 </div>
                 <div className="top-2 right-10 relative">
@@ -312,73 +214,84 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                   />
                 </div>
               </div>
-              <form className="">
-                <div className="mt-6 md:mt-[24px] relative flex items-center justify-center flex-col">
-                  <label htmlFor="">Mobile</label>
-                  <OtpInput
-                    value={mobileOtp}
-                    numInputs={6}
-                    onChange={handleChangeMobileOtp}
-                    renderSeparator={<span></span>}
-                    inputStyle="inputStyle"
-                    renderInput={(props) => <input {...props} />}
-                  />
-                  <span>Time Left : {formatTime(timeLeft)}</span>
-                  {isValid?.mobile !== "" && (
-                    <p className="absolute text-[red] -bottom-6">
-                      {isValid?.mobile}
-                    </p>
-                  )}
-                </div>
-                <div className="mt-6 md:mt-[24px] relative flex items-center justify-center flex-col">
-                  <label htmlFor="">Email</label>
-                  <OtpInput
-                    value={emailOtp}
-                    numInputs={6}
-                    onChange={handleChangeEmailOtp}
-                    renderSeparator={<span></span>}
-                    inputStyle="inputStyle"
-                    renderInput={(props) => <input {...props} />}
-                  />
-                  <span>Time Left : {formatTime(timeLeft)}</span>
-
-                  {isValid?.email !== "" && (
-                    <p className="absolute text-[red] -bottom-6">
-                      {isValid?.email}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <span className="flex flex-row justify-center items-center  mt-10">
-                    You didn’t receive a code?
-                    <span
-                      className={`${
-                        timeLeft > 0
-                          ? "text-blue-400"
-                          : "text-blue-600 hover:cursor-pointer"
-                      } font-semibold ml-1 `}
-                      onClick={() => {
-                        if (timeLeft === 0) {
-                          sendOtp();
-                        }
-                      }}
-                    >
-                      Resend
-                    </span>
-                  </span>
-                </div>
-                <div className="mt-5 md:mt-[36px] px-4 md:px-[40px]">
-                  <div className="flex justify-center items-center mt-12 ">
-                    <ButtonAuth
-                      type="submit"
-                      loader={loader}
-                      label={!loader ? "Submit" : "Loading..."}
-                      onClick={onSubmit}
-                      disabled={disabled}
+              {sentOtp ? (
+                <form className="">
+                  <div className="mt-6 md:mt-[24px] relative flex items-center justify-center flex-col">
+                    <label htmlFor="">Mobile</label>
+                    <OtpInput
+                      value={mobileOtp}
+                      numInputs={6}
+                      onChange={handleChangeMobileOtp}
+                      renderSeparator={<span></span>}
+                      inputStyle="inputStyle"
+                      renderInput={(props) => <input {...props} />}
                     />
+                    <span>Time Left : {formatTime(timeLeft)}</span>
+                    {isValid?.mobile !== "" && (
+                      <p className="absolute text-[red] -bottom-6">
+                        {isValid?.mobile}
+                      </p>
+                    )}
                   </div>
+                  <div className="mt-6 md:mt-[24px] relative flex items-center justify-center flex-col">
+                    <label htmlFor="">Email</label>
+                    <OtpInput
+                      value={emailOtp}
+                      numInputs={6}
+                      onChange={handleChangeEmailOtp}
+                      renderSeparator={<span></span>}
+                      inputStyle="inputStyle"
+                      renderInput={(props) => <input {...props} />}
+                    />
+                    <span>Time Left : {formatTime(timeLeft)}</span>
+
+                    {isValid?.email !== "" && (
+                      <p className="absolute text-[red] -bottom-6">
+                        {isValid?.email}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <span className="flex flex-row justify-center items-center  mt-10">
+                      You didn’t receive a code?
+                      <span
+                        className={`${
+                          timeLeft > 0
+                            ? "text-blue-400"
+                            : "text-blue-600 hover:cursor-pointer"
+                        } font-semibold ml-1 `}
+                        onClick={(event) => {
+                          if (timeLeft === 0) {
+                            sendOtp(event);
+                          }
+                        }}
+                      >
+                        Resend
+                      </span>
+                    </span>
+                  </div>
+                  <div className="mt-5 md:mt-[36px] px-4 md:px-[40px]">
+                    <div className="flex justify-center items-center mt-12 ">
+                      <ButtonAuth
+                        type="submit"
+                        loader={loader}
+                        label={!loader ? "Submit" : "Loading..."}
+                        onClick={onSubmit}
+                        disabled={disabled}
+                      />
+                    </div>
+                  </div>
+                </form>
+              ) : (
+                <div className=" flex justify-center items-center mt-36">
+                  <button
+                    className=" bg-[#1C468E] rounded-xl p-3 text-sm font-semibold text-gilroy-medium text-white w-80"
+                    onClick={sendOtp}
+                  >
+                    Send Otp
+                  </button>
                 </div>
-              </form>
+              )}
             </div>
             <div className="md:order-1 hidden md:flex justify-center items-center">
               <img
