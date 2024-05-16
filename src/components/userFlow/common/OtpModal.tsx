@@ -15,9 +15,9 @@ import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import ButtonAuth from "./ButtonAuth";
 
-interface LoginModelProps {}
+interface LoginModelProps { }
 
-const OtpModel: React.FC<LoginModelProps> = ({}) => {
+const OtpModel: React.FC<LoginModelProps> = ({ }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -170,7 +170,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
     // }
   }, [timeLeft, sentOtp]);
 
-  const handleClose = () => {};
+  const handleClose = () => { };
 
   return (
     <Modal
@@ -247,11 +247,10 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                     <span className="flex flex-row justify-center items-center  mt-10">
                       You didn’t receive a code?
                       <span
-                        className={`${
-                          timeLeft > 0
+                        className={`${timeLeft > 0
                             ? "text-blue-400"
                             : "text-blue-600 hover:cursor-pointer"
-                        } font-semibold ml-1 `}
+                          } font-semibold ml-1 `}
                         onClick={(event) => {
                           if (timeLeft === 0) {
                             sendOtp(event);
