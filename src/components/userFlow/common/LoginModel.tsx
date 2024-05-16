@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-// import LoginPageIcon from "../../../assets/images/LoginpageIcon.svg";
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
 import MobileIcon from "../../../assets/images/MobileIcon.svg";
@@ -131,7 +130,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
     setLoader(true);
     axios
       .post(bffUrl + `/auth/mfa`, {
-        entityType: "DT",
+        entityType: selected,
         username: getValues("email"),
         dscCertificateFile: base64Data,
       })

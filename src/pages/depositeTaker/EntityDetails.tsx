@@ -13,7 +13,7 @@ const EntityDetails: React.FC = () => {
   const [loader, setLoader] = useState(false);
   const Navigate = useNavigate();
 
-  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
+  const {allFormData, documentData} = useDepositTakerRegistrationStore((state : any) => state)
 
   const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Entity Details");
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)

@@ -131,7 +131,7 @@ const ProfileBranches = () => {
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {branches.map((branch: any, index: any) => (
+        {branches?.map((branch: any, index: any) => (
           <ProfileBranchForm
             // key={index}
             key={branch.id}
