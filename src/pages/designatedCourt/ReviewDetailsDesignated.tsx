@@ -190,38 +190,6 @@ const ReviewDetailsDesignated = () => {
                   </div>
                 )
               )}
-
-            <div>
-              <div>
-                <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold mb-4">
-                  <p className="lg:w-[152px] ml-[16px] mt-[16px] text-xl lg:text-[20px] pb-2 text-nowrap">
-                    Upload Documents
-                  </p>
-                </div>
-                <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between items-center h-16 text-gilroy-bold mb-4">
-                  <div className="flex p-7 space-x-2 ">
-                    <div className="mt-1">
-                      <img
-                        src={folderOpen}
-                        alt={folderOpen}
-                        className=" bg-[#52AE3226] rounded p-3 h-10 "
-                      />
-                    </div>
-                    <div className="">
-                      <h1 className="text-sm font-normal text-gilroy-medium text-[#1D1D1B]">
-                        Document Uploaded
-                      </h1>
-                      <p className="text-base font-normal text-gilroy-medium text-gray-400">
-                        Document.pdf
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mr-3">
-                    <Button label="View" type="button" width="100px" />
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
           <div className="flex flex-shrink-0 mt-[20px]">
             <div className="w-[24px] h-[24px] justify-center align-center">

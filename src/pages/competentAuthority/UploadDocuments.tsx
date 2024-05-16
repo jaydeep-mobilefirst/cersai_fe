@@ -9,16 +9,17 @@ import DeleteUpload from "./DeleteUpload";
 import UploadFile from "./UploadFile";
 import UploadIcon from "../../assets/images/UploadIcon.png";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import LoaderSpin from "../../components/LoaderSpin";
 type Props = {};
 
 const UploadDocumentsRegulator = (props: Props) => {
+  const [params, setParams] = useSearchParams();
   const { documentData, allFormData} = useDepositTakerRegistrationStore(
     (state) => state
   );
-  const { onFileChange, handleValidationChecks } =
+  const { onFileChange, handleDocumentValidations } =
   useContext(FormHandlerContext);
   const screenWidth = useScreenWidth();
   const Navigate = useNavigate();
@@ -58,7 +59,19 @@ const UploadDocumentsRegulator = (props: Props) => {
   }; 
 
   console.log({documentData});
-  
+  const submit = async (e : any) => {
+    e.preventDefault();
+    const goodToGo = await handleDocumentValidations(documentData[0]?.sectionId);
+    if (goodToGo) {
+      const edit = params.get('edit');
+      if (edit !== undefined && edit !== null && edit !== "") {
+        Navigate('/competent/authority/reviewdetails')
+      }
+      else{
+        Navigate('/competent/authority/nodaldetails');
+      }
+    }    
+  }
   return (
     <>
       <div>
@@ -107,7 +120,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                           <div className="flex flex-col">
                             <h1 className="text-xs md:text-sm font-normal text-gilroy-medium text-gray-900">
                               {data?.documentName}
-                              <span className="text-red-500">*</span>
+                              {data?.required && <span className="text-red-500">*</span>}
                             </h1>
                             <p className="text-xs md:text-base font-normal text-gilroy-medium text-gray-400">
                               {data?.fileName !== "" && data?.fileName !== undefined ? data?.fileName : "No Document uploaded"}
@@ -144,6 +157,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                           </div>
                         </div>
                       </div>
+                      <span className="text-red-500">{data?.error}</span>
                     </div>
                   );
                 }
@@ -192,7 +206,7 @@ const UploadDocumentsRegulator = (props: Props) => {
               <div className="flex items-center">
                 <button
                   type="submit"
-                  onClick={() => Navigate('/competent/authority/nodaldetails')}
+                  onClick={submit}
                   className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
                    {loader ? <LoaderSpin /> : "Save And Continue"}

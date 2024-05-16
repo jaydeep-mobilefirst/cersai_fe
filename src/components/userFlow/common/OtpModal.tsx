@@ -15,9 +15,9 @@ import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import ButtonAuth from "./ButtonAuth";
 
-interface LoginModelProps {}
+interface LoginModelProps { }
 
-const OtpModel: React.FC<LoginModelProps> = ({}) => {
+const OtpModel: React.FC<LoginModelProps> = ({ }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -170,7 +170,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
     // }
   }, [timeLeft, sentOtp]);
 
-  const handleClose = () => {};
+  const handleClose = () => { };
 
   return (
     <Modal
@@ -185,10 +185,10 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
               <div className="flex justify-between mt-[4px]">
                 <div className="w-full text-center">
                   <h1 className="text-[24px] font-bold text-black text-gilroy-medium">
-                    Otp Verification
+                    OTP Verification
                   </h1>
 
-                  <div className="text-center">
+                  {!sendOtp && <div className="text-center">
                     <span className="text-stone-500 text-base font-normal text-gilroy-medium">
                       Enter the OTP sent to
                       <br />
@@ -203,16 +203,16 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                         ? maskMobile(decodedToken.mobile)
                         : ""}
                     </div>
-                  </div>
+                  </div>}
                 </div>
-                <div className="top-2 right-10 relative">
+                {/* <div className="top-2 right-10 relative">
                   <img
                     src={CrossIcon}
                     alt="CrossIcon"
                     className="cursor-pointer"
                     onClick={handleClose}
                   />
-                </div>
+                </div> */}
               </div>
               {sentOtp ? (
                 <form className="">
@@ -255,11 +255,10 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                     <span className="flex flex-row justify-center items-center  mt-10">
                       You didn’t receive a code?
                       <span
-                        className={`${
-                          timeLeft > 0
+                        className={`${timeLeft > 0
                             ? "text-blue-400"
                             : "text-blue-600 hover:cursor-pointer"
-                        } font-semibold ml-1 `}
+                          } font-semibold ml-1 `}
                         onClick={(event) => {
                           if (timeLeft === 0) {
                             sendOtp(event);
@@ -283,12 +282,15 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                   </div>
                 </form>
               ) : (
-                <div className=" flex justify-center items-center mt-36">
+                <div className=" flex justify-center items-center mt-36 flex-col">
+                  <span className="text-center mb-3">Click below button to send OTP on your registered Email and Phone Number</span>
+                  Email : {decodedToken?.email ? maskEmail(decodedToken.email) : ""} <br />
+                  Phone No : {decodedToken?.mobile ? maskMobile(decodedToken.mobile) : ""}
                   <button
                     className=" bg-[#1C468E] rounded-xl p-3 text-sm font-semibold text-gilroy-medium text-white w-80"
                     onClick={sendOtp}
                   >
-                    Send Otp
+                    Send
                   </button>
                 </div>
               )}
