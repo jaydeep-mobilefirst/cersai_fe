@@ -7,8 +7,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 interface PasswordUpdateModelProps {
-  closeUpdatePasswordModel: () => void;
-  closeUpdatePasswordandShowLogin: () => void;
+  closeUpdatePasswordModel?: () => void;
+  closeUpdatePasswordandShowLogin?: () => void;
 }
 
 const PasswordUpdateModel: React.FC<PasswordUpdateModelProps> = ({
@@ -16,11 +16,11 @@ const PasswordUpdateModel: React.FC<PasswordUpdateModelProps> = ({
   closeUpdatePasswordandShowLogin,
 }) => {
   const handleClose = () => {
-    closeUpdatePasswordModel();
+    // closeUpdatePasswordModel();
   };
 
   const handleNavigateLogin = () => {
-    closeUpdatePasswordandShowLogin();
+    // closeUpdatePasswordandShowLogin();
   };
 
   return (

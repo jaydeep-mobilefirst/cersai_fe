@@ -168,7 +168,7 @@ const TopDetail = () => {
           showLoginPopup={closeRegisterMailPopupShowLoginPopup}
         />
       )}
-      {showsNewPasswordModel && (
+      {/* {showsNewPasswordModel && (
         <SetNewPasswordModel
           closeSetNewPasswordModel={CloseSetNewPasswordModel}
           closeNewPasswordandshowUpdatePassword={
@@ -182,7 +182,7 @@ const TopDetail = () => {
           closeUpdatePasswordModel={CloseUpdatePasswordModel}
           closeUpdatePasswordandShowLogin={CloseUpdatePasswordandShowLogin}
         />
-      )}
+      )} */}
     </div>
   );
 };

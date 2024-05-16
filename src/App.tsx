@@ -39,6 +39,8 @@ import SchemeMasterForm from "./pages/mainPortal/SchemaManagemet/SchemaMasterDet
 import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 
 import SetPassword from "./pages/SetPassowrd";
+import SetNewPasswordModel from "./components/userFlow/common/SetNewPasswordModel";
+import OtpModel from "./components/userFlow/common/OtpModal";
 
 function App() {
   return (
@@ -110,7 +112,9 @@ function App() {
             </Route>
           </Route>
           <Route element={<Landing />} path="/" />
-          <Route element={<SetPassword />} path="/set-password" />
+          {/* <Route element={<SetPassword />} path="/set-password" /> */}
+          <Route element={<SetNewPasswordModel />} path="/set-password" />
+          <Route element={<OtpModel />} path="/otp-verification" />
         </Routes>
       </Router>
     </div>
