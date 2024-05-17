@@ -15,7 +15,7 @@ export const signupSideBarCompetent = [
       path:"/competent/authority/competentdetails",
       imgSrc: profile,
       imgSrcHighlighted:profileCircleHighlighted,
-      description: "Competent Details",
+      description: "Competent Authority Details",
       tickImgSrc: tickCircleWhite,
       percentage: 0,
     },
