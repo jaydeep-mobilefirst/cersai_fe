@@ -114,8 +114,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
       setError(false);
     } catch (err: any) {
       setError(true);
-      if (err.response?.data?.error) {
-        setFormError(err.response.data.error);
+      if (err.response?.data?.error?.error_description) {
+        setFormError(err.response.data.error?.error_description);
         setError(true);
       } else {
         setFormError("An error occurred. Please try again.");
@@ -132,7 +132,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       .post(bffUrl + `/auth/mfa`, {
         entityType: selected,
         username: getValues("email"),
-        dscCertificateFile: base64Data,
+        dscCertificateFile: base64Data
       })
       .then((respose) => {
         reset();
@@ -141,7 +141,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         navigate("/dt/dashboard");
       })
       .catch((error) => {
-        console.log(error);
+        setFormError(error?.response?.data?.message)
         setLoader(false);
       });
   };
@@ -278,6 +278,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       Forgot password?
                     </p>
                   </div>
+                  
                   <div className="mt-4 lg:mt-8">
                     {watch("email") && watch("password") && (
                       <Dscbutton
@@ -287,6 +288,9 @@ const LoginModel: React.FC<LoginModelProps> = ({
                         Upload Document
                       </Dscbutton>
                     )}
+                  </div>
+                  <div className="mt-4 lg:mt-8 text-red-500 text-center">
+                    {formError}
                   </div>
                   <div className="flex justify-center items-center mt-12 ">
                     <Button

@@ -1,8 +1,6 @@
 import React, { useState, useContext } from "react";
 import folderOpen from "../../assets/images/folder-open.svg";
-import directboxsend from "../../assets/images/directboxSend.svg";
 import trashIcon from "../../assets/images/trash.svg";
-import add from "../../assets/images/add.svg";
 
 import { useScreenWidth } from "../../utils/screenSize";
 import DeleteUpload from "./DeleteUpload";
@@ -11,10 +9,6 @@ import UploadIcon from "../../assets/images/UploadIcon.png";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
-import LoaderSpin from "../../components/LoaderSpin";
-import axios from "axios";
-import Swal from "sweetalert2";
-import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 
 type Props = {};
 

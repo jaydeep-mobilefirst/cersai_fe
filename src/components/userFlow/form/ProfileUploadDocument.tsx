@@ -17,6 +17,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onFileUpload?: (file: File | null) => void;
   deleteFile?: () => void;
   documentName?: string;
+  required ?: boolean;
+  fileSelected ?: boolean;
+  fileName  ?: string
 }
 
 const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
@@ -24,9 +27,7 @@ const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
   ButtonProps
 >((props, ref) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [fileSelected, setFileSelected] = useState(false); // State to track file selection
-  const [file, setFile] = useState<any>(null);
-  const { onFileUpload, documentName, ...restProps } = props;
+    const { onFileUpload, documentName, ...restProps } = props;
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -34,8 +35,6 @@ const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    setFileSelected(!!file); // Update the state based on whether a file is selected
-    setFile(file);
     if (file && onFileUpload) {
       onFileUpload(file);
     } else if (onFileUpload) {
@@ -49,27 +48,31 @@ const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
         {...restProps}
         ref={ref}
         className={`upload-button w-full h-48 ${
-          fileSelected ? "file-selected" : "no-file"
+          props?.fileName && props?.fileName?.trim() !== '' ? "file-selected" : "no-file"
         }`}
-        onClick={handleButtonClick}
+        
       >
         <div className="flex items-center space-between gap-2 w-full">
           <img src={folderOpen} alt="Error" height={30} width={30} />
           <div className="text-left">
             <span>
-              {!fileSelected ? UploadButtonTexts.uploadDocument : "Document"}
+              {documentName} {props?.required && props?.required === true && <span className="text-red-500">*</span>}
             </span>
             <p className="text-gray-400">
-              {!fileSelected ? documentName : file?.name}
+              {props?.fileName && props?.fileName?.trim() !== '' ? props?.fileName : UploadButtonTexts.uploadDocument}
             </p>
           </div>
         </div>
         <div>
-          {fileSelected ? (
+          {props?.fileName && props?.fileName?.trim() !== '' ? (
             <span className="flex flex-row justify-between">
-              {" "}
+             
               {props?.deleteFile && (
-                <div className="p-1 bg-white flex align-middle mr-4 rounded-lg">
+                <div className="p-1 bg-white flex align-middle mr-4 rounded-lg" role="button" onClick={() =>{
+                  if (props.deleteFile) {
+                    props.deleteFile()
+                  }
+                  }}>
                   <img src={trash} height={40} width={40} />
                 </div>
               )}
@@ -82,7 +85,9 @@ const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
               />
             </span>
           ) : (
-            <UploadButtonSvg1 />
+            <div onClick={handleButtonClick}>
+              <UploadButtonSvg1/>
+            </div>
           )}
         </div>
       </button>

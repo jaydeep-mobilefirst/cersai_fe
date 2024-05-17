@@ -94,7 +94,7 @@ const ReviewDetailsDesignated = () => {
       })
       .catch((e: any) => {
         setLoader(false);
-        setPara1(`Something went wrong`);
+        setPara1(e?.response?.data?.detail?.message)
         setPara2(`Please try again later`);
         setSubmitted(false);
         setSubmitModal(true);

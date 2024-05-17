@@ -3,17 +3,18 @@ import { useDepositTakerRegistrationStore } from '../zust/deposit-taker-registra
 import { backendBaseUrl, backendBudsPortalBFFUrl, bffUrl, pincodeValidationUrl } from '../utils/api';
 import axios from 'axios';
 import { convertFileToBase64Async } from '../utils/fileConversion';
+import Swal from 'sweetalert2';
 
 type Props = {
   children : React.ReactElement
 }
 
 interface IContextProps {
-  onFileChange: (event : any | undefined | File, field : any, fieldType : string) => Promise<void>
+  onFileChange: (event : any | undefined | File, field : any, fieldType : string, entityId ?: string) => Promise<void>
   onChange: (event: any | undefined, fieldData: any, fieldType: string) => Promise<void>
   updatePanFormField: (responseData: any, panFormField: any) => Promise<boolean>
   handleValidationChecks: (formFields: any[]) => Promise<boolean>
-  handleDocumentValidations :  (sectionId: number) => Promise<boolean>
+  handleDocumentValidations :  (sectionId: number | number[]) => Promise<boolean>
 }
 
 // declare function handleValidations(errors: any): void;
@@ -50,7 +51,7 @@ const FormHandlerProviders = ({children}: Props) => {
     setAllDocumentData(modifiedFileFields)
   }
 
-  const onFileChange = async (event : any, field : any, fieldType : string) : Promise<void> => {   
+  const onFileChange = async (event : any, field : any, fieldType : string, entityID ?: string) : Promise<void> => {       
     switch (fieldType) {
       case 'DSC':
         const file = event;
@@ -61,25 +62,48 @@ const FormHandlerProviders = ({children}: Props) => {
       case 'jpg/png/jpeg' :
         let uploadFileId = ""
         if (event?.name && event?.type) {
-          var formData = new FormData();
-          formData.append("file", event);
-          const fileUpload = await axios.post(`${bffUrl}/openkm/save/temp/file`,  formData,{
-            headers: {
-              'Content-Type': 'multipart/form-data'
+          try {
+            var formData = new FormData();
+            formData.append("file", event);
+
+            if (entityID && entityID !== "") {
+              formData.append("unique_id", entityID);
             }
+
+            const fileUpload = await axios.post(`${bffUrl}/openkm/save/temp/file`,  formData,{
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            }
+              )
+              const data = await fileUpload?.data;
+              uploadFileId = data?.data[0]?.fileId
+              let fileName = event?.name ? event?.name : ""
+              updateDocumentValue(event, field, fileName, uploadFileId);
+          } catch (error) {
+            Swal.fire({
+              icon : "error",
+              text : "Error Upload File, Please try later",
+              title : "Error"
+            })
           }
-            )
-            const data = await fileUpload?.data;
-            uploadFileId = data?.data[0]?.fileId
-            let fileName = event?.name ? event?.name : ""
-            updateDocumentValue(event, field, fileName, uploadFileId);
+         
           }
           else{
             if ((event === '' || event === undefined || event === null) && field?.uploadFileId && field?.uploadFileId !== "") {
-              await axios.delete(`${bffUrl}/openkm/file/delete/${field?.uploadFileId}`);
+              try {
+                await axios.delete(`${bffUrl}/openkm/file/delete/${field?.uploadFileId}`);
+                let fileName = event?.name ? event?.name : ""
+                updateDocumentValue(event, field, fileName, uploadFileId);
+              } catch (error) {
+                Swal.fire({
+                  icon : "error",
+                  text : "Error deleting File, Please try later",
+                  title : "Error"
+                })
+              }
             }            
-            let fileName = event?.name ? event?.name : ""
-            updateDocumentValue(event, field, fileName, uploadFileId);
+           
         }       
         break;
       default:
@@ -88,9 +112,7 @@ const FormHandlerProviders = ({children}: Props) => {
     
   }
 
-  const onChange = async (event : any = undefined, fieldData : any, fieldType : string) => {
-    console.log({fieldType});
-    
+  const onChange = async (event : any = undefined, fieldData : any, fieldType : string) => {    
     const inputFieldTypes = ["text", "textarea", "password", "number", "email", "phone_number"];
     if (inputFieldTypes.includes(fieldType) && event) {
       const {value} = event?.target;
@@ -128,9 +150,7 @@ const FormHandlerProviders = ({children}: Props) => {
        let stateFormField = allFormData?.formFields?.form_fields?.find((o : any) => o?.label?.toLowerCase() === "state" && fieldData?.sectionId === o?.sectionId);
        let districtFormField = allFormData?.formFields?.form_fields?.find((o : any) => o?.label?.toLowerCase() === "district" && fieldData?.sectionId === o?.sectionId);
         if (data[0]?.Status === "Success") {
-          let locationData = data[0]?.PostOffice[0]
-          console.log({locationData});
-          
+          let locationData = data[0]?.PostOffice[0]          
           handlePincodeSucess({
               districtField : districtFormField, 
               stateField : stateFormField, 
@@ -182,7 +202,6 @@ const FormHandlerProviders = ({children}: Props) => {
       ...allFormData,
       formFields : {form_fields : modifiedFormFields}
     }       
-    console.log({obj});
          
     setAllFormData(obj)
   }
@@ -246,20 +265,16 @@ const FormHandlerProviders = ({children}: Props) => {
     let formValidations =  await ValidationSubmitAPI(formFieldsForValidations);
     let documentValidations = documentData?.length > 0 ? await handleDocumentValidations(formFields[0]?.sectionId) : true;
 
-    console.log({formValidations, documentValidations, documentData});
     
 
     return formValidations && documentValidations;
   }
 
   //  If false means validation failed
-  const handleDocumentValidations = async (sectionId : number) : Promise<boolean> => {
-    let errorCount = 0;
-    
-    let modifiedFileFields = documentData?.map((o : any) => {
-      if (o?.sectionId === sectionId) {
-        console.log({o});
-        
+  const handleDocumentValidations = async (sectionId : number | number[]) : Promise<boolean> => {
+    let errorCount = 0;    
+    let modifiedFileFields = documentData?.map((o : any) => {      
+      if ((typeof sectionId === 'number' && o?.sectionId === sectionId) || (Array.isArray(sectionId) && sectionId.includes(o?.sectionId))) {        
         let error = "";
         if(o?.required && (o?.file === "" || o?.file === undefined || o?.file === null)){
           error = "File Required";

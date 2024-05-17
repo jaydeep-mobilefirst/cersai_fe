@@ -19,7 +19,7 @@ const DashboardProfile = (props: Props) => {
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const { entities, setEntities, setAllFormData } =
+  const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
     axios
@@ -46,14 +46,22 @@ const DashboardProfile = (props: Props) => {
               error: "",
             })
           );
-          console.log(modifiedFormFields, "modified data");
 
+           let modifiedFileFields =
+            response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
+              ...o,
+              file: "",
+              error: "",
+              fileName: "",
+            }));
+          
           let obj = {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
           // console.log(obj, "obj-----");
           setAllFormData(obj);
+          setAllDocumentData(modifiedFileFields);
         } else {
           throw new Error("Error getting data, Please try later!");
         }
