@@ -13,6 +13,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import OtpPage from "../depositeTaker/OtpPage";
+import { bffUrl } from "../../utils/api";
 
 const NodalDetailsRegulator = () => {
   const [params, setParams] = useSearchParams();
@@ -32,28 +33,44 @@ const NodalDetailsRegulator = () => {
   );
   const screenWidth = useScreenWidth();
 
-  console.log(formFields, "allFormData");
+  // console.log(formFields, "allFormData");
+  const mobile = allFormData?.formFields?.form_fields?.find(
+    (field: any) => field?.label === "Nodal Officer Mobile Number"
+  )?.userInput;
+  const email = allFormData?.formFields?.form_fields?.find(
+    (field: any) => field?.label === "Nodal Officer Email"
+  )?.userInput;
 
-  const onSubmit = async (event : any) => {
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true)
+    setLoader(true);
     // False means validation fail
-    const noError = await handleValidationChecks(formFields)
-  
-    setLoader(false)
+    const noError = await handleValidationChecks(formFields);
+
+    setLoader(false);
 
     if (noError) {
-      const edit = params.get('edit');
-      const nodalVerification = localStorage.getItem('nodalVerification');
-      console.log({nodalVerification});
-      if (edit !== undefined && edit !== null && edit !== "" && nodalVerification) {
-        Navigate('/regulator/court/reviewdetails')
+      const edit = params.get("edit");
+      const nodalVerification = localStorage.getItem("nodalVerification");
+      console.log({ nodalVerification });
+      const response = await axios.post(`${bffUrl}/dual-otp/sendotp`, {
+        email: email,
+        mobile: mobile,
+      });
+      // console.log(response.data.statusCode, "deposite taker otp ");
+      if (response.data.statusCode === 201) {
+        setShowOTPModel(true);
       }
-      else{
-        setShowOTPModel(true)
+      if (
+        edit !== undefined &&
+        edit !== null &&
+        edit !== "" &&
+        nodalVerification
+      ) {
+        Navigate("/regulator/court/reviewdetails");
       }
     }
-  }; 
+  };
 
   return (
     <>
@@ -76,7 +93,12 @@ const NodalDetailsRegulator = () => {
                 onChange={onChange}
               />
 
-            {showOTPModel && <OtpPage redirectLink="/regulator/court/reviewdetails" closeShowOtpModel={() => setShowOTPModel(false)} />}
+              {showOTPModel && (
+                <OtpPage
+                  redirectLink="/regulator/court/reviewdetails"
+                  closeShowOtpModel={() => setShowOTPModel(false)}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -105,9 +127,9 @@ const NodalDetailsRegulator = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-              <button 
-              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
-              onClick={() => Navigate('/regulator/court/uploaddocuments')}
+              <button
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+                onClick={() => Navigate("/regulator/court/uploaddocuments")}
               >
                 Back
               </button>

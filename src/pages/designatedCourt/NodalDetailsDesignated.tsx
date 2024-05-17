@@ -6,44 +6,71 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import LoaderSpin from "../../components/LoaderSpin";
 import OtpPage from "../depositeTaker/OtpPage";
+import axios from "axios";
+import { bffUrl } from "../../utils/api";
 
 const NodalDetailsDesignated = () => {
   const [params, setParams] = useSearchParams();
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [showOTPModel, setShowOTPModel] = useState<boolean>(false);
-  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
+  const {
+    onChange,
+    handleValidationChecks,
+    onFileChange,
+    handleDocumentValidations,
+  } = useContext(FormHandlerContext);
   const [loader, setLoader] = useState(false);
 
-  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
 
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Nodal Details");
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Nodal Details"
+  );
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-  ? allFormData?.formFields?.form_fields?.filter(
-      (f: any) => f?.sectionId === sectionId?.id
-    )
-  : [];
-  
-  const onSubmit = async (event : any) => {
+    ? allFormData?.formFields?.form_fields?.filter(
+        (f: any) => f?.sectionId === sectionId?.id
+      )
+    : [];
+  const mobile = allFormData?.formFields?.form_fields?.find(
+    (field: any) => field?.label === "Nodal Officer Mobile Number"
+  )?.userInput;
+  const email = allFormData?.formFields?.form_fields?.find(
+    (field: any) => field?.label === "Nodal Officer Email"
+  )?.userInput;
+
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true)
+    setLoader(true);
     // False means validation fail
-    const noError = await handleValidationChecks(formFields)
-  
-    setLoader(false)
+    const noError = await handleValidationChecks(formFields);
+
+    setLoader(false);
 
     if (noError) {
-      const edit = params.get('edit');
-      const nodalVerification = localStorage.getItem('nodalVerification');
-      console.log({nodalVerification});
-      if (edit !== undefined && edit !== null && edit !== "" && nodalVerification) {
-        Navigate('/depositetaker/signup/reviewdetails')
+      const edit = params.get("edit");
+      const nodalVerification = localStorage.getItem("nodalVerification");
+      console.log({ nodalVerification });
+      const response = await axios.post(`${bffUrl}/dual-otp/sendotp`, {
+        email: email,
+        mobile: mobile,
+      });
+      // console.log(response.data.statusCode, "deposite taker otp ");
+      if (response.data.statusCode === 201) {
+        setShowOTPModel(true);
       }
-      else{
-        setShowOTPModel(true)
+      if (
+        edit !== undefined &&
+        edit !== null &&
+        edit !== "" &&
+        nodalVerification
+      ) {
+        Navigate("/depositetaker/signup/reviewdetails");
       }
     }
-  };  
+  };
 
   return (
     <>
@@ -61,10 +88,21 @@ const NodalDetailsDesignated = () => {
             <h1 className="text-2xl font-bold mb-6 text-gilroy-medium">
               Nodal Details
             </h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
+            <DynamicFields
+              allFormData={allFormData}
+              formFields={formFields}
+              onChange={onChange}
+              documentFields={documentData}
+              onFileChange={onFileChange}
+            />
           </div>
         </div>
-        {showOTPModel && <OtpPage redirectLink="/designated/court/reviewdetails" closeShowOtpModel={() => setShowOTPModel(false)} />}
+        {showOTPModel && (
+          <OtpPage
+            redirectLink="/designated/court/reviewdetails"
+            closeShowOtpModel={() => setShowOTPModel(false)}
+          />
+        )}
 
         <div>
           <div
@@ -92,8 +130,9 @@ const NodalDetailsDesignated = () => {
               </svg>
               <button
                 role="button"
-                onClick={() => Navigate('/designated/court/uploaddocuments')}
-                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
+                onClick={() => Navigate("/designated/court/uploaddocuments")}
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+              >
                 Back
               </button>
             </div>
