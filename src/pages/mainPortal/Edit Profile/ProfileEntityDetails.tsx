@@ -76,11 +76,13 @@ const ProfileEntityDetails = (props: Props) => {
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
-    const noError = await handleValidationChecks(formFields);
+    const noError = await handleValidationChecks(formFields?.filter((field : any) => field?.disabled === false));
+    console.log({noError});
+    
     if (noError) {
       if (noError) {
         axios
-          .patch(`${bffUrl}/deposit-taker/DT1714567103716`, {
+          .patch(`${bffUrl}/deposit-taker/${sessionStorage.getItem('entityUniqueId')}`, {
             formData: formData,
           })
           .then((response) => {

@@ -73,7 +73,7 @@ const ProfileNodalDetails = (props: Props) => {
     const noError = await handleValidationChecks(formFields);
     if (noError) {
       axios
-        .patch(`${bffUrl}/deposit-taker/DT1714567103716`, {
+        .patch(`${bffUrl}/deposit-taker/${sessionStorage.getItem('entityUniqueId')}`, {
           formData: formData,
         })
         .then((response) => {

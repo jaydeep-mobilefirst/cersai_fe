@@ -14,6 +14,7 @@ import axios from "axios";
 
 import { bffUrl } from "../../../utils/api";
 import ButtonAuth from "./ButtonAuth";
+import Swal from "sweetalert2";
 
 interface LoginModelProps { }
 
@@ -31,6 +32,7 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
   const [emailOtp, setEmailOtp] = useState<string>("");
   const [otp, setOtp] = useState<any>("");
   const [disabled, setDisabled] = useState(true);
+  const [showError, setShowError] = useState('');
   const [isValid, setIsValid] = useState<{ email: string; mobile: string }>({
     email: "",
     mobile: "",
@@ -117,6 +119,7 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
       .then((response: any) => {
         let data = response.data;
         if (data.success) {
+          setShowError("")
           sessionStorage.setItem("otp-sent", "false");
           sessionStorage.setItem("timerSec", "120");
           navigate("/set-password?identity=" + token);
@@ -124,7 +127,7 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
         }
       })
       .catch((err: any) => {
-        alert(err);
+        setShowError(err?.response?.data?.message)
       });
   };
 
@@ -147,7 +150,11 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
           }
         })
         .catch((err: any) => {
-          // alert('Error in OTP verification')
+          Swal.fire({
+            icon : "error",
+            title : "Error",
+            text :  "Unable to Send OTP, Please try again later!"
+          })
         });
     }
   };
@@ -243,7 +250,7 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
                       </p>
                     )}
                   </div>
-                  <div>
+                  <div className="flex flex-col items-center">
                     <span className="flex flex-row justify-center items-center  mt-10">
                       You didn’t receive a code?
                       <span
@@ -260,6 +267,8 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
                         Resend
                       </span>
                     </span>
+                    <span className="text-red-500 mx-auto">{showError}</span>
+
                   </div>
                   <div className="mt-5 md:mt-[36px] px-4 md:px-[40px]">
                     <div className="flex justify-center items-center mt-12 ">

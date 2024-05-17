@@ -263,10 +263,8 @@ const FormHandlerProviders = ({children}: Props) => {
       }
     })   
     let formValidations =  await ValidationSubmitAPI(formFieldsForValidations);
-    let documentValidations = documentData?.length > 0 ? await handleDocumentValidations(formFields[0]?.sectionId) : true;
-
     
-
+    let documentValidations = documentData?.filter((doc : any) => doc?.sectionId === formFields[0]?.sectionId)?.length > 0 ? await handleDocumentValidations(formFields[0]?.sectionId) : true;
     return formValidations && documentValidations;
   }
 

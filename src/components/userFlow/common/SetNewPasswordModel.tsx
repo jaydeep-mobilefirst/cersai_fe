@@ -23,7 +23,6 @@ import { bffUrl } from "../../../utils/api";
 import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
 import PasswordUpdateModel from "./PasswordUpdateModel";
-import DscButton from "../form/Dscbutton";
 import DscAuth from "./DscAuth";
 
 interface SetNewPasswordModelProps {}
@@ -102,7 +101,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
         setLoader(false);
         setShowPasswordModel(false);
         setTimeout(() => {
-          localStorage.setItem("otp-verified", "false");
+          sessionStorage.setItem("otp-verified", "false");
         }, 3000);
         setShowPasswordUpdateModel(true);
       })
@@ -114,7 +113,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
         });
         setLoader(false);
         setTimeout(() => {
-          localStorage.setItem("otp-verified", "false");
+          sessionStorage.setItem("otp-verified", "false");
         }, 3000);
         navigate("/");
       });
