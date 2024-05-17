@@ -6,6 +6,8 @@ import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
+import axios from "axios";
+import { bffUrl } from "../../utils/api";
 
 type Props = {};
 
@@ -14,45 +16,68 @@ const NodalDetails = (props: Props) => {
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [showOTPModel, setShowOTPModel] = useState<boolean>(false);
-  const {onChange, handleValidationChecks, onFileChange} = useContext(FormHandlerContext)
+  const { onChange, handleValidationChecks, onFileChange } =
+    useContext(FormHandlerContext);
   const [loader, setLoader] = useState(false);
 
-  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
 
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Nodal Details");
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Nodal Details"
+  );
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-  ? allFormData?.formFields?.form_fields?.filter(
-      (f: any) => f?.sectionId === sectionId?.id
-    )
-  : [];
-  
-  const onSubmit = async (event : any) => {
+    ? allFormData?.formFields?.form_fields?.filter(
+        (f: any) => f?.sectionId === sectionId?.id
+      )
+    : [];
+
+  const mobile = allFormData?.formFields?.form_fields?.find(
+    (field: any) => field?.label === "Nodal Officer Mobile Number"
+  )?.userInput;
+  const email = allFormData?.formFields?.form_fields?.find(
+    (field: any) => field?.label === "Nodal Officer Email"
+  )?.userInput;
+
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true)
+    setLoader(true);
     // False means validation fail
-    const noError = await handleValidationChecks(formFields)
-  
-    setLoader(false)
+    const noError = await handleValidationChecks(formFields);
+
+    setLoader(false);
 
     if (noError) {
-      const edit = params.get('edit');
-      const nodalVerification = localStorage.getItem('nodalVerification');
-      console.log({nodalVerification});
-      if (edit !== undefined && edit !== null && edit !== "" && nodalVerification) {
-        Navigate('/depositetaker/signup/reviewdetails')
+      const edit = params.get("edit");
+      const nodalVerification = localStorage.getItem("nodalVerification");
+      console.log({ nodalVerification });
+      const response = await axios.post(`${bffUrl}/dual-otp/sendotp`, {
+        email: email,
+        mobile: mobile,
+      });
+      // console.log(response.data.statusCode, "deposite taker otp ");
+      if (response.data.statusCode === 201) {
+        setShowOTPModel(true);
       }
-      else{
-        setShowOTPModel(true)
+      if (
+        edit !== undefined &&
+        edit !== null &&
+        edit !== "" &&
+        nodalVerification
+      ) {
+        Navigate("/depositetaker/signup/reviewdetails");
       }
+
+      // else {
+      //   setShowOTPModel(true);
+      // }
     }
-  }; 
-  
+  };
 
   return (
     <>
-      <form
-        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
-      >
+      <form className="flex items-center justify-between flex-col h-full lg:h-[100vh]">
         <div
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
@@ -61,10 +86,21 @@ const NodalDetails = (props: Props) => {
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
             <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
+            <DynamicFields
+              allFormData={allFormData}
+              formFields={formFields}
+              onChange={onChange}
+              documentFields={documentData}
+              onFileChange={onFileChange}
+            />
           </div>
         </div>
-        {showOTPModel && <OtpPage redirectLink="/depositetaker/signup/reviewdetails" closeShowOtpModel={() => setShowOTPModel(false)} />}
+        {showOTPModel && (
+          <OtpPage
+            redirectLink="/depositetaker/signup/reviewdetails"
+            closeShowOtpModel={() => setShowOTPModel(false)}
+          />
+        )}
 
         <div>
           <div
@@ -73,10 +109,10 @@ const NodalDetails = (props: Props) => {
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div 
+            <div
               className="flex flex-row items-center space-x-2"
-              onClick={() => Navigate('/depositetaker/signup/regulatordetails')}
-              >
+              onClick={() => Navigate("/depositetaker/signup/regulatordetails")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -98,14 +134,14 @@ const NodalDetails = (props: Props) => {
               </button>
             </div>
             <div className="flex items-center">
-                <button
-                  type="submit"
-                  disabled={loader}
-                  onClick={onSubmit}
-                  className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
-                >
-                  {loader ? <LoaderSpin/> : "Save And Continue"}
-                </button>
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+              >
+                {loader ? <LoaderSpin /> : "Save And Continue"}
+              </button>
             </div>
           </div>
           <div>
