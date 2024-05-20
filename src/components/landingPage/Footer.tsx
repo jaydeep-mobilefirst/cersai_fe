@@ -14,10 +14,10 @@ export const Footer = (props: Props) => {
     { heading: "Sitemap", link: "#" },
   ];
   return (
-    <footer className="lg:-mt-[100px] text-white text-sm bg-footer-gradient-custom bg-[#54AD47]">
+    <footer className="lg:-mt-[100px] text-white text-sm bg-footer-gradient-custom bg-[#1C468E]">
       <nav
         className="flex-col flex-wrap justify-center items-center p-4 max-w-screen-xl mx-auto border-b border-opacity-50 pb-6"
-        style={{ borderColor: "#5DAF4C", fontSize: "16px" }}
+        style={{ borderColor: "#1C468E", fontSize: "16px" }}
       >
         {/* primary nav */}
         <div className="w-full md:flex md:items-center md:w-auto md:space-x-4 md:justify-center flex-wrap">
@@ -39,7 +39,7 @@ export const Footer = (props: Props) => {
           </>
         </div>
       </nav>
-      <hr className="mt-2 bg-[#5DAF4C] w-[85%] mx-[5%] lg:mx-[8%] flex justify-center"></hr>
+      <hr className="mt-2 bg-[#668FD7] w-[85%] mx-[5%] lg:mx-[8%] flex justify-center"></hr>
       <div
         className="py-4 text-center mt-6"
         style={{ fontSize: "10px" }}
