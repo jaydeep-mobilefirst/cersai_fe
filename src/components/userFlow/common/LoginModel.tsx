@@ -132,7 +132,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       .post(bffUrl + `/auth/mfa`, {
         entityType: selected,
         username: getValues("email"),
-        dscCertificateFile: base64Data
+        dscCertificateFile: base64Data,
       })
       .then((respose) => {
         reset();
@@ -141,7 +141,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         navigate("/dt/dashboard");
       })
       .catch((error) => {
-        setFormError(error?.response?.data?.message)
+        setFormError(error?.response?.data?.message);
         setLoader(false);
       });
   };
@@ -184,7 +184,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       <Box>
         <div className="bg-black bg-opacity-30 absolute inset-0 flex justify-center items-center shadow-lg">
           <div className="bg-white p-3 rounded-lg md:w-[946px] w-full grid grid-cols-1 md:grid-cols-2 gap-4 shadow-lg m-4">
-            <div className="order-1 md:order-2 mt-3">
+            <div className="order-1 md:order-2 mt-3 ">
               <div className="flex justify-between mt-[4px]">
                 <div className="w-full text-center">
                   <h1 className="text-[24px] font-bold text-black text-gilroy-medium">
@@ -201,7 +201,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                 </div>
               </div>
               <form onSubmit={handleSubmit(handleFormSubmit)}>
-                <div className="mt-5 md:mt-[36px] px-4 md:px-[40px]">
+                <div className="mt-5 md:mt-[36px] px-4 md:px-[40px] ">
                   <div>
                     <label
                       htmlFor="entity"
@@ -278,7 +278,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       Forgot password?
                     </p>
                   </div>
-                  
+
                   <div className="mt-4 lg:mt-8">
                     {watch("email") && watch("password") && (
                       <Dscbutton

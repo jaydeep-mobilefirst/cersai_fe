@@ -1,28 +1,31 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import TaskTabsItem from "./TaskTabItems";
+import TaskTabsItem from "./TaskTabItem";
 
 type Props = {};
 
 const tabs = [
-  { title: "Profile", url: "profile", rurl: "/dt/profile" },
+  { title: "Profile", url: "profile", rurl: "/dt-regulator/profile" },
   {
     title: "Reset Password",
     url: "resetpassword",
-    rurl: "/dt/resetpassword",
+    rurl: "/dt-regulator/resetpassword",
   },
 ];
 
-const TaskTabs = (props: Props) => {
-  const [activeTab, setActiveTab] = useState<string>("Profile");
+const TaskTabsRegulator = (props: Props) => {
+  const [activeTab, setActiveTab] = useState<string>("profile");
   const [url, setUrl] = useState<String>("");
+  console.log(url, "url  owais");
 
   const location = useLocation();
   const { pathname } = location;
+  console.log(pathname.split("/")[2], "path");
 
   useEffect(() => {
     const cmsPath = pathname.split("/")[2];
     setUrl(cmsPath);
+    console.log(cmsPath, "path");
   }, [pathname]);
 
   const handleTabClick = (tabName: string) => {
@@ -49,4 +52,4 @@ const TaskTabs = (props: Props) => {
   );
 };
 
-export default TaskTabs;
+export default TaskTabsRegulator;

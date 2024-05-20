@@ -5,15 +5,15 @@ import TaskTabsItem from "./TaskTabItems";
 type Props = {};
 
 const tabs = [
-  { title: "Profile", url: "profile", rurl: "/dt/profile" },
+  { title: "Profile", url: "profile", rurl: "/dt-competent/profile" },
   {
     title: "Reset Password",
     url: "resetpassword",
-    rurl: "/dt/resetpassword",
+    rurl: "/dt-competent/resetpassword",
   },
 ];
 
-const TaskTabs = (props: Props) => {
+const TaskTabsCompetent = (props: Props) => {
   const [activeTab, setActiveTab] = useState<string>("Profile");
   const [url, setUrl] = useState<String>("");
 
@@ -28,8 +28,6 @@ const TaskTabs = (props: Props) => {
   const handleTabClick = (tabName: string) => {
     setActiveTab(tabName);
   };
-
-  // console.log({ url });
 
   return (
     <div className="flex-col justify-center items-start max-sm:items-center inline-flex border-b w-full">
@@ -49,4 +47,4 @@ const TaskTabs = (props: Props) => {
   );
 };
 
-export default TaskTabs;
+export default TaskTabsCompetent;
