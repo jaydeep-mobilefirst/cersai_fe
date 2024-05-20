@@ -17,7 +17,7 @@ const Footer: React.FC<FooterProps> = ({ onSubmit, loader, disabled }) => {
             onClick={onSubmit}
             type="submit"
             className={`${
-              disabled ? "bg-gray-500" : "bg-[#385723]"
+              disabled ? "bg-gray-500" : "bg-[#1C468E]"
             } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
           >
             {loader ? <LoaderSpin /> : " Save and Continue"}
