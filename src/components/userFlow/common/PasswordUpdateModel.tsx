@@ -59,7 +59,7 @@ const PasswordUpdateModel: React.FC<PasswordUpdateModelProps> = ({
                         Your new password has been
                       </p>
                       <p className="text-[#646464] text-gilroy-medium">
-                        updated Successfully!.
+                        updated Successfully!
                       </p>
                     </div>
                   </div>
