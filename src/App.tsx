@@ -41,6 +41,16 @@ import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 import SetPassword from "./pages/SetPassowrd";
 import SetNewPasswordModel from "./components/userFlow/common/SetNewPasswordModel";
 import OtpModel from "./components/userFlow/common/OtpModal";
+import MainPortalLayoutRegulator from "./layouts/portal/MainPortalLayoutRegulator";
+import DashboardProfileRegulator from "./pages/mainPortal/DashboardProfileRegulator";
+import ResetPasswordRegulator from "./pages/mainPortal/ResetPasswordRegulator";
+import MainPortalLayoutCompetent from "./layouts/portal/MainPortalLayoutCompetent";
+import DashboardCompetent from "./pages/mainPortal/DashboardCompetent";
+import DashboardProfileCompetent from "./pages/mainPortal/DashboardProfileCompetent";
+import ResetPasswordCompetent from "./pages/mainPortal/ResetPasswordCompetent";
+import ResetPasswordDesignated from "./pages/mainPortal/ResetPasswordDesignated";
+import DashboardProfileDesignateCourt from "./pages/mainPortal/DashboardProfileDesiganted";
+import MainPortalLayoutDesignated from "./layouts/portal/MainPortalLayoutDesignated";
 
 function App() {
   return (
@@ -56,6 +66,42 @@ function App() {
               <Route element={<SchemaCreationForm />} path="mytask/form" />
               <Route element={<SchemeMasterForm />} path="mytask/schema" />
               <Route element={<UserCreation />} path="usermanagement" />
+            </Route>
+            <Route element={<MainPortalLayoutRegulator />} path="/dt-regulator">
+              <Route element={<Dashboard />} path="dashboard" />
+              <Route element={<h1> in Progesss</h1>} path="my-task" />
+              <Route element={<h1> in Progesss</h1>} path="usermanagment" />
+              <Route element={<DashboardProfileRegulator />} path="profile" />
+              <Route
+                element={<ResetPasswordRegulator />}
+                path="resetpassword"
+              />
+            </Route>
+            <Route element={<MainPortalLayoutCompetent />} path="/dt-competent">
+              <Route element={<DashboardCompetent />} path="dashboard" />
+              <Route element={<h1> in Progesss</h1>} path="my-task" />
+              <Route element={<h1> in Progesss</h1>} path="usermanagment" />
+              <Route element={<DashboardProfileCompetent />} path="profile" />
+              <Route
+                element={<ResetPasswordCompetent />}
+                path="resetpassword"
+              />
+            </Route>
+            <Route
+              element={<MainPortalLayoutDesignated />}
+              path="/dt-designated"
+            >
+              <Route element={<DashboardCompetent />} path="dashboard" />
+              <Route element={<h1> in Progesss</h1>} path="my-task" />
+              <Route element={<h1> in Progesss</h1>} path="usermanagment" />
+              <Route
+                element={<DashboardProfileDesignateCourt />}
+                path="profile"
+              />
+              <Route
+                element={<ResetPasswordDesignated />}
+                path="resetpassword"
+              />
             </Route>
 
             <Route
