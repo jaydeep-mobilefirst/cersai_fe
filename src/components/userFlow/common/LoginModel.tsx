@@ -37,7 +37,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [base64Data, setBase64Data] = useState<string>("");
   const [hexData, setHexData] = useState("");
   const [roles, setRoles] = useState<any>();
-
+ 
   const {
     register,
     handleSubmit,
@@ -138,7 +138,15 @@ const LoginModel: React.FC<LoginModelProps> = ({
         reset();
         console.log(respose);
         setLoader(false);
-        navigate("/dt/dashboard");
+        if (selected === "DT") {
+          navigate("/dt/dashboard");
+        } else if (selected === "RG") {
+          navigate("/rg/dashboard");
+        } else if (selected === "DC") {
+          navigate("/dc/dashboard");
+        } else {
+          navigate("/ca/dashboard");
+        }
       })
       .catch((error) => {
         setFormError(error?.response?.data?.message);
