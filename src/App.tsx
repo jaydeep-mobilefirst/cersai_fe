@@ -38,6 +38,10 @@ import SchemaCreation from "./pages/mainPortal/SchemaManagemet/SchemaCreation";
 import SchemeMasterForm from "./pages/mainPortal/SchemaManagemet/SchemaMasterDetail";
 import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 
+import RoleCreation from "./pages/mainPortal/UserManagement/RoleCreation";
+import UserCreationUm from "./pages/mainPortal/UserManagement/UserCreation";
+import UserMasterForm from "./pages/mainPortal/UserManagement/UserMasterForm";
+
 import SetPassword from "./pages/SetPassowrd";
 import SetNewPasswordModel from "./components/userFlow/common/SetNewPasswordModel";
 import OtpModel from "./components/userFlow/common/OtpModal";
@@ -65,7 +69,16 @@ function App() {
               <Route element={<SchemaCreation />} path="mytask" />
               <Route element={<SchemaCreationForm />} path="mytask/form" />
               <Route element={<SchemeMasterForm />} path="mytask/schema" />
-              <Route element={<UserCreation />} path="usermanagement" />
+              <Route
+                element={<UserCreation />}
+                path="usermanagement/usercreation"
+              />
+              <Route element={<RoleCreation />} path="usermanagement" />
+
+              <Route
+                element={<UserMasterForm />}
+                path="usermanagement/usermasterum"
+              />
             </Route>
             <Route element={<MainPortalLayoutRegulator />} path="/dt-regulator">
               <Route element={<Dashboard />} path="dashboard" />
@@ -94,6 +107,7 @@ function App() {
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
               <Route element={<h1> in Progesss</h1>} path="usermanagment" />
+
               <Route
                 element={<DashboardProfileDesignateCourt />}
                 path="profile"
@@ -161,6 +175,7 @@ function App() {
           {/* <Route element={<SetPassword />} path="/set-password" /> */}
           <Route element={<SetNewPasswordModel />} path="/set-password" />
           <Route element={<OtpModel />} path="/otp-verification" />
+          <Route element={<RoleCreation />} path="/role" />
         </Routes>
       </Router>
     </div>
