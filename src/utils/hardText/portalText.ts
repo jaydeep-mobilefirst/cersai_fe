@@ -32,22 +32,22 @@ export const portalSideBarList = [
 export const portalSideBarListRegulator = [
   {
     title: "Dashboard",
-    url: "/dt-regulator/dashboard",
-    rurl: "/dt-regulator/dashboard",
+    url: "/regulator/dashboard",
+    rurl: "/egulator/dashboard",
     logo: dashboardLogo,
     selectlogo: dashboardWhiteLogo,
   },
   {
     title: "My Task",
-    url: "/dt-regulator/my-task",
-    rurl: "/dt-regulator/my-task",
+    url: "/regulator/my-task",
+    rurl: "/regulator/my-task",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
   {
     title: "User Management",
-    url: "/dt-regulator/usermanagment",
-    rurl: "/dt-regulator/usermanagment",
+    url: "/regulator/usermanagment",
+    rurl: "/regulator/usermanagment",
     logo: entityMasterIcon,
     selectlogo: entityMasterWhiteIcon,
   },
@@ -55,22 +55,22 @@ export const portalSideBarListRegulator = [
 export const portalSideBarListCompetent = [
   {
     title: "Dashboard",
-    url: "/dt-competent/dashboard",
-    rurl: "/dt-competent/dashboard",
+    url: "/competent/dashboard",
+    rurl: "/competent/dashboard",
     logo: dashboardLogo,
     selectlogo: dashboardWhiteLogo,
   },
   {
     title: "My Task",
-    url: "/dt-competent/my-task",
-    rurl: "/dt-competent/my-task",
+    url: "/competent/my-task",
+    rurl: "/competent/my-task",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
   {
     title: "User Management",
-    url: "/dt-competent/usermanagment",
-    rurl: "/dt-competent/usermanagment",
+    url: "/competent/usermanagment",
+    rurl: "/competent/usermanagment",
     logo: entityMasterIcon,
     selectlogo: entityMasterWhiteIcon,
   },
@@ -78,22 +78,22 @@ export const portalSideBarListCompetent = [
 export const portalSideBarListDesignated = [
   {
     title: "Dashboard",
-    url: "/dt-designated/dashboard",
-    rurl: "/dt-designated/dashboard",
+    url: "/designated/dashboard",
+    rurl: "/designated/dashboard",
     logo: dashboardLogo,
     selectlogo: dashboardWhiteLogo,
   },
   {
     title: "My Task",
-    url: "/dt-designated/my-task",
-    rurl: "/dt-designated/my-task",
+    url: "/designated/my-task",
+    rurl: "/designated/my-task",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
   {
     title: "User Management",
-    url: "/dt-designated/usermanagment",
-    rurl: "/dt-designated/usermanagment",
+    url: "/designated/usermanagment",
+    rurl: "/designated/usermanagment",
     logo: entityMasterIcon,
     selectlogo: entityMasterWhiteIcon,
   },
@@ -136,21 +136,21 @@ export const profileSideBarListRegulator = [
   {
     title: "Regulator Details",
     url: "regulator",
-    rurl: "/dt-regulator/profile?current=regulator",
+    rurl: "/regulator/profile?current=regulator",
     percentage: 0,
   },
 
   {
     title: "Nodal Details",
     url: "nodal",
-    rurl: "/dt-regulator/profile?current=nodal",
+    rurl: "/regulator/profile?current=nodal",
     percentage: 25,
   },
 
   {
     title: "Upload Documents",
     url: "document",
-    rurl: "/dt-regulator/profile?current=document",
+    rurl: "/regulator/profile?current=document",
     percentage: 100,
   },
 ];
@@ -158,20 +158,20 @@ export const profileSideBarListCompetent = [
   {
     title: "Competent Details",
     url: "competent",
-    rurl: "/dt-competent/profile?current=competent",
+    rurl: "/competent/profile?current=competent",
     percentage: 0,
   },
 
   {
     title: "Upload Documents",
     url: "document",
-    rurl: "/dt-competent/profile?current=document",
+    rurl: "/competent/profile?current=document",
     percentage: 25,
   },
   {
     title: "Nodal Details",
     url: "nodal",
-    rurl: "/dt-competent/profile?current=nodal",
+    rurl: "/competent/profile?current=nodal",
     percentage: 100,
   },
 ];
@@ -179,20 +179,20 @@ export const profileSideBarListDesignated = [
   {
     title: "Court Details",
     url: "court",
-    rurl: "/dt-designated/profile?current=court",
+    rurl: "/designated/profile?current=court",
     percentage: 0,
   },
 
   {
     title: "Upload Documents",
     url: "document",
-    rurl: "/dt-designated/profile?current=document",
+    rurl: "/designated/profile?current=document",
     percentage: 25,
   },
   {
     title: "Nodal Details",
     url: "nodal",
-    rurl: "/dt-designated/profile?current=nodal",
+    rurl: "/designated/profile?current=nodal",
     percentage: 100,
   },
 ];

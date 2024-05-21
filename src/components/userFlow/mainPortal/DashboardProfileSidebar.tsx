@@ -95,7 +95,7 @@ const DashboardProfileSidebar = ({}: Props) => {
                 </p>
                 <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px] border border-black-200">
                   <div
-                    className={` ${widthPercentage[percent]} h-2 bg-[#52AE32] rounded-[32px] `}
+                    className={` ${widthPercentage[percent]} h-2 bg-[#1C468E] rounded-[32px] `}
                   />
                 </div>
               </div>
@@ -111,7 +111,7 @@ const DashboardProfileSidebar = ({}: Props) => {
                     <div
                       onClick={(e) => optionOnclick(data?.url)}
                       className={`w-[190px] md:w-[290px] h-auto md:h-14 ${
-                        current === data?.url ? "bg-[#385723]" : "bg-[#FFFFFF]"
+                        current === data?.url ? "bg-[#1C468E]" : "bg-[#FFFFFF]"
                       }  rounded-lg flex items-center justify-start cursor-pointer`}
                     >
                       <div

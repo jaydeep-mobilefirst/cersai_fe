@@ -316,9 +316,9 @@ const MainPortalSidebar = ({ layout }: Props) => {
     setUrl("/" + cmsPath);
   }, [location.pathname]);
 
-  const handleTabClick = (url: string, title : string) => {
+  const handleTabClick = (url: string, title: string) => {
     setActiveTab(url);
-    localStorage.setItem('current_tab', title);
+    localStorage.setItem("current_tab", title);
   };
 
   return (
@@ -386,7 +386,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
                     <div
                       onClick={(e) => handleTabClick(data.url, data.title)}
                       className={`w-auto h-auto md:h-14 ${
-                        activeTab === data.url ? "bg-[#385723]" : "bg-[#EEF7EB]"
+                        activeTab === data.url ? "bg-[#1C468E]" : "bg-[#EEF7EB]"
                       } rounded-lg flex items-center  cursor-pointer`}
                     >
                       <div className="m-4 h-[24px] w-[24px]">

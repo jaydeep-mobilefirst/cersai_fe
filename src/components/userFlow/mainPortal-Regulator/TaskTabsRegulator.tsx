@@ -5,11 +5,11 @@ import TaskTabsItem from "./TaskTabItem";
 type Props = {};
 
 const tabs = [
-  { title: "Profile", url: "profile", rurl: "/dt-regulator/profile" },
+  { title: "Profile", url: "profile", rurl: "/regulator/profile" },
   {
     title: "Reset Password",
     url: "resetpassword",
-    rurl: "/dt-regulator/resetpassword",
+    rurl: "/regulator/resetpassword",
   },
 ];
 
