@@ -386,7 +386,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
                     <div
                       onClick={(e) => handleTabClick(data.url, data.title)}
                       className={`w-auto h-auto md:h-14 ${
-                        activeTab === data.url ? "bg-[#1C468E]" : "bg-[#E7F0FF]"
+                        activeTab === data.url ? "bg-[#1C468E]" : "bg-[#EEF7EB]"
                       } rounded-lg flex items-center  cursor-pointer`}
                     >
                       <div className="m-4 h-[24px] w-[24px]">

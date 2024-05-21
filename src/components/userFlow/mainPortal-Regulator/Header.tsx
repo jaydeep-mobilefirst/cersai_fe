@@ -32,8 +32,8 @@ const Header = () => {
       <div className="flex items-center justify-between p-4 mt-2 pb-6 flex-col sm:flex-row border-b border-[#E6E6E6]">
         <div className="">
           {title && (
-            <div className="h-8 px-2 rounded-[5px] border border-[#54B749] flex items-center justify-center">
-              <div className="text-[#54B749] text-base font-normal text-gilroy-medium leading-tight">
+            <div className="h-8 px-2 rounded-[5px] border border-[#1C468E] flex items-center justify-center">
+              <div className="text-[#1C468E] text-base font-normal text-gilroy-medium leading-tight">
                 {title}
               </div>
             </div>

@@ -21,11 +21,13 @@ const CourtDetails = (props: Props) => {
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  // console.log(allFormData, "allform data");
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
+  // console.log({ allFormData }, "all form data courtdetail---- ");
 
   const sectionId = allFormData?.entitySections?.find(
-    (s: any) => s?.sectionName === "Nodal Details"
+    (s: any) => s?.sectionName === "Court Details"
   );
 
   // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
@@ -54,7 +56,6 @@ const CourtDetails = (props: Props) => {
           };
         })
     : [];
-  // console.log(formFields, "nodalDetail");
 
   const formData =
     formFields &&
@@ -65,7 +66,7 @@ const CourtDetails = (props: Props) => {
       value: field.userInput,
     }));
 
-  console.log(formData, "formData");
+  // console.log(formData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -74,7 +75,9 @@ const CourtDetails = (props: Props) => {
     if (noError) {
       axios
         .patch(
-          `${bffUrl}/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+          `${bffUrl}/designated-court/${sessionStorage.getItem(
+            "entityUniqueId"
+          )}`,
           {
             formData: formData,
           }
@@ -83,10 +86,10 @@ const CourtDetails = (props: Props) => {
           console.log(response, "response");
           Swal.fire({
             icon: "success",
-            text: "Nodal Detail  update  successfully ",
+            text: "Court Detail  update  successfully ",
             confirmButtonText: "Ok",
           });
-          Navigate("/dt/profile?current=regulator");
+          Navigate("/dc/profile?current=document");
         })
         .catch((err) => {
           Swal.fire({
