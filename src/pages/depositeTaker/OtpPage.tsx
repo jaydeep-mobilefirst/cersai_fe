@@ -487,13 +487,13 @@ const OtpPage: React.FC<OtpPageProps> = ({
       <Box sx={style}>
         <div className="flex flex-col justify-center items-center w-full">
           <div className="bg-white rounded-2xl overflow-hidden shadow-lg max-w-full">
-            <div className="bg-[#EEF7EB] py-6 text-center text-lg sm:text-xl md:text-2xl font-medium">
+            <div className="bg-[#E7F0FF] py-6 text-center text-lg sm:text-xl md:text-2xl font-medium">
               Verify your mobile number and email ID
             </div>
             {message && (
               <p
                 className={`flex justify-center items-center ${
-                  messageType === "success" ? "text-green-600" : "text-red-600"
+                  messageType === "success" ? "text-[#1c648e]" : "text-red-600"
                 }`}
               >
                 {message}
@@ -537,7 +537,7 @@ const OtpPage: React.FC<OtpPageProps> = ({
                     className={`${
                       mobileTimer > 0
                         ? "cursor-not-allowed text-gray-500"
-                        : "text-blue-500"
+                        : "text-[#1C468E]"
                     }`}
                   >
                     Resend
@@ -580,7 +580,7 @@ const OtpPage: React.FC<OtpPageProps> = ({
                     className={`${
                       emailTimer > 0
                         ? "cursor-not-allowed text-gray-500"
-                        : "text-blue-500"
+                        : "text-[#1C468E]"
                     }`}
                   >
                     Resend

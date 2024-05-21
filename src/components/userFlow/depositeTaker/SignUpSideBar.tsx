@@ -52,7 +52,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
     }
   },[allFormData])
   return (
-    <div className="sm:w-[300px]  w-[250px] h-[100vh] md:w-[349px] bg-[#EEF7EB]">
+    <div className="sm:w-[300px]  w-[250px] h-[100vh] md:w-[349px] bg-[#E7F0FF]">
       {/* {isMenuOpen && (
         <div
           className="lg:hidden w-full  flex justify-end items-center p-2"
@@ -66,7 +66,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
       <hr className="bg-[#000000] w-full md:w-[349px]"></hr>
       <div className="px-[28px] mt-[16px]">
         <div className="h-[101px]">
-          <p className="text-[#385723] text-xl font-normal text-gilroy-semibold">
+          <p className="text-[#1C468E] text-xl font-normal text-gilroy-semibold">
             Deposit Taker
           </p>
           <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium">
@@ -77,7 +77,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
           </p>
           <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px]">
             <div
-              className={` ${widthPercentage[percent]} h-2 bg-[#52AE32] rounded-[32px]`}
+              className={` ${widthPercentage[percent]} h-2 bg-[#1C468E] rounded-[32px]`}
             />
           </div>
         </div>
@@ -90,9 +90,9 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
                     handleClick(item.description, item.percentage, item.path)
                   }
                   key={item.id}
-                  className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#385723] rounded-lg justify-between items-center inline-flex ${
+                  className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#1C468E] rounded-lg justify-between items-center inline-flex ${
                     item.path === page
-                      ? "bg-[#385723] text-white"
+                      ? "bg-[#1C468E] text-white"
                       : "bg-white text-black"
                   }`}
                 >

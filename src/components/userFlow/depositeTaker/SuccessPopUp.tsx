@@ -1,5 +1,5 @@
 import { Box, Modal } from '@mui/material'
-import Tick from "../../../assets/images/tickCircle.svg";
+import Tick from "../../../assets/images/new_images/check_Circle2.png";
 import add from "../../../assets/images/add-circle.svg";
 import circleWarning from "../../../assets/images/circleWarning.svg";
 import React from 'react';
@@ -59,7 +59,7 @@ interface SuccessPopupProps {
             </p>
           </div>
           <div>
-            <h2 className="text-[#52AE32] text-base text-center text-gilroy-medium my-2">
+            <h2 className="text-[#1C648E] text-base text-center text-gilroy-medium my-2">
               {
                 para2 && para2
               }
@@ -70,7 +70,7 @@ interface SuccessPopupProps {
           <div className="flex justify-center  items-center">
             <button
               onClick={closePopup}
-              className="bg-[#385723] rounded-xl w-[45%] md:w-[224px] px-4 md:px-10 py-3 text-white font-semibold text-sm"
+              className="bg-[#1C468E] rounded-xl w-[45%] md:w-[224px] px-4 md:px-10 py-3 text-white font-semibold text-sm"
             >
               Okay
             </button>

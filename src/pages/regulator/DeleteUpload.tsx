@@ -55,7 +55,7 @@ const DeleteUpload: React.FC<DeleteUploadProps> = ({
               <p className="text-gray-700 mb-2 text-lg">
                 Are You Sure To Delete
               </p>
-              <p className="text-green-700 mb-4 text-lg">
+              <p className="text-[#1c468e] mb-4 text-lg">
                 {file ? file.name : "No Document uploaded"}?
               </p>
             </div>

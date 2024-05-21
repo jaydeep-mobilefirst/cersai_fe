@@ -44,7 +44,7 @@ const EntityDetails: React.FC = () => {
 
   return (
     <>
-      <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
+      <div className="border-[#E6E6E6] border-[1px] -mt-[2px]"></div>
       {/* <div className="flex flex-col p-6 w-full"> */}
       <form
         // className="flex flex-col justify-between h-full"
@@ -99,7 +99,7 @@ const EntityDetails: React.FC = () => {
                   type="submit"
                   disabled={loader}
                   onClick={onSubmit}
-                  className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                  className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
                   {loader ? <LoaderSpin/> : "Save And Continue"}
                 </button>
