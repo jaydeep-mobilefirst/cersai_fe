@@ -4,6 +4,7 @@ import { backendBaseUrl, backendBudsPortalBFFUrl, bffUrl, pincodeValidationUrl }
 import axios from 'axios';
 import { convertFileToBase64Async } from '../utils/fileConversion';
 import Swal from 'sweetalert2';
+import { emailRegex, panRegex } from '../utils/commonFunction';
 
 type Props = {
   children : React.ReactElement
@@ -125,10 +126,6 @@ const FormHandlerProviders = ({children}: Props) => {
         inputValue = inputValue.toUpperCase();
       }
 
-      if (fieldData?.label) {
-        
-      }
-
       updateValue(inputValue, fieldData?.id);     
     }
     else if (fieldType === "date_picker"){
@@ -244,12 +241,17 @@ const FormHandlerProviders = ({children}: Props) => {
 
       return success
     } catch (error) {
-      return true
+      Swal.fire({
+        icon : "error",
+        title : "Server Error : Code 500",
+        text : "Error while validating fields, Please try later!"
+      })
+      return false;
     }
     
   }
 
-  const handleValidationChecks = async (formFields : any[]) : Promise<boolean> => {
+  const handleValidationChecks = async (formFields : any[], isAdding : boolean = true) : Promise<boolean> => {
     const formFieldsForValidations = formFields?.map((field : any) => {
       return {
         formId: field?.id?.toString(),
@@ -263,9 +265,82 @@ const FormHandlerProviders = ({children}: Props) => {
       }
     })   
     let formValidations =  await ValidationSubmitAPI(formFieldsForValidations);
-    
     let documentValidations = documentData?.filter((doc : any) => doc?.sectionId === formFields[0]?.sectionId)?.length > 0 ? await handleDocumentValidations(formFields[0]?.sectionId) : true;
-    return formValidations && documentValidations;
+    let deDupCheck = !isAdding ? true : !formValidations ? true : await ValidateDeDup(formFields?.filter((field : any) => (emailRegex.test(field?.userInput) || panRegex.test(field?.userInput) || /^-?\d+$/.test(field?.userInput) )))
+    return formValidations && documentValidations && deDupCheck;
+  }
+
+  const ValidateDeDup = async (formFields : any[]) : Promise<boolean>=> {
+    const errors: any[] = [];
+    const deDupURLs : any = {
+      "DT" : "deposit-taker/dedupcheck",
+      "DC" : "designated-court/dedupcheck",
+      "CA" : "competent-authority/dedupcheck",
+      "RG" : "regulator/dedupcheck",
+      "nodal" : "user/dedup"
+    }
+    // Section is nodal then use nodal url else use usual url for that entity
+    const isNodalSection = formFields?.some((field : any) => (/nodal officer/i.test(field?.label)));
+    let URL = isNodalSection ? deDupURLs['nodal'] : deDupURLs[allFormData?.currentEntity?.entityCode];
+    const promises = formFields.map(async (field: any) => {
+        try {
+            const checkDeDup = await axios.post(`${bffUrl}/${URL}`, {
+                "value": field?.userInput
+            });
+
+            const data = checkDeDup.data;
+            console.log({data});
+            
+            if (data?.data?.duplicate) {
+                errors.push({
+                    formId: field?.id,
+                    validationErrors: [{
+                        error: data?.message
+                    }]
+                });
+            }
+        } catch (error : any) {
+          const data = error?.response?.data;
+          if (data?.data?.duplicate) {
+            errors.push({
+                formId: field?.id,
+                validationErrors: [{
+                    error: data?.message
+                }]
+            });
+        } 
+        }
+    });
+
+    await Promise.all(promises);
+    await handleValidations(errors);
+    return errors.length === 0;
+  }
+  const ValidateNodalDeDup = async (formFields : any[]) : Promise<boolean>=> {
+    const errors: any[] = [];
+    const promises = formFields.map(async (field: any) => {
+        try {
+            const checkDeDup = await axios.post(`${bffUrl}/user/dedup`, {
+                "value": field?.userInput
+            });
+
+            const data = checkDeDup.data;
+            if (data?.data?.duplicate) {
+                errors.push({
+                    formId: field?.id,
+                    validationErrors: [{
+                        error: "Already Exists"
+                    }]
+                });
+            }
+        } catch (error) {
+            console.log({ error });
+        }
+    });
+
+    await Promise.all(promises);
+    await handleValidations(errors);
+    return errors.length === 0;
   }
 
   //  If false means validation failed

@@ -50,9 +50,6 @@ const NodalDetailsRegulator = () => {
     setLoader(false);
 
     if (noError) {
-      const edit = params.get("edit");
-      const nodalVerification = localStorage.getItem("nodalVerification");
-      console.log({ nodalVerification });
       const response = await axios.post(`${bffUrl}/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
@@ -61,13 +58,12 @@ const NodalDetailsRegulator = () => {
       if (response.data.statusCode === 201) {
         setShowOTPModel(true);
       }
-      if (
-        edit !== undefined &&
-        edit !== null &&
-        edit !== "" &&
-        nodalVerification
-      ) {
-        Navigate("/regulator/court/reviewdetails");
+      else{
+        Swal.fire({
+          icon : "error",
+          title : "Error",
+          text : "Error sending OTP, Please try later"
+        })
       }
     }
   };

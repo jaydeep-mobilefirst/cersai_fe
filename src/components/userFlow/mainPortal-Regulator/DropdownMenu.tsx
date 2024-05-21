@@ -68,7 +68,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 
   const handleSetting = () => {
     setIsOpen(false);
-    navigate("/dt-regulator/profile?current=regulator");
+    navigate("/rg/profile?current=regulator");
   };
 
   return (

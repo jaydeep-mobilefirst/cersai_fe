@@ -8,6 +8,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import axios from "axios";
 import { bffUrl } from "../../utils/api";
+import Swal from "sweetalert2";
 
 type Props = {};
 
@@ -45,35 +46,29 @@ const NodalDetails = (props: Props) => {
     setLoader(true);
     // False means validation fail
     const noError = await handleValidationChecks(formFields);
-
-    setLoader(false);
-
+    console.log(noError);
+    
+    setLoader(false);    
     if (noError) {
-      const edit = params.get("edit");
-      const nodalVerification = localStorage.getItem("nodalVerification");
-      console.log({ nodalVerification });
       const response = await axios.post(`${bffUrl}/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
       });
-      // console.log(response.data.statusCode, "deposite taker otp ");
       if (response.data.statusCode === 201) {
         setShowOTPModel(true);
       }
-      if (
-        edit !== undefined &&
-        edit !== null &&
-        edit !== "" &&
-        nodalVerification
-      ) {
-        Navigate("/depositetaker/signup/reviewdetails");
+      else{
+        Swal.fire({
+          icon : "error",
+          title : "Error",
+          text : "Error sending OTP, Please try later"
+        })
       }
-
-      // else {
-      //   setShowOTPModel(true);
-      // }
     }
   };
+
+  console.log({allFormData});
+  
 
   return (
     <>

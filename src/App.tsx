@@ -80,7 +80,7 @@ function App() {
                 path="usermanagement/usermasterum"
               />
             </Route>
-            <Route element={<MainPortalLayoutRegulator />} path="/dt-regulator">
+            <Route element={<MainPortalLayoutRegulator />} path="/rg">
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
               <Route element={<h1> in Progesss</h1>} path="usermanagment" />
@@ -90,7 +90,7 @@ function App() {
                 path="resetpassword"
               />
             </Route>
-            <Route element={<MainPortalLayoutCompetent />} path="/dt-competent">
+            <Route element={<MainPortalLayoutCompetent />} path="/ca">
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
               <Route element={<h1> in Progesss</h1>} path="usermanagment" />
@@ -100,10 +100,7 @@ function App() {
                 path="resetpassword"
               />
             </Route>
-            <Route
-              element={<MainPortalLayoutDesignated />}
-              path="/dt-designated"
-            >
+            <Route element={<MainPortalLayoutDesignated />} path="/dc">
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
               <Route element={<h1> in Progesss</h1>} path="usermanagment" />
