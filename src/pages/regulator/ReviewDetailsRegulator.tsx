@@ -40,11 +40,13 @@ const useDownloadPDF = () => {
 };
 
 const ReviewDetailsRegulator = () => {
-  const [para1, setPara1] = useState('')
-  const [para2, setPara2] = useState('')
+  const [para1, setPara1] = useState("");
+  const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -64,9 +66,11 @@ const ReviewDetailsRegulator = () => {
     let finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
-        let sectionCode = allFormData.entitySections?.find((section: any) => section?.id === field?.sectionId)?.sectionName;
-        if (sectionCode === 'Nodal Details') {
-          sectionCode = 'Nodal Officer'
+        let sectionCode = allFormData.entitySections?.find(
+          (section: any) => section?.id === field?.sectionId
+        )?.sectionName;
+        if (sectionCode === "Nodal Details") {
+          sectionCode = "Nodal Officer";
         }
         return {
           fieldId: field?.id,
@@ -76,47 +80,49 @@ const ReviewDetailsRegulator = () => {
         };
       });
 
-    let docs = documentData?.length > 0 && documentData?.map((doc: any) => {
-      return {
-        fieldId: doc?.id,
-        label: doc?.documentName,
-        sectionCode: "Upload Documents",
-        value: doc?.uploadFileId,
-      };
-    })
+    let docs =
+      documentData?.length > 0 &&
+      documentData?.map((doc: any) => {
+        return {
+          fieldId: doc?.id,
+          label: doc?.documentName,
+          sectionCode: "Upload Documents",
+          value: doc?.uploadFileId,
+        };
+      });
 
-    finalResult = [...finalResult, ...docs]
+    finalResult = [...finalResult, ...docs];
 
-    axios.post(
-      bffUrl + "/regulator/add-form-fields",
-      { formData: finalResult }
-    )
+    axios
+      .post(bffUrl + "/regulator/add-form-fields", { formData: finalResult })
       .then((response: any) => {
         const data = response.data;
         if (data?.success) {
           // setSubmitModal( true)
           setPara1(`Your registration request has been sent successfully and
             approval/rejection of your registration will be informed to you
-            via email.`)
-          setPara2(`Your registration acknowledgement ID is RT48726398745923`)
-          setSubmitted(true)
-          setSubmitModal(true)
+            via email.`);
+          setPara2(
+            `Your registration acknowledgement ID is ${data?.data?.newRegulator?.uniqueId}`
+          );
+          setSubmitted(true);
+          setSubmitModal(true);
         } else {
-          setPara1(`Something went wrong`)
-          setPara2(`Please try again later`)
-          setSubmitted(false)
-          setSubmitModal(true)
+          setPara1(`Something went wrong`);
+          setPara2(`Please try again later`);
+          setSubmitted(false);
+          setSubmitModal(true);
         }
       })
       .catch((e: any) => {
-        console.log({e}); 
+        console.log({ e });
         setLoader(false);
-        setPara1(e?.response?.data?.detail?.message)
-        setPara2(`Please try again later`)
-        setSubmitted(false)
-        setSubmitModal(true)
+        setPara1(e?.response?.data?.detail?.message);
+        setPara2(`Please try again later`);
+        setSubmitted(false);
+        setSubmitModal(true);
         setLoader(false);
-      })
+      });
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,10 +174,11 @@ const ReviewDetailsRegulator = () => {
 
                               return (
                                 <div
-                                  className={`sm:mr-[48px] flex justify-between ${idx % 2 === 0
-                                    ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
-                                    : ""
-                                    } `}
+                                  className={`sm:mr-[48px] flex justify-between ${
+                                    idx % 2 === 0
+                                      ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                      : ""
+                                  } `}
                                   key={idx}
                                 >
                                   <div className="text-gray-500">
@@ -180,35 +187,32 @@ const ReviewDetailsRegulator = () => {
                                   </div>
                                   <div>
                                     {field?.dscFileNAme !== "" &&
-                                      field?.dscFileNAme !== undefined
+                                    field?.dscFileNAme !== undefined
                                       ? field?.dscFileNAme
                                       : field.userInput}
                                   </div>
                                 </div>
                               );
                             })}
-                          {
-                            section?.sectionName === "Upload Documents" &&
+                          {section?.sectionName === "Upload Documents" &&
                             documentData?.map((doc: any, idx: number) => {
-                              return <div
-                                className={`sm:mr-[48px] flex justify-between ${idx % 2 === 0
-                                  ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
-                                  : ""
+                              return (
+                                <div
+                                  className={`sm:mr-[48px] flex justify-between ${
+                                    idx % 2 === 0
+                                      ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                      : ""
                                   } `}
-                                key={idx}
-                              >
-                                <div className="text-gray-500">
-                                  {doc?.documentName}
-                                  <span className="text-[#ff0000]">*</span>
+                                  key={idx}
+                                >
+                                  <div className="text-gray-500">
+                                    {doc?.documentName}
+                                    <span className="text-[#ff0000]">*</span>
+                                  </div>
+                                  <div>{doc?.fileName}</div>
                                 </div>
-                                <div>
-                                  {
-                                    doc?.fileName
-                                  }
-                                </div>
-                              </div>
-                            })
-                          }
+                              );
+                            })}
                         </div>
                       </div>
                     </div>
@@ -236,8 +240,9 @@ const ReviewDetailsRegulator = () => {
 
         <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
           <div className=" ml-5">
-            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0"
-              onClick={() => Navigate('/regulator/court/nodaldetails')}
+            <button
+              className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0"
+              onClick={() => Navigate("/regulator/court/nodaldetails")}
             >
               <img src={Arrow} alt="back Arrow" className="mr-2" />
               Back
@@ -258,8 +263,9 @@ const ReviewDetailsRegulator = () => {
               <button
                 onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked || loader}
-                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${isChecked ? "bg-[#385723]" : "bg-[#a3cf85]"
-                  }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
+                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${
+                  isChecked ? "bg-[#385723]" : "bg-[#a3cf85]"
+                }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}
               </button>
@@ -270,7 +276,7 @@ const ReviewDetailsRegulator = () => {
           closePopup={() => {
             setSubmitModal(false);
             if (submitted) {
-              Navigate('/')
+              Navigate("/");
             }
           }}
           showPopup={() => setSubmitModal(true)}
