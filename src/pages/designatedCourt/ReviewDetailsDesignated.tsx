@@ -82,7 +82,7 @@ const ReviewDetailsDesignated = () => {
           setPara1(`Your registration request has been sent successfully and
             approval/rejection of your registration will be informed to you
             via email.`)
-          setPara2(`Your registration acknowledgement ID is RT48726398745923`)
+          setPara2(`Your registration acknowledgement ID is ${data?.data?.newDesignatedCourt?.uniqueId}`)
           setSubmitted(true)
           setSubmitModal(true)
         } else {
