@@ -4,6 +4,7 @@ import TaskTabsItem from "./TaskTabItems";
 import {
   profileSideBarList,
   profileSideBarListCompetent,
+  profileSideBarListDesignated,
 } from "../../../utils/hardText/portalText";
 
 type Props = {};
@@ -14,12 +15,12 @@ type Props = {};
 // ];
 
 const ProfileResponsiveTabs = (props: Props) => {
-  const [activeTab, setActiveTab] = useState<string>("competent");
+  const [activeTab, setActiveTab] = useState<string>("court");
   const [url, setUrl] = useState<String>("");
   const [searchParams, setSearchParams] = useSearchParams();
   const current = searchParams.get("current");
   if (!current) {
-    setSearchParams({ current: "competent" });
+    setSearchParams({ current: "court" });
   }
   const location = useLocation();
   const { pathname } = location;
@@ -36,7 +37,7 @@ const ProfileResponsiveTabs = (props: Props) => {
   return (
     <div className="flex-col justify-center items-center inline-flex border-b w-full">
       <ul className="justify-start items-center inline-flex flex-wrap">
-        {profileSideBarListCompetent.map((menuItem, index) => (
+        {profileSideBarListDesignated.map((menuItem, index) => (
           <Link to={menuItem.rurl} key={index} className="mx-3">
             <TaskTabsItem
               key={index}

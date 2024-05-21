@@ -127,7 +127,7 @@ const UploadDocument = (props: Props) => {
                   onClick={onSubmit}
                   type="submit"
                   className={`${
-                    loader ? "bg-gray-500" : "bg-[#385723]"
+                    loader ? "bg-gray-500" : "bg-[#1C468E]"
                   } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
                 >
                   {loader ? <LoaderSpin /> : " Save and Continue"}
