@@ -159,6 +159,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
             dropdownData,
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
+            currentEntity : selectedRadio
           };
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
@@ -175,10 +176,15 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const [selectedRadio, setSelectedRadio] = useState<any>(entities[0]);
 
   const handleSubmit = (e: any) => {
+    console.log();
+    
     e.preventDefault();
     fetchFormFields();
     Navigate(selectedRadio?.path);
   };
+
+  console.log({data, selectedRadio});
+  
 
   return (
     <div className="text-gilroy-regular md:p-[40px] m-[2.5%] w-[95%] md:w-[586px] md:h-[370px] p-8  bg-white rounded-3xl">

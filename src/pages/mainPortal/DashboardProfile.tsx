@@ -50,9 +50,13 @@ const DashboardProfile = (props: Props) => {
            let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
               ...o,
-              file: "",
+              file: dtData
+              ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value : "",
               error: "",
-              fileName: "",
+              fileName: dtData
+              ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value : "",
+              uploadFileId : dtData
+              ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value : ""
             }));
           
           let obj = {

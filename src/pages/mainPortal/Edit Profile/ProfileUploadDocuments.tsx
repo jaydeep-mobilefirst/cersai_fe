@@ -30,7 +30,7 @@ const ProfileUploadDocuments = (props: Props) => {
   }
 
   const deleteFile = (field: any) => {
-    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === field?.fileType)?.name;
+    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === field?.fileType)?.name;    
     onFileChange("", field, fieldType)
   }
 

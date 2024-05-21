@@ -15,5 +15,7 @@ const dateFormattor = (date : Date) => {
   return [day, month, year].join('-');
 }
 
+const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export {dateFormattor}
+export {dateFormattor, panRegex, emailRegex}

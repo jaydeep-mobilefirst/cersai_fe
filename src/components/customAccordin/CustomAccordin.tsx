@@ -25,7 +25,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, showEdit = false }) => {
   return (
     <div className="w-full">
       {items.map((item, index) => (
-        <div className=" bg-[#EEF7EB] rounded-lg mb-5" key={index}>
+        <div className=" bg-[#E7F0FF] rounded-lg mb-5" key={index}>
           <div
             className="flex justify-between items-center px-4 py-3 cursor-pointer select-none"
             onClick={() => toggleAccordion(index)}
@@ -38,7 +38,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, showEdit = false }) => {
             <span className="flex items-center">
               {showEdit && ( // Conditionally render edit button
                 <p
-                  className="mr-2 text-xl font-normal text-[#385723] text-gilroy-medium "
+                  className="mr-2 text-xl font-normal text-[#1C468E] text-gilroy-medium "
                   onClick={handleEditClick}
                 >
                   Edit
@@ -63,7 +63,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, showEdit = false }) => {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-[#385723] font-medium"
+                    className="h-6 w-6 text-[#1C468E] font-medium"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

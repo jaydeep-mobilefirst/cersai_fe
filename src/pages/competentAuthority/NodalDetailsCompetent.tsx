@@ -13,6 +13,7 @@ import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields
 import OtpPage from "../depositeTaker/OtpPage";
 import axios from "axios";
 import { bffUrl } from "../../utils/api";
+import Swal from "sweetalert2";
 
 type Props = {};
 
@@ -57,24 +58,19 @@ const NodalDetails = (props: Props) => {
     setLoader(false);
 
     if (noError) {
-      const edit = params.get("edit");
-      const nodalVerification = localStorage.getItem("nodalVerification");
-      console.log({ nodalVerification });
       const response = await axios.post(`${bffUrl}/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
       });
-      // console.log(response.data.statusCode, "deposite taker otp ");
       if (response.data.statusCode === 201) {
         setShowOTPModel(true);
       }
-      if (
-        edit !== undefined &&
-        edit !== null &&
-        edit !== "" &&
-        nodalVerification
-      ) {
-        Navigate("/competent/authority/reviewdetails");
+      else{
+        Swal.fire({
+          icon : "error",
+          title : "Error",
+          text : "Error sending OTP, Please try later"
+        })
       }
     }
   };
