@@ -52,7 +52,8 @@ const DashboardProfile = (props: Props) => {
               ...o,
               file: "",
               error: "",
-              fileName: "",
+              fileName: dtData
+              ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value : ""
             }));
           
           let obj = {
