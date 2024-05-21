@@ -8,6 +8,7 @@ import LoaderSpin from "../../components/LoaderSpin";
 import OtpPage from "../depositeTaker/OtpPage";
 import axios from "axios";
 import { bffUrl } from "../../utils/api";
+import Swal from "sweetalert2";
 
 const NodalDetailsDesignated = () => {
   const [params, setParams] = useSearchParams();
@@ -50,9 +51,6 @@ const NodalDetailsDesignated = () => {
     setLoader(false);
 
     if (noError) {
-      const edit = params.get("edit");
-      const nodalVerification = localStorage.getItem("nodalVerification");
-      console.log({ nodalVerification });
       const response = await axios.post(`${bffUrl}/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
@@ -61,13 +59,12 @@ const NodalDetailsDesignated = () => {
       if (response.data.statusCode === 201) {
         setShowOTPModel(true);
       }
-      if (
-        edit !== undefined &&
-        edit !== null &&
-        edit !== "" &&
-        nodalVerification
-      ) {
-        Navigate("/depositetaker/signup/reviewdetails");
+      else{
+        Swal.fire({
+          icon : "error",
+          title : "Error",
+          text : "Error sending OTP, Please try later"
+        })
       }
     }
   };

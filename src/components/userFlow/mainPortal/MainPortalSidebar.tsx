@@ -355,7 +355,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
         aria-label="Sidebar"
       >
         <div
-          className={`h-full overflow-y-auto bg-[#EEF7EB] ${
+          className={`h-full overflow-y-auto bg-[#E7F0FF] ${
             collapsed ? "w-[75px]" : "w-[322px]"
           }`}
         >
@@ -372,7 +372,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
                 <img
                   src={collapsed ? ArrowRight : ArrowClose}
                   alt="collapsed"
-                  className="bg-[#EEF7EB] rounded-full cursor-pointer"
+                  className="bg-[#E7F0FF] rounded-full cursor-pointer"
                 />
               </div>
             </li>
