@@ -110,7 +110,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                             <img
                               src={folderOpen}
                               alt="Folder Open Icon"
-                              className="bg-[#EEF7EB] rounded p-1 text-white cursor-pointer"
+                              className="bg-[#ffffff] rounded p-1 text-white cursor-pointer"
                               onClick={() =>{toggleUploadPopup(); setFieldData(data)}}
                             />
                           </div>

@@ -140,7 +140,7 @@ const ReviewDetailsRegulator = () => {
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
                   <div className="mb-[16px]" key={index}>
-                    <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold">
+                    <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px] text-gilroy-bold">
                       <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
                         {section?.sectionName}
                       </p>

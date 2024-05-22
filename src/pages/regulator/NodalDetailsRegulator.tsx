@@ -135,7 +135,7 @@ const NodalDetailsRegulator = () => {
                 type="submit"
                 disabled={loader}
                 onClick={onSubmit}
-                className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
               >
                 {loader ? <LoaderSpin /> : "Verify details"}
               </button>

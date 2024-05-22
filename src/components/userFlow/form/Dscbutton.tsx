@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import "./custom_css/upload_button2.css";
-import UploadButtonFolderSvg from "../../../assets/images/uploadFile-2.svg";
+import UploadButtonFolderSvg from "../../../assets/images/new_images/uploadFile-2.png";
 import UploadButtonSvg1 from "../../../assets/images/UploadIcon.png";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -42,7 +42,7 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <div>
+      <div className="bg-[#E7F0FF]">
         <button
           {...restProps}
           disabled={disabled}
@@ -80,7 +80,7 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
                 <button
                   type="button"
                   className={`text-white Rectangle151 w-10 h-10 rounded-md ${
-                    fileSelected ? "bg-[#1C468E]" : "bg-gray-600"
+                    fileSelected ? "bg-[#1C468E]" : "bg-[#1C468E]"
                   }  flex justify-center items-center `}
                 >
                   <img
