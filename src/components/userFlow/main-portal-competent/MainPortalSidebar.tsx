@@ -209,7 +209,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
       <aside
         id="default-sidebar"
-        className={`fixed top-0 left-0 z-40 transition-transform ${
+        className={`fixed top-0 left-0 z-100  transition-transform ${
           mSidebar ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
         } ${collapsed ? "w-[100px]" : "w-[322px]"} h-screen`}
         aria-label="Sidebar"
@@ -224,8 +224,10 @@ const MainPortalSidebar = ({ layout }: Props) => {
               <img src={Logo} alt="logo" className="max-h-[52px]" />
               <div
                 className={`absolute ${
-                  collapsed ? "right-[-0.1rem]" : "right-4"
-                } top-16 p-2`}
+                  collapsed
+                    ? "md:-right-[-0.1rem] right-2 "
+                    : "md:-right-4 right-[-0.75rem]"
+                }  ${collapsed ? "top-14" : "top-16"} p-2`}
                 onClick={toggleCollapse}
               >
                 <img

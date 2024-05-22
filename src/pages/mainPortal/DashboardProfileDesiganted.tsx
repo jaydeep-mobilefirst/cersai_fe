@@ -8,9 +8,8 @@ import ProfileResponsiveTabs from "../../components/userFlow/main-portal-designa
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import axios from "axios";
 import { backendBaseUrl, bffUrl } from "../../utils/api";
-import DashboardProfileSidebarRegulator from "../../components/userFlow/mainPortal-Regulator/DashboardProfileSidebar";
 
-import CourtDeatils from "./Edit-profile-designatedCourt/CourtDetails";
+import CourtDetails from "./Edit-profile-designatedCourt/CourtDetails";
 import NodalDetails from "./Edit-profile-designatedCourt/NodalDetail";
 import UploadDocument from "./Edit-profile-designatedCourt/UploadDocument";
 
@@ -27,25 +26,29 @@ const DashboardProfileDesignateCourt = (props: Props) => {
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
     axios
-      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+      .get(`${bffUrl}/registration/field-data/4?status=addToProfile`)
       .then(async (response) => {
+        console.log(response?.data, "response");
+
         if (response?.data?.success) {
-          let dtData: any = [];
+          let dcData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/${entityUniqueId}`
+            let designatedCourt = await axios.get(
+              `${bffUrl}/designated-court/${entityUniqueId}`
             );
-            dtData =
-              depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
+
+            dcData =
+              designatedCourt.data.data.designatedCourt
+                ?.designatedCourtFormData;
           } catch (error) {
             console.log("Error");
           }
-          // console.log(dtData, "respnse--------------");
+
           let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
-              userInput: dtData
-                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+              userInput: dcData
+                ? dcData?.find((data: any) => data?.fieldId === o?.id)?.value
                 : "",
               error: "",
             })
@@ -63,7 +66,7 @@ const DashboardProfileDesignateCourt = (props: Props) => {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
-          // console.log(obj, "obj-----");
+
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
         } else {
@@ -94,7 +97,7 @@ const DashboardProfileDesignateCourt = (props: Props) => {
           <DashboardProfileSidebar />
         </div>
 
-        {current === "Court" && <CourtDeatils />}
+        {current === "court" && <CourtDetails />}
         {current === "nodal" && <NodalDetails />}
         {current === "document" && <UploadDocument />}
       </div>

@@ -282,7 +282,13 @@ const FormHandlerProviders = ({children}: Props) => {
     // Section is nodal then use nodal url else use usual url for that entity
     const isNodalSection = formFields?.some((field : any) => (/nodal officer/i.test(field?.label)));
     let URL = isNodalSection ? deDupURLs['nodal'] : deDupURLs[allFormData?.currentEntity?.entityCode];
-    const promises = formFields.map(async (field: any) => {
+    let filteredFields = formFields?.filter((f : any) => (
+      /mobile/i.test(f?.label) ||    
+      /email/i.test(f?.label) ||
+      /gst/i.test(f?.label) ||
+      /emailid/i.test(f?.label)
+    ))
+    const promises = filteredFields.map(async (field: any) => {
         try {
             const checkDeDup = await axios.post(`${bffUrl}/${URL}`, {
                 "value": field?.userInput
@@ -309,32 +315,6 @@ const FormHandlerProviders = ({children}: Props) => {
                 }]
             });
         } 
-        }
-    });
-
-    await Promise.all(promises);
-    await handleValidations(errors);
-    return errors.length === 0;
-  }
-  const ValidateNodalDeDup = async (formFields : any[]) : Promise<boolean>=> {
-    const errors: any[] = [];
-    const promises = formFields.map(async (field: any) => {
-        try {
-            const checkDeDup = await axios.post(`${bffUrl}/user/dedup`, {
-                "value": field?.userInput
-            });
-
-            const data = checkDeDup.data;
-            if (data?.data?.duplicate) {
-                errors.push({
-                    formId: field?.id,
-                    validationErrors: [{
-                        error: "Already Exists"
-                    }]
-                });
-            }
-        } catch (error) {
-            console.log({ error });
         }
     });
 

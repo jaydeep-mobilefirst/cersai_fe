@@ -23,7 +23,7 @@ const DashboardProfileSidebar = ({}: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const current = searchParams.get("current");
   if (!current) {
-    setSearchParams({ current: "competent" });
+    setSearchParams({ current: "court" });
   }
   const location = useLocation();
   const { pathname } = location;

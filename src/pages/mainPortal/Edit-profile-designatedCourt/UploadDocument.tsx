@@ -61,7 +61,9 @@ const UploadDocument = (props: Props) => {
     setLoader(true);
     axios
       .patch(
-        `${bffUrl}/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+        `${bffUrl}/designated-court/${sessionStorage?.getItem(
+          "entityUniqueId"
+        )}`,
         {
           formData: formData,
         }
@@ -73,7 +75,7 @@ const UploadDocument = (props: Props) => {
           text: "Documents uploaded successfully",
           confirmButtonText: "Ok",
         });
-        Navigate("/dt/profile?current=branches");
+        Navigate("/dc/profile?current=nodal");
       })
       .catch((err) => {
         Swal.fire({
@@ -85,7 +87,7 @@ const UploadDocument = (props: Props) => {
     setLoader(false);
   };
 
-  console.log({ documentData });
+  // console.log({ documentData }, "document dc flow ");
 
   return (
     <>
@@ -127,7 +129,7 @@ const UploadDocument = (props: Props) => {
                   onClick={onSubmit}
                   type="submit"
                   className={`${
-                    loader ? "bg-gray-500" : "bg-[#385723]"
+                    loader ? "bg-gray-500" : "bg-[#1C468E]"
                   } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
                 >
                   {loader ? <LoaderSpin /> : " Save and Continue"}

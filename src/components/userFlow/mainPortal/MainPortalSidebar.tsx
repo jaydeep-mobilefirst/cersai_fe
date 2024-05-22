@@ -488,7 +488,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
       <aside
         id="default-sidebar"
-        className={`fixed top-0 left-0 z-40 transition-transform ${
+        className={`fixed top-0 left-0 z-100  transition-transform ${
           mSidebar ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
         } ${collapsed ? "w-[100px]" : "w-[322px]"} h-screen`}
         aria-label="Sidebar"
@@ -502,9 +502,11 @@ const MainPortalSidebar = ({ layout }: Props) => {
             <li className="relative border-b border-[#E6E6E6] p-4">
               <img src={Logo} alt="logo" className="max-h-[52px]" />
               <div
-                className={`absolute ${
-                  collapsed ? "right-[-0.1rem]" : "right-4"
-                } top-16 p-2`}
+                className={`absolute  ${
+                  collapsed
+                    ? "md:-right-[-0.1rem] right-2"
+                    : "md:-right-4 right-[-0.75rem]"
+                }  ${collapsed ? "top-14" : "top-16"} p-2`}
                 onClick={toggleCollapse}
               >
                 <img
@@ -530,7 +532,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
                     <div
                       onClick={(e) => handleTabClick(data.url, data.title)}
                       className={`w-auto h-auto md:h-14 ${
-                        activeTab === data.url ? "bg-[#1C468E]" : "bg-[#E7F0FF]"
+                        activeTab === data.url ? "bg-[#1C468E]" : ""
                       } rounded-lg flex items-center  cursor-pointer`}
                     >
                       <div className="m-4 h-[24px] w-[24px]">

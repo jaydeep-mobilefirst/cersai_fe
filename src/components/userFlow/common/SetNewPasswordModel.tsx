@@ -3,17 +3,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-// import LoginPageIcon from "../../assets/images/Login-bud.svg";
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
 
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
 
 import MobileIcon from "../../../assets/images/MobileIcon.svg";
 
-// import InputFieldPassword from "../../components/form/InputFieldPassword";
 import InputFieldPassword from "./InputFieldPassword";
 
-// import Button from "../../components/form/Button";
 import Button from "./Button";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -33,14 +30,14 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("identity");
   const otpVerified = sessionStorage.getItem("otp-verified");
-  console.log({otpVerified});
-  
+  console.log({ otpVerified });
+
   if (!otpVerified || otpVerified === "false") {
     sessionStorage.setItem("otp-sent", "false");
     sessionStorage.setItem("timerSec", "120");
     setTimeout(() => {
       navigate("/otp-verification?token=" + token);
-    }, 3000)
+    }, 3000);
   }
   const [loader, setLoader] = useState(false);
   const [formError, setFormError] = useState("");
@@ -51,7 +48,9 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [decodedToken, setDecodedToken] = useState<any>(null);
   const [fileName, setFileName] = useState<string | undefined>("");
-  const [ShowPasswordModel, setShowPasswordModel] = useState(otpVerified === 'true');
+  const [ShowPasswordModel, setShowPasswordModel] = useState(
+    otpVerified === "true"
+  );
   const [showPasswordUpdateModel, setShowPasswordUpdateModel] = useState(false);
 
   useEffect(() => {
@@ -88,7 +87,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
     const payload: any = {
       identity: token,
       password: watch("confirmPassword"),
-      dscCertificateFile : "xyz"
+      dscCertificateFile: "xyz",
     };
 
     if (decodedToken?.isDsc && base64Data) {
@@ -148,6 +147,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
+  const canSubmit = watch("password") && watch("confirmPassword");
 
   const passwordValidations = [
     {
@@ -300,6 +300,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
                           type="submit"
                           loader={loader}
                           label={!loader ? "Submit" : "Loading..."}
+                          disabled={!canSubmit || loader}
                         />
                       </div>
                       <div className="mt-5 md:mt-10 flex justify-center">

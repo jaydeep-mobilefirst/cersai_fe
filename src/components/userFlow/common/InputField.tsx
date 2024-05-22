@@ -5,6 +5,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   width?: string;
   padding?: string;
   error?: boolean;
+  disabled?: boolean;
 }
 
 const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
@@ -15,6 +16,7 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
       padding = "8px 16px",
       className,
       error,
+      disabled,
       ...rest
     },
     ref
@@ -23,6 +25,7 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <input
+        disabled={disabled}
         type="text"
         className={`form-input border flex border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 justify-between align-middle ${errorClasses} ${className}`}
         style={{

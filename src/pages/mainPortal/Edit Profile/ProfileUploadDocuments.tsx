@@ -13,30 +13,38 @@ import { useNavigate } from "react-router-dom";
 type Props = {};
 
 const ProfileUploadDocuments = (props: Props) => {
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
-  const [loader, setLoader] = useState<boolean>(false)
+  const [loader, setLoader] = useState<boolean>(false);
   const [fileLoader, setFileLoader] = useState<number>(0);
-  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
   const { onFileChange, handleDocumentValidations } =
     useContext(FormHandlerContext);
 
   const handleFileChange = (file: File | null, field: any) => {
-    setFileLoader(field?.id)
-    const entityUniqueId = sessionStorage.getItem('entityUniqueId');
-    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === field?.fileType)?.name;
-    onFileChange(file, field, fieldType, entityUniqueId ?? "")
-    setFileLoader(0)
-  }
+    setFileLoader(field?.id);
+    const entityUniqueId = sessionStorage.getItem("entityUniqueId");
+    const fieldType = allFormData?.fileTypes?.find(
+      (type: any) => type?.id === field?.fileType
+    )?.name;
+    onFileChange(file, field, fieldType, entityUniqueId ?? "");
+    setFileLoader(0);
+  };
 
   const deleteFile = (field: any) => {
-    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === field?.fileType)?.name;    
-    onFileChange("", field, fieldType)
-  }
+    const fieldType = allFormData?.fileTypes?.find(
+      (type: any) => type?.id === field?.fileType
+    )?.name;
+    onFileChange("", field, fieldType);
+  };
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    const goodToGo = await handleDocumentValidations(documentData.map((d: { sectionId: number }) => (d?.sectionId)));
+    const goodToGo = await handleDocumentValidations(
+      documentData.map((d: { sectionId: number }) => d?.sectionId)
+    );
     if (!goodToGo) {
       return;
     }
@@ -50,30 +58,32 @@ const ProfileUploadDocuments = (props: Props) => {
         value: field.uploadFileId,
       }));
 
-      setLoader(true);
-        axios
-          .patch(`${bffUrl}/deposit-taker/${sessionStorage?.getItem('entityUniqueId')}`, {
-            formData: formData,
-          })
-          .then((response) => {
-            console.log(response, "response");
-            Swal.fire({
-              icon: "success",
-              text: "Documents uploaded successfully",
-              confirmButtonText: "Ok",
-            });
-            Navigate("/dt/profile?current=branches");
-          })
-          .catch((err) => {
-            Swal.fire({
-              icon: "error",
-              text: err?.response?.data?.detail?.message,
-              confirmButtonText: "Ok",
-            });
-          });
-      setLoader(false);
-
-  }
+    setLoader(true);
+    axios
+      .patch(
+        `${bffUrl}/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+        {
+          formData: formData,
+        }
+      )
+      .then((response) => {
+        console.log(response, "response");
+        Swal.fire({
+          icon: "success",
+          text: "Documents uploaded successfully",
+          confirmButtonText: "Ok",
+        });
+        Navigate("/dt/profile?current=branches");
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          text: err?.response?.data?.detail?.message,
+          confirmButtonText: "Ok",
+        });
+      });
+    setLoader(false);
+  };
 
   console.log({ documentData });
 
@@ -91,16 +101,17 @@ const ProfileUploadDocuments = (props: Props) => {
               return (
                 <>
                   <div key={item.id}>
-                        <ProfileUploadDocument
-                          required={item?.required}
-                          documentName={item.documentName}
-                          id="Dsc"
-                          type="button"
-                          deleteFile={() => deleteFile(item)}
-                          onFileUpload={(file) => handleFileChange(file, item)}
-                          fileSelected={item?.fileName !== ""}
-                          fileName={item?.fileName}
-                        />
+                    <ProfileUploadDocument
+                      required={item?.required}
+                      documentName={item.documentName}
+                      id="Dsc"
+                      type="button"
+                      deleteFile={() => deleteFile(item)}
+                      onFileUpload={(file) => handleFileChange(file, item)}
+                      fileSelected={item?.fileName !== ""}
+                      fileName={item?.fileName}
+                      fileData={item}
+                    />
                   </div>
                   <span className="text-red-500">{item?.error}</span>
                 </>
@@ -116,8 +127,9 @@ const ProfileUploadDocuments = (props: Props) => {
                   disabled={loader}
                   onClick={onSubmit}
                   type="submit"
-                  className={`${loader ? "bg-gray-500" : "bg-[#385723]"
-                    } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
+                  className={`${
+                    loader ? "bg-gray-500" : "bg-[#1C468E]"
+                  } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
                 >
                   {loader ? <LoaderSpin /> : " Save and Continue"}
                 </button>

@@ -37,7 +37,9 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [base64Data, setBase64Data] = useState<string>("");
   const [hexData, setHexData] = useState("");
   const [roles, setRoles] = useState<any>();
- 
+  const [dsc, setDsc] = useState<boolean>(false);
+  const [dscApiInProgress, setDscApiInProgress] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -92,7 +94,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         password: watch("password"),
         entityType: selected,
       });
-      console.log(response, "login model");
+      console.log(response?.data?.user?.UserRoles, "login model");
 
       sessionStorage.setItem(
         "access_token",
@@ -110,7 +112,13 @@ const LoginModel: React.FC<LoginModelProps> = ({
         "entityUniqueId",
         response.data.user?.entityUniqueId
       );
-      apicallDsc();
+      setRoles(response?.data?.user?.UserRoles);
+      setDsc(true);
+      setDscApiInProgress(true);
+      if (roles) {
+        apicallDsc();
+      }
+
       setError(false);
     } catch (err: any) {
       setError(true);
@@ -182,6 +190,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       setHexData(""); // Clear the hex data as well
     }
   };
+  const canSubmit = watch("email") && watch("password") && selected;
 
   return (
     <Modal
@@ -208,8 +217,20 @@ const LoginModel: React.FC<LoginModelProps> = ({
                   />
                 </div>
               </div>
-              <form onSubmit={handleSubmit(handleFormSubmit)}>
-                <div className="mt-5 md:mt-[36px] px-4 md:px-[40px] ">
+              <form
+                // onSubmit={handleSubmit(handleFormSubmit)}
+                onSubmit={handleSubmit((data) => {
+                  handleFormSubmit(data);
+                })}
+              >
+                <div
+                  className="mt-5 md:mt-[36px] px-4 md:px-[40px] custom-scrollbar"
+                  style={{
+                    maxHeight: "500px",
+                    overflowY: "auto",
+                    overflowX: "hidden",
+                  }}
+                >
                   <div>
                     <label
                       htmlFor="entity"
@@ -218,6 +239,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       Select Entity
                     </label>
                     <SelectButton
+                      disabled={dscApiInProgress}
                       setOption={handleSelectOption}
                       options={[
                         { value: "RG", label: "Regulator" },
@@ -245,6 +267,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       Email id / Mobile no.
                     </label>
                     <InputFields
+                      disabled={dscApiInProgress}
                       {...register("email", {
                         required: "Email is required",
                         pattern: {
@@ -269,6 +292,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       Password
                     </label>
                     <InputFieldPassword
+                      disabled={dscApiInProgress}
                       {...register("password", {
                         required: "Password is required",
                       })}
@@ -288,13 +312,24 @@ const LoginModel: React.FC<LoginModelProps> = ({
                   </div>
 
                   <div className="mt-4 lg:mt-8">
-                    {watch("email") && watch("password") && (
+                    {/* {watch("email") && watch("password") && (
                       <Dscbutton
                         onFileUpload={handleFileUpload}
                         disabled={false}
                       >
                         Upload Document
                       </Dscbutton>
+                    )} */}
+
+                    {dsc && (
+                      <>
+                        <Dscbutton
+                          onFileUpload={handleFileUpload}
+                          disabled={false}
+                        >
+                          Upload Document
+                        </Dscbutton>
+                      </>
                     )}
                   </div>
                   <div className="mt-4 lg:mt-8 text-red-500 text-center">
@@ -305,6 +340,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       type="submit"
                       loader={loader}
                       label={!loader ? "Login" : "Loading..."}
+                      disabled={!canSubmit || loader}
                     />
                   </div>
                   <div className="mt-14">
