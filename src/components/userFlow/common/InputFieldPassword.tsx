@@ -4,12 +4,13 @@ import EyeHide from "../../../assets/images/eye-slash.svg";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
+  disabled?: boolean;
 }
 
 const InputFieldPassword: FC<InputProps> = forwardRef<
   HTMLInputElement,
   InputProps
->(({ className, error, ...rest }, ref) => {
+>(({ className, error, disabled, ...rest }, ref) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -24,6 +25,7 @@ const InputFieldPassword: FC<InputProps> = forwardRef<
   return (
     <div className="relative">
       <input
+        disabled={disabled}
         type={showPassword ? "text" : "password"}
         className={`form-input border flex rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 justify-between align-middle pr-12 ${errorClasses} ${className}`}
         style={{
