@@ -28,6 +28,8 @@ const NodalDetails = (props: Props) => {
     (s: any) => s?.sectionName === "Nodal Details"
   );
 
+  // console.log(allFormData, "nodel detail dc");
+
   // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
   //   ? allFormData?.formFields?.form_fields?.filter(
   //       (f: any) => f?.sectionId === sectionId?.id
@@ -65,7 +67,7 @@ const NodalDetails = (props: Props) => {
       value: field.userInput,
     }));
 
-  console.log(formData, "formData");
+  // console.log(formData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -74,7 +76,9 @@ const NodalDetails = (props: Props) => {
     if (noError) {
       axios
         .patch(
-          `${bffUrl}/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+          `${bffUrl}/designated-court/${sessionStorage.getItem(
+            "entityUniqueId"
+          )}`,
           {
             formData: formData,
           }
@@ -86,7 +90,7 @@ const NodalDetails = (props: Props) => {
             text: "Nodal Detail  update  successfully ",
             confirmButtonText: "Ok",
           });
-          Navigate("/dt/profile?current=regulator");
+          Navigate("/dc/profile?current=nodal");
         })
         .catch((err) => {
           Swal.fire({

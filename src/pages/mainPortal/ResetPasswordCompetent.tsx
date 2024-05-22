@@ -8,6 +8,7 @@ import axios from "axios";
 import { bffUrl } from "../../utils/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import TaskTabsCompetent from "../../components/userFlow/main-portal-competent/TaskTabs";
 
 const ResetPasswordCompetent = () => {
   const screenWidth = useScreenWidth();
@@ -81,7 +82,7 @@ const ResetPasswordCompetent = () => {
   return (
     <>
       <div className="mt-6 mx-6">
-        <TaskTabs />
+        <TaskTabsCompetent />
       </div>
       <div className={customClass}>
         <form
