@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
-import download from "../../assets/images/arrow-down.svg";
+import download from "../../assets/images/new_images/arrowDown.png";
 import html2pdf from "html2pdf.js";
 import Button from "../../components/userFlow/form/Button";
 import folderOpen from "../../assets/images/folder-open.svg";
@@ -109,11 +109,11 @@ const ReviewDetails = () => {
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
                   <div className="mb-[16px]" key={index}>
-                    <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold">
+                    <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px] text-gilroy-bold">
                       <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
                         {section?.sectionName}
                       </p>
-                      <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                      <button className="text-[#1c468e] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
                         {section?.sectionName !== "Verification" ? (
                           <Link
                             to={
@@ -204,7 +204,7 @@ const ReviewDetails = () => {
             <div>
               <button
                 onClick={downloadPDF}
-                className="w-auto md:w-[208px] gap-[8px] flex rounded-[12px] text-[#52AE32] border border-[#52AE32] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className="w-auto md:w-[208px] gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
                 <img src={download} alt="download" className="mr-2" />
                 {isDownloading ? "Downloading..." : "Download PDF"}
@@ -214,7 +214,7 @@ const ReviewDetails = () => {
               <button
                 type="submit"
                 onClick={submit} // Assuming this action should be tied to the Submit button
-                className="ml-[16px] w-auto md:w-[208px] rounded-[12px] bg-[#385723] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className="ml-[16px] w-auto md:w-[208px] rounded-[12px] bg-[#1c468e] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
               {loader ? <LoaderSpin /> : "Submit"}
               </button>

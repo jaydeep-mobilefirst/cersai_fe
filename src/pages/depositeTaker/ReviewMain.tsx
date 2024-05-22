@@ -261,7 +261,7 @@ const ReviewMain = () => {
                 onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked || loader}
                 className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${
-                  isChecked ? "bg-[#1C468E]" : "bg-[#1C468E]"
+                  isChecked ? "bg-[#1C468E]" : "bg-[#e7f0ff]"
                 }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}

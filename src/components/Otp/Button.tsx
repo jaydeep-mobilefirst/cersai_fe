@@ -18,8 +18,8 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const className =
     variant === "filled"
-      ? "bg-[#54B749] text-white py-3 px-4 rounded-xl w-[200px] "
-      : "border border-[#54B749] py-3 px-4 rounded-xl w-[200px] text-[#54B749]";
+      ? "bg-[#1c468e] text-white py-3 px-4 rounded-xl w-[200px] "
+      : "border border-[#E7F0FF] py-3 px-4 rounded-xl w-[200px] text-[#1c468e]";
   return (
     <button
       onClick={onClick}

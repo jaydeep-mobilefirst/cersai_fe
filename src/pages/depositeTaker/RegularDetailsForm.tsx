@@ -102,7 +102,7 @@ const RegularDetailsForm = (props: Props) => {
                   onClick={onSubmit}
                   className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
-                  {loader ? <LoaderSpin/> : "Save And Continue"}
+                  {loader ? <LoaderSpin/> : "Save & Continue"}
                 </button>
             </div>
           </div>

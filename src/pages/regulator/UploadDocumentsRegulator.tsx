@@ -110,7 +110,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                             <img
                               src={folderOpen}
                               alt="Folder Open Icon"
-                              className="bg-[#ffffff] rounded p-1 text-white cursor-pointer"
+                              className="text-white cursor-pointer"
                               onClick={() =>{toggleUploadPopup(); setFieldData(data)}}
                             />
                           </div>
@@ -202,7 +202,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                   onClick={submit}
                   className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
-                  Save and continue
+                  Save & Continue
                 </button>
               </div>
             </div>

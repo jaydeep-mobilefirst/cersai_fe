@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent } from "react";
 import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import add from "../../assets/images/CrossIcon.svg";
-import UploadIcon from "../../assets/images/directbox-send.svg";
+import UploadIcon from "../../assets/images/new_images/directbox-send.png";
 
 interface UploadFileProps {
   showUploadPopup: boolean;
@@ -51,7 +51,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
                 alt="cross"
               />
             </div>
-            <div className="bg-[#52AE3226] rounded-lg text-center p-4 mt-10 mb-10">
+            <div className="bg-[#E7F0FF] rounded-lg text-center p-4 mt-10 mb-10">
               <div className=" flex  justify-center items-center py-2">
                 <div className="text-center">
                   <label htmlFor="file-upload">
@@ -76,7 +76,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
             <div className="text-center">
               <label
                 htmlFor="file-upload"
-                className="cursor-pointer bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-72 inline-block"
+                className="cursor-pointer bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-72 inline-block"
               >
                 Browse Files
               </label>

@@ -59,7 +59,7 @@ interface SuccessPopupProps {
             </p>
           </div>
           <div>
-            <h2 className="text-[#1C648E] text-base text-center text-gilroy-medium my-2">
+            <h2 className="text-[#666666] text-base text-center text-gilroy-medium my-2">
               {
                 para2 && para2
               }

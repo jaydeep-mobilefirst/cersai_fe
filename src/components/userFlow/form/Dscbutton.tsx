@@ -42,7 +42,7 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <div className="bg-[#E7F0FF]">
+      <div>
         <button
           {...restProps}
           disabled={disabled}
@@ -52,12 +52,12 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
           onClick={handleButtonClick}
         >
           <div className="flex items-center justify-between gap-2 w-full">
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center pr-2">
               <div>
                 <img
                   src={UploadButtonFolderSvg}
                   alt="UploadButtonFolderSvg "
-                  className="mx-2"
+                  className="pr-3"
                 />
               </div>
               <div className="">

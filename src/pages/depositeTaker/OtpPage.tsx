@@ -501,12 +501,32 @@ const OtpPage: React.FC<OtpPageProps> = ({
             )}
             <div className="p-3">
               <div className="flex justify-between items-center mt-4">
-                <label className="block text-sm sm:text-base font-medium">
-                  Mobile <span className="text-red-600">*</span>
+                <label className="block text-sm sm:text-base font-medium ml-3">
+                  Mobile OTP <span className="text-red-600">*</span>
                 </label>
-                <span className="text-xs sm:text-sm text-gray-400">
-                  {`OTP sent on +91 ${maskMobile(mobile)}`}
-                </span>
+                <div className="flex justify-end items-center space-x-3 mt-3 mr-6">
+                  <div className="text-xs sm:text-sm text-black">
+                    {mobileTimer > 0
+                      ? `${String(Math.floor(mobileTimer / 60)).padStart(
+                          2,
+                          "0"
+                        )}:${String(mobileTimer % 60).padStart(2, "0")}`
+                      : "00:00"}
+                  </div>
+                  <div>
+                    <button
+                      onClick={resendMobileOtp}
+                      disabled={mobileTimer > 0}
+                      className={`${
+                        mobileTimer > 0
+                          ? "cursor-not-allowed text-gray-500"
+                          : "text-[#1C468E]"
+                      }`}
+                    >
+                      Resend
+                    </button>
+                  </div>
+                </div>
               </div>
               <OTPInput
                 value={mobileOtp}
@@ -521,50 +541,15 @@ const OtpPage: React.FC<OtpPageProps> = ({
                   {mobileOtpError}
                 </div>
               )}
-              <div className="flex justify-end items-center space-x-3 mt-3">
-                <div className="text-xs sm:text-sm text-black">
-                  {mobileTimer > 0
-                    ? `${String(Math.floor(mobileTimer / 60)).padStart(
-                        2,
-                        "0"
-                      )}:${String(mobileTimer % 60).padStart(2, "0")}`
-                    : "00:00"}
-                </div>
-                <div>
-                  <button
-                    onClick={resendMobileOtp}
-                    disabled={mobileTimer > 0}
-                    className={`${
-                      mobileTimer > 0
-                        ? "cursor-not-allowed text-gray-500"
-                        : "text-[#1C468E]"
-                    }`}
-                  >
-                    Resend
-                  </button>
-                </div>
-              </div>
+              <span className="text-xs sm:text-sm text-gray-400 ml-3">
+                  {`OTP sent on +91 ${maskMobile(mobile)}`}
+              </span>
 
-              <div className="flex justify-between items-center mt-4">
+              <div className="flex justify-between items-center mt-4 ml-3">
                 <label className="block text-sm sm:text-base font-medium">
-                  Email <span className="text-red-600">*</span>
+                  Email OTP <span className="text-red-600">*</span>
                 </label>
-                <span className="text-xs sm:text-sm text-gray-400">
-                  {`OTP sent on ${maskEmail(email)}`}
-                </span>
-              </div>
-              <OTPInput
-                value={emailOtp}
-                numInputs={6}
-                onChange={onEmailOtpChange}
-                renderSeparator={<span></span>}
-                inputStyle="inputStyle"
-                renderInput={(props) => <input {...props} />}
-              />
-              {emailOtpError && (
-                <div className="text-red-600 text-xs mt-1">{emailOtpError}</div>
-              )}
-              <div className="flex justify-end items-center space-x-3 mt-3">
+                <div className="flex justify-end items-center space-x-3 mt-3 mr-6">
                 <div className="text-xs sm:text-sm text-black">
                   {emailTimer > 0
                     ? `${String(Math.floor(emailTimer / 60)).padStart(
@@ -587,6 +572,21 @@ const OtpPage: React.FC<OtpPageProps> = ({
                   </button>
                 </div>
               </div>
+              </div>
+              <OTPInput
+                value={emailOtp}
+                numInputs={6}
+                onChange={onEmailOtpChange}
+                renderSeparator={<span></span>}
+                inputStyle="inputStyle"
+                renderInput={(props) => <input {...props} />}
+              />
+              {emailOtpError && (
+                <div className="text-red-600 text-xs mt-1">{emailOtpError}</div>
+              )}
+              <span className="text-xs sm:text-sm text-gray-400 ml-3">
+                  {`OTP sent on ${maskEmail(email)}`}
+              </span>
 
               <div className="flex justify-between sm:p-4 space-x-3">
                 <Button
