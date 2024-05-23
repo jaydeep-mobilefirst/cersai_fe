@@ -7,14 +7,15 @@ interface Option {
 }
 
 type Props = {
-  onSelect ?: (data : any) => void
-  setOption ?: (value: string) => void;
+  onSelect?: (data: any) => void;
+  setOption?: (value: string) => void;
   options: Option[];
   selectedOption?: string | null;
   placeholder: string;
   searchInputOnchange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchInputValue?: string;
   showSearchInput?: boolean;
+  disabled?: boolean;
 };
 
 const SelectButton = ({
@@ -25,10 +26,11 @@ const SelectButton = ({
   searchInputValue,
   selectedOption,
   showSearchInput,
-  onSelect
+  onSelect,
+  disabled,
 }: Props) => {
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
-  const [optionsToShow, setOptionsToShow] = useState<any[]>(options)
+  const [optionsToShow, setOptionsToShow] = useState<any[]>(options);
   useEffect(() => {
     setArrowDirectionToggle(false);
   }, [selectedOption]);
@@ -38,8 +40,7 @@ const SelectButton = ({
     options.find((option) => option.value === selectedOption)?.label ||
     placeholder;
 
-
-    const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -57,11 +58,11 @@ const SelectButton = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [arrowDirectionToggle]);
-    
-  
+
   return (
     <div className="w-full relative">
       <button
+        disabled={disabled}
         className="h-[56px] px-2 md:px-8 py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left w-full"
         type="button"
         onClick={() => setArrowDirectionToggle(!arrowDirectionToggle)}
@@ -137,7 +138,7 @@ const SelectButton = ({
                   }
                   setArrowDirectionToggle(false);
                   if (onSelect) {
-                    onSelect(option)
+                    onSelect(option);
                   }
                 }}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 cursor-pointer"

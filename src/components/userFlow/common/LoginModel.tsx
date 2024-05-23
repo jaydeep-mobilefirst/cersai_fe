@@ -38,6 +38,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [hexData, setHexData] = useState("");
   const [roles, setRoles] = useState<any>();
   const [dsc, setDsc] = useState<boolean>(false);
+  const [dscApiInProgress, setDscApiInProgress] = useState(false);
 
   const {
     register,
@@ -113,6 +114,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       );
       setRoles(response?.data?.user?.UserRoles);
       setDsc(true);
+      setDscApiInProgress(true);
       if (roles) {
         apicallDsc();
       }
@@ -188,6 +190,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       setHexData(""); // Clear the hex data as well
     }
   };
+  const canSubmit = watch("email") && watch("password") && selected;
 
   return (
     <Modal
@@ -236,6 +239,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       Select Entity
                     </label>
                     <SelectButton
+                      disabled={dscApiInProgress}
                       setOption={handleSelectOption}
                       options={[
                         { value: "RG", label: "Regulator" },
@@ -263,6 +267,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       Email id / Mobile no.
                     </label>
                     <InputFields
+                      disabled={dscApiInProgress}
                       {...register("email", {
                         required: "Email is required",
                         pattern: {
@@ -287,6 +292,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       Password
                     </label>
                     <InputFieldPassword
+                      disabled={dscApiInProgress}
                       {...register("password", {
                         required: "Password is required",
                       })}
@@ -334,6 +340,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       type="submit"
                       loader={loader}
                       label={!loader ? "Login" : "Loading..."}
+                      disabled={!canSubmit || loader}
                     />
                   </div>
                   <div className="mt-14">

@@ -110,6 +110,7 @@ const ProfileUploadDocuments = (props: Props) => {
                       onFileUpload={(file) => handleFileChange(file, item)}
                       fileSelected={item?.fileName !== ""}
                       fileName={item?.fileName}
+                      fileData={item}
                     />
                   </div>
                   <span className="text-red-500">{item?.error}</span>
