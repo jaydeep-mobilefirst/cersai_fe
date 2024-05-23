@@ -224,10 +224,10 @@ const MainPortalSidebar = ({ layout }: Props) => {
             <li className="relative border-b border-[#E6E6E6] p-4">
               <img src={Logo} alt="logo" className="max-h-[52px]" />
               <div
-                className={`absolute  ${
+                className={`absolute hidden sm:block md:block lg:block ${
                   collapsed
                     ? "md:-right-[-0.1rem] right-2"
-                    : "md:-right-4 right-[-0.75rem]"
+                    : "md:-right-1 right-[0.75rem]"
                 }  ${collapsed ? "top-14" : "top-16"} p-2`}
                 onClick={toggleCollapse}
               >
@@ -239,7 +239,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
               </div>
               <button
                 onClick={toggleSidebar}
-                className="absolute top-3 right-0 sm:hidden "
+                className="absolute top-7 right-0 sm:hidden "
               >
                 <img src={CrossIcon} alt="Close sidebar" className="w-6 h-6" />
               </button>

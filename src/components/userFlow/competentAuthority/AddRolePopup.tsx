@@ -130,7 +130,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose }) => {
   return (
     <>
       {!isSuccessPopupOpen && (
-        <div className="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 popup-container">
+        <div className="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-200 popup-container">
           <div className="bg-white rounded-lg p-8 w-[90%] max-w-[500px] relative">
             <div className="flex justify-between items-center">
               <h1 className="text-xl font-semibold">Add new role</h1>
@@ -179,7 +179,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose }) => {
                 Cancel
               </button>
               <button
-                className="bg-[#1C468E] rounded-xl w-[45%] md:w-[224px] px-4 md:px-10 py-3 text-white font-semibold text-sm hover:bg-blue-800 transition-colors duration-200"
+                className="bg-[#1C468E] rounded-xl w-[45%] md:w-[224px] px-4 md:px-10 py-3 text-white font-semibold text-sm  transition-colors duration-200"
                 onClick={handleSave}
               >
                 Save
