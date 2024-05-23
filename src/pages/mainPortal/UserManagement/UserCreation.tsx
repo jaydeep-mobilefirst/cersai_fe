@@ -404,7 +404,7 @@ const UserCreation = () => {
   };
 
   return (
-    <div className="relative xl:ml-[40px] pr-3">
+    <div className="relative xl:ml-[20px] pr-3">
       <div className="mt-6">
         <UmTabs />
       </div>

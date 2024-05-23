@@ -240,7 +240,9 @@ const MainPortalSidebar = ({ layout }: Props) => {
               </div>
               <button
                 onClick={toggleSidebar}
-                className="absolute top-7 right-0 sm:hidden "
+                className={`absolute ${
+                  collapsed ? "top-[calc(100% + 1rem)] m-1 left-5" : "top-7"
+                } right-0 sm:hidden`}
               >
                 <img src={CrossIcon} alt="Close sidebar" className="w-6 h-6" />
               </button>

@@ -127,7 +127,7 @@ const UserCreation = () => {
               <img
                 src={edit}
                 alt="Edit"
-                className="cursor-pointer"
+                className="cursor-pointer img-full-width "
                 onClick={() => handleEditClick(value)}
               />
             </div>
@@ -161,7 +161,7 @@ const UserCreation = () => {
   };
 
   return (
-    <div className="relative xl:ml-[40px] pr-3">
+    <div className="relative xl:ml-[20px] pr-3">
       <div className="mt-6">
         <UmTabs />
       </div>
