@@ -70,7 +70,7 @@ const ProfileNodalDetails = (props: Props) => {
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
-    const noError = await handleValidationChecks(formFields, false);
+    const noError = await handleValidationChecks(formFields);
     if (noError) {
       axios
         .patch(
