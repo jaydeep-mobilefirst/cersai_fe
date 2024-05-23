@@ -49,19 +49,19 @@ const ProfileRegulatorDetails = (props: Props) => {
     if (noError) {
       axios
         .patch(
-          `${bffUrl}/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+          `${bffUrl}/regulator/${sessionStorage.getItem("entityUniqueId")}`,
           {
             formData: formData,
           }
         )
         .then((response) => {
-          console.log(response, "response");
+          // console.log(response, "response");
           Swal.fire({
             icon: "success",
             text: "Regulator Detail  update  successfully ",
             confirmButtonText: "Ok",
           });
-          Navigate("/dt/profile?current=documents");
+          Navigate("/rg/profile?current=nodal");
         })
         .catch((err) => {
           Swal.fire({

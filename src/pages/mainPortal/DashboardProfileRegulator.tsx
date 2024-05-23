@@ -4,7 +4,8 @@ import { useSearchParams } from "react-router-dom";
 
 import ProfileResponsiveTabs from "../../components/userFlow/mainPortal-Regulator/ProfileResponsiveTabs";
 import ProfileNodalDetails from "./Edit-Profile-Regulator/ProfileNodalDetail";
-import ProfileRegulatorDetails from "./Edit Profile/ProfileRegulatorDetails";
+// import ProfileRegulatorDetails from "./Edit Profile/ProfileRegulatorDetails";
+import ProfileRegulatorDetails from "./Edit-Profile-Regulator/ProfileRegulatorDetail";
 import ProfileUploadDocuments from "./Edit-Profile-Regulator/ProfileUploadDocuments";
 
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
@@ -24,16 +25,20 @@ const DashboardProfileRegulator = (props: Props) => {
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
     axios
-      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+      .get(`${bffUrl}/registration/field-data/2?status=addToProfile`)
       .then(async (response) => {
+        // console.log(response, "responsive");
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/${entityUniqueId}`
+            let regulatorData = await axios.get(
+              `${bffUrl}/regulator/${entityUniqueId}`
             );
-            dtData =
-              depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
+            // console.log(
+            //   regulatorData?.data?.data?.regulator?.regulatorFormData,
+            //   "regulator"
+            // );
+            dtData = regulatorData?.data?.data?.regulator?.regulatorFormData;
           } catch (error) {
             console.log("Error");
           }
