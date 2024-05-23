@@ -136,9 +136,9 @@ const NodalDetailsDesignated = () => {
             <div className="flex items-center">
               <button
                 type="submit"
-                className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold"
+                className="bg-[#1c468e] rounded-xl p-3 text-white text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold"
               >
-                {loader ? <LoaderSpin /> : "Save And Continue"}
+                {loader ? <LoaderSpin /> : "Save & Review"}
               </button>
             </div>
           </div>

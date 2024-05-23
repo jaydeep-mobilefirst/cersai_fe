@@ -1,10 +1,10 @@
-import PhoneIcon from "../../assets/images/phoneicon.svg";
-import Sms from "../../assets/images/sms.svg";
-import Download from "../../assets/images/download.svg";
-import mobile from "../../assets/images/mobile.svg";
-import link from "../../assets/images/link.svg";
-import shieldSearch from "../../assets/images/shieldSearch.svg";
-import global from "../../assets/images/global.svg";
+import PhoneIcon from "../../assets/images/new_images/call-calling.png";
+import Sms from "../../assets/images/new_images/sms.png";
+import Download from "../../assets/images/new_images/document-text.png";
+import mobile from "../../assets/images/new_images/mobile.png";
+import link from "../../assets/images/new_images/link-2.png";
+import shieldSearch from "../../assets/images/new_images/shield-search.png";
+import global from "../../assets/images/new_images/global.png";
 
 export const languageData = ["English", "हिन्दी"];
 

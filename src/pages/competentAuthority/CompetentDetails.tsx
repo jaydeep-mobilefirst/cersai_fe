@@ -119,9 +119,9 @@ const ComponentDetails: React.FC = () => {
                   type="submit"
                   disabled={loader}
                   onClick={onSubmit}
-                  className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                  className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
-                  {loader ? <LoaderSpin/> : "Save And Continue"}
+                  {loader ? <LoaderSpin/> : "Save & Continue"}
                 </button>
             </div>
           </div>

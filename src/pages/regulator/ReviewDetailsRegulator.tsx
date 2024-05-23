@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
-import download from "../../assets/images/arrow-down.svg";
+import download from "../../assets/images/new_images/arrowDown.png";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import axios from "axios";
 import LoaderSpin from "../../components/LoaderSpin";
@@ -140,11 +140,11 @@ const ReviewDetailsRegulator = () => {
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
                   <div className="mb-[16px]" key={index}>
-                    <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px] text-gilroy-bold">
+                    <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px] text-gilroy-bold">
                       <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
                         {section?.sectionName}
                       </p>
-                      <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                      <button className="text-[#1c468e] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
                         {section?.sectionName !== "Verification" ? (
                           <Link
                             to={
@@ -224,16 +224,16 @@ const ReviewDetailsRegulator = () => {
               <div className="justify-center align-center">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 accent-[#385723]"
+                  className="h-4 w-4 accent-[#1c468e]"
                   checked={isChecked}
                   onChange={handleCheckboxChange}
                   placeholder="ischecked"
                 />
               </div>
               <div className="leading-[24px] ml-4">
-                I here by declare that all information provided is best of my
-                knowledge
-              </div>
+                  I provide my consent to &nbsp;
+              <span className="text-[#1c468e] underline">BUDs act 2019</span>
+            </div>
             </div>
           </div>
         </main>
@@ -248,12 +248,12 @@ const ReviewDetailsRegulator = () => {
               Back
             </button>
           </div>
-          <div className="flex mr-5">
+          <div className="flex mr-9">
             <div>
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className="w-auto md:w-[208px] gap-[8px] flex rounded-[12px] text-[#52AE32] border border-[#52AE32] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className="w-auto md:w-[208px] md:h-[48px] gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px] text-gilroy-semibold"
               >
                 <img src={download} alt="download" className="mr-2" />
                 {isDownloading ? "Downloading..." : "Download PDF"}
@@ -263,8 +263,8 @@ const ReviewDetailsRegulator = () => {
               <button
                 onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked || loader}
-                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${
-                  isChecked ? "bg-[#385723]" : "bg-[#a3cf85]"
+                className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] rounded-[12px] md:w-[109px] md:h-[48px] text-gilroy-semibold ${
+                  isChecked ? "bg-[#1c468e]" : "bg-[#1c468e] opacity-50"
                 }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}

@@ -44,7 +44,7 @@ const EntityDetails: React.FC = () => {
 
   return (
     <>
-      <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div>
+      <div className="border-[#E6E6E6] border-[1px] -mt-[2px]"></div>
       {/* <div className="flex flex-col p-6 w-full"> */}
       <form
         // className="flex flex-col justify-between h-full"
@@ -57,7 +57,7 @@ const EntityDetails: React.FC = () => {
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
-            <h1 className="text-2xl font-bold mb-6">Entity Details</h1>
+            <h1 className="text-2xl text-gilroy-bold mb-6">Entity Details</h1>
             <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
           </div>
         </div>
@@ -90,7 +90,7 @@ const EntityDetails: React.FC = () => {
                 />
               </svg>
               <button 
-              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
+              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
                 Back
               </button>
             </div>
@@ -99,9 +99,9 @@ const EntityDetails: React.FC = () => {
                   type="submit"
                   disabled={loader}
                   onClick={onSubmit}
-                  className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                  className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
-                  {loader ? <LoaderSpin/> : "Save And Continue"}
+                  {loader ? <LoaderSpin/> : "Save & Continue"}
                 </button>
             </div>
           </div>
