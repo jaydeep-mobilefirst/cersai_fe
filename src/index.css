@@ -43,15 +43,23 @@
 }
 
 .buds-background-image {
-  background-image: url("./assets/images/bg.svg");
+  background-image: url("./assets/images/new_images/bg.svg"), url("./assets/images/new_images/Vector.svg");
+  background-size: auto, auto;
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, center;
+  background-position: right bottom, left bottom;
+}
+
+.query-bg-image {
+  background-image: url("./assets/images/new_images/footer_vector.png");
   background-size: auto;
   background-repeat: no-repeat;
   background-position: center;
   background-position: right bottom;
 }
 
-.query-bg-image {
-  background-image: url("./assets/images/landingpagebg2.svg");
+.about-buds-background {
+  background-image: url("./assets/images/new_images/About_Buds_Vector.png");
   background-size: auto;
   background-repeat: no-repeat;
   background-position: center;

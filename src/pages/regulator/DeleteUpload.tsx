@@ -52,10 +52,10 @@ const DeleteUpload: React.FC<DeleteUploadProps> = ({
                 alt="Delete"
                 className="w-12 h-12 mx-auto mb-2"
               />
-              <p className="text-gray-700 mb-2 text-lg">
+              <p className="text-gilroy-medium text-gray-700 mb-2 text-lg">
                 Are You Sure To Delete
               </p>
-              <p className="text-green-700 mb-4 text-lg">
+              <p className="text-[#1c468e] text-gilroy-medium mb-4 text-lg">
                 {file ? file.name : "No Document uploaded"}?
               </p>
             </div>
@@ -63,13 +63,13 @@ const DeleteUpload: React.FC<DeleteUploadProps> = ({
             <div className="flex justify-center">
               <button
                 onClick={toggleDeletePopup}
-                className="bg-transparent border-green-700 border w-[45%] md:w-[224px] rounded-xl px-4 md:px-10 py-3 text-[#385723] font-semibold text-sm mr-4 mb-2 md:mb-0"
+                className="bg-transparent border-[#1c468e] border w-[45%] md:w-[224px] rounded-xl px-4 md:px-10 py-3 text-[#1c468e] font-semibold text-sm mr-4 mb-2 md:mb-0"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteFile}
-                className="bg-green-900 rounded-xl w-[45%] md:w-[224px] px-4 md:px-10 py-3 text-white font-semibold text-sm"
+                className="bg-[#1c468e] rounded-xl w-[45%] md:w-[224px] px-4 md:px-10 py-3 text-white font-semibold text-sm"
               >
                 Okay
               </button>

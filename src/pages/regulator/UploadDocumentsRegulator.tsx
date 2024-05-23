@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import folderOpen from "../../assets/images/folder-open.svg";
+import folderOpen from "../../assets/images/new_images/FolderOpen.png";
 import trashIcon from "../../assets/images/trash.svg";
 
 import { useScreenWidth } from "../../utils/screenSize";
@@ -9,6 +9,7 @@ import UploadIcon from "../../assets/images/UploadIcon.png";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
+import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 
 type Props = {};
 
@@ -16,6 +17,9 @@ const UploadDocumentsRegulator = (props: Props) => {
   const { documentData, allFormData} = useDepositTakerRegistrationStore(
     (state) => state
   );
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Upload Documents"
+  )?.id
   const [params, setParams] = useSearchParams();
   const { onFileChange, handleDocumentValidations } = useContext(FormHandlerContext);
   const screenWidth = useScreenWidth();
@@ -100,66 +104,14 @@ const UploadDocumentsRegulator = (props: Props) => {
             <div className="border-[#E6E6E6] border-[1px] lg:mt-20 w-full"></div>
             <div className=" p-4 lg:p-[48px]">
               <h1 className="text-2xl font-bold mb-6">Upload Documents</h1>
-              {documentData && documentData?.map(
-                (data: any, idx: number) => {
-                  return (
-                    <div key={idx}>
-                      <div className="rounded-xl bg-[#9696961A] flex flex-col md:flex-row justify-between items-center p-4  text-gilroy-bold mb-4">
-                        <div className="flex flex-row items-center space-x-2 w-full">
-                          <div className="mt-2">
-                            <img
-                              src={folderOpen}
-                              alt="Folder Open Icon"
-                              className="bg-[#EEF7EB] rounded p-1 text-white cursor-pointer"
-                              onClick={() =>{toggleUploadPopup(); setFieldData(data)}}
-                            />
-                          </div>
-                          <div className="flex flex-col">
-                            <h1 className="text-xs md:text-sm font-normal text-gilroy-medium text-gray-900">
-                              {data?.documentName}
-                              {data?.required && <span className="text-red-500">*</span>}
-                            </h1>
-                            <p className="text-xs md:text-base font-normal text-gilroy-medium text-gray-400">
-                              {data?.fileName !== "" && data?.fileName !== undefined ? data?.fileName : "No Document uploaded"}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex flex-row mt-1 justify-end w-full md:w-auto">
-                          {data?.file && (
-                            <div className="bg-white mt-1 mr-1 flex justify-center items-center h-10 w-10 rounded">
-                              <img
-                                src={trashIcon}
-                                alt="Delete"
-                                className="rounded h-5 cursor-pointer"
-                                onClick={() => { toggleDeletePopup(); setFieldData(data)}}
-                              />
-                            </div>
-                          )}
-                          <div className="mt-1">
-                            <button
-                              type="button"
-                              className="bg-green-800 rounded-lg p-3 text-white flex justify-center items-center cursor-pointer mr-2 h-10"
-                              onClick={() =>{toggleUploadPopup(); setFieldData(data)}}
-                            >
-                              {data?.file ? (
-                                "View"
-                              ) : (
-                                <img
-                                  src={UploadIcon}
-                                  alt="Upload"
-                                  className="w-5"
-                                />
-                              )}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    <span className="text-red-500">{data?.error}</span>
-                    </div>
-                  );
-                }
-              )}
-
+              <DynamicFields
+              allFormData={allFormData}
+              documentFields={documentData}
+              toggleUploadPopup={toggleUploadPopup}
+              setFieldData={setFieldData}
+              sectionId={sectionId}
+              onFileChange={onFileChange}
+            />
             </div>
           </div>
 
@@ -200,9 +152,9 @@ const UploadDocumentsRegulator = (props: Props) => {
                 <button
                   type="submit"
                   onClick={submit}
-                  className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                  className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
-                  Save and continue
+                  Save & Continue
                 </button>
               </div>
             </div>

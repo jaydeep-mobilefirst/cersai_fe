@@ -18,7 +18,7 @@ interface HeadCompProps {
 const HeadComp: React.FC<HeadCompProps> = ({ isMenuOpen, toggleMenu }) => {
   return (
     <div className="flex flex-row ">
-      <div className="bg-[#EEF7EB] pl-[29px] pt-[12px] h-[76px] w-full md:w-[349px] flex items-center justify-between">
+      <div className="bg-[] pl-[29px] pt-[12px] h-[76px] w-full md:w-[349px] flex items-center justify-between">
         <img src={Logo} alt="logo" className="rounded-full h-[52px] w-[52px]" />
 
         <div className="lg:hidden px-1" onClick={toggleMenu}>

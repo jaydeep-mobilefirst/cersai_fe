@@ -193,8 +193,8 @@ const AuthButton: React.FC<AuthButtonProps> = ({ buttontext, onClick }) => {
       <button
         className={`w-full px-[24px] h-10 border rounded-[8px] ${
           buttontext === "Register"
-            ? "bg-white text-[#338218] border-[#338218]"
-            : "bg-[#338218] text-white"
+            ? "bg-white text-[#1c468e] border-[#1c468e]"
+            : "bg-[#1c468e] text-white"
         } rounded-lg justify-center items-center inline-flex`}
         onClick={onClick} // Add onClick handler
       >

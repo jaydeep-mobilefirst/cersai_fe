@@ -8,15 +8,14 @@ import React, {
 import "./custom_css/upload_button.css";
 import trash from "../../../assets/images/trash.svg";
 import folderOpen from "../../../assets/images/folder-open-light.svg";
-import UploadButtonFolderSvg from "./svgs/UploadButtonFolderSvg";
 import UploadButtonSvg1 from "./svgs/UploadButtonSvg1";
 import { UploadButtonTexts } from "../../../utils/hardText/formComponents";
 import Button from "../common/Button";
 import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import { getMimeTypeFromArrayBuffer } from "../../../utils/commonFunction";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import DeleteFileButton from "../common/DeleteFileButton";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onFileUpload?: (file: File | null) => void;
   deleteFile?: () => void;
@@ -38,7 +37,6 @@ const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
-  const navigate = useNavigate();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setResetInput(false)
@@ -87,7 +85,6 @@ const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
     
   }
 
-  
   return (
     <div>
       <button
@@ -119,17 +116,19 @@ const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
           {props?.fileName && props?.fileName?.trim() !== "" ? (
             <span className="flex flex-row justify-between">
               {props?.deleteFile && (
+                <>
                 <div
-                  className="p-1 bg-white flex align-middle mr-4 rounded-lg"
+                  className=" bg-white flex align-middle mr-4 rounded-lg"
                   role="button"
                   onClick={() => {
                     if (props.deleteFile) {
                       props.deleteFile();
                     }
                   }}
-                >
-                  <img src={trash} height={40} width={40} />
+                  >
+                  <img src={trash} height={50} width={50} className="px-2" />
                 </div>
+                  </>
               )}
               <Button
                 onClick={handleOnClikcView}

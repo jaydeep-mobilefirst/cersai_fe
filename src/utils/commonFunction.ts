@@ -26,6 +26,8 @@ async function getMimeTypeFromArrayBuffer(arrayBuffer : any) {
       const signature = signatureArr.join('').toUpperCase()
         // 25504446 - pdf
         // 3C737667 - svg
+        console.log({signature});
+        
       switch (signature) {
         case '89504E47':
           return 'image/png'
@@ -40,6 +42,8 @@ async function getMimeTypeFromArrayBuffer(arrayBuffer : any) {
           return 'application/zip'
         case '3C737667':
           return 'image/svg+xml'
+        case 'D0CF11E0':
+          return 'application/msword'
         default:
           return null
       }
