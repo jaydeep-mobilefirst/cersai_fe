@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import folderOpen from "../../assets/images/folder-open.svg";
+import folderOpen from "../../assets/images/new_images/FolderOpen.png";
 import trashIcon from "../../assets/images/trash.svg";
 
 import { useScreenWidth } from "../../utils/screenSize";
@@ -104,13 +104,13 @@ const UploadDocumentsRegulator = (props: Props) => {
                 (data: any, idx: number) => {
                   return (
                     <div key={idx}>
-                      <div className="rounded-xl bg-[#9696961A] flex flex-col md:flex-row justify-between items-center p-4  text-gilroy-bold mb-4">
+                      <div className="rounded-xl bg-[#E7F0FF] flex flex-col md:flex-row justify-between items-center p-4  text-gilroy-bold mb-4">
                         <div className="flex flex-row items-center space-x-2 w-full">
                           <div className="mt-2">
                             <img
                               src={folderOpen}
                               alt="Folder Open Icon"
-                              className="bg-[#EEF7EB] rounded p-1 text-white cursor-pointer"
+                              className="text-white cursor-pointer"
                               onClick={() =>{toggleUploadPopup(); setFieldData(data)}}
                             />
                           </div>
@@ -138,7 +138,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                           <div className="mt-1">
                             <button
                               type="button"
-                              className="bg-green-800 rounded-lg p-3 text-white flex justify-center items-center cursor-pointer mr-2 h-10"
+                              className="bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer mr-2 h-10"
                               onClick={() =>{toggleUploadPopup(); setFieldData(data)}}
                             >
                               {data?.file ? (
@@ -200,9 +200,9 @@ const UploadDocumentsRegulator = (props: Props) => {
                 <button
                   type="submit"
                   onClick={submit}
-                  className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                  className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
-                  Save and continue
+                  Save & Continue
                 </button>
               </div>
             </div>

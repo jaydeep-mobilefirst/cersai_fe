@@ -47,7 +47,7 @@ const DynamicFields = ({
                 <div>
                   <label
                     htmlFor={field?.label}
-                    className="block text-gray-700 text-sm font-semibold mb-2"
+                    className="block text-gray-700 text-sm text-gilroy-medium mb-2"
                   >
                     {field?.label}
                     <RequiredStar allFormData={allFormData} field={field} />
@@ -136,7 +136,7 @@ const DynamicFields = ({
                 <div>
                   <label
                     htmlFor={field?.label}
-                    className="block text-gray-700 text-sm font-semibold mb-2"
+                    className="block text-gray-700 text-sm text-gilroy-medium mb-2"
                   >
                     {field?.label}
                     <RequiredStar allFormData={allFormData} field={field} />
@@ -160,7 +160,7 @@ const DynamicFields = ({
                 <div className="flex flex-col">
                   <label
                     htmlFor={field?.label}
-                    className="block text-gray-700 text-sm font-semibold mb-2"
+                    className="block text-gray-700 text-sm text-gilroy-medium mb-2"
                   >
                     {field?.label}
                     <RequiredStar allFormData={allFormData} field={field} />
@@ -198,7 +198,7 @@ const DynamicFields = ({
                   <div className="flex flex-col">
                     <label
                       htmlFor={fileField?.documentName}
-                      className="block text-gray-700 text-sm font-semibold mb-2"
+                      className="block text-gray-700 text-sm text-gilroy-medium mb-2"
                     >
                       {fileField?.documentName}
                       {fileField?.required && (

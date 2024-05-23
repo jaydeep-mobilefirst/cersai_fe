@@ -210,8 +210,8 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
                 key={item.id}
                 className={`mt-1 lg:mt-0 md:mb-[18px] md:w-[244px] h-14 pl-4 pr-[18px] rounded-xl flex-col justify-center items-start gap-2 inline-flex hover:cursor-pointer ${
                   selectedRadio.id === item.id
-                    ? "bg-[#EEF7EB] text-[#385723] border-[#385723] mr-2"
-                    : "bg-white text-black border border-gray-300 mr-2"
+                    ? "bg-[#E7F0FF] text-[#1C468E] border-[#385723] text-gilroy-medium mr-2"
+                    : "bg-white text-[#666666] border border-gray-300 mr-2 text-gilroy-medium "
                 }`}
               >
                 <div className="flex-row justify-between items-center  md:gap-4 inline-flex hover:cursor-pointer">
@@ -222,7 +222,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
                         name="entity"
                         checked={selectedRadio?.id === item?.id}
                         onChange={() => setSelectedRadio(item)}
-                        className="mr-2 hover:cursor-pointer"
+                        className="mr-2 accent-color:#1c468e hover:cursor-pointer"
                       />
                       {item?.entityName}
                     </label>
@@ -233,14 +233,14 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
           <div className="mt-[22px] text-[20px] modal-footer flex justify-around md:flex-row md:justify-between">
             <button
               type="button"
-              className="text-[#385723] Rectangle151 w-[35%] md:w-[244px] h-14 rounded-xl border border-[#385723]"
+              className="text-[#1C468E] Rectangle151 w-[35%] md:w-[244px] h-14 rounded-xl border border-[#1C468E]"
               onClick={closeModal}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="text-white Rectangle151 w-[35%] md:w-[244px] h-14 rounded-xl border bg-[#385723]"
+              className="text-white Rectangle151 w-[35%] md:w-[244px] h-14 rounded-xl border bg-[#1C468E]"
             >
               Select
             </button>

@@ -20,7 +20,7 @@ const Navbar = () => {
       </div>
 
       {/* Desktop Menu Items */}
-      <nav className="hidden w-full lg:flex h-[48px] bg-gradient-to-r from-[#54AD47] to-[#338118]">
+      <nav className="hidden w-full lg:flex h-[48px] bg-[#1c468e]">
         <div className="w-full text-[#ffffff] flex items-center justify-center">
           <ul className="flex lg:flex-row items-center">
             {navbar.map((menuItem, index) => (
@@ -34,7 +34,7 @@ const Navbar = () => {
       <nav
         className={`${
           showMenu ? "flex" : "hidden"
-        } lg:hidden w-1/8 h-screen bg-gradient-to-r from-[#54AD47] to-[#338118] fixed top-0 left-0 z-20`}
+        } lg:hidden w-1/8 h-screen bg-gradient-to-r from-[#54AD47] to-[#0b2551] fixed top-0 left-0 z-20`}
       >
         <ul className="flex flex-col h-full text-white">
           {navbar.map((menuItem, index) => (

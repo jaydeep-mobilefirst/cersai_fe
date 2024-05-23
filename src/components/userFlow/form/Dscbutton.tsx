@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import "./custom_css/upload_button2.css";
-import UploadButtonFolderSvg from "../../../assets/images/uploadFile-2.svg";
+import UploadButtonFolderSvg from "../../../assets/images/new_images/uploadFile-2.png";
 import UploadButtonSvg1 from "../../../assets/images/UploadIcon.png";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -25,6 +25,34 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
     const handleButtonClick = () => {
       fileInputRef.current?.click();
     };
+
+    const trimFilename=(filename: string | undefined)=> {
+      if (!filename || typeof filename !== 'string' || 20 <= 0) {
+        return '';
+      }
+    
+      const dotIndex = filename.lastIndexOf('.');
+      if (dotIndex === -1 || dotIndex === 0) {
+        // No extension found or file starts with a dot
+        return filename.length > 20 ? filename.slice(0, 20) : filename;
+      }
+    
+      const namePart = filename.slice(0, dotIndex);
+      const extensionPart = filename.slice(dotIndex);
+    
+      if (filename.length <= 20) {
+        return filename;
+      }
+    
+      const maxNameLength = 20 - extensionPart.length;
+      if (maxNameLength <= 0) {
+        // If maxLength is too short to even include the extension, return the truncated part of the extension
+        return extensionPart.slice(0, 20);
+      }
+    
+      return namePart.slice(0, maxNameLength) + extensionPart;
+    }
+    
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
@@ -52,12 +80,12 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
           onClick={handleButtonClick}
         >
           <div className="flex items-center justify-between gap-2 w-full">
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center pr-2">
               <div>
                 <img
                   src={UploadButtonFolderSvg}
                   alt="UploadButtonFolderSvg "
-                  className="mx-2"
+                  className="pr-3"
                 />
               </div>
               <div className="">
@@ -67,7 +95,7 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
                   </h6>
                   <p className="text-[#1D1D1B] text-base font-normal text-gilroy-regular ">
                     {fileName !== "" && fileName !== undefined ? (
-                      <span className="text-sm">{fileName}</span>
+                      <span className="text-sm">{trimFilename(fileName)}</span>
                     ) : (
                       "Document"
                     )}
@@ -80,7 +108,7 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
                 <button
                   type="button"
                   className={`text-white Rectangle151 w-10 h-10 rounded-md ${
-                    fileSelected ? "bg-[#1C468E]" : "bg-gray-600"
+                    fileSelected ? "bg-[#1C468E]" : "bg-[#1C468E]"
                   }  flex justify-center items-center `}
                 >
                   <img
