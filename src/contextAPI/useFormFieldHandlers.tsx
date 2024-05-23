@@ -53,6 +53,8 @@ const FormHandlerProviders = ({children}: Props) => {
   }
 
   const onFileChange = async (event : any, field : any, fieldType : string, entityID ?: string) : Promise<void> => {       
+    console.log({event, field, fieldType});
+    
     switch (fieldType) {
       case 'DSC':
         const file = event;
