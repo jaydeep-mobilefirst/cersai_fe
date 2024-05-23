@@ -12,11 +12,11 @@
 }
 
 .upload-button.no-file {
-  background-color: #9696961a; /* Gray background when no file is selected */
+  background-color: #E7F0FF; /* Gray background when no file is selected */
 }
 
 .upload-button.file-selected {
-  background-color: #EEF7EB; /* Change to your selected color when a file is selected */
+  background-color: #E7F0FF; /* Change to your selected color when a file is selected */
 }
 
 @media (max-width: 600px) {

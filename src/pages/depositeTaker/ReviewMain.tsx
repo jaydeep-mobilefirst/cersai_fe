@@ -131,16 +131,16 @@ const ReviewMain = () => {
         <header className="lg:p-[38px] border-b border-gray-200"></header>
         <main className="flex-grow p-8 overflow-auto custom-scrollbar">
           <div id="reviewContent">
-            <h1 className="text-2xl font-bold mb-6">Review</h1>
+            <h1 className="text-2xl font-bold mb-6 text-gilroy-bold">Review</h1>
             {allFormData &&
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
                   <div className="mb-[16px]" key={index}>
                     <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px] text-gilroy-bold">
-                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap text-gilroy-bold" >
                         {section?.sectionName}
                       </p>
-                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] text-gilroy-bold">
                         {section?.sectionName !== "Verification" ? (
                           <Link
                             to={
@@ -159,7 +159,7 @@ const ReviewMain = () => {
                     </div>
 
                     <div className="shadow-sm p-5 rounded-md ">
-                      <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
+                      <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px] text-gilroy-medium">
                         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                           {allFormData?.formFields?.form_fields
                             ?.filter((f: any) => f?.sectionId === section?.id)
@@ -230,7 +230,7 @@ const ReviewMain = () => {
                   placeholder="ischecked"
                 />
               </div>
-              <div className="leading-[24px] ml-4">
+              <div className="leading-[24px] ml-4 text-gilroy-medium">
                 I here by declare that all information provided is best of my
                 knowledge
               </div>
@@ -245,12 +245,12 @@ const ReviewMain = () => {
               Back
             </button>
           </div>
-          <div className="flex mr-5">
+          <div className="flex mr-9">
             <div>
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className="w-auto md:w-[208px] gap-[8px] flex rounded-[12px] text-[#1C468E] border border-[#1C468E] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className="w-auto md:w-[208px] md:h-[48px] gap-[8px] text-gilroy-semibold flex rounded-[12px] text-[#1C468E] border border-[#1C468E] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
                 <img src={download} alt="download" className="mr-2" />
                 {isDownloading ? "Downloading..." : "Download PDF"}
@@ -260,8 +260,8 @@ const ReviewMain = () => {
               <button
                 onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked || loader}
-                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${
-                  isChecked ? "bg-[#1C468E]" : "bg-[#e7f0ff]"
+                className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] rounded-[12px] text-gilroy-semibold ${
+                  isChecked ? "bg-[#1C468E]" : "bg-[#1C468E] opacity-50"
                 }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}

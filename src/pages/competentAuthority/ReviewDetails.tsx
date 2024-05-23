@@ -200,11 +200,11 @@ const ReviewDetails = () => {
               Back
             </button>
           </div>
-          <div className="flex mr-5">
+          <div className="flex mr-7">
             <div>
               <button
                 onClick={downloadPDF}
-                className="w-auto md:w-[208px] gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className="w-auto md:w-[208px] md:h-[48px] text-gilroy-semibold gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
                 <img src={download} alt="download" className="mr-2" />
                 {isDownloading ? "Downloading..." : "Download PDF"}
@@ -214,7 +214,7 @@ const ReviewDetails = () => {
               <button
                 type="submit"
                 onClick={submit} // Assuming this action should be tied to the Submit button
-                className="ml-[16px] w-auto md:w-[208px] rounded-[12px] bg-[#1c468e] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className="ml-[16px] w-auto md:w-[109px] md:h-[48px] text-gilroy-semibold rounded-[12px] bg-[#1c468e] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
               {loader ? <LoaderSpin /> : "Submit"}
               </button>

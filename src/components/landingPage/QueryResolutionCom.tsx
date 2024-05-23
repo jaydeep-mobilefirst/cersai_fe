@@ -34,7 +34,7 @@ const QueryResolutionComp = () => {
           </p>
         </div>
         <div className="my-6 md:my-0 w-auto md:w-auto h-10 px-4 py-2 bg-[#1C468E] rounded-lg justify-center items-center">
-          <button className="text-white text-base font-Gilroy-SemiBold leading-normal">
+          <button className="text-white text-base text-Gilroy-SemiBold leading-normal">
             {queryResolutionComp[4].button}
           </button>
         </div>

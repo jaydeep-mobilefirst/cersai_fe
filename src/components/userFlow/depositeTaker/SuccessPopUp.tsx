@@ -59,7 +59,7 @@ interface SuccessPopupProps {
             </p>
           </div>
           <div>
-            <h2 className="text-[#666666] text-base text-center text-gilroy-medium my-2">
+            <h2 className="text-[#666666] text-base text-center font-mulish my-2">
               {
                 para2 && para2
               }
@@ -70,7 +70,7 @@ interface SuccessPopupProps {
           <div className="flex justify-center  items-center">
             <button
               onClick={closePopup}
-              className="bg-[#1C468E] rounded-xl w-[45%] md:w-[224px] px-4 md:px-10 py-3 text-white font-semibold text-sm"
+              className="bg-[#1C468E] rounded-xl w-[45%] md:w-[224px] px-4 md:px-10 py-3 text-white text-gilroy-medium text-sm"
             >
               Okay
             </button>

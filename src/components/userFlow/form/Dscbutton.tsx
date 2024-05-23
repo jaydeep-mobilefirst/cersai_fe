@@ -26,6 +26,34 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
       fileInputRef.current?.click();
     };
 
+    const trimFilename=(filename: string | undefined)=> {
+      if (!filename || typeof filename !== 'string' || 20 <= 0) {
+        return '';
+      }
+    
+      const dotIndex = filename.lastIndexOf('.');
+      if (dotIndex === -1 || dotIndex === 0) {
+        // No extension found or file starts with a dot
+        return filename.length > 20 ? filename.slice(0, 20) : filename;
+      }
+    
+      const namePart = filename.slice(0, dotIndex);
+      const extensionPart = filename.slice(dotIndex);
+    
+      if (filename.length <= 20) {
+        return filename;
+      }
+    
+      const maxNameLength = 20 - extensionPart.length;
+      if (maxNameLength <= 0) {
+        // If maxLength is too short to even include the extension, return the truncated part of the extension
+        return extensionPart.slice(0, 20);
+      }
+    
+      return namePart.slice(0, maxNameLength) + extensionPart;
+    }
+    
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (file) {
@@ -67,7 +95,7 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
                   </h6>
                   <p className="text-[#1D1D1B] text-base font-normal text-gilroy-regular ">
                     {fileName !== "" && fileName !== undefined ? (
-                      <span className="text-sm">{fileName}</span>
+                      <span className="text-sm">{trimFilename(fileName)}</span>
                     ) : (
                       "Document"
                     )}

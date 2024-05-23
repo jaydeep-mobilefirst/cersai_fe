@@ -248,12 +248,12 @@ const ReviewDetailsRegulator = () => {
               Back
             </button>
           </div>
-          <div className="flex mr-5">
+          <div className="flex mr-9">
             <div>
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className="w-auto md:w-[208px] gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className="w-auto md:w-[208px] md:h-[48px] gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px] text-gilroy-semibold"
               >
                 <img src={download} alt="download" className="mr-2" />
                 {isDownloading ? "Downloading..." : "Download PDF"}
@@ -263,8 +263,8 @@ const ReviewDetailsRegulator = () => {
               <button
                 onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked || loader}
-                className={`ml-[16px] w-auto md:w-[208px] rounded-[12px] ${
-                  isChecked ? "bg-[#1c468e]" : "bg-[#E7F0FF]"
+                className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] rounded-[12px] md:w-[109px] md:h-[48px] text-gilroy-semibold ${
+                  isChecked ? "bg-[#1c468e]" : "bg-[#1c468e] opacity-50"
                 }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}

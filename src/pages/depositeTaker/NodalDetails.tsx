@@ -80,7 +80,7 @@ const NodalDetails = (props: Props) => {
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
-            <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
+            <h1 className="text-2xl text-gilroy-bold mb-6">Nodal Details</h1>
             <DynamicFields
               allFormData={allFormData}
               formFields={formFields}
@@ -124,7 +124,7 @@ const NodalDetails = (props: Props) => {
                   strokeLinejoin="round"
                 />
               </svg>
-              <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
+              <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
                 Back
               </button>
             </div>
@@ -133,7 +133,7 @@ const NodalDetails = (props: Props) => {
                 type="submit"
                 disabled={loader}
                 onClick={onSubmit}
-                className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
               >
                 {loader ? <LoaderSpin /> : "Save & Review"}
               </button>

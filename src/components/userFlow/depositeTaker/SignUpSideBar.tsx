@@ -92,8 +92,8 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
                   key={item.id}
                   className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#1C468E] rounded-lg justify-between items-center inline-flex ${
                     item.path === page
-                      ? "bg-[#1C468E] text-white"
-                      : "bg-white text-black"
+                      ? "bg-[#1C468E] text-white text-gilroy-medium"
+                      : "bg-white text-black text-gilroy-medium"
                   }`}
                 >
                   <div className="w-[234px] h-10 justify-start items-center gap-0.5 inline-flex">
@@ -117,7 +117,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
                       />
                     )}
 
-                    <p className="ml-[10px]  text-base font-normal leading-tight">
+                    <p className="ml-[10px]  text-base font-normal leading-tight text-gilroy-medium">
                       {item.description}
                     </p>
                   </div>

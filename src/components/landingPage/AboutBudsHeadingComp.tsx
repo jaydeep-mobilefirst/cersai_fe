@@ -38,7 +38,7 @@ const AboutBudsHeadingComp = () => {
               </div>
               <p className="mt-2 md:mt-0 text-base text-gilroy-medium text-black font-normal leading-6">
                 {item.text}
-                <span className="text-[#1C468E] underline cursor-pointer">
+                <span className="text-[#1C468E] text-gilroy-medium underline cursor-pointer">
                   {" "}
                   www.ckycindia.in{" "}
                 </span>
