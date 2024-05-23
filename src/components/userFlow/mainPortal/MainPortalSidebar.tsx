@@ -502,7 +502,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
             <li className="relative border-b border-[#E6E6E6] p-4">
               <img src={Logo} alt="logo" className="max-h-[52px]" />
               <div
-                className={`absolute  ${
+                className={`absolute hidden sm:hidden md:block lg:block   ${
                   collapsed
                     ? "md:-right-[-0.1rem] right-2"
                     : "md:-right-4 right-[-0.75rem]"

@@ -72,7 +72,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose }) => {
             </div>
             <div className="flex justify-center space-x-4">
               <button
-                className="bg-transparent border border-blue-700 w-[45%] md:w-[224px] rounded-xl px-4 md:px-10 py-3 text-blue-700 font-semibold text-sm hover:bg-blue-700 hover:text-white transition-colors duration-200"
+                className="bg-transparent border border-blue-700 w-[45%] md:w-[224px] rounded-xl px-4 md:px-10 py-3 text-blue-700 font-semibold text-sm  transition-colors duration-200"
                 onClick={onClose}
               >
                 Cancel
