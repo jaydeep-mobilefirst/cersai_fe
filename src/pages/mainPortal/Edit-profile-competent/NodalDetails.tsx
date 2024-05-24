@@ -70,11 +70,13 @@ const NodalDetails = (props: Props) => {
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
-    const noError = await handleValidationChecks(formFields);
+    const noError = await handleValidationChecks(formFields, false);
     if (noError) {
       axios
         .patch(
-          `${bffUrl}/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+          `${bffUrl}/competent-authority/${sessionStorage.getItem(
+            "entityUniqueId"
+          )}`,
           {
             formData: formData,
           }
@@ -86,7 +88,6 @@ const NodalDetails = (props: Props) => {
             text: "Nodal Detail  update  successfully ",
             confirmButtonText: "Ok",
           });
-          Navigate("/dt/profile?current=regulator");
         })
         .catch((err) => {
           Swal.fire({

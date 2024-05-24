@@ -61,19 +61,18 @@ const ProfileUploadDocuments = (props: Props) => {
     setLoader(true);
     axios
       .patch(
-        `${bffUrl}/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+        `${bffUrl}/regulator/${sessionStorage?.getItem("entityUniqueId")}`,
         {
           formData: formData,
         }
       )
       .then((response) => {
-        console.log(response, "response");
+        // console.log(response, "response");
         Swal.fire({
           icon: "success",
           text: "Documents uploaded successfully",
           confirmButtonText: "Ok",
         });
-        Navigate("/dt/profile?current=branches");
       })
       .catch((err) => {
         Swal.fire({

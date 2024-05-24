@@ -72,7 +72,7 @@ const NodalDetails = (props: Props) => {
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
-    const noError = await handleValidationChecks(formFields);
+    const noError = await handleValidationChecks(formFields, false);
     if (noError) {
       axios
         .patch(
