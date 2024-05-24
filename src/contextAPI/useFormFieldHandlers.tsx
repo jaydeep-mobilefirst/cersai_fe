@@ -266,8 +266,12 @@ const FormHandlerProviders = ({children}: Props) => {
         })
       }
     })   
+    // Check for form validations
     let formValidations =  await ValidationSubmitAPI(formFieldsForValidations);
+    // Check for document fields on that particular sections if any
     let documentValidations = documentData?.filter((doc : any) => doc?.sectionId === formFields[0]?.sectionId)?.length > 0 ? await handleDocumentValidations(formFields[0]?.sectionId) : true;
+    // Dedup check for form fields like mobile, email, isAdding flag is set to true by default
+    // So that we can toggle de dup check on one flag, if u don't want to check then set it false
     let deDupCheck = !isAdding ? true : !formValidations ? true : await ValidateDeDup(formFields?.filter((field : any) => (emailRegex.test(field?.userInput) || panRegex.test(field?.userInput) || /^-?\d+$/.test(field?.userInput) )))
     return formValidations && documentValidations && deDupCheck;
   }

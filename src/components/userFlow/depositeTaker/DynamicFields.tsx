@@ -207,7 +207,7 @@ const DynamicFields = ({
                     <img
                       src={folderOpen}
                       alt="Folder Open Icon"
-                      className="bg-[#EEF7EB] rounded p-1 text-white cursor-pointer"
+                      className="bg-white rounded p-1 text-white cursor-pointer"
                       onClick={() => {
                         if (toggleUploadPopup) {
                           toggleUploadPopup()
@@ -220,7 +220,7 @@ const DynamicFields = ({
                     />
                   </div>
                   <div className="flex flex-col">
-                    <h1 className="text-xs md:text-sm font-normal text-gilroy-medium text-gray-900">
+                  <h1 className="text-xs md:text-sm font-normal text-gilroy-medium text-gray-900">
                       {data?.documentName}
                       {data?.required && <span className="text-red-500">*</span>}
                     </h1>
@@ -240,7 +240,7 @@ const DynamicFields = ({
                   <div className="mt-1">
                     <button
                       type="button"
-                      className="bg-green-800 relative mx-2 rounded-lg p-3 text-white flex justify-center items-center cursor-pointer mr-2 h-10 w-[80px]"
+                      className="bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]"
                       onClick={() => { 
                         if (toggleUploadPopup && !data?.uploadFileId) {
                         toggleUploadPopup()

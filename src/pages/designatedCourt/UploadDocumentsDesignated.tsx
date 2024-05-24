@@ -64,16 +64,21 @@ const UploadDocumentsRegulator = (props: Props) => {
 
   const submit = async (e : any) => {
     e.preventDefault();
+    setLoader(true)
     const goodToGo = await handleDocumentValidations(documentData[0]?.sectionId);
     if (goodToGo) {
       const edit = params.get('edit');
       if (edit !== undefined && edit !== null && edit !== "") {
+    setLoader(false)
         Navigate('/designated/court/reviewdetails');
       }
       else{
+    setLoader(false)
         Navigate('/designated/court/nodaldetails')
       }
-    }      
+    }  
+    setLoader(false)
+
   }
 
   return (
