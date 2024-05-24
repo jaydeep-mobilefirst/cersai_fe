@@ -70,12 +70,15 @@ const ProfileNodalDetails = (props: Props) => {
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
-    const noError = await handleValidationChecks(formFields);
+    const noError = await handleValidationChecks(formFields, false);
     if (noError) {
       axios
-        .patch(`${bffUrl}/deposit-taker/${sessionStorage.getItem('entityUniqueId')}`, {
-          formData: formData,
-        })
+        .patch(
+          `${bffUrl}/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+          {
+            formData: formData,
+          }
+        )
         .then((response) => {
           console.log(response, "response");
           Swal.fire({

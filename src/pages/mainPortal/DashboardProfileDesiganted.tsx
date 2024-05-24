@@ -30,20 +30,61 @@ const DashboardProfileDesignateCourt = (props: Props) => {
       .then(async (response) => {
         console.log(response?.data, "response");
 
+        // if (response?.data?.success) {
+        //   let dcData: any = [];
+        //   try {
+        //     let designatedCourt = await axios.get(
+        //       `${bffUrl}/designated-court/${entityUniqueId}`
+        //     );
+
+        //     dcData =
+        //       designatedCourt.data.data.designatedCourt
+        //         ?.designatedCourtFormData;
+        //   } catch (error) {
+        //     console.log("Error");
+        //   }
+
+        //   let modifiedFormFields = response.data.data?.formFields?.map(
+        //     (o: any) => ({
+        //       ...o,
+        //       userInput: dcData
+        //         ? dcData?.find((data: any) => data?.fieldId === o?.id)?.value
+        //         : "",
+        //       error: "",
+        //     })
+        //   );
+
+        //   let modifiedFileFields =
+        //     response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
+        //       ...o,
+        //       file: "",
+        //       error: "",
+        //       fileName: "",
+        //     }));
+
+        //   let obj = {
+        //     ...response?.data?.data,
+        //     formFields: { form_fields: modifiedFormFields },
+        //   };
+
+        //   setAllFormData(obj);
+        //   setAllDocumentData(modifiedFileFields);
+        // } else {
+        //   throw new Error("Error getting data, Please try later!");
+        // }
         if (response?.data?.success) {
           let dcData: any = [];
           try {
             let designatedCourt = await axios.get(
               `${bffUrl}/designated-court/${entityUniqueId}`
             );
-
             dcData =
               designatedCourt.data.data.designatedCourt
                 ?.designatedCourtFormData;
           } catch (error) {
             console.log("Error");
           }
-
+          // console.log(dtData, "respnse--------------");
           let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
@@ -57,21 +98,29 @@ const DashboardProfileDesignateCourt = (props: Props) => {
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
               ...o,
-              file: "",
+              file: dcData
+                ? dcData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
               error: "",
-              fileName: "",
+              fileName: dcData
+                ? dcData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              uploadFileId: dcData
+                ? dcData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
             }));
 
           let obj = {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
-
+          // console.log(obj, "obj-----");
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
         } else {
           throw new Error("Error getting data, Please try later!");
         }
+
         setLoader(false);
       })
       .catch((error: any) => {

@@ -70,7 +70,7 @@ const ProfileNodalDetails = (props: Props) => {
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
-    const noError = await handleValidationChecks(formFields);
+    const noError = await handleValidationChecks(formFields, false);
     if (noError) {
       axios
         .patch(
@@ -86,7 +86,7 @@ const ProfileNodalDetails = (props: Props) => {
             text: "Nodal Detail  update  successfully ",
             confirmButtonText: "Ok",
           });
-          Navigate("/dt/profile?current=regulator");
+          Navigate("/rg/profile?current=document");
         })
         .catch((err) => {
           Swal.fire({

@@ -30,14 +30,69 @@ const DashboardProfileCompetent = (props: Props) => {
     axios
       .get(`${bffUrl}/registration/field-data/3?status=addToProfile`)
       .then(async (response) => {
+        // console.log(response, "resppnse");
+        // if (response?.data?.success) {
+        //   let dtData: any = [];
+        //   try {
+        //     let competentData = await axios.get(
+        //       `${bffUrl}/competent-authority/${entityUniqueId}`
+        //     );
+        //     // console.log(
+        //     //   competentData?.data?.data?.competentAuthority
+        //     //     ?.competentAuthorityData,
+        //     //   "data"
+        //     // );
+        //     dtData =
+        //       competentData?.data?.data?.competentAuthority
+        //         ?.competentAuthorityData;
+        //   } catch (error) {
+        //     console.log("Error");
+        //   }
+        //   // console.log(dtData, "respnse--------------");
+        //   let modifiedFormFields = response.data.data?.formFields?.map(
+        //     (o: any) => ({
+        //       ...o,
+        //       userInput: dtData
+        //         ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+        //         : "",
+        //       error: "",
+        //     })
+        //   );
+
+        //   let modifiedFileFields =
+        //     response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
+        //       ...o,
+        //       file: dtData
+        //         ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+        //         : "",
+        //       error: "",
+        //       fileName: dtData
+        //         ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+        //         : "",
+        //       uploadFileId: dtData
+        //         ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+        //         : "",
+        //     }));
+
+        //   let obj = {
+        //     ...response?.data?.data,
+        //     formFields: { form_fields: modifiedFormFields },
+        //   };
+        //   // console.log(obj, "obj-----");
+        //   setAllFormData(obj);
+        //   setAllDocumentData(modifiedFileFields);
+        // } else {
+        //   throw new Error("Error getting data, Please try later!");
+        // }
         if (response?.data?.success) {
           let dtData: any = [];
           try {
             let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/${entityUniqueId}`
+              `${bffUrl}/competent-authority/${entityUniqueId}`
             );
             dtData =
-              depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
+              depositTakerData?.data?.data?.competentAuthority
+                ?.competentAuthorityData;
           } catch (error) {
             console.log("Error");
           }
@@ -55,10 +110,18 @@ const DashboardProfileCompetent = (props: Props) => {
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
               ...o,
-              file: "",
+              file: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
               error: "",
-              fileName: "",
+              fileName: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              uploadFileId: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
             }));
+          console.log({ modifiedFileFields });
 
           let obj = {
             ...response?.data?.data,
@@ -96,8 +159,9 @@ const DashboardProfileCompetent = (props: Props) => {
         </div>
 
         {current === "competent" && <CompetentDetails />}
-        {current === "nodal" && <NodalDetails />}
         {current === "document" && <UploadDocument />}
+
+        {current === "nodal" && <NodalDetails />}
       </div>
     </>
   );

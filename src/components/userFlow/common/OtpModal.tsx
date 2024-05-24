@@ -16,9 +16,9 @@ import { bffUrl } from "../../../utils/api";
 import ButtonAuth from "./ButtonAuth";
 import Swal from "sweetalert2";
 
-interface LoginModelProps { }
+interface LoginModelProps {}
 
-const OtpModel: React.FC<LoginModelProps> = ({ }) => {
+const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -32,7 +32,7 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
   const [emailOtp, setEmailOtp] = useState<string>("");
   const [otp, setOtp] = useState<any>("");
   const [disabled, setDisabled] = useState(true);
-  const [showError, setShowError] = useState('');
+  const [showError, setShowError] = useState("");
   const [isValid, setIsValid] = useState<{ email: string; mobile: string }>({
     email: "",
     mobile: "",
@@ -119,7 +119,7 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
       .then((response: any) => {
         let data = response.data;
         if (data.success) {
-          setShowError("")
+          setShowError("");
           sessionStorage.setItem("otp-sent", "false");
           sessionStorage.setItem("timerSec", "120");
           navigate("/set-password?identity=" + token);
@@ -127,7 +127,7 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
         }
       })
       .catch((err: any) => {
-        setShowError(err?.response?.data?.message)
+        setShowError(err?.response?.data?.message);
       });
   };
 
@@ -151,10 +151,10 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
         })
         .catch((err: any) => {
           Swal.fire({
-            icon : "error",
-            title : "Error",
-            text :  "Unable to Send OTP, Please try again later!"
-          })
+            icon: "error",
+            title: "Error",
+            text: "Unable to Send OTP, Please try again later!",
+          });
         });
     }
   };
@@ -177,7 +177,7 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
     // }
   }, [timeLeft, sentOtp]);
 
-  const handleClose = () => { };
+  const handleClose = () => {};
 
   return (
     <Modal
@@ -194,23 +194,26 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
                   <h1 className="text-[24px] font-bold text-black text-gilroy-medium">
                     OTP Verification
                   </h1>
-                {sentOtp && <div className="text-center">
-                    <span className="text-stone-500 text-base font-normal text-gilroy-medium">
-                      Enter the OTP sent to
-                      <br />
-                    </span>
-                    <div className="text-black text-base font-normal text-gilroy-medium mt-2">
-                      {/* {decodedToken?.email} */}
-                      {decodedToken?.email ? maskEmail(decodedToken.email) : ""}
+                  {sentOtp && (
+                    <div className="text-center">
+                      <span className="text-stone-500 text-base font-normal text-gilroy-medium">
+                        Enter the OTP sent to
+                        <br />
+                      </span>
+                      <div className="text-black text-base font-normal text-gilroy-medium mt-2">
+                        {/* {decodedToken?.email} */}
+                        {decodedToken?.email
+                          ? maskEmail(decodedToken.email)
+                          : ""}
+                      </div>
+                      <div className="text-black text-base font-normal text-gilroy-medium mt-2">
+                        {/* {decodedToken?.mobile} */}
+                        {decodedToken?.mobile
+                          ? maskMobile(decodedToken.mobile)
+                          : ""}
+                      </div>
                     </div>
-                    <div className="text-black text-base font-normal text-gilroy-medium mt-2">
-                      {/* {decodedToken?.mobile} */}
-                      {decodedToken?.mobile
-                        ? maskMobile(decodedToken.mobile)
-                        : ""}
-                    </div>
-                  </div>
-                }
+                  )}
                 </div>
               </div>
               {sentOtp ? (
@@ -223,6 +226,14 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
                       onChange={handleChangeMobileOtp}
                       renderSeparator={<span></span>}
                       inputStyle="inputStyle"
+                      containerStyle={{
+                        display: "flex",
+                        justifyContent: "center", // Centers the OTP input fields horizontally
+                        flexWrap: "wrap", // Allows the items to wrap in multiple lines if necessary
+                        margin: "0 auto", // Centers the container in the available horizontal space
+                        width: "100%", // Makes sure the container takes the full width to center correctly
+                        maxWidth: "500px",
+                      }}
                       renderInput={(props) => <input {...props} />}
                     />
                     <span>Time Left : {formatTime(timeLeft)}</span>
@@ -240,6 +251,14 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
                       onChange={handleChangeEmailOtp}
                       renderSeparator={<span></span>}
                       inputStyle="inputStyle"
+                      containerStyle={{
+                        display: "flex",
+                        justifyContent: "center", // Centers the OTP input fields horizontally
+                        flexWrap: "wrap", // Allows the items to wrap in multiple lines if necessary
+                        margin: "0 auto", // Centers the container in the available horizontal space
+                        width: "100%", // Makes sure the container takes the full width to center correctly
+                        maxWidth: "500px",
+                      }}
                       renderInput={(props) => <input {...props} />}
                     />
                     <span>Time Left : {formatTime(timeLeft)}</span>
@@ -254,10 +273,11 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
                     <span className="flex flex-row justify-center items-center  mt-10">
                       You didn’t receive a code?
                       <span
-                        className={`${timeLeft > 0
+                        className={`${
+                          timeLeft > 0
                             ? "text-blue-400"
                             : "text-blue-600 hover:cursor-pointer"
-                          } font-semibold ml-1 `}
+                        } font-semibold ml-1 `}
                         onClick={(event) => {
                           if (timeLeft === 0) {
                             sendOtp(event);
@@ -268,7 +288,6 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
                       </span>
                     </span>
                     <span className="text-red-500 mx-auto">{showError}</span>
-
                   </div>
                   <div className="mt-5 md:mt-[36px] px-4 md:px-[40px]">
                     <div className="flex justify-center items-center mt-12 ">
@@ -285,7 +304,8 @@ const OtpModel: React.FC<LoginModelProps> = ({ }) => {
               ) : (
                 <div className=" flex justify-center items-center mt-36 flex-col">
                   <span className="text-center mb-3">
-                    Click on send button to send OTP to your registered email and phone number
+                    Click on send button to send OTP to your registered email
+                    and phone number
                   </span>
                   <button
                     className=" bg-[#1C468E] rounded-xl p-3 text-sm font-semibold text-gilroy-medium text-white w-80"
