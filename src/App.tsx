@@ -36,11 +36,26 @@ import ResetPassword from "./pages/mainPortal/ResetPassword";
 import SchemaCreationForm from "./pages/mainPortal/SchemaManagemet/SchemaCreationForm";
 import SchemaCreation from "./pages/mainPortal/SchemaManagemet/SchemaCreation";
 import SchemeMasterForm from "./pages/mainPortal/SchemaManagemet/SchemaMasterDetail";
-import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 
 import RoleCreation from "./pages/mainPortal/UserManagement/RoleCreation";
-import UserCreationUm from "./pages/mainPortal/UserManagement/UserCreation";
+import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 import UserMasterForm from "./pages/mainPortal/UserManagement/UserMasterForm";
+import EditUserForm from "./pages/mainPortal/UserManagement/EditUserMasterForm";
+
+import RoleCreationRg from "./pages/regulator/UserManagementRg/RoleCreation";
+import UserCreationRg from "./pages/regulator/UserManagementRg/UserCreation";
+import UserMasterFormRg from "./pages/regulator/UserManagementRg/UserMasterForm";
+import EditUserFormRg from "./pages/regulator/UserManagementRg/EditUserMasterForm";
+
+import RoleCreationCa from "./pages/competentAuthority/UserManagementCa/RoleCreation";
+import UserCreationCa from "./pages/competentAuthority/UserManagementCa/UserCreation";
+import UserMasterFormCa from "./pages/competentAuthority/UserManagementCa/UserMasterForm";
+import EditUserFormCa from "./pages/competentAuthority/UserManagementCa/EditUserMasterForm";
+
+import RoleCreationDc from "./pages/designatedCourt/UserManagementDc/RoleCreation";
+import UserCreationDc from "./pages/designatedCourt/UserManagementDc/UserCreation";
+import UserMasterFormDc from "./pages/designatedCourt/UserManagementDc/UserMasterForm";
+import EditRolePopupDc from "./pages/designatedCourt/UserManagementDc/EditUserMasterForm";
 
 import SetPassword from "./pages/SetPassowrd";
 import SetNewPasswordModel from "./components/userFlow/common/SetNewPasswordModel";
@@ -79,11 +94,28 @@ function App() {
                 element={<UserMasterForm />}
                 path="usermanagement/usermasterum"
               />
+              <Route
+                element={<EditUserForm />}
+                path="usermanagement/editusermasterum"
+              />
             </Route>
             <Route element={<MainPortalLayoutRegulator />} path="/rg">
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<h1> in Progesss</h1>} path="usermanagment" />
+              <Route element={<RoleCreationRg />} path="usermanagment" />
+              <Route
+                element={<UserCreationRg />}
+                path="usermanagment/usercreation"
+              />
+              <Route
+                element={<UserMasterFormRg />}
+                path="usermanagment/usermaster"
+              />
+              <Route
+                element={<EditUserFormRg />}
+                path="usermanagement/editusermasterum"
+              />
+
               <Route element={<DashboardProfileRegulator />} path="profile" />
               <Route
                 element={<ResetPasswordRegulator />}
@@ -93,7 +125,20 @@ function App() {
             <Route element={<MainPortalLayoutCompetent />} path="/ca">
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<h1> in Progesss</h1>} path="usermanagment" />
+              <Route element={<RoleCreationCa />} path="usermanagment" />
+              <Route
+                element={<UserCreationCa />}
+                path="usermanagment/usercreation"
+              />
+              <Route
+                element={<UserMasterFormCa />}
+                path="usermanagment/usermaster"
+              />
+              <Route
+                element={<EditUserFormCa />}
+                path="usermanagement/editusermasterum"
+              />
+
               <Route element={<DashboardProfileCompetent />} path="profile" />
               <Route
                 element={<ResetPasswordCompetent />}
@@ -103,8 +148,19 @@ function App() {
             <Route element={<MainPortalLayoutDesignated />} path="/dc">
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<h1> in Progesss</h1>} path="usermanagment" />
-
+              <Route element={<RoleCreationDc />} path="usermanagment" />
+              <Route
+                element={<UserCreationDc />}
+                path="usermanagment/usercreation"
+              />
+              <Route
+                element={<UserMasterFormDc />}
+                path="usermanagment/usermaster"
+              />
+              <Route
+                element={<EditRolePopupDc />}
+                path="usermanagement/editusermasterum"
+              />
               <Route
                 element={<DashboardProfileDesignateCourt />}
                 path="profile"

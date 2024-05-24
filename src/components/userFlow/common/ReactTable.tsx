@@ -63,7 +63,7 @@ const ReactTable = ({ columns, defaultData, borderB = true }: Props) => {
                       borderB ? "border-b" : "" // Conditionally apply border-b class
                     }`}
                   >
-                    <div className="p-6 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                    <div className="lg:p-6 md:p-6 p-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

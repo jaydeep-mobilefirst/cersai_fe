@@ -124,7 +124,7 @@ const NodalDetailsRegulator = () => {
                 />
               </svg>
               <button
-                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
                 onClick={() => Navigate("/regulator/court/uploaddocuments")}
               >
                 Back
@@ -135,7 +135,7 @@ const NodalDetailsRegulator = () => {
                 type="submit"
                 disabled={loader}
                 onClick={onSubmit}
-                className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
               >
                 {loader ? <LoaderSpin /> : "Save & Review"}
               </button>
