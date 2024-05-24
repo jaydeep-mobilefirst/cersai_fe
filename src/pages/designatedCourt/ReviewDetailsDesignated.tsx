@@ -113,11 +113,11 @@ const ReviewDetailsDesignated = () => {
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
                   <div className="mb-[16px]" key={index}>
-                    <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px] text-gilroy-bold">
-                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                    <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px]">
+                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[20px] lg:text-[20px] pb-2 text-nowrap font-bold text-2xl">
                         {section?.sectionName}
                       </p>
-                      <button className="text-[#1c468e] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                      <button className="text-[#1c468e] text-[16px] lg:text-[20px] mr-[13px] font-bold ">
                         {section?.sectionName !== "Verification" ? (
                           <Link
                             to={
@@ -210,7 +210,7 @@ const ReviewDetailsDesignated = () => {
 
         <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
           <div className=" ml-5">
-            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0">
+            <button className="text-gilroy-regular flex items-center p-4 sm:p-0 ">
               <img src={Arrow} alt="back Arrow" className="mr-2" />
               Back
             </button>

@@ -131,16 +131,16 @@ const ReviewMain = () => {
         <header className="lg:p-[38px] border-b border-gray-200"></header>
         <main className="flex-grow p-8 overflow-auto custom-scrollbar">
           <div id="reviewContent">
-            <h1 className="text-2xl font-bold mb-6 text-gilroy-bold">Review</h1>
+            <h1 className="text-2xl font-bold mb-6 font-bold">Review</h1>
             {allFormData &&
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
                   <div className="mb-[16px]" key={index}>
-                    <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px] text-gilroy-bold">
-                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap text-gilroy-bold" >
+                    <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px]">
+                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[20px] lg:text-[20px] pb-2 text-nowrap font-bold text-2xl" >
                         {section?.sectionName}
                       </p>
-                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] text-gilroy-bold">
+                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-bold">
                         {section?.sectionName !== "Verification" ? (
                           <Link
                             to={

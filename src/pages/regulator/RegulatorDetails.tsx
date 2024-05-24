@@ -57,7 +57,7 @@ const RegulatorDetails = (props: Props) => {
             }}
           >
             <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
-            <h1 className="text-xl md:text-2xl font-bold mx-10 ">
+            <h1 className="text-xl md:text-2xl mx-10 font-bold ">
               Regulator Details
             </h1>
             <div className="bg-white p-4 lg:p-[48px]">
@@ -82,7 +82,7 @@ const RegulatorDetails = (props: Props) => {
                   type="submit"
                   disabled={loader}
                   onClick={onSubmit}
-                  className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                  className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
                   {loader ? <LoaderSpin /> : "Save & Continue"}
                 </button>

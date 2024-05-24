@@ -2,7 +2,7 @@ import { queryResolutionComp } from "../../utils/hardText/landingpageText";
 
 const QueryResolutionComp = () => {
   return (
-    <div className="mt-[-48px] p-4 lg:p-[56px] lg:pb-[180px] query-bg-image">
+    <div className=" p-4 lg:p-[56px] lg:pb-[180px] query-bg-image">
       <h1 className="text-[#1D1D1B] text-2xl md:text-3xl font-normal font-Gilroy-Medium leading-normal">
         {queryResolutionComp[0].heading}
       </h1>
