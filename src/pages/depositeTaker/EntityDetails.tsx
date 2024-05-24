@@ -57,7 +57,7 @@ const EntityDetails: React.FC = () => {
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
-            <h1 className="text-2xl text-gilroy-bold mb-6">Entity Details</h1>
+            <h1 className="text-2xl font-bold mb-6">Entity Details</h1>
             <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
           </div>
         </div>

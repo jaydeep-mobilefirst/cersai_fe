@@ -128,7 +128,7 @@ const NodalDetailsDesignated = () => {
               <button
                 role="button"
                 onClick={() => Navigate("/designated/court/uploaddocuments")}
-                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
               >
                 Back
               </button>

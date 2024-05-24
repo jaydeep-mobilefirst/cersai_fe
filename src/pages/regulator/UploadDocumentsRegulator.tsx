@@ -142,7 +142,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                   />
                 </svg>
                 <button 
-                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
                 onClick={() => Navigate('/regulator/court/regulatordetails')}
                 >
                   Back
@@ -152,7 +152,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                 <button
                   type="submit"
                   onClick={submit}
-                  className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                  className="bg-[#1c468e] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
                 >
                   Save & Continue
                 </button>
