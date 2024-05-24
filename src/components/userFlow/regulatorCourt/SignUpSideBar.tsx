@@ -18,7 +18,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
 }) => {
   const Navigate = useNavigate();
   const location = useLocation();
-  const {allFormData} = useDepositTakerRegistrationStore(state => state)
+  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
 
   const [page, setPage] = useState<string | undefined>(location.pathname);
 
@@ -38,22 +38,24 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
   };
 
   useEffect(() => {
-    const data = signupSideBarRegulator.find((p) => p.path === location.pathname);
+    const data = signupSideBarRegulator.find(
+      (p) => p.path === location.pathname
+    );
     setPercentage(data?.percentage);
     setPage(data?.path);
-  }, [location.pathname])
+  }, [location.pathname]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (!allFormData) {
-        Navigate('/')
+        Navigate("/");
       }
-    }, 5000)
+    }, 5000);
 
     return () => {
-      clearTimeout(timeout)
-    }
-  },[allFormData])
+      clearTimeout(timeout);
+    };
+  }, [allFormData]);
 
   return (
     <div className="sm:w-[300px] h-[100vh] md:w-[349px] w-[250px] bg-[#E7F0FF]">

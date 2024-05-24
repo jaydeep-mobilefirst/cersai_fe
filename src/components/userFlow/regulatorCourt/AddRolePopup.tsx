@@ -60,7 +60,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose }) => {
                 id="role-functionality"
                 value={roleFunctionality}
                 onChange={(e) => setRoleFunctionality(e.target.value)}
-                className="mt-3 h-[56px] w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="mt-3 h-[56px]  w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Select functionality</option>
                 {functionalities.map((func) => (

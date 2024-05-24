@@ -3,12 +3,13 @@
 // import addCircle from "../../../assets/images/add-circleb.svg";
 // import searchButton from "../../../assets/images/search-normal.svg";
 // import ReactTable from "../../../components/userFlow/common/ReactTable";
-// import SelectButtonTask from "../../../components/UserManagement/SelectButtonManagement";
+// import SelectButtonTask from "../../../components/userFlow/competentAuthority/SelectButtonManagement";
 // import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-// import ToggleSwitch from "../../../components/UserManagement/ToggleSwitch";
-// import UmTabs from "../../../components/UserManagement/UmTabs";
+// import ToggleSwitch from "../../../components/userFlow/competentAuthority/ToggleSwitch";
+// import UmTabs from "../../../components/userFlow/competentAuthority/UmTabs";
 // import edit from "../../../assets/images/bedit.svg";
-// import AddRolePopup from "../../../components/UserManagement/AddRolePopup";
+// import AddRolePopup from "../../../components/userFlow/competentAuthority/AddRolePopup";
+// import EditRolePopup from "../../../components/userFlow/competentAuthority/EditRolePopup";
 // type TableType = {
 //   sno: string;
 //   depositTakerName: string;
@@ -211,25 +212,18 @@
 
 // export default RoleCreation;
 
-// import SelectButtonTask from "../../../components/UserManagement/SelectButtonManagement";
-// import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-// import ToggleSwitch from "../../../components/UserManagement/ToggleSwitch";
-// import UmTabs from "../../../components/UserManagement/UmTabs";
-// import edit from "../../../assets/images/bedit.svg";
-// import AddRolePopup from "../../../components/UserManagement/AddRolePopup";
-//
 import React, { useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import addCircle from "../../../assets/images/add-circleb.svg";
 import searchButton from "../../../assets/images/search-normal.svg";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
-import SelectButtonTask from "../../../components/UserManagement/SelectButtonManagement";
+import SelectButtonTask from "../../../components/userFlow/competentAuthority/SelectButtonManagement";
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-import ToggleSwitch from "../../../components/UserManagement/ToggleSwitch";
-import UmTabs from "../../../components/UserManagement/UmTabs";
+import ToggleSwitch from "../../../components/userFlow/competentAuthority/ToggleSwitch";
+import UmTabs from "../../../components/userFlow/competentAuthority/UmTabs";
 import edit from "../../../assets/images/bedit.svg";
-import AddRolePopup from "../../../components/UserManagement/AddRolePopup";
-import EditRolePopup from "../../../components/UserManagement/EditRolePopup"; // Import the EditRolePopup
+import AddRolePopup from "../../../components/userFlow/competentAuthority/AddRolePopup";
+import EditRolePopup from "../../../components/userFlow/competentAuthority/EditRolePopup"; // Import the EditRolePopup
 
 type TableType = {
   sno: string;

@@ -3,10 +3,10 @@ import { createColumnHelper } from "@tanstack/react-table";
 import addCircle from "../../../assets/images/add-circleb.svg";
 import searchButton from "../../../assets/images/search-normal.svg";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
-import SelectButtonTask from "../../../components/UserManagement/SelectButtonManagement";
+import SelectButtonTask from "../../../components/userFlow/designatedCourt/SelectButtonManagement";
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-import ToggleSwitch from "../../../components/UserManagement/ToggleSwitch";
-import UmTabs from "../../../components/UserManagement/UmTabs";
+import ToggleSwitch from "../../../components/userFlow/designatedCourt/ToggleSwitch";
+import UmTabs from "../../../components/userFlow/designatedCourt/UmTabs";
 import edit from "../../../assets/images/bedit.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +24,7 @@ const UserCreation = () => {
   const navigate = useNavigate();
 
   const handleAddUserClick = () => {
-    navigate("/dt/usermanagement/usermasterum");
+    navigate("/dc/usermanagment/usermaster");
   };
 
   const defaultData: TableType[] = [
@@ -73,7 +73,7 @@ const UserCreation = () => {
   ];
 
   const handleEditClick = (user: TableType) => {
-    navigate("/dt/usermanagement/editusermasterum");
+    navigate("/dc/usermanagement/editusermasterum");
   };
 
   const columns = [
