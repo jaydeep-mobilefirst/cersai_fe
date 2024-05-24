@@ -91,8 +91,7 @@ const DashboardProfileCompetent = (props: Props) => {
               `${bffUrl}/competent-authority/${entityUniqueId}`
             );
             dtData =
-              depositTakerData?.data?.data?.competentAuthority
-                ?.competentAuthorityData;
+              depositTakerData?.data?.data?.competentAuthority?.competentAuthorityData;
           } catch (error) {
             console.log("Error");
           }

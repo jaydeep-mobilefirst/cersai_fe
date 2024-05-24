@@ -132,8 +132,8 @@ const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
               )}
               <Button
                 onClick={handleOnClikcView}
-                backgroundColor="#52AE32"
-                borderColor="#52AE32"
+                backgroundColor="#1C468E"
+                borderColor="#1C468E"
                 label="View"
                 loader={viewLoader}
                 width="5rem"
