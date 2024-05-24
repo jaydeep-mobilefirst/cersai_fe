@@ -72,7 +72,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
       <hr className="bg-[#000000] w-full md:w-[349px]"></hr>
       <div className="px-[28px] mt-[16px]">
         <div className="h-[101px]">
-          <p className="text-[#1c468e] text-xl font-normal text-gilroy-semibold">
+          <p className="text-[#1c468e] text-xl font-normal font-semibold">
             Regulator
           </p>
           <p className="mt-[16px] text-[#2D2B27] text-base font-normal text-gilroy-medium">

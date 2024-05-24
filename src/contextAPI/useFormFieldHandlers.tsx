@@ -14,7 +14,7 @@ interface IContextProps {
   onFileChange: (event : any | undefined | File, field : any, fieldType : string, entityId ?: string) => Promise<void>
   onChange: (event: any | undefined, fieldData: any, fieldType: string) => Promise<void>
   updatePanFormField: (responseData: any, panFormField: any) => Promise<boolean>
-  handleValidationChecks: (formFields: any[]) => Promise<boolean>
+  handleValidationChecks: (formFields: any[], isAdding?: boolean) => Promise<boolean>
   handleDocumentValidations :  (sectionId: number | number[]) => Promise<boolean>
 }
 
@@ -53,6 +53,8 @@ const FormHandlerProviders = ({children}: Props) => {
   }
 
   const onFileChange = async (event : any, field : any, fieldType : string, entityID ?: string) : Promise<void> => {       
+    console.log({event, field, fieldType});
+    
     switch (fieldType) {
       case 'DSC':
         const file = event;
