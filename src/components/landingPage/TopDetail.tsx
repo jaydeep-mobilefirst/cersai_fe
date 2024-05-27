@@ -1,26 +1,97 @@
-
-
 import React, { useState } from "react";
 import Logo from "../../assets/images/logo.svg";
-import { contactDetails, authlable } from "../../utils/hardText/landingpageText";
+import {
+  contactDetails,
+  authlable,
+} from "../../utils/hardText/landingpageText";
 import RegisterModel from "../userFlow/common/RegisterModal";
-
+import LoginModel from "../userFlow/common/LoginModel";
+import ForgetPasswordModel from "../userFlow/common/ForgetPasswordModel";
+import RegisterMailPopup from "../userFlow/common/RegisterMailPopup";
+import SetNewPasswordModel from "../userFlow/common/SetNewPasswordModel";
+import PasswordUpdateModel from "../userFlow/common/PasswordUpdateModel";
 
 interface AuthButtonProps {
   buttontext: string;
-  onClick?: () => void; // Adding onClick function prop
+  onClick?: () => void;
 }
 
 const TopDetail = () => {
-
   const [isOpen, setIsOpen] = useState(false);
+  const [showLoginModel, setShowLoginModel] = useState(false);
+  const [showForgetModel, setShowForgetModel] = useState(false);
+  const [showRegisterMailModel, setShowRegisterMailModel] = useState(false);
+  const [showsNewPasswordModel, setShowsNewPasswordModel] = useState(true);
+  const [showsPasswordUpdateModel, setShowsPasswordUpdateModel] =
+    useState(false);
 
   const openModal = () => {
+    setIsOpen(true);
+  };
+  const openLoginModel = () => {
+    setShowLoginModel(true);
+  };
+
+  const showRegisterModel = () => {
+    setShowLoginModel(false);
     setIsOpen(true);
   };
 
   const closeModal = () => {
     setIsOpen(false);
+  };
+
+  const CloseLoginModal = () => {
+    setShowLoginModel(false);
+  };
+
+  const ShowForgetModel = () => {
+    setShowLoginModel(false);
+    setShowForgetModel(true);
+  };
+  const CloseForgetModel = () => {
+    setShowForgetModel(false);
+  };
+  const CloseforgetModelShowLoginModel = () => {
+    setShowForgetModel(false);
+    setShowLoginModel(true);
+  };
+
+  const CloseForgetPasswordShowRegisterMail = () => {
+    // setShowRegisterMailModel(false);
+    setShowRegisterMailModel(true);
+  };
+
+  const closeRegisterMailPopup = () => {
+    setShowForgetModel(false);
+    setShowRegisterMailModel(false);
+  };
+  const closeRegisterMailPopupShowLoginPopup = () => {
+    setShowForgetModel(false);
+    setShowRegisterMailModel(false);
+    setShowLoginModel(true);
+  };
+
+  const CloseSetNewPasswordModel = () => {
+    setShowsNewPasswordModel(false);
+  };
+
+  const CloseNewPasswordandshowUpdatePassword = () => {
+    setShowsNewPasswordModel(false);
+    setShowsPasswordUpdateModel(true);
+  };
+  const CloseNewPasswordAndshowLoginModel = () => {
+    setShowsNewPasswordModel(false);
+    setShowLoginModel(true);
+  };
+
+  const CloseUpdatePasswordModel = () => {
+    setShowsPasswordUpdateModel(false);
+  };
+
+  const CloseUpdatePasswordandShowLogin = () => {
+    setShowsPasswordUpdateModel(false);
+    setShowLoginModel(true);
   };
 
   const downloadReport = () => {};
@@ -65,12 +136,53 @@ const TopDetail = () => {
       </div>
       <div className="flex items-center m-4 md:m-0">
         <AuthButton buttontext={authlable[1]} onClick={openModal} />
-        <AuthButton buttontext={authlable[0]}  />
+        <AuthButton buttontext={authlable[0]} onClick={openLoginModel} />
       </div>
       {/* Conditionally render ModelDiv based on isOpen state */}
-      {isOpen && 
-      <div className="fixed flex-row justify-center items-center mt-[35%] md:mt-[50%] lg:mt-[30%] md:ml-[15%]"><RegisterModel closeModal={closeModal} />
-      </div>}
+      {isOpen && (
+        <div className="fixed flex-row justify-center items-center mt-[35%] md:mt-[50%] lg:mt-[30%] md:ml-[15%]">
+          <RegisterModel closeModal={closeModal} />
+        </div>
+      )}
+      {showLoginModel && (
+        <LoginModel
+          closeModal={CloseLoginModal}
+          showRegisterModel={showRegisterModel}
+          ShowForgetModel={ShowForgetModel}
+        />
+      )}
+
+      {showForgetModel && (
+        <ForgetPasswordModel
+          closeForgetModel={CloseForgetModel}
+          closeforgetModelShowLoginModel={CloseforgetModelShowLoginModel}
+          closeForgetPasswordandShowRegisterMail={
+            CloseForgetPasswordShowRegisterMail
+          }
+        />
+      )}
+
+      {showRegisterMailModel && (
+        <RegisterMailPopup
+          closeRegisterMailPopup={closeRegisterMailPopup}
+          showLoginPopup={closeRegisterMailPopupShowLoginPopup}
+        />
+      )}
+      {/* {showsNewPasswordModel && (
+        <SetNewPasswordModel
+          closeSetNewPasswordModel={CloseSetNewPasswordModel}
+          closeNewPasswordandshowUpdatePassword={
+            CloseNewPasswordandshowUpdatePassword
+          }
+          closeNewPasswordAndshowLoginModel={CloseNewPasswordAndshowLoginModel}
+        />
+      )}
+      {showsPasswordUpdateModel && (
+        <PasswordUpdateModel
+          closeUpdatePasswordModel={CloseUpdatePasswordModel}
+          closeUpdatePasswordandShowLogin={CloseUpdatePasswordandShowLogin}
+        />
+      )} */}
     </div>
   );
 };
@@ -81,8 +193,8 @@ const AuthButton: React.FC<AuthButtonProps> = ({ buttontext, onClick }) => {
       <button
         className={`w-full px-[24px] h-10 border rounded-[8px] ${
           buttontext === "Register"
-            ? "bg-white text-[#338218] border-[#338218]"
-            : "bg-[#338218] text-white"
+            ? "bg-white text-[#1c468e] border-[#1c468e]"
+            : "bg-[#1c468e] text-white"
         } rounded-lg justify-center items-center inline-flex`}
         onClick={onClick} // Add onClick handler
       >

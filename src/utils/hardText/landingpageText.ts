@@ -1,10 +1,10 @@
-import PhoneIcon from "../../assets/images/phoneicon.svg";
-import Sms from "../../assets/images/sms.svg";
-import Download from "../../assets/images/download.svg";
-import mobile from "../../assets/images/mobile.svg";
-import link from "../../assets/images/link.svg";
-import shieldSearch from "../../assets/images/shieldSearch.svg";
-import global from "../../assets/images/global.svg";
+import PhoneIcon from "../../assets/images/new_images/call-calling.png";
+import Sms from "../../assets/images/new_images/sms.png";
+import Download from "../../assets/images/new_images/document-text.png";
+import mobile from "../../assets/images/new_images/mobile.png";
+import link from "../../assets/images/new_images/link-2.png";
+import shieldSearch from "../../assets/images/new_images/shield-search.png";
+import global from "../../assets/images/new_images/global.png";
 
 export const languageData = ["English", "हिन्दी"];
 
@@ -41,7 +41,7 @@ export const latestNewsComp = [
   { button: "Latest News" },
   {
     description:
-      "Are you aware about Public Interest Disclosure & Protection of Informer (PIDPI) ? Click here to know.Rejection in upload of KYC records due to mismatch of PIN Code and other matters.",
+      "Are you aware about Public Interest Disclosure & Protection of Informer (PIDPI) ? Click here to know. Rejection in upload of KYC records due to mismatch of PIN Code and other matters.",
   },
 ];
 // QueryResolutionComp Component
@@ -121,51 +121,91 @@ export const hero = [
 
 export const sections = [
   {
-    link : "/depositetaker/signup/verification",
     title: "Verification Status",
     buttonText: "Success",
-    fieldsLeft: [{ label: "Name", value: "Lorem ipsum", key : "companyName" }],
-    fieldsRight: [{ label: "PAN Details", value: "Lorem ipsum", key : "panNumber" }],
+    fieldsLeft: [{ label: "Name", value: "Lorem ipsum" }],
+    fieldsRight: [{ label: "PAN Details", value: "Lorem ipsum" }],
   },
   {
     title: "Entity Details",
     buttonText: "Edit",
-    link : "/depositetaker/signup/entitydetials",
+
     fieldsLeft: [
-      { label: "Type of Entity", value: "Lorem ipsum" , key : "entityType"},
-      { label: "Address Line 1", value: "Lorem ipsum" , key : "addressLine1"},
-      { label: "Address Line 2", value: "Lorem ipsum" , key : "addressLine2"},
-      { label: "GST Number", value: "Lorem ipsum" , key : "gstNumber"},
+      { label: "Name of Deposit Taker", value: "Lorem ipsum" },
+      { label: "Type of Entity", value: "Lorem ipsum" },
+      { label: "Address Line 1", value: "Lorem ipsum" },
+      { label: "Address Line 2", value: "Lorem ipsum" },
     ],
     fieldsRight: [
-      { label: "Unique Registration ID", value: "Lorem ipsum" , key : "uniqueId"},
-      { label: "PIN code", value: "Lorem ipsum" , key : "pinCode"},
-      { label: "State", value: "Lorem ipsum" , key : "state"},
-      { label: "District", value: "Lorem ipsum" , key : "district"},
+      { label: "Unique Registration ID", value: "Lorem ipsum" },
+      { label: "PIN code", value: "Lorem ipsum" },
+      { label: "State", value: "Lorem ipsum" },
+      { label: "District", value: "Lorem ipsum" },
     ],
   },
   {
-    link : "/depositetaker/signup/regulatordetails",
     title: "Regulator Details",
     buttonText: "Edit",
     fieldsLeft: [
-      { label: "Regulator Name", value: "Lorem ipsum", key : "regulatorName" },
-      { label: "Registration Approval Date", value: "Lorem ipsum", key : "registrationDate" },
+      { label: "Regulator Name", value: "Lorem ipsum" },
+      { label: "Registration Approval Date", value: "Lorem ipsum" },
     ],
     fieldsRight: [
-      { label: "Regulator Registered Number", value: "Lorem ipsum", key : "registrationNo" },
+      { label: "Regulator Registered Number", value: "Lorem ipsum" },
     ],
   },
-  // {
-  //   title: "Nodal Details",
-  //   buttonText: "Edit",
-  //   fieldsLeft: [
-  //     { label: "Nodal Officer Name", value: "Lorem ipsum" },
-  //     { label: "Nodal Officer Email", value: "Lorem ipsum" },
-  //   ],
-  //   fieldsRight: [
-  //     { label: "Nodal Officer Name", value: "Lorem ipsum" },
-  //     { label: "Nodal Officer Designation", value: "Lorem ipsum" },
-  //   ],
-  // },
+  {
+    title: "Nodal Details",
+    buttonText: "Edit",
+    fieldsLeft: [
+      { label: "Nodal Officer Name", value: "Lorem ipsum" },
+      { label: "Nodal Officer Email", value: "Lorem ipsum" },
+    ],
+    fieldsRight: [
+      { label: "Nodal Officer Name", value: "Lorem ipsum" },
+      { label: "Nodal Officer Designation", value: "Lorem ipsum" },
+    ],
+  },
+];
+
+export const competentSections = [
+ 
+  {
+    title: "Competent Authority",
+    buttonText: "Edit",
+
+    fieldsLeft: [
+      { label: "Name of Deposit Taker", value: "Lorem ipsum" },
+      { label: "Address Line 1", value: "Lorem ipsum" },
+      { label: "Address Line 2", value: "Lorem ipsum" },
+    ],
+    fieldsRight: [
+      { label: "PIN code", value: "Lorem ipsum" },
+      { label: "State", value: "Lorem ipsum" },
+      { label: "Jursidiction", value: "Lorem ipsum" },
+    ],
+  },
+  {
+    title: "Upload Documents",
+
+    fieldsLeft: [
+      { label: "Regulator Name", value: "Lorem ipsum" },
+      { label: "Registration Approval Date", value: "Lorem ipsum" },
+    ],
+    fieldsRight: [
+      { label: "Regulator Registered Number", value: "Lorem ipsum" },
+    ],
+  },
+  {
+    title: "Nodal Details",
+    buttonText: "Edit",
+    fieldsLeft: [
+      { label: "Nodal Officer Name", value: "Lorem ipsum" },
+      { label: "Nodal Officer Email", value: "Lorem ipsum" },
+    ],
+    fieldsRight: [
+      { label: "Nodal Officer Name", value: "Lorem ipsum" },
+      { label: "Nodal Officer Designation", value: "Lorem ipsum" },
+    ],
+  },
 ];

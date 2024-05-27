@@ -32,7 +32,7 @@ const HeroHome = () => {
                 <div className={card.class}>
                   <img src={card.image} alt={card.altText} className=" " />
                 </div>
-                <p className="text-[20px] leading-[24px] mt-[24px]">
+                <p className="text-[20px] leading-[24px] mt-[24px] text-gilroy-medium">
                   {card.title}
                 </p>
               </div>

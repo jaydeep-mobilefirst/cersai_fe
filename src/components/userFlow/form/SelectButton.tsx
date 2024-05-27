@@ -7,13 +7,15 @@ interface Option {
 }
 
 type Props = {
-  setOption: any;
+  onSelect?: (data: any) => void;
+  setOption?: (value: string) => void;
   options: Option[];
   selectedOption?: string | null;
   placeholder: string;
-  searchInputOnchange?: any;
+  searchInputOnchange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   searchInputValue?: string;
   showSearchInput?: boolean;
+  disabled?: boolean;
 };
 
 const SelectButton = ({
@@ -24,15 +26,23 @@ const SelectButton = ({
   searchInputValue,
   selectedOption,
   showSearchInput,
+  onSelect,
+  disabled,
 }: Props) => {
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const [optionsToShow, setOptionsToShow] = useState<any[]>(options);
   useEffect(() => {
     setArrowDirectionToggle(false);
   }, [selectedOption]);
 
-  const handleClickOutside = (event : any) => {
+  // Find the label of the currently selected option
+  const selectedLabel =
+    options.find((option) => option.value === selectedOption)?.label ||
+    placeholder;
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setArrowDirectionToggle(false);
     }
@@ -43,20 +53,21 @@ const SelectButton = ({
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
     }
-    
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [arrowDirectionToggle]); 
+  }, [arrowDirectionToggle]);
+
   return (
-    <>
+    <div className="w-full relative">
       <button
-        className="w-[250px] h-[56px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left"
-        type="button" 
+        disabled={disabled}
+        className="h-[56px] px-2 md:px-8 py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left w-full"
+        type="button"
         onClick={() => setArrowDirectionToggle(!arrowDirectionToggle)}
       >
-        {selectedOption ? selectedOption : placeholder}
+        {selectedLabel}
         <div>
           {!arrowDirectionToggle ? (
             <svg
@@ -84,7 +95,7 @@ const SelectButton = ({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth={2}
                 d="M5 15l7-7 7 7"
               ></path>
             </svg>
@@ -93,44 +104,14 @@ const SelectButton = ({
       </button>
       {arrowDirectionToggle && (
         <div
-          ref={dropdownRef}
-          className="absolute z-10 mt-2 w-[250px] rounded-md bg-white shadow-lg"
+          className="absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu"
-          style={{
-            width: "317px",
-            padding: "8px 16px",
-          }}
+          style={{ padding: "8px 16px" }}
         >
           {showSearchInput && searchInputOnchange && (
             <div className="relative p-2">
-              <svg
-                className="absolute left-4 top-4 text-gray-400"
-                width="24px"
-                height="24px"
-                viewBox="0 -0.5 25 25"
-                fill="none"
-                color="gray"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M5.5 10.7655C5.50003 8.01511 7.44296 5.64777 10.1405 5.1113C12.8381 4.57483 15.539 6.01866 16.5913 8.55977C17.6437 11.1009 16.7544 14.0315 14.4674 15.5593C12.1804 17.0871 9.13257 16.7866 7.188 14.8415C6.10716 13.7604 5.49998 12.2942 5.5 10.7655Z"
-                  stroke="#000000"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M17.029 16.5295L19.5 19.0005"
-                  stroke="#000000"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
               <input
                 type="search"
                 value={searchInputValue}
@@ -146,13 +127,21 @@ const SelectButton = ({
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
+            ref={dropdownRef}
           >
-            {options.map((option, index) => (
+            {options?.map((option, index) => (
               <a
                 key={index}
-                onClick={() => setOption(option)}
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900"
+                onClick={() => {
+                  if (setOption) {
+                    setOption(option.value);
+                  }
+                  setArrowDirectionToggle(false);
+                  if (onSelect) {
+                    onSelect(option);
+                  }
+                }}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 cursor-pointer"
                 role="menuitem"
               >
                 {option.label}
@@ -161,7 +150,7 @@ const SelectButton = ({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

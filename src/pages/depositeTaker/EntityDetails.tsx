@@ -1,265 +1,262 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import SelectButton from "../../components/userFlow/form/SelectButton";
-import InputFields from "../../components/userFlow/form/InputField";
-import TextArea from "../../components/userFlow/form/TextArea";
-import Button from "../../components/userFlow/form/Button";
-import ArrowIcon from "../../assets/images/Arrow.svg";
-import { EntityDetailschema } from "../../formValidationSchema/deposit_taker/EntityValidation.schema";
-import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../utils/axios";
-import { useDTStore } from "../../zust/deposit-taker-registration/verificationData";
+import React, { useContext, useState } from "react";
+import { useScreenWidth } from "../../utils/screenSize";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
+import LoaderSpin from "../../components/LoaderSpin";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 
 const EntityDetails: React.FC = () => {
-  const navigate = useNavigate();
-  const {entityFormData, setEntityFormData} = useDTStore((state) => state)
+  const screenWidth = useScreenWidth();
+  const [params, setParams] = useSearchParams();
+  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
+  const [loader, setLoader] = useState(false);
+  const Navigate = useNavigate();
 
-  const [states, setStates] = useState([]);
-  const [districts, setDistrict] = useState([]);
-  const [selectedState, setSelectedState] = useState<string | null>(null);
-  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
-  const [selectedEntity, setSelectedEntity] = useState<string | null>(null);
-  const options1 = [
-    { value: "Pvt Ltd", label: "Pvt Ltd" },
-    { value: "LLP", label: "LLP" },
-    { value: "Sole PArtnership", label: "Sole PArtnership" },
-  ];
+  const {allFormData, documentData} = useDepositTakerRegistrationStore((state : any) => state)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-    clearErrors
-  } = useForm({
-    resolver: yupResolver(EntityDetailschema),
-  });
-  const onSubmit = (data: any) => {
-    setEntityFormData(Object.keys(data).map((k) => ({name : k, value : data[k]})))
-    navigate("/depositetaker/signup/regulatordetails")
-  };
+  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Entity Details");
+  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  ? allFormData?.formFields?.form_fields?.filter(
+      (f: any) => f?.sectionId === sectionId?.id
+    )
+  : [];
 
-  const handleSelectState = (value: any) => {
-    setDistrict([]);
-    setSelectedDistrict("");
-    setValue("district", "");
-    setSelectedState(value.label);
-    setValue("state", value.label);
-    clearErrors("state");
-    handleStateSelect(value.value);
-  };
-  const handleSelectDistrict = (value: any) => {
-    setSelectedDistrict(value.label);
-    setValue("district", value.label);
-    clearErrors("district");
-  };
-
-
-  const handleStateSelect = (id: number) => {
-    axiosInstance
-      .get(`/cms/location/district/${id}/list?pagesize=50`)
-      .then((res : any) => {
-        if (res.data.status === "success") {
-          setDistrict(
-            res.data.data.map((state: { id: number; name: string }) => ({
-              label: state.name,
-              value: state.id,
-            }))
-          );
-        }
-      })
-      .catch((e : any) => alert("Error fetching States"));
-  };
-
-  // ---------- Fetch States ------------------
-  const fetchStates = () => {
-    axiosInstance
-      .get(`/cms/location/state/95/list?pagesize=50`)
-      .then((res : any) => {
-        if (res.data.status === "success") {
-          setStates(
-            res.data.data.map((state: { id: number; name: string }) => ({
-              label: state.name,
-              value: state.id,
-            }))
-          );
-        }
-      })
-      .catch((e : any) => alert("Error fetching States"));
-  };
-
-  const handleSelectEntity = (data :any) => {
-    setSelectedEntity(data.label)
-    setValue("entityType", data.label)
-    clearErrors("entityType")
-  }
-  useEffect(() => {
-    fetchStates();
-  }, []);
-
-  useEffect(() => {
-    if (entityFormData.length > 0) {
-     const uniqueId = entityFormData.find((d) => d.name === "uniqueId").value
-     const addressLine1 = entityFormData.find((d) => d.name === "addressLine1").value
-     const addressLine2 = entityFormData.find((d) => d.name === "addressLine2").value
-     const pinCode = entityFormData.find((d) => d.name === "pinCode").value
-     const gstNumber = entityFormData.find((d) => d.name === "gstNumber").value
-     const entityType = entityFormData.find((d) => d.name === "entityType").value
-     const state = entityFormData.find((d) => d.name === "state").value
-     const district = entityFormData.find((d) => d.name === "district").value
+  const onSubmit = async (event : any) => {
+    event?.preventDefault();
+    setLoader(true)
+    const noError = await handleValidationChecks(formFields)    
+    setLoader(false)
     
-     setValue("uniqueId", uniqueId)
-     setValue("addressLine1", addressLine1)
-     setValue("addressLine2", addressLine2)
-     setValue("pinCode", pinCode)
-     setValue("gstNumber", gstNumber)
-     setValue("entityType", entityType)
-     setValue("state", state)
-     setValue("district", district)
-     setSelectedDistrict(district)
-     setSelectedState(state)
-     setSelectedEntity(entityType)
-    }
-  }, [entityFormData])
-
-  useEffect(() => {
-    if (states.length > 0) {
-      let stateId : any = states?.find((s : any) => s.label === selectedState);      
-      if (stateId) {
-        stateId = stateId.value
-        handleStateSelect(stateId)
+    console.log({noError});
+    
+    if (noError) {
+      const edit = params.get('edit');
+      console.log({edit});
+      if (edit !== undefined && edit !== null && edit !== "") {
+        Navigate('/depositetaker/signup/reviewdetails')
+      }
+      else{
+        Navigate('/depositetaker/signup/regulatordetails')
       }
     }
-  }, [states])
+  };
+
   return (
-    <div className="flex flex-col p-6 w-full">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between h-full">
-        <div>
-          <h1 className="text-2xl font-bold mb-6">Entity Details</h1>
-          <div className="grid grid-cols-3 gap-5">
-            <div>
-              <label htmlFor="Typeofentity" className="text-base font-normal">
-                Type of Entity <span className="text-red-500">*</span>
-              </label>
-
-              <SelectButton
-                setOption={handleSelectEntity}
-                options={options1}
-                selectedOption={selectedEntity}
-                placeholder="Select"
-                showSearchInput={false}
-              />
-              <span className="text-red-400">
-                {errors.entityType?.message}
-              </span>
-            </div>
-            <div>
-              <label htmlFor="uniqueId" className="text-base font-normal">
-                Unique Id <span className="text-red-500">*</span>
-              </label>
-              <InputFields
-                placeholder="Enter Unique Id"
-                {...register("uniqueId")}
-              />
-              {errors.uniqueId && (
-                <p className="text-red-500">{errors.uniqueId.message}</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="addressLine1" className="text-base font-normal">
-                Address line <span className="text-red-500">*</span>1
-              </label>
-              <TextArea
-                placeholder="Enter address"
-                {...register("addressLine1")}
-                width="315px"
-              />
-              {errors.addressLine1 && (
-                <p className="text-red-500">{errors.addressLine1.message}</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="addressLine2" className="text-base font-normal">
-                Address line <span className="text-red-500">*</span>2
-              </label>
-              <TextArea
-                placeholder="Enter address"
-                {...register("addressLine2")}
-                width="315px"
-              />
-
-              {errors.addressLine2 && (
-                <p className="text-red-500">{errors.addressLine2.message}</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="pinCode" className="text-base font-normal">
-                Pine code <span className="text-red-500">*</span>
-              </label>
-              <InputFields placeholder="Type Here" {...register("pinCode")} />
-              {errors?.pinCode && (
-                <p className="text-red-500">{errors?.pinCode?.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="state" className="text-base font-normal">
-                State <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSelectState}
-                options={states}
-                selectedOption={selectedState}
-                placeholder="Select"
-                showSearchInput={true}
-              />
-              <span className="text-red-400">
-                {errors.state?.message}
-              </span>
-            </div>
-
-            <div>
-              <label htmlFor="district" className="text-base font-normal">
-                District <span className="text-red-500">*</span>
-              </label>
-              <SelectButton
-                setOption={handleSelectDistrict}
-                options={districts}
-                selectedOption={selectedDistrict}
-                placeholder="Select"
-                showSearchInput={true}
-              />
-              <span className="text-red-400">
-                {errors.district?.message}
-              </span>
-            </div>
-            <div>
-              <label htmlFor="gstNumber" className="text-base font-normal">
-                GST Number <span className="text-red-500">*</span>
-              </label>
-              <InputFields placeholder="Type here" {...register("gstNumber")} />
-              {errors?.gstNumber && (
-                <p className="text-red-500">{errors?.gstNumber?.message}</p>
-              )}
-            </div>
+    <>
+      <div className="border-[#E6E6E6] border-[1px] -mt-[2px]"></div>
+      {/* <div className="flex flex-col p-6 w-full"> */}
+      <form
+        // className="flex flex-col justify-between h-full"
+        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+      >
+        <div
+          style={{
+            width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+          }}
+        >
+          <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+          <div className="bg-white p-6 w-full">
+            <h1 className="text-2xl font-bold mb-6">Entity Details</h1>
+            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
           </div>
         </div>
 
-        <div className="flex justify-between items-center ">
-          <div className="flex cursor-pointer" onClick={() => navigate("/depositetaker/signup/verification")}>
-            <img src={ArrowIcon} alt="" />
-            <h1 className="text-sm font-normal text-black">Back</h1>
+        <div>
+          <div
+            className="flex w-full p-4 lg:px-[29px] flex-row justify-between items-center"
+            style={{
+              width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+            }}
+          >
+            <div className="flex flex-row items-center space-x-2"
+            onClick={() => Navigate('/depositetaker/signup/verification')}
+
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="shrink-0"
+              >
+                <path
+                  d="M15 6L9 12L15 18"
+                  stroke="#1D1D1B"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <button 
+              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
+                Back
+              </button>
+            </div>
+            <div className="flex items-center">
+            <button
+                  type="submit"
+                  disabled={loader}
+                  onClick={onSubmit}
+                  className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                >
+                  {loader ? <LoaderSpin/> : "Save & Continue"}
+                </button>
+            </div>
           </div>
           <div>
-            <Button type="submit" label="Save & Continue" />
+            <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
+
+            <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+              © 2024 Protean BUDs, All Rights Reserved.
+            </p>
           </div>
         </div>
-
       </form>
-    </div>
+      {/* </div> */}
+    </>
   );
 };
 
 export default EntityDetails;
+
+
+
+/**
+<div>
+                <label
+                  htmlFor="Typeofentity"
+                  className="text-base font-normal text-text-gilroy-medium"
+                >
+                  Type of Entity <span className="text-red-500">*</span>
+                </label>
+
+                <SelectButton
+                  setOption={handleSetOption1}
+                  options={options1}
+                  selectedOption={selectedOption1}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange1}
+                  searchInputValue={searchInputValue1}
+                  showSearchInput={false}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="uniqueId"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  <div className="flex">
+                    Unique ID Number <span className="text-red-500">*</span>
+                    <img
+                      src={InfoCircle}
+                      alt=" InfoCircle "
+                      className="w-5 mx-2"
+                    />
+                  </div>
+                </label>
+                <InputFields
+                  placeholder="Enter Unique Id"
+                  {...register("uniqueId")}
+                />
+                {errors.uniqueId && (
+                  <p className="text-red-500">{errors.uniqueId.message}</p>
+                )}
+              </div>
+              <div className="-mt-[6px]">
+                <label
+                  htmlFor="addressLine1"
+                  className="text-base font-normal text-text-gilroy-medium"
+                >
+                  Registered Address Line 1
+                  <span className="text-red-500">*</span>
+                </label>
+                <TextArea
+                  placeholder="Enter address"
+                  {...register("addressLine1")}
+                />
+                {errors.addressLine1 && (
+                  <p className="text-red-500">{errors.addressLine1.message}</p>
+                )}
+              </div>
+              <div className="-mt-[6px]">
+                <label
+                  htmlFor="addressLine2"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  Registered Address Line 2
+                </label>
+                <TextArea
+                  placeholder="Enter address"
+                  {...register("addressLine2")}
+                />
+
+                {errors.addressLine2 && (
+                  <p className="text-red-500">{errors.addressLine2.message}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="pinCode"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  Pine code <span className="text-red-500">*</span>
+                </label>
+                <InputFields placeholder="Type Here" {...register("pinCode")} />
+                {errors?.pinCode && (
+                  <p className="text-red-500">{errors?.pinCode?.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="state"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  State <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption2}
+                  options={options2}
+                  selectedOption={selectedOption2}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange2}
+                  searchInputValue={searchInputValue2}
+                  showSearchInput={true}
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="district"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  District <span className="text-red-500">*</span>
+                </label>
+                <SelectButton
+                  setOption={handleSetOption3}
+                  options={options3}
+                  selectedOption={selectedOption3}
+                  placeholder="Select"
+                  searchInputOnchange={handleSearchInputChange3}
+                  searchInputValue={searchInputValue3}
+                  showSearchInput={true}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="gstNumber"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  GST Number <span className="text-red-500">*</span>
+                </label>
+                <InputFields
+                  placeholder="Type here"
+                  {...register("gstNumber")}
+                />
+                {errors?.gstNumber && (
+                  <p className="text-red-500">{errors?.gstNumber?.message}</p>
+                )}
+              </div>
+ */

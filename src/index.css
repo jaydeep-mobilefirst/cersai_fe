@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* body {
+  overflow-y: hidden;
+} */
+
 .font-Gilroy-Regular {
   font-family: Gilroy-Regular;
 }
@@ -39,15 +43,23 @@
 }
 
 .buds-background-image {
-  background-image: url("./assets/images/bg.svg");
+  background-image: url("./assets/images/new_images/bg.svg"), url("./assets/images/new_images/Vector.svg");
+  background-size: auto, auto;
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, center;
+  background-position: right bottom, left bottom;
+}
+
+.query-bg-image {
+  background-image: url("./assets/images/new_images/footer_vector.png");
   background-size: auto;
   background-repeat: no-repeat;
   background-position: center;
   background-position: right bottom;
 }
 
-.query-bg-image {
-  background-image: url("./assets/images/landingpagebg2.svg");
+.about-buds-background {
+  background-image: url("./assets/images/new_images/About_Buds_Vector.png");
   background-size: auto;
   background-repeat: no-repeat;
   background-position: center;
@@ -64,4 +76,30 @@
   background-repeat: no-repeat;
   background-position: center;
   background-position: right bottom;
+}
+.form-container {
+  max-height: 600px; /* Adjust the height as needed */
+  overflow-y: auto;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 39px;
+  flex-shrink: 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #385723;
+  border-radius: 16px;
+}
+
+.inputStyle {
+  width: 3rem !important;
+  height: 3rem !important;
+  border-radius: 7px;
+  background: #e7e7e7;
+  margin: 12px;
 }

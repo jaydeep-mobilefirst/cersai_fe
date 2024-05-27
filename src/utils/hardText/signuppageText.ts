@@ -22,11 +22,18 @@ export const registrationFirstPage = [
   { heading: "Entity Type", removeBtn: closeCircle },
   { btn1: "Cacel", btn2: "Select" },
 ];
+// export const radioButtons = [
+//   { id: 1, text: "Deposit Taker",path },
+//   { id: 2, text: "Regulator" },
+//   { id: 3, text: "Designated Court" },
+//   { id: 4, text: "Competent Authority" },
+// ];
+
 export const radioButtons = [
-  { id: 1, text: "Deposit Taker" },
-  { id: 2, text: "Regulator" },
-  { id: 3, text: "Designated Court" },
-  { id: 4, text: "Competent Authority" },
+  { id: 1, text: "Deposit Taker",path: "/depositetaker/signup/verification", entityCode : "DT" },
+  { id: 2, text: "Regulator",path:"/regulator/court/regulatordetails", entityCode : "RG"},
+  { id: 3, text: "Designated Court",path:"/designated/court/designateddetails", entityCode : "DC" },
+  { id: 4, text: "Competent Authority",path:"/competent/authority/competentdetails", entityCode : "CA" },
 ];
 //UploadDocumentComp Component
 export const uploadModal=[
@@ -86,7 +93,7 @@ export const signupSideBar = [
   },
   {
     id: 2,
-    path:"/depositetaker/signup/entitydetials",
+    path:"/depositetaker/signup/entitydetails",
     imgSrc: profieCircle,
     imgSrcHighlighted:profileCircleHighlighted,
     description: "Entity Details",
@@ -121,3 +128,45 @@ export const signupSideBar = [
     percentage: 100,
   },
 ];
+
+export const regulatorSignupSideBar = [
+  
+ 
+  {
+    id: 1,
+    path:"/regulator/court/regulatordetails",
+    imgSrc: clipboardText,
+    imgSrcHighlighted:clickboardTextHigh,
+    description: "Regulators Details",
+    tickImgSrc: tickCircleWhite,
+    percentage: 0,
+  },
+  {
+    id: 2,
+    path:"/regulator/court/uploaddocuments",
+    imgSrc: buildings,
+    imgSrcHighlighted:buildingsHigh,
+    description: "Upload Documents",
+    tickImgSrc: tickCircleWhite,
+    percentage: 75,
+  },
+  {
+    id: 3,
+    path:"/regulator/court/nodaldetails",
+    imgSrc: buildings,
+    imgSrcHighlighted:buildingsHigh,
+    description: "Nodal Details",
+    tickImgSrc: tickCircleWhite,
+    percentage: 75,
+  },
+  {
+    id: 4,
+    path:"/regulator/court/reviewdetails",
+    imgSrc: documentTest,
+    imgSrcHighlighted:documentTestHigh,
+    description: "Review Details",
+    tickImgSrc: tickCircleWhite,
+    percentage: 100,
+  },
+];
+

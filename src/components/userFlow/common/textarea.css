@@ -1,0 +1,7 @@
+.textarea-component::-webkit-resizer {
+  display: none;
+}
+
+.textarea-component::-webkit-scrollbar {
+  display: none;
+}

@@ -15,5 +15,43 @@ const dateFormattor = (date : Date) => {
   return [day, month, year].join('-');
 }
 
+async function getMimeTypeFromArrayBuffer(arrayBuffer : any) {
+    const uint8arr = new Uint8Array(arrayBuffer)
+  
+    const len = 4
+    if (uint8arr.length >= len) {
+      let signatureArr = new Array(len)
+      for (let i = 0; i < len; i++)
+        signatureArr[i] = (new Uint8Array(arrayBuffer))[i].toString(16)
+      const signature = signatureArr.join('').toUpperCase()
+        // 25504446 - pdf
+        // 3C737667 - svg
+        console.log({signature});
+        
+      switch (signature) {
+        case '89504E47':
+          return 'image/png'
+        case '47494638':
+          return 'image/gif'
+        case '25504446':
+          return 'application/pdf'
+        case 'FFD8FFDB':
+        case 'FFD8FFE0':
+          return 'image/jpeg'
+        case '504B0304':
+          return 'application/zip'
+        case '3C737667':
+          return 'image/svg+xml'
+        case 'D0CF11E0':
+          return 'application/msword'
+        default:
+          return null
+      }
+    }
+    return null
+  }
 
-export {dateFormattor}
+const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export {dateFormattor, panRegex, emailRegex, getMimeTypeFromArrayBuffer}

@@ -1,293 +1,292 @@
 // @ts-nocheck
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
-import download from "../../assets/images/arrow-down.svg";
-import html2pdf from "html2pdf.js";
-import { sections } from "../../utils/hardText/landingpageText";
-import useFormStore from "../../store/formStore";
-import { useDTStore } from "../../zust/deposit-taker-registration/verificationData";
-import { axiosInstance } from "../../utils/axios";
+import download from "../../assets/images/new_images/arrowDown.png";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import axios from "axios";
+import LoaderSpin from "../../components/LoaderSpin";
+import { bffUrl } from "../../utils/api";
+import html2pdf from "html2pdf.js";
+import { signupSideBar } from "../../utils/hardText/signuppageText";
+import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
-
   const downloadPDF = () => {
     setIsDownloading(true);
     const element = document.getElementById("reviewContent");
-    html2pdf().from(element).save();
-    setIsDownloading(false);
+    const isMobile = window.innerWidth <= 768;
+    const options = {
+      margin: 1,
+      filename: "details.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: isMobile ? 1 : 2 },
+      jsPDF: {
+        unit: "in",
+        format: isMobile ? "a4" : "letter",
+        orientation: "portrait",
+      },
+    };
+    html2pdf()
+      .set(options)
+      .from(element)
+      .save()
+      .finally(() => {
+        setIsDownloading(false);
+      });
   };
 
   return { downloadPDF, isDownloading };
 };
 
 const ReviewMain = () => {
+  const [para1, setPara1] = useState("");
+  const [para2, setPara2] = useState("");
+  const [submitModal, setSubmitModal] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
+  const [loader, setLoader] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
-  const {
-    nodalOfficerName,
-    nodalOfficerEmail,
-    nodalOfficerMobileNumber,
-    nodalOfficerDesignation,
-  } = useFormStore();
-  const { verificationFormData, entityFormData, regulatorFormData } =
-    useDTStore();
-  console.log(
-    verificationFormData,
-    entityFormData,
-    regulatorFormData,
-    "Review data"
-  );
 
-  const navigateToLandingPage = (link : string ) => {
-    Navigate(link);
+  const sectionCodes: any = {
+    1: "de_verification",
+    2: "de_entity_details",
+    3: "de_regulations_details",
+    4: "Nodal Officer",
+  };
+  console.log({ allFormData });
+
+  const handleFinalSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoader(true);
+    let finalResult =
+      allFormData &&
+      allFormData?.formFields?.form_fields?.map((field: any) => {
+        return {
+          fieldId: field?.id,
+          label: field?.label,
+          sectionCode: sectionCodes[field?.sectionId],
+          value: field?.userInput,
+        };
+      });
+
+      let docs = documentData?.length > 0 ? documentData?.map((doc : any) => {
+        return {
+          fieldId: doc?.id,
+          label: doc?.documentName,
+          sectionCode: "Upload Documents",
+          value: doc?.uploadFileId,
+        };
+      }) : []
+
+      finalResult = [...finalResult, ...docs]
+
+    axios
+      .post(bffUrl + "/deposit-taker/add-form-fields", {
+        formData: finalResult,
+      })
+      .then((response: any) => {
+        console.log({ response });
+
+        const data = response.data;
+        console.log({ data });
+
+        if (data?.success) {
+          // setSubmitModal( true)
+          setPara1(`Your registration request has been sent successfully and
+          approval/rejection of your registration will be informed to you
+          via email.`);
+          setPara2(
+            `Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`
+          );
+          setSubmitted(true);
+          setSubmitModal(true);
+        } else {
+          setPara1(`Something went wrong`);
+          setPara2(`Please try again later`);
+          setSubmitted(false);
+          setSubmitModal(true);
+        }
+      })
+      .catch((e: any) => {
+        setLoader(false);
+        setPara1(e?.response?.data?.detail?.message)
+        setPara2(`Please try again later`);
+        setSubmitted(false);
+        setSubmitModal(true);
+        setLoader(false);
+      });
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
 
-  const handleEdit = () => {
-    Navigate("/depositetaker/signup/nodaldetails", {
-      state: {
-        nodalOfficerName: nodalOfficerName,
-        nodalOfficerEmail: nodalOfficerEmail,
-        nodalOfficerMobileNumber: nodalOfficerMobileNumber,
-        nodalOfficerDesignation: nodalOfficerDesignation,
-      },
-    });
-  };
-
-  let counter = 1;
-  const submit = async () => {
-    const verification = verificationFormData.map((v) => {
-      counter++;
-      return {
-        fieldId : counter,
-        label: v.name,
-        sectionCode : "de_verification",
-        value : v.value
-      }
-    })
-    const entities = entityFormData.map((v) => {
-      counter++;
-      return {
-        fieldId : counter,
-        label: v.name,
-        sectionCode : "de_entity_details",
-        value : v.value
-      }
-    })
-    const regulators = regulatorFormData.map((v) => {
-      counter++;
-      return {
-        fieldId : counter,
-        label: v.name,
-        sectionCode : "de_regulations_details",
-        value : v.value
-      }
-    })
-
-    const nodal_details = [
-      {        
-        fieldId : counter++,
-        label: "nodalOfficerName",
-        sectionCode : "de_nodal_details",
-        value : nodalOfficerName
-      },
-      {        
-        fieldId : counter++,
-        label: "nodalOfficerEmail",
-        sectionCode : "de_nodal_details",
-        value : nodalOfficerEmail
-      },
-      {        
-        fieldId : counter++,
-        label: "nodalOfficerMobileNumber",
-        sectionCode : "de_nodal_details",
-        value : nodalOfficerMobileNumber
-      },
-      {        
-        fieldId : counter++,
-        label: "nodalOfficerDesignation",
-        sectionCode : "de_nodal_details",
-        value : nodalOfficerDesignation
-      },
-    ]
-
-    const resultantArray = [...verification, ...entities, ...regulators, ...nodal_details]
-
-    const response = await axios.post("http://34.49.240.236/buds-portal/deposit-taker/add-form-fields/DT", {formData : resultantArray})
-    const data = await response.data;
-
-    if (data.success) {
-      alert(data.message);
-    }
-    
-
-  }
-
   return (
     <>
-      <div className="container mx-auto p-6 w-full">
-        <div id="reviewContent">
-          <h1 className="text-2xl font-bold mb-6">Review Details</h1>
-           {sections.map((section, index) => (
-            <div className="mb-[16px]">
-              <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px;] text-gilroy-bold">
-                <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                  {section.title}
-                </p>
-                <button
-                  onClick={
-                    section.buttonText === "Edit"
-                      ? () => navigateToLandingPage(section.link)
-                      : (e) => {e.preventDefault()}
-                  }
-                  className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal "
-                >
-                  {section.buttonText}
-                </button>
-              </div>
+      <div className="flex flex-col justify-between h-screen">
+        <header className="lg:p-[38px] border-b border-gray-200"></header>
+        <main className="flex-grow p-8 overflow-auto custom-scrollbar">
+          <div id="reviewContent">
+            <h1 className="text-2xl font-bold mb-6 font-bold">Review</h1>
+            {allFormData &&
+              allFormData?.entitySections?.map(
+                (section: any, index: number) => (
+                  <div className="mb-[16px]" key={index}>
+                    <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px]">
+                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[20px] lg:text-[20px] pb-2 text-nowrap font-bold text-2xl" >
+                        {section?.sectionName}
+                      </p>
+                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-bold">
+                        {section?.sectionName !== "Verification" ? (
+                          <Link
+                            to={
+                              signupSideBar.find(
+                                (sec) =>
+                                  sec?.description === section?.sectionName
+                              )?.path + "?edit=true"
+                            }
+                          >
+                            Edit
+                          </Link>
+                        ) : (
+                          "Success"
+                        )}
+                      </button>
+                    </div>
 
-              <div className="ml-[16px] mt-[24px] mr-[16px] mb-[24px] ">
-                <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                  <div className="  w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px]">
-                    {section.fieldsLeft.map((field, idx) => (
-                      <div className="sm:mr-[48px] flex justify-between ">
-                        <div className="opacity-60">
-                          {field.label}
-                          <span className="text-[#ff0000]">*</span>
+                    <div className="shadow-sm p-5 rounded-md ">
+                      <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px] text-gilroy-medium">
+                        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          {allFormData?.formFields?.form_fields
+                            ?.filter((f: any) => f?.sectionId === section?.id)
+                            ?.map((field: any, idx: number) => {
+                              console.log({
+                                field,
+                              });
+
+                              return (
+                                <div
+                                  className={`sm:mr-[48px] flex justify-between ${
+                                    idx % 2 === 0
+                                      ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                      : ""
+                                  } `}
+                                  key={idx}
+                                >
+                                  <div className="text-gray-500">
+                                    {field.label}
+                                    <span className="text-[#ff0000]">*</span>
+                                  </div>
+                                  <div>
+                                    {field?.dscFileNAme !== "" &&
+                                    field?.dscFileNAme !== undefined
+                                      ? field?.dscFileNAme
+                                      : field.userInput}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                            {
+                              section?.sectionName === "Upload Documents" && 
+                              documentData?.map((doc : any, idx : number) => {
+                                return <div
+                                className={`sm:mr-[48px] flex justify-between ${
+                                  idx % 2 === 0
+                                    ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                    : ""
+                                } `}
+                                key={idx}
+                              >
+                                <div className="text-gray-500">
+                                  {doc?.documentName}
+                                  <span className="text-[#ff0000]">*</span>
+                                </div>
+                                <div>
+                                  {
+                                    doc?.fileName
+                                  }
+                                </div>
+                              </div>
+                              })
+                            }
                         </div>
-                        <div>
-                          {section.title === "Verification Status" && verificationFormData.find(v => v.name === field.key)?.value}
-                          {section.title === "Entity Details" && entityFormData.find(v => v.name === field.key)?.value}
-                          {section.title === "Regulator Details" && regulatorFormData.find(v => v.name === field.key)?.value}
-                          </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
+                )
+              )}
 
-                  <div className="w-full grid gap-y-[16px]">
-                    {section.fieldsRight.map((field, idx) => (
-                      <div className="sm:ml-[48px] flex justify-between">
-                        <div className="opacity-60">
-                          {field.label}
-                          <span className="text-[#ff0000]"></span>
-                        </div>
-                        <div>
-                          {section.title === "Verification Status" && verificationFormData.find(v => v.name === field.key)?.value}
-                          {section.title === "Entity Details" && entityFormData.find(v => v.name === field.key)?.value}
-                          {section.title === "Regulator Details" && regulatorFormData.find(v => v.name === field.key)?.value}
-
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            <div className="flex flex-shrink-0 mt-[20px]">
+              <div className="justify-center align-center">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 accent-[#1c648e]"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  placeholder="ischecked"
+                />
               </div>
-            </div>
-          ))} 
-
-          <div className="mb-[16px]">
-            <div className="rounded-t-lg bg-[#EEF7EB] flex justify-between h-[57px;] text-gilroy-bold">
-              <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                Nodal Details
-              </p>
-              <button
-                onClick={handleEdit}
-                className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal "
-              >
-                Edit
-              </button>
-            </div>
-
-            <div className="ml-[16px] mt-[24px] mr-[16px] mb-[24px] ">
-              <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                <div className="  w-full sm:border-r-[0.5px] border-r-[#385723] border-opacity-20 grid gap-y-[16px]">
-                  <div className="sm:mr-[48px] flex justify-between ">
-                    <div className="opacity-60">
-                      Nodal Officer Name
-                      <span className="text-[#ff0000]">*</span>
-                    </div>
-                    <div>{nodalOfficerName}</div>
-                  </div>
-                  <div className="sm:mr-[48px] flex justify-between ">
-                    <div className="opacity-60">
-                      Nodal Officer Email
-                      <span className="text-[#ff0000]">*</span>
-                    </div>
-                    <div>{nodalOfficerEmail}</div>
-                  </div>
-                </div>
-
-                <div className="w-full grid gap-y-[16px]">
-                  <div className="sm:ml-[48px] flex justify-between">
-                    <div className="opacity-60">
-                      Nodal Officer Designation
-                      <span className="text-[#ff0000]"></span>
-                    </div>
-                    <div>{nodalOfficerDesignation}</div>
-                  </div>
-                  <div className="sm:ml-[48px] flex justify-between">
-                    <div className="opacity-60">
-                      Nodal Officer Mobile Number
-                      <span className="text-[#ff0000]"></span>
-                    </div>
-                    <div>{nodalOfficerMobileNumber}</div>
-                  </div>
-                </div>
+              <div className="leading-[24px] ml-4 text-gilroy-medium">
+                I here by declare that all information provided is best of my
+                knowledge
               </div>
             </div>
           </div>
-        </div>
+        </main>
 
-        <div className="flex flex-shrink-0 mt-[20px]">
-          <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={handleCheckboxChange}
-            />
+        <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
+          <div className=" ml-5">
+            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0" role="button" onClick={() => Navigate('/depositetaker/signup/nodaldetails')}>
+              <img src={Arrow} alt="back Arrow" className="mr-2" />
+              Back
+            </button>
           </div>
-          <div className="leading-[24px]">
-            I here by declare that all information provided is best of my
-            knowledge
-          </div>
-        </div>
-
-        <div className="flex text-nowrap justify-between mt-[52px] sm:flex-row">
-          <button className="flex text-gilroy-regulartext-[14px]" onClick={handleEdit}>
-            <div>
-              <img src={Arrow} alt="back Arrow" />
-            </div>
-            <div>Back</div>
-          </button>
-          <div className="flex text-gilroy-semibold">
+          <div className="flex mr-9">
             <div>
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className="w-auto md:w-[208px] gap-[8px] flex rounded-[12px] text-[#52AE32] border border-[#52AE32] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className="w-auto md:w-[208px] md:h-[48px] gap-[8px] text-gilroy-semibold flex rounded-[12px] text-[#1C468E] border border-[#1C468E] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
-                <img src={download} alt="download" />{" "}
-                {isDownloading ? "Downloading..." : "Download pdf"}
+                <img src={download} alt="download" className="mr-2" />
+                {isDownloading ? "Downloading..." : "Download PDF"}
               </button>
             </div>
-            <div className="ml-[16px]">
+            <div>
               <button
-                onClick={submit}
-                disabled={!isChecked}
-                className={`w-auto md:w-[208px] rounded-[12px] bg-[#385723] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
+                onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
+                disabled={!isChecked || loader}
+                className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] rounded-[12px] text-gilroy-semibold ${
+                  isChecked ? "bg-[#1C468E]" : "bg-[#1C468E] opacity-50"
+                }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
-                Submit
+                {loader ? <LoaderSpin /> : "Submit"}
               </button>
             </div>
           </div>
         </div>
+        <SuccessPopup
+          closePopup={() => {
+            setSubmitModal(false);
+            if (submitted) {
+              Navigate('/')
+            }
+          }}
+          showPopup={() => setSubmitModal(true)}
+          toggle={submitModal}
+          para1={para1}
+          para2={para2}
+          success={submitted}
+        />
+        <footer className="p-4 border-[#E6E6E6] border-[1px] ">
+          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            © 2024 Protean BUDs, All Rights Reserved.
+          </p>
+        </footer>
       </div>
     </>
   );
