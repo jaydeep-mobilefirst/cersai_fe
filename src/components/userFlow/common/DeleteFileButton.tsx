@@ -1,6 +1,7 @@
 import { useState } from "react";
 import trashIcon from "../../../assets/images/trash.svg";
 import LoaderSpin from "../../LoaderSpin";
+import Swal from "sweetalert2";
 
 type Props = {
   fieldData: any,
@@ -15,17 +16,35 @@ type Props = {
 const DeleteFileButton = ({ fieldData, fieldType, onFileChange }: Props) => {
   const [loader, setLoader] = useState<boolean>(false);
   const deleteFile = async () => {
-    console.log({onFileChange});
-    if (onFileChange) {
+    Swal.fire({
+      icon : "warning",
+      title : "Are you sure",
+      showCancelButton : true,
+      reverseButtons : true,
+      confirmButtonText : "Delete",
+      confirmButtonColor : "blue",
+    })
+    .then(async (res) => {
+      if (!res?.isConfirmed) {
+        return;
+      }
+      if (onFileChange) {
       setLoader(true)
       
       await onFileChange("", fieldData, fieldType)
       setLoader(false)
     }
+      
+    })
+    .catch(res => {
+      console.log({res});
+      
+    })
+   
   }
   return (
     <div onClick={deleteFile}
-      className="bg-white mt-1 mr-1 flex justify-center items-center h-10 w-10 rounded">
+    className="bg-white mt-1 mr-1 flex justify-center items-center h-10 w-10 rounded">
       {
         loader === true ?
           <LoaderSpin />

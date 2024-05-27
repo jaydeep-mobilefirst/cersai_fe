@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import ProfileUploadDocument from "../../../components/userFlow/form/ProfileUploadDocument";
-import Footer from "../../../components/userFlow/userProfile/Footer";
 import { useScreenWidth } from "../../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
@@ -9,6 +8,9 @@ import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import UploadFile from "../../designatedCourt/UploadFile";
+import DeleteUpload from "../../designatedCourt/DeleteUpload";
+import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 
 type Props = {};
 
@@ -16,36 +18,46 @@ const ProfileUploadDocuments = (props: Props) => {
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState<boolean>(false);
-  const [fileLoader, setFileLoader] = useState<number>(0);
+  const [showUploadPopup, setShowUploadPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [fieldData, setFieldData] = useState<any>(null);
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
+
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Upload Documents"
+  )?.id
+
   const { onFileChange, handleDocumentValidations } =
     useContext(FormHandlerContext);
 
-  const handleFileChange = (file: File | null, field: any) => {
-    setFileLoader(field?.id);
-    const entityUniqueId = sessionStorage.getItem("entityUniqueId");
-    const fieldType = allFormData?.fileTypes?.find(
-      (type: any) => type?.id === field?.fileType
-    )?.name;
-    onFileChange(file, field, fieldType, entityUniqueId ?? "");
-    setFileLoader(0);
-  };
+  // const handleFileChange = (file: File | null, field: any) => {
+  //   setFileLoader(field?.id);
+  //   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
+  //   const fieldType = allFormData?.fileTypes?.find(
+  //     (type: any) => type?.id === field?.fileType
+  //   )?.name;
+  //   onFileChange(file, field, fieldType, entityUniqueId ?? "");
+  //   setFileLoader(0);
+  // };
 
-  const deleteFile = (field: any) => {
-    const fieldType = allFormData?.fileTypes?.find(
-      (type: any) => type?.id === field?.fileType
-    )?.name;
-    onFileChange("", field, fieldType);
-  };
+  // const deleteFile = (field: any) => {
+  //   const fieldType = allFormData?.fileTypes?.find(
+  //     (type: any) => type?.id === field?.fileType
+  //   )?.name;
+  //   onFileChange("", field, fieldType);
+  // };
 
   const onSubmit = async (e: any) => {
-    e.preventDefault();
+    e.preventDefault();    
+    setLoader(true)
     const goodToGo = await handleDocumentValidations(
       documentData.map((d: { sectionId: number }) => d?.sectionId)
     );
     if (!goodToGo) {
+      setLoader(false)
       return;
     }
 
@@ -58,7 +70,6 @@ const ProfileUploadDocuments = (props: Props) => {
         value: field.uploadFileId,
       }));
 
-    setLoader(true);
     axios
       .patch(
         `${bffUrl}/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
@@ -67,15 +78,16 @@ const ProfileUploadDocuments = (props: Props) => {
         }
       )
       .then((response) => {
-        console.log(response, "response");
         Swal.fire({
           icon: "success",
           text: "Documents uploaded successfully",
           confirmButtonText: "Ok",
         });
+        setLoader(false)
         Navigate("/dt/profile?current=branches");
       })
       .catch((err) => {
+        setLoader(false)
         Swal.fire({
           icon: "error",
           text: err?.response?.data?.detail?.message,
@@ -85,7 +97,36 @@ const ProfileUploadDocuments = (props: Props) => {
     setLoader(false);
   };
 
-  console.log({ documentData });
+  // ---------------------------------------------------------------------------------------
+
+  const closePopup = () => {
+    setShowUploadPopup(false);
+  };
+
+  const toggleDeletePopup = () => {
+    setShowDeletePopup(!showDeletePopup);
+  };
+
+  const toggleUploadPopup = () => {
+    setShowUploadPopup(true);
+  };
+
+  const handleDeleteFile = () => {
+    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fieldData?.fileType)?.name;
+    onFileChange("", fieldData, fieldType);
+    setFile(null);
+    toggleDeletePopup();
+  }; 
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fieldData?.fileType)?.name;
+     if (event.target.files && event.target.files.length > 0) {
+       setFile(event.target.files[0]);
+       onFileChange(event.target.files[0], fieldData, fieldType);
+       toggleUploadPopup();
+       closePopup();
+     }
+   };
 
   return (
     <>
@@ -95,28 +136,31 @@ const ProfileUploadDocuments = (props: Props) => {
           height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
         }}
       >
+        {showUploadPopup && (
+            <UploadFile
+              showUploadPopup={showUploadPopup}
+              closePopup={closePopup}
+              file={file}
+              handleFileChange={handleFileChange}
+            />
+          )}
+          {showDeletePopup && (
+            <DeleteUpload
+              file={file}
+              handleDeleteFile={handleDeleteFile}
+              toggleDeletePopup={toggleDeletePopup}
+              showDeletePopup={showDeletePopup}
+            />
+          )}
         <div className="p-6 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-5 space-y-0">
-          {documentData &&
-            documentData?.map((item: any) => {
-              return (
-                <>
-                  <div key={item.id}>
-                    <ProfileUploadDocument
-                      required={item?.required}
-                      documentName={item.documentName}
-                      id="Dsc"
-                      type="button"
-                      deleteFile={() => deleteFile(item)}
-                      onFileUpload={(file) => handleFileChange(file, item)}
-                      fileSelected={item?.fileName !== ""}
-                      fileName={item?.fileName}
-                      fileData={item}
-                    />
-                  </div>
-                  <span className="text-red-500">{item?.error}</span>
-                </>
-              );
-            })}
+          <DynamicFields
+              allFormData={allFormData}
+              documentFields={documentData}
+              toggleUploadPopup={toggleUploadPopup}
+              setFieldData={setFieldData}
+              sectionId={sectionId}
+              onFileChange={onFileChange}
+          />
         </div>
         <div className="p-4">
           <div>

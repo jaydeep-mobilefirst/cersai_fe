@@ -29,7 +29,7 @@ const QueryResolutionComp = () => {
           <h1 className="text-gilroy-semibold text-[#1C468E] text-[24px] md:text-xl font-normal leading-snug">
             {queryResolutionComp[3].onlineHeading}
           </h1>
-          <p className="text-gilroy-light text-black lg:w-[396px] text-base font-normal leading-normal">
+          <p className="text-gilroy-light text-black lg:w-full text-base font-normal leading-normal">
             {queryResolutionComp[3].descritpion}
           </p>
         </div>

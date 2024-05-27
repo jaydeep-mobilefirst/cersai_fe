@@ -57,21 +57,17 @@ const DscButton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
                 <img
                   src={UploadButtonFolderSvg}
                   alt="UploadButtonFolderSvg "
-                  className="pr-3"
+                  className="pr-3 w-[56px] h-[44px]"
                 />
               </div>
               <div className="">
                 <div className="">
-                  <h6 className="text-base font-normal text-gilroy-regular md:-mr-[11px] ">
+                  <h6 className="text-base font-normal text-gilroy-regular md:-mr-[11px]">
                     Upload DSC
                   </h6>
-                  <p className="text-[#1D1D1B] text-base font-normal text-gilroy-regular display: inline-block;
-    overflow: hidden;
-    white-space: nowrap">
+                  <p className="text-[#1D1D1B] text-base font-normal text-gilroy-regular">
                     {fileName !== "" && fileName !== undefined ? (
-                      <span className="text-sm overflow:hidden;
-                      text-overflow:ellipsis;
-                      white-space:nowrap;">{fileName}</span>
+                      <p className="text-sm truncate w-[100px] xl:w-[200px]">{fileName}</p>
                     ) : (
                       "Document"
                     )}

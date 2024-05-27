@@ -1,23 +1,15 @@
 import React, { useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import addCircle from "../../../assets/images/add-circleb.svg";
-import { Link } from "react-router-dom";
 import searchButton from "../../../assets/images/search-normal.svg";
-//import ReactTable from "../../../components/userFlow/common/ReactTable";
-// import ReactTable from "../../components/userFlow/common/ReactTable";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
-// import SelectButtonTask from "../../../components/UserManagement/SelectButtonManagement";
 import SelectButtonTask from "../../../components/UserManagement/SelectButtonManagement";
-// import CustomPagination from "../../../components/CustomPagination/CustomPagination";
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-// import ToggleSwitch from "../../../components/UserManagement/ToggleSwitch";
 import ToggleSwitch from "../../../components/UserManagement/ToggleSwitch";
-// import UmTabs from "../../../components/UserManagement/UmTabs";
 import UmTabs from "../../../components/UserManagement/UmTabs";
-// import edit from "../../assets/images/add.svg";
 import edit from "../../../assets/images/bedit.svg";
-
 import { useNavigate } from "react-router-dom";
+
 type TableType = {
   sno: string;
   depositTakerName: string;
@@ -80,6 +72,10 @@ const UserCreation = () => {
     },
   ];
 
+  const handleEditClick = (user: TableType) => {
+    navigate("/dt/usermanagement/editusermasterum");
+  };
+
   const columns = [
     columnHelper.accessor("sno", {
       cell: (info) => info.renderValue(),
@@ -117,17 +113,21 @@ const UserCreation = () => {
 
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/dt/usermanagement/usermasterum"}>
-              <div>
-                <img src={edit} alt="Edit " className="cursor-pointer" />
-              </div>
-            </Link>
+            <div>
+              <img
+                src={edit}
+                alt="Edit"
+                className="cursor-pointer"
+                onClick={() => handleEditClick(value)}
+              />
+            </div>
           </div>
         );
       },
       header: () => <span>Edit</span>,
     }),
   ];
+
   const options = [
     { value: "pdf", label: "PDF" },
     { value: "docx", label: "DOCX" },
@@ -135,9 +135,7 @@ const UserCreation = () => {
   ];
 
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
-
   const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
-
   const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
 
   const handleSetOption1 = (value: string) => {
@@ -153,7 +151,7 @@ const UserCreation = () => {
   };
 
   return (
-    <div className="relative xl:ml-[40px] pr-3">
+    <div className="relative xl:ml-[20px] pr-3">
       <div className="mt-6">
         <UmTabs />
       </div>
@@ -211,18 +209,6 @@ const UserCreation = () => {
         </div>
       </div>
 
-      {/* <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-  <div className="max-w-full overflow-x-auto">
-    <ReactTable defaultData={defaultData} columns={columns} />
-  </div>
-  <div className="mt-10">
-    <CustomPagination
-      totalItems={defaultData.length}
-      itemsPerPage={5}
-      maxPageNumbersToShow={5}
-    />
-  </div>
-</div> */}
       <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
         <div className="max-w-full overflow-x-auto">
           <ReactTable defaultData={defaultData} columns={columns} />

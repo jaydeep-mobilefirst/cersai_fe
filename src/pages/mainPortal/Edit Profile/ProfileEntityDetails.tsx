@@ -120,7 +120,6 @@ const ProfileEntityDetails = (props: Props) => {
             formFields={formFields}
             onChange={onChange}
           />
-
           <div>
             <Footer onSubmit={onSubmit} loader={loader} />
           </div>
