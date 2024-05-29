@@ -67,29 +67,24 @@ const MainPortalSidebar = ({ layout }: Props) => {
           }`}
         >
           <ul className="">
-            <li className="relative border-b border-[#E6E6E6] p-4">
+            <li
+              className={`relative border-b border-[#E6E6E6] ${
+                collapsed ? "p-2 mt-4" : "p-4"
+              }`}
+            >
               <img src={Logo} alt="logo" className="max-h-[52px]" />
-              <div
-                className={`absolute hidden sm:block md:block lg:block   ${
-                  collapsed
-                    ? "md:-right-[-0.1rem] right-2 "
-                    : "md:-right-1 right-[0.75rem]"
-                }  ${collapsed ? "top-14" : "top-16"} p-2`}
-                onClick={toggleCollapse}
-              >
-                <img
-                  src={collapsed ? ArrowRight : ArrowClose}
-                  alt="collapsed"
-                  className="bg-[#E7F0FF] rounded-full cursor-pointer"
-                />
-              </div>
+
               <button
                 onClick={toggleSidebar}
                 className={`absolute ${
                   collapsed ? "top-[calc(100% + 1rem)] m-1 left-5" : "top-7"
                 } right-0 sm:hidden`}
               >
-                <img src={CrossIcon} alt="Close sidebar" className="w-6 h-6" />
+                <img
+                  src={CrossIcon}
+                  alt="Close sidebar"
+                  className="w-6 h-6 mr-2"
+                />
               </button>
             </li>
             {portalSideBarList?.map((data, idx) => {
@@ -136,6 +131,16 @@ const MainPortalSidebar = ({ layout }: Props) => {
       <div className={`${collapsed ? "sm:ml-[75px]" : "sm:ml-[322px]"}`}>
         <div>
           <Header />
+          <div
+            className={`absolute hidden sm:block md:block lg:block top-[70px] -ml-3 z-[100]`}
+            onClick={toggleCollapse}
+          >
+            <img
+              src={collapsed ? ArrowRight : ArrowClose}
+              alt="collapsed"
+              className="bg-[#E7F0FF] rounded-full cursor-pointer"
+            />
+          </div>
         </div>
         <div className="overflow-x-hidden p-3">{layout}</div>
       </div>
