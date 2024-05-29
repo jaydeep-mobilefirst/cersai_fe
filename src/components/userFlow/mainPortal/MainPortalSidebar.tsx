@@ -67,7 +67,11 @@ const MainPortalSidebar = ({ layout }: Props) => {
           }`}
         >
           <ul className="">
-            <li className={`relative border-b border-[#E6E6E6] ${ collapsed ? "p-2 mt-4" : "p-4"}`}>
+            <li
+              className={`relative border-b border-[#E6E6E6] ${
+                collapsed ? "p-2 mt-4" : "p-4"
+              }`}
+            >
               <img src={Logo} alt="logo" className="max-h-[52px]" />
 
               <button
@@ -76,7 +80,11 @@ const MainPortalSidebar = ({ layout }: Props) => {
                   collapsed ? "top-[calc(100% + 1rem)] m-1 left-5" : "top-7"
                 } right-0 sm:hidden`}
               >
-                <img src={CrossIcon} alt="Close sidebar" className="w-6 h-6 mr-2" />
+                <img
+                  src={CrossIcon}
+                  alt="Close sidebar"
+                  className="w-6 h-6 mr-2"
+                />
               </button>
             </li>
             {portalSideBarList?.map((data, idx) => {
