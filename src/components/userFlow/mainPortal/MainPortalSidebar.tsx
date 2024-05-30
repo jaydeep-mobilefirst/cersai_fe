@@ -90,7 +90,9 @@ const MainPortalSidebar = ({ layout }: Props) => {
             {portalSideBarList?.map((data, idx) => {
               return (
                 <li
-                  className={`${collapsed ? "px-2 py-1" : "px-4 py-2"}`}
+                  className={`${
+                    collapsed && mSidebar && idx === 0 ? "mt-4" : "" // Applied mt-4 only to the first item when collapsed and sidebar is open
+                  } ${collapsed ? "px-2 py-1" : "px-4 py-2"}`}
                   key={idx}
                 >
                   <Link to={data.url}>
