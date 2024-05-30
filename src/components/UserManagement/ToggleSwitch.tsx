@@ -12,10 +12,8 @@ const ToggleSwitch: FC<ToggleSwitchProps> = forwardRef<
   ToggleSwitchProps
 >((props, ref) => {
   const { enabled, variant, className, apiCall } = props;
-  const [isEnabled, setEnabled] = useState(enabled);
 
   const handleOnClick = () => {
-    setEnabled(!isEnabled);
     if (apiCall) {
       apiCall();
     }
@@ -37,15 +35,15 @@ const ToggleSwitch: FC<ToggleSwitchProps> = forwardRef<
       aria-checked={enabled}
       onClick={handleOnClick}
       className={`${
-        isEnabled ? variantsBG[variant ?? "basic"] : "bg-gray-200"
+        enabled ? variantsBG[variant ?? "basic"] : "bg-gray-200"
       } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none ${className}`}
       {...props}
     >
       <span
         className={`${
-          isEnabled ? "translate-x-6" : "translate-x-1"
+          enabled ? "translate-x-6" : "translate-x-1"
         } inline-block w-4 h-4 transform ${
-          isEnabled ? circleBG[variant ?? "basic"] : "bg-white"
+          enabled ? circleBG[variant ?? "basic"] : "bg-white"
         } rounded-full transition-transform`}
       />
     </button>

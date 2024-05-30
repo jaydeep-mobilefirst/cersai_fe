@@ -43,7 +43,7 @@ const AddUserForm = () => {
   };
 
   const handleBackButtonClick = () => {
-    navigate("/dc/usermanagment/usercreation");
+    navigate("/dc/usermanagement/usercreation");
   };
 
   return (

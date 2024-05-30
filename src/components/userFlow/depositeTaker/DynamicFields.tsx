@@ -57,6 +57,7 @@ const DynamicFields = ({
             case "number":
             case "password":
             case "phone_number":
+            case "email":
               return (
                 <div>
                   <label

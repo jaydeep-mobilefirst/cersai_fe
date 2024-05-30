@@ -46,8 +46,8 @@ export const portalSideBarListRegulator = [
   },
   {
     title: "User Management",
-    url: "/rg/usermanagment",
-    rurl: "/rg/usermanagment",
+    url: "/rg/usermanagement",
+    rurl: "/rg/usermanagement",
     logo: entityMasterIcon,
     selectlogo: entityMasterWhiteIcon,
   },
@@ -69,8 +69,8 @@ export const portalSideBarListCompetent = [
   },
   {
     title: "User Management",
-    url: "/ca/usermanagment",
-    rurl: "/ca/usermanagment",
+    url: "/ca/usermanagement",
+    rurl: "/ca/usermanagement",
     logo: entityMasterIcon,
     selectlogo: entityMasterWhiteIcon,
   },
@@ -92,8 +92,8 @@ export const portalSideBarListDesignated = [
   },
   {
     title: "User Management",
-    url: "/dc/usermanagment",
-    rurl: "/dc/usermanagment",
+    url: "/dc/usermanagement",
+    rurl: "/dc/usermanagement",
     logo: entityMasterIcon,
     selectlogo: entityMasterWhiteIcon,
   },
