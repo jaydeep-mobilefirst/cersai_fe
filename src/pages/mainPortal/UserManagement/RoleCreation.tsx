@@ -50,6 +50,12 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
   const [selectedFuncs, setSelectedFuncs] = useState<any[]>([]);
 
   const handleAddRoleClick = (operation : 'add' | 'edit') => {
+    if (operation === 'add') {
+      setIsActive(undefined);
+      setRoleName(undefined);
+      setRoleEditId(undefined);
+      setSelectedFuncs([]);
+    }
     sessionStorage.setItem('operation', operation)
     setIsAddRolePopupOpen(true);
   };
