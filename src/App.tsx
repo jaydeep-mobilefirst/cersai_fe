@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import PrivateRoutes from "./utils/PrivateRoute";
@@ -85,14 +86,20 @@ function App() {
               <Route element={<SchemaCreationForm />} path="mytask/form" />
               <Route element={<SchemeMasterForm />} path="mytask/schema" />
               <Route
-                element={<UserCreation />}
+                element={
+                  <UserCreation
+                    entityType="DT"
+                  />}
                 path="usermanagement/usercreation"
               />
-              <Route element={<RoleCreation />} path="usermanagement" />
+              <Route element={
+                <RoleCreation
+                  entityType="DT"
+                />} path="usermanagement" />
 
               <Route
                 element={<UserMasterForm />}
-                path="usermanagement/usermasterum"
+                path="usermanagement/usermaster"
               />
               <Route
                 element={<EditUserForm />}
@@ -102,18 +109,22 @@ function App() {
             <Route element={<MainPortalLayoutRegulator />} path="/rg">
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<RoleCreationRg />} path="usermanagment" />
+              <Route element={<RoleCreation
+                entityType="RG"
+              />} path="usermanagement" />
               <Route
-                element={<UserCreationRg />}
-                path="usermanagment/usercreation"
+                element={<UserCreation
+                  entityType="RG"
+                />}
+                path="usermanagement/usercreation"
               />
               <Route
-                element={<UserMasterFormRg />}
-                path="usermanagment/usermaster"
+                element={<UserMasterForm />}
+                path="usermanagement/usermaster"
               />
               <Route
                 element={<EditUserFormRg />}
-                path="usermanagement/editusermasterum"
+                path="usermanagement/editusermaster"
               />
 
               <Route element={<DashboardProfileRegulator />} path="profile" />
@@ -124,15 +135,19 @@ function App() {
             </Route>
             <Route element={<MainPortalLayoutCompetent />} path="/ca">
               <Route element={<DashboardCompetent />} path="dashboard" />
-              <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<RoleCreationCa />} path="usermanagment" />
+              <Route element={<h1> in Progress</h1>} path="my-task" />
+              <Route element={<RoleCreation
+                entityType="CA"
+              />} path="usermanagement" />
               <Route
-                element={<UserCreationCa />}
-                path="usermanagment/usercreation"
+                element={<UserCreation
+                  entityType="CA"
+                />}
+                path="usermanagement/usercreation"
               />
               <Route
-                element={<UserMasterFormCa />}
-                path="usermanagment/usermaster"
+                element={<UserMasterForm />}
+                path="usermanagement/usermaster"
               />
               <Route
                 element={<EditUserFormCa />}
@@ -148,14 +163,18 @@ function App() {
             <Route element={<MainPortalLayoutDesignated />} path="/dc">
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<RoleCreationDc />} path="usermanagment" />
+              <Route element={<RoleCreation
+                entityType="DC"
+              />} path="usermanagement" />
               <Route
-                element={<UserCreationDc />}
-                path="usermanagment/usercreation"
+                element={<UserCreation
+                  entityType="CA"
+                />}
+                path="usermanagement/usercreation"
               />
               <Route
-                element={<UserMasterFormDc />}
-                path="usermanagment/usermaster"
+                element={<UserMasterForm />}
+                path="usermanagement/usermaster"
               />
               <Route
                 element={<EditRolePopupDc />}
@@ -228,7 +247,7 @@ function App() {
           {/* <Route element={<SetPassword />} path="/set-password" /> */}
           <Route element={<SetNewPasswordModel />} path="/set-password" />
           <Route element={<OtpModel />} path="/otp-verification" />
-          <Route element={<RoleCreation />} path="/role" />
+          {/* <Route element={<RoleCreation />} path="/role" /> */}
         </Routes>
       </Router>
     </div>

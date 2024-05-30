@@ -1,10 +1,6 @@
 import { useContext, useState } from "react";
-import InputFields from "../../components/userFlow/form/InputField";
-import DatePicker from "../../components/userFlow/form/DatePicker";
 import { useScreenWidth } from "../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import TextArea from "../../components/userFlow/form/TextArea";
-import SelectButton from "../../components/userFlow/form/SelectButton";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
 import { useNavigate, useSearchParams } from "react-router-dom";

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
 type TableType = {
-  sno: string;
-  depositTakerName: string;
+  id: string;
+  compositeRoleName: string;
   status: string;
-  action: boolean;
+  isActive: boolean;
 };
 
 interface EditRolePopupProps {
@@ -13,14 +13,14 @@ interface EditRolePopupProps {
 }
 
 const EditRolePopup: React.FC<EditRolePopupProps> = ({ roleData, onClose }) => {
-  const [roleName, setRoleName] = useState(roleData.depositTakerName);
+  const [roleName, setRoleName] = useState(roleData.compositeRoleName);
   const [selectedFunctionality, setSelectedFunctionality] = useState("");
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
   const [roleNameError, setRoleNameError] = useState("");
   const [functionalityError, setFunctionalityError] = useState("");
 
   useEffect(() => {
-    setRoleName(roleData.depositTakerName);
+    setRoleName(roleData.compositeRoleName);
   }, [roleData]);
 
   const handleSave = () => {

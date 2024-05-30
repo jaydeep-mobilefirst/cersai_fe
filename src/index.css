@@ -103,3 +103,7 @@
   background: #e7e7e7;
   margin: 12px;
 }
+
+.swal2-container {
+  z-index: X;
+}
