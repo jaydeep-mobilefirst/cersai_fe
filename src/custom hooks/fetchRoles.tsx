@@ -14,6 +14,7 @@ function useFetchRoles(entityId : string, perPage ?: number) {
   const [functionalitySearch, setFunctionalitySearch] = useState('')
 
   const handleSearch = () => {
+    setData([])
     fetchData();
   }
   const fetchData = async () => {
