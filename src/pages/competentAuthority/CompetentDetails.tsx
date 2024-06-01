@@ -21,7 +21,7 @@ const ComponentDetails: React.FC = () => {
 
   const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
 
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Competent Details");
+  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Competent Authority Details");
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
   ? allFormData?.formFields?.form_fields?.filter(
       (f: any) => f?.sectionId === sectionId?.id
