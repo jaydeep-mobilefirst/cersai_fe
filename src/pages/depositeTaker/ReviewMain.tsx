@@ -73,16 +73,16 @@ const ReviewMain = () => {
         };
       });
 
-      let docs = documentData?.length > 0 ? documentData?.map((doc : any) => {
-        return {
-          fieldId: doc?.id,
-          label: doc?.documentName,
-          sectionCode: "Upload Documents",
-          value: doc?.uploadFileId,
-        };
-      }) : []
+    let docs = documentData?.length > 0 ? documentData?.map((doc: any) => {
+      return {
+        fieldId: doc?.id,
+        label: doc?.documentName,
+        sectionCode: "Upload Documents",
+        value: doc?.uploadFileId,
+      };
+    }) : []
 
-      finalResult = [...finalResult, ...docs]
+    finalResult = [...finalResult, ...docs]
 
     axios
       .post(bffUrl + "/deposit-taker/add-form-fields", {
@@ -135,6 +135,8 @@ const ReviewMain = () => {
             {allFormData &&
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
+                  allFormData?.formFields?.form_fields
+                    ?.filter((f: any) => f?.sectionId === section?.id)?.length > 0 &&
                   <div className="mb-[16px]" key={index}>
                     <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px]">
                       <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[20px] lg:text-[20px] pb-2 text-nowrap font-bold text-2xl" >
@@ -170,11 +172,10 @@ const ReviewMain = () => {
 
                               return (
                                 <div
-                                  className={`sm:mr-[48px] flex justify-between ${
-                                    idx % 2 === 0
+                                  className={`sm:mr-[48px] flex justify-between ${idx % 2 === 0
                                       ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
                                       : ""
-                                  } `}
+                                    } `}
                                   key={idx}
                                 >
                                   <div className="text-gray-500">
@@ -183,22 +184,21 @@ const ReviewMain = () => {
                                   </div>
                                   <div>
                                     {field?.dscFileNAme !== "" &&
-                                    field?.dscFileNAme !== undefined
+                                      field?.dscFileNAme !== undefined
                                       ? field?.dscFileNAme
                                       : field.userInput}
                                   </div>
                                 </div>
                               );
                             })}
-                            {
-                              section?.sectionName === "Upload Documents" && 
-                              documentData?.map((doc : any, idx : number) => {
-                                return <div
-                                className={`sm:mr-[48px] flex justify-between ${
-                                  idx % 2 === 0
+                          {
+                            section?.sectionName === "Upload Documents" &&
+                            documentData?.map((doc: any, idx: number) => {
+                              return <div
+                                className={`sm:mr-[48px] flex justify-between ${idx % 2 === 0
                                     ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
                                     : ""
-                                } `}
+                                  } `}
                                 key={idx}
                               >
                                 <div className="text-gray-500">
@@ -211,8 +211,8 @@ const ReviewMain = () => {
                                   }
                                 </div>
                               </div>
-                              })
-                            }
+                            })
+                          }
                         </div>
                       </div>
                     </div>
@@ -260,9 +260,8 @@ const ReviewMain = () => {
               <button
                 onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked || loader}
-                className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] rounded-[12px] text-gilroy-semibold ${
-                  isChecked ? "bg-[#1C468E]" : "bg-[#1C468E] opacity-50"
-                }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
+                className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] rounded-[12px] text-gilroy-semibold ${isChecked ? "bg-[#1C468E]" : "bg-[#1C468E] opacity-50"
+                  }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}
               </button>

@@ -82,7 +82,7 @@ const UploadDocument = (props: Props) => {
           confirmButtonText: "Ok",
         });
         setLoader(false)
-        Navigate("/dt/profile?current=branches");
+        Navigate("/ca/profile?current=nodal");
       })
       .catch((err) => {
         setLoader(false)

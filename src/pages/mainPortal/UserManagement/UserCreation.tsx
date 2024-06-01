@@ -16,6 +16,7 @@ import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import useFetchRoles from "../../../custom hooks/fetchRoles";
+import SendActivationLink from "../../../components/userFlow/common/SendActivationLink";
 
 type TableType = {
   id: string;
@@ -103,15 +104,28 @@ const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
       header: () => <span>Status</span>,
     }),
     columnHelper.accessor((row) => row, {
+      id: "link",
+      cell: (info) => {
+        const value : any = info.getValue();
+        return (
+          <div className="flex justify-center">
+          {value?.emailId && <SendActivationLink email={value?.emailId}/>}
+          </div>
+        );
+      },
+      header: () => <span>Send Invite Link</span>,
+    }),
+    columnHelper.accessor((row) => row, {
       id: "action",
       cell: (info) => {
-        const value = info.getValue();
-        console.log({value});
+        const value : any = info.getValue();
+        console.log("Value -----------", {value});
         return (
-          <div className="flex justify-center items-center ">
+          <div className="flex justify-center items-center flex-row w-full">
             <div>
               <img
                 src={edit}
+                title="Edit User"
                 alt="Edit"
                 className="cursor-pointer"
                 onClick={() => handleEditClick(value)}
@@ -122,12 +136,6 @@ const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
       },
       header: () => <span>Edit</span>,
     }),
-  ];
-
-  const options = [
-    { value: "pdf", label: "PDF" },
-    { value: "docx", label: "DOCX" },
-    { value: "image", label: "Image" },
   ];
 
   const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
