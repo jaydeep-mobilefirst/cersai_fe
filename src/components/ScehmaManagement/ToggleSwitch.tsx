@@ -22,13 +22,13 @@ const ToggleSwitch: FC<ToggleSwitchProps> = forwardRef<
   };
 
   const variantsBG = {
-    basic: "bg-[#D4FDC6]",
-    table: "bg-[#D4FDC6]",
+    basic: "bg-[#E7F0FF]",
+    table: "bg-[#E7F0FF]",
   };
 
   const circleBG = {
-    basic: "bg-[#52AE32]",
-    table: "bg-[#385723]",
+    basic: "bg-[#1c468e]",
+    table: "bg-[#1c468e]",
   };
   return (
     <button

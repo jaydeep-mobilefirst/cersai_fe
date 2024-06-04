@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.css"
+import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import PrivateRoutes from "./utils/PrivateRoute";
@@ -86,16 +86,13 @@ function App() {
               <Route element={<SchemaCreationForm />} path="mytask/form" />
               <Route element={<SchemeMasterForm />} path="mytask/schema" />
               <Route
-                element={
-                  <UserCreation
-                    entityType="DT"
-                  />}
+                element={<UserCreation entityType="DT" />}
                 path="usermanagement/usercreation"
               />
-              <Route element={
-                <RoleCreation
-                  entityType="DT"
-                />} path="usermanagement" />
+              <Route
+                element={<RoleCreation entityType="DT" />}
+                path="usermanagement"
+              />
 
               <Route
                 element={<UserMasterForm />}
@@ -109,13 +106,12 @@ function App() {
             <Route element={<MainPortalLayoutRegulator />} path="/rg">
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<RoleCreation
-                entityType="RG"
-              />} path="usermanagement" />
               <Route
-                element={<UserCreation
-                  entityType="RG"
-                />}
+                element={<RoleCreation entityType="RG" />}
+                path="usermanagement"
+              />
+              <Route
+                element={<UserCreation entityType="RG" />}
                 path="usermanagement/usercreation"
               />
               <Route
@@ -136,13 +132,12 @@ function App() {
             <Route element={<MainPortalLayoutCompetent />} path="/ca">
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<h1> in Progress</h1>} path="my-task" />
-              <Route element={<RoleCreation
-                entityType="CA"
-              />} path="usermanagement" />
               <Route
-                element={<UserCreation
-                  entityType="CA"
-                />}
+                element={<RoleCreation entityType="CA" />}
+                path="usermanagement"
+              />
+              <Route
+                element={<UserCreation entityType="CA" />}
                 path="usermanagement/usercreation"
               />
               <Route
@@ -163,13 +158,12 @@ function App() {
             <Route element={<MainPortalLayoutDesignated />} path="/dc">
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<RoleCreation
-                entityType="DC"
-              />} path="usermanagement" />
               <Route
-                element={<UserCreation
-                  entityType="CA"
-                />}
+                element={<RoleCreation entityType="DC" />}
+                path="usermanagement"
+              />
+              <Route
+                element={<UserCreation entityType="CA" />}
                 path="usermanagement/usercreation"
               />
               <Route

@@ -168,7 +168,7 @@ const SchemaCreation = () => {
 
             <div className=" flex items-center mt-7">
               <button
-                className={`w-40 h-[45px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#385723] cursor-pointer"} mt-2`}
+                className={`w-40 h-[45px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1C468E] cursor-pointer"} mt-2`}
               >
                 <img src={searchButton} alt="searchButton" />
                 <span className="ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium ">
@@ -176,9 +176,9 @@ const SchemaCreation = () => {
                 </span>
               </button>
               <Link to="/usermanagement/adduser">
-                <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#385723] flex justify-center items-center mt-2 cursor-pointer">
+                <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1C468E] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
-                  <span className="ml-1 text-[14px] md:text-base font-normal text-[#385723] lg:text-[16px] text-gilroy-medium ">
+                  <span className="ml-1 text-[14px] md:text-base font-normal text-[#1C468E] lg:text-[16px] text-gilroy-medium ">
                     Add User
                   </span>
                 </div>

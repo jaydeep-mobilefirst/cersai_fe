@@ -27,7 +27,7 @@ const UploadDocument = (props: Props) => {
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Upload Documents"
-  )?.id
+  )?.id;
 
   const { onFileChange, handleDocumentValidations } =
     useContext(FormHandlerContext);
@@ -50,13 +50,13 @@ const UploadDocument = (props: Props) => {
   // };
 
   const onSubmit = async (e: any) => {
-    setLoader(true)
-    e.preventDefault();    
+    setLoader(true);
+    e.preventDefault();
     const goodToGo = await handleDocumentValidations(
       documentData.map((d: { sectionId: number }) => d?.sectionId)
     );
     if (!goodToGo) {
-      setLoader(false)
+      setLoader(false);
       return;
     }
 
@@ -71,7 +71,9 @@ const UploadDocument = (props: Props) => {
 
     axios
       .patch(
-        `${bffUrl}/competent-authority/${sessionStorage?.getItem("entityUniqueId")}`,
+        `${bffUrl}/competent-authority/${sessionStorage?.getItem(
+          "entityUniqueId"
+        )}`,
         {
           formData: formData,
         }
@@ -82,11 +84,11 @@ const UploadDocument = (props: Props) => {
           text: "Documents uploaded successfully",
           confirmButtonText: "Ok",
         });
-        setLoader(false)
+        setLoader(false);
         Navigate("/dt/profile?current=branches");
       })
       .catch((err) => {
-        setLoader(false)
+        setLoader(false);
         Swal.fire({
           icon: "error",
           text: err?.response?.data?.detail?.message,
@@ -111,21 +113,25 @@ const UploadDocument = (props: Props) => {
   };
 
   const handleDeleteFile = () => {
-    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fieldData?.fileType)?.name;
+    const fieldType = allFormData?.fileTypes?.find(
+      (type: any) => type?.id === fieldData?.fileType
+    )?.name;
     onFileChange("", fieldData, fieldType);
     setFile(null);
     toggleDeletePopup();
-  }; 
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fieldData?.fileType)?.name;
-     if (event.target.files && event.target.files.length > 0) {
-       setFile(event.target.files[0]);
-       onFileChange(event.target.files[0], fieldData, fieldType);
-       toggleUploadPopup();
-       closePopup();
-     }
-   };
+    const fieldType = allFormData?.fileTypes?.find(
+      (type: any) => type?.id === fieldData?.fileType
+    )?.name;
+    if (event.target.files && event.target.files.length > 0) {
+      setFile(event.target.files[0]);
+      onFileChange(event.target.files[0], fieldData, fieldType);
+      toggleUploadPopup();
+      closePopup();
+    }
+  };
 
   return (
     <>
@@ -136,29 +142,30 @@ const UploadDocument = (props: Props) => {
         }}
       >
         {showUploadPopup && (
-            <UploadFile
-              showUploadPopup={showUploadPopup}
-              closePopup={closePopup}
-              file={file}
-              handleFileChange={handleFileChange}
-            />
-          )}
-          {showDeletePopup && (
-            <DeleteUpload
-              file={file}
-              handleDeleteFile={handleDeleteFile}
-              toggleDeletePopup={toggleDeletePopup}
-              showDeletePopup={showDeletePopup}
-            />
-          )}
-        <div className="p-6 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-5 space-y-0">
+          <UploadFile
+            showUploadPopup={showUploadPopup}
+            closePopup={closePopup}
+            file={file}
+            handleFileChange={handleFileChange}
+          />
+        )}
+        {showDeletePopup && (
+          <DeleteUpload
+            file={file}
+            handleDeleteFile={handleDeleteFile}
+            toggleDeletePopup={toggleDeletePopup}
+            showDeletePopup={showDeletePopup}
+          />
+        )}
+        <div className="p-4 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-5 space-y-0">
+          <h1 className="text-xl text-gilroy-bold">Upload Documents</h1>
           <DynamicFields
-              allFormData={allFormData}
-              documentFields={documentData}
-              toggleUploadPopup={toggleUploadPopup}
-              setFieldData={setFieldData}
-              sectionId={sectionId}
-              onFileChange={onFileChange}
+            allFormData={allFormData}
+            documentFields={documentData}
+            toggleUploadPopup={toggleUploadPopup}
+            setFieldData={setFieldData}
+            sectionId={sectionId}
+            onFileChange={onFileChange}
           />
         </div>
         <div className="p-4">

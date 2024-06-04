@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { portalSideBarList } from "../../../utils/hardText/portalText";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowClose from "../../../assets/images/arrowclose.svg";
 import Logo from "../../../assets/images/logo2.svg";
@@ -29,15 +29,41 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
   const { pathname } = location;
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
+  // useEffect(() => {
+  //   const cmsPath = location.pathname.split("/")[1];
+  //   setUrl("/" + cmsPath);
+  // }, [location.pathname]);
+
+  // const handleTabClick = (url: string, title: string) => {
+  //   setActiveTab(url);
+  //   localStorage.setItem("current_tab", title);
+  // };
   useEffect(() => {
     const cmsPath = location.pathname.split("/")[1];
     setUrl("/" + cmsPath);
-  }, [location.pathname]);
+    if (
+      location.pathname.startsWith("/dt/profile") &&
+      searchParams.get("current") === "entity"
+    ) {
+      setActiveTab(""); // Reset active tab for specific condition
+    }
+  }, [location.pathname, searchParams]);
 
   const handleTabClick = (url: string, title: string) => {
-    setActiveTab(url);
-    localStorage.setItem("current_tab", title);
+    if (
+      location.pathname.startsWith("/dt/profile") &&
+      searchParams.get("current") === "entity"
+    ) {
+      console.log(
+        "Sidebar highlight prevention active for /dt/profile with entity"
+      );
+    } else {
+      setActiveTab(url);
+      localStorage.setItem("current_tab", title);
+      navigate(url);
+    }
   };
 
   return (
@@ -67,7 +93,11 @@ const MainPortalSidebar = ({ layout }: Props) => {
           }`}
         >
           <ul className="">
-            <li className={`relative border-b border-[#E6E6E6] ${ collapsed ? "p-2 mt-4" : "p-4"}`}>
+            <li
+              className={`relative border-b border-[#E6E6E6] ${
+                collapsed ? "p-2 mt-4" : "p-4"
+              }`}
+            >
               <img src={Logo} alt="logo" className="max-h-[52px]" />
 
               <button
@@ -76,7 +106,11 @@ const MainPortalSidebar = ({ layout }: Props) => {
                   collapsed ? "top-[calc(100% + 1rem)] m-1 left-5" : "top-7"
                 } right-0 sm:hidden`}
               >
-                <img src={CrossIcon} alt="Close sidebar" className="w-6 h-6 mr-2" />
+                <img
+                  src={CrossIcon}
+                  alt="Close sidebar"
+                  className="w-6 h-6 mr-2"
+                />
               </button>
             </li>
             {portalSideBarList?.map((data, idx) => {

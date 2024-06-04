@@ -155,7 +155,7 @@
 
 import { useEffect } from "react";
 import { portalSideBarListRegulator } from "../../../utils/hardText/portalText";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowClose from "../../../assets/images/arrowclose.svg";
 import Logo from "../../../assets/images/logo2.svg";
@@ -184,15 +184,41 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
   const { pathname } = location;
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
+  // useEffect(() => {
+  //   const cmsPath = location.pathname.split("/")[1];
+  //   setUrl("/" + cmsPath);
+  // }, [location.pathname]);
+
+  // const handleTabClick = (url: string, title: string) => {
+  //   setActiveTab(url);
+  //   localStorage.setItem("current_tab", title);
+  // };
   useEffect(() => {
     const cmsPath = location.pathname.split("/")[1];
     setUrl("/" + cmsPath);
-  }, [location.pathname]);
+    if (
+      location.pathname.startsWith("/rg/profile") &&
+      searchParams.get("current") === "regulator"
+    ) {
+      setActiveTab(""); // Reset active tab for specific condition
+    }
+  }, [location.pathname, searchParams]);
 
   const handleTabClick = (url: string, title: string) => {
-    setActiveTab(url);
-    localStorage.setItem("current_tab", title);
+    if (
+      location.pathname.startsWith("/rg/profile") &&
+      searchParams.get("current") === "regulator"
+    ) {
+      console.log(
+        "Sidebar highlight prevention active for /dt/profile with entity"
+      );
+    } else {
+      setActiveTab(url);
+      localStorage.setItem("current_tab", title);
+      navigate(url);
+    }
   };
 
   return (

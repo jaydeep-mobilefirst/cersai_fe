@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import TextArea from "../../../components/userFlow/form/TextArea";
 import SelectButton from "../../../components/userFlow/form/SelectButton";
-import addCircle from "../../../assets/images/add-circle.svg";
-import minusCircle from "../../../assets/images/minus-cirlce.svg";
+// import addCircle from "../../../assets/images/add-circle.svg";
+import addCircle from "../../../assets/images/add-user.svg";
+// import minusCircle from "../../../assets/images/minus-cirlce.svg";
+import minusCircle from "../../../assets/images/MinusIcon.svg";
 import InputFields from "../../../components/userFlow/common/InputField";
 import axios from "axios";
 import { pincodeValidationUrl } from "../../../utils/api";
@@ -134,7 +136,7 @@ const ProfileBranchForm: React.FC<Props> = ({
 
   return (
     <div className="my-3">
-      <div className="flex flex-row justify-between bg-[#EEF7EB] p-2 rounded-md">
+      <div className="flex flex-row justify-between bg-[#E7F0FF] p-2 rounded-md">
         <span>Branch {i + 1}</span>
         <div className="flex flex-row cursor-pointer">
           <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
