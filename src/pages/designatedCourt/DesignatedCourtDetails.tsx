@@ -15,7 +15,7 @@ const DesignatedCourtDetails: React.FC = () => {
 
   const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
 
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Court Details");
+  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Designated Court Details");
   const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
 
 

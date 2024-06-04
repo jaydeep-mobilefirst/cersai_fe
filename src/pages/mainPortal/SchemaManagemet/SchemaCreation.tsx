@@ -236,7 +236,7 @@ const SchemaCreation = () => {
           </div>
           <div className="mt-10">
             <CustomPagination
-              totalItems={defaultData.length}
+              totalItems={defaultData?.length}
               itemsPerPage={5}
               maxPageNumbersToShow={5}
             />
