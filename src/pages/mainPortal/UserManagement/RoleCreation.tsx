@@ -16,6 +16,7 @@ import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import uamStore from "../../../store/uamStore";
 import InputFields from "../../../components/ScehmaManagement/InputField";
+import LoaderSpin from "../../../components/LoaderSpin";
 
 type TableType = {
   sno: number;
@@ -159,6 +160,8 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
     setSearchString(e.target.value);
   };
 
+  console.log({loading});
+  
   return (
     <div className="relative xl:ml-[20px] pr-3">
       <div className="mt-6">
@@ -231,7 +234,7 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
 
       <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
         <div className="max-w-full overflow-x-auto">
-          {roles?.length > 0 ? <ReactTable defaultData={roles} columns={columns} /> : <div className="text-center w-full">No Data Available</div>}
+          {loading ? <LoaderSpin/> : roles?.length > 0 ? <ReactTable defaultData={roles} columns={columns} /> : <div className="text-center w-full">No Data Available</div>}
         </div>
         <div className="mt-10">
           {roles?.length > 0 && <CustomPagination

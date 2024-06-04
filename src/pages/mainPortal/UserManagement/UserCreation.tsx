@@ -17,6 +17,7 @@ import { bffUrl } from "../../../utils/api";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import useFetchRoles from "../../../custom hooks/fetchRoles";
 import SendActivationLink from "../../../components/userFlow/common/SendActivationLink";
+import LoaderSpin from "../../../components/LoaderSpin";
 
 type TableType = {
   sno: number;
@@ -132,7 +133,6 @@ const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
       id: "action",
       cell: (info) => {
         const value : any = info.getValue();
-        console.log("Value -----------", {value});
         return (
           <div className="flex justify-center items-center flex-row w-full">
             <div>
@@ -215,9 +215,9 @@ const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
 
       <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
         <div className="max-w-full overflow-x-auto">
-          {users?.length > 0 ? <ReactTable defaultData={users} columns={columns} /> : <div className="text-center w-full">No Data Available</div>}
+        {loading ? <LoaderSpin/> : users?.length > 0 ? <ReactTable defaultData={users} columns={columns} /> : <div className="text-center w-full">No Data Available</div>}
         </div>
-        <div className="mt-10">
+        <div className="mt-10 flex justify-center">
           {users?.length > 0 && <CustomPagination
             currentPage={page}
             setCurrentPage={setPage}

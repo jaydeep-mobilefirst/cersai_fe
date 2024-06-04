@@ -59,7 +59,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
   return (
     <>
       <div className="mb-3 border-b-2 border-[#0000001A]"></div>
-      <div className="flex flex-col md:flex-row items-center justify-between xl:w-[1197px]">
+      <div className="flex flex-col md:flex-row items-center justify-between w-full">
         <div className="mb-3 sm:mb-0">
           <p className="text-sm text-black font-normal text-gilroy-regular">
             Showing Data &nbsp;

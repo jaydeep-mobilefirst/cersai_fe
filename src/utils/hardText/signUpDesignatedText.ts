@@ -15,7 +15,7 @@ export const signupSideBarDesignated = [
       path:"/designated/court/designateddetails", 
       imgSrc: profile,
       imgSrcHighlighted:profileCircleHighlighted,
-      description: "Court Details",
+      description: "Designated Court Details",
       tickImgSrc: tickCircleWhite,
       percentage: 0,
     },

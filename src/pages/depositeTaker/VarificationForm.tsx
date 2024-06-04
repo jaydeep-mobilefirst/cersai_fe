@@ -13,7 +13,7 @@ type Props = {};
 
 const VerificationForm = (props: Props) => {
   const [loader, setLoader] = useState(false);
-  const {onChange, handleValidationChecks, updatePanFormField, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
+  const {onChange, handleValidationChecks, updatePanFormField, onFileChange, handleSectionCompletionTrack} = useContext(FormHandlerContext)
   const Navigate = useNavigate();
   const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
   const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Verification");
@@ -33,8 +33,8 @@ const VerificationForm = (props: Props) => {
 
     const verifyPan = async () : Promise<boolean> => {
       try {
-        let company = formFields?.find((field : any, i : number) => field?.label === "Company Name (As per Pan)");
-        let pan = formFields?.find((field : any, i : number) =>  field?.label === "Pan Number");
+        let company = formFields?.find((field : any, i : number) => /Company Name/i.test(field?.label));
+        let pan = formFields?.find((field : any, i : number) =>  /PAN Number/i.test(field?.label));
         
         let response = await axios.post("http://34.149.91.231/cms/pandirectory/api", {
           name:company?.userInput?.toUpperCase(),
@@ -66,21 +66,20 @@ const VerificationForm = (props: Props) => {
      panVerified = await verifyPan();  
     } 
     setLoader(false)
-    
+      console.log({panVerified});
+      
     if (noError && panVerified) {
       setAllVerified(true);
       setPara1(`Verification Successful`)
       setPara2(`Your PAN Details have been successfully verified.`)
       setSubmitted(true)
       setPanSuccessModal(true)
-      // Swal.fire({
-      //   icon : "success",
-      //   text : "Pan Verified Successfully!",
-      //   confirmButtonText : "Ok"
-      // })
-      // .then((confirm : any) => {
-      //   
-      // })
+    }
+    else{
+      setTimeout(async () => {
+        await handleSectionCompletionTrack(sectionId?.id, false)
+      }, 2000)
+      
     }
   };  
   
