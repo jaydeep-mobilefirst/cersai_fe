@@ -17,8 +17,10 @@ import { bffUrl } from "../../../utils/api";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import useFetchRoles from "../../../custom hooks/fetchRoles";
 import SendActivationLink from "../../../components/userFlow/common/SendActivationLink";
+import LoaderSpin from "../../../components/LoaderSpin";
 
 type TableType = {
+  sno: number;
   id: string;
   Name: string;
   role: string;
@@ -34,7 +36,7 @@ const columnHelper = createColumnHelper<TableType>();
 const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
   const entityId = sessionStorage.getItem('entityUniqueId') ?? ''
   const { handleRefreshUAM } = uamStore((state => state))
-  const { loading, users, page, pageSize, setFunctionalitySearch, setPage, setSearchString, totalPages, handleSearch } = useFetchUsers(entityId);
+  const { loading, users, page, pageSize, setFunctionalitySearch, setPage, setSearchString, total, totalPages, handleSearch } = useFetchUsers(entityId);
   const { roles } = useFetchRoles(entityId, 100);
 
   let customRoles = roles?.map((r) => ({label : r?.compositeRoleName, value : r?.compositeRoleName, id : r?.id}))
@@ -56,10 +58,22 @@ const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
     // alert('Edit is in progress')
   };
 
+  let count: number;
+  const serialNoGen = (page: number) => {
+    count = (page - 1) * 10;
+  }
+  serialNoGen(page)
+
   const columns = [
-    columnHelper.accessor("id", {
-      cell: (info) => info.renderValue(),
-      header: () => <span>S.No.</span>,
+    columnHelper.accessor("sno", {
+      cell: () => {
+        while (count <= total)
+          {
+            count++;
+            return count;
+          }
+      },
+      header: () => <span>Sr. No.</span>,
     }),
 
     columnHelper.accessor((row) => row, {
@@ -119,7 +133,6 @@ const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
       id: "action",
       cell: (info) => {
         const value : any = info.getValue();
-        console.log("Value -----------", {value});
         return (
           <div className="flex justify-center items-center flex-row w-full">
             <div>
@@ -202,9 +215,9 @@ const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
 
       <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
         <div className="max-w-full overflow-x-auto">
-          {users?.length > 0 ? <ReactTable defaultData={users} columns={columns} /> : <div className="text-center w-full">No Data Available</div>}
+        {loading ? <LoaderSpin/> : users?.length > 0 ? <ReactTable defaultData={users} columns={columns} /> : <div className="text-center w-full">No Data Available</div>}
         </div>
-        <div className="mt-10">
+        <div className="mt-10 flex justify-center">
           {users?.length > 0 && <CustomPagination
             currentPage={page}
             setCurrentPage={setPage}

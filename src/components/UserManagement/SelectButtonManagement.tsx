@@ -619,13 +619,10 @@ const SelectButtonUserManagement = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: any) => {
-    console.log("Clicked outside");
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       console.log("Closing dropdown");
       setArrowDirectionToggle(false);
     }
-    // Check if any other event handlers are intercepting the click event
-    console.log("Event bubbling path:", event.composedPath());
   };
 
   useEffect(() => {
@@ -646,11 +643,11 @@ const SelectButtonUserManagement = ({
 
   const handleOptionClick = (option: Option) => {
     setOption(option);
-    setArrowDirectionToggle(false);
-  };
+    // setArrowDirectionToggle(false);
+  };  
 
   return (
-    <div className={`relative w-full ${mdWidth}`}>
+    <div className={`relative w-full ${mdWidth}`} ref={dropdownRef}>
       <button
         className={`w-full flex justify-between items-center border rounded-md shadow-sm px-4 py-2 text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left ${mdWidth}`}
         type="button"
@@ -701,7 +698,7 @@ const SelectButtonUserManagement = ({
       </button>
       {arrowDirectionToggle && (
         <div
-          ref={dropdownRef}
+          
           className={`absolute w-full ${mdWidth} rounded-md bg-white shadow-lg`}
           role="menu"
           aria-orientation="vertical"

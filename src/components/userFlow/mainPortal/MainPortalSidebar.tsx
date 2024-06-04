@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { portalSideBarList } from "../../../utils/hardText/portalText";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import ArrowClose from "../../../assets/images/arrowclose.svg";
+import ArrowClose from "../../../assets/images/new_images/sidebarCollapse.png";
 import Logo from "../../../assets/images/logo2.svg";
 import ArrowRight from "../../../assets/images/arrow-left.svg";
 import HamburgerMenu from "../../../assets/images/hamburger_icon.svg";

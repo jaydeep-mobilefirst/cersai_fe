@@ -44,7 +44,7 @@ const ViewFile = ({uploadFileId}: Props) => {
   }
   return (
     <div 
-        className='absolute py-1 px-5 rounded'
+        className='py-1 px-5 rounded position-fixed'
         role='button' 
         aria-disabled={viewLoader} 
         onClick={handleOnClikcView}>

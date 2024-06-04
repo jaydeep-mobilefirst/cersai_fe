@@ -4,7 +4,7 @@ import React, { FC, forwardRef } from "react";
 
 // Import your SVG icons
 import EyeSvg from "../../assets/images/eye2.svg";
-import EditSvg from "../../assets/images/edit.svg";
+import EditSvg from "../../assets/images/bedit.svg";
 import DeleteSvg from "../../assets/images/delete.svg";
 import SendSvg from "../../assets/images/send.svg";
 import ExportSvg from "../../assets/images/export.svg";
@@ -33,7 +33,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 // ActionButton component
 const ActionButton: FC<Props> = forwardRef<HTMLButtonElement, Props>(
   (
-    { variant = "edit", variantHeight = 24, variantWidth = 24, ...Props },
+    { variant = "edit", variantHeight = 45, variantWidth = 45, ...Props },
     ref
   ) => {
     // Object mapping variant to SVG

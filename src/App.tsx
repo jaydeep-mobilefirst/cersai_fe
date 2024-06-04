@@ -42,23 +42,9 @@ import RoleCreation from "./pages/mainPortal/UserManagement/RoleCreation";
 import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 import UserMasterForm from "./pages/mainPortal/UserManagement/UserMasterForm";
 import EditUserForm from "./pages/mainPortal/UserManagement/EditUserMasterForm";
-
-import RoleCreationRg from "./pages/regulator/UserManagementRg/RoleCreation";
-import UserCreationRg from "./pages/regulator/UserManagementRg/UserCreation";
-import UserMasterFormRg from "./pages/regulator/UserManagementRg/UserMasterForm";
 import EditUserFormRg from "./pages/regulator/UserManagementRg/EditUserMasterForm";
-
-import RoleCreationCa from "./pages/competentAuthority/UserManagementCa/RoleCreation";
-import UserCreationCa from "./pages/competentAuthority/UserManagementCa/UserCreation";
-import UserMasterFormCa from "./pages/competentAuthority/UserManagementCa/UserMasterForm";
 import EditUserFormCa from "./pages/competentAuthority/UserManagementCa/EditUserMasterForm";
-
-import RoleCreationDc from "./pages/designatedCourt/UserManagementDc/RoleCreation";
-import UserCreationDc from "./pages/designatedCourt/UserManagementDc/UserCreation";
-import UserMasterFormDc from "./pages/designatedCourt/UserManagementDc/UserMasterForm";
 import EditRolePopupDc from "./pages/designatedCourt/UserManagementDc/EditUserMasterForm";
-
-import SetPassword from "./pages/SetPassowrd";
 import SetNewPasswordModel from "./components/userFlow/common/SetNewPasswordModel";
 import OtpModel from "./components/userFlow/common/OtpModal";
 import MainPortalLayoutRegulator from "./layouts/portal/MainPortalLayoutRegulator";

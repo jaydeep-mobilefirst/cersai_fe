@@ -17,7 +17,7 @@ const TaskTabsItem: React.FC<MenuItemProps> = ({ text, isActive, onClick }) => {
         className={`hover:text-gilroy-bold 
                        ${
                          isActive
-                           ? "font-bold text-[#1C468E]"
+                           ? "font-bold text-[#1c468e]"
                            : "text-[#666666] "
                        }
       `}
@@ -26,7 +26,7 @@ const TaskTabsItem: React.FC<MenuItemProps> = ({ text, isActive, onClick }) => {
       </div>
       <div
         className={` self-stretch h-1 rounded-sm ${
-          isActive ? "bg-[#1C468E]" : "bg-white"
+          isActive ? "bg-[#1c468e]" : "bg-white"
         }`}
       ></div>
     </li>
