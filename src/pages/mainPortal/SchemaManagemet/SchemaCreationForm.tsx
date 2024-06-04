@@ -398,12 +398,12 @@ const SchemaCreationForm = () => {
               }}
             >
               <div className="flex items-center space-x-6">
-                <p className="text-[#52AE32] text-gilroy-medium cursor-pointer">
+                <p className="text-[#1c468e] text-gilroy-medium cursor-pointer">
                   Discord
                 </p>
                 <button
                   type="submit"
-                  className="bg-[#385723] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+                  className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
                 >
                   Create Scheme
                 </button>
