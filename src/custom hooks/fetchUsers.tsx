@@ -6,6 +6,7 @@ import uamStore from '../store/uamStore';
 function useFetchUsers(entityId : string) {
   const {update} = uamStore((state => state))
   const [users, setData] = useState<any[]>([]);
+  const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(1);
@@ -27,6 +28,7 @@ function useFetchUsers(entityId : string) {
       const response = await axios.get(`${bffUrl}/user/list/${entityId}?page=${page}&pageSize=10&search=${searchString}&roleName=${functionalitySearch}`);      
       setData(response.data?.data?.userList)
       setPage(response.data?.data?.currentPage);
+      setTotal(response.data?.data?.userList?.length)
       // setPageSize(response.data?.data?.totalData)
       setTotalPages(response.data?.data?.totalPages)
       setLoading(false)
@@ -42,7 +44,7 @@ function useFetchUsers(entityId : string) {
     fetchData();
   }, [entityId, page, update]);
 
-  return { users, loading, page, pageSize, totalPages, setSearchString, setPage, setFunctionalitySearch , handleSearch}
+  return { users, loading, page, pageSize, total, totalPages, setSearchString, setPage, setFunctionalitySearch , handleSearch}
   
 }
 

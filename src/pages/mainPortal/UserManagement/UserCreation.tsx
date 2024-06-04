@@ -20,6 +20,7 @@ import SendActivationLink from "../../../components/userFlow/common/SendActivati
 import LoaderSpin from "../../../components/LoaderSpin";
 
 type TableType = {
+  sno: number;
   id: string;
   Name: string;
   role: string;
@@ -35,7 +36,7 @@ const columnHelper = createColumnHelper<TableType>();
 const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
   const entityId = sessionStorage.getItem('entityUniqueId') ?? ''
   const { handleRefreshUAM } = uamStore((state => state))
-  const { loading, users, page, pageSize, setFunctionalitySearch, setPage, setSearchString, totalPages, handleSearch } = useFetchUsers(entityId);
+  const { loading, users, page, pageSize, setFunctionalitySearch, setPage, setSearchString, total, totalPages, handleSearch } = useFetchUsers(entityId);
   const { roles } = useFetchRoles(entityId, 100);
 
   let customRoles = roles?.map((r) => ({label : r?.compositeRoleName, value : r?.compositeRoleName, id : r?.id}))
@@ -57,10 +58,22 @@ const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
     // alert('Edit is in progress')
   };
 
+  let count: number;
+  const serialNoGen = (page: number) => {
+    count = (page - 1) * 10;
+  }
+  serialNoGen(page)
+
   const columns = [
-    columnHelper.accessor("id", {
-      cell: (info) => info.renderValue(),
-      header: () => <span>S.No.</span>,
+    columnHelper.accessor("sno", {
+      cell: () => {
+        while (count <= total)
+          {
+            count++;
+            return count;
+          }
+      },
+      header: () => <span>Sr. No.</span>,
     }),
 
     columnHelper.accessor((row) => row, {

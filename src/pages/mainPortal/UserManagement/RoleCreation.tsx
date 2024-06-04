@@ -19,6 +19,7 @@ import InputFields from "../../../components/ScehmaManagement/InputField";
 import LoaderSpin from "../../../components/LoaderSpin";
 
 type TableType = {
+  sno: number;
   id: string;
   compositeRoleName: string;
   status: string;
@@ -37,7 +38,7 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
   const entityId = sessionStorage.getItem('entityUniqueId') ?? ''
   const { uamFunctionalities } = useFetchFunctionalityForUAM(entityType);
   const { handleRefreshUAM } = uamStore((state => state))
-  const { loading, roles, page, pageSize, setFunctionalitySearch, setPage, setSearchString, totalPages, searchString, handleSearch} = useFetchRoles(entityId);
+  const { loading, roles, page, pageSize, setFunctionalitySearch, setPage, setSearchString, total, totalPages, searchString, handleSearch} = useFetchRoles(entityId);
   const [isAddRolePopupOpen, setIsAddRolePopupOpen] = useState(false);
   const [isEditRolePopupOpen, setIsEditRolePopupOpen] = useState(false);
   const [editRoleData, setEditRoleData] = useState<TableType | null>(null);
@@ -66,10 +67,21 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
     setIsEditRolePopupOpen(true);
   };
 
+  let count: number;
+  const serialNoGen = (page: number) => {
+    count = (page - 1) * 10;
+  }
+  serialNoGen(page)
 
   const columns = [
     columnHelper.accessor("id", {
-      cell: (info) => info.renderValue(),
+      cell: (info) => {
+        while (count <= total)
+        {
+          count++;
+          return count;
+        }
+      },
       header: () => <span>Sr. No.</span>,
     }),
 
