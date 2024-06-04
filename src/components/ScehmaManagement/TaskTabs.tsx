@@ -6,7 +6,7 @@ type Props = {};
 
 const tabs = [
   {
-    title: "Schema Creation",
+    title: "Scheme Creation",
     url: "mytask",
     rurl: "/dt/mytask",
   },

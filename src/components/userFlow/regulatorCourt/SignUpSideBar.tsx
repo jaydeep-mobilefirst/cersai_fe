@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-
-import { signupSideBar } from "../../../utils/hardText/signuppageText";
+import blueTickImage from "../../../assets/images/tickCircleBlue.svg"
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import HeadComp from "./HeadCom";
@@ -18,7 +17,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
 }) => {
   const Navigate = useNavigate();
   const location = useLocation();
-  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, sections } = useDepositTakerRegistrationStore((state) => state);
 
   const [page, setPage] = useState<string | undefined>(location.pathname);
 
@@ -55,8 +54,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
     return () => {
       clearTimeout(timeout);
     };
-  }, [allFormData]);
-
+  }, [allFormData]); 
   return (
     <div className="sm:w-[300px] h-[100vh] md:w-[349px] w-[250px] bg-[#E7F0FF]">
       {/* {isMenuOpen && (
@@ -92,9 +90,9 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
             {signupSideBarRegulator.map((item: any) => {
               return (
                 <div
-                  onClick={() =>
-                    handleClick(item.description, item.percentage, item.path)
-                  }
+                  // onClick={() =>
+                  //   handleClick(item.description, item.percentage, item.path)
+                  // }
                   key={item.id}
                   className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#1C468E] rounded-lg justify-between items-center inline-flex ${
                     item.path === page
@@ -127,7 +125,11 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
                       {item.description}
                     </p>
                   </div>
-                  <img src={item.tickImgSrc} className="w-6 h-6" alt="icon" />
+                  {
+                    sections?.find((s) => item?.description?.trim() === s?.sectionName?.trim())?.completed &&
+                    <img src={item.path === page ? item?.tickImgSrc : blueTickImage} className="w-6 h-6 stroke-black" />
+                  }
+                  {/* <img src={item.tickImgSrc} className="w-6 h-6" alt="icon" /> */}
                 </div>
               );
             })}

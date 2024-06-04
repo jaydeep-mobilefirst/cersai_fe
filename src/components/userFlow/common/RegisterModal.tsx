@@ -97,7 +97,7 @@ export const paths: any = {
 };
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const Navigate = useNavigate();
-  const { entities, setEntities, setAllFormData, setAllDocumentData } =
+  const { entities, setEntities, setAllFormData, setAllDocumentData,sections, setSections } =
     useDepositTakerRegistrationStore((state) => state);
   const [data, setData] = useState<EntityType[]>(entities);
   const [loader, setLoader] = useState<boolean>(false);
@@ -155,6 +155,8 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
               error: "",
               fileName: "",
             }));
+            console.log({response});
+            
           let obj = {
             dropdownData,
             ...response?.data?.data,
@@ -163,6 +165,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
           };
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
+          setSections(response?.data?.data?.entitySections?.map((e : any) => ({...e, completed : false})))
         } else {
           throw new Error("Error getting data, Please try later!");
         }

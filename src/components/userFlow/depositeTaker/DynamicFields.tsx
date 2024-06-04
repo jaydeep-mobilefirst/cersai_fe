@@ -151,8 +151,8 @@ const DynamicFields = ({
                     <RequiredStar allFormData={allFormData} field={field} />
                   </label>
                   <InputFields
-                    max={6}
-                    min={6}
+                    // max={6}
+                    // min={6}
                     value={field?.userInput}
                     onChange={(e) => onChange && onChange(e, field, fieldType)}
                     type={"number"}

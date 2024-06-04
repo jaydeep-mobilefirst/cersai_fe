@@ -16,6 +16,7 @@ interface IContextProps {
   updatePanFormField: (responseData: any, panFormField: any) => Promise<boolean>
   handleValidationChecks: (formFields: any[], isAdding?: boolean) => Promise<boolean>
   handleDocumentValidations :  (sectionId: number | number[]) => Promise<boolean>
+  handleSectionCompletionTrack : (sectionId : number, flag : boolean) => Promise<void>
 }
 
 // declare function handleValidations(errors: any): void;
@@ -23,7 +24,7 @@ interface IContextProps {
 export const FormHandlerContext = createContext({} as IContextProps);
 
 const FormHandlerProviders = ({children}: Props) => {
-  const {allFormData, setAllFormData, documentData, setAllDocumentData} = useDepositTakerRegistrationStore(state => state)
+  const {allFormData, setAllFormData, documentData, setAllDocumentData, sections, setSections} = useDepositTakerRegistrationStore(state => state)
   const updateValue = (value : string | any[], fieldId : number, dscFileNAme : string = "") => {
     let modifiedFormFields = allFormData?.formFields?.form_fields?.map((o : any) => {
       if (o?.id === fieldId) {
@@ -273,9 +274,28 @@ const FormHandlerProviders = ({children}: Props) => {
     // Dedup check for form fields like mobile, email, isAdding flag is set to true by default
     // So that we can toggle de dup check on one flag, if u don't want to check then set it false
     let deDupCheck = !isAdding ? true : !formValidations ? true : await ValidateDeDup(formFields?.filter((field : any) => (emailRegex.test(field?.userInput) || panRegex.test(field?.userInput) || /^-?\d+$/.test(field?.userInput) )))
+
+    if (formValidations && documentValidations && deDupCheck) {
+      await handleSectionCompletionTrack(formFields[0]?.sectionId, true);
+    }
+    else{
+      await handleSectionCompletionTrack(formFields[0]?.sectionId, false);
+    }
+
     return formValidations && documentValidations && deDupCheck;
   }
 
+  const handleSectionCompletionTrack  = async (sectionId : number,  flag : boolean) : Promise<void> => {
+    let updated = sections?.map((s) => {
+      if (s?.id === sectionId) {
+        return {...s, completed : flag}
+      }
+      else{
+        return s;
+      }
+    })
+    setSections(updated)
+  }
   const ValidateDeDup = async (formFields : any[]) : Promise<boolean>=> {
     const errors: any[] = [];
     const deDupURLs : any = {
@@ -349,6 +369,12 @@ const FormHandlerProviders = ({children}: Props) => {
       }
     })
     setAllDocumentData(modifiedFileFields)
+    if (typeof sectionId === 'number' && errorCount === 0) {
+      await handleSectionCompletionTrack(sectionId, true);
+    }
+    else if (typeof sectionId === 'number' && errorCount !== 0) {
+      await handleSectionCompletionTrack(sectionId, false);
+    }
     return errorCount === 0;
   }
 
@@ -374,7 +400,7 @@ const FormHandlerProviders = ({children}: Props) => {
   }
 
   return (
-    <FormHandlerContext.Provider  value={{onChange, handleValidationChecks, updatePanFormField, onFileChange, handleDocumentValidations}}>
+    <FormHandlerContext.Provider  value={{handleSectionCompletionTrack, onChange, handleValidationChecks, updatePanFormField, onFileChange, handleDocumentValidations}}>
       {children}
     </FormHandlerContext.Provider>
   )
