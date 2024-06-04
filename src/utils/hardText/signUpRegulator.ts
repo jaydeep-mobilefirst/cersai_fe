@@ -15,7 +15,7 @@ export const signupSideBarRegulator = [
       path:"/regulator/court/regulatordetails",
       imgSrc: profile,
       imgSrcHighlighted:profileCircleHighlighted,
-      description: "Regulator Details",
+      description: "Regulators Details",
       tickImgSrc: tickCircleWhite,
       percentage: 0,
     },
