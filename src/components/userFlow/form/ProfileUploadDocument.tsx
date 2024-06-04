@@ -15,7 +15,6 @@ import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import { getMimeTypeFromArrayBuffer } from "../../../utils/commonFunction";
 import Swal from "sweetalert2";
-import DeleteFileButton from "../common/DeleteFileButton";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onFileUpload?: (file: File | null) => void;
   deleteFile?: () => void;
