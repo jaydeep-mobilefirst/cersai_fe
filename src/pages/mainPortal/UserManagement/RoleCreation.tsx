@@ -74,7 +74,7 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
   serialNoGen(page)
 
   const columns = [
-    columnHelper.accessor("id", {
+    columnHelper.accessor("sno", {
       cell: (info) => {
         while (count <= total)
         {
