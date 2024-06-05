@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { portalSideBarList } from "../../../utils/hardText/portalText";
+import { portalSideBarListDesignated } from "../../../utils/hardText/portalText";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowClose from "../../../assets/images/new_images/sidebarCollapse.png";
@@ -113,7 +113,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
                 />
               </button>
             </li>
-            {portalSideBarList?.map((data, idx) => {
+            {portalSideBarListDesignated?.map((data, idx) => {
               return (
                 <li
                   className={`${

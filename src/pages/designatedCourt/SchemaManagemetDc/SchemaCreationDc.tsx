@@ -11,7 +11,7 @@ import ReactTable from "../../../components/userFlow/common/ReactTable";
 import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton";
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
 import ToggleSwitch from "../../../components/ScehmaManagement/ToggleSwitch";
-import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
+import TaskTabs from "../../../components/ScehmaManagement/TaskTabsDc";
 
 type TableType = {
   sno: string;
@@ -23,7 +23,7 @@ type TableType = {
 
 const columnHelper = createColumnHelper<TableType>();
 
-const SchemaCreation = () => {
+const SchemaCreationDc = () => {
   const defaultData: TableType[] = [
     {
       sno: "01",
@@ -105,7 +105,7 @@ const SchemaCreation = () => {
 
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/dt/mytask/form"}>
+            <Link to={"/dc/my-task/form"}>
               <div>
                 <img src={Eye} alt="Eye " className="cursor-pointer" />
               </div>
@@ -175,7 +175,7 @@ const SchemaCreation = () => {
                   Search
                 </span>
               </button>
-              <Link to="/usermanagement/adduser">
+              <Link to="dc/usermanagement/adduser">
                 <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
                   <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
@@ -247,4 +247,4 @@ const SchemaCreation = () => {
   );
 };
 
-export default SchemaCreation;
+export default SchemaCreationDc;

@@ -3,15 +3,13 @@ import React, { useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import Eye from "../../../assets/images/eye2.svg";
-import addCircle from "../../../assets/images/new_images/add-circle.png";
+
 import { Link } from "react-router-dom";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import searchButton from "../../../assets/images/search-normal.svg";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
 import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton";
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-import ToggleSwitch from "../../../components/ScehmaManagement/ToggleSwitch";
-import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 
 type TableType = {
   sno: string;
@@ -23,7 +21,7 @@ type TableType = {
 
 const columnHelper = createColumnHelper<TableType>();
 
-const SchemaCreation = () => {
+const MyTaskStatus = () => {
   const defaultData: TableType[] = [
     {
       sno: "01",
@@ -91,8 +89,7 @@ const SchemaCreation = () => {
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span> {value ? "Active" : "In-Active"}</span>
-            <ToggleSwitch enabled={value} />
+            <span> Pending</span>
           </div>
         );
       },
@@ -105,7 +102,7 @@ const SchemaCreation = () => {
 
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/dt/mytask/form"}>
+            <Link to={"/rg/mytask/form"}>
               <div>
                 <img src={Eye} alt="Eye " className="cursor-pointer" />
               </div>
@@ -142,11 +139,8 @@ const SchemaCreation = () => {
 
   return (
     <div className="relative xl:ml-[40px]">
-      <div className="mt-6">
-        <TaskTabs />
-      </div>
       <div>
-        <div className=" mt-2">
+        <div className=" mt-4">
           <div className=" flex  space-x-2  items-center flex-wrap">
             <div className="md:w-[500px] lg:w-[600px] sm:w-[350px] w-[300px]">
               <div className="mb-2">
@@ -154,7 +148,7 @@ const SchemaCreation = () => {
                   htmlFor="Deposit taker Search"
                   className="text-base font-normal text-gilroy-medium "
                 >
-                  Scheme Search
+                  Deposit taker Search
                 </label>
               </div>
 
@@ -175,14 +169,6 @@ const SchemaCreation = () => {
                   Search
                 </span>
               </button>
-              <Link to="/usermanagement/adduser">
-                <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
-                  <img src={addCircle} alt="icon" />
-                  <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
-                    Add Schema
-                  </span>
-                </div>
-              </Link>
             </div>
           </div>
         </div>
@@ -247,4 +233,4 @@ const SchemaCreation = () => {
   );
 };
 
-export default SchemaCreation;
+export default MyTaskStatus;

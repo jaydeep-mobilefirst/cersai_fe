@@ -38,6 +38,19 @@ import SchemaCreationForm from "./pages/mainPortal/SchemaManagemet/SchemaCreatio
 import SchemaCreation from "./pages/mainPortal/SchemaManagemet/SchemaCreation";
 import SchemeMasterForm from "./pages/mainPortal/SchemaManagemet/SchemaMasterDetail";
 
+import SchemaCreationFormRg from "./pages/regulator/SchemaManagemetRg/SchemaCreationFormRg";
+import SchemaCreationRg from "./pages/regulator/SchemaManagemetRg/SchemaCreationRg";
+import SchemeMasterFormRg from "./pages/regulator/SchemaManagemetRg/SchemaMasterDetailRg";
+import MyTaskStatus from "./pages/regulator/MyTask/MyTaskStatus";
+
+import SchemaCreationCa from "./pages/competentAuthority/SchemaManagemetCa/SchemaCreationCa";
+import SchemaCreationFormCa from "./pages/competentAuthority/SchemaManagemetCa/SchemaCreationFormCa";
+import SchemeMasterFormCa from "./pages/competentAuthority/SchemaManagemetCa/SchemaMasterDetailCa";
+
+import SchemaCreationDc from "./pages/designatedCourt/SchemaManagemetDc/SchemaCreationDc";
+import SchemaCreationFormDc from "./pages/designatedCourt/SchemaManagemetDc/SchemaCreationFormDc";
+import SchemeMasterFormDc from "./pages/designatedCourt/SchemaManagemetDc/SchemaMasterDetailDc";
+
 import RoleCreation from "./pages/mainPortal/UserManagement/RoleCreation";
 import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 import UserMasterForm from "./pages/mainPortal/UserManagement/UserMasterForm";
@@ -91,7 +104,10 @@ function App() {
             </Route>
             <Route element={<MainPortalLayoutRegulator />} path="/rg">
               <Route element={<Dashboard />} path="dashboard" />
-              <Route element={<h1> in Progesss</h1>} path="my-task" />
+              <Route element={<MyTaskStatus />} path="mytask" />
+              <Route element={<SchemaCreationRg />} path="my-task" />
+              <Route element={<SchemaCreationFormRg />} path="my-task/form" />
+              <Route element={<SchemeMasterFormRg />} path="my-task/schema" />
               <Route
                 element={<RoleCreation entityType="RG" />}
                 path="usermanagement"
@@ -117,7 +133,10 @@ function App() {
             </Route>
             <Route element={<MainPortalLayoutCompetent />} path="/ca">
               <Route element={<DashboardCompetent />} path="dashboard" />
-              <Route element={<h1> in Progress</h1>} path="my-task" />
+              <Route element={<SchemaCreationCa />} path="my-task" />
+              <Route element={<SchemaCreationFormCa />} path="my-task/form" />
+              <Route element={<SchemeMasterFormCa />} path="my-task/schema" />
+
               <Route
                 element={<RoleCreation entityType="CA" />}
                 path="usermanagement"
@@ -143,7 +162,10 @@ function App() {
             </Route>
             <Route element={<MainPortalLayoutDesignated />} path="/dc">
               <Route element={<DashboardCompetent />} path="dashboard" />
-              <Route element={<h1> in Progesss</h1>} path="my-task" />
+              <Route element={<SchemaCreationDc />} path="my-task" />
+              <Route element={<SchemaCreationFormDc />} path="my-task/form" />
+              <Route element={<SchemeMasterFormDc />} path="my-task/schema" />
+
               <Route
                 element={<RoleCreation entityType="DC" />}
                 path="usermanagement"
