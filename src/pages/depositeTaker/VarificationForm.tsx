@@ -123,7 +123,7 @@ const VerificationForm = (props: Props) => {
                   type="submit"
                   disabled={loader}
                   onClick={onSubmit}
-                  className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                  className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
                 >
                   {loader ? <LoaderSpin/> : "Verify details"}
                 </button>
