@@ -103,6 +103,7 @@ export const profileSideBarList = [
     title: "Entity Details",
     url: "entity",
     rurl: "/dt/profile?current=entity",
+
     percentage: 0,
   },
   {
