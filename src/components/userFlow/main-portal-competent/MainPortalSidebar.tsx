@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { portalSideBarListCompetent } from "../../../utils/hardText/portalText";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import ArrowClose from "../../../assets/images/arrowclose.svg";
+import ArrowClose from "../../../assets/images/new_images/sidebarCollapse.png";
 import Logo from "../../../assets/images/logo2.svg";
 import ArrowRight from "../../../assets/images/arrow-left.svg";
 import HamburgerMenu from "../../../assets/images/hamburger_icon.svg";
@@ -29,15 +29,41 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
   const { pathname } = location;
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
+  // useEffect(() => {
+  //   const cmsPath = location.pathname.split("/")[1];
+  //   setUrl("/" + cmsPath);
+  // }, [location.pathname]);
+
+  // const handleTabClick = (url: string, title: string) => {
+  //   setActiveTab(url);
+  //   localStorage.setItem("current_tab", title);
+  // };
   useEffect(() => {
     const cmsPath = location.pathname.split("/")[1];
     setUrl("/" + cmsPath);
-  }, [location.pathname]);
+    if (
+      location.pathname.startsWith("/ca/profile") &&
+      searchParams.get("current") === "competent"
+    ) {
+      setActiveTab(""); // Reset active tab for specific condition
+    }
+  }, [location.pathname, searchParams]);
 
   const handleTabClick = (url: string, title: string) => {
-    setActiveTab(url);
-    localStorage.setItem("current_tab", title);
+    if (
+      location.pathname.startsWith("/ca/profile") &&
+      searchParams.get("current") === "competent"
+    ) {
+      console.log(
+        "Sidebar highlight prevention active for /dt/profile with entity"
+      );
+    } else {
+      setActiveTab(url);
+      localStorage.setItem("current_tab", title);
+      navigate(url);
+    }
   };
 
   return (

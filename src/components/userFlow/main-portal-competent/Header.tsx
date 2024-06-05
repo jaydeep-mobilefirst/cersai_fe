@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Notification from "../../../assets/images/notification.svg";
 import Setting from "../../../assets/images/setting.svg";
 import G1 from "../../../assets/images/g1.svg";
@@ -21,19 +21,34 @@ const Header = () => {
 
   const firstName = sessionStorage.getItem("firstName");
   const lastName = sessionStorage.getItem("lastName");
+  const entityType = sessionStorage.getItem("entityType");
+  const [Title, setTitle] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+  useEffect(() => {
+    const titleMap: { [key: string]: string } = {
+      DT: "Deposit Taker",
+      CA: "Competent Authority",
+      DC: "Designated Court",
+      RG: "Regulator",
+    };
+    if (entityType && titleMap.hasOwnProperty(entityType)) {
+      setTitle(titleMap[entityType]);
+    } else {
+      setTitle("");
+    }
+  }, [entityType]);
 
   return (
     <>
       <div className="flex items-center justify-between p-4 mt-2 pb-6 flex-col sm:flex-row border-b border-[#E6E6E6]">
         <div className="">
-          {title && (
+          {Title && (
             <div className="h-8 px-2 rounded-[5px] border border-[#1C468E] flex items-center justify-center">
               <div className="text-[#1C468E] text-base font-normal text-gilroy-medium leading-tight">
-                {title}
+                {Title}
               </div>
             </div>
           )}

@@ -60,7 +60,7 @@ const SchemeCreationSuccess: React.FC<SuccessProps> = ({
               <button
                 type="button"
                 onClick={SuccessPopup}
-                className="bg-[#385723] rounded-xl w-full md:w-[224px] px-4 md:px-10 py-3 text-white font-semibold text-sm"
+                className="bg-[#1c468e] rounded-xl w-full md:w-[224px] px-4 md:px-10 py-3 text-white font-semibold text-sm"
               >
                 Okay
               </button>

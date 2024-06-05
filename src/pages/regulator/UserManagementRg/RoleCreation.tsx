@@ -1,29 +1,47 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import addCircle from "../../../assets/images/add-circleb.svg";
 import searchButton from "../../../assets/images/search-normal.svg";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
-import SelectButtonTask from "../../../components/userFlow/regulatorCourt/SelectButtonManagement";
+import SelectButtonTask from "../../../components/UserManagement/SelectButtonManagement";
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-import ToggleSwitch from "../../../components/userFlow/regulatorCourt/ToggleSwitch";
-import UmTabs from "../../../components/userFlow/regulatorCourt/UmTabs";
-import edit from "../../../assets/images/bedit.svg";
-import AddRolePopup from "../../../components/userFlow/regulatorCourt/AddRolePopup";
-import EditRolePopup from "../../../components/userFlow/regulatorCourt/EditRolePopup"; // Import the EditRolePopup
+import ToggleSwitch from "../../../components/UserManagement/ToggleSwitch";
+import UmTabs from "../../../components/UserManagement/UmTabs";
+import AddRolePopup from "../../../components/UserManagement/AddRolePopup";
+import EditRolePopup from "../../../components/UserManagement/EditRolePopup"; // Import the EditRolePopup
+import useFetchFunctionalityForUAM from "../../../custom hooks/useFetchFunctionalityForUAM";
+import useFetchRoles from "../../../custom hooks/fetchRoles";
+import ActionButton from "../../../components/buttons/ActionButton";
+import axios from "axios";
+import { bffUrl } from "../../../utils/api";
+import uamStore from "../../../store/uamStore";
+import InputFields from "../../../components/ScehmaManagement/InputField";
 
 type TableType = {
-  sno: string;
-  depositTakerName: string;
+  id: string;
+  compositeRoleName: string;
   status: string;
-  action: boolean;
+  isActive: boolean;
 };
 
 const columnHelper = createColumnHelper<TableType>();
 
 const RoleCreation = () => {
+  const entityId = sessionStorage.getItem('entityUniqueId') ?? ''
+  const { uamFunctionalities } = useFetchFunctionalityForUAM('RG');
+  const { handleRefreshUAM } = uamStore((state => state))
+  const { loading, roles, page, pageSize, setFunctionalitySearch, setPage, setSearchString, totalPages } = useFetchRoles(entityId);
   const [isAddRolePopupOpen, setIsAddRolePopupOpen] = useState(false);
   const [isEditRolePopupOpen, setIsEditRolePopupOpen] = useState(false);
   const [editRoleData, setEditRoleData] = useState<TableType | null>(null);
+
+
+  // States for Edit
+  // console.log( {loading, roles, page, pageSize, setFunctionalitySearch, setPage, setSearchString, totalPages});
+  const [roleName, setRoleName] = useState<string | undefined>(undefined);
+  const [isActive, setIsActive] = useState();
+  const [roleEditId, setRoleEditId] = useState<number | undefined>();
+  const [selectedFuncs, setSelectedFuncs] = useState<any[]>([]);
 
   const handleAddRoleClick = () => {
     setIsAddRolePopupOpen(true);
@@ -34,87 +52,71 @@ const RoleCreation = () => {
     setIsEditRolePopupOpen(true);
   };
 
-  const defaultData: TableType[] = [
-    {
-      sno: "01",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      status: "Active",
-      action: false,
-    },
-    {
-      sno: "02",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "03",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "04",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      status: "pending",
-      action: false,
-    },
-    {
-      sno: "05",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "06",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      status: "pending",
-      action: false,
-    },
-  ];
 
   const columns = [
-    columnHelper.accessor("sno", {
+    columnHelper.accessor("id", {
       cell: (info) => info.renderValue(),
-      header: () => <span>S.No.</span>,
+      header: () => <span>Sr. No.</span>,
     }),
 
-    columnHelper.accessor("depositTakerName", {
+    columnHelper.accessor("compositeRoleName", {
       cell: (info) => info.renderValue(),
       header: () => <span>Name of the Role</span>,
     }),
-    columnHelper.accessor("status", {
-      cell: (info) => {
-        const value = info?.row?.original?.action;
+    columnHelper.accessor("isActive", {
+      header: () => <span>Status</span>,
+      cell: (info: any) => {
+        const value = info?.row?.original?.isActive;
+        const id = info?.row?.original?.id;
+        // console.log(info?.row?.original?.id, "info");
+        const StatusChange = () => {
+          axios
+            .patch(`${bffUrl}/role/status/`, {
+              id: id,
+              status: !value,
+            })
+            .then((response: any) => {
+              handleRefreshUAM();
+            })
+            .catch((error: any) => { });
+        };
 
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span> {value ? "Active" : "In-Active"}</span>
-            <ToggleSwitch enabled={value} />
+            <span>{value ? "Active" : "InActive"}</span>
+            <ToggleSwitch enabled={value} apiCall={StatusChange} />
           </div>
         );
       },
-      header: () => <span>Status</span>,
     }),
-    columnHelper.accessor((row) => row, {
-      id: "action",
-      cell: (info) => {
-        const value = info.getValue();
-
+    {
+      accessorFn: (row: any) => row,
+      id: "edit",
+      cell: (info: any) => {
+        const handleOnEdit = (event: any) => {
+          const data = info.cell.row.original;
+          setIsActive(data.isActive);
+          setRoleName(data?.compositeRoleName);
+          setRoleEditId(data?.id);
+          const selectedFuncs = uamFunctionalities.filter(
+            (f) => data?.functionalities?.includes(f.roleName) === true
+          );
+          setSelectedFuncs(selectedFuncs);
+          setIsEditRolePopupOpen(true);
+        };
         return (
-          <div className="flex justify-center items-center">
-            <div onClick={() => handleEditRoleClick(value)}>
-              <img src={edit} alt="Edit" className="cursor-pointer" />
-            </div>
-          </div>
+          <>
+            <ActionButton variant="edit" onClick={handleOnEdit} />
+          </>
         );
       },
       header: () => <span>Action</span>,
-    }),
+    },
   ];
+
 
   const options = [
     { value: "pdf", label: "PDF" },
@@ -140,41 +142,34 @@ const RoleCreation = () => {
     setSelectedOption3(value);
   };
 
+  const handleSearch = (e: any) => {
+    setSearchString(e.target.value);
+  };
+
   return (
     <div className="relative xl:ml-[20px] pr-3">
       <div className="mt-6">
-        <UmTabs />
+        {/* <UmTabs /> */}
       </div>
       <div>
         <div className="mt-5 mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-          <div className="flex-grow">
-            <SelectButtonTask
-              setOption={handleSetOption1}
-              options={options}
-              selectedOption={selectedOption1}
-              borderColor="#E7F0FF"
-              placeholder="Name"
-              mdWidth="w-full"
+          <div className="flex-grow mt-[11px] mb-[35px] flex items-center  flex-wrap gap-4">
+            <InputFields
+              height="45px"
+              width="500px"
+              padding="10px"
+              placeholder="Search by Name/Role"
+              onChange={handleSearch}
             />
           </div>
           <div className="flex-grow">
             <SelectButtonTask
               setOption={handleSetOption1}
-              options={options}
+              options={uamFunctionalities}
               selectedOption={selectedOption1}
               placeholder="Functionality"
               bgColor="#FFFFFF"
               borderColor="#E7F0FF" // Custom border color
-              mdWidth="w-full"
-            />
-          </div>
-          <div className="flex-grow">
-            <SelectButtonTask
-              setOption={handleSetOption3}
-              options={options}
-              selectedOption={selectedOption3}
-              placeholder="Functionaly"
-              borderColor="#E7F0FF"
               mdWidth="w-full"
             />
           </div>
@@ -198,9 +193,9 @@ const RoleCreation = () => {
             </button>
           </div>
         </div>
-        {isAddRolePopupOpen && (
+        {/* {isAddRolePopupOpen && (
           <AddRolePopup onClose={() => setIsAddRolePopupOpen(false)} />
-        )}
+        )} */}
         {isEditRolePopupOpen && editRoleData && (
           <EditRolePopup
             roleData={editRoleData}
@@ -211,12 +206,14 @@ const RoleCreation = () => {
 
       <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
         <div className="max-w-full overflow-x-auto">
-          <ReactTable defaultData={defaultData} columns={columns} />
+          {roles?.length > 0 && <ReactTable defaultData={roles} columns={columns} />}
         </div>
         <div className="mt-10">
           <CustomPagination
-            totalItems={defaultData.length}
-            itemsPerPage={5}
+            currentPage={page}
+            setCurrentPage={setPage}
+            totalItems={totalPages}
+            itemsPerPage={pageSize}
             maxPageNumbersToShow={5}
           />
         </div>

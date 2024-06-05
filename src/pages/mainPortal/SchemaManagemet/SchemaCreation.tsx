@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import Eye from "../../../assets/images/eye2.svg";
-import addCircle from "../../../assets/images/add-circle.svg";
+import addCircle from "../../../assets/images/new_images/add-circle.png";
 import { Link } from "react-router-dom";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import searchButton from "../../../assets/images/search-normal.svg";
@@ -72,7 +72,7 @@ const SchemaCreation = () => {
   const columns = [
     columnHelper.accessor("sno", {
       cell: (info: any) => info.renderValue(),
-      header: () => <span>S.No.</span>,
+      header: () => <span>Sr. No.</span>,
     }),
     columnHelper.accessor("depositTakerID", {
       cell: (info: any) => info.renderValue(),
@@ -168,7 +168,7 @@ const SchemaCreation = () => {
 
             <div className=" flex items-center mt-7">
               <button
-                className={`w-40 h-[45px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#385723] cursor-pointer"} mt-2`}
+                className={`w-40 h-[45px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1c468e] cursor-pointer"} mt-2`}
               >
                 <img src={searchButton} alt="searchButton" />
                 <span className="ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium ">
@@ -176,9 +176,9 @@ const SchemaCreation = () => {
                 </span>
               </button>
               <Link to="/usermanagement/adduser">
-                <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#385723] flex justify-center items-center mt-2 cursor-pointer">
+                <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
-                  <span className="ml-1 text-[14px] md:text-base font-normal text-[#385723] lg:text-[16px] text-gilroy-medium ">
+                  <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
                     Add User
                   </span>
                 </div>
@@ -236,7 +236,7 @@ const SchemaCreation = () => {
           </div>
           <div className="mt-10">
             <CustomPagination
-              totalItems={defaultData.length}
+              totalItems={defaultData?.length}
               itemsPerPage={5}
               maxPageNumbersToShow={5}
             />

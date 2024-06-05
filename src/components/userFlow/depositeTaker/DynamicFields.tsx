@@ -4,10 +4,8 @@ import SelectButton from "../form/SelectButton";
 import DatePicker from "../form/DatePicker";
 import DscButton from "../form/Dscbutton";
 import RequiredStar from "./RequiredStar";
-import folderOpen from "../../../assets/images/folder-open.svg";
-import UploadIcon from "../../../assets/images/UploadIcon.png";
-import ViewFile from "./ViewFile";
-import DeleteFileButton from "../common/DeleteFileButton";
+import DynamicFileUpload from "./DynamicFileUpload";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 
 type Props = {
   toggleUploadPopup?: () => void;
@@ -32,16 +30,12 @@ type Props = {
 const DynamicFields = ({
   formFields,
   onChange,
-  allFormData,
-  documentFields,
-  onFileChange,
-  setFieldData,
-  toggleUploadPopup,
   sectionId
 }: Props) => {
 
-  console.log({sectionId, documentFields});
-
+  const {  allFormData, documentData} = useDepositTakerRegistrationStore(
+    (state) => state
+);
 
   return (
     <>
@@ -57,6 +51,7 @@ const DynamicFields = ({
             case "number":
             case "password":
             case "phone_number":
+            case "email":
               return (
                 <div>
                   <label
@@ -156,8 +151,8 @@ const DynamicFields = ({
                     <RequiredStar allFormData={allFormData} field={field} />
                   </label>
                   <InputFields
-                    max={6}
-                    min={6}
+                    // max={6}
+                    // min={6}
                     value={field?.userInput}
                     onChange={(e) => onChange && onChange(e, field, fieldType)}
                     type={"number"}
@@ -193,78 +188,12 @@ const DynamicFields = ({
         })}
           </div>
 
-      {documentFields &&
-        documentFields
+      {documentData &&
+        documentData
           ?.filter((f: any) => f.sectionId === sectionId)
           ?.map((data: any, idx: number) => {   
-            const fieldType = allFormData?.fileTypes?.find(
-              (type: any) => type?.id === data?.fileType
-            )?.name;  
-            return <div key={idx}>
-              <div className="rounded-xl bg-[#E7F0FF] flex flex-col md:flex-row justify-between items-center p-4  text-gilroy-bold mb-4">
-                <div className="flex flex-row items-center space-x-2 w-full">
-                  <div className="mt-2">
-                    <img
-                      src={folderOpen}
-                      alt="Folder Open Icon"
-                      className="bg-white rounded p-1 text-white cursor-pointer"
-                      onClick={() => {
-                        if (toggleUploadPopup) {
-                          toggleUploadPopup()
-                        }
-                        if (setFieldData) {
-                          setFieldData(data)
-                        }
-                      }
-                      }
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                  <h1 className="text-xs md:text-sm font-normal text-gilroy-medium text-gray-900">
-                      {data?.documentName}
-                      {data?.required && <span className="text-red-500">*</span>}
-                    </h1>
-                    <p className="text-xs md:text-base font-normal text-gilroy-medium text-gray-400">
-                      {data?.fileName !== "" && data?.fileName !== undefined ? data?.fileName : "No Document uploaded"}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-row mt-1 justify-end w-full md:w-auto">
-                  {data?.uploadFileId && (
-                    <DeleteFileButton 
-                      fieldData={data}
-                      fieldType={fieldType}
-                      onFileChange={onFileChange}
-                    />
-                  )}
-                  <div className="mt-1">
-                    <button
-                      type="button"
-                      className="bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]"
-                      onClick={() => { 
-                        if (toggleUploadPopup && !data?.uploadFileId) {
-                        toggleUploadPopup()
-                        }
-                        if (setFieldData && !data?.uploadFileId) {
-                          setFieldData(data)
-                        }
-                      }}
-                    >
-                      {data?.uploadFileId ? (
-                        <ViewFile uploadFileId={data?.uploadFileId}/>
-                      ) : (
-                        <img
-                          src={UploadIcon}
-                          alt="Upload"
-                          className="w-5"
-                        />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <span className="text-red-500">{data?.error}</span>
-            </div>
+           
+            return <DynamicFileUpload data={data} key={data?.id}/>
           })}
 
           </>

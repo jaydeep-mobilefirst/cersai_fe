@@ -1,0 +1,11 @@
+.action-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.action-icon {
+  max-width: 100%;
+  height: auto;
+}

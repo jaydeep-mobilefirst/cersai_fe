@@ -14,6 +14,8 @@ interface Types {
   allFormData : any
   documentData : any[]
   setAllDocumentData : any
+  sections : any[]
+  setSections : any
 }
 
 // Create your store, which includes both state and (optionally) actions
@@ -21,9 +23,11 @@ export const useDepositTakerRegistrationStore = create<Types>((set: any) => ({
   entities: [],
   allFormData : undefined,
   documentData : [],
-  // Reducers
+  sections : [],
+    // Reducers
   setEntities : (data : EntityType[]) => set(() => ({ entities: data })),
   setAllFormData : (data : any) => set(() => ({ allFormData: data })),
   setAllDocumentData : (data : any) => set(() => ({ documentData: data })),
+  setSections : (data : any[]) => set(() => ({sections: data}))
 }))
 
