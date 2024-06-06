@@ -10,6 +10,7 @@ import ForgetPasswordModel from "../userFlow/common/ForgetPasswordModel";
 import RegisterMailPopup from "../userFlow/common/RegisterMailPopup";
 import SetNewPasswordModel from "../userFlow/common/SetNewPasswordModel";
 import PasswordUpdateModel from "../userFlow/common/PasswordUpdateModel";
+import useTopDetailStore from "../../store/TopDetailStore";
 
 interface AuthButtonProps {
   buttontext: string;
@@ -17,13 +18,27 @@ interface AuthButtonProps {
 }
 
 const TopDetail = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [showLoginModel, setShowLoginModel] = useState(false);
-  const [showForgetModel, setShowForgetModel] = useState(false);
-  const [showRegisterMailModel, setShowRegisterMailModel] = useState(false);
-  const [showsNewPasswordModel, setShowsNewPasswordModel] = useState(true);
-  const [showsPasswordUpdateModel, setShowsPasswordUpdateModel] =
-    useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [showLoginModel, setShowLoginModel] = useState(false);
+  // const [showForgetModel, setShowForgetModel] = useState(false);
+  // const [showRegisterMailModel, setShowRegisterMailModel] = useState(false);
+  // const [showsNewPasswordModel, setShowsNewPasswordModel] = useState(true);
+  // const [showsPasswordUpdateModel, setShowsPasswordUpdateModel] =
+  //   useState(false);
+  const {
+    isOpen,
+    showLoginModel,
+    showForgetModel,
+    showRegisterMailModel,
+    showsNewPasswordModel,
+    showsPasswordUpdateModel,
+    setIsOpen,
+    setShowLoginModel,
+    setShowForgetModel,
+    setShowRegisterMailModel,
+    setShowsNewPasswordModel,
+    setShowsPasswordUpdateModel,
+  } = useTopDetailStore();
 
   const openModal = () => {
     setIsOpen(true);
