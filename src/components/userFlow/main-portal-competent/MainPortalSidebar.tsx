@@ -82,7 +82,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
       <aside
         id="default-sidebar"
-        className={`fixed top-0 left-0 z-100 transition-transform ${
+        className={`fixed top-0 left-0 z-100  transition-transform ${
           mSidebar ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
         } ${collapsed ? "w-[100px]" : "w-[322px]"} h-screen`}
         aria-label="Sidebar"
@@ -93,29 +93,24 @@ const MainPortalSidebar = ({ layout }: Props) => {
           }`}
         >
           <ul className="">
-            <li className="relative border-b border-[#E6E6E6] p-4">
+            <li
+              className={`relative border-b border-[#E6E6E6] ${
+                collapsed ? "p-2 mt-4" : "p-4"
+              }`}
+            >
               <img src={Logo} alt="logo" className="max-h-[52px]" />
-              <div
-                className={`absolute hidden sm:block md:block lg:block ${
-                  collapsed
-                    ? "md:-right-[-0.1rem] right-2 "
-                    : "md:-right-1 right-[0.75rem]"
-                }  ${collapsed ? "top-14" : "top-16"} p-2`}
-                onClick={toggleCollapse}
-              >
-                <img
-                  src={collapsed ? ArrowRight : ArrowClose}
-                  alt="collapsed"
-                  className="bg-[#E7F0FF] rounded-full cursor-pointer"
-                />
-              </div>
+
               <button
                 onClick={toggleSidebar}
                 className={`absolute ${
                   collapsed ? "top-[calc(100% + 1rem)] m-1 left-5" : "top-7"
                 } right-0 sm:hidden`}
               >
-                <img src={CrossIcon} alt="Close sidebar" className="w-6 h-6" />
+                <img
+                  src={CrossIcon}
+                  alt="Close sidebar"
+                  className="w-6 h-6 mr-2"
+                />
               </button>
             </li>
             {portalSideBarListCompetent?.map((data, idx) => {
@@ -128,7 +123,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
                     <div
                       onClick={(e) => handleTabClick(data.url, data.title)}
                       className={`w-auto h-auto md:h-14 ${
-                        activeTab === data.url ? "bg-[#1C468E]" : "bg-[#E7F0FF]"
+                        activeTab === data.url ? "bg-[#1C468E]" : ""
                       } rounded-lg flex items-center  cursor-pointer`}
                     >
                       <div className="m-4 h-[24px] w-[24px]">
@@ -162,6 +157,16 @@ const MainPortalSidebar = ({ layout }: Props) => {
       <div className={`${collapsed ? "sm:ml-[75px]" : "sm:ml-[322px]"}`}>
         <div>
           <Header />
+          <div
+            className={`absolute hidden sm:block md:block lg:block top-[70px] -ml-3 z-[100]`}
+            onClick={toggleCollapse}
+          >
+            <img
+              src={collapsed ? ArrowRight : ArrowClose}
+              alt="collapsed"
+              className="bg-[#E7F0FF] rounded-full cursor-pointer"
+            />
+          </div>
         </div>
         <div className="overflow-x-hidden p-3">{layout}</div>
       </div>
