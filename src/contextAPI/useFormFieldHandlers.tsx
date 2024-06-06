@@ -311,7 +311,7 @@ const FormHandlerProviders = ({children}: Props) => {
     let filteredFields = formFields?.filter((f : any) => (
       /mobile/i.test(f?.label) ||    
       /email/i.test(f?.label) ||
-      /gst/i.test(f?.label) ||
+      /Pan Number/i.test(f?.label) ||
       /emailid/i.test(f?.label)
     ))
     const promises = filteredFields.map(async (field: any) => {

@@ -145,9 +145,11 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
           } catch (error) {
             console.log("Error");
           }
-          let modifiedFormFields = response?.data?.data?.formFields?.map(
+          let modifiedFormFields = response?.data?.data?.formFields
+          ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+          ?.map(
             (o: any) => ({ ...o, userInput: "", error: "" })
-          );
+          )
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
               ...o,
