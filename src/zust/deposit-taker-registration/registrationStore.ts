@@ -59,7 +59,6 @@ export const useDepositTakerRegistrationStore = create<Types>()(
       allFormData: undefined,
       documentData: [],
       sections: [],
-      // Reducers
       setEntities: (data: EntityType[]) => set({ entities: data }),
       setAllFormData: (data: any) => set({ allFormData: data }),
       setAllDocumentData: (data: any[]) => set({ documentData: data }),
