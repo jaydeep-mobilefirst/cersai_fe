@@ -66,8 +66,8 @@ export const useDepositTakerRegistrationStore = create<Types>()(
       setSections: (data: any[]) => set({ sections: data }),
     }),
     {
-      name: "deposit-taker-registration-store", // Unique name for localStorage
-      getStorage: () => localStorage, // (optional) by default, 'localStorage' is used
+      name: "deposit-taker-registration-store",
+      getStorage: () => localStorage,
     } as PersistOptions<Types>
   )
 );
