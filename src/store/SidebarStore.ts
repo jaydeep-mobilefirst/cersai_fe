@@ -12,6 +12,11 @@ type SidebarState = {
   setActiveTab: (tab: string) => void;
 };
 
+interface CollapseState {
+  collapse: boolean;
+  setCollapse: (value: boolean) => void;
+}
+
 const useSidebarStore = create(
   persist<SidebarState>(
     (set) => ({
@@ -34,5 +39,12 @@ const useSidebarStore = create(
     }
   )
 );
+
+const useCollapseStore = create<CollapseState>((set) => ({
+  collapse: false,
+  setCollapse: (value: boolean) => set({ collapse: value }),
+}));
+
+export { useCollapseStore };
 
 export default useSidebarStore;
