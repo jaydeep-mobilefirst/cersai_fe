@@ -95,7 +95,7 @@ const DynamicFields = ({
                   <span className="text-red-500">{field?.error}</span>
                 </div>
               );
-            case "select":
+            case "select":              
               return (
                 <div>
                   <label
@@ -116,6 +116,7 @@ const DynamicFields = ({
                     )}
                     selectedOption={field?.userInput}
                     placeholder={field?.placeholder}
+                    disabled={field?.disabled}
                     //  searchInputOnchange={handleSearchInputChange3}
                     //  searchInputValue={searchInputValue3}
                     showSearchInput={true}

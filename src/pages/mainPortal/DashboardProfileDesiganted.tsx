@@ -93,7 +93,8 @@ const DashboardProfileDesignateCourt = (props: Props) => {
                 : "",
               error: "",
             })
-          );
+          )?.sort((a  :any, b : any) => a.sortOrder - b.sortOrder)
+
 
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({

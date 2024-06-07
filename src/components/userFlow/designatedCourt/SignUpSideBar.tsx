@@ -81,9 +81,9 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
             {signupSideBarDesignated.map((item: any) => {
               return (
                 <div
-                  // onClick={() =>
-                  //   handleClick(item.description, item.percentage, item.path)
-                  // }
+                  onClick={() =>
+                    handleClick(item.description, item.percentage, item.path)
+                  }
                   key={item.id}
                   className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#1c468e] rounded-lg justify-between items-center inline-flex ${
                     item.path === page
