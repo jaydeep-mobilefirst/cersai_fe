@@ -115,6 +115,7 @@ const TopDetail = () => {
     <div className="relative flex items-center justify-between flex-col md:flex-row my-[19px] mx-[16px] lg:mx-[169px]">
       <div className="m-4 md:m-0">
         <img src={Logo} alt="logo" />
+        check env : {process.env.REACT_APP_API_authBaseUrl}
       </div>
       {isOpen && (
         <div
