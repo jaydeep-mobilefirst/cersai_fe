@@ -165,7 +165,6 @@ const SchemaCreationRg = () => {
                 placeholder="Search by Unique ID/name"
               />
             </div>
-
             <div className=" flex items-center mt-7">
               <button
                 className={`w-40 h-[45px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1c468e] cursor-pointer"} mt-2`}
@@ -175,8 +174,10 @@ const SchemaCreationRg = () => {
                   Search
                 </span>
               </button>
-              <Link to="rg/usermanagement/adduser">
-                <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
+            </div>
+            <div className=" flex items-center mt-7">
+              <Link to="/usermanagement/adduser">
+                <div className="w-40 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
                   <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
                     Add Schema

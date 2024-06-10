@@ -66,7 +66,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
             {Math.min(indexOfLastItem, totalItems)} of {totalItems}
           </p>
         </div>
-        <div className="flex flex-col md:flex-row items-center">
+        <div className="flex flex-row md:flex-row items-center">
           <button
             onClick={() =>
               handlePageChange(

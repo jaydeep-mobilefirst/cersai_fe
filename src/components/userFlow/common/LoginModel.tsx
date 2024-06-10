@@ -120,15 +120,20 @@ const LoginModel: React.FC<LoginModelProps> = ({
       }
 
       setError(false);
-    } catch (err: any) {
+    } catch (error: any) {
       setError(true);
-      if (err.response?.data?.error?.error_description) {
-        setFormError(err.response.data.error?.error_description);
-        console.log(err,"error")
-        setError(true);
-      } else {
-        setFormError("An error occurred. Please try again.");
-      }
+      const errorMessage =
+        error?.response?.data?.error?.error_description ||
+        error?.response?.data?.error?.message ||
+        "User not found";
+      setFormError(errorMessage);
+      // if (err.response?.data?.error?.error_description) {
+      //   setFormError(err.response.data.error?.error_description);
+      //   console.log(err, "error");
+      //   setError(true);
+      // } else {
+      //   setFormError("An error occurred. Please try again.");
+      // }
     } finally {
       setLoader(false);
       // setError(false);

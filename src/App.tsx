@@ -42,6 +42,7 @@ import SchemaCreationFormRg from "./pages/regulator/SchemaManagemetRg/SchemaCrea
 import SchemaCreationRg from "./pages/regulator/SchemaManagemetRg/SchemaCreationRg";
 import SchemeMasterFormRg from "./pages/regulator/SchemaManagemetRg/SchemaMasterDetailRg";
 import MyTaskStatus from "./pages/regulator/MyTask/MyTaskStatus";
+import MyTaskForm from "./pages/regulator/MyTask/MyTaskForm";
 
 import SchemaCreationCa from "./pages/competentAuthority/SchemaManagemetCa/SchemaCreationCa";
 import SchemaCreationFormCa from "./pages/competentAuthority/SchemaManagemetCa/SchemaCreationFormCa";
@@ -105,6 +106,8 @@ function App() {
             <Route element={<MainPortalLayoutRegulator />} path="/rg">
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<MyTaskStatus />} path="mytask" />
+              <Route element={<MyTaskForm />} path="mytask/form" />
+
               <Route element={<SchemaCreationRg />} path="my-task" />
               <Route element={<SchemaCreationFormRg />} path="my-task/form" />
               <Route element={<SchemeMasterFormRg />} path="my-task/schema" />
