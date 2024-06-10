@@ -71,6 +71,8 @@ import ResetPasswordCompetent from "./pages/mainPortal/ResetPasswordCompetent";
 import ResetPasswordDesignated from "./pages/mainPortal/ResetPasswordDesignated";
 import DashboardProfileDesignateCourt from "./pages/mainPortal/DashboardProfileDesiganted";
 import MainPortalLayoutDesignated from "./layouts/portal/MainPortalLayoutDesignated";
+import SchemeSearch from "./pages/schemeSearch/SchemeSearch";
+import SchemeSearchDetails from "./pages/schemeSearch/SchemSearchDetails";
 
 function App() {
   return (
@@ -249,6 +251,11 @@ function App() {
             </Route>
           </Route>
           <Route element={<Landing />} path="/" />
+          <Route element={<SchemeSearch />} path="/scheme-search" />
+          <Route
+            element={<SchemeSearchDetails />}
+            path="/scheme-search-details"
+          />
           {/* <Route element={<SetPassword />} path="/set-password" /> */}
           <Route element={<SetNewPasswordModel />} path="/set-password" />
           <Route element={<OtpModel />} path="/otp-verification" />
