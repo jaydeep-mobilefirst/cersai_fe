@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 interface Option {
   value: string;
   label: string;
@@ -24,12 +24,30 @@ const SelectField = ({
   height,
 }: Props) => {
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setArrowDirectionToggle(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   useEffect(() => {
     setArrowDirectionToggle(false);
     return () => {};
   }, [selectedOption]);
   return (
-    <div className="w-full relative">
+    <div className="w-full relative" ref={dropdownRef}>
       <button
         className=" w-full  flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left"
         type="button"
@@ -79,13 +97,13 @@ const SelectField = ({
       </button>
       {arrowDirectionToggle && (
         <div
-          className="absolute w-full rounded-md bg-white shadow-lg"
+          className="absolute w-full rounded-md bg-white shadow-lg z-50"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu"
         >
           <div
-            className="overflow-auto max-h-40 custom-scrollbar"
+            className="overflow-auto max-h-40 custom-scrollbars"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
@@ -94,8 +112,8 @@ const SelectField = ({
               <a
                 key={index}
                 onClick={() => setOption(option.value)}
-                href="#"
-                className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900"
+                // href=""
+                className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 cursor-pointer"
                 role="menuitem"
               >
                 {option.label}

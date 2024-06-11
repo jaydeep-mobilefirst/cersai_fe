@@ -17,58 +17,75 @@ import { useState } from "react";
 
 type TableType = {
   sno: string;
-  depositTakerID: string;
-  depositTakerName: string;
+  schemeID: string;
+  schemeName: string;
   status: string;
+  depositeTaker: string;
+  createdBy: string;
   action: boolean;
 };
 
 const columnHelper = createColumnHelper<TableType>();
 
 const SchemeSearch: React.FC = () => {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
+  const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
+  const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
+  const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
 
   const defaultData: TableType[] = [
     {
       sno: "01",
-      depositTakerID: "DT001",
-      depositTakerName: "Deposit Taker 1",
+      schemeID: "DT001",
+      schemeName: "Deposit Taker 1",
       status: "Active",
+      depositeTaker: "taker1",
+      createdBy: "01/01/2024",
       action: false,
     },
     {
       sno: "02",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
+      schemeID: "DT002",
+      schemeName: "Deposit Taker 2",
       status: "pending",
+      depositeTaker: "taker2",
+      createdBy: "01/01/2024",
       action: true,
     },
     {
       sno: "03",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
+      schemeID: "DT002",
+      schemeName: "Deposit Taker 2",
       status: "pending",
+      depositeTaker: "taker3",
+      createdBy: "01/01/2024",
       action: true,
     },
     {
       sno: "04",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
+      schemeID: "DT002",
+      schemeName: "Deposit Taker 2",
       status: "pending",
+      depositeTaker: "taker4",
+      createdBy: "01/01/2024",
       action: true,
     },
     {
       sno: "05",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
+      schemeID: "DT002",
+      schemeName: "Deposit Taker 2",
       status: "pending",
+      depositeTaker: "taker5",
+      createdBy: "01/01/2024",
       action: true,
     },
     {
       sno: "06",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
+      schemeID: "DT002",
+      schemeName: "Deposit Taker 2",
       status: "pending",
+      depositeTaker: "taker6",
+      createdBy: "01/01/2024",
       action: true,
     },
   ];
@@ -78,23 +95,23 @@ const SchemeSearch: React.FC = () => {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Sr. No.</span>,
     }),
-    columnHelper.accessor("depositTakerID", {
+    columnHelper.accessor("schemeID", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Scheme ID</span>,
     }),
-    columnHelper.accessor("depositTakerName", {
+    columnHelper.accessor("schemeName", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Scheme Name</span>,
     }),
-    columnHelper.accessor("depositTakerName", {
+    columnHelper.accessor("status", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor("depositTakerName", {
+    columnHelper.accessor("depositeTaker", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Deposite Taker</span>,
     }),
-    columnHelper.accessor("depositTakerName", {
+    columnHelper.accessor("createdBy", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Created by</span>,
     }),
@@ -123,7 +140,19 @@ const SchemeSearch: React.FC = () => {
     { value: "image", label: "Image" },
   ];
 
-  const handleSetOption1 = () => {};
+  const handleSetOption1 = (value: string) => {
+    setSelectedOption1(value);
+  };
+
+  const handleSetOption2 = (value: string) => {
+    setSelectedOption2(value);
+  };
+  const handleSetOption3 = (value: string) => {
+    setSelectedOption3(value);
+  };
+  const handleSetOption4 = (value: string) => {
+    setSelectedOption4(value);
+  };
 
   return (
     <div>
@@ -132,8 +161,8 @@ const SchemeSearch: React.FC = () => {
       <Navbar />
       <div className="w-[100%] p-[50px] flex flex-col gap-[40px]">
         <SchemeSearchTabsContainer />
-        <div className="flex items-center gap-4  ">
-          <div className="w-[30%] max-w-[317px] ">
+        <div className="flex items-center gap-4 flex-wrap">
+          <div className="w-[30%] min-w-[150px] max-w-[317px] ">
             <label
               htmlFor="Deposit taker Search"
               className="text-base font-normal text-gilroy-medium "
@@ -143,12 +172,12 @@ const SchemeSearch: React.FC = () => {
             <SelectField
               setOption={handleSetOption1}
               options={options}
-              selectedOption={selectedOption}
+              selectedOption={selectedOption1}
               placeholder="India"
               height="56px"
             />
           </div>
-          <div className="w-[60%]">
+          <div className="w-[60%] min-w-[200px]">
             <label
               htmlFor="Deposit taker Search"
               className="text-base font-normal text-gilroy-medium "
@@ -182,25 +211,25 @@ const SchemeSearch: React.FC = () => {
           >
             QR Search by
           </label>
-          <div className="w-[40%] flex items-center gap-2">
+          <div className=" w-[60%] sm:w-[60%] lg:w-[40%] flex items-center gap-2 flex-wrap sm:flex-nowrap">
             <SelectField
-              setOption={handleSetOption1}
+              setOption={handleSetOption2}
               options={options}
-              selectedOption={selectedOption}
+              selectedOption={selectedOption2}
               placeholder="India"
               height="40px"
             />
             <SelectField
-              setOption={handleSetOption1}
+              setOption={handleSetOption3}
               options={options}
-              selectedOption={selectedOption}
+              selectedOption={selectedOption3}
               placeholder="India"
               height="40px"
             />
             <SelectField
-              setOption={handleSetOption1}
+              setOption={handleSetOption4}
               options={options}
-              selectedOption={selectedOption}
+              selectedOption={selectedOption4}
               placeholder="India"
               height="40px"
             />

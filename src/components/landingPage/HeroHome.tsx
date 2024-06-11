@@ -10,8 +10,10 @@ const HeroHome = () => {
   const navigate = useNavigate();
   const buttons = [{ text: "Scheme Search" }, { text: "Deposit Taker Search" }];
 
-  const onNavigateToSchemeSearch = () => {
-    navigate("/scheme-search");
+  const onNavigateToSchemeSearch = (text: string) => {
+    if (text === "Scheme Search") {
+      navigate("/scheme-search");
+    }
   };
 
   return (
@@ -27,10 +29,14 @@ const HeroHome = () => {
         </div>
         <div
           className="buttons-container flex flex-wrap gap-[16px] justify-center lg:justify-start mt-[24px]"
-          onClick={onNavigateToSchemeSearch}
+          // onClick={onNavigateToSchemeSearch}
         >
           {buttons.map((menuItem, index) => (
-            <HeroButton key={index} text={menuItem.text} />
+            <HeroButton
+              key={index}
+              text={menuItem.text}
+              onClick={onNavigateToSchemeSearch}
+            />
           ))}
         </div>
       </div>
