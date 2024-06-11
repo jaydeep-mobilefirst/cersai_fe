@@ -93,7 +93,7 @@ const ComponentDetails: React.FC = () => {
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className="flex flex-row items-center space-x-2">
+            {/* <div className="flex flex-row items-center space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -113,8 +113,8 @@ const ComponentDetails: React.FC = () => {
               <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
                 Back
               </button>
-            </div>
-            <div className="flex items-center">
+            </div> */}
+            <div className="flex items-center ml-auto">
                 <button
                   type="submit"
                   disabled={loader}

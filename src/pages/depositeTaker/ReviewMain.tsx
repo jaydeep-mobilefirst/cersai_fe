@@ -10,6 +10,7 @@ import { bffUrl } from "../../utils/api";
 import html2pdf from "html2pdf.js";
 import { signupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
+import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -70,6 +71,7 @@ const ReviewMain = () => {
           label: field?.label,
           sectionCode: sectionCodes[field?.sectionId],
           value: field?.userInput,
+          key : field?.key
         };
       });
 
@@ -132,7 +134,7 @@ const ReviewMain = () => {
         <main className="flex-grow p-8 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             <h1 className="text-2xl font-bold mb-6 font-bold">Review</h1>
-            {allFormData &&
+            {/* {allFormData &&
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
                   allFormData?.formFields?.form_fields
@@ -218,8 +220,8 @@ const ReviewMain = () => {
                     </div>
                   </div>
                 )
-              )}
-
+              )} */}
+            <ReviewMainListing allFormData={allFormData} documentData={documentData} urlList={signupSideBar}/>
             <div className="flex flex-shrink-0 mt-[20px]">
               <div className="justify-center align-center">
                 <input

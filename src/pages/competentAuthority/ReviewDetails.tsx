@@ -12,6 +12,7 @@ import { signupSideBarCompetent } from "../../utils/hardText/signUpCompetentText
 import axios from "axios";
 import { bffUrl } from "../../utils/api";
 import LoaderSpin from "../../components/LoaderSpin";
+import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -53,6 +54,7 @@ const ReviewDetails = () => {
           label: field?.label,
           sectionCode: sectionCode,
           value: field?.userInput,
+          key : field?.key
         };
       });
 
@@ -190,6 +192,7 @@ const ReviewDetails = () => {
                   </div>
                 )
               )}
+               <ReviewMainListing allFormData={allFormData} documentData={documentData} urlList={signupSideBarCompetent}/>
           </div>
         </main>
 
