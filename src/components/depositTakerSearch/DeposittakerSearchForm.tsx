@@ -8,9 +8,9 @@ import { useDepositTakerRegistrationStore } from "../../store/registrationStore"
 import { getMimeTypeFromArrayBuffer } from "../../utils/commonFunction";
 import Swal from "sweetalert2";
 import ReactTable from "../../components/userFlow/common/ReactTable";
-import LanguageBar from "../../components/landingPage/LanguageBar";
-import AboutBudsHeadingComp from "../../components/landingPage/AboutBudsHeadingComp";
-import Footer from "../../components/landingPage/Footer";
+
+import AuditTrail from "./AuditTrailDepositSearch";
+import Accordion from "../../components/customAccordin/CustomAccordin";
 type TableType = {
   sno: string;
   branchName: string;
@@ -19,10 +19,20 @@ type TableType = {
   state: string;
   district: string;
 };
+interface AccordionItem {
+  header: React.ReactNode;
+  content: React.ReactNode;
+}
 
 const columnHelper = createColumnHelper<TableType>();
 
 const DepositTakerSearchForm = () => {
+  const accordionItems: AccordionItem[] = [
+    {
+      header: "Scheme Details",
+      content: <AuditTrail />,
+    },
+  ];
   const defaultData: TableType[] = [
     {
       sno: "01",
@@ -263,48 +273,6 @@ const DepositTakerSearchForm = () => {
       ],
     },
   ];
-  const [authorityModel, setAuthorityModel] = useState<boolean>(false);
-
-  const [referModel, setRefererModel] = useState<boolean>(false);
-  const [approveModel, setApproveModel] = useState<boolean>(false);
-  const [returnModel, setReturnModel] = useState<boolean>(false);
-  const [rejectModel, setRejectModel] = useState<boolean>(false);
-  const handleRefer = () => {
-    setRefererModel(true);
-  };
-  const handleReturn = () => {
-    setReturnModel(true);
-  };
-  const handleApproveModel = () => {
-    setApproveModel(true);
-  };
-  const handleRejectModel = () => {
-    setRejectModel(true);
-  };
-
-  const CloseReferModel = () => {
-    setRefererModel(false);
-  };
-  const CloseApproveModel = () => {
-    setApproveModel(false);
-  };
-
-  const CloseReturnModel = () => {
-    setReturnModel(false);
-  };
-  const CloseRejectModel = () => {
-    setRejectModel(false);
-  };
-
-  const handlerauthority = () => {
-    setAuthorityModel(true);
-  };
-
-  const CloseAuthorityMode = () => {
-    setAuthorityModel(false);
-  };
-
-  const navigate = useNavigate();
 
   return (
     <div>
@@ -319,7 +287,7 @@ const DepositTakerSearchForm = () => {
                       <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
                         {section.title}
                       </p>
-                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[25px] font-normal ">
                         {section.buttonText}
                       </button>
                     </div>
@@ -401,7 +369,7 @@ const DepositTakerSearchForm = () => {
                       <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
                         {section.title}
                       </p>
-                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[25px] font-normal ">
                         {section.buttonText}
                       </button>
                     </div>
@@ -476,18 +444,18 @@ const DepositTakerSearchForm = () => {
                 ))}
               </div>
               <div className="mb-[16px] shadow-sm  rounded-md">
-                <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
-                  <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                    Branches
-                  </p>
+                <div>
+                  <div className="mt-5">
+                    <Accordion items={accordionItems} showEdit={false} />
+                  </div>
                 </div>
-                <div className="w-full overflow-x-auto ">
+                {/* <div className="w-full overflow-x-auto ">
                   <div className="p-5">
                     <div className="h-32">
                       <ReactTable defaultData={defaultData} columns={columns} />
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </>
