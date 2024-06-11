@@ -13,6 +13,8 @@ const HeroHome = () => {
   const onNavigateToSchemeSearch = (text: string) => {
     if (text === "Scheme Search") {
       navigate("/scheme-search");
+    } else {
+      navigate("/deposite-taker-search");
     }
   };
 

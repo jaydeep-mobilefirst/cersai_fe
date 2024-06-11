@@ -74,6 +74,7 @@ import MainPortalLayoutDesignated from "./layouts/portal/MainPortalLayoutDesigna
 import DepositTakerSearchForm from "./pages/depositTakerSearch/DeposittakerSearchForm";
 import SchemeSearch from "./pages/schemeSearch/SchemeSearch";
 import SchemeSearchDetails from "./pages/schemeSearch/SchemSearchDetails";
+import DepositeTakerSearch from "./pages/depositTakerSearch/DepositeTakerSearch";
 
 function App() {
   return (
@@ -256,6 +257,10 @@ function App() {
           <Route
             element={<SchemeSearchDetails />}
             path="/scheme-search-details"
+          />
+          <Route
+            element={<DepositeTakerSearch />}
+            path="/deposite-taker-search"
           />
 
           {/* <Route element={<SetPassword />} path="/set-password" /> */}

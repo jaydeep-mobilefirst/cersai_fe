@@ -1,7 +1,13 @@
 import SchemeSearchTab from "./schemeSearchTab";
 
-const SchemeSearchTabsContainer = () => {
-  const tabsData = [
+interface TabData {
+  text: string;
+  value: string;
+  bgColor: boolean;
+}
+
+const SchemeSearchTabsContainer: React.FC = () => {
+  const tabsData: TabData[] = [
     { text: "Scheme Registered", value: "1000k", bgColor: true },
     { text: "Banned", value: "1000k", bgColor: false },
     { text: "Active", value: "1000k", bgColor: true },

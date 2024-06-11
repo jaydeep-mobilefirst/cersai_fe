@@ -1,4 +1,13 @@
-const SchemeSearchTab = ({ text, value, bgColor }) => {
+interface SchemeSearchTabProps {
+  text: string;
+  value: string;
+  bgColor: boolean;
+}
+const SchemeSearchTab: React.FC<SchemeSearchTabProps> = ({
+  text,
+  value,
+  bgColor,
+}) => {
   return (
     <div
       className={`min-w-[170px] sm:min-w-[232px] w-[18%] h-[100px] rounded-[12px] flex flex-col justify-between px-3 py-2 ${
