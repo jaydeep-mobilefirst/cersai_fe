@@ -199,7 +199,7 @@ const SchemeDetails = () => {
       <div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+          className="flex items-center justify-between flex-col h-full "
         >
           <div className="flex flex-col p-6 w-full ">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -386,7 +386,7 @@ const SchemeDetails = () => {
           </div>
 
           <div
-            className="custom-scrollbar mt-10 w-full"
+            className="custom-scrollbar  w-full"
             style={{ maxHeight: "360px", overflowY: "auto" }}
           >
             <ReactTable defaultData={defaultData} columns={columns} />
