@@ -100,7 +100,12 @@ const DepositeTakerSearch: React.FC = () => {
     }),
     columnHelper.accessor("depositeTakerName", {
       cell: (info: any) => info.renderValue(),
-      header: () => <span>Deposite Taker Name</span>,
+      header: () => (
+        <div className="flex items-center justify-center gap-2">
+          Deposite Taker Name
+          <img src={ArrangeSquare} alt="square" />
+        </div>
+      ),
     }),
     columnHelper.accessor("pan", {
       cell: (info: any) => info.renderValue(),
@@ -108,7 +113,12 @@ const DepositeTakerSearch: React.FC = () => {
     }),
     columnHelper.accessor("status", {
       cell: (info: any) => info.renderValue(),
-      header: () => <span>Status</span>,
+      header: () => (
+        <div className="flex items-center justify-center gap-2">
+          Status
+          <img src={ArrangeSquare} alt="square" />
+        </div>
+      ),
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
@@ -117,7 +127,7 @@ const DepositeTakerSearch: React.FC = () => {
 
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/scheme-search-details"}>
+            <Link to={"/deposite-taker-search-details"}>
               <div>
                 <img src={Eye} alt="Eye " className="cursor-pointer" />
               </div>

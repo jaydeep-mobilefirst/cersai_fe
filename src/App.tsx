@@ -75,6 +75,7 @@ import DepositTakerSearchForm from "./pages/depositTakerSearch/DeposittakerSearc
 import SchemeSearch from "./pages/schemeSearch/SchemeSearch";
 import SchemeSearchDetails from "./pages/schemeSearch/SchemSearchDetails";
 import DepositeTakerSearch from "./pages/depositTakerSearch/DepositeTakerSearch";
+import DepositeTakerSearchDetails from "./pages/depositTakerSearch/DepositeTakerSearchDetails";
 
 function App() {
   return (
@@ -261,6 +262,10 @@ function App() {
           <Route
             element={<DepositeTakerSearch />}
             path="/deposite-taker-search"
+          />
+          <Route
+            element={<DepositeTakerSearchDetails />}
+            path="/deposite-taker-search-details"
           />
 
           {/* <Route element={<SetPassword />} path="/set-password" /> */}

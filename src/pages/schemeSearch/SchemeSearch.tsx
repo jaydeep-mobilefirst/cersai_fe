@@ -12,6 +12,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import ToggleSwitch from "../../components/ScehmaManagement/ToggleSwitch";
 import { Link } from "react-router-dom";
 import Eye from "../../assets/images/eye2.svg";
+import VerticalLine from "../../assets/images/verticalLine.png";
 
 import { useState } from "react";
 
@@ -32,6 +33,9 @@ const SchemeSearch: React.FC = () => {
   const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
   const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
   const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
 
   const defaultData: TableType[] = [
     {
@@ -226,6 +230,7 @@ const SchemeSearch: React.FC = () => {
               placeholder="India"
               height="40px"
             />
+            <img src={VerticalLine} alt="line" className="mx-1 mt-1" />
             <SelectField
               setOption={handleSetOption4}
               options={options}
@@ -241,14 +246,18 @@ const SchemeSearch: React.FC = () => {
           </div>
           <div className="mt-10">
             <CustomPagination
+              currentPage={page}
+              setCurrentPage={setPage}
               totalItems={defaultData?.length}
-              itemsPerPage={5}
+              itemsPerPage={pageSize}
               maxPageNumbersToShow={5}
             />
           </div>
         </div>
       </div>
-      {/* <div className="mt-[100px]"><Footer /></div> */}
+      <div className="mt-[100px]">
+        <Footer />
+      </div>
     </div>
   );
 };

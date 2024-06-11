@@ -3,20 +3,18 @@ import TopDetail from "../../components/landingPage/TopDetail";
 import Navbar from "../../components/landingPage/Navbar";
 import Footer from "../../components/landingPage/Footer";
 import Accordion from "../../components/customAccordin/CustomAccordin";
-import SchemeDetails from "../../components/schemeSearch/schemeDetails";
-
-import EntityDetails from "../../components/schemeSearch/EntityDetails";
-import CreatedBy from "../../components/schemeSearch/CreatedBy";
-import AuditTrail from "../../components/schemeSearch/AuditTrail";
+import SchemeDetails from "../../components/depositeTakerSearch/schemeDetails";
+import EntityDetails from "../../components/depositeTakerSearch/EntityDetails";
+import CreatedBy from "../../components/depositeTakerSearch/CreatedBy";
+import AuditTrail from "../../components/depositeTakerSearch/AuditTrail";
 import { useScreenWidth } from "../../utils/screenSize";
 import { useNavigate } from "react-router-dom";
-
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
 
-const SchemeSearchDetails: React.FC = () => {
+const DepositeTakerSearchDetails: React.FC = () => {
   const screenWidth = useScreenWidth();
   const navigate = useNavigate();
   const accordionItems: AccordionItem[] = [
@@ -40,7 +38,7 @@ const SchemeSearchDetails: React.FC = () => {
   ];
 
   const onNavigateToBack = () => {
-    navigate("/scheme-search");
+    navigate("/deposite-taker-search");
   };
   return (
     <div className="flex flex-col min-h-screen">
@@ -94,4 +92,4 @@ const SchemeSearchDetails: React.FC = () => {
   );
 };
 
-export default SchemeSearchDetails;
+export default DepositeTakerSearchDetails;
