@@ -128,6 +128,7 @@ const CreatedBy = () => {
                   Entity Name <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -144,6 +145,7 @@ const CreatedBy = () => {
                   Entity Type <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -160,6 +162,7 @@ const CreatedBy = () => {
                   Unique ID Number <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -175,6 +178,7 @@ const CreatedBy = () => {
                   Address Line 1 <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -190,6 +194,7 @@ const CreatedBy = () => {
                   Address Line 2
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -206,6 +211,7 @@ const CreatedBy = () => {
                   PIN Code <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -221,6 +227,7 @@ const CreatedBy = () => {
                   State <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
+                  backgroundColor="#F2F2F2"
                   setOption={handleSetOption4}
                   options={options4}
                   selectedOption={selectedOption4}
@@ -238,6 +245,7 @@ const CreatedBy = () => {
                   District <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
+                  backgroundColor="#F2F2F2"
                   setOption={handleSetOption2}
                   options={options2}
                   selectedOption={selectedOption2}
@@ -255,6 +263,7 @@ const CreatedBy = () => {
                   Nodal Officer Name <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />

@@ -16,6 +16,7 @@ type Props = {
   searchInputValue?: string;
   showSearchInput?: boolean;
   disabled?: boolean;
+  backgroundColor?: string;
 };
 
 const SelectButton = ({
@@ -28,6 +29,7 @@ const SelectButton = ({
   showSearchInput,
   onSelect,
   disabled,
+  backgroundColor,
 }: Props) => {
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
   const [optionsToShow, setOptionsToShow] = useState<any[]>(options);
@@ -44,9 +46,12 @@ const SelectButton = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const handleClickOutside = (event: any) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)&&
-    buttonRef.current &&
-    !buttonRef.current.contains(event.target)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target)
+    ) {
       setArrowDirectionToggle(false);
     }
   };
@@ -66,6 +71,7 @@ const SelectButton = ({
     <div className="w-full relative">
       <button
         ref={buttonRef}
+        style={{ backgroundColor }}
         disabled={disabled}
         className="h-[56px] px-2 md:px-8 py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left w-full"
         type="button"

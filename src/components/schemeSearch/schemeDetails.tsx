@@ -199,7 +199,7 @@ const SchemeDetails = () => {
       <div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+          className="flex items-center justify-between flex-col h-full "
         >
           <div className="flex flex-col p-6 w-full ">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -211,6 +211,7 @@ const SchemeDetails = () => {
                   Scheme Name
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -226,6 +227,7 @@ const SchemeDetails = () => {
                   Scheme Description
                 </label>
                 <TextArea
+                  backgroundColor="#F2F2F2"
                   placeholder="Scheme  Description"
                   {...register("addressLine1")}
                   // width="315px"
@@ -242,7 +244,10 @@ const SchemeDetails = () => {
                   Select Start Date
                 </label>
 
-                <DatePicker onChange={handleDateChange} />
+                <DatePicker
+                  backgroundColor="#F2F2F2"
+                  onChange={handleDateChange}
+                />
                 <span className="text-red-500">
                   {/* {errors.registrationDate?.message} */}
                 </span>
@@ -255,7 +260,10 @@ const SchemeDetails = () => {
                   Last day to enter scheme
                 </label>
 
-                <DatePicker onChange={handleDateChange} />
+                <DatePicker
+                  backgroundColor="#F2F2F2"
+                  onChange={handleDateChange}
+                />
                 <span className="text-red-500">
                   {/* {errors.registrationDate?.message} */}
                 </span>
@@ -281,6 +289,7 @@ const SchemeDetails = () => {
                   Minimum Investment
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -296,6 +305,7 @@ const SchemeDetails = () => {
                   Maximum Investment
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -326,6 +336,7 @@ const SchemeDetails = () => {
                   Regulator Name
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -341,6 +352,7 @@ const SchemeDetails = () => {
                   Scheme Act
                 </label>
                 <SelectButton
+                  backgroundColor="#F2F2F2"
                   setOption={handleSetOption4}
                   options={options4}
                   selectedOption={selectedOption4}
@@ -358,6 +370,7 @@ const SchemeDetails = () => {
                   Number of investers
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -373,6 +386,7 @@ const SchemeDetails = () => {
                   Status <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
+                  backgroundColor="#F2F2F2"
                   setOption={handleSetOption2}
                   options={options2}
                   selectedOption={selectedOption2}
@@ -386,7 +400,7 @@ const SchemeDetails = () => {
           </div>
 
           <div
-            className="custom-scrollbar mt-10 w-full"
+            className="custom-scrollbar  w-full"
             style={{ maxHeight: "360px", overflowY: "auto" }}
           >
             <ReactTable defaultData={defaultData} columns={columns} />

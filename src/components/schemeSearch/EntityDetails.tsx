@@ -129,6 +129,7 @@ const EntityDetails = () => {
                   Entity Name <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -144,6 +145,7 @@ const EntityDetails = () => {
                   PAN <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -159,6 +161,7 @@ const EntityDetails = () => {
                   Type of Entity <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
+                  backgroundColor="#F2F2F2"
                   setOption={handleSetOption4}
                   options={options4}
                   selectedOption={selectedOption4}
@@ -177,6 +180,7 @@ const EntityDetails = () => {
                   Unique ID Number <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -192,6 +196,7 @@ const EntityDetails = () => {
                   Address Line 1 <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -219,6 +224,7 @@ const EntityDetails = () => {
                   Address Line 2
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -235,6 +241,7 @@ const EntityDetails = () => {
                   PIN Code <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
@@ -250,6 +257,7 @@ const EntityDetails = () => {
                   State <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
+                  backgroundColor="#F2F2F2"
                   setOption={handleSetOption4}
                   options={options4}
                   selectedOption={selectedOption4}
@@ -267,6 +275,7 @@ const EntityDetails = () => {
                   District <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
+                  backgroundColor="#F2F2F2"
                   setOption={handleSetOption2}
                   options={options2}
                   selectedOption={selectedOption2}
@@ -284,6 +293,7 @@ const EntityDetails = () => {
                   GST Number <span className="text-red-500">*</span>
                 </label>
                 <InputFields
+                  backgroundColor="#F2F2F2"
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
