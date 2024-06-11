@@ -8,12 +8,14 @@ import SchemeDetails from "../../components/depositTakerSearch/DeposittakerSearc
 import AuditTrail from "../../components/depositTakerSearch/AuditTrailDepositSearch";
 
 import { useScreenWidth } from "../../utils/screenSize";
+import { useNavigate } from "react-router-dom";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
 
 const DepositSearchDetails: React.FC = () => {
+  const navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const accordionItems: AccordionItem[] = [
     {
@@ -21,6 +23,10 @@ const DepositSearchDetails: React.FC = () => {
       content: <AuditTrail />,
     },
   ];
+
+  const onNavigateToBack = () => {
+    navigate("/deposite-taker-search");
+  };
   return (
     <div className="flex flex-col min-h-screen">
       <LanguageBar />
@@ -53,7 +59,10 @@ const DepositSearchDetails: React.FC = () => {
                 strokeLinejoin="round"
               />
             </svg>
-            <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]">
+            <button
+              onClick={onNavigateToBack}
+              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+            >
               Back
             </button>
           </div>
@@ -63,7 +72,7 @@ const DepositSearchDetails: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-[100px]">
         <Footer />
       </div>
     </div>

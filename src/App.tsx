@@ -264,6 +264,10 @@ function App() {
             path="/deposite-taker-search"
           />
           <Route
+            element={<DepositTakerSearchForm />}
+            path="/deposite-taker-search-form"
+          />
+          <Route
             element={<DepositeTakerSearchDetails />}
             path="/deposite-taker-search-details"
           />
@@ -272,7 +276,6 @@ function App() {
           <Route element={<SetNewPasswordModel />} path="/set-password" />
           <Route element={<OtpModel />} path="/otp-verification" />
           {/* <Route element={<RoleCreation />} path="/role" /> */}
-          <Route element={<DepositTakerSearchForm />} path="/searchform" />
         </Routes>
       </Router>
     </div>

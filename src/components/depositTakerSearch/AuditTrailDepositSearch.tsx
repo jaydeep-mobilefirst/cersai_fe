@@ -4,6 +4,8 @@ import { createColumnHelper } from "@tanstack/table-core";
 import DirectBox from "../../assets/images/send.png";
 import ReactTable from "../userFlow/common/ReactTable";
 import edit from "../../assets/images/eye2.svg";
+import { Link } from "react-router-dom";
+
 interface TableType {
   sno: string;
   SchemeId: string;
@@ -118,9 +120,11 @@ const AuditTrail = () => {
 
         return (
           <div className="flex justify-center items-center ">
-            <div>
-              <img src={edit} alt="Edit" className="cursor-pointer" />
-            </div>
+            <Link to={"/deposite-taker-search-details"}>
+              <div>
+                <img src={edit} alt="Edit" className="cursor-pointer" />
+              </div>
+            </Link>
           </div>
         );
       },

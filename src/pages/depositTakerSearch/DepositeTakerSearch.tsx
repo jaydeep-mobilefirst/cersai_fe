@@ -127,7 +127,7 @@ const DepositeTakerSearch: React.FC = () => {
 
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/deposite-taker-search-details"}>
+            <Link to={"/deposite-taker-search-form"}>
               <div>
                 <img src={Eye} alt="Eye " className="cursor-pointer" />
               </div>
