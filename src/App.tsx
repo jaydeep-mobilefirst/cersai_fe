@@ -257,6 +257,7 @@ function App() {
             element={<SchemeSearchDetails />}
             path="/scheme-search-details"
           />
+
           {/* <Route element={<SetPassword />} path="/set-password" /> */}
           <Route element={<SetNewPasswordModel />} path="/set-password" />
           <Route element={<OtpModel />} path="/otp-verification" />
