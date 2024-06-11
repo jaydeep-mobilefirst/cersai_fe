@@ -71,7 +71,7 @@ import ResetPasswordCompetent from "./pages/mainPortal/ResetPasswordCompetent";
 import ResetPasswordDesignated from "./pages/mainPortal/ResetPasswordDesignated";
 import DashboardProfileDesignateCourt from "./pages/mainPortal/DashboardProfileDesiganted";
 import MainPortalLayoutDesignated from "./layouts/portal/MainPortalLayoutDesignated";
-import DepositTakerSearchForm from "./pages/depositTakerSearch/DeposittakerSearchForm";
+import DepositTakerSearchForm from "./pages/depositTakerSearch/DepositTakerDetails";
 import SchemeSearch from "./pages/schemeSearch/SchemeSearch";
 import SchemeSearchDetails from "./pages/schemeSearch/SchemSearchDetails";
 
