@@ -1300,16 +1300,20 @@ const MyTaskForm = () => {
                           {section.fieldsLeft.map((field, idx) => (
                             <div className=" flex justify-between " key={idx}>
                               <div className="opacity-60">{field.label}</div>
-                              <div>{field.value}</div>
+                              <div className="-mr-12 sm:-mr-0 lg:-mr-0 xl:-mr-0">
+                                {field.value}
+                              </div>
                             </div>
                           ))}
                         </div>
 
-                        <div className=" w-full  sm:w-1/2 lg:pl-5 g xl:pl-5 md:pl-5 sm:pl-0 rid gap-y-4 pr-12">
+                        <div className=" w-full  sm:w-1/2 lg:pl-5  xl:pl-5 md:pl-5 sm:pl-2 rid gap-y-4 pr-12">
                           {section.fieldsRight.map((field, idx) => (
                             <div className=" flex justify-between" key={idx}>
                               <div className="opacity-60">{field.label}</div>
-                              <div>{field.value}</div>
+                              <div className="-mr-12 sm:-mr-0 lg:-mr-0 xl:-mr-0">
+                                {field.value}
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -1466,16 +1470,20 @@ const MyTaskForm = () => {
                           {section.fieldsLeft.map((field, idx) => (
                             <div className=" flex justify-between " key={idx}>
                               <div className="opacity-60">{field.label}</div>
-                              <div>{field.value}</div>
+                              <div className="-mr-12 sm:-mr-0 lg:-mr-0 xl:-mr-0">
+                                {field.value}
+                              </div>
                             </div>
                           ))}
                         </div>
 
-                        <div className=" w-full  sm:w-1/2 lg:pl-5 g xl:pl-5 md:pl-5 sm:pl-0 grid gap-y-4 pr-12">
+                        <div className=" w-full  sm:w-1/2 lg:pl-5  xl:pl-5 md:pl-5 sm:pl-2 grid gap-y-4 pr-12">
                           {section.fieldsRight.map((field, idx) => (
                             <div className=" flex justify-between" key={idx}>
                               <div className="opacity-60">{field.label}</div>
-                              <div>{field.value}</div>
+                              <div className="-mr-12 sm:-mr-0 lg:-mr-0 xl:-mr-0">
+                                {field.value}
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -1503,16 +1511,20 @@ const MyTaskForm = () => {
                           {section.fieldsLeft.map((field, idx) => (
                             <div className=" flex justify-between " key={idx}>
                               <div className="opacity-60">{field.label}</div>
-                              <div>{field.value}</div>
+                              <div className="-mr-12 sm:-mr-0 lg:-mr-0 xl:-mr-0">
+                                {field.value}
+                              </div>
                             </div>
                           ))}
                         </div>
 
-                        <div className=" w-full  sm:w-1/2 lg:pl-5 g xl:pl-5 md:pl-5 sm:pl-0 grid gap-y-4 pr-12">
+                        <div className=" w-full  sm:w-1/2 lg:pl-5  xl:pl-5 md:pl-5 sm:pl-2 grid gap-y-4 pr-12">
                           {section.fieldsRight.map((field, idx) => (
                             <div className=" flex justify-between" key={idx}>
                               <div className="opacity-60">{field.label}</div>
-                              <div>{field.value}</div>
+                              <div className="-mr-12 sm:-mr-0 lg:-mr-0 xl:-mr-0">
+                                {field.value}
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -1540,16 +1552,20 @@ const MyTaskForm = () => {
                           {section.fieldsLeft.map((field, idx) => (
                             <div className=" flex justify-between " key={idx}>
                               <div className="opacity-60">{field.label}</div>
-                              <div>{field.value}</div>
+                              <div className="-mr-12 sm:-mr-0 lg:-mr-0 xl:-mr-0">
+                                {field.value}
+                              </div>
                             </div>
                           ))}
                         </div>
 
-                        <div className=" w-full  sm:w-1/2 lg:pl-5 g xl:pl-5 md:pl-5 sm:pl-0 grid gap-y-4 pr-12">
+                        <div className=" w-full  sm:w-1/2 lg:pl-5  xl:pl-5 md:pl-5 sm:pl-5 grid gap-y-4 pr-12">
                           {section.fieldsRight.map((field, idx) => (
                             <div className=" flex justify-between" key={idx}>
                               <div className="opacity-60">{field.label}</div>
-                              <div>{field.value}</div>
+                              <div className="-mr-12 sm:-mr-0 lg:-mr-0 xl:-mr-0">
+                                {field.value}
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -1604,7 +1620,7 @@ const MyTaskForm = () => {
               </div>
             </div>
 
-            <div className="my-11 flex flex-col sm:flex-row justify-between items-center">
+            {/* <div className="my-11 flex flex-col sm:flex-row justify-between items-center">
               <div
                 className="flex items-center cursor-pointer space-x-2 mb-3 sm:mb-0"
                 onClick={() => navigate(-1)}
@@ -1646,7 +1662,51 @@ const MyTaskForm = () => {
                   />
                 </div>
               </div>
+            </div> */}
+
+            <div className="my-11 flex flex-col lg:flex-row lg:items-center justify-between">
+              <div
+                className="flex items-center cursor-pointer space-x-2 mb-3 lg:mb-0 md:ml-[5rem]"
+                onClick={() => navigate(-1)}
+              >
+                <img src={BackArrow} alt="Back Arrow" />
+                <p className="text-sm font-normal text-gilroy-regular">Back</p>
+              </div>
+              <div className="flex flex-wrap justify-center lg:flex-nowrap lg:w-auto items-center space-x-3 lg:justify-end">
+                <div className="mb-3 lg:mb-0">
+                  <Button
+                    type="button"
+                    label="Return"
+                    width="100px"
+                    textColor="#F5BD0B"
+                    borderColor="#F5BD0B"
+                    backgroundColor="white"
+                    onClick={handleReturn}
+                  />
+                </div>
+                <div className="mb-3 lg:mb-0">
+                  <Button
+                    type="button"
+                    label="Reject"
+                    width="100px"
+                    textColor="#E63312"
+                    borderColor="#E63312"
+                    backgroundColor="white"
+                    onClick={handleRejectModel}
+                  />
+                </div>
+                <div className="mb-3 lg:mb-0">
+                  <Button
+                    type="button"
+                    label="Approve"
+                    width="100px"
+                    backgroundColor="#1C468E"
+                    onClick={handleApproveModel}
+                  />
+                </div>
+              </div>
             </div>
+
             {returnModel && (
               <ReturnModelPopup onClose={CloseReturnModel} onSave={() => {}} />
             )}

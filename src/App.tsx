@@ -71,6 +71,7 @@ import ResetPasswordCompetent from "./pages/mainPortal/ResetPasswordCompetent";
 import ResetPasswordDesignated from "./pages/mainPortal/ResetPasswordDesignated";
 import DashboardProfileDesignateCourt from "./pages/mainPortal/DashboardProfileDesiganted";
 import MainPortalLayoutDesignated from "./layouts/portal/MainPortalLayoutDesignated";
+import DepositTakerSearchForm from "./pages/depositTakerSearch/DeposittakerSearchForm";
 import SchemeSearch from "./pages/schemeSearch/SchemeSearch";
 import SchemeSearchDetails from "./pages/schemeSearch/SchemSearchDetails";
 
@@ -256,10 +257,12 @@ function App() {
             element={<SchemeSearchDetails />}
             path="/scheme-search-details"
           />
+
           {/* <Route element={<SetPassword />} path="/set-password" /> */}
           <Route element={<SetNewPasswordModel />} path="/set-password" />
           <Route element={<OtpModel />} path="/otp-verification" />
           {/* <Route element={<RoleCreation />} path="/role" /> */}
+          <Route element={<DepositTakerSearchForm />} path="/searchform" />
         </Routes>
       </Router>
     </div>

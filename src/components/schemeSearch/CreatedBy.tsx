@@ -1,90 +1,12 @@
-import { createColumnHelper } from "@tanstack/table-core";
-
 import { useState } from "react";
 import InputFields from "../userFlow/common/InputField";
 import TextArea from "../userFlow/form/TextArea";
-import DatePicker from "../userFlow/form/DatePicker";
 import SelectButton from "../userFlow/form/SelectButton";
-import ReactTable from "../userFlow/common/ReactTable";
 import { EntityDetailschema } from "../../formValidationSchema/deposit_taker/EntityValidation.schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useScreenWidth } from "../../utils/screenSize";
-import useSidebarStore from "../../store/SidebarStore";
 
-const TableType = {
-  sno: String,
-  branchName: String,
-  addressLine1: String,
-  addressLine2: String,
-  state: String,
-  district: String,
-};
-
-const SchemeDetails = () => {
-  const columnHelper = createColumnHelper<typeof TableType>();
-
-  const defaultData = [
-    {
-      sno: "01",
-      branchName: "Department of PR",
-      addressLine1: "123 Main St",
-      addressLine2: "Apt 101",
-      state: "Andhra Pradesh",
-      district: "Ananthapuram",
-    },
-    {
-      sno: "02",
-      branchName: "Department of HR",
-      addressLine1: "456 Elm St",
-      addressLine2: "Suite 202",
-      state: "Andhra Pradesh",
-      district: "Ananthapuram",
-    },
-    {
-      sno: "02",
-      branchName: "Department of HR",
-      addressLine1: "456 Elm St",
-      addressLine2: "Suite 202",
-      state: "Andhra Pradesh",
-      district: "Ananthapuram",
-    },
-    {
-      sno: "02",
-      branchName: "Department of HR",
-      addressLine1: "456 Elm St",
-      addressLine2: "Suite 202",
-      state: "Andhra Pradesh",
-      district: "Ananthapuram",
-    },
-  ];
-
-  const columns = [
-    columnHelper.accessor("sno", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>Sr. No.</span>,
-    }),
-    columnHelper.accessor("branchName", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>Branch Name</span>,
-    }),
-    columnHelper.accessor("addressLine1", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>Address Line 1</span>,
-    }),
-    columnHelper.accessor("addressLine2", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>Address Line 2</span>,
-    }),
-    columnHelper.accessor("state", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>State</span>,
-    }),
-    columnHelper.accessor("district", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>District</span>,
-    }),
-  ];
+const CreatedBy = () => {
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
   const [searchInputValue1, setSearchInputValue1] = useState<string>("");
 
@@ -96,9 +18,7 @@ const SchemeDetails = () => {
 
   const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
   const [searchInputValue4, setSearchInputValue4] = useState<string>("");
-  const screenWidth = useScreenWidth();
-  const [isChecked, setIsChecked] = useState(false);
-  const { collapsed } = useSidebarStore();
+
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
     { value: "LLP", label: "LLP" },
@@ -190,16 +110,13 @@ const SchemeDetails = () => {
 
     reset();
   };
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(event.target.checked);
-  };
 
   return (
     <div className="mt-6">
       <div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+          className="flex items-center justify-between flex-col h-full "
         >
           <div className="flex flex-col p-6 w-full ">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -208,137 +125,100 @@ const SchemeDetails = () => {
                   htmlFor="gstNumber"
                   className="text-base font-normal text-gilroy-medium"
                 >
-                  Scheme Name
+                  Entity Name <span className="text-red-500">*</span>
                 </label>
                 <InputFields
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
-                {/* {errors?.gstNumber && (
-                    <p className="text-red-500">{errors?.gstNumber?.message}</p>
-                  )} */}
-              </div>
-              <div className="">
-                <label
-                  htmlFor="Scheme  Description"
-                  className="text-base font-normal text-gilroy-medium"
-                >
-                  Scheme Description
-                </label>
-                <TextArea
-                  placeholder="Scheme  Description"
-                  {...register("addressLine1")}
-                  // width="315px"
-                />
-                {errors.addressLine1 && (
-                  <p className="text-red-500">{errors.addressLine1.message}</p>
+                {errors?.gstNumber && (
+                  <p className="text-red-500">{errors?.gstNumber?.message}</p>
                 )}
               </div>
-              <div className="">
-                <label
-                  htmlFor="registrationDate"
-                  className="text-base font-normal text-gilroy-medium"
-                >
-                  Select Start Date
-                </label>
-
-                <DatePicker onChange={handleDateChange} />
-                <span className="text-red-500">
-                  {/* {errors.registrationDate?.message} */}
-                </span>
-              </div>
-              <div className="">
-                <label
-                  htmlFor="registrationDate"
-                  className="text-base font-normal text-gilroy-medium"
-                >
-                  Last day to enter scheme
-                </label>
-
-                <DatePicker onChange={handleDateChange} />
-                <span className="text-red-500">
-                  {/* {errors.registrationDate?.message} */}
-                </span>
-              </div>
-              {/* <div>
-                  <label
-                    htmlFor="addressLine2"
-                    className="text-base font-normal text-gilroy-medium"
-                  >
-                    Address Line 2
-                  </label>
-                  <TextArea
-                    placeholder="Type Here"
-                    {...register("addressLine2")}
-                    // width="315px"
-                  />
-                </div> */}
-              <div>
-                <label
-                  htmlFor="gstNumber"
-                  className="text-base font-normal text-gilroy-medium"
-                >
-                  Minimum Investment
-                </label>
-                <InputFields
-                  placeholder="Type here"
-                  {...register("gstNumber")}
-                />
-                {/* {errors?.gstNumber && (
-                    <p className="text-red-500">{errors?.gstNumber?.message}</p>
-                  )} */}
-              </div>
-              <div>
-                <label
-                  htmlFor="gstNumber"
-                  className="text-base font-normal text-gilroy-medium"
-                >
-                  Maximum Investment
-                </label>
-                <InputFields
-                  placeholder="Type here"
-                  {...register("gstNumber")}
-                />
-                {/* {errors?.gstNumber && (
-                    <p className="text-red-500">{errors?.gstNumber?.message}</p>
-                  )} */}
-              </div>
-
-              {/* <div className="">
-                <label
-                  htmlFor="ABCD Scheme"
-                  className="text-base font-normal text-gilroy-medium"
-                >
-                  Regulator Name
-                </label>
-                <TextArea
-                  placeholder="ABCD"
-                  {...register("addressLine1")}
-                  // width="315px"
-                />
-              </div> */}
 
               <div>
                 <label
                   htmlFor="gstNumber"
                   className="text-base font-normal text-gilroy-medium"
                 >
-                  Regulator Name
+                  Entity Type <span className="text-red-500">*</span>
                 </label>
                 <InputFields
                   placeholder="Type here"
                   {...register("gstNumber")}
                 />
-                {/* {errors?.gstNumber && (
-                    <p className="text-red-500">{errors?.gstNumber?.message}</p>
-                  )} */}
+                {errors?.gstNumber && (
+                  <p className="text-red-500">{errors?.gstNumber?.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="gstNumber"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  Unique ID Number <span className="text-red-500">*</span>
+                </label>
+                <InputFields
+                  placeholder="Type here"
+                  {...register("gstNumber")}
+                />
+                {errors?.gstNumber && (
+                  <p className="text-red-500">{errors?.gstNumber?.message}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="gstNumber"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  Address Line 1 <span className="text-red-500">*</span>
+                </label>
+                <InputFields
+                  placeholder="Type here"
+                  {...register("gstNumber")}
+                />
+                {errors?.gstNumber && (
+                  <p className="text-red-500">{errors?.gstNumber?.message}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="gstNumber"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  Address Line 2
+                </label>
+                <InputFields
+                  placeholder="Type here"
+                  {...register("gstNumber")}
+                />
+                {errors?.gstNumber && (
+                  <p className="text-red-500">{errors?.gstNumber?.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="gstNumber"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  PIN Code <span className="text-red-500">*</span>
+                </label>
+                <InputFields
+                  placeholder="Type here"
+                  {...register("gstNumber")}
+                />
+                {errors?.gstNumber && (
+                  <p className="text-red-500">{errors?.gstNumber?.message}</p>
+                )}
               </div>
               <div>
                 <label
                   htmlFor="pinCode"
                   className="text-base font-normal text-gilroy-medium"
                 >
-                  Scheme Act
+                  State <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
                   setOption={handleSetOption4}
@@ -352,25 +232,10 @@ const SchemeDetails = () => {
               </div>
               <div>
                 <label
-                  htmlFor="gstNumber"
-                  className="text-base font-normal text-gilroy-medium"
-                >
-                  Number of investers
-                </label>
-                <InputFields
-                  placeholder="Type here"
-                  {...register("gstNumber")}
-                />
-                {/* {errors?.gstNumber && (
-                    <p className="text-red-500">{errors?.gstNumber?.message}</p>
-                  )} */}
-              </div>
-              <div>
-                <label
                   htmlFor="state"
                   className="text-base font-normal text-gilroy-medium"
                 >
-                  Status <span className="text-red-500">*</span>
+                  District <span className="text-red-500">*</span>
                 </label>
                 <SelectButton
                   setOption={handleSetOption2}
@@ -382,14 +247,22 @@ const SchemeDetails = () => {
                   showSearchInput={true}
                 />
               </div>
+              <div>
+                <label
+                  htmlFor="gstNumber"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  Nodal Officer Name <span className="text-red-500">*</span>
+                </label>
+                <InputFields
+                  placeholder="Type here"
+                  {...register("gstNumber")}
+                />
+                {errors?.gstNumber && (
+                  <p className="text-red-500">{errors?.gstNumber?.message}</p>
+                )}
+              </div>
             </div>
-          </div>
-
-          <div
-            className="custom-scrollbar mt-10 w-full"
-            style={{ maxHeight: "360px", overflowY: "auto" }}
-          >
-            <ReactTable defaultData={defaultData} columns={columns} />
           </div>
         </form>
       </div>
@@ -397,4 +270,4 @@ const SchemeDetails = () => {
   );
 };
 
-export default SchemeDetails;
+export default CreatedBy;

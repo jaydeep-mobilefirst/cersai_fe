@@ -61,27 +61,27 @@ const SchemeDetails = () => {
 
   const columns = [
     columnHelper.accessor("sno", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Sr. No.</span>,
     }),
     columnHelper.accessor("branchName", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Branch Name</span>,
     }),
     columnHelper.accessor("addressLine1", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Address Line 1</span>,
     }),
     columnHelper.accessor("addressLine2", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Address Line 2</span>,
     }),
     columnHelper.accessor("state", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>State</span>,
     }),
     columnHelper.accessor("district", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>District</span>,
     }),
   ];
