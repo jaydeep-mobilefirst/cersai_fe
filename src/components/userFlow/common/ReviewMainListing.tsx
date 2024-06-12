@@ -13,7 +13,9 @@ const ReviewMainListing = ({ allFormData, urlList, documentData }: Props) => {
         <>
             {allFormData &&
                 allFormData?.entitySections?.map(
-                    (section: any, index: number) => (
+                    (section: any, index: number) => {
+                        return (allFormData?.formFields?.form_fields
+                                            ?.filter((f: any) => f?.sectionId === section?.id)?.length > 0 || documentData?.length > 0) ?
                         <div className="mb-[16px]" key={index}>
                             <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px]">
                                 <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[20px] lg:text-[20px] pb-2 text-nowrap font-bold text-2xl">
@@ -100,7 +102,9 @@ const ReviewMainListing = ({ allFormData, urlList, documentData }: Props) => {
                                 </div>
                             </div>
                         </div>
-                    )
+                        :
+                        <></>
+                    }
                 )}
         </>
     )
