@@ -119,8 +119,8 @@ const DashboardProfileCompetent = (props: Props) => {
               uploadFileId: dtData
                 ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
                 : "",
-            }));
-          console.log({ modifiedFileFields });
+            }))?.sort((a  :any, b : any) => a.sortOrder - b.sortOrder)
+
 
           let obj = {
             ...response?.data?.data,

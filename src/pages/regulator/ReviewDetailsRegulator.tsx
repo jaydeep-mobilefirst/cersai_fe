@@ -10,6 +10,7 @@ import { bffUrl } from "../../utils/api";
 import html2pdf from "html2pdf.js";
 import { regulatorSignupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
+import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const downloadPDF = () => {
@@ -52,14 +53,6 @@ const ReviewDetailsRegulator = () => {
   const [loader, setLoader] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
 
-  const sectionCodes: any = {
-    // 1: "de_verification",
-    // 2: "de_entity_details",
-    1: "de_regulations_details",
-    2: "Nodal Officer",
-  };
-  console.log({ allFormData });
-
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();
     setLoader(true);
@@ -77,6 +70,7 @@ const ReviewDetailsRegulator = () => {
           label: field?.label,
           sectionCode: sectionCode,
           value: field?.userInput,
+          key : field?.key
         };
       });
 
@@ -136,89 +130,7 @@ const ReviewDetailsRegulator = () => {
         <main className="flex-grow p-8 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             <h1 className="text-2xl font-bold mb-6">Review</h1>
-            {allFormData &&
-              allFormData?.entitySections?.map(
-                (section: any, index: number) => (
-                  <div className="mb-[16px]" key={index}>
-                    <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px]">
-                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[20px] lg:text-[20px] pb-2 text-nowrap font-bold text-2xl">
-                        {section?.sectionName}
-                      </p>
-                      <button className="text-[#1c468e] text-[16px] lg:text-[20px] mr-[13px] font-bold ">
-                        {section?.sectionName !== "Verification" ? (
-                          <Link
-                            to={
-                              regulatorSignupSideBar.find(
-                                (sec) =>
-                                  sec?.description === section?.sectionName
-                              )?.path + "?edit=true"
-                            }
-                          >
-                            Edit
-                          </Link>
-                        ) : (
-                          "Success"
-                        )}
-                      </button>
-                    </div>
-
-                    <div className="shadow-sm p-5 rounded-md ">
-                      <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                        <div className="w-full grid gap-y-[16px] grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                          {allFormData?.formFields?.form_fields
-                            ?.filter((f: any) => f?.sectionId === section?.id)
-                            ?.map((field: any, idx: number) => {
-                              console.log({
-                                field,
-                              });
-
-                              return (
-                                <div
-                                  className={`sm:mr-[48px] flex justify-between ${
-                                    idx % 2 === 0
-                                      ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
-                                      : ""
-                                  } `}
-                                  key={idx}
-                                >
-                                  <div className="text-gray-500">
-                                    {field.label}
-                                    <span className="text-[#ff0000]">*</span>
-                                  </div>
-                                  <div>
-                                    {field?.dscFileNAme !== "" &&
-                                    field?.dscFileNAme !== undefined
-                                      ? field?.dscFileNAme
-                                      : field.userInput}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          {section?.sectionName === "Upload Documents" &&
-                            documentData?.map((doc: any, idx: number) => {
-                              return (
-                                <div
-                                  className={`sm:mr-[48px] flex justify-between ${
-                                    idx % 2 === 0
-                                      ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
-                                      : ""
-                                  } `}
-                                  key={idx}
-                                >
-                                  <div className="text-gray-500">
-                                    {doc?.documentName}
-                                    <span className="text-[#ff0000]">*</span>
-                                  </div>
-                                  <div>{doc?.fileName}</div>
-                                </div>
-                              );
-                            })}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              )}
+            <ReviewMainListing allFormData={allFormData} documentData={documentData} urlList={regulatorSignupSideBar}/>
 
             <div className="flex flex-shrink-0 mt-[20px]">
               <div className="justify-center align-center">
@@ -232,7 +144,7 @@ const ReviewDetailsRegulator = () => {
               </div>
               <div className="leading-[24px] ml-4">
                   I provide my consent to &nbsp;
-              <span className="text-[#1c468e] underline">BUDs act 2019</span>
+              <Link className="text-[#1c468e] underline cursor-pointer" to={"/"} target="_blank">BUDs act 2019</Link>
             </div>
             </div>
           </div>

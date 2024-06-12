@@ -4,14 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/new_images/arrowDown.png";
 import html2pdf from "html2pdf.js";
-import Button from "../../components/userFlow/form/Button";
-import folderOpen from "../../assets/images/folder-open.svg";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { signupSideBarDesignated } from "../../utils/hardText/signUpDesignatedText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 import LoaderSpin from "../../components/LoaderSpin";
 import axios from "axios";
 import { bffUrl } from "../../utils/api";
+import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -56,6 +55,7 @@ const ReviewDetailsDesignated = () => {
         label: field?.label,
         sectionCode: sectionCode,
         value: field?.userInput,
+        key : field?.key
       };
     });
 
@@ -69,7 +69,6 @@ const ReviewDetailsDesignated = () => {
     })
 
     finalResult = [...finalResult, ...docs]
-    console.log({ finalResult });
 
     axios.post(
       bffUrl + "/designated-court/add-form-fields",
@@ -101,6 +100,7 @@ const ReviewDetailsDesignated = () => {
         setLoader(false);
       });
   };
+  
 
   return (
     <>
@@ -109,7 +109,8 @@ const ReviewDetailsDesignated = () => {
         <main className="flex-grow p-6 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             <h1 className="text-2xl font-bold mb-6">Review</h1>
-            {allFormData &&
+            <ReviewMainListing allFormData={allFormData} documentData={documentData} urlList={signupSideBarDesignated}/>
+            {/* {allFormData &&
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
                   <div className="mb-[16px]" key={index}>
@@ -189,7 +190,7 @@ const ReviewDetailsDesignated = () => {
                     </div>
                   </div>
                 )
-              )}
+              )} */}
           </div>
           <div className="flex flex-shrink-0 mt-[20px]">
             <div className="w-[24px] h-[24px] justify-center align-center">

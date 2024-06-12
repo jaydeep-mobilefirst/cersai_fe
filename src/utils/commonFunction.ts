@@ -52,4 +52,18 @@ async function getMimeTypeFromArrayBuffer(arrayBuffer: any) {
 const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export { dateFormattor, panRegex, emailRegex, getMimeTypeFromArrayBuffer };
+function isLinkExpired(data : any) : boolean {
+  // Getting the expiry date from the object
+  const expiryDate = new Date(data?.expiryDate);
+
+  // Getting the current date and time
+  const currentDate = new Date();
+
+  // Compare the current date and time with the expiry date
+  if (currentDate > expiryDate) {
+      return true; // The link is expired
+  } else {
+      return false; // The link is not expired
+  }
+}
+export { dateFormattor, panRegex, emailRegex, getMimeTypeFromArrayBuffer, isLinkExpired };

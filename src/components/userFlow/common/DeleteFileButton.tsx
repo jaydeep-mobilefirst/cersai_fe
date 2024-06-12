@@ -17,12 +17,13 @@ const DeleteFileButton = ({ fieldData, fieldType, onFileChange }: Props) => {
   const [loader, setLoader] = useState<boolean>(false);
   const deleteFile = async () => {
     Swal.fire({
-      icon: "warning",
-      title: "Are you sure you want to delete",
-      showCancelButton: true,
-      reverseButtons: true,
-      confirmButtonText: "Delete",
-      confirmButtonColor: "blue",
+      icon : "warning",
+      title : "Confirm",
+      text : "Are you sure, You want to remove the file ?",
+      showCancelButton : true,
+      reverseButtons : true,
+      confirmButtonText : "Delete",
+      confirmButtonColor : "blue",
     })
       .then(async (res) => {
         if (!res?.isConfirmed) {
