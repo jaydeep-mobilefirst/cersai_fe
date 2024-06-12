@@ -43,9 +43,7 @@ const ReviewDetails = () => {
     let finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
-        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
-        console.log({sectionCode});
-        
+        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;        
         if (sectionCode === 'Nodal Details') {
           sectionCode = 'Nodal Officer'
         }

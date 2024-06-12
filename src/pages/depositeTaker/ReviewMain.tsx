@@ -64,12 +64,13 @@ const ReviewMain = () => {
     e.preventDefault();
     setLoader(true);
     let finalResult =
-      allFormData &&
-      allFormData?.formFields?.form_fields?.map((field: any) => {
+    allFormData &&
+    allFormData?.formFields?.form_fields?.map((field: any) => {
+        let sectionCode = allFormData?.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
         return {
           fieldId: field?.id,
           label: field?.label,
-          sectionCode: sectionCodes[field?.sectionId],
+          sectionCode: sectionCode,
           value: field?.userInput,
           key : field?.key
         };

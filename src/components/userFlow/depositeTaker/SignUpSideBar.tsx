@@ -17,10 +17,6 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
   const Navigate = useNavigate();
   const location = useLocation();
   const {allFormData, sections} = useDepositTakerRegistrationStore(state => state)
-
-  const [page, setPage] = useState<string | undefined>(location.pathname);
-
-  const [percent, setPercentage] = useState<any>(0);
   const widthPercentage: any = {
     0: "w-0",
     25: "w-1/4",
@@ -28,6 +24,10 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
     75: "w-3/4",
     100: "w-full",
   };
+  const [progressBar, setProgressbar] = useState<string>(widthPercentage[0]);
+  const [page, setPage] = useState<string | undefined>(location.pathname);
+
+  const [percent, setPercentage] = useState<any>(0);
 
   const handleClick = (des: string, num: number, path: string) => {
 
@@ -51,6 +51,44 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
       clearTimeout(timeout)
     }
   },[allFormData])
+
+  useEffect(() => {
+    let totalSections = sections?.length;
+    let completed = sections?.reduce((acc, obj) => {
+      if (obj?.completed) {
+        return acc + 1;
+      }
+      else{
+        return acc + 0;
+      }
+    }, 0)
+    console.log({completed, totalSections, sections});
+    
+     let percentage = (completed / totalSections) * 100;
+     switch (true) {
+      case percentage < 25:
+        setProgressbar(widthPercentage[0])
+        break;
+      case percentage > 25 && percentage <= 50:
+        setProgressbar(widthPercentage[25])
+        break;
+      case percentage > 50 && percentage <= 75:
+        setProgressbar(widthPercentage[50])
+        break;
+      case percentage > 75 && percentage < 100:
+        setProgressbar(widthPercentage[75])
+        break;
+      case percentage === 100:
+        setProgressbar(widthPercentage[75])
+        break;
+     
+     
+      default:
+        break;
+     }
+
+  }, [sections])
+   
   return (
     <div className="sm:w-[300px]  w-[250px] h-[100vh] md:w-[349px] bg-[#E7F0FF]">
       {/* {isMenuOpen && (
@@ -77,7 +115,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
           </p>
           <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px]">
             <div
-              className={` ${widthPercentage[percent]} h-2 bg-[#1C468E] rounded-[32px]`}
+              className={`${progressBar} h-2 bg-[#1C468E] rounded-[32px]`}
             />
           </div>
         </div>

@@ -4,8 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/new_images/arrowDown.png";
 import html2pdf from "html2pdf.js";
-import Button from "../../components/userFlow/form/Button";
-import folderOpen from "../../assets/images/folder-open.svg";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { signupSideBarDesignated } from "../../utils/hardText/signUpDesignatedText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
@@ -71,7 +69,6 @@ const ReviewDetailsDesignated = () => {
     })
 
     finalResult = [...finalResult, ...docs]
-    console.log({ finalResult });
 
     axios.post(
       bffUrl + "/designated-court/add-form-fields",
@@ -103,6 +100,7 @@ const ReviewDetailsDesignated = () => {
         setLoader(false);
       });
   };
+  
 
   return (
     <>
