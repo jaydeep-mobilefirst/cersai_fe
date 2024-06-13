@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import add from "../../../../assets/images/add.svg";
 import TickIcon from "../../../../assets/images/tickCircleBlue.svg";
-import UploadIcon from "../../../assets/images/Right Icons.svg";
 
 interface ApproveProps {
   closePopup: () => void;
@@ -46,14 +45,18 @@ const SchemeSuccessPopUp: React.FC<ApproveProps> = ({
             <div className="flex flex-col items-center justify-center text-center mb-4">
               <img
                 src={TickIcon}
-                alt="UploadIcon"
-                className="h-[35px] w-[35px] mb-2"
+                alt="TickIcon"
+                className="h-[52px] w-[52px] mb-3"
               />
-              <h1 className="text-[#1C468E]">Scheme Creation Successful</h1>
-              <p className="text-gray-400">
+              <h1 className="text-[24px] text-[#000000] font-normal font-gilroy-medium mb-1">
+                Scheme Creation Successful
+              </h1>
+              <p className="text-[16px] text-[#666666] font-normal font-gilroy-medium mb-2">
                 "Success! Your scheme creation is complete.
               </p>
-              <p className="text-[#1C468E]">Scheme ID is "SH76545678"</p>
+              <p className="text-[18px] text-[#1C468E] font-semibold">
+                Scheme ID is "SH76545678"
+              </p>
             </div>
             <hr className="my-4" />
             <div className="flex justify-center space-x-4">

@@ -17,7 +17,6 @@ type TableType = {
   sno: string;
   depositTakerID: string;
   depositTakerName: string;
-  pan: string;
   status: string;
   action: boolean;
 };
@@ -34,7 +33,6 @@ const DepositSchemaCreation = () => {
       sno: "01",
       depositTakerID: "DT001",
       depositTakerName: "Deposit Taker 1",
-      pan: "EUSPM1234T",
       status: "Active",
       action: false,
     },
@@ -42,41 +40,38 @@ const DepositSchemaCreation = () => {
       sno: "02",
       depositTakerID: "DT002",
       depositTakerName: "Deposit Taker 2",
-      pan: "EUSPM1234T",
-      status: "pending",
+
+      status: "Pending",
       action: true,
     },
     {
       sno: "03",
       depositTakerID: "DT002",
       depositTakerName: "Deposit Taker 2",
-      pan: "EUSPM1234T",
-      status: "pending",
+
+      status: "Banned",
       action: true,
     },
     {
       sno: "04",
       depositTakerID: "DT002",
       depositTakerName: "Deposit Taker 2",
-      pan: "EUSPM1234T",
-      status: "pending",
-      action: true,
+      status: "Pending",
+      action: false,
     },
     {
       sno: "05",
       depositTakerID: "DT002",
       depositTakerName: "Deposit Taker 2",
-      pan: "EUSPM1234T",
-      status: "pending",
+      status: "Pending",
       action: true,
     },
     {
       sno: "06",
       depositTakerID: "DT002",
       depositTakerName: "Deposit Taker 2",
-      pan: "EUSPM1234T",
-      status: "pending",
-      action: true,
+      status: "Active",
+      action: false,
     },
   ];
 
@@ -93,14 +88,12 @@ const DepositSchemaCreation = () => {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Deposit Taker Name</span>,
     }),
-    columnHelper.accessor("pan", {
-      cell: (info: any) => {
-        const pan = info.renderValue();
-        return validatePan(pan) ? pan : "Invalid PAN";
-      },
-      header: () => <span>PAN</span>,
-    }),
     columnHelper.accessor("status", {
+      cell: (info: any) => info.renderValue(),
+      header: () => <span>Status</span>,
+    }),
+
+    columnHelper.accessor("action", {
       cell: (info: any) => {
         const value = info?.row?.original?.action;
 
@@ -113,8 +106,9 @@ const DepositSchemaCreation = () => {
           </div>
         );
       },
-      header: () => <span>Status</span>,
+      header: () => <span>Action</span>,
     }),
+
     columnHelper.accessor((row: any) => row, {
       id: "action",
       cell: (info: any) => {
@@ -130,7 +124,7 @@ const DepositSchemaCreation = () => {
           </div>
         );
       },
-      header: () => <span>Action</span>,
+      header: () => <span>View</span>,
     }),
   ];
   const options = [

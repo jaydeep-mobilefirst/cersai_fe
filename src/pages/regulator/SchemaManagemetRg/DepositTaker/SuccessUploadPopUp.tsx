@@ -48,11 +48,13 @@ const SuccessUploadPopUp: React.FC<ApproveProps> = ({
               <img
                 src={TickIcon}
                 alt="UploadIcon"
-                className="h-[35px] w-[35px] mb-2"
+                className="h-[52px] w-[52px] mb-6"
               />
-              <p className="text-[#385723]">Successfully uploaded 20/35</p>
+              <p className="text-[#385723] text-gilroy-medium font-normal text-[24px]">
+                Successfully uploaded 20/35
+              </p>
               <Link to="/rg/deposit-taker/failed-records">
-                <p className="text-red-500 cursor-pointer">
+                <p className="text-red-500 cursor-pointer text-gilroy-medium font-normal text-[24px]">
                   Failed to upload 15/35
                 </p>
               </Link>

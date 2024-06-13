@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 
 const NodalDetails = () => {
   return (
-    <div className="mt-6">
+    <div className="mt-6 -m-3">
       <div>
         <form className="flex flex-col items-center justify-between w-full h-full">
           <div className="flex flex-col  w-full">

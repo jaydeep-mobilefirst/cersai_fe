@@ -65,7 +65,7 @@ const EntityDetails = () => {
   };
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 -m-3">
       <div>
         <form
           onSubmit={handleSubmit(onSubmit)}

@@ -6,11 +6,10 @@ import TextArea from "../../../../components/userFlow/form/TextArea";
 import DatePicker from "../../../../components/userFlow/form/DatePicker";
 import SelectButton from "../../../../components/userFlow/form/SelectButton";
 import ReactTable from "../../../../components/userFlow/common/ReactTable";
-
 import { SchemaFormValidation } from "../../../../../src/components/ScehmaManagement/SchemaMangementValidation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import UploadIcon from "../../../../assets/images/upload-gray.svg";
 const TableType = {
   sno: String,
   branchName: String,
@@ -187,7 +186,7 @@ const SchemeDetails = () => {
   };
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 -m-4">
       <div>
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -202,10 +201,7 @@ const SchemeDetails = () => {
                 >
                   Scheme Name
                 </label>
-                <InputFields
-                  backgroundColor="#F2F2F2"
-                  placeholder="Type here"
-                />
+                <TextArea backgroundColor="#F2F2F2" placeholder="Type here" />
               </div>
               <div className="">
                 <label
@@ -214,12 +210,9 @@ const SchemeDetails = () => {
                 >
                   Scheme Description
                 </label>
-                <TextArea
-                  backgroundColor="#F2F2F2"
-                  placeholder="Scheme  Description"
-                />
+                <TextArea backgroundColor="#F2F2F2" placeholder="Type here" />
               </div>
-              <div className="">
+              <div className="mt-1">
                 <label
                   htmlFor="Select Start Date"
                   className="text-base font-normal text-gilroy-medium"
@@ -246,17 +239,14 @@ const SchemeDetails = () => {
                 />
               </div>
 
-              <div>
+              <div className="-mt-1">
                 <label
                   htmlFor="Minimum Investment"
                   className="text-base font-normal text-gilroy-medium"
                 >
                   Minimum Investment
                 </label>
-                <InputFields
-                  backgroundColor="#F2F2F2"
-                  placeholder="Type here"
-                />
+                <TextArea backgroundColor="#F2F2F2" placeholder="Type here" />
               </div>
               <div>
                 <label
@@ -278,12 +268,9 @@ const SchemeDetails = () => {
                 >
                   Regulator Name
                 </label>
-                <InputFields
-                  backgroundColor="#F2F2F2"
-                  placeholder="Type here"
-                />
+                <TextArea backgroundColor="#F2F2F2" placeholder="Type Here" />
               </div>
-              <div>
+              <div className="mt-1">
                 <label
                   htmlFor="Scheme Act"
                   className="text-base font-normal text-gilroy-medium"
@@ -308,10 +295,7 @@ const SchemeDetails = () => {
                 >
                   Number of investers
                 </label>
-                <TextArea
-                  backgroundColor="#F2F2F2"
-                  placeholder="Scheme  Description"
-                />
+                <TextArea backgroundColor="#F2F2F2" placeholder="Type Here" />
               </div>
 
               <div>
@@ -319,9 +303,10 @@ const SchemeDetails = () => {
                   htmlFor="Status"
                   className="text-base font-normal text-gilroy-medium"
                 >
-                  Status <span className="text-red-500">*</span>
+                  Status
                 </label>
                 <SelectButton
+                  backgroundColor="#F2F2F2"
                   setOption={handleSetOption1}
                   options={options1}
                   selectedOption={selectedOption1}
@@ -329,34 +314,39 @@ const SchemeDetails = () => {
                   searchInputOnchange={handleSearchInputChange1}
                   searchInputValue={searchInputValue1}
                   showSearchInput={true}
-                  {...register("Status")}
-                  {...(errors?.Status && (
-                    <p className="text-red-500">{errors?.Status?.message}</p>
-                  ))}
                 />
               </div>
               <div>
                 <label
-                  htmlFor="Select Other Schemes"
+                  htmlFor="Comments"
                   className="text-base font-normal text-gilroy-medium"
                 >
-                  Select Other Schemes
+                  Comments
                 </label>
-                <SelectButton
-                  setOption={handleSetOption2}
-                  options={options2}
-                  selectedOption={selectedOption2}
-                  placeholder="Select"
-                  searchInputOnchange={handleSearchInputChange2}
-                  searchInputValue={searchInputValue2}
-                  showSearchInput={true}
-                />
+                <InputFields placeholder="Type here" />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="Upload Document"
+                  className="text-base font-normal text-gilroy-medium"
+                >
+                  Upload Document
+                </label>
+                <div className="relative flex items-center">
+                  <InputFields placeholder="Type here" className="pr-10" />
+                  <img
+                    src={UploadIcon}
+                    alt="Upload"
+                    className="absolute right-2 w-[24px] h-[24px]"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
           <div
-            className="custom-scrollbar  w-full mt-3"
+            className="custom-scrollbar  w-full mt-5"
             style={{ maxHeight: "360px", overflowY: "auto" }}
           >
             <ReactTable defaultData={defaultData} columns={columns} />

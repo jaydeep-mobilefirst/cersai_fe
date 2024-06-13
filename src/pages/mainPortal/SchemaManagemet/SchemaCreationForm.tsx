@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 import { useScreenWidth } from "../../../utils/screenSize";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import SelectButton from "../../../components/userFlow/form/SelectButton";
@@ -38,7 +37,9 @@ const SchemaCreationForm = () => {
     setShowPopup(false);
     navigate("/dt/mytask/schema");
   };
-
+  const handleBackButtonClick = () => {
+    navigate("/dt/mytask");
+  };
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
     { value: "LLP", label: "LLP" },
@@ -398,7 +399,10 @@ const SchemaCreationForm = () => {
               }}
             >
               <div className="flex items-center space-x-6">
-                <p className="text-[#1c468e] text-gilroy-medium cursor-pointer">
+                <p
+                  onClick={handleBackButtonClick}
+                  className="text-[#1c468e] text-gilroy-medium cursor-pointer"
+                >
                   Discord
                 </p>
                 <button

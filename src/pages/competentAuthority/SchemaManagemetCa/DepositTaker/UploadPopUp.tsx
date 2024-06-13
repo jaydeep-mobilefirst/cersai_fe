@@ -43,9 +43,11 @@ const UploadPopUp: React.FC<ApproveProps> = ({ closePopup, SuccessPopup }) => {
               <img
                 src={UploadIcon}
                 alt="UploadIcon"
-                className="h-[35px] w-[35px] mb-2"
+                className="h-[56px] w-[56px] mb-2"
               />
-              <p>Uploading</p>
+              <p className="text-[24px] font-normal font-gilroy-medium text-[#1C468E]">
+                Uploading
+              </p>
 
               <div className="w-full bg-[#E7F0FF] h-2 rounded-full mt-2">
                 <div

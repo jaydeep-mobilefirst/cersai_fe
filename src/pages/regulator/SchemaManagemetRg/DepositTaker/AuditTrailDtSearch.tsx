@@ -10,6 +10,7 @@ import UploadIcon from "../../../../assets/images/directbox-send-White.svg";
 import UploadPopUp from "./UploadPopUp";
 import { useScreenWidth } from "../../../../utils/screenSize";
 import SuccessUploadPopUp from "./SuccessUploadPopUp";
+import { useNavigate } from "react-router-dom";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -17,6 +18,11 @@ interface AccordionItem {
 }
 
 const DepositeTakerSearchDetailsSM: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleCancelClick = () => {
+    navigate("/rg/deposit-taker");
+  };
   const [uploadPopupOpen, setUploadPopupOpen] = useState(false);
   const [successUploadPopupOpen, setSuccessUploadPopupOpen] = useState(false);
 
@@ -99,7 +105,10 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
             }}
           >
             <div className="flex items-center space-x-6">
-              <p className="text-[#1c468e]  rounded-xl p-3 border border-[#1c468e] text-gilroy-medium cursor-pointer text-sm w-full sm:w-auto sm:max-w-xs ">
+              <p
+                onClick={handleCancelClick}
+                className="text-[#1c468e]  rounded-xl p-3 border border-[#1c468e] text-gilroy-medium cursor-pointer text-sm w-full sm:w-auto sm:max-w-xs "
+              >
                 Cancel
               </p>
 

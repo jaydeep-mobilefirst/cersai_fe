@@ -42,15 +42,15 @@ const FailedRecords = () => {
   const columns = [
     columnHelper.accessor("sno", {
       cell: (info: any) => info.renderValue(),
-      header: () => <span>Sr. No.</span>,
+      header: () => <span>S. No.</span>,
     }),
     columnHelper.accessor("DepositeTakerName", {
       cell: (info: any) => info.renderValue(),
-      header: () => <span>Deposite Taker Name</span>,
+      header: () => <span>Deposite taker name</span>,
     }),
     columnHelper.accessor("PanNumber", {
       cell: (info: any) => info.renderValue(),
-      header: () => <span>Pan Number</span>,
+      header: () => <span>Pan number</span>,
     }),
   ];
   const navigate = useNavigate();
@@ -60,7 +60,9 @@ const FailedRecords = () => {
         <div className="mt-6">
           <TaskTabsCa />
         </div>
-        <p className="font-bold text-black mt-3 mb-3 ">Failed Records</p>
+        <p className="font-bold font-gilroy-bold text-black mt-5 mb-5 ">
+          Failed Records
+        </p>
         <div
           className="custom-scrollbar  w-full"
           style={{ maxHeight: "360px", overflowY: "auto" }}

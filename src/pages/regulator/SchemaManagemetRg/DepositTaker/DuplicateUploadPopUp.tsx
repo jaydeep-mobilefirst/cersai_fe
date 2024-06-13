@@ -1,8 +1,8 @@
 import React from "react";
 import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import add from "../../../assets/images/add.svg";
-import CrossIcon from "../../../assets/images/CrossRed.svg";
+import add from "../../../../assets/images/add.svg";
+import CrossIcon from "../../../../assets/images/CrossRed.svg";
 
 interface ApproveProps {
   closePopup: () => void;
@@ -45,11 +45,13 @@ const DuplicateUploadPopUp: React.FC<ApproveProps> = ({
             <div className="flex flex-col items-center justify-center text-center mb-4">
               <img
                 src={CrossIcon}
-                alt="UploadIcon"
-                className="h-[35px] w-[35px] mb-2"
+                alt="CrossIcon"
+                className="h-[52px] w-[52px] mb-2"
               />
-              <p className="text-black">Duplicate record</p>
-              <p className="text-gray-300">
+              <p className="text-gilroy-medium font-normal text-[24px] text-[#000000]">
+                Duplicate record
+              </p>
+              <p className="text-gilroy-medium font-normal text-[13px] text-[#666666]">
                 Deposit Taker already exists with this PAN Number
               </p>
             </div>

@@ -130,7 +130,7 @@ const DepositSchemaCreation = () => {
           </div>
         );
       },
-      header: () => <span>Action</span>,
+      header: () => <span>View</span>,
     }),
   ];
   const options = [

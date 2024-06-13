@@ -45,15 +45,15 @@ const RegistrationPopUp: React.FC<ApproveProps> = ({
             <div className="flex flex-col items-center justify-center text-center mb-4">
               <img
                 src={TickIcon}
-                alt="UploadIcon"
-                className="h-[35px] w-[35px] mb-2"
+                alt="TickIcon"
+                className="h-[52px] w-[52px] mb-3"
               />
-              <p className="text-black">
+              <p className="text-[16px] text-[#170A38] text-gilroy-medium font-normal mb-2">
                 Your registration request has been send successfully and
                 approval/rejection of your registration will be informed to you
                 via email.
               </p>
-              <p className="text-[#1C468E]">
+              <p className="text-[12px] text-[#1C468E] font-semibold  text-gilroy-medium ">
                 Your registration acknowledgement ID is "DT76545678"
               </p>
             </div>

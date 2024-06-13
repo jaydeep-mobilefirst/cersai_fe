@@ -18,7 +18,6 @@ type TableType = {
   schemeID: string;
   schemeName: string;
   status: string;
-  depositTaker: string;
   createdBy: string;
   action: boolean;
 };
@@ -36,7 +35,6 @@ const NewSchemaCreation = () => {
       schemeID: "DT001",
       schemeName: "Deposit Taker 1",
       status: "Active",
-      depositTaker: "Chandra",
       createdBy: "BOB",
       action: false,
     },
@@ -44,8 +42,7 @@ const NewSchemaCreation = () => {
       sno: "02",
       schemeID: "DT002",
       schemeName: "Deposit Taker 2",
-      status: "Active",
-      depositTaker: "Chandra",
+      status: "Banned",
       createdBy: "BOB",
       action: false,
     },
@@ -53,8 +50,7 @@ const NewSchemaCreation = () => {
       sno: "03",
       schemeID: "DT002",
       schemeName: "Deposit Taker 2",
-      status: "Active",
-      depositTaker: "Chandra",
+      status: "Pending",
       createdBy: "BOB",
       action: false,
     },
@@ -63,7 +59,6 @@ const NewSchemaCreation = () => {
       schemeID: "DT002",
       schemeName: "Deposit Taker 2",
       status: "Active",
-      depositTaker: "Chandra",
       createdBy: "BOB",
       action: false,
     },
@@ -71,8 +66,7 @@ const NewSchemaCreation = () => {
       sno: "05",
       schemeID: "DT002",
       schemeName: "Deposit Taker 2",
-      status: "Active",
-      depositTaker: "Chandra",
+      status: "Under Letigation",
       createdBy: "BOB",
       action: false,
     },
@@ -81,7 +75,6 @@ const NewSchemaCreation = () => {
       schemeID: "DT002",
       schemeName: "Deposit Taker 2",
       status: "Active",
-      depositTaker: "Chandra",
       createdBy: "BOB",
       action: false,
     },
@@ -102,24 +95,10 @@ const NewSchemaCreation = () => {
     }),
 
     columnHelper.accessor("status", {
-      cell: (info: any) => {
-        const value = info?.row?.original?.action;
-
-        return (
-          <div
-            className="flex flex-col md:flex-row justify-center gap-3"
-            key={Math.random()}
-          >
-            <span> {value ? "Active" : "In-Active"}</span>
-          </div>
-        );
-      },
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor("depositTaker", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>Deposit Taker</span>,
-    }),
+
     columnHelper.accessor("createdBy", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Created By</span>,
@@ -143,7 +122,7 @@ const NewSchemaCreation = () => {
           </div>
         );
       },
-      header: () => <span>Action</span>,
+      header: () => <span>Edit</span>,
     }),
   ];
   const options = [

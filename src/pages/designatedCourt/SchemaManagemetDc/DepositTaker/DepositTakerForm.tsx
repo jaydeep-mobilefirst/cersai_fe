@@ -193,10 +193,10 @@ const DepositTakerForm = () => {
                 {section1.map((section, index) => (
                   <div className="mb-[16px]" key={index}>
                     <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] text-gilroy-bold">
-                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap ">
                         {section.title}
                       </p>
-                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-bold text-gilroy-bold ">
                         {section.buttonText}
                       </button>
                     </div>
@@ -237,7 +237,7 @@ const DepositTakerForm = () => {
                       <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
                         {section.title}
                       </p>
-                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-bold text-gilroy-bold ">
                         {section.buttonText}
                       </button>
                     </div>
@@ -278,7 +278,7 @@ const DepositTakerForm = () => {
                       <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
                         {section.title}
                       </p>
-                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-bold text-gilroy-bold">
                         {section.buttonText}
                       </button>
                     </div>
@@ -319,7 +319,7 @@ const DepositTakerForm = () => {
                       <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
                         {section.title}
                       </p>
-                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-bold text-gilroy-bold ">
                         {section.buttonText}
                       </button>
                     </div>

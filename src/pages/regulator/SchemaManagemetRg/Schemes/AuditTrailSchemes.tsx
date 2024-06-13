@@ -48,7 +48,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
       <div className="mt-6 mx-8">
         <TaskTabsRg />
       </div>
-      <div className="flex flex-row mt-3 mx-8">
+      <div className="flex  flex-row mt-3 mx-8">
         <img
           src={InfoIcon}
           alt="InfoIcon"

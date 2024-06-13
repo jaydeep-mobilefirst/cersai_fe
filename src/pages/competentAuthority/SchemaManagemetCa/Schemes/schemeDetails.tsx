@@ -187,7 +187,7 @@ const SchemeDetails = () => {
   };
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 -m-3">
       <div>
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -356,7 +356,7 @@ const SchemeDetails = () => {
           </div>
 
           <div
-            className="custom-scrollbar  w-full mt-3"
+            className="custom-scrollbar  w-full mt-5"
             style={{ maxHeight: "360px", overflowY: "auto" }}
           >
             <ReactTable defaultData={defaultData} columns={columns} />

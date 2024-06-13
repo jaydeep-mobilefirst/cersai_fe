@@ -143,7 +143,7 @@ const NewSchemaCreation = () => {
           </div>
         );
       },
-      header: () => <span>Action</span>,
+      header: () => <span>Edit</span>,
     }),
   ];
   const options = [

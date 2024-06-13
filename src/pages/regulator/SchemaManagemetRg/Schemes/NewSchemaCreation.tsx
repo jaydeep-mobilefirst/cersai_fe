@@ -6,7 +6,6 @@ import InputFields from "../../../../components/userFlow/common/InputField";
 import TextArea from "../../../../components/userFlow/form/TextArea";
 import DatePicker from "../../../../components/userFlow/form/DatePicker";
 import SelectButton from "../../../../components/userFlow/form/SelectButton";
-
 import { SchemaFormValidation } from "../../../../../src/components/ScehmaManagement/SchemaMangementValidation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,6 +13,7 @@ import { useScreenWidth } from "../../../../utils/screenSize";
 import useSidebarStore from "../../../../store/SidebarStore";
 import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
 import SchemeSuccessPopUp from "./SchemeSuccessPopUp";
+import { useNavigate } from "react-router-dom";
 const SchemeDetails = () => {
   const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
   const [searchInputValue2, setSearchInputValue2] = useState<string>("");
@@ -96,7 +96,11 @@ const SchemeDetails = () => {
     // }
     // setValue("registrationDate", value);
   };
+  const navigate = useNavigate();
 
+  const handleDiscordClick = () => {
+    navigate("/rg/my-task");
+  };
   const {
     register,
     handleSubmit,
@@ -347,7 +351,10 @@ const SchemeDetails = () => {
               }}
             >
               <div className="flex items-center space-x-4 sm:space-x-6">
-                <p className="text-[#1c468e] rounded-xl p-3 text-gilroy-medium cursor-pointer text-sm sm:text-base w-full sm:w-auto sm:max-w-xs">
+                <p
+                  onClick={handleDiscordClick}
+                  className="text-[#1c468e] rounded-xl p-3 text-gilroy-medium cursor-pointer text-sm sm:text-base w-full sm:w-auto sm:max-w-xs"
+                >
                   Discard
                 </p>
 

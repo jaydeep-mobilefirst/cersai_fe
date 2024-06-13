@@ -38,7 +38,7 @@ const VerificationDetails = () => {
 
   return (
     <div>
-      <div className="">
+      <div className=" mt-2 -m-3">
         <div className="container mx-auto">
           <div className="flex flex-wrap md:flex-nowrap gap-4">
             <div className="w-full md:w-1/2 lg:w-[317px]">

@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import add from "../../../../assets/images/add.svg";
 import TickIcon from "../../../../assets/images/tickCircleBlue.svg";
-import UploadIcon from "../../../assets/images/Right Icons.svg";
 
 interface ApproveProps {
   closePopup: () => void;
@@ -46,11 +45,13 @@ const StatusSuccessPopUp: React.FC<ApproveProps> = ({
             <div className="flex flex-col items-center justify-center text-center mb-4">
               <img
                 src={TickIcon}
-                alt="UploadIcon"
-                className="h-[35px] w-[35px] mb-2"
+                alt="TickIcon"
+                className="h-[52px] w-[52px] mb-3"
               />
-              <h1 className="text-[#1C468E]">Status updated Successfully</h1>
-              <p className="text-gray-400">
+              <h1 className="text-[24px] font-normal font-gilroy-medium text-[#000000]">
+                Status updated Successfully
+              </h1>
+              <p className="text-[16px] font-normal font-gilroy-medium text-[#666666] mb-3">
                 Success! Your changes have been updated.
               </p>
             </div>

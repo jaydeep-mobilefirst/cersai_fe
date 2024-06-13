@@ -7,12 +7,15 @@ import Accordion from "../../../components/customAccordin/CustomAccordin";
 import AuditTrail from "../../../components/ScehmaManagement/AuditTrail";
 import SchemeDetails from "../../../components/ScehmaManagement/SchemaDetails";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
+import { useNavigate, useNavigation } from "react-router-dom";
+
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
 
 const SchemeMasterForm = () => {
+  const navigate = useNavigate();
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
@@ -24,6 +27,9 @@ const SchemeMasterForm = () => {
       content: <AuditTrail />,
     },
   ];
+  const handleBackButtonClick = () => {
+    navigate("/dt/mytask");
+  };
   return (
     <div>
       <div className="relative mx-2 xl:ml-[40px] mt-4">
@@ -36,7 +42,12 @@ const SchemeMasterForm = () => {
         <div className="my-11 flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center cursor-pointer space-x-2 mb-3 md:mb-0">
             <img src={BackArrow} alt={BackArrow} />
-            <p className="text-sm font-normal text-gilroy-regular">Back</p>
+            <p
+              onClick={handleBackButtonClick}
+              className="text-sm font-normal text-gilroy-regular"
+            >
+              Back
+            </p>
           </div>
         </div>
         <div className="border-b-2 border-[#E6E6E6]"></div>
