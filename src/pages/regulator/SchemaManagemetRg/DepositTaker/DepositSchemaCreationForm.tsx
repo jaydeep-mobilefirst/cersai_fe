@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import TaskTabs from "../../../components/ScehmaManagement/TaskTabsDc";
-import { useScreenWidth } from "../../../utils/screenSize";
+import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
+import { useScreenWidth } from "../../../../utils/screenSize";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import SelectButton from "../../../components/userFlow/form/SelectButton";
-import TextArea from "../../../components/userFlow/form/TextArea";
-import DatePicker from "../../../components/userFlow/form/DatePicker";
-import InputFields from "../../../components/userFlow/common/InputField";
+import SelectButton from "../../../../components/userFlow/form/SelectButton";
+import TextArea from "../../../../components/userFlow/form/TextArea";
+import DatePicker from "../../../../components/userFlow/form/DatePicker";
+import InputFields from "../../../../components/userFlow/common/InputField";
 import { useNavigate, useNavigation } from "react-router-dom";
-import SchemeCreationSuccess from "../../../components/ScehmaManagement/SchemeCrationSucess";
-import { SchemaFormValidation } from "../../../components/ScehmaManagement/SchemaMangementValidation";
-import useSidebarStore from "../../../store/SidebarStore";
+import SchemeCreationSuccess from "../../../../components/ScehmaManagement/SchemeCrationSucess";
+import { SchemaFormValidation } from "../../../../components/ScehmaManagement/SchemaMangementValidation";
+import useSidebarStore from "../../../../store/SidebarStore";
 
-const SchemaCreationFormDc = () => {
+const DepositSchemaCreationForm = () => {
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
   const [searchInputValue1, setSearchInputValue1] = useState<string>("");
 
@@ -36,7 +36,7 @@ const SchemaCreationFormDc = () => {
   };
   const SuccessPopup = () => {
     setShowPopup(false);
-    navigate("/dc/my-task/schema");
+    navigate("/rg/my-task/schema");
   };
 
   const options1 = [
@@ -179,7 +179,7 @@ const SchemaCreationFormDc = () => {
   return (
     <div className="relative xl:ml-[40px]">
       <div className="mt-6">
-        <TaskTabs />
+        <TaskTabsRg />
       </div>
       <div>
         <form
@@ -423,4 +423,4 @@ const SchemaCreationFormDc = () => {
   );
 };
 
-export default SchemaCreationFormDc;
+export default DepositSchemaCreationForm;

@@ -2,33 +2,39 @@ import React, { useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
-import Eye from "../../../assets/images/eye2.svg";
-import addCircle from "../../../assets/images/new_images/add-circle.png";
+import Eye from "../../../../assets/images/eye2.svg";
+import addCircle from "../../../../assets/images/new_images/add-circle.png";
 import { Link } from "react-router-dom";
-import InputFields from "../../../components/ScehmaManagement/InputField";
-import searchButton from "../../../assets/images/search-normal.svg";
-import ReactTable from "../../../components/userFlow/common/ReactTable";
-import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton";
-import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-import ToggleSwitch from "../../../components/ScehmaManagement/ToggleSwitch";
-import TaskTabs from "../../../components/ScehmaManagement/TaskTabsCa";
+import InputFields from "../../../../components/ScehmaManagement/InputField";
+import searchButton from "../../../../assets/images/search-normal.svg";
+import ReactTable from "../../../../components/userFlow/common/ReactTable";
+import SelectButtonTask from "../../../../components/ScehmaManagement/SelectButton";
+import CustomPagination from "../../../../components/CustomPagination/CustomPagination";
+import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
+import TaskTabsCa from "../../../../components/ScehmaManagement/TaskTabsCa";
 
 type TableType = {
   sno: string;
   depositTakerID: string;
   depositTakerName: string;
+  pan: string;
   status: string;
   action: boolean;
 };
 
 const columnHelper = createColumnHelper<TableType>();
 
-const SchemaCreationCa = () => {
+const validatePan = (pan: string): boolean => {
+  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+  return panRegex.test(pan);
+};
+const DepositSchemaCreation = () => {
   const defaultData: TableType[] = [
     {
       sno: "01",
       depositTakerID: "DT001",
       depositTakerName: "Deposit Taker 1",
+      pan: "EUSPM1234T",
       status: "Active",
       action: false,
     },
@@ -36,6 +42,7 @@ const SchemaCreationCa = () => {
       sno: "02",
       depositTakerID: "DT002",
       depositTakerName: "Deposit Taker 2",
+      pan: "EUSPM1234T",
       status: "pending",
       action: true,
     },
@@ -43,6 +50,7 @@ const SchemaCreationCa = () => {
       sno: "03",
       depositTakerID: "DT002",
       depositTakerName: "Deposit Taker 2",
+      pan: "EUSPM1234T",
       status: "pending",
       action: true,
     },
@@ -50,6 +58,7 @@ const SchemaCreationCa = () => {
       sno: "04",
       depositTakerID: "DT002",
       depositTakerName: "Deposit Taker 2",
+      pan: "EUSPM1234T",
       status: "pending",
       action: true,
     },
@@ -57,6 +66,7 @@ const SchemaCreationCa = () => {
       sno: "05",
       depositTakerID: "DT002",
       depositTakerName: "Deposit Taker 2",
+      pan: "EUSPM1234T",
       status: "pending",
       action: true,
     },
@@ -64,6 +74,7 @@ const SchemaCreationCa = () => {
       sno: "06",
       depositTakerID: "DT002",
       depositTakerName: "Deposit Taker 2",
+      pan: "EUSPM1234T",
       status: "pending",
       action: true,
     },
@@ -82,6 +93,13 @@ const SchemaCreationCa = () => {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Deposit Taker Name</span>,
     }),
+    columnHelper.accessor("pan", {
+      cell: (info: any) => {
+        const pan = info.renderValue();
+        return validatePan(pan) ? pan : "Invalid PAN";
+      },
+      header: () => <span>PAN</span>,
+    }),
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info?.row?.original?.action;
@@ -92,7 +110,6 @@ const SchemaCreationCa = () => {
             key={Math.random()}
           >
             <span> {value ? "Active" : "In-Active"}</span>
-            <ToggleSwitch enabled={value} />
           </div>
         );
       },
@@ -105,7 +122,7 @@ const SchemaCreationCa = () => {
 
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/ca/my-task/form"}>
+            <Link to={"/ca/deposit-taker/form"}>
               <div>
                 <img src={Eye} alt="Eye " className="cursor-pointer" />
               </div>
@@ -143,7 +160,7 @@ const SchemaCreationCa = () => {
   return (
     <div className="relative xl:ml-[40px]">
       <div className="mt-6">
-        <TaskTabs />
+        <TaskTabsCa />
       </div>
       <div>
         <div className=" mt-2">
@@ -154,7 +171,7 @@ const SchemaCreationCa = () => {
                   htmlFor="Deposit taker Search"
                   className="text-base font-normal text-gilroy-medium "
                 >
-                  Scheme Search
+                  Deposit taker Search
                 </label>
               </div>
 
@@ -176,11 +193,11 @@ const SchemaCreationCa = () => {
               </button>
             </div>
             <div className=" flex items-center mt-7">
-              <Link to="/ca/my-task/schema">
-                <div className="w-40 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
+              <Link to="/ca/deposit-taker/audit">
+                <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
-                  <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
-                    Add Schema
+                  <span className="ml-1 text-sm  md:text-[10px] font-normal text-[#1c468e] lg:text-[13px] text-gilroy-medium ">
+                    New Deposit taker
                   </span>
                 </div>
               </Link>
@@ -248,4 +265,4 @@ const SchemaCreationCa = () => {
   );
 };
 
-export default SchemaCreationCa;
+export default DepositSchemaCreation;

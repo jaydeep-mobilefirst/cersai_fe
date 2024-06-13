@@ -49,8 +49,8 @@ export const portalSideBarListRegulator = [
   },
   {
     title: "Scheme Management",
-    url: "/rg/my-task",
-    rurl: "/rg/my-task",
+    url: "/rg/deposit-taker",
+    rurl: "/rg/deposit-taker",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
@@ -72,8 +72,8 @@ export const portalSideBarListCompetent = [
   },
   {
     title: "Scheme Management",
-    url: "/ca/my-task",
-    rurl: "/ca/my-task",
+    url: "/ca/deposit-taker",
+    rurl: "/ca/deposit-taker",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
@@ -95,8 +95,8 @@ export const portalSideBarListDesignated = [
   },
   {
     title: "Scheme Management",
-    url: "/dc/my-task",
-    rurl: "/dc/my-task",
+    url: "/dc/deposit-taker",
+    rurl: "/dc/deposit-taker",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
