@@ -38,19 +38,30 @@ import SchemaCreationForm from "./pages/mainPortal/SchemaManagemet/SchemaCreatio
 import SchemaCreation from "./pages/mainPortal/SchemaManagemet/SchemaCreation";
 import SchemeMasterForm from "./pages/mainPortal/SchemaManagemet/SchemaMasterDetail";
 
-import SchemaCreationFormRg from "./pages/regulator/SchemaManagemetRg/SchemaCreationFormRg";
-import SchemaCreationRg from "./pages/regulator/SchemaManagemetRg/SchemaCreationRg";
-import SchemeMasterFormRg from "./pages/regulator/SchemaManagemetRg/SchemaMasterDetailRg";
+import DepositSearchMg from "./pages/regulator/SchemaManagemetRg/DepositTaker/AuditTrailDtSearch";
+import DepositTakerForm from "./pages/regulator/SchemaManagemetRg/DepositTaker/DepositTakerForm";
+import DepositSchemeCreation from "./pages/regulator/SchemaManagemetRg/DepositTaker/DepositSchemaCreation";
+import FailedRecords from "./pages/regulator/SchemaManagemetRg/DepositTaker/FailedRecords";
+import SchemaCreationFormRg from "./pages/regulator/SchemaManagemetRg/Schemes/NewSchemaCreation";
+import SchemaCreationRg from "./pages/regulator/SchemaManagemetRg/Schemes/SchemsCreation";
+import SchemeDetailsRg from "./pages/regulator/SchemaManagemetRg/Schemes/NewSchemaCreation";
 import MyTaskStatus from "./pages/regulator/MyTask/MyTaskStatus";
 import MyTaskForm from "./pages/regulator/MyTask/MyTaskForm";
+import AuditTrailRg from "./pages/regulator/SchemaManagemetRg/Schemes/AuditTrailSchemes";
 
-import SchemaCreationCa from "./pages/competentAuthority/SchemaManagemetCa/SchemaCreationCa";
-import SchemaCreationFormCa from "./pages/competentAuthority/SchemaManagemetCa/SchemaCreationFormCa";
-import SchemeMasterFormCa from "./pages/competentAuthority/SchemaManagemetCa/SchemaMasterDetailCa";
+import DepositSearchMgCa from "./pages/competentAuthority/SchemaManagemetCa/DepositTaker/AuditTrailDtSearch";
+import DepositTakerFormCa from "./pages/competentAuthority/SchemaManagemetCa/DepositTaker/DepositTakerForm";
+import DepositSchemeCreationCa from "./pages/competentAuthority/SchemaManagemetCa/DepositTaker/DepositSchemaCreation";
+import FailedRecordsCa from "./pages/competentAuthority/SchemaManagemetCa/DepositTaker/FailedRecords";
+import SchemaCreationFormCa from "./pages/competentAuthority/SchemaManagemetCa/Schemes/NewSchemaCreation";
+import SchemaCreationCa from "./pages/competentAuthority/SchemaManagemetCa/Schemes/SchemsCreation";
+import SchemeDetailsCa from "./pages/competentAuthority/SchemaManagemetCa/Schemes/NewSchemaCreation";
+import AuditTrailCa from "./pages/competentAuthority/SchemaManagemetCa/Schemes/AuditTrailSchemes";
 
-import SchemaCreationDc from "./pages/designatedCourt/SchemaManagemetDc/SchemaCreationDc";
-import SchemaCreationFormDc from "./pages/designatedCourt/SchemaManagemetDc/SchemaCreationFormDc";
-import SchemeMasterFormDc from "./pages/designatedCourt/SchemaManagemetDc/SchemaMasterDetailDc";
+import DepositTakerFormDc from "./pages/designatedCourt/SchemaManagemetDc/DepositTaker/DepositTakerForm";
+import DepositSchemeCreationDc from "./pages/designatedCourt/SchemaManagemetDc/DepositTaker/DepositSchemaCreation";
+import SchemaCreationDc from "./pages/designatedCourt/SchemaManagemetDc/Schemes/SchemsCreation";
+import AuditTrailDc from "./pages/designatedCourt/SchemaManagemetDc/Schemes/AuditTrailSchemes";
 
 import RoleCreation from "./pages/mainPortal/UserManagement/RoleCreation";
 import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
@@ -76,7 +87,6 @@ import SchemeSearch from "./pages/schemeSearch/SchemeSearch";
 import SchemeSearchDetails from "./pages/schemeSearch/SchemSearchDetails";
 import DepositeTakerSearch from "./pages/depositTakerSearch/DepositeTakerSearch";
 import DepositeTakerSearchDetails from "./pages/depositTakerSearch/DepositeTakerSearchDetails";
-
 function App() {
   return (
     <div>
@@ -112,10 +122,21 @@ function App() {
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<MyTaskStatus />} path="mytask" />
               <Route element={<MyTaskForm />} path="mytask/form" />
-
+              <Route element={<DepositSchemeCreation />} path="deposit-taker" />
+              <Route element={<DepositTakerForm />} path="deposit-taker/form" />
+              <Route element={<DepositSearchMg />} path="deposit-taker/audit" />
+              <Route
+                element={<FailedRecords />}
+                path="deposit-taker/failed-records"
+              />
+              <Route element={<AuditTrailRg />} path="my-task/audit-rail" />
               <Route element={<SchemaCreationRg />} path="my-task" />
+
               <Route element={<SchemaCreationFormRg />} path="my-task/form" />
-              <Route element={<SchemeMasterFormRg />} path="my-task/schema" />
+              <Route
+                element={<SchemeDetailsRg />}
+                path="my-task/new-scheme-creation"
+              />
               <Route
                 element={<RoleCreation entityType="RG" />}
                 path="usermanagement"
@@ -143,7 +164,27 @@ function App() {
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<SchemaCreationCa />} path="my-task" />
               <Route element={<SchemaCreationFormCa />} path="my-task/form" />
-              <Route element={<SchemeMasterFormCa />} path="my-task/schema" />
+              <Route
+                element={<DepositSchemeCreationCa />}
+                path="deposit-taker"
+              />
+              <Route
+                element={<DepositTakerFormCa />}
+                path="deposit-taker/form"
+              />
+              <Route
+                element={<DepositSearchMgCa />}
+                path="deposit-taker/audit"
+              />
+              <Route
+                element={<FailedRecordsCa />}
+                path="deposit-taker/failed-records"
+              />
+              <Route element={<AuditTrailCa />} path="my-task/audit-rail" />
+              <Route
+                element={<SchemeDetailsCa />}
+                path="my-task/new-scheme-creation"
+              />
 
               <Route
                 element={<RoleCreation entityType="CA" />}
@@ -171,8 +212,17 @@ function App() {
             <Route element={<MainPortalLayoutDesignated />} path="/dc">
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<SchemaCreationDc />} path="my-task" />
-              <Route element={<SchemaCreationFormDc />} path="my-task/form" />
-              <Route element={<SchemeMasterFormDc />} path="my-task/schema" />
+
+              <Route
+                element={<DepositSchemeCreationDc />}
+                path="deposit-taker"
+              />
+              <Route
+                element={<DepositTakerFormDc />}
+                path="deposit-taker/form"
+              />
+
+              <Route element={<AuditTrailDc />} path="my-task/audit-rail" />
 
               <Route
                 element={<RoleCreation entityType="DC" />}

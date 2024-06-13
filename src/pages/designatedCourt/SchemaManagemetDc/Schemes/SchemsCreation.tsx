@@ -2,70 +2,88 @@ import React, { useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
-import Eye from "../../../assets/images/eye2.svg";
-import addCircle from "../../../assets/images/new_images/add-circle.png";
+import Eye from "../../../../assets/images/eye2.svg";
+import addCircle from "../../../../assets/images/new_images/add-circle.png";
 import { Link } from "react-router-dom";
-import InputFields from "../../../components/ScehmaManagement/InputField";
-import searchButton from "../../../assets/images/search-normal.svg";
-import ReactTable from "../../../components/userFlow/common/ReactTable";
-import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton";
-import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-import ToggleSwitch from "../../../components/ScehmaManagement/ToggleSwitch";
-import TaskTabs from "../../../components/ScehmaManagement/TaskTabsDc";
-
+import InputFields from "../../../../components/ScehmaManagement/InputField";
+import searchButton from "../../../../assets/images/search-normal.svg";
+import ReactTable from "../../../../components/userFlow/common/ReactTable";
+import SelectButtonTask from "../../../../components/ScehmaManagement/SelectButton";
+import CustomPagination from "../../../../components/CustomPagination/CustomPagination";
+import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
+import TaskTabsDc from "../../../../components/ScehmaManagement/TaskTabsDc";
+import EditIcon from "../../../../assets/images/editBlue.svg";
 type TableType = {
   sno: string;
-  depositTakerID: string;
-  depositTakerName: string;
+  schemeID: string;
+  schemeName: string;
   status: string;
+  depositTaker: string;
+  createdBy: string;
   action: boolean;
 };
 
 const columnHelper = createColumnHelper<TableType>();
 
-const SchemaCreationDc = () => {
+const validatePan = (pan: string): boolean => {
+  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+  return panRegex.test(pan);
+};
+const NewSchemaCreation = () => {
   const defaultData: TableType[] = [
     {
       sno: "01",
-      depositTakerID: "DT001",
-      depositTakerName: "Deposit Taker 1",
+      schemeID: "DT001",
+      schemeName: "Deposit Taker 1",
       status: "Active",
+      depositTaker: "Chandra",
+      createdBy: "BOB",
       action: false,
     },
     {
       sno: "02",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
+      schemeID: "DT002",
+      schemeName: "Deposit Taker 2",
+      status: "Active",
+      depositTaker: "Chandra",
+      createdBy: "BOB",
+      action: false,
     },
     {
       sno: "03",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
+      schemeID: "DT002",
+      schemeName: "Deposit Taker 2",
+      status: "Active",
+      depositTaker: "Chandra",
+      createdBy: "BOB",
+      action: false,
     },
     {
       sno: "04",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
+      schemeID: "DT002",
+      schemeName: "Deposit Taker 2",
+      status: "Active",
+      depositTaker: "Chandra",
+      createdBy: "BOB",
+      action: false,
     },
     {
       sno: "05",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
+      schemeID: "DT002",
+      schemeName: "Deposit Taker 2",
+      status: "Active",
+      depositTaker: "Chandra",
+      createdBy: "BOB",
+      action: false,
     },
     {
       sno: "06",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
+      schemeID: "DT002",
+      schemeName: "Deposit Taker 2",
+      status: "Active",
+      depositTaker: "Chandra",
+      createdBy: "BOB",
+      action: false,
     },
   ];
 
@@ -74,14 +92,15 @@ const SchemaCreationDc = () => {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Sr. No.</span>,
     }),
-    columnHelper.accessor("depositTakerID", {
+    columnHelper.accessor("schemeID", {
       cell: (info: any) => info.renderValue(),
-      header: () => <span>Deposit Taker ID</span>,
+      header: () => <span>Scheme ID</span>,
     }),
-    columnHelper.accessor("depositTakerName", {
+    columnHelper.accessor("schemeName", {
       cell: (info: any) => info.renderValue(),
-      header: () => <span>Deposit Taker Name</span>,
+      header: () => <span>Scheme Name</span>,
     }),
+
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info?.row?.original?.action;
@@ -92,11 +111,18 @@ const SchemaCreationDc = () => {
             key={Math.random()}
           >
             <span> {value ? "Active" : "In-Active"}</span>
-            <ToggleSwitch enabled={value} />
           </div>
         );
       },
       header: () => <span>Status</span>,
+    }),
+    columnHelper.accessor("depositTaker", {
+      cell: (info: any) => info.renderValue(),
+      header: () => <span>Deposit Taker</span>,
+    }),
+    columnHelper.accessor("createdBy", {
+      cell: (info: any) => info.renderValue(),
+      header: () => <span>Created By</span>,
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
@@ -105,9 +131,13 @@ const SchemaCreationDc = () => {
 
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/dc/my-task/form"}>
+            <Link to={"/dc/my-task/audit-rail"}>
               <div>
-                <img src={Eye} alt="Eye " className="cursor-pointer" />
+                <img
+                  src={EditIcon}
+                  alt="EditIcon "
+                  className="cursor-pointer"
+                />
               </div>
             </Link>
           </div>
@@ -143,7 +173,7 @@ const SchemaCreationDc = () => {
   return (
     <div className="relative xl:ml-[40px]">
       <div className="mt-6">
-        <TaskTabs />
+        <TaskTabsDc />
       </div>
       <div>
         <div className=" mt-2">
@@ -174,16 +204,6 @@ const SchemaCreationDc = () => {
                   Search
                 </span>
               </button>
-            </div>
-            <div className=" flex items-center mt-7">
-              <Link to="/dc/my-task/schema">
-                <div className="w-40 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
-                  <img src={addCircle} alt="icon" />
-                  <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
-                    Add Schema
-                  </span>
-                </div>
-              </Link>
             </div>
           </div>
         </div>
@@ -248,4 +268,4 @@ const SchemaCreationDc = () => {
   );
 };
 
-export default SchemaCreationDc;
+export default NewSchemaCreation;

@@ -1,18 +1,15 @@
-import BackArrow from "../../../assets/images/BackArrow.svg";
-// import CreatedBy from "./CreatedBy";
-// import EntityDetails from "./EntityDetails";
-// import SchemeDetails from "./SchemeDetails";
-// import AuditTrail from "./AuditTrail";
-import Accordion from "../../../components/customAccordin/CustomAccordin";
-import AuditTrail from "../../../components/ScehmaManagement/AuditTrail";
-import SchemeDetails from "../../../components/ScehmaManagement/SchemaDetails";
-import TaskTabs from "../../../components/ScehmaManagement/TaskTabsDc";
+import BackArrow from "../../../../assets/images/BackArrow.svg";
+
+import Accordion from "../../../../components/customAccordin/CustomAccordin";
+import AuditTrail from "../../../../components/ScehmaManagement/AuditTrail";
+import SchemeDetails from "../../../../components/ScehmaManagement/SchemaDetails";
+import TaskTabsCa from "../../../../components/ScehmaManagement/TaskTabsCa";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
 
-const SchemaMasterDetailDc = () => {
+const DepositSchemaMasterDetail = () => {
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
@@ -28,7 +25,7 @@ const SchemaMasterDetailDc = () => {
     <div>
       <div className="relative mx-2 xl:ml-[40px] mt-4">
         <div className="mt-6">
-          <TaskTabs />
+          <TaskTabsCa />
         </div>
         <div className="mt-8">
           <Accordion items={accordionItems} />
@@ -50,4 +47,4 @@ const SchemaMasterDetailDc = () => {
   );
 };
 
-export default SchemaMasterDetailDc;
+export default DepositSchemaMasterDetail;

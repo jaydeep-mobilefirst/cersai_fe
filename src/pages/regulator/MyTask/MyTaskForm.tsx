@@ -1620,50 +1620,6 @@ const MyTaskForm = () => {
               </div>
             </div>
 
-            {/* <div className="my-11 flex flex-col sm:flex-row justify-between items-center">
-              <div
-                className="flex items-center cursor-pointer space-x-2 mb-3 sm:mb-0"
-                onClick={() => navigate(-1)}
-              >
-                <img src={BackArrow} alt={BackArrow} />
-                <p className="text-sm font-normal text-gilroy-regular">Back</p>
-              </div>
-              <div className="flex flex-wrap justify-center sm:w-7/12 items-center space-x-3 sm:mb-3">
-                <div className="mb-3 sm:mb-0">
-                  <Button
-                    type="button"
-                    label="Return"
-                    width="100px"
-                    textColor="#F5BD0B"
-                    borderColor="#F5BD0B"
-                    backgroundColor="white"
-                    onClick={handleReturn}
-                  />
-                </div>
-                <div className="mb-3 sm:mb-0">
-                  <Button
-                    type="button"
-                    label="Reject"
-                    width="100px"
-                    textColor="#E63312"
-                    borderColor="#E63312"
-                    backgroundColor="white"
-                    onClick={handleRejectModel}
-                  />
-                </div>
-
-                <div className="mb-3 sm:mb-0">
-                  <Button
-                    type="button"
-                    label="Approve"
-                    width="100px"
-                    backgroundColor="#1C468E"
-                    onClick={handleApproveModel}
-                  />
-                </div>
-              </div>
-            </div> */}
-
             <div className="my-11 flex flex-col lg:flex-row lg:items-center justify-between">
               <div
                 className="flex items-center cursor-pointer space-x-2 mb-3 lg:mb-0 md:ml-[5rem]"

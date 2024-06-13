@@ -6,12 +6,16 @@ type Props = {};
 
 const tabs = [
   {
-    title: "Scheme Creation",
+    title: "Deposit Takers",
+    url: "deposit-taker",
+    rurl: "/dc/deposit-taker",
+  },
+  {
+    title: "Schemes",
     url: "my-task",
     rurl: "/dc/my-task",
   },
 ];
-
 const TaskTabsDc = (props: Props) => {
   const [activeTab, setActiveTab] = useState<string>("my-task");
   const [url, setUrl] = useState<String>("");

@@ -6,7 +6,12 @@ type Props = {};
 
 const tabs = [
   {
-    title: "Scheme Creation",
+    title: "Deposit Takers",
+    url: "deposit-taker",
+    rurl: "/ca/deposit-taker",
+  },
+  {
+    title: "Schemes",
     url: "my-task",
     rurl: "/ca/my-task",
   },
