@@ -27,7 +27,7 @@ const CourtDetails = (props: Props) => {
   // console.log({ allFormData }, "all form data courtdetail---- ");
 
   const sectionId = allFormData?.entitySections?.find(
-    (s: any) => s?.sectionName === "Court Details"
+    (s: any) => s?.sectionName === "Designated Court Details"
   );
 
   // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
@@ -66,7 +66,7 @@ const CourtDetails = (props: Props) => {
       value: field.userInput,
     }));
 
-  // console.log(formData, "formData");
+  console.log(allFormData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();

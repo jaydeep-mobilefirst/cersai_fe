@@ -20,7 +20,7 @@ const DynamicFileUpload = ({ data }: Props) => {
     const fieldType = allFormData?.fileTypes?.find(
         (type: any) => type?.id === data?.fileType
     )?.name;  
-
+    const [loader, setLoader] = useState(false);
     const { onFileChange } = useContext(FormHandlerContext);
     const [fieldData, setFieldData] = useState<any>(null);
     const [showUploadPopup, setShowUploadPopup] = useState(false);
@@ -47,6 +47,7 @@ const DynamicFileUpload = ({ data }: Props) => {
     };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setLoader(true)
         const allowedMimeTypes = fieldType.split('/').map((type : any) => {
             switch (type) {
                 case "jpg":
@@ -72,6 +73,7 @@ const DynamicFileUpload = ({ data }: Props) => {
                     title : "File Size Exceeded",
                     text : `Max file size limit : ${AllowedFileSizeinMB.toFixed()} MB | Uploaded File Size : ${CurrentFileSizeinMB.toFixed(2)} MB`,
                 })
+                setLoader(false)
                 return;
             }
 
@@ -83,17 +85,21 @@ const DynamicFileUpload = ({ data }: Props) => {
                     title : "File type allowed only "+ fieldType,
                     text : `File Type ${event.target.files[0]?.type.split('/')[event.target.files[0]?.type.split('/').length - 1]} not allowed!`
                 })
+                setLoader(false)
                 return;
-            }             
+            }                         
             // Check for File Type
             setFile(event.target.files[0]);
             onFileChange(event.target.files[0], fieldData, fieldType);
             toggleUploadPopup();
             closePopup();
+            setLoader(false)
+            return
+        }
+        else{
+            setLoader(false)
         }
     };
-
-    console.log({file});
     
     return (
         <div key={data?.id}>
