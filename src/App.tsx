@@ -229,7 +229,7 @@ function App() {
                 path="usermanagement"
               />
               <Route
-                element={<UserCreation entityType="CA" />}
+                element={<UserCreation entityType="DC" />}
                 path="usermanagement/usercreation"
               />
               <Route
