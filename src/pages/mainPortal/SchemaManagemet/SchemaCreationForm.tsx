@@ -182,20 +182,21 @@ const SchemaCreationForm = () => {
       <div className="mt-6">
         <TaskTabs />
       </div>
-      <div>
+      <div className="-ml-7">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
         >
           <div
-            style={{
-              // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-              width: `${
-                screenWidth > 1024
-                  ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
-                  : "100vw"
-              }`,
-            }}
+            className="w-full"
+            // style={{
+            //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+            //   width: `${
+            //     screenWidth > 1024
+            //       ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
+            //       : "100vw"
+            //   }`,
+            // }}
           >
             <div className="flex flex-col p-6 w-full ">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
