@@ -202,7 +202,7 @@ const SchemeDetails = () => {
           className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
         >
           <div
-            className="flex flex-col  w-full "
+            className="w-full "
             // style={{
             //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             //   width: `${
