@@ -34,8 +34,7 @@ const SchemaCreationForm = () => {
     setShowPopup(false);
   };
   const SuccessPopup = () => {
-    setShowPopup(false);
-    navigate("/dt/mytask/schema");
+    setShowPopup(true);
   };
   const handleBackButtonClick = () => {
     navigate("/dt/mytask");
@@ -238,13 +237,9 @@ const SchemaCreationForm = () => {
                     className="block text-gray-700 text-sm font-bold mb-2"
                   >
                     Scheme Start Date
-                    <span className="text-red-500">*</span>
                   </label>
 
                   <DatePicker onChange={handleDateChange} />
-                  <span className="text-red-500">
-                    {errors.startSchemaDate?.message}
-                  </span>
                 </div>
                 <div className="-mt-2">
                   <label
@@ -252,13 +247,9 @@ const SchemaCreationForm = () => {
                     className="block text-gray-700 text-sm font-bold mb-2"
                   >
                     Last day to enter scheme
-                    <span className="text-red-500">*</span>
                   </label>
 
                   <DatePicker onChange={handleDateChangeEnd} />
-                  <span className="text-red-500">
-                    {errors.endSchemaDate?.message}
-                  </span>
                 </div>
 
                 <div>
@@ -336,7 +327,7 @@ const SchemaCreationForm = () => {
                     htmlFor="district"
                     className="text-base font-normal text-gilroy-medium"
                   >
-                    Scheme Act <span className="text-red-500">*</span>
+                    Scheme Act
                   </label>
                   <SelectButton
                     setOption={handleSetOption3}
@@ -406,6 +397,7 @@ const SchemaCreationForm = () => {
                   Discord
                 </p>
                 <button
+                  onClick={SuccessPopup}
                   type="submit"
                   className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
                 >
