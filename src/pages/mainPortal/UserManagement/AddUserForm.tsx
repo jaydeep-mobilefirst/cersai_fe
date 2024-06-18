@@ -136,8 +136,8 @@ const AddUserForm = () => {
     }
   }, [editUserData]);
   return (
-    <div className="relative xl:ml-[40px]">
-      <div className="pr-10">
+    <div className="mt-2 ">
+      <div className="-ml-9 -mr-9">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex items-center justify-between flex-col h-full lg:h-[75vh] "

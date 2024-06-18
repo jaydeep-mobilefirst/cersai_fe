@@ -7,7 +7,8 @@ import TextArea from "../../../../components/userFlow/form/TextArea";
 import DatePicker from "../../../../components/userFlow/form/DatePicker";
 import SelectButton from "../../../../components/userFlow/form/SelectButton";
 import { SchemaFormValidation } from "../../../../../src/components/ScehmaManagement/SchemaMangementValidation";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useScreenWidth } from "../../../../utils/screenSize";
 import useSidebarStore from "../../../../store/SidebarStore";
@@ -83,6 +84,7 @@ const SchemeDetails = () => {
   ) => {
     setSearchInputValue4(event.target.value);
   };
+
   const handleDateChange = (event: any) => {
     const { value } = event.target;
     const today = new Date();
@@ -111,8 +113,10 @@ const SchemeDetails = () => {
     resolver: yupResolver(SchemaFormValidation),
   });
   const onSubmit = (data: any) => {
+    console.log(data, "data");
     alert("Form submitted successfully!");
     console.log({ data });
+    setIsSuccessOpen(true);
 
     reset();
   };
@@ -156,12 +160,12 @@ const SchemeDetails = () => {
                     searchInputValue={searchInputValue4}
                     showSearchInput={true}
                     {...register("EntityName")}
-                    {...(errors?.EntityName && (
-                      <p className="text-red-500">
-                        {errors?.EntityName?.message}
-                      </p>
-                    ))}
                   />
+                  {errors?.EntityName && (
+                    <p className="text-red-500">
+                      {errors?.EntityName?.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -173,7 +177,13 @@ const SchemeDetails = () => {
                   <InputFields
                     backgroundColor="#f2f2f2"
                     placeholder="Type here"
+                    {...register("EntityUniqueId")}
                   />
+                  {errors?.EntityUniqueId && (
+                    <p className="text-red-500">
+                      {errors?.EntityUniqueId?.message}
+                    </p>
+                  )}
                 </div>
                 <div className="">
                   <label
@@ -204,11 +214,19 @@ const SchemeDetails = () => {
                   >
                     Scheme Description
                   </label>
-                  <TextArea placeholder="Scheme  Description" />
+                  <TextArea
+                    placeholder="Scheme  Description"
+                    {...register("schemeDescription")}
+                  />
 
                   <span className="text-[#00000066] text-xs text-gilroy-medium flex justify-end items-end">
                     0 / 50
                   </span>
+                  {errors?.schemeDescription && (
+                    <p className="text-red-500">
+                      {errors?.schemeDescription?.message}
+                    </p>
+                  )}
                 </div>
                 <div className="mt-[2px]">
                   <label
@@ -238,7 +256,15 @@ const SchemeDetails = () => {
                   >
                     Minimum Investment amount
                   </label>
-                  <InputFields placeholder="Type here" />
+                  <InputFields
+                    placeholder="Type here"
+                    {...register("minInvestment")}
+                  />
+                  {errors?.minInvestment && (
+                    <p className="text-red-500">
+                      {errors?.minInvestment?.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -247,7 +273,15 @@ const SchemeDetails = () => {
                   >
                     Maximum Investment amount
                   </label>
-                  <InputFields placeholder="Type here" />
+                  <InputFields
+                    placeholder="Type here"
+                    {...register("maxInvestment")}
+                  />
+                  {errors?.maxInvestment && (
+                    <p className="text-red-500">
+                      {errors?.maxInvestment?.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -264,7 +298,13 @@ const SchemeDetails = () => {
                     searchInputOnchange={handleSearchInputChange4}
                     searchInputValue={searchInputValue4}
                     showSearchInput={true}
+                    {...register("RegulatorName")}
                   />
+                  {errors?.RegulatorName && (
+                    <p className="text-red-500">
+                      {errors?.RegulatorName?.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -282,8 +322,13 @@ const SchemeDetails = () => {
                     searchInputOnchange={handleSearchInputChange2}
                     searchInputValue={searchInputValue2}
                     showSearchInput={true}
+                    {...register("Branch")}
                   />
+                  {errors?.Branch && (
+                    <p className="text-red-500">{errors?.Branch?.message}</p>
+                  )}
                 </div>
+
                 <div>
                   <label
                     htmlFor=" Number of investers"
@@ -291,7 +336,15 @@ const SchemeDetails = () => {
                   >
                     Number of investers
                   </label>
-                  <InputFields placeholder="Type here" />
+                  <InputFields
+                    placeholder="Type here"
+                    {...register("numberOfInvestors")}
+                  />
+                  {errors?.numberOfInvestors && (
+                    <p className="text-red-500">
+                      {errors?.numberOfInvestors?.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -308,7 +361,11 @@ const SchemeDetails = () => {
                     searchInputOnchange={handleSearchInputChange3}
                     searchInputValue={searchInputValue3}
                     showSearchInput={true}
+                    {...register("SchemeAct")}
                   />
+                  {errors?.SchemeAct && (
+                    <p className="text-red-500">{errors?.SchemeAct?.message}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -379,8 +436,8 @@ const SchemeDetails = () => {
 
           {isSuccessOpen && (
             <SchemeSuccessPopUp
-              closePopup={closePopup}
-              SuccessPopup={() => {}}
+              closePopup={() => setIsSuccessOpen(false)}
+              SuccessPopup={() => setIsSuccessOpen(false)}
             />
           )}
         </form>

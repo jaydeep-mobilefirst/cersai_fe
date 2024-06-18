@@ -12,7 +12,6 @@ import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton"
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
 import ToggleSwitch from "../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
-
 type TableType = {
   sno: string;
   depositTakerID: string;
@@ -116,17 +115,37 @@ const SchemaCreation = () => {
       header: () => <span>Action</span>,
     }),
   ];
-  const options = [
-    { value: "pdf", label: "PDF" },
-    { value: "docx", label: "DOCX" },
-    { value: "image", label: "Image" },
+  const options1 = [
+    { value: "India", label: "India" },
+    { value: "Maharashtra", label: "Maharashtra" },
+    { value: "Pune", label: "Pune" },
+    { value: "Status", label: "Status" },
   ];
 
+  const options2 = [
+    { value: "India", label: "India" },
+    { value: "Maharashtra", label: "Maharashtra" },
+    { value: "Pune", label: "Pune" },
+    { value: "Status", label: "Status" },
+  ];
+  const options3 = [
+    { value: "India", label: "India" },
+    { value: "Maharashtra", label: "Maharashtra" },
+    { value: "Pune", label: "Pune" },
+    { value: "Status", label: "Status" },
+  ];
+  const options4 = [
+    { value: "India", label: "India" },
+    { value: "Maharashtra", label: "Maharashtra" },
+    { value: "Pune", label: "Pune" },
+    { value: "Status", label: "Status" },
+  ];
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
 
   const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
 
   const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
+  const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
 
   const handleSetOption1 = (value: string) => {
     setSelectedOption1(value);
@@ -140,6 +159,9 @@ const SchemaCreation = () => {
     setSelectedOption3(value);
   };
 
+  const handleSetOption4 = (value: string) => {
+    setSelectedOption4(value);
+  };
   return (
     <div className="relative xl:ml-[40px]">
       <div className="mt-6">
@@ -198,7 +220,7 @@ const SchemaCreation = () => {
               <div className="">
                 <SelectButtonTask
                   setOption={handleSetOption1}
-                  options={options}
+                  options={options1}
                   selectedOption={selectedOption1}
                   placeholder="India"
                 />
@@ -206,25 +228,25 @@ const SchemaCreation = () => {
               <div className="">
                 <SelectButtonTask
                   setOption={handleSetOption2}
-                  options={options}
+                  options={options2}
                   selectedOption={selectedOption2}
                   placeholder="Maharashtra"
                 />
               </div>
               <div className="">
                 <SelectButtonTask
-                  setOption={handleSetOption2}
-                  options={options}
-                  selectedOption={selectedOption2}
+                  setOption={handleSetOption3}
+                  options={options3}
+                  selectedOption={selectedOption3}
                   placeholder="Pune"
                 />
               </div>
               <div className="h-6 border-r-2 border-gray-300 "></div>
               <div>
                 <SelectButtonTask
-                  setOption={handleSetOption3}
-                  options={options}
-                  selectedOption={selectedOption3}
+                  setOption={handleSetOption4}
+                  options={options4}
+                  selectedOption={selectedOption4}
                   placeholder="Status"
                 />
               </div>

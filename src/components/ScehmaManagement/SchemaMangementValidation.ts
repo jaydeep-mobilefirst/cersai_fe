@@ -17,6 +17,17 @@ export const SchemaFormValidation = Yup.object().shape({
   EntityName: Yup.string()
     .required("Entity Name  is required")
     .min(2, "Entity Name must be at least 2 characters long"),
+  EntityUniqueId: Yup.string()
+    .required("Entity Unique Id is required")
+    .matches(
+      /^[A-Za-z0-9]{8}$/,
+      "Unique ID Number must be 8 characters long and alphanumeric"
+    ),
+  RegulatorName: Yup.string().required("Regulator Name is required"),
+
+  Branch: Yup.string().required("Branch is required"),
+  SchemeAct: Yup.string().required("SchemeAct is required"),
+
   uniqueIdNumber: Yup.string()
     .required("Unique ID Number is required")
     .matches(

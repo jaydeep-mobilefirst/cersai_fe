@@ -133,17 +133,32 @@ const DepositSchemaCreation = () => {
       header: () => <span>View</span>,
     }),
   ];
-  const options = [
+  const options1 = [
     { value: "pdf", label: "PDF" },
     { value: "docx", label: "DOCX" },
     { value: "image", label: "Image" },
   ];
-
+  const options2 = [
+    { value: "pdf", label: "PDF" },
+    { value: "docx", label: "DOCX" },
+    { value: "image", label: "Image" },
+  ];
+  const options3 = [
+    { value: "pdf", label: "PDF" },
+    { value: "docx", label: "DOCX" },
+    { value: "image", label: "Image" },
+  ];
+  const options4 = [
+    { value: "pdf", label: "PDF" },
+    { value: "docx", label: "DOCX" },
+    { value: "image", label: "Image" },
+  ];
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
 
   const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
 
   const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
+  const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
 
   const handleSetOption1 = (value: string) => {
     setSelectedOption1(value);
@@ -155,6 +170,9 @@ const DepositSchemaCreation = () => {
 
   const handleSetOption3 = (value: string) => {
     setSelectedOption3(value);
+  };
+  const handleSetOption4 = (value: string) => {
+    setSelectedOption4(value);
   };
 
   return (
@@ -215,7 +233,7 @@ const DepositSchemaCreation = () => {
               <div className="">
                 <SelectButtonTask
                   setOption={handleSetOption1}
-                  options={options}
+                  options={options1}
                   selectedOption={selectedOption1}
                   placeholder="India"
                 />
@@ -223,25 +241,25 @@ const DepositSchemaCreation = () => {
               <div className="">
                 <SelectButtonTask
                   setOption={handleSetOption2}
-                  options={options}
+                  options={options2}
                   selectedOption={selectedOption2}
                   placeholder="Maharashtra"
                 />
               </div>
               <div className="">
                 <SelectButtonTask
-                  setOption={handleSetOption2}
-                  options={options}
-                  selectedOption={selectedOption2}
+                  setOption={handleSetOption3}
+                  options={options3}
+                  selectedOption={selectedOption3}
                   placeholder="Pune"
                 />
               </div>
               <div className="h-6 border-r-2 border-gray-300 "></div>
               <div>
                 <SelectButtonTask
-                  setOption={handleSetOption3}
-                  options={options}
-                  selectedOption={selectedOption3}
+                  setOption={handleSetOption4}
+                  options={options4}
+                  selectedOption={selectedOption4}
                   placeholder="Status"
                 />
               </div>
