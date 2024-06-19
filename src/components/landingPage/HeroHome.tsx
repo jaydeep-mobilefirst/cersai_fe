@@ -4,9 +4,20 @@ import search_status from "../../assets/images/search-status.svg";
 import user_search from "../../assets/images/user-search.svg";
 import archive_book from "../../assets/images/archive-book.svg";
 import cards from "../../assets/images/cards.svg";
+import { useNavigate } from "react-router-dom";
 
 const HeroHome = () => {
+  const navigate = useNavigate();
   const buttons = [{ text: "Scheme Search" }, { text: "Deposit Taker Search" }];
+
+  const onNavigateToSchemeSearch = (text: string) => {
+    if (text === "Scheme Search") {
+      navigate("/scheme-search");
+    } else {
+      navigate("/deposite-taker-search");
+    }
+  };
+
   return (
     <div className="flex items-center justify-between px-4 lg:px-[100px] py-4 lg:py-[48px] flex-col lg:flex-row landing-hero-bg-image">
       <div className="md:mr-2">
@@ -18,9 +29,16 @@ const HeroHome = () => {
           General Public can undertake an online search in the Central Register
           on payment of prescribed fee.
         </div>
-        <div className="buttons-container flex flex-wrap gap-[16px] justify-center lg:justify-start mt-[24px]">
+        <div
+          className="buttons-container flex flex-wrap gap-[16px] justify-center lg:justify-start mt-[24px]"
+          // onClick={onNavigateToSchemeSearch}
+        >
           {buttons.map((menuItem, index) => (
-            <HeroButton key={index} text={menuItem.text} />
+            <HeroButton
+              key={index}
+              text={menuItem.text}
+              onClick={onNavigateToSchemeSearch}
+            />
           ))}
         </div>
       </div>

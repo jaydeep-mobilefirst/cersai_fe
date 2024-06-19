@@ -10,6 +10,7 @@ interface ButtonProps {
   backgroundColor?: string; // Optional background color
   onClick?: () => void;
   loader?: boolean;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -22,6 +23,7 @@ const Button: React.FC<ButtonProps> = ({
   textColor = "#FFFFFF", // Default text color
   backgroundColor = "#385723", // Default background color
   onClick,
+  disabled,
 }) => {
   const buttonStyle = {
     width,
@@ -37,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       className="rounded-xl p-3 text-sm font-semibold text-gilroy-medium"
       style={buttonStyle}
-      disabled={loader}
+      disabled={disabled}
     >
       {loader ? <LoaderSpin /> : label}
     </button>

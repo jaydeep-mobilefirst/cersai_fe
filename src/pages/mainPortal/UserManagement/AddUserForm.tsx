@@ -16,21 +16,23 @@ import Swal from "sweetalert2";
 import uamStore from "../../../store/uamStore";
 
 const AddUserForm = () => {
-  const editUserData = sessionStorage.getItem('editUserData');
-  console.log({editUserData});
-  
-  const userCreationURL = sessionStorage.getItem('userCreationURL');
-  const {handleRefreshUAM} = uamStore((state => state))
+  const editUserData = sessionStorage.getItem("editUserData");
+  console.log({ editUserData });
+
+  const userCreationURL = sessionStorage.getItem("userCreationURL");
+  const { handleRefreshUAM } = uamStore((state) => state);
   const [roleName, setRoleName] = useState("");
-  const [selectedRole, setRoleSelected] = useState('');
+  const [selectedRole, setRoleSelected] = useState("");
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const screenWidth = useScreenWidth();
   const navigate = useNavigate();
   const { collapsed } = useSidebarStore();
 
-
   // Array of roles
-  const roles = [{ label: "Select Role", value: "", id: "" }, ...JSON.parse(sessionStorage.getItem('customRoles') ?? '[]')];
+  const roles = [
+    { label: "Select Role", value: "", id: "" },
+    ...JSON.parse(sessionStorage.getItem("customRoles") ?? "[]"),
+  ];
   console.log({ roles });
 
   const handleButtonClick = () => {
@@ -45,7 +47,7 @@ const AddUserForm = () => {
     reset,
     clearErrors,
     setValue,
-    setError
+    setError,
   } = useForm({
     resolver: yupResolver(UserManagementValidation),
   });
@@ -53,92 +55,102 @@ const AddUserForm = () => {
   const onSubmit = (data: any) => {
     console.log(data, "data");
     let finalResult = {
-      entityUniqueId: sessionStorage.getItem('entityUniqueId'),
-      entityType: sessionStorage.getItem('entityType'),
+      entityUniqueId: sessionStorage.getItem("entityUniqueId"),
+      entityType: sessionStorage.getItem("entityType"),
       first_name: data?.firstName,
       middle_name: data?.middleName,
       last_name: data?.lastName,
       role_id: parseInt(data?.role),
       email_id: data?.email,
-      mobile: data?.mobileNumber
-    }
+      mobile: data?.mobileNumber,
+    };
 
-    axios.post(`${bffUrl}/user/add`, finalResult)
-    .then((res : any) => {
-      let data = res?.data;
-      if (data?.success) {
-        Swal.fire({
-          icon : "success",
-          title : data?.message
-        })
-        handleRefreshUAM();
-        navigate(userCreationURL ?? `/${sessionStorage.getItem('entityType')?.toLocaleLowerCase()}`)
-      }
-    })
-    .catch((err : any) => {
-      console.log({err});
-      let data = err?.response?.data;
-      Swal.fire({
-        icon : "error",
-        text : data?.message,
-        title: "Unable to create user!"
+    axios
+      .post(`${bffUrl}/user/add`, finalResult)
+      .then((res: any) => {
+        let data = res?.data;
+        if (data?.success) {
+          Swal.fire({
+            icon: "success",
+            title: data?.message,
+          });
+          handleRefreshUAM();
+          navigate(
+            userCreationURL ??
+              `/${sessionStorage.getItem("entityType")?.toLocaleLowerCase()}`
+          );
+        }
       })
-      
-    })
+      .catch((err: any) => {
+        console.log({ err });
+        let data = err?.response?.data;
+        Swal.fire({
+          icon: "error",
+          text: data?.message,
+          title: "Unable to create user!",
+        });
+      });
     // setShowPopup(true);
 
     // reset();
   };
 
   const handleBackButtonClick = () => {
-    navigate(userCreationURL ?? `/${sessionStorage.getItem('entityType')?.toLocaleLowerCase()}`);
+    navigate(
+      userCreationURL ??
+        `/${sessionStorage.getItem("entityType")?.toLocaleLowerCase()}`
+    );
   };
 
   const handleSelectRole = (value: any) => {
-    setRoleSelected(value?.label)
-    if (value?.value !== '') {
-      setValue('role', value?.id.toString())
-      clearErrors('role')
+    setRoleSelected(value?.label);
+    if (value?.value !== "") {
+      setValue("role", value?.id.toString());
+      clearErrors("role");
+    } else {
+      setValue("role", "");
+      setError("role", { message: "Role id required" });
     }
-    else {
-      setValue('role', '')
-      setError('role', { message: 'Role id required' })
-    }
-  }
+  };
 
   useEffect(() => {
-    const operation = sessionStorage.getItem('operation');
-    if (operation === 'edit' && editUserData !== '' && editUserData !== undefined && editUserData !== null) {
-      const data  = JSON.parse(editUserData);
-      
-      setValue('email', data?.emailId)
-      setValue('firstName', data?.firstName)
-      setValue('lastName', data?.lastName)
-      setValue('middleName', data?.middleName)
-      setValue('mobileNumber', data?.mobile)
-      setRoleSelected(data?.role)
-      setValue('role', data?.roleId);
-    }
-    else{
-      setRoleSelected('')
+    const operation = sessionStorage.getItem("operation");
+    if (
+      operation === "edit" &&
+      editUserData !== "" &&
+      editUserData !== undefined &&
+      editUserData !== null
+    ) {
+      const data = JSON.parse(editUserData);
+
+      setValue("email", data?.emailId);
+      setValue("firstName", data?.firstName);
+      setValue("lastName", data?.lastName);
+      setValue("middleName", data?.middleName);
+      setValue("mobileNumber", data?.mobile);
+      setRoleSelected(data?.role);
+      setValue("role", data?.roleId);
+    } else {
+      setRoleSelected("");
       reset();
     }
-  }, [editUserData])
+  }, [editUserData]);
   return (
-    <div className="relative xl:ml-[40px]">
-      <div className="pr-10">
+    <div className="mt-2 ">
+      <div className="-ml-9 -mr-9">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex items-center justify-between flex-col h-full lg:h-[75vh] "
         >
           <div
-            style={{
-              // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-              width: `${screenWidth > 1024
-                  ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
-                  : "100vw"
-                }`,
-            }}
+            className="w-full"
+            // style={{
+            //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+            //   width: `${screenWidth > 1024
+            //       ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
+            //       : "100vw"
+            //     }`,
+            // }}
           >
             <div className="flex flex-col p-6 w-full ">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -269,8 +281,9 @@ const AddUserForm = () => {
             <div
               className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center "
               style={{
-                width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
-                  }`,
+                width: `${
+                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                }`,
               }}
             >
               <div className="flex flex-row items-center space-x-2">

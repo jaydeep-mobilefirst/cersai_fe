@@ -5,6 +5,9 @@ import myTaskWhiteIcon from "../../assets/images/myTaskWhiteIcon.svg";
 import entityMasterIcon from "../../assets/images/entitymaster.svg";
 import entityMasterWhiteIcon from "../../assets/images/entitymasterwhite.svg";
 
+import TaskIcon from "../../assets/images/task.svg";
+import TaskIconWhite from "../../assets/images/task-2.svg";
+
 export const portalSideBarList = [
   {
     title: "Dashboard",
@@ -38,9 +41,16 @@ export const portalSideBarListRegulator = [
     selectlogo: dashboardWhiteLogo,
   },
   {
-    title: "My Task",
-    url: "/rg/my-task",
-    rurl: "/rg/my-task",
+    title: "My Tasks",
+    url: "/rg/mytask",
+    rurl: "/rg/mytask",
+    logo: TaskIcon,
+    selectlogo: TaskIconWhite,
+  },
+  {
+    title: "Scheme Management",
+    url: "/rg/deposit-taker",
+    rurl: "/rg/deposit-taker",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
@@ -61,9 +71,9 @@ export const portalSideBarListCompetent = [
     selectlogo: dashboardWhiteLogo,
   },
   {
-    title: "My Task",
-    url: "/ca/my-task",
-    rurl: "/ca/my-task",
+    title: "Scheme Management",
+    url: "/ca/deposit-taker",
+    rurl: "/ca/deposit-taker",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
@@ -84,9 +94,9 @@ export const portalSideBarListDesignated = [
     selectlogo: dashboardWhiteLogo,
   },
   {
-    title: "My Task",
-    url: "/dc/my-task",
-    rurl: "/dc/my-task",
+    title: "Scheme Management",
+    url: "/dc/deposit-taker",
+    rurl: "/dc/deposit-taker",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },

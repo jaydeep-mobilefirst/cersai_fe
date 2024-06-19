@@ -48,7 +48,7 @@ const Header = () => {
           {Title && (
             <div className="h-8 px-2 rounded-[5px] border border-[#1C468E] flex items-center justify-center">
               <div className="text-[#1C468E] text-base font-normal text-gilroy-medium leading-tight">
-                {Title}
+                {/* {Title} */}Designated Court
               </div>
             </div>
           )}

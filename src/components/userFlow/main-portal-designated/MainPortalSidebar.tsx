@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { portalSideBarList } from "../../../utils/hardText/portalText";
+import { portalSideBarListDesignated } from "../../../utils/hardText/portalText";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ArrowClose from "../../../assets/images/new_images/sidebarCollapse.png";
@@ -87,9 +87,8 @@ const MainPortalSidebar = ({ layout }: Props) => {
         data-drawer-toggle="default-sidebar"
         aria-controls="default-sidebar"
         type="button"
-        // onClick={toggleSidebar}
         onClick={onToggleSideBar}
-        className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
         <span className="sr-only">Open sidebar</span>
         <img src={HamburgerMenu} alt="hamburger menu" className="w-6 h-6" />
@@ -98,7 +97,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
       <aside
         id="default-sidebar"
         className={`fixed top-0 left-0 z-100  transition-transform ${
-          mSidebarOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
+          mSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         } ${collapse ? "w-[100px]" : "w-[322px]"} h-screen`}
         aria-label="Sidebar"
       >
@@ -116,11 +115,10 @@ const MainPortalSidebar = ({ layout }: Props) => {
               <img src={Logo} alt="logo" className="max-h-[52px]" />
 
               <button
-                // onClick={toggleSidebar}
                 onClick={onToggleSideBar}
                 className={`absolute ${
                   collapse ? "top-[calc(100% + 1rem)] m-1 left-5" : "top-7"
-                } right-0 sm:hidden`}
+                } right-0 lg:hidden`}
               >
                 <img
                   src={CrossIcon}
@@ -129,7 +127,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
                 />
               </button>
             </li>
-            {portalSideBarList?.map((data, idx) => {
+            {portalSideBarListDesignated?.map((data, idx) => {
               return (
                 <li
                   className={`${collapse ? "px-2 py-1" : "px-4 py-2"}`}
@@ -170,18 +168,16 @@ const MainPortalSidebar = ({ layout }: Props) => {
           </ul>
         </div>
       </aside>
-      <div className={`${collapse ? "sm:ml-[75px]" : "sm:ml-[322px]"}`}>
+      <div className={`${collapse ? "lg:ml-[75px]" : "lg:ml-[322px]"}`}>
         <div>
           <Header />
           <div
-            className={`absolute hidden sm:block md:block lg:block top-[65px]  z-[100] ${
+            className={`absolute hidden lg:block top-[65px] z-[100] ${
               collapse ? "-ml-4" : "-ml-5"
             }`}
-            // onClick={toggleCollapse}
             onClick={onClickCollapse}
           >
             <img
-              // src={collapse ? ArrowRight : ArrowClose}
               src={ArrowClose}
               alt="collapsed"
               className={`bg-[#E7F0FF] rounded-full cursor-pointer ${

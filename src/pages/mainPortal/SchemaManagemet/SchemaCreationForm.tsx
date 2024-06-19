@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 import { useScreenWidth } from "../../../utils/screenSize";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import SelectButton from "../../../components/userFlow/form/SelectButton";
@@ -35,10 +34,11 @@ const SchemaCreationForm = () => {
     setShowPopup(false);
   };
   const SuccessPopup = () => {
-    setShowPopup(false);
-    navigate("/dt/mytask/schema");
+    setShowPopup(true);
   };
-
+  const handleBackButtonClick = () => {
+    navigate("/dt/mytask");
+  };
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
     { value: "LLP", label: "LLP" },
@@ -181,20 +181,21 @@ const SchemaCreationForm = () => {
       <div className="mt-6">
         <TaskTabs />
       </div>
-      <div>
+      <div className="-ml-7">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
         >
           <div
-            style={{
-              // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-              width: `${
-                screenWidth > 1024
-                  ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
-                  : "100vw"
-              }`,
-            }}
+            className="w-full"
+            // style={{
+            //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+            //   width: `${
+            //     screenWidth > 1024
+            //       ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
+            //       : "100vw"
+            //   }`,
+            // }}
           >
             <div className="flex flex-col p-6 w-full ">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -237,13 +238,9 @@ const SchemaCreationForm = () => {
                     className="block text-gray-700 text-sm font-bold mb-2"
                   >
                     Scheme Start Date
-                    <span className="text-red-500">*</span>
                   </label>
 
                   <DatePicker onChange={handleDateChange} />
-                  <span className="text-red-500">
-                    {errors.startSchemaDate?.message}
-                  </span>
                 </div>
                 <div className="-mt-2">
                   <label
@@ -251,13 +248,9 @@ const SchemaCreationForm = () => {
                     className="block text-gray-700 text-sm font-bold mb-2"
                   >
                     Last day to enter scheme
-                    <span className="text-red-500">*</span>
                   </label>
 
                   <DatePicker onChange={handleDateChangeEnd} />
-                  <span className="text-red-500">
-                    {errors.endSchemaDate?.message}
-                  </span>
                 </div>
 
                 <div>
@@ -335,7 +328,7 @@ const SchemaCreationForm = () => {
                     htmlFor="district"
                     className="text-base font-normal text-gilroy-medium"
                   >
-                    Scheme Act <span className="text-red-500">*</span>
+                    Scheme Act
                   </label>
                   <SelectButton
                     setOption={handleSetOption3}
@@ -398,10 +391,14 @@ const SchemaCreationForm = () => {
               }}
             >
               <div className="flex items-center space-x-6">
-                <p className="text-[#1c468e] text-gilroy-medium cursor-pointer">
+                <p
+                  onClick={handleBackButtonClick}
+                  className="text-[#1c468e] text-gilroy-medium cursor-pointer"
+                >
                   Discord
                 </p>
                 <button
+                  onClick={SuccessPopup}
                   type="submit"
                   className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
                 >

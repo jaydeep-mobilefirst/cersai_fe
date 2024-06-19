@@ -61,27 +61,27 @@ const SchemeDetails = () => {
 
   const columns = [
     columnHelper.accessor("sno", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Sr. No.</span>,
     }),
     columnHelper.accessor("branchName", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Branch Name</span>,
     }),
     columnHelper.accessor("addressLine1", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Address Line 1</span>,
     }),
     columnHelper.accessor("addressLine2", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Address Line 2</span>,
     }),
     columnHelper.accessor("state", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>State</span>,
     }),
     columnHelper.accessor("district", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>District</span>,
     }),
   ];
@@ -195,21 +195,22 @@ const SchemeDetails = () => {
   };
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 -ml-9">
       <div>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
         >
           <div
-            style={{
-              // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-              width: `${
-                screenWidth > 1024
-                  ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
-                  : "100vw"
-              }`,
-            }}
+            className="w-full "
+            // style={{
+            //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+            //   width: `${
+            //     screenWidth > 1024
+            //       ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
+            //       : "100vw"
+            //   }`,
+            // }}
           >
             <div className="flex flex-col p-6 w-full ">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -221,6 +222,7 @@ const SchemeDetails = () => {
                     Scheme Name
                   </label>
                   <TextArea
+                    backgroundColor="#F2F2F2"
                     placeholder="ABCD Scheme"
                     {...register("addressLine1")}
                     // width="315px"
@@ -242,6 +244,7 @@ const SchemeDetails = () => {
                     Scheme Description
                   </label>
                   <TextArea
+                    backgroundColor="#F2F2F2"
                     placeholder="Scheme  Description"
                     {...register("addressLine1")}
                     // width="315px"
@@ -255,33 +258,31 @@ const SchemeDetails = () => {
                     0 / 50
                   </span>
                 </div>
-                <div className="mt-[2px]">
+                <div className="mt-1">
                   <label
                     htmlFor="registrationDate"
-                    className="block text-gray-700 text-sm font-bold mb-2"
+                    className="text-base font-normal text-gilroy-medium"
                   >
                     Scheme Start Date
-                    <span className="text-red-500">*</span>
                   </label>
 
-                  <DatePicker onChange={handleDateChange} />
-                  <span className="text-red-500">
-                    {/* {errors.registrationDate?.message} */}
-                  </span>
+                  <DatePicker
+                    backgroundColor="#F2F2F2"
+                    onChange={handleDateChange}
+                  />
                 </div>
-                <div className="-mt-2">
+                <div className="">
                   <label
                     htmlFor="registrationDate"
-                    className="block text-gray-700 text-sm font-bold mb-2"
+                    className="text-base font-normal text-gilroy-medium"
                   >
                     Last day to enter scheme
-                    <span className="text-red-500">*</span>
                   </label>
 
-                  <DatePicker onChange={handleDateChange} />
-                  <span className="text-red-500">
-                    {/* {errors.registrationDate?.message} */}
-                  </span>
+                  <DatePicker
+                    backgroundColor="#F2F2F2"
+                    onChange={handleDateChange}
+                  />
                 </div>
                 {/* <div>
                   <label
@@ -304,8 +305,8 @@ const SchemeDetails = () => {
                     Minimum Investment amount
                   </label>
                   <InputFields
+                    backgroundColor="#F2F2F2"
                     placeholder="Type here"
-                    {...register("gstNumber")}
                   />
                   {/* {errors?.gstNumber && (
                     <p className="text-red-500">{errors?.gstNumber?.message}</p>
@@ -319,76 +320,56 @@ const SchemeDetails = () => {
                     Maximum Investment amount
                   </label>
                   <InputFields
+                    backgroundColor="#F2F2F2"
                     placeholder="Type here"
-                    {...register("gstNumber")}
                   />
                   {/* {errors?.gstNumber && (
                     <p className="text-red-500">{errors?.gstNumber?.message}</p>
                   )} */}
                 </div>
-                <div>
-                  <label
-                    htmlFor="pinCode"
-                    className="text-base font-normal text-gilroy-medium"
-                  >
-                    Regulator Name
-                  </label>
-                  <SelectButton
-                    setOption={handleSetOption4}
-                    options={options4}
-                    selectedOption={selectedOption4}
-                    placeholder="Select"
-                    searchInputOnchange={handleSearchInputChange4}
-                    searchInputValue={searchInputValue4}
-                    showSearchInput={true}
-                  />
-                </div>
 
-                <div>
-                  <label
-                    htmlFor="state"
-                    className="text-base font-normal text-gilroy-medium"
-                  >
-                    Branch
-                  </label>
-                  <SelectButton
-                    setOption={handleSetOption2}
-                    options={options2}
-                    selectedOption={selectedOption2}
-                    placeholder="Select"
-                    searchInputOnchange={handleSearchInputChange2}
-                    searchInputValue={searchInputValue2}
-                    showSearchInput={true}
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="district"
-                    className="text-base font-normal text-gilroy-medium"
-                  >
-                    Scheme Act <span className="text-red-500">*</span>
-                  </label>
-                  <SelectButton
-                    setOption={handleSetOption3}
-                    options={options3}
-                    selectedOption={selectedOption3}
-                    placeholder="Select"
-                    searchInputOnchange={handleSearchInputChange3}
-                    searchInputValue={searchInputValue3}
-                    showSearchInput={true}
-                  />
-                </div>
                 <div>
                   <label
                     htmlFor="gstNumber"
                     className="text-base font-normal text-gilroy-medium"
                   >
-                    Number of investers
+                    Regulator Name
                   </label>
                   <InputFields
+                    backgroundColor="#F2F2F2"
                     placeholder="Type here"
-                    {...register("gstNumber")}
+                  />
+                  {/* {errors?.gstNumber && (
+                    <p className="text-red-500">{errors?.gstNumber?.message}</p>
+                  )} */}
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="gstNumber"
+                    className="text-base font-normal text-gilroy-medium"
+                  >
+                    Number of Investers
+                  </label>
+                  <InputFields
+                    backgroundColor="#F2F2F2"
+                    placeholder="Type here"
+                  />
+                  {/* {errors?.gstNumber && (
+                    <p className="text-red-500">{errors?.gstNumber?.message}</p>
+                  )} */}
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="gstNumber"
+                    className="text-base font-normal text-gilroy-medium"
+                  >
+                    Scheme Act
+                  </label>
+                  <InputFields
+                    backgroundColor="#F2F2F2"
+                    placeholder="Type here"
                   />
                   {/* {errors?.gstNumber && (
                     <p className="text-red-500">{errors?.gstNumber?.message}</p>
