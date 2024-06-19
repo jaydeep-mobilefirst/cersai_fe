@@ -209,8 +209,10 @@ const DepositSchemaCreationForm = () => {
                     placeholder="ABCD Scheme"
                     {...register("SchemeName")}
                   />
-                  {errors.SchemeName && (
-                    <p className="text-red-500">{errors.SchemeName.message}</p>
+                  {errors?.SchemeName && (
+                    <p className="text-red-500">
+                      {errors?.SchemeName?.message}
+                    </p>
                   )}
                 </div>
 
@@ -225,9 +227,9 @@ const DepositSchemaCreationForm = () => {
                     placeholder="Scheme Description"
                     {...register("schemeDescription")}
                   />
-                  {errors.schemeDescription && (
+                  {errors?.schemeDescription && (
                     <p className="text-red-500">
-                      {errors.schemeDescription.message}
+                      {errors?.schemeDescription?.message}
                     </p>
                   )}
                 </div>
@@ -345,7 +347,11 @@ const DepositSchemaCreationForm = () => {
                     searchInputOnchange={handleSearchInputChange3}
                     searchInputValue={searchInputValue3}
                     showSearchInput={true}
+                    {...register("SchemeAct")}
                   />
+                  {errors?.SchemeAct && (
+                    <p className="text-red-500">{errors?.SchemeAct?.message}</p>
+                  )}
                 </div>
                 <div>
                   <label

@@ -156,12 +156,12 @@ const SchemeDetails = () => {
                     searchInputValue={searchInputValue4}
                     showSearchInput={true}
                     {...register("EntityName")}
-                    {...(errors?.EntityName && (
-                      <p className="text-red-500">
-                        {errors?.EntityName?.message}
-                      </p>
-                    ))}
                   />
+                  {errors?.EntityName && (
+                    <p className="text-red-500">
+                      {errors?.EntityName?.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label

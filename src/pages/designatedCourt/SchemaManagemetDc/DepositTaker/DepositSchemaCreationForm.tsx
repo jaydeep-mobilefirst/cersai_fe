@@ -345,7 +345,11 @@ const DepositSchemaCreationForm = () => {
                     searchInputOnchange={handleSearchInputChange3}
                     searchInputValue={searchInputValue3}
                     showSearchInput={true}
+                    {...register("SchemeAct")}
                   />
+                  {errors?.SchemeAct && (
+                    <p className="text-red-500">{errors?.SchemeAct?.message}</p>
+                  )}
                 </div>
                 <div>
                   <label

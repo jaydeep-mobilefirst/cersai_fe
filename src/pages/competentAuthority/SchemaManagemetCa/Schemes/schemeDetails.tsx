@@ -330,10 +330,10 @@ const SchemeDetails = () => {
                   searchInputValue={searchInputValue1}
                   showSearchInput={true}
                   {...register("Status")}
-                  {...(errors?.Status && (
-                    <p className="text-red-500">{errors?.Status?.message}</p>
-                  ))}
                 />
+                {errors?.Status && (
+                  <p className="text-red-500">{errors?.Status?.message}</p>
+                )}
               </div>
               <div>
                 <label

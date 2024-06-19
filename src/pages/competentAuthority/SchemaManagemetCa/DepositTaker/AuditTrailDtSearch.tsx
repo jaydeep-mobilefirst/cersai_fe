@@ -45,6 +45,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       header: "Verification Details",
       content: <VerificationDetails />,
     },
+
     {
       header: "Entity Details",
       content: <EntityDetails />,

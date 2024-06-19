@@ -51,10 +51,10 @@ const VerificationDetails = () => {
               <InputFields
                 placeholder="Type here"
                 {...register("CompanyName")}
-                {...(errors?.CompanyName && (
-                  <p className="text-red-500">{errors?.CompanyName?.message}</p>
-                ))}
               />
+              {errors?.CompanyName && (
+                <p className="text-red-500">{errors?.CompanyName?.message}</p>
+              )}
             </div>
             <div className="w-full md:w-1/2 lg:w-[317px]">
               <label
@@ -63,13 +63,10 @@ const VerificationDetails = () => {
               >
                 Pan Number <span className="text-red-500">*</span>
               </label>
-              <InputFields
-                {...register("PAN")}
-                {...(errors?.PAN && (
-                  <p className="text-red-500">{errors?.PAN?.message}</p>
-                ))}
-                placeholder="Type here"
-              />
+              <InputFields {...register("PAN")} placeholder="Type here" />
+              {errors?.PAN && (
+                <p className="text-red-500">{errors?.PAN?.message}</p>
+              )}
             </div>
           </div>
         </div>

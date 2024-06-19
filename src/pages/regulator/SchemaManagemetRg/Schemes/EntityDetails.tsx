@@ -122,12 +122,12 @@ const EntityDetails = () => {
                   searchInputValue={searchInputValue4}
                   showSearchInput={true}
                   {...register("TypeOfEntity")}
-                  {...(errors?.TypeOfEntity && (
-                    <p className="text-red-500">
-                      {errors?.TypeOfEntity?.message}
-                    </p>
-                  ))}
                 />
+                {errors?.TypeOfEntity && (
+                  <p className="text-red-500">
+                    {errors?.TypeOfEntity?.message}
+                  </p>
+                )}
               </div>
 
               <div>
