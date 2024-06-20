@@ -118,39 +118,6 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     setSuccessUploadPopupOpen(false);
   };
   const screenWidth = useScreenWidth();
-  // const sectionId = allFormData?.entitySections?.find(
-  //   (s: any) => s?.sectionName === "Verification"
-  // );
-  // const formFields = allFormData?.formFields?.form_fields?.filter(
-  //   (f: any) => f?.sectionId === sectionId?.id
-  // );
-  // const accordionItems: AccordionItem[] = [
-  //   {
-  //     header: "Verification Details",
-  //     content: (
-  //       <DynamicFields
-  //         allFormData={allFormData}
-  //         formFields={formFields}
-  //         onChange={onChange}
-  //         documentFields={documentData}
-  //         onFileChange={onFileChange}
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     header: "Entity Details",
-  //     content: <EntityDetails />,
-  //   },
-  //   {
-  //     header: "Nodal Details",
-  //     content: <NodalDetails />,
-  //   },
-  //   {
-  //     header: "Regulator Details",
-  //     content: <RegulatorDetails />,
-  //   },
-  // ];
-  console.log({ allFormData });
 
   useEffect(() => {
     console.log({ allFormData });
