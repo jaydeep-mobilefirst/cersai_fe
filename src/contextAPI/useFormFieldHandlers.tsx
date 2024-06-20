@@ -60,9 +60,14 @@ const FormHandlerProviders = ({ children }: Props) => {
     fieldId: number,
     dscFileNAme: string = ""
   ) => {
+    console.log({ value, fieldId, allFormData });
     let modifiedFormFields = allFormData?.formFields?.form_fields?.map(
       (o: any) => {
+        // console.log(`Field ID: ${fieldId}, Type: ${typeof fieldId}`);
+        // console.log(`Object ID: ${o.id}, Type: ${typeof o.id}`);
+
         if (o?.id === fieldId) {
+          console.log({ value, fieldId, o });
           return {
             ...o,
             userInput: value,
@@ -74,6 +79,7 @@ const FormHandlerProviders = ({ children }: Props) => {
         }
       }
     );
+    console.log(modifiedFormFields, "modifiedFormField");
     let obj = {
       ...allFormData,
       formFields: { form_fields: modifiedFormFields },
@@ -191,6 +197,7 @@ const FormHandlerProviders = ({ children }: Props) => {
     ];
     if (inputFieldTypes.includes(fieldType) && event) {
       const { value } = event?.target;
+      console.log({ value, fieldData });
       let inputValue: string = value;
 
       const regex = /\bpan\b/i;
