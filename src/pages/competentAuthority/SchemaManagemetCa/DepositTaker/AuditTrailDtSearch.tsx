@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Accordion from "../../../../components/customAccordin/CustomAccordin";
 import VerificationDetails from "./VerificationDetails";
 import EntityDetails from "./EntityDetails";
@@ -11,6 +11,13 @@ import UploadPopUp from "./UploadPopUp";
 import { useScreenWidth } from "../../../../utils/screenSize";
 import SuccessUploadPopUp from "./SuccessUploadPopUp";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import DynamicFields from "../../../../components/userFlow/depositeTaker/DynamicFields";
+import { FormHandlerContext } from "../../../../contextAPI/useFormFieldHandlers";
+import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker-registration/registrationStore";
+import { bffUrl } from "../../../../utils/api";
+import LoaderSpin from "../../../../components/LoaderSpin";
+import SuccessPopup from "../../../../components/userFlow/depositeTaker/SuccessPopUp";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -18,13 +25,76 @@ interface AccordionItem {
 }
 
 const DepositeTakerSearchDetailsSM: React.FC = () => {
+  // const [uploadPopupOpen, setUploadPopupOpen] = useState(false);
+  // const [successUploadPopupOpen, setSuccessUploadPopupOpen] = useState(false);
+  // const navigate = useNavigate();
+
+  // const handleCancelClick = () => {
+  //   navigate("/ca/deposit-taker");
+  // };
+  // const handleUploadClick = () => {
+  //   setUploadPopupOpen(true);
+  // };
+
+  // const handleClosePopup = () => {
+  //   setUploadPopupOpen(false);
+  // };
+  // const handleSuccessUploadClick = () => {
+  //   setSuccessUploadPopupOpen(true);
+  // };
+
+  // const handleSuccessClosePopup = () => {
+  //   setSuccessUploadPopupOpen(false);
+  // };
+  // const screenWidth = useScreenWidth();
+  // const accordionItems: AccordionItem[] = [
+  //   {
+  //     header: "Verification Details",
+  //     content: <VerificationDetails />,
+  //   },
+
+  //   {
+  //     header: "Entity Details",
+  //     content: <EntityDetails />,
+  //   },
+  //   {
+  //     header: "Nodal Details",
+  //     content: <NodalDetails />,
+  //   },
+  //   {
+  //     header: "Regulator Details",
+  //     content: <RegulatorDetails />,
+  //   },
+  // ];
+
+  // const handleCancelClick = () => {
+  //   navigate("/ca/deposit-taker");
+  // };
+  const navigate = useNavigate();
   const [uploadPopupOpen, setUploadPopupOpen] = useState(false);
   const [successUploadPopupOpen, setSuccessUploadPopupOpen] = useState(false);
-  const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
+  const [panSuccessModal, setPanSuccessModal] = useState(false);
+  const [submitModal, setSubmitModal] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [para1, setPara1] = useState("");
+  const [para2, setPara2] = useState("");
+  const screenWidth = useScreenWidth();
+
+  const { onChange, handleValidationChecks, updatePanFormField } =
+    useContext(FormHandlerContext);
+
+  const { setAllFormData, setAllDocumentData, allFormData } =
+    useDepositTakerRegistrationStore((state) => state);
+
+  useEffect(() => {
+    fetchFormFields();
+  }, []);
 
   const handleCancelClick = () => {
     navigate("/ca/deposit-taker");
   };
+
   const handleUploadClick = () => {
     setUploadPopupOpen(true);
   };
@@ -32,6 +102,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   const handleClosePopup = () => {
     setUploadPopupOpen(false);
   };
+
   const handleSuccessUploadClick = () => {
     setSuccessUploadPopupOpen(true);
   };
@@ -39,26 +110,158 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   const handleSuccessClosePopup = () => {
     setSuccessUploadPopupOpen(false);
   };
-  const screenWidth = useScreenWidth();
-  const accordionItems: AccordionItem[] = [
-    {
-      header: "Verification Details",
-      content: <VerificationDetails />,
-    },
 
-    {
-      header: "Entity Details",
-      content: <EntityDetails />,
-    },
-    {
-      header: "Nodal Details",
-      content: <NodalDetails />,
-    },
-    {
-      header: "Regulator Details",
-      content: <RegulatorDetails />,
-    },
-  ];
+  const fetchFormFields = async () => {
+    try {
+      const response = await axios.get(
+        `${bffUrl}/registration/field-data/${1}?status=addToRegistration`
+      );
+      const dropdownOptionsRes = await axios.get(
+        `${bffUrl}/registration/dropdown-components`
+      );
+      if (response?.data?.success) {
+        const dropdownData = dropdownOptionsRes?.data?.data;
+        const modifiedFormFields = response?.data?.data?.formFields
+          ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+          .map((o: any) => ({ ...o, userInput: "", error: "" }));
+        const modifiedFileFields =
+          response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
+            ...o,
+            file: "",
+            error: "",
+            fileName: "",
+          }));
+        setAllFormData({
+          ...response.data.data,
+          formFields: { form_fields: modifiedFormFields },
+          dropdownData,
+        });
+        setAllDocumentData(modifiedFileFields);
+      }
+    } catch (error) {
+      console.error("Error fetching form data:", error);
+    }
+  };
+  const excludedSectionNames = ["Upload Documents"];
+
+  const accordionItems =
+    allFormData?.entitySections
+      ?.filter(
+        (section: any) => !excludedSectionNames.includes(section.sectionName)
+      )
+      .map((section: any) => {
+        const formFields = allFormData?.formFields?.form_fields?.filter(
+          (f: any) => f.sectionId === section.id
+        );
+        const hasError = formFields.some((field: any) => field.error);
+
+        return {
+          header: section?.sectionName,
+          content: (
+            <div key={section.id}>
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+              />
+            </div>
+          ),
+          hasError: hasError,
+        };
+      }) || [];
+
+  const verifyPan = async () => {
+    try {
+      const company = allFormData?.formFields?.form_fields?.find((field: any) =>
+        /Company Name/i.test(field?.label)
+      );
+      const pan = allFormData?.formFields?.form_fields?.find((field: any) =>
+        /PAN Number/i.test(field?.label)
+      );
+      const response = await axios.post(
+        "http://34.149.91.231/cms/pandirectory/api",
+        {
+          name: company?.userInput?.toUpperCase(),
+          pan_no: pan?.userInput,
+        }
+      );
+      const data = response.data;
+      if (data?.status !== "success") {
+        setPara1("Verification Failed");
+        setPara2(data?.message);
+        setSubmitted(false);
+        setPanSuccessModal(true);
+        return false;
+      }
+      updatePanFormField(data, pan);
+      return true;
+    } catch (error) {
+      console.error("Error while verifying PAN:", error);
+      setPara1("Verification Error");
+      setPara2("There was an error verifying the PAN. Please try again later.");
+      setPanSuccessModal(true);
+      return false;
+    }
+  };
+
+  const onSubmit = async (event: any) => {
+    event.preventDefault();
+    setLoader(true);
+    const isFormValid = await handleValidationChecks(
+      allFormData?.formFields?.form_fields
+    );
+    if (!isFormValid) {
+      setLoader(false);
+      console.log("Form validation failed");
+      return;
+    }
+    const panVerified = await verifyPan();
+    if (panVerified) {
+      // Process submission if PAN is verified
+      try {
+        let formData = allFormData.formFields.form_fields.map((field: any) => ({
+          fieldId: field.id,
+          label: field.label,
+          sectionCode: allFormData.entitySections.find(
+            (section: any) => section.id === field.sectionId
+          )?.sectionName,
+          value: field.userInput,
+          key: field.key,
+        }));
+        const response = await axios.post(
+          bffUrl + "/deposit-taker/add-form-fields",
+          { formData }
+        );
+        if (response.data.success) {
+          setPara1(
+            "Your registration request has been submitted successfully."
+          );
+          setPara2(
+            `Your registration acknowledgement ID is ${response.data.data.newDepositTaker.uniqueId}`
+          );
+          setSubmitted(true);
+        } else {
+          throw new Error("Submission failed");
+        }
+      } catch (error) {
+        console.error("Error during form submission:", error);
+        setPara1("Submission Error");
+        setPara2(
+          "There was an error during the submission process. Please try again later."
+        );
+      } finally {
+        setSubmitModal(true);
+        setLoader(false);
+      }
+    } else {
+      console.log("PAN verification failed");
+      setLoader(false);
+    }
+  };
+
+  const handleClosePopupPan = () => {
+    setPanSuccessModal(false);
+  };
 
   return (
     <div className="flex flex-col min-h-screen ">
@@ -113,11 +316,12 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
               </p>
 
               <button
-                onClick={handleSuccessUploadClick}
+                // onClick={handleSuccessUploadClick}
+                onClick={onSubmit}
                 type="submit"
                 className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
               >
-                Submit
+                {loader ? <LoaderSpin /> : " Submit"}
               </button>
             </div>
           </div>
@@ -139,6 +343,27 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
           SuccessPopup={() => {}}
         />
       )}
+      <SuccessPopup
+        closePopup={() => {
+          setPanSuccessModal(false);
+        }}
+        showPopup={() => setPanSuccessModal(true)}
+        toggle={panSuccessModal}
+        para1={para1}
+        para2={para2}
+        success={submitted}
+      />
+      <SuccessPopup
+        closePopup={() => {
+          setSubmitModal(false);
+          navigate("/ca/deposit-taker");
+        }}
+        showPopup={() => setSubmitModal(true)}
+        toggle={submitModal}
+        para1={para1}
+        para2={para2}
+        success={submitted}
+      />
     </div>
   );
 };
