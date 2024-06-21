@@ -97,8 +97,14 @@ export const paths: any = {
 };
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const Navigate = useNavigate();
-  const { entities, setEntities, setAllFormData, setAllDocumentData,sections, setSections } =
-    useDepositTakerRegistrationStore((state) => state);
+  const {
+    entities,
+    setEntities,
+    setAllFormData,
+    setAllDocumentData,
+    sections,
+    setSections,
+  } = useDepositTakerRegistrationStore((state) => state);
   const [data, setData] = useState<EntityType[]>(entities);
   const [loader, setLoader] = useState<boolean>(false);
   useEffect(() => {
@@ -133,7 +139,9 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
 
   const fetchFormFields = () => {
     axios
-      .get(`${bffUrl}/registration/field-data/${selectedRadio?.id}?status=addToRegistration`)
+      .get(
+        `${bffUrl}/registration/field-data/${selectedRadio?.id}?status=addToRegistration`
+      )
       .then(async (response) => {
         if (response?.data?.success) {
           let dropdownData = undefined;
@@ -146,10 +154,8 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
             console.log("Error");
           }
           let modifiedFormFields = response?.data?.data?.formFields
-          ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
-          ?.map(
-            (o: any) => ({ ...o, userInput: "", error: "" })
-          )
+            ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+            ?.map((o: any) => ({ ...o, userInput: "", error: "" }));
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
               ...o,
@@ -157,17 +163,22 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
               error: "",
               fileName: "",
             }));
-            console.log({response});
-            
+          console.log({ response });
+
           let obj = {
             dropdownData,
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
-            currentEntity : selectedRadio
+            currentEntity: selectedRadio,
           };
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
-          setSections(response?.data?.data?.entitySections?.map((e : any) => ({...e, completed : false})))
+          setSections(
+            response?.data?.data?.entitySections?.map((e: any) => ({
+              ...e,
+              completed: false,
+            }))
+          );
         } else {
           throw new Error("Error getting data, Please try later!");
         }
@@ -182,17 +193,16 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
 
   const handleSubmit = (e: any) => {
     console.log();
-    
+
     e.preventDefault();
     fetchFormFields();
     Navigate(selectedRadio?.path);
   };
 
-  console.log({data, selectedRadio});
-  
+  console.log({ data, selectedRadio });
 
   return (
-    <div className="text-gilroy-regular md:p-[40px] m-[2.5%] w-[95%] md:w-[586px] md:h-[370px] p-8  bg-white rounded-3xl">
+    <div className="text-gilroy-regular md:p-[40px] m-[2.5%] w-[95%] md:w-[586px] md:h-[370px] p-8  bg-white rounded-3xl z-200">
       <div className="flex flex-row justify-between items-center md:w-[506px] h-12 mb-[16px]">
         <h1 className="text-black text-2xl font-normal text-gilroy-medium leading-loose">
           {registrationFirstPage[0].heading}

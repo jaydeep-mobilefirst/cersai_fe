@@ -49,8 +49,8 @@ const MainPortalSidebar = ({ layout }: Props) => {
     const cmsPath = location.pathname.split("/")[1];
     setUrl("/" + cmsPath);
     if (
-      location.pathname.startsWith("/ca/profile") &&
-      searchParams.get("current") === "competent"
+      location.pathname.startsWith("/dc/profile") &&
+      searchParams.get("current") === "designated"
     ) {
       setActiveTab(""); // Reset active tab for specific condition
     }
@@ -59,8 +59,8 @@ const MainPortalSidebar = ({ layout }: Props) => {
   const handleTabClick = (url: string, title: string) => {
     setMSidebarOpen(false);
     if (
-      location.pathname.startsWith("/ca/profile") &&
-      searchParams.get("current") === "competent"
+      location.pathname.startsWith("/dc/profile") &&
+      searchParams.get("current") === "designated"
     ) {
       console.log(
         "Sidebar highlight prevention active for /dt/profile with entity"
