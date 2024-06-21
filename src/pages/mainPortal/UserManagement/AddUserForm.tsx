@@ -179,13 +179,13 @@ const AddUserForm = () => {
                   </label>
                   <InputFields
                     placeholder="Type here"
-                    {...register("middleName")}
+                    // {...register("middleName")}
                   />
-                  {errors?.middleName && (
+                  {/* {errors?.middleName && (
                     <p className="text-red-500">
                       {errors?.middleName?.message}
                     </p>
-                  )}
+                  )} */}
                 </div>
 
                 <div>
