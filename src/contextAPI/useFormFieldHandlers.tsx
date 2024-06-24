@@ -332,7 +332,7 @@ const FormHandlerProviders = ({ children }: Props) => {
   ): Promise<boolean> => {
     try {
       const response = await axios?.post(
-        `${backendBudsPortalBFFUrl}/validator/submit`,
+        `${bffUrl}/validator/submit`,
         formFieldsForValidations
       );
       const data = await response?.data?.data;
