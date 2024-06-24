@@ -27,25 +27,23 @@ const RegulatorDetails = (props: Props) => {
   );
   const screenWidth = useScreenWidth();
 
-  console.log(allFormData, "allFormData");
+  // console.log(allFormData, "allFormData in regulator");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
     setLoader(false);
-    
+
     if (noError) {
-      const edit = params.get('edit');
+      const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate('/regulator/court/reviewdetails')
-      }
-      else{
-        Navigate('/regulator/court/uploaddocuments')
+        Navigate("/regulator/court/reviewdetails");
+      } else {
+        Navigate("/regulator/court/uploaddocuments");
       }
     }
   };
-  
 
   return (
     <>

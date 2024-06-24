@@ -7,7 +7,7 @@ import SelectButton from "../../../components/userFlow/form/SelectButton";
 import TextArea from "../../../components/userFlow/form/TextArea";
 import DatePicker from "../../../components/userFlow/form/DatePicker";
 import InputFields from "../../../components/userFlow/common/InputField";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SchemeCreationSuccess from "../../../components/ScehmaManagement/SchemeCrationSucess";
 import { SchemaFormValidation } from "../../../components/ScehmaManagement/SchemaMangementValidation";
 import useSidebarStore from "../../../store/SidebarStore";
@@ -358,19 +358,19 @@ const SchemaCreationForm = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="flex flex-shrink-0 mt-[20px]">
-              <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  placeholder="ischecked"
-                />
-              </div>
-              <div className="leading-[24px]">
-                I declare all the Information provided is correct as per my
-                knowledge.
+              <div className="flex flex-shrink-0 mt-[20px]">
+                <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={handleCheckboxChange}
+                    placeholder="ischecked"
+                  />
+                </div>
+                <div className="leading-[24px]">
+                  I declare all the Information provided is correct as per my
+                  knowledge.
+                </div>
               </div>
             </div>
           </div>
