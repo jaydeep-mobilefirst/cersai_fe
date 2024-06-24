@@ -16,6 +16,71 @@ type Props = {
 };
 
 const MainPortalSidebar = ({ layout }: Props) => {
+  // const {
+  //   mSidebar,
+  //   collapsed,
+  //   url,
+  //   activeTab,
+  //   toggleSidebar,
+  //   toggleCollapse,
+  //   setUrl,
+  //   setActiveTab,
+  // } = useSidebarStore();
+
+  // const [mSidebarOpen, setMSidebarOpen] = useState<boolean>(false);
+  // const location = useLocation();
+
+  // const { pathname } = location;
+  // const navigate = useNavigate();
+  // const [searchParams] = useSearchParams();
+
+  // const collapse = useCollapseStore((state: any) => state.collapse);
+  // const setCollapse = useCollapseStore((state: any) => state.setCollapse);
+
+  // // useEffect(() => {
+  // //   const cmsPath = location.pathname.split("/")[1];
+  // //   setUrl("/" + cmsPath);
+  // // }, [location.pathname]);
+
+  // // const handleTabClick = (url: string, title: string) => {
+  // //   setActiveTab(url);
+  // //   localStorage.setItem("current_tab", title);
+  // // };
+  // useEffect(() => {
+  //   const cmsPath = location.pathname.split("/")[1];
+  //   setUrl("/" + cmsPath);
+  //   if (
+  //     location.pathname.startsWith("/dt/profile") &&
+  //     searchParams.get("current") === "entity"
+  //   ) {
+  //     setActiveTab(""); // Reset active tab for specific condition
+  //   }
+  // }, [location.pathname, searchParams]);
+
+  // const handleTabClick = (url: string, title: string) => {
+  //   setMSidebarOpen(false);
+
+  //   if (
+  //     location.pathname.startsWith("/dt/profile") &&
+  //     searchParams.get("current") === "entity"
+  //   ) {
+  //     console.log(
+  //       "Sidebar highlight prevention active for /dt/profile with entity"
+  //     );
+  //   } else {
+  //     setActiveTab(url);
+  //     localStorage.setItem("current_tab", title);
+  //     navigate(url);
+  //   }
+  // };
+
+  // const onClickCollapse = () => {
+  //   setCollapse(!collapse);
+  // };
+
+  // const onToggleSideBar = () => {
+  //   setMSidebarOpen(!mSidebarOpen);
+  // };
   const {
     mSidebar,
     collapsed,
@@ -29,7 +94,6 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
   const [mSidebarOpen, setMSidebarOpen] = useState<boolean>(false);
   const location = useLocation();
-
   const { pathname } = location;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -37,18 +101,19 @@ const MainPortalSidebar = ({ layout }: Props) => {
   const collapse = useCollapseStore((state: any) => state.collapse);
   const setCollapse = useCollapseStore((state: any) => state.setCollapse);
 
-  // useEffect(() => {
-  //   const cmsPath = location.pathname.split("/")[1];
-  //   setUrl("/" + cmsPath);
-  // }, [location.pathname]);
-
-  // const handleTabClick = (url: string, title: string) => {
-  //   setActiveTab(url);
-  //   localStorage.setItem("current_tab", title);
-  // };
   useEffect(() => {
     const cmsPath = location.pathname.split("/")[1];
     setUrl("/" + cmsPath);
+
+    // Set active tab based on the pathname
+    const activePath = portalSideBarList.find((item) =>
+      pathname.includes(item.url)
+    );
+    if (activePath) {
+      setActiveTab(activePath.url);
+    }
+
+    // Specific logic for entity tabs
     if (
       location.pathname.startsWith("/dt/profile") &&
       searchParams.get("current") === "entity"
