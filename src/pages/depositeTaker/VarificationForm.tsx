@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
@@ -36,7 +36,7 @@ const VerificationForm = (props: Props) => {
         let company = formFields?.find((field : any, i : number) => /Company Name/i.test(field?.label));
         let pan = formFields?.find((field : any, i : number) =>  /PAN Number/i.test(field?.label));
         
-        let response = await axios.post("http://34.149.91.231/cms/pandirectory/api", {
+        let response = await axios.post("http://107.178.253.95/cms/pandirectory/api", {
           name:company?.userInput?.toUpperCase(),
           pan_no: pan?.userInput
         })
@@ -53,7 +53,15 @@ const VerificationForm = (props: Props) => {
         return panUpdate;
         
       } catch (error) {
-        alert("Error while verifying pan, Please try later!")
+        if (axios.isAxiosError(error)) {
+          Swal.fire({
+            text : error.response?.data?.message,
+            title : "Error",
+            icon : "error"
+          })
+          return false
+
+        }
         return false
       }
 
