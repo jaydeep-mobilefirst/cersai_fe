@@ -1,8 +1,6 @@
 import React, { createContext } from "react";
 import { useDepositTakerRegistrationStore } from "../zust/deposit-taker-registration/registrationStore";
 import {
-  backendBaseUrl,
-  backendBudsPortalBFFUrl,
   bffUrl,
   pincodeValidationUrl,
 } from "../utils/api";

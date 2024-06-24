@@ -9,7 +9,7 @@ import ProfileUploadDocuments from "./Edit-Profile-Regulator/ProfileUploadDocume
 
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import axios from "axios";
-import { backendBaseUrl, bffUrl } from "../../utils/api";
+import { bffUrl } from "../../utils/api";
 import DashboardProfileSidebarRegulator from "../../components/userFlow/mainPortal-Regulator/DashboardProfileSidebar";
 
 import CompetentDetails from "./Edit-profile-competent/CompetentDetails";
