@@ -1,8 +1,6 @@
 import React, { createContext } from "react";
 import { useDepositTakerRegistrationStore } from "../zust/deposit-taker-registration/registrationStore";
 import {
-  backendBaseUrl,
-  backendBudsPortalBFFUrl,
   bffUrl,
   pincodeValidationUrl,
 } from "../utils/api";
@@ -333,7 +331,7 @@ const FormHandlerProviders = ({ children }: Props) => {
   ): Promise<boolean> => {
     try {
       const response = await axios?.post(
-        `${backendBudsPortalBFFUrl}/validator/submit`,
+        `${bffUrl}/validator/submit`,
         formFieldsForValidations
       );
       const data = await response?.data?.data;

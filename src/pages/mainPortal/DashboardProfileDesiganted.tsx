@@ -7,7 +7,7 @@ import ProfileResponsiveTabs from "../../components/userFlow/main-portal-designa
 
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import axios from "axios";
-import { backendBaseUrl, bffUrl } from "../../utils/api";
+import { bffUrl } from "../../utils/api";
 
 import CourtDetails from "./Edit-profile-designatedCourt/CourtDetails";
 import NodalDetails from "./Edit-profile-designatedCourt/NodalDetail";

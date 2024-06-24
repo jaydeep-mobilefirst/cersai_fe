@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { backendBaseUrl, bffUrl } from "../../../utils/api";
+import { bffUrl } from "../../../utils/api";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 
-// import { authBaseUrl } from "../../utils/api";
 type DropdownMenuProps = {
   toggleDropdown: () => void; // This is a function prop
   isOpen: boolean; // This is a boolean state

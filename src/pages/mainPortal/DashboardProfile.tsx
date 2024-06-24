@@ -10,7 +10,7 @@ import ProfileUploadDocuments from "./Edit Profile/ProfileUploadDocuments";
 import ProfileBranches from "./Edit Profile/ProfileBranches";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import axios from "axios";
-import { backendBaseUrl, bffUrl } from "../../utils/api";
+import { bffUrl } from "../../utils/api";
 
 type Props = {};
 

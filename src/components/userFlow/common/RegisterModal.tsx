@@ -74,7 +74,7 @@ import {
 } from "../../../utils/hardText/signuppageText";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { backendBaseUrl, bffUrl } from "../../../utils/api";
+import { bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../LoaderSpin";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 
