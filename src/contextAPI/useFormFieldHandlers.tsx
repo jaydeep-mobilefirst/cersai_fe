@@ -52,13 +52,16 @@ const FormHandlerProviders = ({ children }: Props) => {
     setAllDocumentData,
     sections,
     setSections,
-  } = useDepositTakerRegistrationStore((state) => state);
+    masterEntityId,
+    setMasterEntityId
+  } = useDepositTakerRegistrationStore((state) => state);  
+  console.log({masterEntityId});
+  
   const updateValue = (
     value: string | any[],
     fieldId: number,
     dscFileNAme: string = ""
   ) => {
-    console.log({ value, fieldId, allFormData });
     let modifiedFormFields = allFormData?.formFields?.form_fields?.map(
       (o: any) => {
         if (o?.id === fieldId) {
@@ -110,8 +113,6 @@ const FormHandlerProviders = ({ children }: Props) => {
     fieldType: string,
     entityID?: string
   ): Promise<void> => {
-    console.log({ event, field, fieldType });
-
     switch (fieldType) {
       case "DSC":
         const file = event;
@@ -199,13 +200,68 @@ const FormHandlerProviders = ({ children }: Props) => {
       if (regex.test(fieldData.label)) {
         inputValue = inputValue.toUpperCase();
       }
-
       updateValue(inputValue, fieldData?.id);
     } else if (fieldType === "date_picker") {
       const { value } = event.target;
       updateValue(value, fieldData?.id);
     } else if (fieldType === "select") {
       updateValue(event?.value, fieldData?.id);
+      let sectionName = fieldData?.entityRegSection?.sectionName;
+      console.log({sectionName, fieldData});
+      
+      switch (sectionName) {
+        case 'Regulators Details':
+        case 'Competent Authority Details':
+        case 'Designated Court Details':
+          let fieldName = fieldData?.key
+          switch (fieldName) {
+            case "regulatorName":
+            case "competentAuthorityName":
+            case "designatedCourtname":
+              let data = fieldData?.dropdown_options?.options?.find((d : any) => d?.id === event?.id)              
+              let allFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === fieldData?.sectionId);
+              let updated = allFields?.map((field : any) => {
+                if (/\baddress line 1\b/i.test(field?.label) || /\baddress 1\b/i.test(field?.label)) {
+                  return {...field, userInput : data?.address1, disabled : true}
+                }
+                else if (/\bpin code\b/i.test(field?.label) || /\bpincode\b/i.test(field?.label)) {
+                  return {...field, userInput : data?.pincode, disabled : true}
+                }
+                else if (/\baddress line 2\b/i.test(field?.label) || /\baddress 2\b/i.test(field?.label)) {
+                  return {...field, userInput : data?.address2, disabled : true}
+                }
+                else if (/\bDistrict\b/i.test(field?.label)) {
+                  return {...field, userInput : data?.districtId, disabled : true}
+                }
+                else if (/\bState\b/i.test(field?.label)) {
+                  return {...field, userInput : data?.stateId, disabled : true}
+                }
+                else if ( fieldData?.id === field?.id) {
+                  return {...field, userInput : event?.value, disabled : false}
+                }
+                else{
+                  return field;
+                }
+              })  
+
+              let allFieldsExceptCurrentSections = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId !== fieldData?.sectionId);
+              let obj = {
+                ...allFormData,
+                formFields: { form_fields: [...allFieldsExceptCurrentSections, ...updated] },
+              };              
+              setAllFormData(obj); 
+              setMasterEntityId(data?.masterEntityId);
+              break;
+          
+            default:
+              break;
+          }
+          
+          break;
+      
+        default:
+          break;
+      }      
     } else if (fieldType === "pincode") {
       const { value } = event.target;
       if (value?.length <= 6) {
