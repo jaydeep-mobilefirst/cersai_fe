@@ -30,7 +30,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
-  // console.log({ formFields });
+  console.log({ allFormData, formFields, onChange });
 
   return (
     <>
@@ -41,6 +41,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
             const fieldType = allFormData?.fieldTypes?.find(
               (type: any) => type?.id === field?.typeId
             )?.name;
+
             switch (fieldType) {
               case "text":
               case "number":
