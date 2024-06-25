@@ -44,9 +44,9 @@ const CompetentDetails = (props: Props) => {
           return {
             ...field,
             disabled: [
-              "Nodal Officer FirstName",
-              "Nodal Officer MiddleName",
-              "Nodal Officer LastName",
+              "Nodal Officer First Name",
+              "Nodal Officer Middle Name",
+              "Nodal Officer Last Name",
               "Nodal Officer Mobile Number",
               "Nodal Officer Email",
               "DSC3 Certificate",
