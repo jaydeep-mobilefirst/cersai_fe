@@ -35,7 +35,7 @@ const ReviewDetails = () => {
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData, masterEntityId} = useDepositTakerRegistrationStore((state) => state);
 
   const submit = async (e: any) => {
     e.preventDefault();
@@ -69,7 +69,7 @@ const ReviewDetails = () => {
            
       axios.post(
           bffUrl + "/competent-authority/add-form-fields",
-          { formData: finalResult }
+          { formData: finalResult, masterId : masterEntityId}
         )
         .then((response : any) => {
           const data = response.data;
