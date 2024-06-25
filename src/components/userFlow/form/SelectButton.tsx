@@ -39,7 +39,7 @@ const SelectButton = ({
 
   // Find the label of the currently selected option
   const selectedLabel =
-    options.find((option) => option.value === selectedOption)?.label ||
+    options?.find((option: any) => option?.value === selectedOption)?.label ||
     placeholder;
 
   const dropdownRef = useRef<HTMLDivElement>(null);

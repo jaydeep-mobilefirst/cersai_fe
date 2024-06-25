@@ -1,9 +1,6 @@
 import React, { createContext } from "react";
 import { useDepositTakerRegistrationStore } from "../zust/deposit-taker-registration/registrationStore";
-import {
-  bffUrl,
-  pincodeValidationUrl,
-} from "../utils/api";
+import { bffUrl, pincodeValidationUrl } from "../utils/api";
 import axios from "axios";
 import { convertFileToBase64Async } from "../utils/fileConversion";
 import Swal from "sweetalert2";
@@ -58,11 +55,11 @@ const FormHandlerProviders = ({ children }: Props) => {
     fieldId: number,
     dscFileNAme: string = ""
   ) => {
-    console.log({ value, fieldId, allFormData });
+    console.log({ value, fieldId, allFormData }, "checking form updatevalue");
     let modifiedFormFields = allFormData?.formFields?.form_fields?.map(
       (o: any) => {
         if (o?.id === fieldId) {
-          console.log({ value, fieldId, o });
+          console.log({ value, fieldId, o }, "checking on it update logic");
           return {
             ...o,
             userInput: value,
@@ -192,7 +189,7 @@ const FormHandlerProviders = ({ children }: Props) => {
     ];
     if (inputFieldTypes.includes(fieldType) && event) {
       const { value } = event?.target;
-      console.log({ value, fieldData });
+      console.log({ value, fieldData }, "checking onchage for schema");
       let inputValue: string = value;
 
       const regex = /\bpan\b/i;
