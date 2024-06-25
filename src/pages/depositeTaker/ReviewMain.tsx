@@ -46,7 +46,7 @@ const ReviewMain = () => {
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData, masterEntityId } = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -58,7 +58,6 @@ const ReviewMain = () => {
     3: "de_regulations_details",
     4: "Nodal Officer",
   };
-  console.log({ allFormData });
 
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();
@@ -86,17 +85,12 @@ const ReviewMain = () => {
     }) : []
 
     finalResult = [...finalResult, ...docs]
-
     axios
       .post(bffUrl + "/deposit-taker/add-form-fields", {
-        formData: finalResult,
+        formData: finalResult, regulatorId : masterEntityId
       })
       .then((response: any) => {
-        console.log({ response });
-
         const data = response.data;
-        console.log({ data });
-
         if (data?.success) {
           // setSubmitModal( true)
           setPara1(`Your registration request has been sent successfully and

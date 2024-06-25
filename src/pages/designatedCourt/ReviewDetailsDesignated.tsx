@@ -29,7 +29,7 @@ const ReviewDetailsDesignated = () => {
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData, masterEntityId} = useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
@@ -47,8 +47,6 @@ const ReviewDetailsDesignated = () => {
       if (sectionCode === 'Nodal Details') {
         sectionCode = 'Nodal Officer'
       }
-
-      console.log({ sectionCode });
 
       return {
         fieldId: field?.id,
@@ -72,7 +70,7 @@ const ReviewDetailsDesignated = () => {
 
     axios.post(
       bffUrl + "/designated-court/add-form-fields",
-      { formData: finalResult }
+      { formData: finalResult, masterId : masterEntityId }
     )
       .then((response: any) => {
         const data = response.data;

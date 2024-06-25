@@ -165,7 +165,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                       type={"number"}
                       id={field?.label}
                       placeholder={field?.placeholder}
-                      // disabled={field?.disabled ? field?.disabled : false}
+                      disabled={field?.disabled ? field?.disabled : false}
                     />
                     <span className="text-red-500">{field?.error}</span>
                   </div>
