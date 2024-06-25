@@ -45,7 +45,7 @@ const ReviewDetailsRegulator = () => {
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+  const { allFormData, documentData , masterEntityId} = useDepositTakerRegistrationStore(
     (state) => state
   );
   const Navigate = useNavigate();
@@ -88,11 +88,10 @@ const ReviewDetailsRegulator = () => {
     finalResult = [...finalResult, ...docs];
 
     axios
-      .post(bffUrl + "/regulator/add-form-fields", { formData: finalResult })
+      .post(bffUrl + "/regulator/add-form-fields", { formData: finalResult,  masterId : masterEntityId })
       .then((response: any) => {
         const data = response.data;
         if (data?.success) {
-          // setSubmitModal( true)
           setPara1(`Your registration request has been sent successfully and
             approval/rejection of your registration will be informed to you
             via email.`);

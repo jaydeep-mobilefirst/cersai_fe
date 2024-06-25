@@ -50,6 +50,8 @@ interface Types {
   setAllDocumentData: (data: any[]) => void;
   sections: any[];
   setSections: (data: any[]) => void;
+  setMasterEntityId: (data: string | number | undefined) => void;
+  masterEntityId : string | number | undefined
 }
 
 export const useDepositTakerRegistrationStore = create<Types>()(
@@ -59,10 +61,12 @@ export const useDepositTakerRegistrationStore = create<Types>()(
       allFormData: undefined,
       documentData: [],
       sections: [],
+      masterEntityId : undefined,
       setEntities: (data: EntityType[]) => set({ entities: data }),
       setAllFormData: (data: any) => set({ allFormData: data }),
       setAllDocumentData: (data: any[]) => set({ documentData: data }),
       setSections: (data: any[]) => set({ sections: data }),
+      setMasterEntityId: (data: string | number | undefined) => set({ masterEntityId: data }),
     }),
     {
       name: "deposit-taker-registration-store",

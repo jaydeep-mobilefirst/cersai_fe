@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 import { useScreenWidth } from "../../../utils/screenSize";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,6 +11,12 @@ import { useNavigate } from "react-router-dom";
 import SchemeCreationSuccess from "../../../components/ScehmaManagement/SchemeCrationSucess";
 import { SchemaFormValidation } from "../../../components/ScehmaManagement/SchemaMangementValidation";
 import useSidebarStore from "../../../store/SidebarStore";
+import { bffUrl } from "../../../utils/api";
+import axios from "axios";
+import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
+import LoaderSpin from "../../../components/LoaderSpin";
 
 const SchemaCreationForm = () => {
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
@@ -27,8 +33,15 @@ const SchemaCreationForm = () => {
   const screenWidth = useScreenWidth();
   const [isChecked, setIsChecked] = useState(false);
   const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [loader, setLoader] = useState(false);
+
   const navigate = useNavigate();
   const { collapsed } = useSidebarStore();
+  const { setAllFormData, setAllDocumentData, allFormData } =
+    useDepositTakerRegistrationStore((state) => state);
+  const { onChange, handleValidationChecks, updatePanFormField } =
+    useContext(FormHandlerContext);
+  console.log({ allFormData });
 
   const closePopup = () => {
     setShowPopup(false);
@@ -114,14 +127,7 @@ const SchemaCreationForm = () => {
   } = useForm({
     resolver: yupResolver(SchemaFormValidation),
   });
-  const onSubmit = (data: any) => {
-    console.log(data, "data");
-    alert("Form submitted successfully!");
-    console.log({ data });
-    setShowPopup(true);
 
-    reset();
-  };
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
@@ -176,14 +182,107 @@ const SchemaCreationForm = () => {
       setValue("endSchemaDate", value, { shouldValidate: true });
     }
   };
+  useEffect(() => {
+    fetchSchema();
+  }, []);
+  const fetchSchema = async () => {
+    try {
+      const response = await axios.get(`${bffUrl}/scheme/field-data`);
+      console.log(response, "response");
+      if (response.data.success) {
+        const formFields = response?.data?.data?.formFields?.allFormFields.map(
+          (field: any) => ({
+            ...field,
+            userInput: "",
+            error: "",
+            typeId: field?.fieldTypeId,
+            // id: field.fieldTypeId,
+          })
+        );
+
+        setAllFormData({
+          ...response?.data?.data,
+          formFields: { form_fields: formFields },
+          fieldTypes: response?.data?.data?.fieldTypes,
+          validations: response?.data?.data?.validations,
+          fileTypes: response?.data?.data?.fileTypes,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching schema data:", error);
+    }
+  };
+  const entityType = sessionStorage.getItem("entityType");
+  const onSubmit = async (event: any) => {
+    event.preventDefault();
+    setLoader(true);
+    const isFormValid = await handleValidationChecks(
+      allFormData?.formFields?.form_fields
+    );
+    if (!isFormValid) {
+      setLoader(false);
+      console.log("Form validation failed");
+      return;
+    }
+    try {
+      // Mapping over the form fields to prepare the formData
+      let formData = allFormData.formFields.form_fields.map((field: any) => ({
+        fieldId: field.id,
+        value: field.userInput,
+      }));
+
+      // Creating the payload object that includes both formData and depositTakerId
+      const payload = {
+        depositTakerId: entityType || "DT1717238481799",
+        formData: formData,
+      };
+
+      // Making the POST request with axios
+      const response = await axios.post(
+        `${bffUrl}/scheme-portal/add-form-fields`, // Assuming bffUrl is defined elsewhere
+        payload // Sending the payload with depositTakerId and formData
+      );
+
+      // Handle response or further processing here if needed
+      console.log("Data submitted successfully:", response.data);
+      setLoader(false);
+    } catch (error) {
+      console.error("Error submitting form data:", error);
+      setLoader(false);
+    }
+  };
+
+  // const onSubmit = async (event: any) => {
+  //   event.preventDefault();
+  //   setLoader(true);
+  //   const isFormValid = await handleValidationChecks(
+  //     allFormData?.formFields?.form_fields
+  //   );
+  //   if (!isFormValid) {
+  //     setLoader(false);
+  //     console.log("Form validation failed");
+  //     return;
+  //   }
+  //   try {
+  //     let formData = allFormData.formFields.form_fields.map((field: any) => ({
+  //       fieldId: field.id,
+  //       value: field.userInput,
+  //     }));
+  //     const response = await axios.post(
+  //       bffUrl + "/scheme-portal/add-form-fields",
+  //       { formData }
+  //     );
+  //   } catch (error) {}
+  // };
+
   return (
     <div className="relative xl:ml-[40px]">
       <div className="mt-6">
         <TaskTabs />
       </div>
       <div className="-ml-7">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
+        <div
+          // onSubmit={handleSubmit(onSubmit)}
           className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
         >
           <div
@@ -197,7 +296,7 @@ const SchemaCreationForm = () => {
             //   }`,
             // }}
           >
-            <div className="flex flex-col p-6 w-full ">
+            {/* <div className="flex flex-col p-6 w-full ">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div className="">
                   <label
@@ -372,6 +471,13 @@ const SchemaCreationForm = () => {
                   knowledge.
                 </div>
               </div>
+            </div> */}
+            <div className="mt-10">
+              <DynamicFields
+                formFields={allFormData?.formFields?.form_fields}
+                allFormData={allFormData}
+                onChange={onChange}
+              />
             </div>
           </div>
           {showPopup && (
@@ -398,11 +504,12 @@ const SchemaCreationForm = () => {
                   Discord
                 </p>
                 <button
-                  onClick={SuccessPopup}
+                  onClick={onSubmit}
+                  // onClick={SuccessPopup}
                   type="submit"
                   className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
                 >
-                  Create Scheme
+                  {loader ? <LoaderSpin /> : "Create Scheme"}
                 </button>
               </div>
             </div>
@@ -414,7 +521,7 @@ const SchemaCreationForm = () => {
               </p>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
