@@ -7,13 +7,13 @@ type Props = {};
 const tabs = [
   {
     title: "Scheme Creation",
-    url: "mytask",
-    rurl: "/dt/mytask",
+    url: "schema",
+    rurl: "/dt/schema",
   },
 ];
 
 const TaskTabs = (props: Props) => {
-  const [activeTab, setActiveTab] = useState<string>("mytask");
+  const [activeTab, setActiveTab] = useState<string>("schema");
   const [url, setUrl] = useState<String>("");
 
   const location = useLocation();

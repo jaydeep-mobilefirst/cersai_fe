@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -8,10 +8,28 @@ interface AccordionItem {
 interface AccordionProps {
   items: AccordionItem[];
   showEdit?: boolean; // New prop to show/hide edit button
+  hasError?: boolean;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items, showEdit = false }) => {
+const Accordion: React.FC<AccordionProps> = ({
+  items,
+  showEdit = false,
+  hasError,
+}) => {
+  // const [activeIndex, setActiveIndex] = useState<number | null>(0);
+
+  // const toggleAccordion = (index: number) => {
+  //   setActiveIndex(activeIndex === index ? null : index);
+  // };
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
+
+  useEffect(() => {
+    // Automatically open the first section with an error
+    const errorIndex = items.findIndex((item: any) => item.hasError);
+    if (errorIndex !== -1) {
+      setActiveIndex(errorIndex);
+    }
+  }, [items]);
 
   const toggleAccordion = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
