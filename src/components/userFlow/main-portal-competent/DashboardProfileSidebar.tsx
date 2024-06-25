@@ -81,7 +81,7 @@ const DashboardProfileSidebar = ({}: Props) => {
         <div className="h-full overflow-y-auto bg-[#ffffff] w-[225px] md:w-[322px] border-r-2">
           <ul className="">
             <li className="border-b border-[#E6E6E6] p-4">
-              <h1 className="text-2xl font-semibold">
+              <h1 className="text-2xl font-semibold mb-1">
                 {firstName}
                 {lastName}
               </h1>
