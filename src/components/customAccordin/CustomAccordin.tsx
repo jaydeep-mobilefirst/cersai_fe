@@ -66,7 +66,7 @@ const Accordion: React.FC<AccordionProps> = ({
                 {activeIndex === index ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-[#385723] font-medium"
+                    className="h-6 w-6 text-[#1C468E] font-medium"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
