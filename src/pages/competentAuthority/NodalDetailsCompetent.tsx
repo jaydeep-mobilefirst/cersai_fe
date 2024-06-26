@@ -64,13 +64,12 @@ const NodalDetails = (props: Props) => {
       });
       if (response.data.statusCode === 201) {
         setShowOTPModel(true);
-      }
-      else{
+      } else {
         Swal.fire({
-          icon : "error",
-          title : "Error",
-          text : "Error sending OTP, Please try later"
-        })
+          icon: "error",
+          title: "Error",
+          text: "Error sending OTP, Please try later",
+        });
       }
     }
   };

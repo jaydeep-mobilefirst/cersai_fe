@@ -164,7 +164,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
         <div>
           <Header />
           <div
-            className={`absolute hidden lg:block top-[65px] z-[100] ${
+            className={`fixed hidden lg:block top-[65px] z-[100] ${
               collapse ? "-ml-4" : "-ml-5"
             }`}
             onClick={onClickCollapse}
