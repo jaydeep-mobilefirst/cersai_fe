@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -12,109 +12,109 @@ import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton"
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
 import ToggleSwitch from "../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
-type TableType = {
-  sno: string;
-  depositTakerID: string;
-  depositTakerName: string;
+import axios from "axios";
+import { bffUrl } from "../../../utils/api";
+import LoaderSpin from "../../../components/LoaderSpin";
+
+type SchemeType = {
+  id: number;
+  uniqueId: string;
+  name: string;
   status: string;
-  action: boolean;
+  active: boolean;
 };
 
-const columnHelper = createColumnHelper<TableType>();
+const columnHelper = createColumnHelper<SchemeType>();
 
 const SchemaCreation = () => {
-  const defaultData: TableType[] = [
-    {
-      sno: "01",
-      depositTakerID: "DT001",
-      depositTakerName: "Deposit Taker 1",
-      status: "Active",
-      action: false,
-    },
-    {
-      sno: "02",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "03",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "04",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "05",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "06",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
-    },
-  ];
+  const [schemaData, setSchemaData] = useState([]);
+  const [loader, setLoader] = useState<boolean>(false);
+  const fetchSchemes = async () => {
+    setLoader(true);
+    try {
+      const { data } = await axios.get(
+        `${bffUrl}/scheme-portal/scheme-by/${sessionStorage.getItem(
+          "entityUniqueId"
+        )}`
+      );
+      setSchemaData(
+        data.data.map((item: any, index: any) => ({
+          ...item,
+          id: index + 1, // Assuming you want to use index as S.No.
+          status: item.status, // Or some logic to determine status
+        }))
+      );
+      setLoader(false);
+    } catch (error) {
+      console.error("Error fetching schemes:", error);
+      setLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchemes();
+  }, []);
 
   const columns = [
-    columnHelper.accessor("sno", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>Sr. No.</span>,
+    columnHelper.accessor("id", {
+      header: () => "S.No.",
+      cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("depositTakerID", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>Deposit Taker ID</span>,
+    columnHelper.accessor("uniqueId", {
+      header: () => "Scheme ID",
+      cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("depositTakerName", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>Deposit Taker Name</span>,
+    columnHelper.accessor("name", {
+      header: () => "Scheme Name",
+      cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("status", {
-      cell: (info: any) => {
-        const value = info?.row?.original?.action;
-
-        return (
-          <div
-            className="flex flex-col md:flex-row justify-center gap-3"
-            key={Math.random()}
-          >
-            <span> {value ? "Active" : "In-Active"}</span>
-            <ToggleSwitch enabled={value} />
-          </div>
-        );
-      },
-      header: () => <span>Status</span>,
+      header: () => "Status",
+      cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor((row: any) => row, {
-      id: "action",
+    columnHelper.accessor("id", {
+      header: () => "Action",
+
       cell: (info: any) => {
-        const value = info.getValue();
+        const Activated = info?.row?.original?.active;
+        const uniqueId = info?.row?.original?.uniqueId;
+        const apiCall = () => {
+          axios
+            .patch(`${bffUrl}/scheme-portal/${uniqueId}/active`, {
+              isActive: !Activated,
+            })
+
+            .then((responce: any) => {
+              console.log(responce);
+              fetchSchemes();
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        };
 
         return (
-          <div className="flex justify-center items-center ">
-            <Link to={"/dt/schema/creation"}>
-              <div>
-                <img src={Eye} alt="Eye " className="cursor-pointer" />
-              </div>
-            </Link>
+          <div key={Math.random()} className="flex justify-center items-center">
+            <p className="mr-2">{Activated ? "Active" : "inactive"}</p>
+            <ToggleSwitch enabled={Activated} apiCall={apiCall} />
           </div>
         );
       },
-      header: () => <span>Action</span>,
+    }),
+    columnHelper.accessor("id", {
+      header: () => "View",
+      cell: (info) => (
+        <div className="flex justify-center items-center ">
+          <Link to={"/dt/schema/creation"}>
+            <div>
+              <img src={Eye} alt="Eye " className="cursor-pointer" />
+            </div>
+          </Link>
+        </div>
+      ),
     }),
   ];
+
   const options1 = [
     { value: "India", label: "India" },
     { value: "Maharashtra", label: "Maharashtra" },
@@ -163,7 +163,10 @@ const SchemaCreation = () => {
     setSelectedOption4(value);
   };
   return (
-    <div className="relative xl:ml-[40px]">
+    <div
+      className="relative xl:ml-[40px]"
+      style={{ minHeight: "calc(100vh - 110px)" }}
+    >
       <div className="mt-6">
         <TaskTabs />
       </div>
@@ -254,12 +257,20 @@ const SchemaCreation = () => {
           </div>
         </div>
         <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-          <div className="">
-            <ReactTable defaultData={defaultData} columns={columns} />
+          <div className=" mb-12">
+            {loader ? (
+              <LoaderSpin />
+            ) : schemaData?.length > 0 ? (
+              <ReactTable defaultData={schemaData} columns={columns} />
+            ) : (
+              <div className=" flex justify-center items-center">
+                <h1>No data available</h1>
+              </div>
+            )}
           </div>
-          <div className="mt-10">
+          <div className="absolute bottom-0">
             <CustomPagination
-              totalItems={defaultData?.length}
+              totalItems={schemaData?.length}
               itemsPerPage={5}
               maxPageNumbersToShow={5}
             />
