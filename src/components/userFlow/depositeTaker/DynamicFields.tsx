@@ -57,7 +57,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
-  // console.log({ formFields });
+  console.log({ allFormData, formFields, onChange });
 
   return (
     <>
@@ -68,6 +68,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
             const fieldType = allFormData?.fieldTypes?.find(
               (type: any) => type?.id === field?.typeId
             )?.name;
+
             switch (fieldType) {
               case "text":
               case "number":
@@ -191,7 +192,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                       type={"number"}
                       id={field?.label}
                       placeholder={field?.placeholder}
-                      // disabled={field?.disabled ? field?.disabled : false}
+                      disabled={field?.disabled ? field?.disabled : false}
                     />
                     <span className="text-red-500">{field?.error}</span>
                   </div>

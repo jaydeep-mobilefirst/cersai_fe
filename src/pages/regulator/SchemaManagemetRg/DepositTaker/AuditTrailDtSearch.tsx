@@ -358,6 +358,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
 
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
+  console.log({ allFormData });
 
   useEffect(() => {
     fetchFormFields();
