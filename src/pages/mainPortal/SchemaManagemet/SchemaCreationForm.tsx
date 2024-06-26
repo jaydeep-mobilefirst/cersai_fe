@@ -50,7 +50,7 @@ const SchemaCreationForm = () => {
     setShowPopup(true);
   };
   const handleBackButtonClick = () => {
-    navigate("/dt/mytask");
+    navigate("/dt/schema");
   };
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
@@ -212,23 +212,24 @@ const SchemaCreationForm = () => {
       console.error("Error fetching schema data:", error);
     }
   };
-  const entityType = sessionStorage.getItem("entityType");
+  const entityType = sessionStorage.getItem("entityUniqueId");
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoader(true);
-    const isFormValid = await handleValidationChecks(
-      allFormData?.formFields?.form_fields
-    );
-    if (!isFormValid) {
-      setLoader(false);
-      console.log("Form validation failed");
-      return;
-    }
+    // const isFormValid = await handleValidationChecks(
+    //   allFormData?.formFields?.form_fields
+    // );
+    // if (!isFormValid) {
+    //   setLoader(false);
+    //   console.log("Form validation failed");
+    //   return;
+    // }
     try {
       // Mapping over the form fields to prepare the formData
       let formData = allFormData.formFields.form_fields.map((field: any) => ({
         fieldId: field.id,
         value: field.userInput,
+        key: field.key,
       }));
 
       // Creating the payload object that includes both formData and depositTakerId
@@ -246,34 +247,12 @@ const SchemaCreationForm = () => {
       // Handle response or further processing here if needed
       console.log("Data submitted successfully:", response.data);
       setLoader(false);
+      SuccessPopup();
     } catch (error) {
       console.error("Error submitting form data:", error);
       setLoader(false);
     }
   };
-
-  // const onSubmit = async (event: any) => {
-  //   event.preventDefault();
-  //   setLoader(true);
-  //   const isFormValid = await handleValidationChecks(
-  //     allFormData?.formFields?.form_fields
-  //   );
-  //   if (!isFormValid) {
-  //     setLoader(false);
-  //     console.log("Form validation failed");
-  //     return;
-  //   }
-  //   try {
-  //     let formData = allFormData.formFields.form_fields.map((field: any) => ({
-  //       fieldId: field.id,
-  //       value: field.userInput,
-  //     }));
-  //     const response = await axios.post(
-  //       bffUrl + "/scheme-portal/add-form-fields",
-  //       { formData }
-  //     );
-  //   } catch (error) {}
-  // };
 
   return (
     <div className="relative xl:ml-[40px]">
@@ -281,10 +260,7 @@ const SchemaCreationForm = () => {
         <TaskTabs />
       </div>
       <div className="-ml-7">
-        <div
-          // onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
-        >
+        <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
           <div
             className="w-full"
             // style={{
@@ -479,6 +455,20 @@ const SchemaCreationForm = () => {
                 onChange={onChange}
               />
             </div>
+            <div className="flex flex-shrink-0 mt-[20px]">
+              <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  placeholder="ischecked"
+                />
+              </div>
+              <div className="leading-[24px]">
+                I declare all the Information provided is correct as per my
+                knowledge.
+              </div>
+            </div>
           </div>
           {showPopup && (
             <SchemeCreationSuccess
@@ -503,11 +493,23 @@ const SchemaCreationForm = () => {
                 >
                   Discord
                 </p>
-                <button
+                {/* <button
                   onClick={onSubmit}
                   // onClick={SuccessPopup}
                   type="submit"
                   className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+                >
+                  {loader ? <LoaderSpin /> : "Create Scheme"}
+                </button> */}
+                <button
+                  onClick={onSubmit}
+                  type="submit"
+                  className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold ${
+                    !isChecked
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-[#163a7a]"
+                  }`}
+                  disabled={!isChecked}
                 >
                   {loader ? <LoaderSpin /> : "Create Scheme"}
                 </button>
