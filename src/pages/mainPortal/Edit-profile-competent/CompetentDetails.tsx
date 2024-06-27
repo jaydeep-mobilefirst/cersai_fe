@@ -21,7 +21,7 @@ const CompetentDetails = (props: Props) => {
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
-  const { onChange, handleValidationChecks, updatePanFormField } =
+  const { onChange, handleValidationChecks, onFileChange, updatePanFormField } =
     useContext(FormHandlerContext);
 
   const sectionId = allFormData?.entitySections?.find(
@@ -209,6 +209,7 @@ const CompetentDetails = (props: Props) => {
             allFormData={allFormData}
             formFields={formFields}
             onChange={onChange}
+            onFileChange={onFileChange}
           />
 
           <div>
