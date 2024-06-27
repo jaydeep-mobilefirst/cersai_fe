@@ -52,7 +52,6 @@ const FormHandlerProviders = ({ children }: Props) => {
     masterEntityId,
     setMasterEntityId,
   } = useDepositTakerRegistrationStore((state) => state);
-  console.log({ masterEntityId });
 
   const updateValue = (
     value: string | any[],
