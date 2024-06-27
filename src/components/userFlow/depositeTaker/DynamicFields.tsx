@@ -30,30 +30,6 @@ type Props = {
 };
 
 const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
-  const [isFileUploaded, setIsFileUploaded] = useState(false);
-  const [error, setError] = useState<boolean>(false);
-  const [base64Data, setBase64Data] = useState<string>("");
-  const [hexData, setHexData] = useState("");
-  const handleFileUpload = (file: File | null) => {
-    if (file) {
-      setIsFileUploaded(true);
-
-      convertFileToBase64(
-        file,
-        (hex) => {
-          setHexData(hex);
-        },
-        (base64) => {
-          setBase64Data(base64);
-        }
-      );
-    } else {
-      setIsFileUploaded(false);
-      setBase64Data("");
-      setHexData("");
-    }
-  };
-
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
@@ -208,15 +184,13 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                       <RequiredStar allFormData={allFormData} field={field} />
                     </label>
 
-                    {/* <DscButton
+                    <DscButton
                       onFileUpload={(file) =>
                         onChange && onChange(file, field, fieldType)
                       }
                       fname={field?.dscFileNAme}
                       disabled={field?.disabled ? field?.disabled : false}
-                    /> */}
-                    <DscButton onFileUpload={handleFileUpload} />
-
+                    />
                     <span className="text-red-500">{field?.error}</span>
                   </div>
                 );

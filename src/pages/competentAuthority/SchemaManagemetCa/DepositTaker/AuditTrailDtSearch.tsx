@@ -410,7 +410,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
 
-  const { setAllFormData, setAllDocumentData, allFormData } =
+  const { setAllFormData, setAllDocumentData, allFormData, masterEntityId } =
     useDepositTakerRegistrationStore((state) => state);
 
   useEffect(() => {
@@ -544,7 +544,6 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     );
     if (!isFormValid) {
       setLoader(false);
-      console.log("Form validation failed");
       return;
     }
     const panVerified = await verifyPan();
@@ -562,7 +561,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         }));
         const response = await axios.post(
           bffUrl + "/deposit-taker/add-form-fields",
-          { formData }
+          { formData, regulatorId : masterEntityId}
         );
         if (response.data.success) {
           setPara1(
@@ -596,7 +595,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="flex flex-col justify-between h-screen">
       <div className="mt-6 mx-2">
         <TaskTabsCa />
       </div>
@@ -631,15 +630,15 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       <div className="mt-8 mb-8 mx-8">
         <Accordion items={accordionItems} />
       </div>
-      <div className="my-11  flex flex-col lg:flex-row lg:items-center justify-between ">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between ">
         <div>
           <div
-            className="flex w-full p-8  flex-row justify-end items-center"
+            className="flex w-full flex-row justify-end items-center"
             style={{
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-6 mb-4 pr-4">
               <p
                 onClick={handleCancelClick}
                 className="text-[#1c468e]  rounded-xl p-3 border border-[#1c468e] text-gilroy-medium cursor-pointer text-sm w-full sm:w-auto sm:max-w-xs "
@@ -656,10 +655,10 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
               </button>
             </div>
           </div>
-          <div>
-            <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
+          <div className="mt-auto">
+            <div className="border-[#E6E6E6] border-[1px]"></div>
 
-            <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer py-4">
               © 2024 Protean BUDs, All Rights Reserved.
             </p>
           </div>
