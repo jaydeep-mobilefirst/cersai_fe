@@ -48,7 +48,7 @@ const SchemaCreation = () => {
         {
           params: {
             page: page,
-            pageSize: pageSize,
+            limit: pageSize,
           },
         }
       );
