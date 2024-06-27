@@ -62,7 +62,6 @@ const FormHandlerProviders = ({ children }: Props) => {
     let modifiedFormFields = allFormData?.formFields?.form_fields?.map(
       (o: any) => {
         if (o?.id === fieldId) {
-          console.log({ value, fieldId, o }, "checking on it update logic");
           return {
             ...o,
             userInput: value,
@@ -190,7 +189,6 @@ const FormHandlerProviders = ({ children }: Props) => {
     ];
     if (inputFieldTypes.includes(fieldType) && event) {
       const { value } = event?.target;
-      console.log({ value, fieldData }, "checking onchage for schema");
       let inputValue: string = value;
 
       const regex = /\bpan\b/i;
@@ -383,11 +381,20 @@ const FormHandlerProviders = ({ children }: Props) => {
       (o: any) => {
         if (errorData === true) {
           return { ...o, error: "" };
-        } else {
+        } else if (typeof o?.id === "number") {
           const errorField = errorData?.find(
             (eData: any) => parseInt(eData?.formId) === o?.id
           );
           if (o?.id === parseInt(errorField?.formId)) {
+            return { ...o, error: errorField?.validationErrors[0]?.error };
+          } else {
+            return { ...o, error: "" };
+          }
+        } else if (typeof o?.id === "string") {
+          const errorField = errorData?.find(
+            (eData: any) => eData?.formId === o?.id
+          );
+          if (o?.id === errorField?.formId) {
             return { ...o, error: errorField?.validationErrors[0]?.error };
           } else {
             return { ...o, error: "" };
@@ -411,6 +418,7 @@ const FormHandlerProviders = ({ children }: Props) => {
         `${bffUrl}/validator/submit`,
         formFieldsForValidations
       );
+      console.log({ response });
       const data = await response?.data?.data;
       const success = await response?.data?.success;
 
@@ -435,11 +443,17 @@ const FormHandlerProviders = ({ children }: Props) => {
     formFields: any[],
     isAdding: boolean = true
   ): Promise<boolean> => {
+    console.log({ formFields });
     const formFieldsForValidations = formFields?.map((field: any) => {
+      let validations = field?.regFormFieldsValidations
+        ? field?.regFormFieldsValidations
+        : field?.schemeFormValidations
+        ? field?.schemeFormValidations
+        : [];
       return {
         formId: field?.id?.toString(),
         fieldValue: field?.userInput,
-        validations: field?.regFormFieldsValidations?.map((v: any) => {
+        validations: validations?.map((v: any) => {
           return {
             validationName: allFormData?.validations?.find(
               (vd: any) => vd?.id === v?.validationId

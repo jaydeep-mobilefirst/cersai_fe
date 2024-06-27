@@ -97,9 +97,9 @@ function App() {
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<DashboardProfile />} path="profile" />
               <Route element={<ResetPassword />} path="resetpassword" />
-              <Route element={<SchemaCreation />} path="schema" />
-              <Route element={<SchemaCreationForm />} path="schema/form" />
-              <Route element={<SchemeMasterForm />} path="schema/creation" />
+              <Route element={<SchemaCreation />} path="scheme" />
+              <Route element={<SchemaCreationForm />} path="scheme/form" />
+              <Route element={<SchemeMasterForm />} path="scheme/creation" />
               <Route
                 element={<UserCreation entityType="DT" />}
                 path="usermanagement/usercreation"

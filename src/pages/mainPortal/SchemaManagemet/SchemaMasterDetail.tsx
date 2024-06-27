@@ -1,3 +1,4 @@
+import axios from "axios";
 import BackArrow from "../../../assets/images/BackArrow.svg";
 // import CreatedBy from "./CreatedBy";
 // import EntityDetails from "./EntityDetails";
@@ -7,7 +8,9 @@ import Accordion from "../../../components/customAccordin/CustomAccordin";
 import AuditTrail from "../../../components/ScehmaManagement/AuditTrail";
 import SchemeDetails from "../../../components/ScehmaManagement/SchemaDetails";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { useLocation, useNavigate, useNavigation } from "react-router-dom";
+import { bffUrl } from "../../../utils/api";
+import { useEffect, useState } from "react";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -16,6 +19,64 @@ interface AccordionItem {
 
 const SchemeMasterForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const uniqueId = location.state?.uniqueId;
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(2);
+
+  const fetchAndMapSchemeData = async () => {
+    try {
+      // Fetch schema form fields (assuming this endpoint provides the necessary field IDs and types)
+      const schemaResponse = await axios.get(`${bffUrl}/scheme/field-data`);
+      if (!schemaResponse.data.success) {
+        throw new Error("Failed to fetch schema fields");
+      }
+      let formFields = schemaResponse.data.data.formFields.allFormFields;
+      console.log({ formFields });
+
+      // Fetch user data from the scheme portal (actual values to be filled in the form)
+      const portalResponse = await axios.get(
+        `${bffUrl}/scheme-portal/${uniqueId}?page=${page}&limit=${pageSize}`
+      );
+      const userData = portalResponse.data?.data;
+      console.log(userData, "userData"); // Assuming this returns the scheme data with schemeFormData
+
+      // Ensure userData contains the schemeFormData before proceeding
+      if (!userData || !userData.schemeFormData) {
+        throw new Error("Scheme form data not available");
+      }
+
+      // Map user inputs to schema fields
+      formFields = formFields.map((field: any) => {
+        const userField = userData.schemeFormData.find(
+          (uField: any) => uField.fieldId === field.id
+        );
+        if (userField) {
+          console.log(`Match found for fieldId ${field.id}:`, userField);
+        }
+        return {
+          ...field,
+          userInput: userField ? userField.value : "",
+          error: "", // Placeholder for future validation error handling
+        };
+      });
+
+      // Optionally: update state or handle the mapped fields as needed
+      console.log(formFields, "Mapped form fields data"); // Log or manage the mapped data as needed
+    } catch (error: any) {
+      console.error("Error in fetching or mapping scheme data:", error);
+      if (error.response) {
+        console.log("Error response:", error.response.data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (uniqueId) {
+      fetchAndMapSchemeData();
+    }
+  }, [uniqueId, page, pageSize]);
+
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
