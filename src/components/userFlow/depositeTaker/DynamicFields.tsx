@@ -57,7 +57,6 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
-  console.log({ allFormData, formFields, onChange });
 
   return (
     <>

@@ -18,8 +18,8 @@ export const portalSideBarList = [
   },
   {
     title: "Scheme Management",
-    url: "/dt/schema",
-    rurl: "/dt/schema",
+    url: "/dt/scheme",
+    rurl: "/dt/scheme",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },

@@ -41,7 +41,7 @@ const SchemaCreationForm = () => {
     useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
-  console.log({ allFormData });
+  // console.log({ allFormData });
 
   const closePopup = () => {
     setShowPopup(false);
@@ -50,7 +50,7 @@ const SchemaCreationForm = () => {
     setShowPopup(true);
   };
   const handleBackButtonClick = () => {
-    navigate("/dt/schema");
+    navigate("/dt/scheme");
   };
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
@@ -131,36 +131,6 @@ const SchemaCreationForm = () => {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
-  // const handleDateChange = (event: any) => {
-  //   const { value } = event.target;
-  //   const today = new Date();
-  //   const selected = new Date(value);
-  //   today.setHours(0, 0, 0, 0);
-
-  //   if (!(selected <= today)) {
-  //     setError("registrationDate", { message: "Date should not be in future" });
-  //   } else {
-  //     clearErrors("registrationDate");
-  //   }
-  //   setValue("registrationDate", value);
-  // };
-  // const handleDateChange1 = (event: any) => {
-  //   const { value } = event.target;
-  //   const today = new Date();
-  //   const selected = new Date(value);
-  //   today.setHours(0, 0, 0, 0);
-
-  //   if (!(selected <= today)) {
-  //     setError("registrationDate", { message: "Date should not be in future" });
-  //   } else {
-  //     clearErrors("registrationDate");
-  //   }
-  //   setValue("registrationDate", value);
-  // };
-  const handleDateChange = (event: any) => {
-    const { value } = event.target;
-    setValue("startSchemaDate", value, { shouldValidate: true });
-  };
 
   const handleDateChangeEnd = (event: any) => {
     const { value } = event.target;
@@ -188,7 +158,7 @@ const SchemaCreationForm = () => {
   const fetchSchema = async () => {
     try {
       const response = await axios.get(`${bffUrl}/scheme/field-data`);
-      console.log(response, "response");
+      // console.log(response, "response");
       if (response.data.success) {
         const formFields = response?.data?.data?.formFields?.allFormFields.map(
           (field: any) => ({
@@ -216,14 +186,14 @@ const SchemaCreationForm = () => {
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoader(true);
-    // const isFormValid = await handleValidationChecks(
-    //   allFormData?.formFields?.form_fields
-    // );
-    // if (!isFormValid) {
-    //   setLoader(false);
-    //   console.log("Form validation failed");
-    //   return;
-    // }
+    const isFormValid = await handleValidationChecks(
+      allFormData?.formFields?.form_fields
+    );
+    if (!isFormValid) {
+      setLoader(false);
+      console.log("Form validation failed");
+      return;
+    }
     try {
       // Mapping over the form fields to prepare the formData
       let formData = allFormData.formFields.form_fields.map((field: any) => ({
@@ -255,14 +225,17 @@ const SchemaCreationForm = () => {
   };
 
   return (
-    <div className="relative xl:ml-[40px]">
+    <div
+      className="relative xl:ml-[40px]"
+      style={{ minHeight: "calc(100vh - 110px)" }}
+    >
       <div className="mt-6">
         <TaskTabs />
       </div>
       <div className="-ml-7">
         <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
           <div
-            className="w-full"
+            className="w-full mb-40"
             // style={{
             //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             //   width: `${
@@ -477,7 +450,7 @@ const SchemaCreationForm = () => {
             />
           )}
 
-          <div>
+          <div className="absolute bottom-0">
             <div
               className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
               style={{
@@ -493,14 +466,7 @@ const SchemaCreationForm = () => {
                 >
                   Discord
                 </p>
-                {/* <button
-                  onClick={onSubmit}
-                  // onClick={SuccessPopup}
-                  type="submit"
-                  className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
-                >
-                  {loader ? <LoaderSpin /> : "Create Scheme"}
-                </button> */}
+
                 <button
                   onClick={onSubmit}
                   type="submit"
@@ -516,7 +482,7 @@ const SchemaCreationForm = () => {
               </div>
             </div>
             <div>
-              <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
+              <div className="border-[#E6E6E6] border-[1px] lg:mt-4 "></div>
 
               <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
                 © 2024 Protean BUDs, All Rights Reserved.
