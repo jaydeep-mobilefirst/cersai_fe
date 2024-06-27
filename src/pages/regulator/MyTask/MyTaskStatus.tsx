@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -10,9 +10,13 @@ import searchButton from "../../../assets/images/search-normal.svg";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
 import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton";
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
+import axios from "axios";
+import { bffUrl } from "../../../utils/api";
+import LoaderSpin from "../../../components/LoaderSpin";
 
 type TableType = {
-  sno: string;
+  id: number;
+  uniqueId: string;
   depositTakerID: string;
   depositTakerName: string;
   status: string;
@@ -22,97 +26,79 @@ type TableType = {
 const columnHelper = createColumnHelper<TableType>();
 
 const MyTaskStatus = () => {
-  const defaultData: TableType[] = [
-    {
-      sno: "01",
-      depositTakerID: "DT001",
-      depositTakerName: "Deposit Taker 1",
-      status: "Active",
-      action: false,
-    },
-    {
-      sno: "02",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "03",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "04",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "05",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "06",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      status: "pending",
-      action: true,
-    },
-  ];
+  const [loader, setLoader] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
+  const [myTaskData, setMyTaskData] = useState([]);
+  const myTaskRg = async () => {
+    setLoader(true);
+    try {
+      const { data } = await axios.get(`${bffUrl}/mytask/regulator-task`, {
+        params: {
+          page: page,
+          limit: pageSize,
+          regId: "RG02ID8",
+        },
+      });
+      if (data?.data?.depositTakers) {
+        const mappedData = data.data.depositTakers.map(
+          (item: any, index: number) => ({
+            ...item,
+            id: index + 1,
+            key: index,
+            depositTakerName: `${item?.approverRelation?.firstName || ""} ${
+              item?.approverRelation?.lastName || ""
+            }`,
+          })
+        );
+        setMyTaskData(mappedData);
+      }
+
+      setTotal(data?.data?.total);
+      setLoader(false);
+    } catch (error) {
+      console.error("Error fetching schemes:", error);
+      setLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    myTaskRg();
+  }, [page, pageSize]);
 
   const columns = [
-    columnHelper.accessor("sno", {
-      cell: (info: any) => info.renderValue(),
+    columnHelper.accessor("id", {
+      cell: (info) => info.renderValue(),
       header: () => <span>Sr. No.</span>,
     }),
-    columnHelper.accessor("depositTakerID", {
-      cell: (info: any) => info.renderValue(),
+    columnHelper.accessor("uniqueId", {
+      cell: (info) => info.renderValue(),
       header: () => <span>Deposit Taker ID</span>,
     }),
     columnHelper.accessor("depositTakerName", {
-      cell: (info: any) => info.renderValue(),
+      cell: (info) => info.renderValue(),
       header: () => <span>Deposit Taker Name</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info: any) => {
-        const value = info?.row?.original?.action;
-
-        return (
-          <div
-            className="flex flex-col md:flex-row justify-center gap-3"
-            key={Math.random()}
-          >
-            <span> Pending</span>
-          </div>
-        );
-      },
+      cell: (info) => <span>{info.getValue()}</span>,
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor((row: any) => row, {
+    columnHelper.accessor((row) => row, {
       id: "action",
-      cell: (info: any) => {
-        const value = info.getValue();
-
-        return (
-          <div className="flex justify-center items-center ">
-            <Link to={"/rg/mytask/form"}>
-              <div>
-                <img src={Eye} alt="Eye " className="cursor-pointer" />
-              </div>
-            </Link>
-          </div>
-        );
-      },
+      cell: (info) => (
+        <div className="flex justify-center items-center ">
+          <Link to={"/rg/mytask/form"}>
+            <div>
+              <img src={Eye} alt="Eye" className="cursor-pointer" />
+            </div>
+          </Link>
+        </div>
+      ),
       header: () => <span>Action</span>,
     }),
   ];
+
   const options1 = [
     { value: "pdf", label: "PDF" },
     { value: "docx", label: "DOCX" },
@@ -158,7 +144,10 @@ const MyTaskStatus = () => {
   };
 
   return (
-    <div className="relative xl:ml-[40px]">
+    <div
+      className="relative xl:ml-[40px]"
+      style={{ minHeight: "calc(100vh - 110px)" }}
+    >
       <div>
         <div className=" mt-4">
           <div className=" flex  space-x-2  items-center flex-wrap">
@@ -237,15 +226,27 @@ const MyTaskStatus = () => {
           </div>
         </div>
         <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-          <div className="">
-            <ReactTable defaultData={defaultData} columns={columns} />
+          <div className=" mb-20">
+            {loader ? (
+              <LoaderSpin />
+            ) : myTaskData?.length > 0 ? (
+              <ReactTable defaultData={myTaskData} columns={columns} />
+            ) : (
+              <div className=" flex justify-center items-center">
+                <h1>No data available</h1>
+              </div>
+            )}
           </div>
-          <div className="mt-10">
-            <CustomPagination
-              totalItems={defaultData?.length}
-              itemsPerPage={5}
-              maxPageNumbersToShow={5}
-            />
+          <div className="absolute bottom-0 w-full">
+            {myTaskData?.length > 0 && (
+              <CustomPagination
+                currentPage={page}
+                setCurrentPage={setPage}
+                totalItems={total}
+                itemsPerPage={pageSize}
+                maxPageNumbersToShow={5}
+              />
+            )}
           </div>
         </div>
       </div>
