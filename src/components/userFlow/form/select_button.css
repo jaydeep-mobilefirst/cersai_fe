@@ -1,5 +1,5 @@
-  /* Custom scrollbar styles for Webkit browsers like Chrome, Safari */
-  .custom-scrollbar::-webkit-scrollbar {
+/* Custom scrollbar styles for Webkit browsers like Chrome, Safari */
+/* .custom-scrollbar::-webkit-scrollbar {
     width: 5px;
     height: 39px;
     flex-shrink: 0;
@@ -12,4 +12,19 @@
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background-color:#385723;
     border-radius: 16px;
-  }
+  } */
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 39px;
+  flex-shrink: 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #1c468e;
+  border-radius: 16px;
+}

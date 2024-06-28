@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
 import Eye from "../../../../assets/images/eye2.svg";
 import addCircle from "../../../../assets/images/new_images/add-circle.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputFields from "../../../../components/ScehmaManagement/InputField";
 import searchButton from "../../../../assets/images/search-normal.svg";
 import ReactTable from "../../../../components/userFlow/common/ReactTable";
@@ -12,14 +12,24 @@ import SelectButtonTask from "../../../../components/ScehmaManagement/SelectButt
 import CustomPagination from "../../../../components/CustomPagination/CustomPagination";
 import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabsCa from "../../../../components/ScehmaManagement/TaskTabsCa";
+import { axiosInstance } from "../../../../utils/axios";
+import LoaderSpin from "../../../../components/LoaderSpin";
 
+// type TableType = {
+//   sno: string;
+//   depositTakerID: string;
+//   depositTakerName: string;
+//   pan: string;
+//   status: string;
+//   action: boolean;
+// };
 type TableType = {
-  sno: string;
-  depositTakerID: string;
-  depositTakerName: string;
-  pan: string;
+  id: number;
+  panNumber: string;
   status: string;
+  uniqueId: string;
   action: boolean;
+  companyName: string;
 };
 
 const columnHelper = createColumnHelper<TableType>();
@@ -29,71 +39,161 @@ const validatePan = (pan: string): boolean => {
   return panRegex.test(pan);
 };
 const DepositSchemaCreation = () => {
-  const defaultData: TableType[] = [
-    {
-      sno: "01",
-      depositTakerID: "DT001",
-      depositTakerName: "Deposit Taker 1",
-      pan: "EUSPM1234T",
-      status: "Active",
-      action: false,
-    },
-    {
-      sno: "02",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      pan: "EUSPM1234T",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "03",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      pan: "EUSPM1234T",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "04",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      pan: "EUSPM1234T",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "05",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      pan: "EUSPM1234T",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "06",
-      depositTakerID: "DT002",
-      depositTakerName: "Deposit Taker 2",
-      pan: "EUSPM1234T",
-      status: "pending",
-      action: true,
-    },
-  ];
+  const [loader, setLoader] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
+  const [myTaskData, setMyTaskData] = useState([]);
+  const navigate = useNavigate();
+  const myTaskRg = async () => {
+    setLoader(true);
+    try {
+      const { data } = await axiosInstance.get(`/deposit-taker`, {
+        params: {
+          page: page,
+          limit: pageSize,
+        },
+      });
+      if (data?.data?.depositTakers) {
+        const mappedData = data.data.depositTakers.map(
+          (item: any, index: number) => ({
+            ...item,
+            id: index + 1,
+            key: index,
+          })
+        );
+        setMyTaskData(mappedData);
+      }
 
+      setTotal(data?.data?.total);
+      setLoader(false);
+    } catch (error) {
+      console.error("Error fetching schemes:", error);
+      setLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    myTaskRg();
+  }, [page, pageSize]);
+  // const defaultData: TableType[] = [
+  //   {
+  //     sno: "01",
+  //     depositTakerID: "DT001",
+  //     depositTakerName: "Deposit Taker 1",
+  //     pan: "EUSPM1234T",
+  //     status: "Active",
+  //     action: false,
+  //   },
+  //   {
+  //     sno: "02",
+  //     depositTakerID: "DT002",
+  //     depositTakerName: "Deposit Taker 2",
+  //     pan: "EUSPM1234T",
+  //     status: "pending",
+  //     action: true,
+  //   },
+  //   {
+  //     sno: "03",
+  //     depositTakerID: "DT002",
+  //     depositTakerName: "Deposit Taker 2",
+  //     pan: "EUSPM1234T",
+  //     status: "pending",
+  //     action: true,
+  //   },
+  //   {
+  //     sno: "04",
+  //     depositTakerID: "DT002",
+  //     depositTakerName: "Deposit Taker 2",
+  //     pan: "EUSPM1234T",
+  //     status: "pending",
+  //     action: true,
+  //   },
+  //   {
+  //     sno: "05",
+  //     depositTakerID: "DT002",
+  //     depositTakerName: "Deposit Taker 2",
+  //     pan: "EUSPM1234T",
+  //     status: "pending",
+  //     action: true,
+  //   },
+  //   {
+  //     sno: "06",
+  //     depositTakerID: "DT002",
+  //     depositTakerName: "Deposit Taker 2",
+  //     pan: "EUSPM1234T",
+  //     status: "pending",
+  //     action: true,
+  //   },
+  // ];
+
+  // const columns = [
+  //   columnHelper.accessor("sno", {
+  //     cell: (info: any) => info.renderValue(),
+  //     header: () => <span>Sr. No.</span>,
+  //   }),
+  //   columnHelper.accessor("depositTakerID", {
+  //     cell: (info: any) => info.renderValue(),
+  //     header: () => <span>Deposit Taker ID</span>,
+  //   }),
+  //   columnHelper.accessor("depositTakerName", {
+  //     cell: (info: any) => info.renderValue(),
+  //     header: () => <span>Deposit Taker Name</span>,
+  //   }),
+  //   columnHelper.accessor("pan", {
+  //     cell: (info: any) => {
+  //       const pan = info.renderValue();
+  //       return validatePan(pan) ? pan : "Invalid PAN";
+  //     },
+  //     header: () => <span>PAN</span>,
+  //   }),
+  //   columnHelper.accessor("status", {
+  //     cell: (info: any) => {
+  //       const value = info?.row?.original?.action;
+
+  //       return (
+  //         <div
+  //           className="flex flex-col md:flex-row justify-center gap-3"
+  //           key={Math.random()}
+  //         >
+  //           <span> {value ? "Active" : "In-Active"}</span>
+  //         </div>
+  //       );
+  //     },
+  //     header: () => <span>Status</span>,
+  //   }),
+  //   columnHelper.accessor((row: any) => row, {
+  //     id: "action",
+  //     cell: (info: any) => {
+  //       const value = info.getValue();
+
+  //       return (
+  //         <div className="flex justify-center items-center ">
+  //           <Link to={"/ca/deposit-taker/form"}>
+  //             <div>
+  //               <img src={Eye} alt="Eye " className="cursor-pointer" />
+  //             </div>
+  //           </Link>
+  //         </div>
+  //       );
+  //     },
+  //     header: () => <span>View</span>,
+  //   }),
+  // ];
   const columns = [
-    columnHelper.accessor("sno", {
+    columnHelper.accessor("id", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Sr. No.</span>,
     }),
-    columnHelper.accessor("depositTakerID", {
+    columnHelper.accessor("uniqueId", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Deposit Taker ID</span>,
     }),
-    columnHelper.accessor("depositTakerName", {
+    columnHelper.accessor("companyName", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Deposit Taker Name</span>,
     }),
-    columnHelper.accessor("pan", {
+    columnHelper.accessor("panNumber", {
       cell: (info: any) => {
         const pan = info.renderValue();
         return validatePan(pan) ? pan : "Invalid PAN";
@@ -101,18 +201,8 @@ const DepositSchemaCreation = () => {
       header: () => <span>PAN</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info: any) => {
-        const value = info?.row?.original?.action;
+      cell: (info: any) => info.renderValue(),
 
-        return (
-          <div
-            className="flex flex-col md:flex-row justify-center gap-3"
-            key={Math.random()}
-          >
-            <span> {value ? "Active" : "In-Active"}</span>
-          </div>
-        );
-      },
       header: () => <span>Status</span>,
     }),
     columnHelper.accessor((row: any) => row, {
@@ -178,7 +268,10 @@ const DepositSchemaCreation = () => {
   };
 
   return (
-    <div className="relative xl:ml-[40px]">
+    <div
+      className="relative xl:ml-[40px]"
+      style={{ minHeight: "calc(100vh - 110px)" }}
+    >
       <div className="mt-6">
         <TaskTabsCa />
       </div>
@@ -269,15 +362,27 @@ const DepositSchemaCreation = () => {
           </div>
         </div>
         <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-          <div className="">
-            <ReactTable defaultData={defaultData} columns={columns} />
+          <div className="mb-20">
+            {loader ? (
+              <LoaderSpin />
+            ) : myTaskData?.length > 0 ? (
+              <ReactTable defaultData={myTaskData} columns={columns} />
+            ) : (
+              <div className=" flex justify-center items-center">
+                <h1>No data available</h1>
+              </div>
+            )}
           </div>
-          <div className="mt-10">
-            <CustomPagination
-              totalItems={defaultData?.length}
-              itemsPerPage={5}
-              maxPageNumbersToShow={5}
-            />
+          <div className="absolute bottom-0 w-full">
+            {myTaskData?.length > 0 && (
+              <CustomPagination
+                currentPage={page}
+                setCurrentPage={setPage}
+                totalItems={total}
+                itemsPerPage={pageSize}
+                maxPageNumbersToShow={5}
+              />
+            )}
           </div>
         </div>
       </div>
