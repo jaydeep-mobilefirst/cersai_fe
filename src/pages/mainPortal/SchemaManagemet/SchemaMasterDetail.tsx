@@ -1,16 +1,15 @@
 import axios from "axios";
 import BackArrow from "../../../assets/images/BackArrow.svg";
-// import CreatedBy from "./CreatedBy";
-// import EntityDetails from "./EntityDetails";
-// import SchemeDetails from "./SchemeDetails";
-// import AuditTrail from "./AuditTrail";
 import Accordion from "../../../components/customAccordin/CustomAccordin";
 import AuditTrail from "../../../components/ScehmaManagement/AuditTrail";
-import SchemeDetails from "../../../components/ScehmaManagement/SchemaDetails";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 import { useLocation, useNavigate, useNavigation } from "react-router-dom";
 import { bffUrl } from "../../../utils/api";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
+import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
+import LoaderSpin from "../../../components/LoaderSpin";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -18,79 +17,95 @@ interface AccordionItem {
 }
 
 const SchemeMasterForm = () => {
+  const [loader, setLoader] = useState(true);
+  const { onChange } =
+    useContext(FormHandlerContext);
+  const { setAllFormData, setAllDocumentData, allFormData } =
+    useDepositTakerRegistrationStore((state) => state);
   const navigate = useNavigate();
   const location = useLocation();
   const uniqueId = location.state?.uniqueId;
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
 
-  const fetchAndMapSchemeData = async () => {
+  const fetchSchema = async () => {
     try {
-      // Fetch schema form fields (assuming this endpoint provides the necessary field IDs and types)
-      const schemaResponse = await axios.get(`${bffUrl}/scheme/field-data`);
-      if (!schemaResponse.data.success) {
-        throw new Error("Failed to fetch schema fields");
-      }
-      let formFields = schemaResponse.data.data.formFields.allFormFields;
-      console.log({ formFields });
-
-      // Fetch user data from the scheme portal (actual values to be filled in the form)
-      const portalResponse = await axios.get(
-        `${bffUrl}/scheme-portal/${uniqueId}?page=${page}&limit=${pageSize}`
-      );
-      const userData = portalResponse.data?.data;
-      console.log(userData, "userData"); // Assuming this returns the scheme data with schemeFormData
-
-      // Ensure userData contains the schemeFormData before proceeding
-      if (!userData || !userData.schemeFormData) {
-        throw new Error("Scheme form data not available");
-      }
-
-      // Map user inputs to schema fields
-      formFields = formFields.map((field: any) => {
-        const userField = userData.schemeFormData.find(
-          (uField: any) => uField.fieldId === field.id
+      setLoader(true)
+      const response = await axios.get(`${bffUrl}/scheme/field-data`);
+      // console.log(response, "response");
+      if (response.data.success) {
+        const portalResponse = await axios.get(
+          `${bffUrl}/scheme-portal/${uniqueId}`
         );
-        if (userField) {
-          console.log(`Match found for fieldId ${field.id}:`, userField);
-        }
-        return {
-          ...field,
-          userInput: userField ? userField.value : "",
-          error: "", // Placeholder for future validation error handling
-        };
-      });
 
-      // Optionally: update state or handle the mapped fields as needed
-      console.log(formFields, "Mapped form fields data"); // Log or manage the mapped data as needed
-    } catch (error: any) {
-      console.error("Error in fetching or mapping scheme data:", error);
-      if (error.response) {
-        console.log("Error response:", error.response.data);
+        const userData = portalResponse.data?.data?.schemes[0];
+        const formFields = response?.data?.data?.formFields?.allFormFields.map(
+          (field: any) => ({
+            ...field,
+            userInput: userData?.schemeFormData?.find((f: any) => f?.fieldId === field?.id)?.value,
+            error: "",
+            disabled: true,
+            typeId: field?.fieldTypeId,
+            // id: field.fieldTypeId,
+          })
+        );
+
+        setAllFormData({
+          ...response?.data?.data,
+          formFields: {
+            form_fields: formFields?.map((field: any) => {
+              if (field?.key === 'depositTakerId') {
+                return {
+                  ...field, dropdown_options: {
+                    ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                      name: o?.uniqueId,
+                      id: o?.companyName,
+                    }))
+                  }
+                }
+              }
+              else {
+                return field;
+              }
+            })
+          },
+          fieldTypes: response?.data?.data?.fieldTypes,
+          validations: response?.data?.data?.validations,
+          fileTypes: response?.data?.data?.fileTypes,
+          other: userData
+        });
       }
+      setLoader(false)
+    } catch (error) {
+      setLoader(false)
+      console.error("Error fetching schema data:", error);
     }
   };
 
   useEffect(() => {
     if (uniqueId) {
-      fetchAndMapSchemeData();
+      fetchSchema();
     }
   }, [uniqueId, page, pageSize]);
 
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
-      content: <SchemeDetails />,
+      content: <DynamicFields
+        formFields={allFormData?.formFields?.form_fields}
+        allFormData={allFormData}
+        onChange={onChange}
+      />,
     },
-
     {
       header: "Audit Trail",
       content: <AuditTrail />,
     },
   ];
   const handleBackButtonClick = () => {
-    navigate("/dt/mytask");
+    navigate("/dt/scheme");
   };
+
   return (
     <div>
       <div className="relative mx-2 xl:ml-[40px] mt-4">
@@ -98,7 +113,7 @@ const SchemeMasterForm = () => {
           <TaskTabs />
         </div>
         <div className="mt-8">
-          <Accordion items={accordionItems} />
+          {loader ? <LoaderSpin/> : <Accordion items={accordionItems} />}
         </div>
         <div className="my-11 flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center cursor-pointer space-x-2 mb-3 md:mb-0">

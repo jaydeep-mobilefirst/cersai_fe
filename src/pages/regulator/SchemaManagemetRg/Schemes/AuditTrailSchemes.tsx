@@ -1,45 +1,123 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Accordion from "../../../../components/customAccordin/CustomAccordin";
-import SchemeDetails from "./schemeDetails";
-import EntityDetails from "./EntityDetails";
-import CreatedBy from "./CreatedBy";
 import AuditTrail from "../../../../components/ScehmaManagement/AuditTrail";
-
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useScreenWidth } from "../../../../utils/screenSize";
 import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
-import StatusSuccessPopUp from "./StatusSuccessPopUp";
 import InfoIcon from "../../../../assets/images/info-circle.svg";
+import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker-registration/registrationStore";
+import { FormHandlerContext } from "../../../../contextAPI/useFormFieldHandlers";
+import axios from "axios";
+import { bffUrl } from "../../../../utils/api";
+import DynamicFields from "../../../../components/userFlow/depositeTaker/DynamicFields";
+import LoaderSpin from "../../../../components/LoaderSpin";
+import SelectButton from "../../../../components/userFlow/form/SelectButton";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
+
+const options2 = [
+  { value: "Scheme 123", label: "Scheme 123" },
+  { value: "Scheme 123", label: "Scheme 123" },
+  { value: "Scheme 123", label: "Scheme 123" },
+];
 const SchemesSearchDetailsSM: React.FC = () => {
-  const navigate = useNavigate();
-  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
+
+  const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
+
+  const [loader, setLoader] = useState(true);
   const screenWidth = useScreenWidth();
+  const { onChange } =
+    useContext(FormHandlerContext);
+  const { setAllFormData, setAllDocumentData, allFormData } =
+    useDepositTakerRegistrationStore((state) => state);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const uniqueId = location.state?.uniqueId;
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(2);
+
+  const fetchSchema = async () => {
+    try {
+      setLoader(true)
+      const response = await axios.get(`${bffUrl}/scheme/field-data`);
+      // console.log(response, "response");
+      if (response.data.success) {
+        const portalResponse = await axios.get(
+          `${bffUrl}/scheme-portal/${uniqueId}`
+        );
+
+        const userData = portalResponse.data?.data?.schemes[0];
+        const formFields = response?.data?.data?.formFields?.allFormFields.map(
+          (field: any) => ({
+            ...field,
+            userInput: userData?.schemeFormData?.find((f: any) => f?.fieldId === field?.id)?.value,
+            error: "",
+            disabled: true,
+            typeId: field?.fieldTypeId,
+            // id: field.fieldTypeId,
+          })
+        );
+
+        setAllFormData({
+          ...response?.data?.data,
+          formFields: {
+            form_fields: formFields?.map((field: any) => {
+              if (field?.key === 'depositTakerId') {
+                return {
+                  ...field, dropdown_options: {
+                    ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                      name: o?.uniqueId,
+                      id: o?.companyName,
+                    }))
+                  }
+                }
+              }
+              else {
+                return field;
+              }
+            })
+          },
+          fieldTypes: response?.data?.data?.fieldTypes,
+          validations: response?.data?.data?.validations,
+          fileTypes: response?.data?.data?.fileTypes,
+          other: userData
+        });
+      }
+      setLoader(false)
+    } catch (error) {
+      setLoader(false)
+      console.error("Error fetching schema data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (uniqueId) {
+      fetchSchema();
+    }
+  }, [uniqueId, page, pageSize]);
+
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
-      content: <SchemeDetails />,
-    },
-    {
-      header: "Entity Details",
-      content: <EntityDetails />,
-    },
-    {
-      header: "Created By",
-      content: <CreatedBy />,
+      content: <DynamicFields
+        formFields={allFormData?.formFields?.form_fields}
+        allFormData={allFormData}
+        onChange={onChange}
+      />,
     },
     {
       header: "Audit Trail",
       content: <AuditTrail />,
     },
   ];
-  const handleButtonClick = () => {
-    // Set showPopup to true to display the popup
-    setShowPopup(true);
+
+  const handleSetOption2 = (value: string) => {
+    setSelectedOption2(value);
   };
+
   const handleBackButtonClick = () => {
     navigate("/rg/my-task");
   };
@@ -62,7 +140,42 @@ const SchemesSearchDetailsSM: React.FC = () => {
         </p>
       </div>
       <div className="mt-8 mb-8 mx-8">
-        <Accordion items={accordionItems} />
+        {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
+        <div className="grid grid-cols-2 space-x-3">
+        <div > 
+          <label
+            htmlFor="Select Other Schemes"
+            className="text-base font-normal text-gilroy-medium"
+          >
+            Status
+          </label>
+          <SelectButton
+            // backgroundColor="#F2F2F2"
+            setOption={handleSetOption2}
+            options={options2}
+            selectedOption={selectedOption2}
+            placeholder="Select"
+            showSearchInput={true}
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="Select Other Schemes"
+            className="text-base font-normal text-gilroy-medium"
+          >
+            Select Other Schemes
+          </label>
+          <SelectButton
+            // backgroundColor="#F2F2F2"
+            setOption={handleSetOption2}
+            options={options2}
+            selectedOption={selectedOption2}
+            placeholder="Select"
+            showSearchInput={true}
+          />
+        </div>
+        </div>
       </div>
       <div>
         <div
@@ -98,7 +211,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
           <div className="flex items-center">
             <button
               type="submit"
-              onClick={handleButtonClick}
+              // onClick={handleButtonClick}
               className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
             >
               Submit
@@ -113,12 +226,12 @@ const SchemesSearchDetailsSM: React.FC = () => {
           </p>
         </div>
       </div>
-      {showPopup && (
+      {/* {showPopup && (
         <StatusSuccessPopUp
           closePopup={() => setShowPopup(false)}
           SuccessPopup={() => setShowPopup(false)}
         />
-      )}
+      )} */}
     </div>
   );
 };

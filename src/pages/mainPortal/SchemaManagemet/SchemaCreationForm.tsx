@@ -1,11 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 import { useScreenWidth } from "../../../utils/screenSize";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import SchemeCreationSuccess from "../../../components/ScehmaManagement/SchemeCrationSucess";
-import { SchemaFormValidation } from "../../../components/ScehmaManagement/SchemaMangementValidation";
 import useSidebarStore from "../../../store/SidebarStore";
 import { bffUrl } from "../../../utils/api";
 import axios from "axios";
@@ -13,24 +9,17 @@ import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFie
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../../components/LoaderSpin";
-
+import SuccessPopup from "../../../components/userFlow/depositeTaker/SuccessPopUp"
 const SchemaCreationForm = () => {
-  const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
-  const [searchInputValue1, setSearchInputValue1] = useState<string>("");
-
-  const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
-  const [searchInputValue2, setSearchInputValue2] = useState<string>("");
-
-  const [selectedOption3, setSelectedOption3] = useState<string | null>(null);
-  const [searchInputValue3, setSearchInputValue3] = useState<string>("");
-
-  const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
-  const [searchInputValue4, setSearchInputValue4] = useState<string>("");
   const screenWidth = useScreenWidth();
   const [isChecked, setIsChecked] = useState(false);
-  const [showPopup, setShowPopup] = useState<boolean>(false);
   const [loader, setLoader] = useState(false);
-
+  const [submitted, setSubmitted] = useState(false);
+  const [popupData, setPopData] = useState({
+    para1: '',
+    para2: '',
+    show : false
+  });
   const navigate = useNavigate();
   const { collapsed } = useSidebarStore();
   const { setAllFormData, setAllDocumentData, allFormData } =
@@ -38,116 +27,14 @@ const SchemaCreationForm = () => {
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
 
-  const closePopup = () => {
-    setShowPopup(false);
-  };
-  const SuccessPopup = () => {
-    setShowPopup(false);
-    navigate("/dt/scheme");
-  };
   const handleBackButtonClick = () => {
     navigate("/dt/scheme");
   };
-  const options1 = [
-    { value: "Pvt Ltd", label: "Pvt Ltd" },
-    { value: "LLP", label: "LLP" },
-    { value: "Sole PArtnership", label: "Sole PArtnership" },
-  ];
-
-  const options2 = [
-    { value: "Andhra Pradesh", label: "Andhra Pradesh" },
-    { value: "Bihar", label: "Bihar" },
-    { value: "Chhattisgarh", label: "Chhattisgarh" },
-    { value: "Gujarat", label: "Gujarat" },
-  ];
-
-  const options3 = [
-    { value: "Anantapur", label: "Anantapur" },
-    { value: "Kurnool", label: "Kurnool" },
-    { value: "Chittoor", label: "Chittoor" },
-  ];
-
-  const options4 = [
-    { value: "515661", label: "515661" },
-    { value: "515672", label: "515672" },
-    { value: "515662", label: "515662" },
-  ];
-  const handleSetOption1 = (value: string) => {
-    setSelectedOption1(value);
-  };
-
-  const handleSearchInputChange1 = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchInputValue1(event.target.value);
-  };
-
-  const handleSetOption2 = (value: string) => {
-    setSelectedOption2(value);
-  };
-
-  const handleSearchInputChange2 = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchInputValue2(event.target.value);
-  };
-
-  const handleSetOption3 = (value: string) => {
-    setSelectedOption3(value);
-  };
-
-  const handleSearchInputChange3 = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchInputValue3(event.target.value);
-  };
-  const handleSetOption4 = (value: string) => {
-    setSelectedOption4(value);
-  };
-
-  const handleSearchInputChange4 = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchInputValue4(event.target.value);
-  };
-
-  const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
-    reset,
-    setValue,
-    clearErrors,
-    getValues,
-  } = useForm({
-    resolver: yupResolver(SchemaFormValidation),
-  });
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
 
-  const handleDateChangeEnd = (event: any) => {
-    const { value } = event.target;
-    const startValue = getValues("startSchemaDate");
-    const startDate = startValue ? new Date(startValue) : null; // Handle undefined values
-
-    if (!startDate || isNaN(startDate.getTime())) {
-      setError("endSchemaDate", { message: "Invalid start date" });
-      return; // Exit if no valid start date
-    }
-
-    const selectedDate = new Date(value);
-    if (selectedDate <= startDate) {
-      setError("endSchemaDate", {
-        message: "End date must be after the start date",
-      });
-    } else {
-      clearErrors("endSchemaDate");
-      setValue("endSchemaDate", value, { shouldValidate: true });
-    }
-  };
   useEffect(() => {
     fetchSchema();
   }, []);
@@ -168,7 +55,20 @@ const SchemaCreationForm = () => {
 
         setAllFormData({
           ...response?.data?.data,
-          formFields: { form_fields: formFields },
+          formFields: { form_fields: formFields?.map((field : any) => {
+            if (field?.key === 'depositTakerId') {
+              console.log({field});
+              
+              return  {...field, dropdown_options : {...field?.dropdown_options, options : field?.dropdown_options?.options?.map((o : any) => ({
+                name: o?.uniqueId,
+                id: o?.companyName,
+              }))}   
+             }
+            }
+            else{
+              return field;
+            }
+          } ) },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,
@@ -187,7 +87,6 @@ const SchemaCreationForm = () => {
     );
     if (!isFormValid) {
       setLoader(false);
-      console.log("Form validation failed");
       return;
     }
     try {
@@ -200,7 +99,7 @@ const SchemaCreationForm = () => {
 
       // Creating the payload object that includes both formData and depositTakerId
       const payload = {
-        depositTakerId: entityType || "DT1717238481799",
+        createdBy: entityType,
         formData: formData,
       };
 
@@ -209,18 +108,30 @@ const SchemaCreationForm = () => {
         `${bffUrl}/scheme-portal/add-form-fields`, // Assuming bffUrl is defined elsewhere
         payload // Sending the payload with depositTakerId and formData
       );
-
-      console.log("Data submitted successfully:", response.data);
-      if (response.status) {
-        setShowPopup(true);
+      
+      if (response.data?.success) {
+        setSubmitted(true)
+        setPopData({
+          para1 : 'Addition Successful',
+          para2 : response.data?.message,
+          show : true,
+        })
+      }
+      else{
+        setSubmitted(false)
+        setPopData({
+          para1 : 'Something went wrong',
+          para2 : response.data?.message,
+          show : true,
+        })
       }
       setLoader(false);
-      SuccessPopup();
+      // SuccessPopup();
     } catch (error) {
-      console.error("Error submitting form data:", error);
       setLoader(false);
     }
   };
+  
 
   return (
     <div
@@ -255,12 +166,19 @@ const SchemaCreationForm = () => {
               </div>
             </div>
           </div>
-          {showPopup && (
-            <SchemeCreationSuccess
-              closePopup={closePopup}
-              SuccessPopup={SuccessPopup}
+            <SuccessPopup
+                closePopup={() => {
+                 setPopData({...popupData, show : false})
+                  if (submitted) {
+                    navigate('/dt/scheme')
+                  }
+                }}
+                showPopup={() => {}}
+                toggle={popupData.show}
+                para1={popupData.para1}
+                para2={popupData.para2}
+                success={submitted}
             />
-          )}
 
           <div className="absolute bottom-0">
             <div
@@ -276,7 +194,7 @@ const SchemaCreationForm = () => {
                   onClick={handleBackButtonClick}
                   className="text-[#1c468e] text-gilroy-medium cursor-pointer"
                 >
-                  Discord
+                  Discard
                 </p>
 
                 <button

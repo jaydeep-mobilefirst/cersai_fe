@@ -417,7 +417,6 @@ const FormHandlerProviders = ({ children }: Props) => {
         `${bffUrl}/validator/submit`,
         formFieldsForValidations
       );
-      console.log({ response });
       const data = await response?.data?.data;
       const success = await response?.data?.success;
 
@@ -442,7 +441,6 @@ const FormHandlerProviders = ({ children }: Props) => {
     formFields: any[],
     isAdding: boolean = true
   ): Promise<boolean> => {
-    console.log({ formFields });
     const formFieldsForValidations = formFields?.map((field: any) => {
       let validations = field?.regFormFieldsValidations
         ? field?.regFormFieldsValidations

@@ -33,6 +33,7 @@ const SchemaCreation = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [total, setTotal] = useState<number>(0);
   const navigate = useNavigate();
+
   const fetchSchemes = async () => {
     setLoader(true);
     try {
@@ -41,17 +42,12 @@ const SchemaCreation = () => {
       //     "entityUniqueId"
       //   )}`
       // );
-      const { data } = await axios.get(
-        `${bffUrl}/scheme-portal/scheme-by/${sessionStorage.getItem(
-          "entityUniqueId"
-        )}`,
-        {
-          params: {
-            page: page,
-            limit: pageSize,
-          },
-        }
-      );
+      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme`, {
+        params: {
+          page: page,
+          limit: pageSize,
+        },
+      });
 
       setSchemaData(
         data.data.map((item: any, index: any) => ({
@@ -60,6 +56,7 @@ const SchemaCreation = () => {
           status: item.status, // Or some logic to determine status
         }))
       );
+      setTotal(data?.total)
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
@@ -70,6 +67,7 @@ const SchemaCreation = () => {
   useEffect(() => {
     fetchSchemes();
   }, [page, pageSize]);
+
   const NavigateScheme = (uniqueId: any) => {
     navigate("/dt/scheme/creation", {
       state: {

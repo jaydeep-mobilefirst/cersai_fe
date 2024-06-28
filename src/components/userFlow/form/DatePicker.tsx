@@ -101,15 +101,15 @@
 
 import React, { useRef, useState } from "react";
 import Calender from "./svgs/Calender";
-import { dateFormattor } from "../../../utils/commonFunction";
 
 type Props = {
+  disabled ?: boolean
   onChange?: (event: any) => void;
   userValue?: string;
   backgroundColor?: string; // New background color prop
 };
 
-const DatePicker = ({ onChange, userValue, backgroundColor }: Props) => {
+const DatePicker = ({ onChange, userValue, backgroundColor, disabled }: Props) => {
   const hiddenDateInput = useRef<HTMLInputElement>(null);
   const [dateSelected, setDateSelected] = useState<string | undefined>(
     userValue
@@ -135,6 +135,7 @@ const DatePicker = ({ onChange, userValue, backgroundColor }: Props) => {
     <div className="flex justify-start items-center h-14 w-full max-w-[35rem] sm:max-w-[100%] md:max-w-md lg:max-w-2xl border rounded-md">
       <button
         type="button"
+        disabled={disabled ? disabled : false}
         onClick={handleDateButtonClick}
         className={`flex justify-between items-center h-full w-full px-2 py-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none`}
         style={{ backgroundColor: backgroundColor || "white" }} // Set background color
@@ -143,6 +144,7 @@ const DatePicker = ({ onChange, userValue, backgroundColor }: Props) => {
         <Calender />
       </button>
       <input
+        disabled={disabled ? disabled : false}
         defaultValue={userValue}
         ref={hiddenDateInput}
         type="date"

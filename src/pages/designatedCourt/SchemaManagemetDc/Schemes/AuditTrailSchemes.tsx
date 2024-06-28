@@ -1,39 +1,102 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Accordion from "../../../../components/customAccordin/CustomAccordin";
-import SchemeDetails from "./schemeDetails";
-import EntityDetails from "./EntityDetails";
-import CreatedBy from "./CreatedBy";
 import AuditTrail from "../../../../components/ScehmaManagement/AuditTrail";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useScreenWidth } from "../../../../utils/screenSize";
 import TaskTabsDc from "../../../../components/ScehmaManagement/TaskTabsDc";
 import InfoIcon from "../../../../assets/images/info-circle.svg";
+import DynamicFields from "../../../../components/userFlow/depositeTaker/DynamicFields";
+import { FormHandlerContext } from "../../../../contextAPI/useFormFieldHandlers";
+import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker-registration/registrationStore";
+import axios from "axios";
+import { bffUrl } from "../../../../utils/api";
+import LoaderSpin from "../../../../components/LoaderSpin";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
 const SchemesSearchDetailsSM: React.FC = () => {
-  const navigate = useNavigate();
+  const [loader, setLoader] = useState(true);
   const screenWidth = useScreenWidth();
+  const { onChange } =
+  useContext(FormHandlerContext);
+  const { setAllFormData, setAllDocumentData, allFormData } =
+  useDepositTakerRegistrationStore((state) => state);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const uniqueId = location.state?.uniqueId;
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(2);
+
+  const fetchSchema = async () => {
+    try {
+      setLoader(true)
+      const response = await axios.get(`${bffUrl}/scheme/field-data`);
+      // console.log(response, "response");
+      if (response.data.success) {
+        const portalResponse = await axios.get(
+          `${bffUrl}/scheme-portal/${uniqueId}`
+        );
+
+        const userData = portalResponse.data?.data?.schemes[0];        
+        const formFields = response?.data?.data?.formFields?.allFormFields.map(
+          (field: any) => ({
+            ...field,
+            userInput: userData?.schemeFormData?.find((f : any) => f?.fieldId === field?.id)?.value,
+            error: "",
+            disabled : true,
+            typeId: field?.fieldTypeId,
+            // id: field.fieldTypeId,
+          })
+        );
+
+        setAllFormData({
+          ...response?.data?.data,
+          formFields: { form_fields: formFields?.map((field : any) => {
+            if (field?.key === 'depositTakerId') {              
+              return  {...field, dropdown_options : {...field?.dropdown_options, options : field?.dropdown_options?.options?.map((o : any) => ({
+                name: o?.uniqueId,
+                id: o?.companyName,
+              }))}   
+             }
+            }
+            else{
+              return field;
+            }
+          } ) },
+          fieldTypes: response?.data?.data?.fieldTypes,
+          validations: response?.data?.data?.validations,
+          fileTypes: response?.data?.data?.fileTypes,
+          other : userData
+        });
+      }
+      setLoader(false)
+    } catch (error) {
+      setLoader(false)
+      console.error("Error fetching schema data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (uniqueId) {
+      fetchSchema();
+    }
+  }, [uniqueId, page, pageSize]);
+
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
-      content: <SchemeDetails />,
-    },
-    {
-      header: "Entity Details",
-      content: <EntityDetails />,
-    },
-    {
-      header: "Created By",
-      content: <CreatedBy />,
+      content: <DynamicFields
+                formFields={allFormData?.formFields?.form_fields}
+                allFormData={allFormData}
+                onChange={onChange}
+              />,
     },
     {
       header: "Audit Trail",
       content: <AuditTrail />,
     },
   ];
-
   const handleBackButtonClick = () => {
     navigate("/dc/my-task");
   };
@@ -53,7 +116,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
         </p>
       </div>
       <div className="mt-8 mb-8 mx-8">
-        <Accordion items={accordionItems} />
+      {loader ? <LoaderSpin/> : <Accordion items={accordionItems} />}
       </div>
       <div>
         <div

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -13,90 +13,132 @@ import CustomPagination from "../../../../components/CustomPagination/CustomPagi
 import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
 import EditIcon from "../../../../assets/images/editBlue.svg";
-type TableType = {
-  sno: string;
-  schemeID: string;
-  schemeName: string;
-  status: string;
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { bffUrl } from "../../../../utils/api";
+import LoaderSpin from "../../../../components/LoaderSpin";
+
+type SchemeType = {
+  id: number;
+  uniqueId: string;
+  name: string;
   depositTaker: string;
   createdBy: string;
-  action: boolean;
+  status: string;
+  active: boolean;
 };
 
-const columnHelper = createColumnHelper<TableType>();
+const columnHelper = createColumnHelper<SchemeType>();
 
 const validatePan = (pan: string): boolean => {
   const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
   return panRegex.test(pan);
 };
 const NewSchemaCreation = () => {
-  const defaultData: TableType[] = [
-    {
-      sno: "01",
-      schemeID: "DT001",
-      schemeName: "Deposit Taker 1",
-      status: "Active",
-      depositTaker: "Chandra",
-      createdBy: "BOB",
-      action: false,
-    },
-    {
-      sno: "02",
-      schemeID: "DT002",
-      schemeName: "Deposit Taker 2",
-      status: "Active",
-      depositTaker: "Chandra",
-      createdBy: "BOB",
-      action: false,
-    },
-    {
-      sno: "03",
-      schemeID: "DT002",
-      schemeName: "Deposit Taker 2",
-      status: "Active",
-      depositTaker: "Chandra",
-      createdBy: "BOB",
-      action: false,
-    },
-    {
-      sno: "04",
-      schemeID: "DT002",
-      schemeName: "Deposit Taker 2",
-      status: "Active",
-      depositTaker: "Chandra",
-      createdBy: "BOB",
-      action: false,
-    },
-    {
-      sno: "05",
-      schemeID: "DT002",
-      schemeName: "Deposit Taker 2",
-      status: "Active",
-      depositTaker: "Chandra",
-      createdBy: "BOB",
-      action: false,
-    },
-    {
-      sno: "06",
-      schemeID: "DT002",
-      schemeName: "Deposit Taker 2",
-      status: "Active",
-      depositTaker: "Chandra",
-      createdBy: "BOB",
-      action: false,
-    },
-  ];
+  const [schemaData, setSchemaData] = useState([]);
+  const [loader, setLoader] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
+  const navigate = useNavigate();
+
+  // const defaultData: TableType[] = [
+  //   {
+  //     sno: "01",
+  //     schemeID: "DT001",
+  //     schemeName: "Deposit Taker 1",
+  //     status: "Active",
+  //     depositTaker: "Chandra",
+  //     createdBy: "BOB",
+  //     action: false,
+  //   },
+  //   {
+  //     sno: "02",
+  //     schemeID: "DT002",
+  //     schemeName: "Deposit Taker 2",
+  //     status: "Active",
+  //     depositTaker: "Chandra",
+  //     createdBy: "BOB",
+  //     action: false,
+  //   },
+  //   {
+  //     sno: "03",
+  //     schemeID: "DT002",
+  //     schemeName: "Deposit Taker 2",
+  //     status: "Active",
+  //     depositTaker: "Chandra",
+  //     createdBy: "BOB",
+  //     action: false,
+  //   },
+  //   {
+  //     sno: "04",
+  //     schemeID: "DT002",
+  //     schemeName: "Deposit Taker 2",
+  //     status: "Active",
+  //     depositTaker: "Chandra",
+  //     createdBy: "BOB",
+  //     action: false,
+  //   },
+  //   {
+  //     sno: "05",
+  //     schemeID: "DT002",
+  //     schemeName: "Deposit Taker 2",
+  //     status: "Active",
+  //     depositTaker: "Chandra",
+  //     createdBy: "BOB",
+  //     action: false,
+  //   },
+  //   {
+  //     sno: "06",
+  //     schemeID: "DT002",
+  //     schemeName: "Deposit Taker 2",
+  //     status: "Active",
+  //     depositTaker: "Chandra",
+  //     createdBy: "BOB",
+  //     action: false,
+  //   },
+  // ];
+
+  const fetchSchemes = async () => {
+    setLoader(true);
+    try {
+      // const uniqueId = sessionStorage.getItem("entityUniqueId");
+      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme`, {
+        params: {
+          page: page,
+          limit: pageSize,
+        },
+      });
+
+      setSchemaData(
+        data.data.map((item: any, index: any) => ({
+          ...item,
+          id: index + 1, // Assuming you want to use index as S.No.
+          status: item.status, // Or some logic to determine status
+        }))
+      );
+      setTotal(data?.total)
+      setLoader(false);
+    } catch (error) {
+      console.error("Error fetching schemes:", error);
+      setLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchemes();
+  }, [page, pageSize]);
 
   const columns = [
-    columnHelper.accessor("sno", {
+    columnHelper.accessor("id", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Sr. No.</span>,
     }),
-    columnHelper.accessor("schemeID", {
+    columnHelper.accessor("uniqueId", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Scheme ID</span>,
     }),
-    columnHelper.accessor("schemeName", {
+    columnHelper.accessor("name", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Scheme Name</span>,
     }),
@@ -121,25 +163,27 @@ const NewSchemaCreation = () => {
       header: () => <span>Deposit Taker</span>,
     }),
     columnHelper.accessor("createdBy", {
-      cell: (info: any) => info.renderValue(),
+      cell: (info: any) => (info.renderValue() ? info.renderValue : "N/A"),
       header: () => <span>Created By</span>,
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
-      cell: (info: any) => {
-        const value = info.getValue();
-
+      cell: (info) => {
+        const NavigateScheme = (uniqueId: any) => {
+          navigate("/rg/my-task/audit-rail", {
+            state: {
+              uniqueId: uniqueId,
+            },
+          });
+        };
+        const uniqueId = info?.row?.original?.uniqueId;
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/rg/my-task/audit-rail"}>
-              <div>
-                <img
-                  src={EditIcon}
-                  alt="EditIcon "
-                  className="cursor-pointer"
-                />
-              </div>
-            </Link>
+            {/* <Link to={"/dt/schema/creation"}> */}
+            <div onClick={() => NavigateScheme(uniqueId)}>
+              <img src={Eye} alt="Eye " className="cursor-pointer" />
+            </div>
+            {/* </Link> */}
           </div>
         );
       },
@@ -191,7 +235,10 @@ const NewSchemaCreation = () => {
   };
 
   return (
-    <div className="relative xl:ml-[40px]">
+    <div
+      className="relative xl:ml-[40px]"
+      style={{ minHeight: "calc(100vh - 110px)" }}
+    >
       <div className="mt-6">
         <TaskTabsRg />
       </div>
@@ -282,16 +329,28 @@ const NewSchemaCreation = () => {
           </div>
         </div>
         <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-          <div className="">
-            <ReactTable defaultData={defaultData} columns={columns} />
+          <div className=" mb-12">
+            {loader ? (
+              <LoaderSpin />
+            ) : schemaData?.length > 0 ? (
+              <ReactTable defaultData={schemaData} columns={columns} />
+            ) : (
+              <div className=" flex justify-center items-center">
+                <h1>No data available</h1>
+              </div>
+            )}
           </div>
-          <div className="mt-10">
-            <CustomPagination
-              totalItems={defaultData?.length}
-              itemsPerPage={5}
-              maxPageNumbersToShow={5}
-            />
-          </div>
+          {schemaData.length > 0 && (
+            <div className="absolute bottom-0 w-full">
+              <CustomPagination
+                currentPage={page}
+                setCurrentPage={setPage}
+                totalItems={total}
+                itemsPerPage={pageSize}
+                maxPageNumbersToShow={5}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

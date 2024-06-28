@@ -34,6 +34,8 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
     (state) => state
   );
 
+  console.log({formFields});
+  
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -88,6 +90,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                     </label>
                     <TextArea
                       value={field?.userInput}
+                      disabled={field?.disabled ? field?.disabled : false}
                       onChange={(e) =>
                         onChange && onChange(e, field, fieldType)
                       }
@@ -139,6 +142,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                       <RequiredStar allFormData={allFormData} field={field} />
                     </label>
                     <DatePicker
+                      disabled={field?.disabled ? field?.disabled : false}
                       onChange={(e) =>
                         onChange && onChange(e, field, fieldType)
                       }

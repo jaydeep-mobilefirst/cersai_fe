@@ -3,80 +3,58 @@ import { createColumnHelper } from "@tanstack/table-core";
 // import DirectBox from "../../assets/images/send.png";
 import DirectBox from "../../assets/images/send.png";
 import ReactTable from "../userFlow/common/ReactTable";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import { useEffect, useState } from "react";
 
 interface TableType {
-  sno: string;
-  statusChangeBy: string;
+  id: string;
+  user: string;
   from: string;
   to: string;
-  remarks?: string;
-  date: string;
+  remark?: string;
+  updatedAt: string;
 }
 
+const convertToDate = (isoString: string) => {
+  const date = new Date(isoString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = date.getFullYear();
+
+  return `${day}-${month}-${year}`;
+};
+
 const AuditTrail = () => {
+  const { allFormData } = useDepositTakerRegistrationStore(state => state)
+  const [auditTrail, setAuditTrail] = useState(allFormData?.other?.schemeAuditTrail);
   const columnHelper = createColumnHelper<TableType>();
 
-  const defaultData: TableType[] = [
-    {
-      sno: "01",
-      statusChangeBy: "Rohit",
-      from: "Department A",
-      to: "Department B",
-      remarks: "Transfer approved",
-      date: "2024-03-31",
-    },
-    {
-      sno: "02",
-      statusChangeBy: "Aman",
-      from: "Department X",
-      to: "Department Y",
-      remarks: "Promotion",
-      date: "2024-04-01",
-    },
-    {
-      sno: "03",
-      statusChangeBy: "Kumar",
-      from: "Section 1",
-      to: "Section 2",
-      remarks: "Change of role",
-      date: "2024-04-02",
-    },
-    {
-      sno: "04",
-      statusChangeBy: "Rahul",
-      from: "Department C",
-      to: "Department ID",
-      remarks: "Complaint",
-      date: "2024-04-03",
-    },
-  ];
-
   const columns = [
-    columnHelper.accessor("sno", {
-      cell: (info : any) => info.renderValue(),
+    columnHelper.accessor("id", {
+      cell: (info: any) => info.renderValue(),
       header: () => <span>S.No.</span>,
     }),
-    columnHelper.accessor("statusChangeBy", {
-      cell: (info : any) => info.renderValue(),
+    columnHelper.accessor("user", {
+      cell: (info: any) => info.renderValue(),
       header: () => <span>Status Change By</span>,
     }),
     columnHelper.accessor("from", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>From</span>,
     }),
     columnHelper.accessor("to", {
-      cell: (info : any) => info.renderValue(),
+      cell: (info: any) => info.renderValue(),
       header: () => <span>To</span>,
     }),
-    columnHelper.accessor("remarks", {
-      cell: (info : any) => (
+    columnHelper.accessor("remark", {
+      cell: (info: any) => (
         <>
           <div
             className=" flex items-center justify-between"
             style={{ width: "200px" }}
           >
-            <p>{info.row.original.remarks}</p>
-            {info.row.original.remarks === "Complaint" && (
+            <p>{info.row.original.remark}</p>
+            {info.row.original.remark === "Complaint" && (
               <img src={DirectBox} alt="DirectBox" className="w-6" />
             )}
           </div>
@@ -84,18 +62,25 @@ const AuditTrail = () => {
       ),
       header: () => <span>Remarks</span>,
     }),
-    columnHelper.accessor("date", {
-      cell: (info : any) => info.renderValue(),
+    columnHelper.accessor("updatedAt", {
+      cell: (info: any) => {
+        let modifiedDate = info?.getValue();
+        modifiedDate = convertToDate(modifiedDate);
+        return modifiedDate
+      },
       header: () => <span>Date</span>,
     }),
   ];
+
+  console.log({ allFormData });
+
   return (
     <div>
       <div
         className="custom-scrollbar mt-2"
         style={{ maxHeight: "300px", overflowY: "auto" }}
       >
-        <ReactTable defaultData={defaultData} columns={columns} />
+        {auditTrail?.length > 0 ? <ReactTable defaultData={auditTrail} columns={columns} /> : <span>No data</span>}
       </div>
     </div>
   );
