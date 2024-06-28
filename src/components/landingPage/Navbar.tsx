@@ -3,9 +3,12 @@ import MenuItem from "./MenuItem";
 import hamburger from "../../assets/images/hamburger_icon.svg";
 import close_icon from "../../assets/images/white_close.png";
 import { navbar } from "../../utils/hardText/landingpageText";
+import { useLandingStore } from "../../zust/useLandingStore";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
+
+  const { homePageData } = useLandingStore((state) => state);
 
   return (
     <div>
@@ -23,9 +26,13 @@ const Navbar = () => {
       <nav className="hidden w-full lg:flex h-[48px] bg-[#1c468e]">
         <div className="w-full text-[#ffffff] flex items-center justify-center">
           <ul className="flex lg:flex-row items-center">
-            {navbar.map((menuItem, index) => (
-              <MenuItem key={index} text={menuItem} />
-            ))}
+            {homePageData?.navbar?.length > 0 && (
+              <>
+                {homePageData?.navbar.map((menuItem: any, index: any) => (
+                  <MenuItem key={index} text={menuItem} />
+                ))}
+              </>
+            )}
           </ul>
         </div>
       </nav>
@@ -37,9 +44,13 @@ const Navbar = () => {
         } lg:hidden w-1/8 h-screen bg-gradient-to-r from-[#54AD47] to-[#0b2551] fixed top-0 left-0 z-20`}
       >
         <ul className="flex flex-col h-full text-white">
-          {navbar.map((menuItem, index) => (
-            <MenuItem key={index} text={menuItem} />
-          ))}
+          {homePageData?.navbar?.length > 0 && (
+            <>
+              {homePageData?.navbar.map((menuItem: any, index: any) => (
+                <MenuItem key={index} text={menuItem} />
+              ))}
+            </>
+          )}
         </ul>
 
         {/* Close Icon*/}
