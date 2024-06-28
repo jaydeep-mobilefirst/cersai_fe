@@ -14,11 +14,18 @@ import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import Swal from "sweetalert2";
 import uamStore from "../../../store/uamStore";
+import AdditionSuccessfulModalOne from "../../../components/UserManagement/AdditonSuccessfulModalOne";
+import failedLogo from "../../../assets/images/FailedIcon.svg"
+import LoaderSpin from "../../../components/LoaderSpin";
 
 const AddUserForm = () => {
+  const [successData, setSuccessData] = useState<{heading : string, paragraph : string, logo : any}>({heading : "", paragraph : "", logo : undefined})
+  const [loader, setLoader] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const editUserData = sessionStorage.getItem("editUserData");
+  const operation = sessionStorage.getItem("operation");
   console.log({ editUserData });
-
+  const parsedEditUSerData = JSON.parse(editUserData ?? "{}");
   const userCreationURL = sessionStorage.getItem("userCreationURL");
   const { handleRefreshUAM } = uamStore((state) => state);
   const [roleName, setRoleName] = useState("");
@@ -53,7 +60,7 @@ const AddUserForm = () => {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data, "data");
+    setLoader(true)
     let finalResult = {
       entityUniqueId: sessionStorage.getItem("entityUniqueId"),
       entityType: sessionStorage.getItem("entityType"),
@@ -63,43 +70,56 @@ const AddUserForm = () => {
       role_id: parseInt(data?.role),
       email_id: data?.email,
       mobile: data?.mobileNumber,
+      nodalOfficerId: operation === 'edit' ? parsedEditUSerData?.id : undefined
     };
 
     axios
-      .post(`${bffUrl}/user/add`, finalResult)
+    [operation === 'edit' ? "put" : "post"](`${bffUrl}/user/${operation === 'edit' ? 'update' : 'add'}`, finalResult)
       .then((res: any) => {
         let data = res?.data;
         if (data?.success) {
-          Swal.fire({
-            icon: "success",
-            title: data?.message,
-          });
           handleRefreshUAM();
-          navigate(
-            userCreationURL ??
-              `/${sessionStorage.getItem("entityType")?.toLocaleLowerCase()}`
-          );
+          setSubmitted(true)
+          setSuccessData({
+            heading : `User ${operation === 'edit' ? 'updated ' : "added"} Successfully`,
+            paragraph : `User has been ${operation === 'edit' ? 'updated ' : "added"} successfully`,
+            logo : undefined
+          })
+          setShowPopup(true);
+        }
+        else{
+          setSuccessData({
+            heading : "Error",
+            paragraph : "Unable to add user, Please try again later!",
+            logo : failedLogo
+          })
+          setShowPopup(true);
         }
       })
       .catch((err: any) => {
-        console.log({ err });
         let data = err?.response?.data;
-        Swal.fire({
-          icon: "error",
-          text: data?.message,
-          title: "Unable to create user!",
-        });
-      });
-    // setShowPopup(true);
-
-    // reset();
+        setSuccessData({
+          heading : "Error",
+          paragraph : data?.message,
+          logo : failedLogo
+        })
+        setShowPopup(true);
+      })
+      .finally(() => { setLoader(false) })
   };
 
   const handleBackButtonClick = () => {
-    navigate(
-      userCreationURL ??
+    if (submitted) {
+      setShowPopup(false)
+      reset();
+      navigate(
+        userCreationURL ??
         `/${sessionStorage.getItem("entityType")?.toLocaleLowerCase()}`
-    );
+      );
+    }
+    else{
+      setShowPopup(false)
+    }
   };
 
   const handleSelectRole = (value: any) => {
@@ -114,7 +134,7 @@ const AddUserForm = () => {
   };
 
   useEffect(() => {
-    const operation = sessionStorage.getItem("operation");
+
     if (
       operation === "edit" &&
       editUserData !== "" &&
@@ -135,6 +155,9 @@ const AddUserForm = () => {
       reset();
     }
   }, [editUserData]);
+
+  console.log({ errors, parsedEditUSerData });
+
   return (
     <div className="mt-2 ">
       <div className="-ml-9 -mr-9">
@@ -144,13 +167,13 @@ const AddUserForm = () => {
         >
           <div
             className="w-full"
-            // style={{
-            //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-            //   width: `${screenWidth > 1024
-            //       ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
-            //       : "100vw"
-            //     }`,
-            // }}
+          // style={{
+          //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+          //   width: `${screenWidth > 1024
+          //       ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
+          //       : "100vw"
+          //     }`,
+          // }}
           >
             <div className="flex flex-col p-6 w-full ">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -179,7 +202,7 @@ const AddUserForm = () => {
                   </label>
                   <InputFields
                     placeholder="Type here"
-                    // {...register("middleName")}
+                    {...register("middleName")}
                   />
                   {/* {errors?.middleName && (
                     <p className="text-red-500">
@@ -281,9 +304,8 @@ const AddUserForm = () => {
             <div
               className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center "
               style={{
-                width: `${
-                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
-                }`,
+                width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                  }`,
               }}
             >
               <div className="flex flex-row items-center space-x-2">
@@ -304,7 +326,12 @@ const AddUserForm = () => {
                   />
                 </svg>
                 <button
-                  onClick={handleBackButtonClick}
+                  onClick={() => {
+                    navigate(
+                      userCreationURL ??
+                      `/${sessionStorage.getItem("entityType")?.toLocaleLowerCase()}`
+                    );
+                  }}
                   role="button"
                   type="button"
                   className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
@@ -317,7 +344,10 @@ const AddUserForm = () => {
                   type="submit"
                   className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
                 >
-                  Submit
+                  {
+                    loader ? <LoaderSpin/> : "Submit"
+                  }
+                  
                 </button>
               </div>
             </div>
@@ -332,10 +362,13 @@ const AddUserForm = () => {
         </form>
       </div>
       {showPopup && (
-        <UserSuccessPopup
-          closePopup={() => setShowPopup(false)}
-          SuccessPopup={() => setShowPopup(false)}
-        />
+       <AdditionSuccessfulModalOne
+       heading={successData.heading}
+       paragraph={successData.paragraph}
+       onClose={() => {setShowPopup(false)}}
+       onSave={handleBackButtonClick}
+       logo={successData.logo}
+     />
       )}
     </div>
   );

@@ -3,11 +3,8 @@ import * as Yup from "yup";
 export const UserManagementValidation = Yup.object().shape({
   firstName: Yup.string()
     .required("First name is required")
-    .matches(/^[a-zA-Z]+$/, "First name must contain only alphabets"),
-  middleName: Yup.string().matches(
-    /^[a-zA-Z]*$/,
-    "Middle name must contain only alphabets"
-  ),
+    .min(2, "First name must be at least 2 characters long"),
+  middleName: Yup.string().trim(),
   lastName: Yup.string()
     .required("Last name is required")
     .matches(/^[a-zA-Z]+$/, "Last name must contain only alphabets"),
