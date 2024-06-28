@@ -7,7 +7,8 @@ import TextArea from "../../components/userFlow/common/TextArea";
 import SelectButton from "../../components/userFlow/form/SelectButton";
 import ButtonComp from "./ButtonComp";
 import { axiosInstance } from "../../utils/axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import SelectButtonV3 from "../userFlow/form/SelectButtonV3";
 
 interface ReturnModelPopupProps {
   onClose: () => void;
@@ -48,6 +49,7 @@ const SubRejectModelPopup: React.FC<ReturnModelPopupProps> = ({
   const [isApiSucess, setApiSuccess] = useState<boolean>(false);
   const [isApiError, setApiError] = useState<boolean>(false);
   const depositTakerId = location.state?.depositTakerId;
+  const navigate = useNavigate();
 
   useEffect(() => {
     setSelected(false);
@@ -122,6 +124,7 @@ const SubRejectModelPopup: React.FC<ReturnModelPopupProps> = ({
         setTimeout(() => {
           onClose();
           onSave();
+          navigate(-1);
         }, 2500);
       } else {
       }
@@ -414,7 +417,7 @@ const SubRejectModelPopup: React.FC<ReturnModelPopupProps> = ({
                     Rejection Reasons <span className="text-red-500">*</span>
                   </label>
                   <div className="mt-2 relative">
-                    <SelectButton
+                    <SelectButtonV3
                       setOption={handleSetFunc}
                       options={optionData}
                       selectedOption={selectedFunc}
