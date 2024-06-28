@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import Eye from "../../../assets/images/eye2.svg";
 import addCircle from "../../../assets/images/new_images/add-circle.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import searchButton from "../../../assets/images/search-normal.svg";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
@@ -29,14 +29,30 @@ const columnHelper = createColumnHelper<SchemeType>();
 const SchemaCreation = () => {
   const [schemaData, setSchemaData] = useState([]);
   const [loader, setLoader] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [total, setTotal] = useState<number>(0);
+  const navigate = useNavigate();
   const fetchSchemes = async () => {
     setLoader(true);
     try {
+      // const { data } = await axios.get(
+      //   `${bffUrl}/scheme-portal/scheme-by/${sessionStorage.getItem(
+      //     "entityUniqueId"
+      //   )}`
+      // );
       const { data } = await axios.get(
         `${bffUrl}/scheme-portal/scheme-by/${sessionStorage.getItem(
           "entityUniqueId"
-        )}`
+        )}`,
+        {
+          params: {
+            page: page,
+            limit: pageSize,
+          },
+        }
       );
+
       setSchemaData(
         data.data.map((item: any, index: any) => ({
           ...item,
@@ -53,7 +69,14 @@ const SchemaCreation = () => {
 
   useEffect(() => {
     fetchSchemes();
-  }, []);
+  }, [page, pageSize]);
+  const NavigateScheme = (uniqueId: any) => {
+    navigate("/dt/scheme/creation", {
+      state: {
+        uniqueId: uniqueId,
+      },
+    });
+  };
 
   const columns = [
     columnHelper.accessor("id", {
@@ -103,15 +126,19 @@ const SchemaCreation = () => {
     }),
     columnHelper.accessor("id", {
       header: () => "View",
-      cell: (info) => (
-        <div className="flex justify-center items-center ">
-          <Link to={"/dt/schema/creation"}>
-            <div>
+
+      cell: (info) => {
+        const uniqueId = info?.row?.original?.uniqueId;
+        return (
+          <div className="flex justify-center items-center ">
+            {/* <Link to={"/dt/schema/creation"}> */}
+            <div onClick={() => NavigateScheme(uniqueId)}>
               <img src={Eye} alt="Eye " className="cursor-pointer" />
             </div>
-          </Link>
-        </div>
-      ),
+            {/* </Link> */}
+          </div>
+        );
+      },
     }),
   ];
 
@@ -201,7 +228,7 @@ const SchemaCreation = () => {
               </button>
             </div>
             <div className=" flex items-center mt-7">
-              <Link to="/dt/schema/form">
+              <Link to="/dt/scheme/form">
                 <div className="w-40 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
                   <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
@@ -268,13 +295,17 @@ const SchemaCreation = () => {
               </div>
             )}
           </div>
-          <div className="absolute bottom-0">
-            <CustomPagination
-              totalItems={schemaData?.length}
-              itemsPerPage={5}
-              maxPageNumbersToShow={5}
-            />
-          </div>
+          {schemaData.length > 0 && (
+            <div className="absolute bottom-0 w-full">
+              <CustomPagination
+                currentPage={page}
+                setCurrentPage={setPage}
+                totalItems={total}
+                itemsPerPage={pageSize}
+                maxPageNumbersToShow={5}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

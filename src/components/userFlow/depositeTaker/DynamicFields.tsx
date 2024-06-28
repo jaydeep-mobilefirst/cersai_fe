@@ -270,41 +270,9 @@ type Props = {
 };
 
 const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
-  const [isFileUploaded, setIsFileUploaded] = useState(false);
-  const [error, setError] = useState<boolean>(false);
-  const [base64Data, setBase64Data] = useState<string>("");
-  const [hexData, setHexData] = useState("");
-  const handleFileUpload = (file: File | null) => {
-    if (file) {
-      setIsFileUploaded(true);
-
-      convertFileToBase64(
-        file,
-        (hex) => {
-          setHexData(hex);
-        },
-        (base64) => {
-          setBase64Data(base64);
-        }
-      );
-    } else {
-      setIsFileUploaded(false);
-      setBase64Data("");
-      setHexData("");
-    }
-  };
-
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
-  // console.log({ formFields });
-
-  const getFieldErrorMessage = (field: any) => {
-    if (field?.error) {
-      return `${field?.label} is required`;
-    }
-    return "";
-  };
 
   return (
     <>
@@ -315,7 +283,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
             const fieldType = allFormData?.fieldTypes?.find(
               (type: any) => type?.id === field?.typeId
             )?.name;
-            const errorMessage = getFieldErrorMessage(field);
+            const errorMessage = field;
             switch (fieldType) {
               case "text":
               case "number":
@@ -461,17 +429,14 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                       <RequiredStar allFormData={allFormData} field={field} />
                     </label>
 
-                    {/* <DscButton
+                    <DscButton
                       onFileUpload={(file) =>
                         onChange && onChange(file, field, fieldType)
                       }
                       fname={field?.dscFileNAme}
                       disabled={field?.disabled ? field?.disabled : false}
-                    /> */}
-
-                    {/* <span className="text-red-500">{field?.error}</span> */}
-                    <DscButton onFileUpload={handleFileUpload} />
-                    <span className="text-red-500">{errorMessage}</span>
+                    />
+                    <span className="text-red-500">{field?.error}</span>
                   </div>
                 );
               default:
