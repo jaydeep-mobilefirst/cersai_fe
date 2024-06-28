@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import Eye from "../../../assets/images/eye2.svg";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import searchButton from "../../../assets/images/search-normal.svg";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
@@ -13,12 +13,15 @@ import CustomPagination from "../../../components/CustomPagination/CustomPaginat
 import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../../components/LoaderSpin";
+import { axiosInstance } from "../../../utils/axios";
 
 type TableType = {
   id: number;
   uniqueId: string;
   depositTakerID: string;
   depositTakerName: string;
+  checkerId: number;
+  approvalDocumentId: number;
   status: string;
   action: boolean;
 };
@@ -31,10 +34,11 @@ const MyTaskStatus = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [total, setTotal] = useState<number>(0);
   const [myTaskData, setMyTaskData] = useState([]);
+  const navigate = useNavigate();
   const myTaskRg = async () => {
     setLoader(true);
     try {
-      const { data } = await axios.get(`${bffUrl}/mytask/regulator-task`, {
+      const { data } = await axiosInstance.get(`/mytask/regulator-task`, {
         params: {
           page: page,
           limit: pageSize,
@@ -66,6 +70,23 @@ const MyTaskStatus = () => {
   useEffect(() => {
     myTaskRg();
   }, [page, pageSize]);
+  const NavigateDepositStaus = (
+    id: string,
+    checkerId: string,
+    approvalDocumentId: number,
+    status: string,
+    depositTakerName: string
+  ) => {
+    navigate("/rg/mytask/form", {
+      state: {
+        depositTakerId: id,
+        checkerId: checkerId,
+        approvalDocumentId: approvalDocumentId,
+        status: status,
+        depositTakerName,
+      },
+    });
+  };
 
   const columns = [
     columnHelper.accessor("id", {
@@ -86,15 +107,43 @@ const MyTaskStatus = () => {
     }),
     columnHelper.accessor((row) => row, {
       id: "action",
-      cell: (info) => (
-        <div className="flex justify-center items-center ">
-          <Link to={"/rg/mytask/form"}>
+      cell: (info: any) => {
+        console.log(info, "info");
+        const {
+          uniqueId,
+          depositTakerName,
+          checkerId,
+          status,
+          approvalDocumentId,
+        } = info.getValue();
+        console.log(
+          uniqueId,
+          depositTakerName,
+          status,
+          checkerId,
+          approvalDocumentId
+        );
+        return (
+          <div
+            className="flex justify-center items-center "
+            onClick={() =>
+              NavigateDepositStaus(
+                uniqueId,
+                checkerId,
+                approvalDocumentId,
+                status,
+                depositTakerName
+              )
+            }
+          >
+            {/* <Link to={"/rg/mytask/form"}> */}
             <div>
               <img src={Eye} alt="Eye" className="cursor-pointer" />
             </div>
-          </Link>
-        </div>
-      ),
+            {/* </Link> */}
+          </div>
+        );
+      },
       header: () => <span>Action</span>,
     }),
   ];
