@@ -117,6 +117,7 @@ const NewSchemaCreation = () => {
           status: item.status, // Or some logic to determine status
         }))
       );
+      setTotal(data?.total)
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
@@ -167,20 +168,22 @@ const NewSchemaCreation = () => {
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
-      cell: (info: any) => {
-        const value = info.getValue();
-
+      cell: (info) => {
+        const NavigateScheme = (uniqueId: any) => {
+          navigate("/rg/my-task/audit-rail", {
+            state: {
+              uniqueId: uniqueId,
+            },
+          });
+        };
+        const uniqueId = info?.row?.original?.uniqueId;
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/rg/my-task/audit-rail"}>
-              <div>
-                <img
-                  src={EditIcon}
-                  alt="EditIcon "
-                  className="cursor-pointer"
-                />
-              </div>
-            </Link>
+            {/* <Link to={"/dt/schema/creation"}> */}
+            <div onClick={() => NavigateScheme(uniqueId)}>
+              <img src={Eye} alt="Eye " className="cursor-pointer" />
+            </div>
+            {/* </Link> */}
           </div>
         );
       },

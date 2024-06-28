@@ -56,6 +56,7 @@ const SchemaCreation = () => {
           status: item.status, // Or some logic to determine status
         }))
       );
+      setTotal(data?.total)
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);

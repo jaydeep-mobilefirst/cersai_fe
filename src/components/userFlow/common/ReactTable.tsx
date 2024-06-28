@@ -63,14 +63,14 @@ const ReactTable = ({ columns, defaultData, borderB = true }: Props) => {
                       borderB ? "border-b" : "" // Conditionally apply border-b class
                     }`}
                   >
-                    <div className="lg:p-6 md:p-6 p-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                    <div className="lg:p-3 md:p-3 p-1 overflow-hidden overflow-ellipsis whitespace-nowrap">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
                     </div>
                     {index < row.getVisibleCells().length - 1 && (
-                      <div className="border right-0 absolute h-10 top-4 text-gilroy-medium"></div>
+                      <div className="border right-0 absolute h-8 top-2 text-gilroy-medium"></div>
                     )}
                   </td>
                 ))}

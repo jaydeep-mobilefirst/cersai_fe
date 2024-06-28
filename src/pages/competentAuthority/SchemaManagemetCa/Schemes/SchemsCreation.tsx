@@ -22,7 +22,7 @@ type SchemeType = {
   id: number;
   uniqueId: string;
   name: string;
-  depositTaker: string;
+  depositTakerId: string;
   createdBy: string;
   status: string;
   active: boolean;
@@ -117,6 +117,7 @@ const NewSchemaCreation = () => {
           status: item.status, // Or some logic to determine status
         }))
       );
+      setTotal(data?.total)
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
@@ -157,7 +158,7 @@ const NewSchemaCreation = () => {
       },
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor("depositTaker", {
+    columnHelper.accessor("depositTakerId", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Deposit Taker</span>,
     }),
@@ -167,23 +168,42 @@ const NewSchemaCreation = () => {
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
-      cell: (info: any) => {
-        const value = info.getValue();
-
+      cell: (info) => {
+        const NavigateScheme = (uniqueId: any) => {
+          navigate("/ca/my-task/audit-rail", {
+            state: {
+              uniqueId: uniqueId,
+            },
+          });
+        };
+        const uniqueId = info?.row?.original?.uniqueId;
         return (
           <div className="flex justify-center items-center ">
-            <Link to={"/ca/my-task/audit-rail"}>
-              <div>
-                <img
-                  src={EditIcon}
-                  alt="EditIcon "
-                  className="cursor-pointer"
-                />
-              </div>
-            </Link>
+            {/* <Link to={"/dt/schema/creation"}> */}
+            <div onClick={() => NavigateScheme(uniqueId)}>
+              <img src={Eye} alt="Eye " className="cursor-pointer" />
+            </div>
+            {/* </Link> */}
           </div>
         );
       },
+      // cell: (info: any) => {
+      //   const value = info.getValue();
+
+      //   return (
+      //     <div className="flex justify-center items-center ">
+      //       <Link to={"/ca/my-task/audit-rail"}>
+      //         <div>
+      //           <img
+      //             src={EditIcon}
+      //             alt="EditIcon "
+      //             className="cursor-pointer"
+      //           />
+      //         </div>
+      //       </Link>
+      //     </div>
+      //   );
+      // },
       header: () => <span>Edit</span>,
     }),
   ];
