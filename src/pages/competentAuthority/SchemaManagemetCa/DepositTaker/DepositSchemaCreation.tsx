@@ -54,16 +54,18 @@ const DepositSchemaCreation = () => {
           limit: pageSize,
         },
       });
-      if (data?.data?.depositTakers) {
-        const mappedData = data.data.depositTakers.map(
-          (item: any, index: number) => ({
-            ...item,
-            id: index + 1,
-            key: index,
-          })
-        );
-        setMyTaskData(mappedData);
-      }
+      // if (data?.data?.depositTakers) {
+      //   const mappedData = data.data.depositTakers.map(
+      //     (item: any, index: number) => ({
+      //       ...item,
+      //       id: index + 1,
+      //       key: index,
+      //     })
+      //   );
+      //   setMyTaskData(mappedData);
+      // }
+
+      setMyTaskData(data?.data?.depositTakers);
 
       setTotal(data?.data?.total);
       setLoader(false);
@@ -76,113 +78,27 @@ const DepositSchemaCreation = () => {
   useEffect(() => {
     myTaskRg();
   }, [page, pageSize]);
-  // const defaultData: TableType[] = [
-  //   {
-  //     sno: "01",
-  //     depositTakerID: "DT001",
-  //     depositTakerName: "Deposit Taker 1",
-  //     pan: "EUSPM1234T",
-  //     status: "Active",
-  //     action: false,
-  //   },
-  //   {
-  //     sno: "02",
-  //     depositTakerID: "DT002",
-  //     depositTakerName: "Deposit Taker 2",
-  //     pan: "EUSPM1234T",
-  //     status: "pending",
-  //     action: true,
-  //   },
-  //   {
-  //     sno: "03",
-  //     depositTakerID: "DT002",
-  //     depositTakerName: "Deposit Taker 2",
-  //     pan: "EUSPM1234T",
-  //     status: "pending",
-  //     action: true,
-  //   },
-  //   {
-  //     sno: "04",
-  //     depositTakerID: "DT002",
-  //     depositTakerName: "Deposit Taker 2",
-  //     pan: "EUSPM1234T",
-  //     status: "pending",
-  //     action: true,
-  //   },
-  //   {
-  //     sno: "05",
-  //     depositTakerID: "DT002",
-  //     depositTakerName: "Deposit Taker 2",
-  //     pan: "EUSPM1234T",
-  //     status: "pending",
-  //     action: true,
-  //   },
-  //   {
-  //     sno: "06",
-  //     depositTakerID: "DT002",
-  //     depositTakerName: "Deposit Taker 2",
-  //     pan: "EUSPM1234T",
-  //     status: "pending",
-  //     action: true,
-  //   },
-  // ];
+  const NavigateDepositTaker = (id: string) => {
+    navigate("/ca/deposit-taker/form", {
+      state: {
+        depositTakerId: id,
+      },
+    });
+  };
+  let count: number;
+  const serialNoGen = (page: number) => {
+    count = (page - 1) * 10;
+  };
+  serialNoGen(page);
 
-  // const columns = [
-  //   columnHelper.accessor("sno", {
-  //     cell: (info: any) => info.renderValue(),
-  //     header: () => <span>Sr. No.</span>,
-  //   }),
-  //   columnHelper.accessor("depositTakerID", {
-  //     cell: (info: any) => info.renderValue(),
-  //     header: () => <span>Deposit Taker ID</span>,
-  //   }),
-  //   columnHelper.accessor("depositTakerName", {
-  //     cell: (info: any) => info.renderValue(),
-  //     header: () => <span>Deposit Taker Name</span>,
-  //   }),
-  //   columnHelper.accessor("pan", {
-  //     cell: (info: any) => {
-  //       const pan = info.renderValue();
-  //       return validatePan(pan) ? pan : "Invalid PAN";
-  //     },
-  //     header: () => <span>PAN</span>,
-  //   }),
-  //   columnHelper.accessor("status", {
-  //     cell: (info: any) => {
-  //       const value = info?.row?.original?.action;
-
-  //       return (
-  //         <div
-  //           className="flex flex-col md:flex-row justify-center gap-3"
-  //           key={Math.random()}
-  //         >
-  //           <span> {value ? "Active" : "In-Active"}</span>
-  //         </div>
-  //       );
-  //     },
-  //     header: () => <span>Status</span>,
-  //   }),
-  //   columnHelper.accessor((row: any) => row, {
-  //     id: "action",
-  //     cell: (info: any) => {
-  //       const value = info.getValue();
-
-  //       return (
-  //         <div className="flex justify-center items-center ">
-  //           <Link to={"/ca/deposit-taker/form"}>
-  //             <div>
-  //               <img src={Eye} alt="Eye " className="cursor-pointer" />
-  //             </div>
-  //           </Link>
-  //         </div>
-  //       );
-  //     },
-  //     header: () => <span>View</span>,
-  //   }),
-  // ];
   const columns = [
     columnHelper.accessor("id", {
-      cell: (info: any) => info.renderValue(),
+      cell: () => {
+        while (count <= total) {
+          count++;
+          return count;
+        }
+      },
       header: () => <span>Sr. No.</span>,
     }),
     columnHelper.accessor("uniqueId", {
@@ -208,15 +124,16 @@ const DepositSchemaCreation = () => {
     columnHelper.accessor((row: any) => row, {
       id: "action",
       cell: (info: any) => {
-        const value = info.getValue();
+        const { uniqueId } = info.getValue();
 
         return (
-          <div className="flex justify-center items-center ">
-            <Link to={"/ca/deposit-taker/form"}>
-              <div>
-                <img src={Eye} alt="Eye " className="cursor-pointer" />
-              </div>
-            </Link>
+          <div
+            className="flex justify-center items-center "
+            onClick={() => NavigateDepositTaker(uniqueId)}
+          >
+            <div>
+              <img src={Eye} alt="Eye " className="cursor-pointer" />
+            </div>
           </div>
         );
       },

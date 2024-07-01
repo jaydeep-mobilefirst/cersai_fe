@@ -42,63 +42,6 @@ const NewSchemaCreation = () => {
   const [total, setTotal] = useState<number>(0);
   const navigate = useNavigate();
 
-  // const defaultData: TableType[] = [
-  //   {
-  //     sno: "01",
-  //     schemeID: "DT001",
-  //     schemeName: "Deposit Taker 1",
-  //     status: "Active",
-  //     depositTaker: "Chandra",
-  //     createdBy: "BOB",
-  //     action: false,
-  //   },
-  //   {
-  //     sno: "02",
-  //     schemeID: "DT002",
-  //     schemeName: "Deposit Taker 2",
-  //     status: "Active",
-  //     depositTaker: "Chandra",
-  //     createdBy: "BOB",
-  //     action: false,
-  //   },
-  //   {
-  //     sno: "03",
-  //     schemeID: "DT002",
-  //     schemeName: "Deposit Taker 2",
-  //     status: "Active",
-  //     depositTaker: "Chandra",
-  //     createdBy: "BOB",
-  //     action: false,
-  //   },
-  //   {
-  //     sno: "04",
-  //     schemeID: "DT002",
-  //     schemeName: "Deposit Taker 2",
-  //     status: "Active",
-  //     depositTaker: "Chandra",
-  //     createdBy: "BOB",
-  //     action: false,
-  //   },
-  //   {
-  //     sno: "05",
-  //     schemeID: "DT002",
-  //     schemeName: "Deposit Taker 2",
-  //     status: "Active",
-  //     depositTaker: "Chandra",
-  //     createdBy: "BOB",
-  //     action: false,
-  //   },
-  //   {
-  //     sno: "06",
-  //     schemeID: "DT002",
-  //     schemeName: "Deposit Taker 2",
-  //     status: "Active",
-  //     depositTaker: "Chandra",
-  //     createdBy: "BOB",
-  //     action: false,
-  //   },
-  // ];
-
   const fetchSchemes = async () => {
     setLoader(true);
     try {
@@ -110,14 +53,16 @@ const NewSchemaCreation = () => {
         },
       });
 
-      setSchemaData(
-        data.data.map((item: any, index: any) => ({
-          ...item,
-          id: index + 1, // Assuming you want to use index as S.No.
-          status: item.status, // Or some logic to determine status
-        }))
-      );
-      setTotal(data?.total)
+      // setSchemaData(
+      //   data.data.map((item: any, index: any) => ({
+      //     ...item,
+      //     id: index + 1, // Assuming you want to use index as S.No.
+      //     status: item.status, // Or some logic to determine status
+      //   }))
+      // );
+
+      setSchemaData(data?.data);
+      setTotal(data?.total);
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
@@ -128,10 +73,24 @@ const NewSchemaCreation = () => {
   useEffect(() => {
     fetchSchemes();
   }, [page, pageSize]);
+  let count: number;
+  const serialNoGen = (page: number) => {
+    count = (page - 1) * 10;
+  };
+  serialNoGen(page);
 
   const columns = [
+    // columnHelper.accessor("id", {
+    //   cell: (info: any) => info.renderValue(),
+    //   header: () => <span>Sr. No.</span>,
+    // }),
     columnHelper.accessor("id", {
-      cell: (info: any) => info.renderValue(),
+      cell: () => {
+        while (count <= total) {
+          count++;
+          return count;
+        }
+      },
       header: () => <span>Sr. No.</span>,
     }),
     columnHelper.accessor("uniqueId", {

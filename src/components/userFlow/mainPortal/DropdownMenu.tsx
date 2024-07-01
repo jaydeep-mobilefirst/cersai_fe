@@ -114,21 +114,20 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            <div
+            {/* <div
               className="block px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100"
               role="menuitem"
             >
               Dashboard
-            </div>
-            {/* <Link to={"/dt/profile?current=entity"}> */}
-            <div
+            </div> */}
+
+            {/* <div
               onClick={handleSetting}
               className="block px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100 cursor-pointer"
               role="menuitem"
             >
               Setting
-            </div>
-            {/* </Link> */}
+            </div> */}
 
             {loader ? (
               <div className="flex items-start px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100">
