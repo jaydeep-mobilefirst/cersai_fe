@@ -464,7 +464,7 @@ const OtpPage: React.FC<OtpPageProps> = ({
           setTimeout(() => {
             closeShowOtpModel();
             navigate(redirectLink);
-          }, 4000);
+          }, 2000);
         } else {
           setMessageType("error");
           setMessage(response.data.message);

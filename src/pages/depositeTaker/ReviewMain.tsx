@@ -19,7 +19,7 @@ const useDownloadPDF = () => {
     const element = document.getElementById("reviewContent");
     const isMobile = window.innerWidth <= 768;
     const options = {
-      margin: 1,
+      margin: 0.4,
       filename: "details.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 1 : 2 },
@@ -46,7 +46,8 @@ const ReviewMain = () => {
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData, documentData, masterEntityId } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData, masterEntityId } =
+    useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -63,31 +64,37 @@ const ReviewMain = () => {
     e.preventDefault();
     setLoader(true);
     let finalResult =
-    allFormData &&
-    allFormData?.formFields?.form_fields?.map((field: any) => {
-        let sectionCode = allFormData?.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;
+      allFormData &&
+      allFormData?.formFields?.form_fields?.map((field: any) => {
+        let sectionCode = allFormData?.entitySections?.find(
+          (section: any) => section?.id === field?.sectionId
+        )?.sectionName;
         return {
           fieldId: field?.id,
           label: field?.label,
           sectionCode: sectionCode,
           value: field?.userInput,
-          key : field?.key
+          key: field?.key,
         };
       });
 
-    let docs = documentData?.length > 0 ? documentData?.map((doc: any) => {
-      return {
-        fieldId: doc?.id,
-        label: doc?.documentName,
-        sectionCode: "Upload Documents",
-        value: doc?.uploadFileId,
-      };
-    }) : []
+    let docs =
+      documentData?.length > 0
+        ? documentData?.map((doc: any) => {
+            return {
+              fieldId: doc?.id,
+              label: doc?.documentName,
+              sectionCode: "Upload Documents",
+              value: doc?.uploadFileId,
+            };
+          })
+        : [];
 
-    finalResult = [...finalResult, ...docs]
+    finalResult = [...finalResult, ...docs];
     axios
       .post(bffUrl + "/deposit-taker/add-form-fields", {
-        formData: finalResult, regulatorId : masterEntityId
+        formData: finalResult,
+        regulatorId: masterEntityId,
       })
       .then((response: any) => {
         const data = response.data;
@@ -110,7 +117,7 @@ const ReviewMain = () => {
       })
       .catch((e: any) => {
         setLoader(false);
-        setPara1(e?.response?.data?.detail?.message)
+        setPara1(e?.response?.data?.detail?.message);
         setPara2(`Please try again later`);
         setSubmitted(false);
         setSubmitModal(true);
@@ -216,7 +223,11 @@ const ReviewMain = () => {
                   </div>
                 )
               )} */}
-            <ReviewMainListing allFormData={allFormData} documentData={documentData} urlList={signupSideBar}/>
+            <ReviewMainListing
+              allFormData={allFormData}
+              documentData={documentData}
+              urlList={signupSideBar}
+            />
             <div className="flex flex-shrink-0 mt-[20px]">
               <div className="justify-center align-center">
                 <input
@@ -237,7 +248,11 @@ const ReviewMain = () => {
 
         <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
           <div className=" ml-5">
-            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0" role="button" onClick={() => Navigate('/depositetaker/signup/nodaldetails')}>
+            <button
+              className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0"
+              role="button"
+              onClick={() => Navigate("/depositetaker/signup/nodaldetails")}
+            >
               <img src={Arrow} alt="back Arrow" className="mr-2" />
               Back
             </button>
@@ -257,8 +272,9 @@ const ReviewMain = () => {
               <button
                 onClick={handleFinalSubmit} // Assuming this action should be tied to the Submit button
                 disabled={!isChecked || loader}
-                className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] rounded-[12px] text-gilroy-semibold ${isChecked ? "bg-[#1C468E]" : "bg-[#1C468E] opacity-50"
-                  }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
+                className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] rounded-[12px] text-gilroy-semibold ${
+                  isChecked ? "bg-[#1C468E]" : "bg-[#1C468E] opacity-50"
+                }  text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}
               </button>
@@ -269,7 +285,7 @@ const ReviewMain = () => {
           closePopup={() => {
             setSubmitModal(false);
             if (submitted) {
-              Navigate('/')
+              Navigate("/");
             }
           }}
           showPopup={() => setSubmitModal(true)}

@@ -38,7 +38,7 @@ const useTopDetailStore = create(
     }),
     {
       name: "topdetail",
-      getStorage: () => localStorage,
+      getStorage: () => sessionStorage,
     }
   )
 );

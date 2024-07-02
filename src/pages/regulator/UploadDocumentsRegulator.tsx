@@ -8,31 +8,33 @@ import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields
 type Props = {};
 
 const UploadDocumentsRegulator = (props: Props) => {
-  const { documentData, allFormData} = useDepositTakerRegistrationStore(
+  const { documentData, allFormData } = useDepositTakerRegistrationStore(
     (state) => state
   );
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Upload Documents"
-  )?.id
+  )?.id;
   const [params, setParams] = useSearchParams();
-  const { onFileChange, handleDocumentValidations } = useContext(FormHandlerContext);
+  const { onFileChange, handleDocumentValidations } =
+    useContext(FormHandlerContext);
   const screenWidth = useScreenWidth();
   const Navigate = useNavigate();
 
-  const submit = async (e : any) => {
+  const submit = async (e: any) => {
     e.preventDefault();
-    const goodToGo = await handleDocumentValidations(documentData[0]?.sectionId);
+    const goodToGo = await handleDocumentValidations(
+      documentData[0]?.sectionId
+    );
     if (goodToGo) {
-      const edit = params.get('edit');
+      const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate('/regulator/court/reviewdetails');
+        Navigate("/regulator/court/reviewdetails");
+      } else {
+        Navigate("/regulator/court/nodaldetails");
       }
-      else{
-        Navigate('/regulator/court/nodaldetails')
-      }
-    }  
-}    
-  
+    }
+  };
+
   return (
     <>
       <div>
@@ -47,10 +49,10 @@ const UploadDocumentsRegulator = (props: Props) => {
             <div className=" p-4 lg:p-[48px]">
               <h1 className="text-2xl font-bold mb-6">Upload Documents</h1>
               <DynamicFields
-              documentFields={documentData}
-              sectionId={sectionId}
-              onFileChange={onFileChange}
-            />
+                documentFields={documentData}
+                sectionId={sectionId}
+                onFileChange={onFileChange}
+              />
             </div>
           </div>
 
@@ -80,9 +82,9 @@ const UploadDocumentsRegulator = (props: Props) => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <button 
-                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
-                onClick={() => Navigate('/regulator/court/regulatordetails')}
+                <button
+                  className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
+                  onClick={() => Navigate("/regulator/court/regulatordetails")}
                 >
                   Back
                 </button>

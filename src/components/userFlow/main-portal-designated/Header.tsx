@@ -5,7 +5,7 @@ import G1 from "../../../assets/images/g1.svg";
 import Reddot from "../../../assets/images/reddot.svg";
 import DownArrow from "../../assets/images/downarrow.svg";
 import DropdownMenu from "./DropdownMenu";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useSidebarStore from "../../../store/SidebarStore";
 
 const Header = () => {
@@ -64,9 +64,11 @@ const Header = () => {
               />
             </div>
           </div>
-          <div className="mr-4">
-            <img src={Setting} alt="Setting" />
-          </div>
+          <Link to="/dc/profile?current=court">
+            <div className="mr-4 cursor-pointer ">
+              <img src={Setting} alt="Setting" />
+            </div>
+          </Link>
           <div
             className="flex items-center justify-center cursor-pointer"
             onClick={toggleDropdown}
