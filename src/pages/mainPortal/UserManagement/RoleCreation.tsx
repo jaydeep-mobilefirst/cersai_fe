@@ -160,7 +160,6 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
     setSearchString(e.target.value);
   };
 
-  console.log({loading});
   
   return (
     <div className="relative xl:ml-[20px] pr-3">
