@@ -16,34 +16,42 @@ const ComponentDetails: React.FC = () => {
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [showOTPModel, setShowOTPModel] = useState<boolean>(false);
-  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
+  const {
+    onChange,
+    handleValidationChecks,
+    onFileChange,
+    handleDocumentValidations,
+  } = useContext(FormHandlerContext);
   const [loader, setLoader] = useState(false);
 
-  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
 
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Competent Authority Details");
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Competent Authority Details"
+  );
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-  ? allFormData?.formFields?.form_fields?.filter(
-      (f: any) => f?.sectionId === sectionId?.id
-    )
-  : [];
-  
-  const onSubmit = async (event : any) => {
+    ? allFormData?.formFields?.form_fields?.filter(
+        (f: any) => f?.sectionId === sectionId?.id
+      )
+    : [];
+
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true)
+    setLoader(true);
     // False means validation fail
-    const noError = await handleValidationChecks(formFields)
-  
-    setLoader(false)
+    const noError = await handleValidationChecks(formFields);
+
+    setLoader(false);
 
     if (noError) {
-      const edit = params.get('edit');
-      console.log({edit});
+      const edit = params.get("edit");
+      console.log({ edit });
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate('/competent/authority/reviewdetails')
-      }
-      else{
-        Navigate('/competent/authority/uploaddocuments')
+        Navigate("/competent/authority/reviewdetails");
+      } else {
+        Navigate("/competent/authority/uploaddocuments");
       }
     }
   };
@@ -66,7 +74,13 @@ const ComponentDetails: React.FC = () => {
             <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
               Competent Details
             </h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>  
+            <DynamicFields
+              allFormData={allFormData}
+              formFields={formFields}
+              onChange={onChange}
+              documentFields={documentData}
+              onFileChange={onFileChange}
+            />
           </div>
         </div>
 
@@ -114,15 +128,25 @@ const ComponentDetails: React.FC = () => {
                 Back
               </button>
             </div> */}
+            {/* <div className="flex items-center ml-auto">
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#1c468e] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
+              </button>
+            </div> */}
             <div className="flex items-center ml-auto">
-                <button
-                  type="submit"
-                  disabled={loader}
-                  onClick={onSubmit}
-                  className="bg-[#1c468e] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
-                >
-                  {loader ? <LoaderSpin/> : "Save & Continue"}
-                </button>
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
+              </button>
             </div>
           </div>
           <div>

@@ -168,7 +168,7 @@ const NodalDetails = (props: Props) => {
                 Back
               </button>
             </div>
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <button
                 type="submit"
                 disabled={loader}
@@ -176,6 +176,16 @@ const NodalDetails = (props: Props) => {
                 className="bg-[#1c468e] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
               >
                 {loader ? <LoaderSpin /> : "Save & Review"}
+              </button>
+            </div> */}
+             <div className="flex items-center ml-auto">
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
               </button>
             </div>
           </div>

@@ -47,8 +47,8 @@ const NodalDetails = (props: Props) => {
     // False means validation fail
     const noError = await handleValidationChecks(formFields);
     console.log(noError);
-    
-    setLoader(false);    
+
+    setLoader(false);
     if (noError) {
       const response = await axios.post(`${bffUrl}/dual-otp/sendotp`, {
         email: email,
@@ -56,19 +56,17 @@ const NodalDetails = (props: Props) => {
       });
       if (response.data.statusCode === 201) {
         setShowOTPModel(true);
-      }
-      else{
+      } else {
         Swal.fire({
-          icon : "error",
-          title : "Error",
-          text : "Error sending OTP, Please try later"
-        })
+          icon: "error",
+          title: "Error",
+          text: "Error sending OTP, Please try later",
+        });
       }
     }
   };
 
-  console.log({allFormData});
-  
+  console.log({ allFormData });
 
   return (
     <>
@@ -128,7 +126,7 @@ const NodalDetails = (props: Props) => {
                 Back
               </button>
             </div>
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <button
                 type="submit"
                 disabled={loader}
@@ -136,6 +134,16 @@ const NodalDetails = (props: Props) => {
                 className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
               >
                 {loader ? <LoaderSpin /> : "Save & Review"}
+              </button>
+            </div> */}
+            <div className="flex items-center ml-auto">
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
               </button>
             </div>
           </div>
