@@ -12,21 +12,22 @@ import { bffUrl } from "../../../../utils/api";
 import DynamicFields from "../../../../components/userFlow/depositeTaker/DynamicFields";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import SelectButton from "../../../../components/userFlow/form/SelectButton";
+import SelectButtonMultiselect from "../../../../components/UserManagement/SelectButtonMultiselect";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
 
-const options2 = [
-  { value: "Scheme 123", label: "Scheme 123" },
-  { value: "Scheme 123", label: "Scheme 123" },
-  { value: "Scheme 123", label: "Scheme 123" },
+const status = [
+  { label: "Ban", value: "BANNED" },
+  { label: "Active", value: "ACTIVE" },
+  { label: "Under Legislation", value: "UNDER_LETIGATION" },
 ];
 const SchemesSearchDetailsSM: React.FC = () => {
   const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
 
-  const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
-
+  const [schemes, setSchemes] = useState<any[]>([]);
+  const [selectedSchemes, setSelectedSchems] = useState<any[]>([])
   const [loader, setLoader] = useState(true);
   const screenWidth = useScreenWidth();
   const { onChange } =
@@ -85,14 +86,35 @@ const SchemesSearchDetailsSM: React.FC = () => {
           fileTypes: response?.data?.data?.fileTypes,
           other: userData
         });
+        console.log({userData});
       }
+
+      
       setLoader(false)
     } catch (error) {
       setLoader(false)
       console.error("Error fetching schema data:", error);
     }
-  };
+  };  
 
+  useEffect(() => {
+    if (allFormData?.other?.depositTakerId) {
+      axios.get(`${bffUrl}/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000`)
+      .then((res) => {
+        let data = res?.data?.data;
+        setSchemes(data?.map((d : any) => {
+          return {
+            label : d?.name,
+            value : d?.uniqueId
+          }
+        }))
+        console.log({data});
+        
+      })
+      .catch((e) => {alert("Error fetching Schemes"); setSchemes([])})
+    }
+  }, [allFormData])
+  
   useEffect(() => {
     if (uniqueId) {
       fetchSchema();
@@ -121,6 +143,27 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const handleBackButtonClick = () => {
     navigate("/rg/my-task");
   };
+
+  const handleSetOption1 = (value: any) => {
+    if (
+      schemes.length > 0 &&
+      !selectedSchemes.find((f) => f.value === value.value)
+    ) {
+      const selected = schemes.find((f) => f.value === value.value);
+      setSelectedSchems((prev) => [...prev, selected]);
+    }
+  };
+
+  const remove = (data: any) => {
+    const filtered = selectedSchemes.filter(
+      (f) => f.value !== data.value
+    );
+    setSelectedSchems(filtered);
+  };
+
+  const handleUpdateSchemeStatus = (e : any) => {
+    e?.preventDefault();
+  }
   return (
     <div className="flex flex-col min-h-screen ">
       <div className="mt-6 mx-8">
@@ -152,7 +195,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
           <SelectButton
             // backgroundColor="#F2F2F2"
             setOption={handleSetOption2}
-            options={options2}
+            options={status}
             selectedOption={selectedOption2}
             placeholder="Select"
             showSearchInput={true}
@@ -166,14 +209,23 @@ const SchemesSearchDetailsSM: React.FC = () => {
           >
             Select Other Schemes
           </label>
-          <SelectButton
+          <SelectButtonMultiselect
+                  setOption={handleSetOption1}
+                  options={schemes}
+                  placeholder="Select"
+                  multiselect={true}
+                  allSelectedOptions={selectedSchemes}
+                  remove={remove}
+                  className="relative"
+                />
+          {/* <SelectButton
             // backgroundColor="#F2F2F2"
             setOption={handleSetOption2}
             options={options2}
             selectedOption={selectedOption2}
             placeholder="Select"
             showSearchInput={true}
-          />
+          /> */}
         </div>
         </div>
       </div>
