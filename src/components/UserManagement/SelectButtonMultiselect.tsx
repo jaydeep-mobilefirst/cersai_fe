@@ -408,7 +408,7 @@ const SelectButtonMultiselect = ({
               options.map((option, index) => (
                 <a
                   key={index}
-                  onClick={() => {
+                  onClick={(e) => {
                     setOption(option);
                     setArrowDirectionToggle(false);
                   }}
