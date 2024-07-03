@@ -12,37 +12,37 @@ import { bffUrl } from "../../../../utils/api";
 import DynamicFields from "../../../../components/userFlow/depositeTaker/DynamicFields";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import SelectButton from "../../../../components/userFlow/form/SelectButton";
-import SelectButtonMultiselect from "../../../../components/UserManagement/SelectButtonMultiselect";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
 
-const status = [
-  { label: "Ban", value: "BANNED" },
-  { label: "Active", value: "ACTIVE" },
-  { label: "Under Legislation", value: "UNDER_LETIGATION" },
+const options2 = [
+  { value: "Scheme 123", label: "Scheme 123" },
+  { value: "Scheme 123", label: "Scheme 123" },
+  { value: "Scheme 123", label: "Scheme 123" },
 ];
 const SchemesSearchDetailsSM: React.FC = () => {
   const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
 
-  const [schemes, setSchemes] = useState<any[]>([]);
-  const [selectedSchemes, setSelectedSchems] = useState<any[]>([])
+  const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
+
   const [loader, setLoader] = useState(true);
   const screenWidth = useScreenWidth();
-  const { onChange } =
-    useContext(FormHandlerContext);
+  const { onChange } = useContext(FormHandlerContext);
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
   const navigate = useNavigate();
   const location = useLocation();
   const uniqueId = location.state?.uniqueId;
+  const depositTakerId = location.state?.depositTakerId;
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
-
+  const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
+  // console.log(entityDetailsFields, "entitydata");
   const fetchSchema = async () => {
     try {
-      setLoader(true)
+      setLoader(true);
       const response = await axios.get(`${bffUrl}/scheme/field-data`);
       // console.log(response, "response");
       if (response.data.success) {
@@ -54,7 +54,9 @@ const SchemesSearchDetailsSM: React.FC = () => {
         const formFields = response?.data?.data?.formFields?.allFormFields.map(
           (field: any) => ({
             ...field,
-            userInput: userData?.schemeFormData?.find((f: any) => f?.fieldId === field?.id)?.value,
+            userInput: userData?.schemeFormData?.find(
+              (f: any) => f?.fieldId === field?.id
+            )?.value,
             error: "",
             disabled: true,
             typeId: field?.fieldTypeId,
@@ -66,69 +68,124 @@ const SchemesSearchDetailsSM: React.FC = () => {
           ...response?.data?.data,
           formFields: {
             form_fields: formFields?.map((field: any) => {
-              if (field?.key === 'depositTakerId') {
+              if (field?.key === "depositTakerId") {
                 return {
-                  ...field, dropdown_options: {
-                    ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
-                      name: o?.uniqueId,
-                      id: o?.companyName,
-                    }))
-                  }
-                }
-              }
-              else {
+                  ...field,
+                  dropdown_options: {
+                    ...field?.dropdown_options,
+                    options: field?.dropdown_options?.options?.map(
+                      (o: any) => ({
+                        name: o?.uniqueId,
+                        id: o?.companyName,
+                      })
+                    ),
+                  },
+                };
+              } else {
                 return field;
               }
-            })
+            }),
           },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,
-          other: userData
+          other: userData,
         });
-        console.log({userData});
       }
-
-      
-      setLoader(false)
+      setLoader(false);
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.error("Error fetching schema data:", error);
     }
-  };  
+  };
 
-  useEffect(() => {
-    if (allFormData?.other?.depositTakerId) {
-      axios.get(`${bffUrl}/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000`)
-      .then((res) => {
-        let data = res?.data?.data;
-        setSchemes(data?.map((d : any) => {
-          return {
-            label : d?.name,
-            value : d?.uniqueId
-          }
-        }))
-        console.log({data});
-        
-      })
-      .catch((e) => {alert("Error fetching Schemes"); setSchemes([])})
-    }
-  }, [allFormData])
-  
   useEffect(() => {
     if (uniqueId) {
       fetchSchema();
     }
   }, [uniqueId, page, pageSize]);
+  const fetchFormFields = () => {
+    axios
+      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+      .then(async (response) => {
+        if (response?.data?.success) {
+          let dtData: any = [];
+          try {
+            let depositTakerData = await axios.get(
+              `${bffUrl}/deposit-taker/${depositTakerId}`
+            );
+            dtData =
+              depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
+          } catch (error) {
+            console.log("Error");
+          }
+          let modifiedFormFields = response.data.data?.formFields
+            ?.map((o: any) => ({
+              ...o,
+              userInput: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              error: "",
+              disabled: true,
+            }))
+            ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+
+          let modifiedFileFields =
+            response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
+              ...o,
+              file: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              error: "",
+              fileName: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              uploadFileId: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              disabled: true,
+            }));
+
+          let obj = {
+            ...response?.data?.data,
+            formFields: { form_fields: modifiedFormFields },
+          };
+          setEntityDetailsFields(modifiedFormFields);
+          // setAllDocumentData(modifiedFileFields);
+        } else {
+          throw new Error("Error getting data, Please try later!");
+        }
+        setLoader(false);
+      })
+      .catch((error: any) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
+  useEffect(() => {
+    fetchFormFields();
+  }, [depositTakerId]);
 
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
-      content: <DynamicFields
-        formFields={allFormData?.formFields?.form_fields}
-        allFormData={allFormData}
-        onChange={onChange}
-      />,
+      content: (
+        <DynamicFields
+          formFields={allFormData?.formFields?.form_fields}
+          allFormData={allFormData}
+          onChange={onChange}
+        />
+      ),
+    },
+    {
+      header: "Entity Details",
+      content: (
+        <DynamicFields
+          formFields={entityDetailsFields}
+          allFormData={entityDetailsFields}
+          onChange={onChange}
+        />
+      ),
     },
     {
       header: "Audit Trail",
@@ -143,27 +200,6 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const handleBackButtonClick = () => {
     navigate("/rg/my-task");
   };
-
-  const handleSetOption1 = (value: any) => {
-    if (
-      schemes.length > 0 &&
-      !selectedSchemes.find((f) => f.value === value.value)
-    ) {
-      const selected = schemes.find((f) => f.value === value.value);
-      setSelectedSchems((prev) => [...prev, selected]);
-    }
-  };
-
-  const remove = (data: any) => {
-    const filtered = selectedSchemes.filter(
-      (f) => f.value !== data.value
-    );
-    setSelectedSchems(filtered);
-  };
-
-  const handleUpdateSchemeStatus = (e : any) => {
-    e?.preventDefault();
-  }
   return (
     <div className="flex flex-col min-h-screen ">
       <div className="mt-6 mx-8">
@@ -185,48 +221,39 @@ const SchemesSearchDetailsSM: React.FC = () => {
       <div className="mt-8 mb-8 mx-8">
         {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
         <div className="grid grid-cols-2 space-x-3">
-        <div > 
-          <label
-            htmlFor="Select Other Schemes"
-            className="text-base font-normal text-gilroy-medium"
-          >
-            Status
-          </label>
-          <SelectButton
-            // backgroundColor="#F2F2F2"
-            setOption={handleSetOption2}
-            options={status}
-            selectedOption={selectedOption2}
-            placeholder="Select"
-            showSearchInput={true}
-          />
-        </div>
+          <div>
+            <label
+              htmlFor="Select Other Schemes"
+              className="text-base font-normal text-gilroy-medium"
+            >
+              Status
+            </label>
+            <SelectButton
+              // backgroundColor="#F2F2F2"
+              setOption={handleSetOption2}
+              options={options2}
+              selectedOption={selectedOption2}
+              placeholder="Select"
+              showSearchInput={true}
+            />
+          </div>
 
-        <div>
-          <label
-            htmlFor="Select Other Schemes"
-            className="text-base font-normal text-gilroy-medium"
-          >
-            Select Other Schemes
-          </label>
-          <SelectButtonMultiselect
-                  setOption={handleSetOption1}
-                  options={schemes}
-                  placeholder="Select"
-                  multiselect={true}
-                  allSelectedOptions={selectedSchemes}
-                  remove={remove}
-                  className="relative"
-                />
-          {/* <SelectButton
-            // backgroundColor="#F2F2F2"
-            setOption={handleSetOption2}
-            options={options2}
-            selectedOption={selectedOption2}
-            placeholder="Select"
-            showSearchInput={true}
-          /> */}
-        </div>
+          <div>
+            <label
+              htmlFor="Select Other Schemes"
+              className="text-base font-normal text-gilroy-medium"
+            >
+              Select Other Schemes
+            </label>
+            <SelectButton
+              // backgroundColor="#F2F2F2"
+              setOption={handleSetOption2}
+              options={options2}
+              selectedOption={selectedOption2}
+              placeholder="Select"
+              showSearchInput={true}
+            />
+          </div>
         </div>
       </div>
       <div>

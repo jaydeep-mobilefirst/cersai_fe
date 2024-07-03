@@ -23,7 +23,8 @@ type SchemeType = {
   uniqueId: string;
   name: string;
   depositTakerId: string;
-  createdBy: string;
+  // createdBy: string;
+  createdBy: string | null;
   status: string;
   active: boolean;
 };
@@ -45,7 +46,6 @@ const NewSchemaCreation = () => {
   const fetchSchemes = async () => {
     setLoader(true);
     try {
-      // const uniqueId = sessionStorage.getItem("entityUniqueId");
       const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme`, {
         params: {
           page: page,
@@ -53,13 +53,6 @@ const NewSchemaCreation = () => {
         },
       });
 
-      // setSchemaData(
-      //   data.data.map((item: any, index: any) => ({
-      //     ...item,
-      //     id: index + 1, // Assuming you want to use index as S.No.
-      //     status: item.status, // Or some logic to determine status
-      //   }))
-      // );
       setSchemaData(data?.data);
       setTotal(data?.total);
       setLoader(false);
@@ -120,25 +113,28 @@ const NewSchemaCreation = () => {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Deposit Taker</span>,
     }),
+
     columnHelper.accessor("createdBy", {
-      cell: (info: any) => (info.renderValue() ? info.renderValue : "N/A"),
+      cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
       cell: (info) => {
-        const NavigateScheme = (uniqueId: any) => {
+        const NavigateScheme = (uniqueId: any, depositTakerId: any) => {
           navigate("/ca/my-task/audit-rail", {
             state: {
               uniqueId: uniqueId,
+              depositTakerId: depositTakerId,
             },
           });
         };
         const uniqueId = info?.row?.original?.uniqueId;
+        const depositTakerId = info?.row?.original?.depositTakerId;
         return (
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}
-            <div onClick={() => NavigateScheme(uniqueId)}>
+            <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
               <img src={Eye} alt="Eye " className="cursor-pointer" />
             </div>
             {/* </Link> */}
