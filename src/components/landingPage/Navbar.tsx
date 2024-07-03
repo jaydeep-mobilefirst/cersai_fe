@@ -1,14 +1,28 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import MenuItem from "./MenuItem";
 import hamburger from "../../assets/images/hamburger_icon.svg";
 import close_icon from "../../assets/images/white_close.png";
 import { navbar } from "../../utils/hardText/landingpageText";
 import { useLandingStore } from "../../zust/useLandingStore";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const navigate = useNavigate();
 
   const { homePageData } = useLandingStore((state) => state);
+  const handleMenuClick = (text:any) => {
+    if (text === "FAQ") {
+      navigate("/faq");
+    } else if (text === "NOTIFICATIONS") {
+      navigate("/notifications");
+    } else if (text === "HOME"){
+      navigate("/");
+
+      // handle other routes if necessary
+    }
+    setShowMenu(false);
+  };
 
   return (
     <div>
@@ -29,7 +43,7 @@ const Navbar = () => {
             {homePageData?.navbar?.length > 0 && (
               <>
                 {homePageData?.navbar.map((menuItem: any, index: any) => (
-                  <MenuItem key={index} text={menuItem} />
+                  <MenuItem key={index} text={menuItem} onClick={() => handleMenuClick(menuItem)}/>
                 ))}
               </>
             )}
@@ -47,7 +61,7 @@ const Navbar = () => {
           {homePageData?.navbar?.length > 0 && (
             <>
               {homePageData?.navbar.map((menuItem: any, index: any) => (
-                <MenuItem key={index} text={menuItem} />
+                <MenuItem key={index} text={menuItem} onClick={() => handleMenuClick(menuItem)}/>
               ))}
             </>
           )}
