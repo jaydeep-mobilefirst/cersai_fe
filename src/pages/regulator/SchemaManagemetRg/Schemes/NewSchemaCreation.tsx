@@ -12,15 +12,14 @@ import SuccessPopup from "../../../../components/userFlow/depositeTaker/SuccessP
 const SchemeDetails = () => {
   const [submitted, setSubmitted] = useState(false);
   const [popupData, setPopData] = useState({
-    para1: '',
-    para2: '',
-    show : false
+    para1: "",
+    para2: "",
+    show: false,
   });
   const screenWidth = useScreenWidth();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
-
 
   const handleBackButtonClick = () => {
     navigate("/rg/my-task");
@@ -49,20 +48,28 @@ const SchemeDetails = () => {
 
         setAllFormData({
           ...response?.data?.data,
-          formFields: { form_fields: formFields?.map((field : any) => {
-            if (field?.key === 'depositTakerId') {
-              console.log({field});
-              
-              return  {...field, dropdown_options : {...field?.dropdown_options, options : field?.dropdown_options?.options?.map((o : any) => ({
-                name: o?.uniqueId,
-                id: o?.companyName,
-              }))}   
-             }
-            }
-            else{
-              return field;
-            }
-          } ) },
+          formFields: {
+            form_fields: formFields?.map((field: any) => {
+              if (field?.key === "depositTakerId") {
+                console.log({ field });
+
+                return {
+                  ...field,
+                  dropdown_options: {
+                    ...field?.dropdown_options,
+                    options: field?.dropdown_options?.options?.map(
+                      (o: any) => ({
+                        name: o?.uniqueId,
+                        id: o?.companyName,
+                      })
+                    ),
+                  },
+                };
+              } else {
+                return field;
+              }
+            }),
+          },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,
@@ -102,22 +109,21 @@ const SchemeDetails = () => {
         `${bffUrl}/scheme-portal/add-form-fields`, // Assuming bffUrl is defined elsewhere
         payload // Sending the payload with depositTakerId and formData
       );
-      
+
       if (response.data?.success) {
-        setSubmitted(true)
+        setSubmitted(true);
         setPopData({
-          para1 : 'Addition Successful',
-          para2 : response.data?.message,
-          show : true,
-        })
-      }
-      else{
-        setSubmitted(false)
+          para1: "Addition Successful",
+          para2: response.data?.message,
+          show: true,
+        });
+      } else {
+        setSubmitted(false);
         setPopData({
-          para1 : 'Something went wrong',
-          para2 : response.data?.message,
-          show : true,
-        })
+          para1: "Something went wrong",
+          para2: response.data?.message,
+          show: true,
+        });
       }
       setLoader(false);
       // SuccessPopup();
@@ -130,7 +136,10 @@ const SchemeDetails = () => {
     setIsChecked(event.target.checked);
   };
   return (
-    <div className="mt-6 mx-8 relative">
+    <div
+      className="mt-6 mx-8 relative"
+      style={{ minHeight: "calc(100vh - 110px)" }}
+    >
       <div className="mt-2 ">
         <TaskTabsRg />
       </div>
@@ -160,20 +169,20 @@ const SchemeDetails = () => {
             </div>
           </div>
           <SuccessPopup
-                closePopup={() => {
-                 setPopData({...popupData, show : false})
-                  if (submitted) {
-                    navigate('/rg/my-task')
-                  }
-                }}
-                showPopup={() => {}}
-                toggle={popupData.show}
-                para1={popupData.para1}
-                para2={popupData.para2}
-                success={submitted}
-            />
+            closePopup={() => {
+              setPopData({ ...popupData, show: false });
+              if (submitted) {
+                navigate("/rg/my-task");
+              }
+            }}
+            showPopup={() => {}}
+            toggle={popupData.show}
+            para1={popupData.para1}
+            para2={popupData.para2}
+            success={submitted}
+          />
 
-          <div className="absolute bottom-0">
+          <div className="w-full absolute bottom-0">
             <div
               className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
               style={{
@@ -193,11 +202,12 @@ const SchemeDetails = () => {
                 <button
                   onClick={onSubmit}
                   type="submit"
-                  className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold ${
+                  className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm text-gilroy-semibold ${
                     !isChecked
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-[#163a7a]"
                   }`}
+                  style={{ width: "150px" }}
                   disabled={!isChecked}
                 >
                   {loader ? <LoaderSpin /> : "Create Scheme"}

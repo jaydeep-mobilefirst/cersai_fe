@@ -22,8 +22,9 @@ type SchemeType = {
   id: number;
   uniqueId: string;
   name: string;
-  depositTaker: string;
-  createdBy: string;
+  depositTakerId: string;
+  // createdBy: string;
+  createdBy: string | null;
   status: string;
   active: boolean;
 };
@@ -79,10 +80,6 @@ const NewSchemaCreation = () => {
   serialNoGen(page);
 
   const columns = [
-    // columnHelper.accessor("id", {
-    //   cell: (info: any) => info.renderValue(),
-    //   header: () => <span>Sr. No.</span>,
-    // }),
     columnHelper.accessor("id", {
       cell: () => {
         while (count <= total) {
@@ -107,27 +104,27 @@ const NewSchemaCreation = () => {
     }),
 
     columnHelper.accessor("createdBy", {
-      cell: (info: any) => (info.renderValue() ? info.renderValue : "N/A"),
+      cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
       cell: (info) => {
-        const NavigateScheme = (uniqueId: any) => {
+        const NavigateScheme = (uniqueId: any, depositTakerId: any) => {
           navigate("/dc/my-task/audit-rail", {
             state: {
               uniqueId: uniqueId,
+              depositTakerId: depositTakerId,
             },
           });
         };
         const uniqueId = info?.row?.original?.uniqueId;
+        const depositTakerId = info?.row?.original?.depositTakerId;
         return (
           <div className="flex justify-center items-center ">
-            {/* <Link to={"/dt/schema/creation"}> */}
-            <div onClick={() => NavigateScheme(uniqueId)}>
+            <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
               <img src={Eye} alt="Eye " className="cursor-pointer" />
             </div>
-            {/* </Link> */}
           </div>
         );
       },
