@@ -49,6 +49,12 @@
   background-position: center, center;
   background-position: right bottom, left bottom;
 }
+.buds-faq-background-image {
+  background-image: url("./assets/images/bg.svg"), url("./assets/images/Vector-faq.svg");
+  background-size: auto, auto;
+  background-repeat: no-repeat, no-repeat;
+  background-position: right top, right top;
+}
 
 .query-bg-image {
   background-image: url("./assets/images/new_images/footer_vector.png");

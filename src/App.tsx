@@ -87,6 +87,8 @@ import SchemeSearch from "./pages/schemeSearch/SchemeSearch";
 import SchemeSearchDetails from "./pages/schemeSearch/SchemSearchDetails";
 import DepositeTakerSearch from "./pages/depositTakerSearch/DepositeTakerSearch";
 import DepositeTakerSearchDetails from "./pages/depositTakerSearch/DepositeTakerSearchDetails";
+import Faq from "./pages/Faq";
+import Notifications from "./pages/Notifications";
 function App() {
   return (
     <div>
@@ -325,6 +327,8 @@ function App() {
           {/* <Route element={<SetPassword />} path="/set-password" /> */}
           <Route element={<SetNewPasswordModel />} path="/set-password" />
           <Route element={<OtpModel />} path="/otp-verification" />
+          <Route element={<Faq />} path="/faq" />
+          <Route element={<Notifications />} path="/notifications" />
           {/* <Route element={<RoleCreation />} path="/role" /> */}
         </Routes>
       </Router>
