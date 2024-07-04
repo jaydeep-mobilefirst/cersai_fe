@@ -50,10 +50,10 @@
   background-position: right bottom, left bottom;
 }
 .buds-faq-background-image {
-  background-image: url("./assets/images/bg.svg"), url("./assets/images/Vector-faq.svg");
+  background-image: url("./assets/images/Vector.png");
   background-size: auto, auto;
   background-repeat: no-repeat, no-repeat;
-  background-position: right top, right top;
+  background-position: right top;
 }
 
 .query-bg-image {
