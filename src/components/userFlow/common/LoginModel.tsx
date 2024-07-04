@@ -94,7 +94,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         password: watch("password"),
         entityType: selected,
       });
-      // console.log(response?.data?.user?.UserRoles, "login model");
+      // console.log(response?.data?.user?.id, "login model");
 
       sessionStorage.setItem(
         "access_token",
@@ -105,6 +105,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         response?.data?.response?.refresh_token
       );
       sessionStorage.setItem("firstName", response?.data?.user?.firstName);
+      sessionStorage.setItem("masterId", response?.data?.entityDetais.masterId);
       sessionStorage.setItem("lastName", response?.data?.user?.lastName);
       sessionStorage.setItem("emailId", response.data.user?.emailId);
       sessionStorage.setItem("entityType", response.data.user?.entityType);
@@ -112,6 +113,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
         "entityUniqueId",
         response.data.user?.entityUniqueId
       );
+      sessionStorage.setItem("userId", response?.data?.user?.id);
+
       setRoles(response?.data?.user?.UserRoles);
       setDsc(true);
       setDscApiInProgress(true);
@@ -150,7 +153,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       })
       .then((respose) => {
         reset();
-        console.log(respose);
+        // console.log(respose);
         setLoader(false);
         if (selected === "DT") {
           navigate("/dt/dashboard");

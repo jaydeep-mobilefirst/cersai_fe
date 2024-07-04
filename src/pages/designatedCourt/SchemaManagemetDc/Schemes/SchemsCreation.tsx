@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from "react";
-
+import { useState, useEffect } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
-
 import Eye from "../../../../assets/images/eye2.svg";
-import addCircle from "../../../../assets/images/new_images/add-circle.png";
-import { Link } from "react-router-dom";
 import InputFields from "../../../../components/ScehmaManagement/InputField";
 import searchButton from "../../../../assets/images/search-normal.svg";
 import ReactTable from "../../../../components/userFlow/common/ReactTable";
 import SelectButtonTask from "../../../../components/ScehmaManagement/SelectButton";
 import CustomPagination from "../../../../components/CustomPagination/CustomPagination";
-import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabsDc from "../../../../components/ScehmaManagement/TaskTabsDc";
-import EditIcon from "../../../../assets/images/editBlue.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { bffUrl } from "../../../../utils/api";
@@ -22,18 +16,15 @@ type SchemeType = {
   id: number;
   uniqueId: string;
   name: string;
-  depositTaker: string;
-  createdBy: string;
+  depositTakerId: string;
+  // createdBy: string;
+  createdBy: string | null;
   status: string;
   active: boolean;
 };
 
 const columnHelper = createColumnHelper<SchemeType>();
 
-const validatePan = (pan: string): boolean => {
-  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-  return panRegex.test(pan);
-};
 const NewSchemaCreation = () => {
   const [schemaData, setSchemaData] = useState([]);
   const [loader, setLoader] = useState<boolean>(false);
@@ -79,10 +70,6 @@ const NewSchemaCreation = () => {
   serialNoGen(page);
 
   const columns = [
-    // columnHelper.accessor("id", {
-    //   cell: (info: any) => info.renderValue(),
-    //   header: () => <span>Sr. No.</span>,
-    // }),
     columnHelper.accessor("id", {
       cell: () => {
         while (count <= total) {
@@ -107,31 +94,31 @@ const NewSchemaCreation = () => {
     }),
 
     columnHelper.accessor("createdBy", {
-      cell: (info: any) => (info.renderValue() ? info.renderValue : "N/A"),
+      cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
       cell: (info) => {
-        const NavigateScheme = (uniqueId: any) => {
+        const NavigateScheme = (uniqueId: any, depositTakerId: any) => {
           navigate("/dc/my-task/audit-rail", {
             state: {
               uniqueId: uniqueId,
+              depositTakerId: depositTakerId,
             },
           });
         };
         const uniqueId = info?.row?.original?.uniqueId;
+        const depositTakerId = info?.row?.original?.depositTakerId;
         return (
           <div className="flex justify-center items-center ">
-            {/* <Link to={"/dt/schema/creation"}> */}
-            <div onClick={() => NavigateScheme(uniqueId)}>
+            <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
               <img src={Eye} alt="Eye " className="cursor-pointer" />
             </div>
-            {/* </Link> */}
           </div>
         );
       },
-      header: () => <span>Edit</span>,
+      header: () => <span>View</span>,
     }),
   ];
   const options1 = [

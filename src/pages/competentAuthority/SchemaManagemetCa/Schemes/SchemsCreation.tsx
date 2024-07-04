@@ -23,7 +23,8 @@ type SchemeType = {
   uniqueId: string;
   name: string;
   depositTakerId: string;
-  createdBy: string;
+  // createdBy: string;
+  createdBy: string | null;
   status: string;
   active: boolean;
 };
@@ -45,7 +46,6 @@ const NewSchemaCreation = () => {
   const fetchSchemes = async () => {
     setLoader(true);
     try {
-      // const uniqueId = sessionStorage.getItem("entityUniqueId");
       const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme`, {
         params: {
           page: page,
@@ -53,13 +53,6 @@ const NewSchemaCreation = () => {
         },
       });
 
-      // setSchemaData(
-      //   data.data.map((item: any, index: any) => ({
-      //     ...item,
-      //     id: index + 1, // Assuming you want to use index as S.No.
-      //     status: item.status, // Or some logic to determine status
-      //   }))
-      // );
       setSchemaData(data?.data);
       setTotal(data?.total);
       setLoader(false);
@@ -103,14 +96,14 @@ const NewSchemaCreation = () => {
 
     columnHelper.accessor("status", {
       cell: (info: any) => {
-        const value = info?.row?.original?.action;
+        const value = info?.getValue();
 
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span> {value ? "Active" : "In-Active"}</span>
+            <span className="text-sm">{value}</span>
           </div>
         );
       },
@@ -120,26 +113,29 @@ const NewSchemaCreation = () => {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Deposit Taker</span>,
     }),
+
     columnHelper.accessor("createdBy", {
-      cell: (info: any) => (info.renderValue() ? info.renderValue : "N/A"),
+      cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
       cell: (info) => {
-        const NavigateScheme = (uniqueId: any) => {
+        const NavigateScheme = (uniqueId: any, depositTakerId: any) => {
           navigate("/ca/my-task/audit-rail", {
             state: {
               uniqueId: uniqueId,
+              depositTakerId: depositTakerId,
             },
           });
         };
         const uniqueId = info?.row?.original?.uniqueId;
+        const depositTakerId = info?.row?.original?.depositTakerId;
         return (
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}
-            <div onClick={() => NavigateScheme(uniqueId)}>
-              <img src={Eye} alt="Eye " className="cursor-pointer" />
+            <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
+              <img src={EditIcon} alt="Eye " className="cursor-pointer" />
             </div>
             {/* </Link> */}
           </div>
@@ -251,7 +247,7 @@ const NewSchemaCreation = () => {
                 <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
                   <span className="ml-1 text-sm  md:text-[10px] font-normal text-[#1c468e] lg:text-[13px] text-gilroy-medium ">
-                    New Schema
+                    New Scheme
                   </span>
                 </div>
               </Link>

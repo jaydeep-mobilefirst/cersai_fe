@@ -13,37 +13,42 @@ import DynamicFields from "../../../../components/userFlow/depositeTaker/Dynamic
 import LoaderSpin from "../../../../components/LoaderSpin";
 import SelectButton from "../../../../components/userFlow/form/SelectButton";
 import SelectButtonMultiselect from "../../../../components/UserManagement/SelectButtonMultiselect";
+import Swal from "sweetalert2";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
 
-const status = [
+const options2 = [
+  { label: "Select Status", value: "" },
   { label: "Ban", value: "BANNED" },
   { label: "Active", value: "ACTIVE" },
   { label: "Under Legislation", value: "UNDER_LETIGATION" },
 ];
 const SchemesSearchDetailsSM: React.FC = () => {
+  const [errors, setErrors] = useState({
+    statusError : "",
+  })
   const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
-
+  const [rawSchemes, setRawSchemes] = useState([]);
   const [schemes, setSchemes] = useState<any[]>([]);
   const [selectedSchemes, setSelectedSchems] = useState<any[]>([])
   const [loader, setLoader] = useState(true);
   const screenWidth = useScreenWidth();
-  const { onChange } =
-    useContext(FormHandlerContext);
+  const { onChange } = useContext(FormHandlerContext);
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
   const navigate = useNavigate();
   const location = useLocation();
   const uniqueId = location.state?.uniqueId;
-  const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(2);
-
+  const depositTakerId = location.state?.depositTakerId;
+  const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
+  // console.log(entityDetailsFields, "entitydata");
+  
   const fetchSchema = async () => {
     try {
-      setLoader(true)
-      const response = await axios.get(`${bffUrl}/scheme/field-data`);
+      setLoader(true);
+      const response = await axios.get(`${bffUrl}/scheme/field-data/2`);
       // console.log(response, "response");
       if (response.data.success) {
         const portalResponse = await axios.get(
@@ -54,7 +59,9 @@ const SchemesSearchDetailsSM: React.FC = () => {
         const formFields = response?.data?.data?.formFields?.allFormFields.map(
           (field: any) => ({
             ...field,
-            userInput: userData?.schemeFormData?.find((f: any) => f?.fieldId === field?.id)?.value,
+            userInput: userData?.schemeFormData?.find(
+              (f: any) => f?.fieldId === field?.id
+            )?.value,
             error: "",
             disabled: true,
             typeId: field?.fieldTypeId,
@@ -66,83 +73,147 @@ const SchemesSearchDetailsSM: React.FC = () => {
           ...response?.data?.data,
           formFields: {
             form_fields: formFields?.map((field: any) => {
-              if (field?.key === 'depositTakerId') {
+              if (field?.key === "depositTakerId") {
                 return {
-                  ...field, dropdown_options: {
-                    ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
-                      name: o?.uniqueId,
-                      id: o?.companyName,
-                    }))
-                  }
-                }
-              }
-              else {
+                  ...field,
+                  dropdown_options: {
+                    ...field?.dropdown_options,
+                    options: field?.dropdown_options?.options?.map(
+                      (o: any) => ({
+                        name: o?.uniqueId,
+                        id: o?.companyName,
+                      })
+                    ),
+                  },
+                };
+              } else {
                 return field;
               }
-            })
+            }),
           },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,
-          other: userData
+          other: userData,
         });
-        console.log({userData});
       }
-
-      
-      setLoader(false)
+      setLoader(false);
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.error("Error fetching schema data:", error);
     }
-  };  
+  };
+
+  useEffect(() => {
+    if (uniqueId) {
+      fetchSchema();
+    }
+  }, [uniqueId]);
+  const fetchFormFields = () => {
+    axios
+      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+      .then(async (response) => {
+        if (response?.data?.success) {
+          let dtData: any = [];
+          try {
+            let depositTakerData = await axios.get(
+              `${bffUrl}/deposit-taker/${depositTakerId}`
+            );
+            dtData =
+              depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
+          } catch (error) {
+            console.log("Error");
+          }
+          let modifiedFormFields = response.data.data?.formFields
+            ?.map((o: any) => ({
+              ...o,
+              userInput: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              error: "",
+              disabled: true,
+            }))
+            ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+
+          let modifiedFileFields =
+            response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
+              ...o,
+              file: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              error: "",
+              fileName: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              uploadFileId: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              disabled: true,
+            }));
+
+          let obj = {
+            ...response?.data?.data,
+            formFields: { form_fields: modifiedFormFields },
+          };
+          setEntityDetailsFields(modifiedFormFields);
+          // setAllDocumentData(modifiedFileFields);
+        } else {
+          throw new Error("Error getting data, Please try later!");
+        }
+        setLoader(false);
+      })
+      .catch((error: any) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
+  useEffect(() => {
+    fetchFormFields();
+  }, [depositTakerId]);
 
   useEffect(() => {
     if (allFormData?.other?.depositTakerId) {
       axios.get(`${bffUrl}/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000`)
       .then((res) => {
         let data = res?.data?.data;
+        setRawSchemes(data);
         setSchemes(data?.map((d : any) => {
           return {
             label : d?.name,
-            value : d?.uniqueId
+            value : d?.uniqueId,
+            status : d?.status
           }
         }))
-        console.log({data});
-        
       })
       .catch((e) => {alert("Error fetching Schemes"); setSchemes([])})
     }
   }, [allFormData])
-  
-  useEffect(() => {
-    if (uniqueId) {
-      fetchSchema();
-    }
-  }, [uniqueId, page, pageSize]);
-
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
-      content: <DynamicFields
-        formFields={allFormData?.formFields?.form_fields}
-        allFormData={allFormData}
-        onChange={onChange}
-      />,
+      content: (
+        <DynamicFields
+          formFields={allFormData?.formFields?.form_fields}
+          allFormData={allFormData}
+          onChange={onChange}
+        />
+      ),
+    },
+    {
+      header: "Entity Details",
+      content: (
+        <DynamicFields
+          formFields={entityDetailsFields}
+          allFormData={entityDetailsFields}
+          onChange={onChange}
+        />
+      ),
     },
     {
       header: "Audit Trail",
       content: <AuditTrail />,
     },
   ];
-
-  const handleSetOption2 = (value: string) => {
-    setSelectedOption2(value);
-  };
-
-  const handleBackButtonClick = () => {
-    navigate("/rg/my-task");
-  };
 
   const handleSetOption1 = (value: any) => {
     if (
@@ -160,9 +231,65 @@ const SchemesSearchDetailsSM: React.FC = () => {
     );
     setSelectedSchems(filtered);
   };
+  const handleSetOption2 = (value: string) => {
+    if (value !== "") {
+      setErrors({statusError : ""})
+    }
+    setSelectedOption2(value);
+  };
 
-  const handleUpdateSchemeStatus = (e : any) => {
+  const handleBackButtonClick = () => {
+    navigate("/rg/my-task");
+  };
+
+  const handleStatusChange = (e : any) => {
     e?.preventDefault();
+    if (!selectedOption2) {
+      setErrors({...errors,statusError : "Please select status"});
+      return;
+    }
+    else{
+      setErrors({...errors,statusError : ""});
+    }
+
+    let schemesToChangeStatus = selectedSchemes?.filter((s : any) => s?.status !== selectedOption2)?.map((d : any) => d?.value);
+    if (allFormData?.other?.status !== selectedOption2) {
+        schemesToChangeStatus = [...schemesToChangeStatus, uniqueId];
+    }
+    let payload = {
+      status: selectedOption2,
+      schemeIds:schemesToChangeStatus
+    }
+    
+    setLoader(true)
+    axios.patch(bffUrl + '/scheme-portal/status', payload)
+    .then(res => {
+      let data = res.data;
+      if (data?.success) {
+        Swal.fire({
+          title : "Success",
+          text : data?.message,
+          icon: "success"
+        })
+      }
+      else{
+        Swal.fire({
+          title : "Something went wrong",
+          text : data?.message,
+          icon: "error"
+        })
+      }
+      console.log({data});
+    })
+    .catch((e) => {
+      Swal.fire({
+        title : "Something went wrong",
+        text : e?.message,
+        icon: "error"
+      })
+    })
+    .finally(() => setLoader(false))
+    
   }
   return (
     <div className="flex flex-col min-h-screen ">
@@ -185,31 +312,32 @@ const SchemesSearchDetailsSM: React.FC = () => {
       <div className="mt-8 mb-8 mx-8">
         {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
         <div className="grid grid-cols-2 space-x-3">
-        <div > 
-          <label
-            htmlFor="Select Other Schemes"
-            className="text-base font-normal text-gilroy-medium"
-          >
-            Status
-          </label>
-          <SelectButton
-            // backgroundColor="#F2F2F2"
-            setOption={handleSetOption2}
-            options={status}
-            selectedOption={selectedOption2}
-            placeholder="Select"
-            showSearchInput={true}
-          />
-        </div>
+          <div>
+            <label
+              htmlFor="Select Other Schemes"
+              className="text-base font-normal text-gilroy-medium"
+            >
+              Status
+            </label>
+            <SelectButton
+              // backgroundColor="#F2F2F2"
+              setOption={handleSetOption2}
+              options={options2}
+              selectedOption={selectedOption2}
+              placeholder="Select"
+              showSearchInput={true}
+            />
+            <span className="text-red-400">{errors?.statusError}</span>
+          </div>
 
-        <div>
-          <label
-            htmlFor="Select Other Schemes"
-            className="text-base font-normal text-gilroy-medium"
-          >
-            Select Other Schemes
-          </label>
-          <SelectButtonMultiselect
+          <div>
+            <label
+              htmlFor="Select Other Schemes"
+              className="text-base font-normal text-gilroy-medium"
+            >
+              Select Other Schemes
+            </label>
+            <SelectButtonMultiselect
                   setOption={handleSetOption1}
                   options={schemes}
                   placeholder="Select"
@@ -218,15 +346,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
                   remove={remove}
                   className="relative"
                 />
-          {/* <SelectButton
-            // backgroundColor="#F2F2F2"
-            setOption={handleSetOption2}
-            options={options2}
-            selectedOption={selectedOption2}
-            placeholder="Select"
-            showSearchInput={true}
-          /> */}
-        </div>
+          </div>
         </div>
       </div>
       <div>
@@ -262,11 +382,12 @@ const SchemesSearchDetailsSM: React.FC = () => {
           </div>
           <div className="flex items-center">
             <button
+              disabled={loader}
               type="submit"
-              // onClick={handleButtonClick}
+              onClick={handleStatusChange}
               className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
             >
-              Submit
+              {loader ? <LoaderSpin/> : "Submit"}
             </button>
           </div>
         </div>

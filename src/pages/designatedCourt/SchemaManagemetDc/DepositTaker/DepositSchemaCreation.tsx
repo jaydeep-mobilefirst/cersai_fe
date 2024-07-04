@@ -53,16 +53,18 @@ const DepositSchemaCreation = () => {
           limit: pageSize,
         },
       });
-      if (data?.data?.depositTakers) {
-        const mappedData = data.data.depositTakers.map(
-          (item: any, index: number) => ({
-            ...item,
-            id: index + 1,
-            key: index,
-          })
-        );
-        setMyTaskData(mappedData);
-      }
+      // if (data?.data?.depositTakers) {
+      //   const mappedData = data.data.depositTakers.map(
+      //     (item: any, index: number) => ({
+      //       ...item,
+      //       id: index + 1,
+      //       key: index,
+      //     })
+      //   );
+      //   setMyTaskData(mappedData);
+      // }
+
+      setMyTaskData(data?.data?.depositTakers);
 
       setTotal(data?.data?.total);
       setLoader(false);
@@ -75,108 +77,20 @@ const DepositSchemaCreation = () => {
   useEffect(() => {
     myTaskRg();
   }, [page, pageSize]);
-  // const defaultData: TableType[] = [
-  //   {
-  //     sno: "01",
-  //     depositTakerID: "DT001",
-  //     depositTakerName: "Deposit Taker 1",
-  //     status: "Active",
-  //     action: false,
-  //   },
-  //   {
-  //     sno: "02",
-  //     depositTakerID: "DT002",
-  //     depositTakerName: "Deposit Taker 2",
+  let count: number;
+  const serialNoGen = (page: number) => {
+    count = (page - 1) * 10;
+  };
+  serialNoGen(page);
 
-  //     status: "Pending",
-  //     action: true,
-  //   },
-  //   {
-  //     sno: "03",
-  //     depositTakerID: "DT002",
-  //     depositTakerName: "Deposit Taker 2",
-
-  //     status: "Banned",
-  //     action: true,
-  //   },
-  //   {
-  //     sno: "04",
-  //     depositTakerID: "DT002",
-  //     depositTakerName: "Deposit Taker 2",
-  //     status: "Pending",
-  //     action: false,
-  //   },
-  //   {
-  //     sno: "05",
-  //     depositTakerID: "DT002",
-  //     depositTakerName: "Deposit Taker 2",
-  //     status: "Pending",
-  //     action: true,
-  //   },
-  //   {
-  //     sno: "06",
-  //     depositTakerID: "DT002",
-  //     depositTakerName: "Deposit Taker 2",
-  //     status: "Active",
-  //     action: false,
-  //   },
-  // ];
-
-  // const columns = [
-  //   columnHelper.accessor("sno", {
-  //     cell: (info: any) => info.renderValue(),
-  //     header: () => <span>Sr. No.</span>,
-  //   }),
-  //   columnHelper.accessor("depositTakerID", {
-  //     cell: (info: any) => info.renderValue(),
-  //     header: () => <span>Deposit Taker ID</span>,
-  //   }),
-  //   columnHelper.accessor("depositTakerName", {
-  //     cell: (info: any) => info.renderValue(),
-  //     header: () => <span>Deposit Taker Name</span>,
-  //   }),
-  //   columnHelper.accessor("status", {
-  //     cell: (info: any) => info.renderValue(),
-  //     header: () => <span>Status</span>,
-  //   }),
-
-  //   columnHelper.accessor("action", {
-  //     cell: (info: any) => {
-  //       const value = info?.row?.original?.action;
-
-  //       return (
-  //         <div
-  //           className="flex flex-col md:flex-row justify-center gap-3"
-  //           key={Math.random()}
-  //         >
-  //           <span> {value ? "Active" : "In-Active"}</span>
-  //         </div>
-  //       );
-  //     },
-  //     header: () => <span>Action</span>,
-  //   }),
-
-  //   columnHelper.accessor((row: any) => row, {
-  //     id: "action",
-  //     cell: (info: any) => {
-  //       const value = info.getValue();
-
-  //       return (
-  //         <div className="flex justify-center items-center ">
-  //           <Link to={"/dc/deposit-taker/form"}>
-  //             <div>
-  //               <img src={Eye} alt="Eye " className="cursor-pointer" />
-  //             </div>
-  //           </Link>
-  //         </div>
-  //       );
-  //     },
-  //     header: () => <span>View</span>,
-  //   }),
-  // ];
   const columns = [
     columnHelper.accessor("id", {
-      cell: (info: any) => info.renderValue(),
+      cell: () => {
+        while (count <= total) {
+          count++;
+          return count;
+        }
+      },
       header: () => <span>Sr. No.</span>,
     }),
     columnHelper.accessor("uniqueId", {
@@ -202,10 +116,20 @@ const DepositSchemaCreation = () => {
     columnHelper.accessor((row: any) => row, {
       id: "action",
       cell: (info: any) => {
-        const value = info.getValue();
+        const { uniqueId } = info.getValue();
+        const NavigateScheme = (uniqueId: any) => {
+          navigate("/dc/deposit-taker/form", {
+            state: {
+              depositTakerId: uniqueId,
+            },
+          });
+        };
 
         return (
-          <div className="flex justify-center items-center ">
+          <div
+            className="flex justify-center items-center "
+            onClick={() => NavigateScheme(uniqueId)}
+          >
             <Link to={"/dc/deposit-taker/form"}>
               <div>
                 <img src={Eye} alt="Eye " className="cursor-pointer" />

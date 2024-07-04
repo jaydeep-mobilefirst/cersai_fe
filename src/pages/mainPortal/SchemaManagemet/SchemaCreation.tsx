@@ -42,7 +42,9 @@ const SchemaCreation = () => {
       //     "entityUniqueId"
       //   )}`
       // );
-      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme`, {
+      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme-by/${sessionStorage.getItem(
+          "entityUniqueId"
+        )}`, {
         params: {
           page: page,
           limit: pageSize,
@@ -56,7 +58,7 @@ const SchemaCreation = () => {
           status: item.status, // Or some logic to determine status
         }))
       );
-      setTotal(data?.total)
+      setTotal(data?.total);
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
@@ -230,7 +232,7 @@ const SchemaCreation = () => {
                 <div className="w-40 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
                   <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
-                    Add Schema
+                    New Scheme
                   </span>
                 </div>
               </Link>

@@ -18,8 +18,7 @@ interface AccordionItem {
 
 const SchemeMasterForm = () => {
   const [loader, setLoader] = useState(true);
-  const { onChange } =
-    useContext(FormHandlerContext);
+  const { onChange } = useContext(FormHandlerContext);
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
   const navigate = useNavigate();
@@ -30,8 +29,8 @@ const SchemeMasterForm = () => {
 
   const fetchSchema = async () => {
     try {
-      setLoader(true)
-      const response = await axios.get(`${bffUrl}/scheme/field-data`);
+      setLoader(true);
+      const response = await axios.get(`${bffUrl}/scheme/field-data/1`);
       // console.log(response, "response");
       if (response.data.success) {
         const portalResponse = await axios.get(
@@ -42,7 +41,9 @@ const SchemeMasterForm = () => {
         const formFields = response?.data?.data?.formFields?.allFormFields.map(
           (field: any) => ({
             ...field,
-            userInput: userData?.schemeFormData?.find((f: any) => f?.fieldId === field?.id)?.value,
+            userInput: userData?.schemeFormData?.find(
+              (f: any) => f?.fieldId === field?.id
+            )?.value,
             error: "",
             disabled: true,
             typeId: field?.fieldTypeId,
@@ -54,30 +55,33 @@ const SchemeMasterForm = () => {
           ...response?.data?.data,
           formFields: {
             form_fields: formFields?.map((field: any) => {
-              if (field?.key === 'depositTakerId') {
+              if (field?.key === "depositTakerId") {
                 return {
-                  ...field, dropdown_options: {
-                    ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
-                      name: o?.uniqueId,
-                      id: o?.companyName,
-                    }))
-                  }
-                }
-              }
-              else {
+                  ...field,
+                  dropdown_options: {
+                    ...field?.dropdown_options,
+                    options: field?.dropdown_options?.options?.map(
+                      (o: any) => ({
+                        name: o?.uniqueId,
+                        id: o?.companyName,
+                      })
+                    ),
+                  },
+                };
+              } else {
                 return field;
               }
-            })
+            }),
           },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,
-          other: userData
+          other: userData,
         });
       }
-      setLoader(false)
+      setLoader(false);
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.error("Error fetching schema data:", error);
     }
   };
@@ -91,11 +95,13 @@ const SchemeMasterForm = () => {
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
-      content: <DynamicFields
-        formFields={allFormData?.formFields?.form_fields}
-        allFormData={allFormData}
-        onChange={onChange}
-      />,
+      content: (
+        <DynamicFields
+          formFields={allFormData?.formFields?.form_fields}
+          allFormData={allFormData}
+          onChange={onChange}
+        />
+      ),
     },
     {
       header: "Audit Trail",
@@ -108,12 +114,15 @@ const SchemeMasterForm = () => {
 
   return (
     <div>
-      <div className="relative mx-2 xl:ml-[40px] mt-4">
+      <div
+        className="relative mx-2 xl:ml-[40px] mt-4"
+        style={{ minHeight: "calc(100vh - 110px)" }}
+      >
         <div className="mt-6">
           <TaskTabs />
         </div>
         <div className="mt-8">
-          {loader ? <LoaderSpin/> : <Accordion items={accordionItems} />}
+          {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
         </div>
         <div className="my-11 flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center cursor-pointer space-x-2 mb-3 md:mb-0">
@@ -126,11 +135,13 @@ const SchemeMasterForm = () => {
             </p>
           </div>
         </div>
-        <div className="border-b-2 border-[#E6E6E6]"></div>
-        <div className="text-center">
-          <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
-            © 2024 Protean BUDs, All Rights Reserved.
-          </h1>
+        <div className="w-full absolute bottom-0">
+          <div className="border-b-2 border-[#E6E6E6]"></div>
+          <div className="text-center">
+            <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+              © 2024 Protean BUDs, All Rights Reserved.
+            </h1>
+          </div>
         </div>
       </div>
     </div>
