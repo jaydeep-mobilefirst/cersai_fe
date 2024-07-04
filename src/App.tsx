@@ -89,6 +89,8 @@ import DepositeTakerSearch from "./pages/depositTakerSearch/DepositeTakerSearch"
 import DepositeTakerSearchDetails from "./pages/depositTakerSearch/DepositeTakerSearchDetails";
 import Faq from "./pages/Faq";
 import Notifications from "./pages/Notifications";
+import Downloads from "./pages/Downloads";
+import Training from "./pages/Training";
 function App() {
   return (
     <div>
@@ -329,6 +331,8 @@ function App() {
           <Route element={<OtpModel />} path="/otp-verification" />
           <Route element={<Faq />} path="/faq" />
           <Route element={<Notifications />} path="/notifications" />
+          <Route element={<Downloads />} path="/downloads" />
+          <Route element={<Training />} path="/training" />
           {/* <Route element={<RoleCreation />} path="/role" /> */}
         </Routes>
       </Router>
