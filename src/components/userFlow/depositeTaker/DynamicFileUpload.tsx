@@ -26,7 +26,6 @@ const DynamicFileUpload = ({ data }: Props) => {
     const [showUploadPopup, setShowUploadPopup] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [file, setFile] = useState<File | null>(null);
-    console.log({data, allFormData});
     const toggleUploadPopup = () => {
         setShowUploadPopup(true);
     };

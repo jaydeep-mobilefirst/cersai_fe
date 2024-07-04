@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from "react";
-
+import { useState, useEffect } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
-
 import Eye from "../../../../assets/images/eye2.svg";
-import addCircle from "../../../../assets/images/new_images/add-circle.png";
-import { Link } from "react-router-dom";
 import InputFields from "../../../../components/ScehmaManagement/InputField";
 import searchButton from "../../../../assets/images/search-normal.svg";
 import ReactTable from "../../../../components/userFlow/common/ReactTable";
 import SelectButtonTask from "../../../../components/ScehmaManagement/SelectButton";
 import CustomPagination from "../../../../components/CustomPagination/CustomPagination";
-import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabsDc from "../../../../components/ScehmaManagement/TaskTabsDc";
-import EditIcon from "../../../../assets/images/editBlue.svg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { bffUrl } from "../../../../utils/api";
@@ -31,10 +25,6 @@ type SchemeType = {
 
 const columnHelper = createColumnHelper<SchemeType>();
 
-const validatePan = (pan: string): boolean => {
-  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-  return panRegex.test(pan);
-};
 const NewSchemaCreation = () => {
   const [schemaData, setSchemaData] = useState([]);
   const [loader, setLoader] = useState<boolean>(false);
@@ -128,7 +118,7 @@ const NewSchemaCreation = () => {
           </div>
         );
       },
-      header: () => <span>Edit</span>,
+      header: () => <span>View</span>,
     }),
   ];
   const options1 = [
