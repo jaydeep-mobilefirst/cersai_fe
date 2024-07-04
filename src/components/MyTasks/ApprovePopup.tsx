@@ -57,15 +57,16 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
   const status = location?.state?.status;
 
   const userid = sessionStorage.getItem("userId");
+  console.log({ userid });
   const navigate = useNavigate();
 
   useEffect(() => {
     setDocSelected(false);
   }, [selectedFunc]);
 
-  useEffect(() => {
-    setCheckerSelected(false);
-  }, [checkerId]);
+  // useEffect(() => {
+  //   setCheckerSelected(false);
+  // }, [checkerId]);
 
   const apiCall = () => {
     axiosInstance
@@ -164,18 +165,18 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!selectedFunc) {
-      setDocSelected(true);
-    }
+    // if (!selectedFunc) {
+    //   setDocSelected(true);
+    // }
     // if (!checkerId) {
     //   setCheckerSelected(true);
     // }
     // if (!selectedFunc || !checkerId) {
     //   return;
     // }
-    if (!selectedFunc) {
-      return;
-    }
+    // if (!selectedFunc) {
+    //   return;
+    // }
 
     try {
       setLoader(true);
@@ -183,9 +184,8 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
         `/approval-engine/update-status`,
         {
           uniqueId: depositTakerId,
-          status: status === "PENDING" ? "TRANSIT" : "PENDING",
-          // checkerId: checkerId,
-          approvalDocumentId: approvalDocumentId,
+          status: "APPROVED",
+          // approvalDocumentId: approvalDocumentId,
           approverId: Number(userid),
         }
       );
@@ -225,7 +225,7 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
           {
             uniqueId: depositTakerId,
             status: "APPROVED",
-            approvalDocumentId: approvalDocumentId,
+            // approvalDocumentId: approvalDocumentId,
             approverId: Number(userid),
           }
         );
@@ -301,11 +301,12 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
                 )}
               </div>
               <form
-                onSubmit={
-                  status === "TRANSIT" ? handleFormSubmit2 : handleFormSubmit
-                }
+                // onSubmit={
+                //   status === "TRANSIT" ? handleFormSubmit2 : handleFormSubmit
+                // }
+                onSubmit={handleFormSubmit}
               >
-                <div className="w-[300px] md:w-[450px] mx-3 my-4 ">
+                {/* <div className="w-[300px] md:w-[450px] mx-3 my-4 ">
                   <label
                     htmlFor="State"
                     className="text-base font-normal text-gilroy-medium"
@@ -329,7 +330,7 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
                       </p>
                     )}
                   </div>
-                </div>
+                </div> */}
                 {/* {status !== "TRANSIT" && (
                   <div className="w-[300px] md:w-[450px] mx-3 my-4 ">
                     <label
@@ -362,7 +363,7 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
                   <hr className="w-full bg-[#E6E6E6] mt-[27px] mb-[24px]"></hr>
                   <ButtonComp
                     onClose={onClose}
-                    title="Approve"
+                    title="Confirm"
                     loader={loader}
                   />
                 </div>

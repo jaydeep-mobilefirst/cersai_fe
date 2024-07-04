@@ -20,6 +20,7 @@ type TableType = {
   uniqueId: string;
   depositTakerID: string;
   depositTakerName: string;
+  companyName: string;
   checkerId: number;
   approvalDocumentId: number;
   status: string;
@@ -35,6 +36,7 @@ const MyTaskStatus = () => {
   const [total, setTotal] = useState<number>(0);
   const [myTaskData, setMyTaskData] = useState([]);
   const navigate = useNavigate();
+  const masterId = sessionStorage.getItem("masterId");
   const myTaskRg = async () => {
     setLoader(true);
     try {
@@ -42,22 +44,24 @@ const MyTaskStatus = () => {
         params: {
           page: page,
           limit: pageSize,
-          regId: "RG02ID8",
+          // regId: "RG02ID8",
+          regId: masterId,
         },
       });
-      if (data?.data?.depositTakers) {
-        const mappedData = data.data.depositTakers.map(
-          (item: any, index: number) => ({
-            ...item,
-            id: index + 1,
-            key: index,
-            depositTakerName: `${item?.approverRelation?.firstName || ""} ${
-              item?.approverRelation?.lastName || ""
-            }`,
-          })
-        );
-        setMyTaskData(mappedData);
-      }
+      // if (data?.data?.depositTakers) {
+      //   const mappedData = data.data.depositTakers.map(
+      //     (item: any, index: number) => ({
+      //       ...item,
+      //       id: index + 1,
+      //       key: index,
+      //       depositTakerName: `${item?.approverRelation?.firstName || ""} ${
+      //         item?.approverRelation?.lastName || ""
+      //       }`,
+      //     })
+      //   );
+      //   setMyTaskData(mappedData);
+      // }
+      setMyTaskData(data?.data?.depositTakers);
 
       setTotal(data?.data?.total);
       setLoader(false);
@@ -87,17 +91,31 @@ const MyTaskStatus = () => {
       },
     });
   };
+  let count: number;
+  const serialNoGen = (page: number) => {
+    count = (page - 1) * 10;
+  };
+  serialNoGen(page);
 
   const columns = [
+    // columnHelper.accessor("id", {
+    //   cell: (info) => info.renderValue(),
+    //   header: () => <span>Sr. No.</span>,
+    // }),
     columnHelper.accessor("id", {
-      cell: (info) => info.renderValue(),
+      cell: () => {
+        while (count <= total) {
+          count++;
+          return count;
+        }
+      },
       header: () => <span>Sr. No.</span>,
     }),
     columnHelper.accessor("uniqueId", {
       cell: (info) => info.renderValue(),
       header: () => <span>Deposit Taker ID</span>,
     }),
-    columnHelper.accessor("depositTakerName", {
+    columnHelper.accessor("companyName", {
       cell: (info) => info.renderValue(),
       header: () => <span>Deposit Taker Name</span>,
     }),

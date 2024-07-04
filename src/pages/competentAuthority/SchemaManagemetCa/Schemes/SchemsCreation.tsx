@@ -247,7 +247,7 @@ const NewSchemaCreation = () => {
                 <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
                   <span className="ml-1 text-sm  md:text-[10px] font-normal text-[#1c468e] lg:text-[13px] text-gilroy-medium ">
-                    New Schema
+                    New Scheme
                   </span>
                 </div>
               </Link>
