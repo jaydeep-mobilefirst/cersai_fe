@@ -96,14 +96,14 @@ const NewSchemaCreation = () => {
 
     columnHelper.accessor("status", {
       cell: (info: any) => {
-        const value = info?.row?.original?.action;
+        const value = info?.getValue();
 
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span> {value ? "Active" : "In-Active"}</span>
+            <span className="text-sm">{value}</span>
           </div>
         );
       },
@@ -135,7 +135,7 @@ const NewSchemaCreation = () => {
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}
             <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
-              <img src={Eye} alt="Eye " className="cursor-pointer" />
+              <img src={EditIcon} alt="Eye " className="cursor-pointer" />
             </div>
             {/* </Link> */}
           </div>

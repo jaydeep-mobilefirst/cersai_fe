@@ -34,7 +34,7 @@ const SchemeDetails = () => {
   }, []);
   const fetchSchema = async () => {
     try {
-      const response = await axios.get(`${bffUrl}/scheme/field-data`);
+      const response = await axios.get(`${bffUrl}/scheme/field-data/2`);
       // console.log(response, "response");
       if (response.data.success) {
         const formFields = response?.data?.data?.formFields?.allFormFields.map(

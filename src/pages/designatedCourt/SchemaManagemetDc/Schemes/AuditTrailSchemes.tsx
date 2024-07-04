@@ -11,6 +11,9 @@ import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker
 import axios from "axios";
 import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
+import InputField from "../../../../components/form/InputField";
+import UploadFile from "../../UploadFile";
+import TextArea from "../../../../components/userFlow/form/TextArea";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
@@ -32,7 +35,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/scheme/field-data`);
+      const response = await axios.get(`${bffUrl}/scheme/field-data/2`);
       // console.log(response, "response");
       if (response.data.success) {
         const portalResponse = await axios.get(
@@ -201,6 +204,27 @@ const SchemesSearchDetailsSM: React.FC = () => {
       </div>
       <div className="mt-8 mb-8 mx-8">
         {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
+        <div className="grid grid-cols-2 space-x-3">
+          <div>
+            <label
+              htmlFor="Select Other Schemes"
+              className="text-base font-normal text-gilroy-medium"
+            >
+              Comment
+            </label>
+            <TextArea id="Select Other Schemes" placeholder="type comment "/>
+          </div>
+
+          <div>
+            <label
+              htmlFor="Select Other Schemes"
+              className="text-base font-normal text-gilroy-medium"
+            >
+              Upload File
+            </label>
+           <InputField type="file"/>
+          </div>
+        </div>
       </div>
       <div>
         <div

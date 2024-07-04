@@ -30,7 +30,7 @@ const SchemeMasterForm = () => {
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/scheme/field-data`);
+      const response = await axios.get(`${bffUrl}/scheme/field-data/1`);
       // console.log(response, "response");
       if (response.data.success) {
         const portalResponse = await axios.get(

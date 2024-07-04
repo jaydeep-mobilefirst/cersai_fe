@@ -42,7 +42,9 @@ const SchemaCreation = () => {
       //     "entityUniqueId"
       //   )}`
       // );
-      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme`, {
+      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme-by/${sessionStorage.getItem(
+          "entityUniqueId"
+        )}`, {
         params: {
           page: page,
           limit: pageSize,

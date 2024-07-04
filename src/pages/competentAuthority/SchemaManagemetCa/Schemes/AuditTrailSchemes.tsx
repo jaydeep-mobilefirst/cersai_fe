@@ -11,11 +11,32 @@ import axios from "axios";
 import { bffUrl } from "../../../../utils/api";
 import DynamicFields from "../../../../components/userFlow/depositeTaker/DynamicFields";
 import LoaderSpin from "../../../../components/LoaderSpin";
+import Swal from "sweetalert2";
+import SelectButton from "../../../../components/userFlow/form/SelectButton";
+import SelectButtonMultiselect from "../../../../components/UserManagement/SelectButtonMultiselect";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
+
+const options2 = [
+  { label: "Select Status", value: "" },
+  { label: "Ban", value: "BANNED" },
+  { label: "Active", value: "ACTIVE" },
+  { label: "Under Legislation", value: "UNDER_LETIGATION" },
+];
 const SchemesSearchDetailsSM: React.FC = () => {
+  const [errors, setErrors] = useState({
+    statusError : "",
+  })
+  const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
+
+  const [rawSchemes, setRawSchemes] = useState([]);
+
+  const [schemes, setSchemes] = useState<any[]>([]);
+
+  const [selectedSchemes, setSelectedSchems] = useState<any[]>([])
+
   const [loader, setLoader] = useState(true);
   const screenWidth = useScreenWidth();
   const { onChange } = useContext(FormHandlerContext);
@@ -33,7 +54,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/scheme/field-data`);
+      const response = await axios.get(`${bffUrl}/scheme/field-data/2`);
       // console.log(response, "response");
       if (response.data.success) {
         const portalResponse = await axios.get(
@@ -152,6 +173,26 @@ const SchemesSearchDetailsSM: React.FC = () => {
         setLoader(false);
       });
   };
+
+  useEffect(() => {
+    if (allFormData?.other?.depositTakerId) {
+      axios.get(`${bffUrl}/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000`)
+      .then((res) => {
+        let data = res?.data?.data;
+        setRawSchemes(data);
+        setSchemes(data?.map((d : any) => {
+          return {
+            label : d?.name,
+            value : d?.uniqueId,
+            status : d?.status
+          }
+        }))
+      })
+      .catch((e) => {alert("Error fetching Schemes"); setSchemes([])})
+    }
+  }, [allFormData])
+
+
   useEffect(() => {
     fetchFormFields();
   }, [depositTakerId]);
@@ -186,6 +227,82 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const handleBackButtonClick = () => {
     navigate("/ca/my-task");
   };
+
+  const handleStatusChange = (e : any) => {
+    e?.preventDefault();
+    if (!selectedOption2) {
+      setErrors({...errors,statusError : "Please select status"});
+      return;
+    }
+    else{
+      setErrors({...errors,statusError : ""});
+    }
+
+    let schemesToChangeStatus = selectedSchemes?.filter((s : any) => s?.status !== selectedOption2)?.map((d : any) => d?.value);
+    if (allFormData?.other?.status !== selectedOption2) {
+        schemesToChangeStatus = [...schemesToChangeStatus, uniqueId];
+    }
+    let payload = {
+      status: selectedOption2,
+      schemeIds:schemesToChangeStatus
+    }
+    
+    setLoader(true)
+    axios.patch(bffUrl + '/scheme-portal/status', payload)
+    .then(res => {
+      let data = res.data;
+      if (data?.success) {
+        Swal.fire({
+          title : "Success",
+          text : data?.message,
+          icon: "success"
+        })
+      }
+      else{
+        Swal.fire({
+          title : "Something went wrong",
+          text : data?.message,
+          icon: "error"
+        })
+      }
+      console.log({data});
+    })
+    .catch((e) => {
+      Swal.fire({
+        title : "Something went wrong",
+        text : e?.message,
+        icon: "error"
+      })
+    })
+    .finally(() => setLoader(false))
+    
+  }
+
+  const handleSetOption2 = (value: string) => {
+    if (value !== "") {
+      setErrors({statusError : ""})
+    }
+    setSelectedOption2(value);
+  };
+
+  const remove = (data: any) => {
+    const filtered = selectedSchemes.filter(
+      (f) => f.value !== data.value
+    );
+    setSelectedSchems(filtered);
+  };
+
+
+  const handleSetOption1 = (value: any) => {
+    if (
+      schemes.length > 0 &&
+      !selectedSchemes.find((f) => f.value === value.value)
+    ) {
+      const selected = schemes.find((f) => f.value === value.value);
+      setSelectedSchems((prev) => [...prev, selected]);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen ">
       <div className="mt-6 mx-8">
@@ -206,6 +323,43 @@ const SchemesSearchDetailsSM: React.FC = () => {
       </div>
       <div className="mt-8 mb-8 mx-8">
         {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
+        <div className="grid grid-cols-2 space-x-3">
+          <div>
+            <label
+              htmlFor="Select Other Schemes"
+              className="text-base font-normal text-gilroy-medium"
+            >
+              Status
+            </label>
+            <SelectButton
+              // backgroundColor="#F2F2F2"
+              setOption={handleSetOption2}
+              options={options2}
+              selectedOption={selectedOption2}
+              placeholder="Select"
+              showSearchInput={true}
+            />
+            <span className="text-red-400">{errors?.statusError}</span>
+          </div>
+
+          <div>
+            <label
+              htmlFor="Select Other Schemes"
+              className="text-base font-normal text-gilroy-medium"
+            >
+              Select Other Schemes
+            </label>
+            <SelectButtonMultiselect
+                  setOption={handleSetOption1}
+                  options={schemes}
+                  placeholder="Select"
+                  multiselect={true}
+                  allSelectedOptions={selectedSchemes}
+                  remove={remove}
+                  className="relative"
+                />
+          </div>
+        </div>
       </div>
       <div>
         <div
@@ -241,10 +395,10 @@ const SchemesSearchDetailsSM: React.FC = () => {
           <div className="flex items-center">
             <button
               type="submit"
-              // onClick={handleButtonClick}
+              onClick={handleStatusChange}
               className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
             >
-              Submit
+              {loader ? <LoaderSpin/> : "Submit"}
             </button>
           </div>
         </div>
