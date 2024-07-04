@@ -46,7 +46,7 @@ export const latestNewsComp = [
 ];
 // QueryResolutionComp Component
 export const queryResolutionComp = [
-  { heading: "Query Resolution Session" },
+  { heading: "Query Resolution Session",description:"This session aims at resolving functional and technical queries you may have encountered during the operationalization of the CKYCR system in your organization." },
   { date: "13", month: "Mar" },
   { location: "Location", city: "Mumbai" },
   {

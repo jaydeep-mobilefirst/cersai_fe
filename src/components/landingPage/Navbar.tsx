@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import MenuItem from "./MenuItem";
 import hamburger from "../../assets/images/hamburger_icon.svg";
 import close_icon from "../../assets/images/white_close.png";
@@ -8,21 +8,46 @@ import { useLandingStore } from "../../zust/useLandingStore";
 
 const Navbar: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("HOME");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { homePageData } = useLandingStore((state) => state);
-  const handleMenuClick = (text:any) => {
+
+  useEffect(()=>{
+    if (location.pathname === '/faq'){
+      setActiveTab("FAQ")
+    }
+    else if (location.pathname === '/notifications'){
+      setActiveTab("NOTIFICATIONS")
+    }
+    else if (location.pathname === '/downloads'){
+      setActiveTab("DOWNLOADS")
+    }
+    else if (location.pathname === '/training'){
+      setActiveTab("TRAINING")
+    }
+  },[location.pathname])
+
+  const handleMenuClick = (text:string) => {
     if (text === "FAQ") {
       navigate("/faq");
+      
+      
     } else if (text === "NOTIFICATIONS") {
       navigate("/notifications");
     } else if (text === "HOME"){
       navigate("/");
 
       // handle other routes if necessary
-    }
+    } else if (text === "DOWNLOADS") {
+      navigate("/downloads");
+    }else if (text === "TRAINING") {
+      navigate("/training");}
+    setActiveTab(text);
     setShowMenu(false);
   };
+
 
   return (
     <div>
@@ -43,7 +68,7 @@ const Navbar: React.FC = () => {
             {homePageData?.navbar?.length > 0 && (
               <>
                 {homePageData?.navbar.map((menuItem: any, index: any) => (
-                  <MenuItem key={index} text={menuItem} onClick={() => handleMenuClick(menuItem)}/>
+                  <MenuItem key={index} text={menuItem} onClick={() => handleMenuClick(menuItem)} isActive={activeTab === menuItem}/>
                 ))}
               </>
             )}
@@ -61,7 +86,7 @@ const Navbar: React.FC = () => {
           {homePageData?.navbar?.length > 0 && (
             <>
               {homePageData?.navbar.map((menuItem: any, index: any) => (
-                <MenuItem key={index} text={menuItem} onClick={() => handleMenuClick(menuItem)}/>
+                <MenuItem key={index} text={menuItem} onClick={() => handleMenuClick(menuItem)} isActive={activeTab === menuItem} />
               ))}
             </>
           )}
