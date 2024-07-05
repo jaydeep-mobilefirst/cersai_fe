@@ -43,7 +43,7 @@ const Landing = () => {
       <LatestNewsComp />
       <AboutBudsHeadingComp />
       <AboutBuds />
-      <QueryResolutoinComp />
+      {/* <QueryResolutoinComp /> */}
       <Footer />
     </div>
   );
