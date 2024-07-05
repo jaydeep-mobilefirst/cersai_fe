@@ -27,6 +27,9 @@ const Navbar: React.FC = () => {
     else if (location.pathname === '/training'){
       setActiveTab("TRAINING")
     }
+    else if (location.pathname === '/contactus'){
+      setActiveTab("CONTACT US")
+    }
   },[location.pathname])
 
   const handleMenuClick = (text:string) => {
@@ -43,7 +46,11 @@ const Navbar: React.FC = () => {
     } else if (text === "DOWNLOADS") {
       navigate("/downloads");
     }else if (text === "TRAINING") {
-      navigate("/training");}
+      navigate("/training");
+    }else if (text === "CONTACT US") {
+      navigate("/contactus");
+    }
+
     setActiveTab(text);
     setShowMenu(false);
   };
