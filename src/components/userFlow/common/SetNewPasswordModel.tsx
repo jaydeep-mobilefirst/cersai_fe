@@ -263,11 +263,11 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
                           placeholder="Confirm Password"
                           error={error}
                         />
-                        {errors.confirmPassword?.message && (
+                        {/* {errors.confirmPassword?.message && (
                           <p className="text-red-500">
                             {errors.confirmPassword.message as string}
                           </p>
-                        )}
+                        )} */}
                         {confirmPassword && (
                           <p
                             className={
@@ -277,8 +277,8 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
                             }
                           >
                             {confirmPassword === password
-                              ? "Passwords match"
-                              : "Passwords do not match"}
+                              ? "Password & confirm password  match"
+                              : "Password & confirm password do not match"}
                           </p>
                         )}
                       </div>

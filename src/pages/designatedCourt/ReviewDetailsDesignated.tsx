@@ -29,7 +29,8 @@ const ReviewDetailsDesignated = () => {
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData, documentData, masterEntityId} = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData, masterEntityId } =
+    useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const { downloadPDF, isDownloading } = useDownloadPDF();
@@ -42,46 +43,55 @@ const ReviewDetailsDesignated = () => {
   const submit = async (e: any) => {
     e.preventDefault();
     setLoader(true);
-    let finalResult = allFormData?.formFields?.form_fields?.map((field: any) => {
-      let sectionCode = allFormData.entitySections?.find((section: any) => section?.id === field?.sectionId)?.sectionName;
-      if (sectionCode === 'Nodal Details') {
-        sectionCode = 'Nodal Officer'
+    let finalResult = allFormData?.formFields?.form_fields?.map(
+      (field: any) => {
+        let sectionCode = allFormData.entitySections?.find(
+          (section: any) => section?.id === field?.sectionId
+        )?.sectionName;
+        if (sectionCode === "Nodal Details") {
+          sectionCode = "Nodal Officer";
+        }
+
+        return {
+          fieldId: field?.id,
+          label: field?.label,
+          sectionCode: sectionCode,
+          value: field?.userInput,
+          key: field?.key,
+        };
       }
+    );
 
-      return {
-        fieldId: field?.id,
-        label: field?.label,
-        sectionCode: sectionCode,
-        value: field?.userInput,
-        key : field?.key
-      };
-    });
+    let docs =
+      documentData?.length > 0 &&
+      documentData?.map((doc: any) => {
+        return {
+          fieldId: doc?.id,
+          label: doc?.documentName,
+          sectionCode: "Upload Documents",
+          value: doc?.uploadFileId,
+        };
+      });
 
-    let docs = documentData?.length > 0 && documentData?.map((doc: any) => {
-      return {
-        fieldId: doc?.id,
-        label: doc?.documentName,
-        sectionCode: "Upload Documents",
-        value: doc?.uploadFileId,
-      };
-    })
+    finalResult = [...finalResult, ...docs];
 
-    finalResult = [...finalResult, ...docs]
-
-    axios.post(
-      bffUrl + "/designated-court/add-form-fields",
-      { formData: finalResult, masterId : masterEntityId }
-    )
+    axios
+      .post(bffUrl + "/designated-court/add-form-fields", {
+        formData: finalResult,
+        masterId: masterEntityId,
+      })
       .then((response: any) => {
         const data = response.data;
         if (data?.success) {
           // setSubmitModal( true)
           setPara1(`Your registration request has been sent successfully and
             approval/rejection of your registration will be informed to you
-            via email.`)
-          setPara2(`Your registration acknowledgement ID is ${data?.data?.newDesignatedCourt?.uniqueId}`)
-          setSubmitted(true)
-          setSubmitModal(true)
+            via email.`);
+          setPara2(
+            `Your registration acknowledgement ID is ${data?.data?.newDesignatedCourt?.uniqueId}`
+          );
+          setSubmitted(true);
+          setSubmitModal(true);
         } else {
           setPara1(`Something went wrong`);
           setPara2(`Please try again later`);
@@ -91,14 +101,13 @@ const ReviewDetailsDesignated = () => {
       })
       .catch((e: any) => {
         setLoader(false);
-        setPara1(e?.response?.data?.detail?.message)
+        setPara1(e?.response?.data?.detail?.message);
         setPara2(`Please try again later`);
         setSubmitted(false);
         setSubmitModal(true);
         setLoader(false);
       });
   };
-  
 
   return (
     <>
@@ -107,7 +116,11 @@ const ReviewDetailsDesignated = () => {
         <main className="flex-grow p-6 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             <h1 className="text-2xl font-bold mb-6">Review</h1>
-            <ReviewMainListing allFormData={allFormData} documentData={documentData} urlList={signupSideBarDesignated}/>
+            <ReviewMainListing
+              allFormData={allFormData}
+              documentData={documentData}
+              urlList={signupSideBarDesignated}
+            />
             {/* {allFormData &&
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
@@ -207,7 +220,10 @@ const ReviewDetailsDesignated = () => {
           </div>
         </main>
 
-        <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
+        <div
+          className="flex justify-between items-center my-3 flex-col sm:flex-row"
+          onClick={() => Navigate(-1)}
+        >
           <div className=" ml-5">
             <button className="text-gilroy-regular flex items-center p-4 sm:p-0 ">
               <img src={Arrow} alt="back Arrow" className="mr-2" />
@@ -242,7 +258,7 @@ const ReviewDetailsDesignated = () => {
           closePopup={() => {
             setSubmitModal(false);
             if (submitted) {
-              Navigate('/')
+              Navigate("/");
             }
           }}
           showPopup={() => setSubmitModal(true)}
