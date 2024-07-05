@@ -1,8 +1,10 @@
 import React from "react";
 import { useLandingStore } from "../../zust/useLandingStore";
+import {languageData} from '../../utils/hardText/landingpageText';
 
 const LanguageBar = () => {
   const { homePageData } = useLandingStore((state) => state);
+  console.log("languague",homePageData.languageData)
   return (
     <div>
       <div className="h-6 relative bg-[#ECECEB] flex items-center lg:justify-start overflow-auto">
@@ -12,7 +14,7 @@ const LanguageBar = () => {
           </div>
           {homePageData?.languageData?.length > 0 && (
             <>
-              {homePageData?.languageData.map((languagename: any, idx: any) => {
+              {languageData.map((languagename: any, idx: any) => {
                 return (
                   <div
                     className={`mx-[8px] cursor-pointer ${
