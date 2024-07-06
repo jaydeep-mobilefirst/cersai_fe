@@ -11,15 +11,21 @@ import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker
 import axios from "axios";
 import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
-import InputField from "../../../../components/form/InputField";
-import UploadFile from "../../UploadFile";
 import TextArea from "../../../../components/userFlow/form/TextArea";
+import FileUploadOpenKm from "../../../../components/buttons/FileUploadOpenKM";
+import InputField from "../../../../components/form/InputField";
+import { jwtDecode } from "jwt-decode";
+
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
 const SchemesSearchDetailsSM: React.FC = () => {
-  const [loader, setLoader] = useState(true);
+  const [error, setError] = useState<string>("")
+  const [comment, setComment] = useState<string>("")
+  const [fileData, setFileData] = useState<string | null>(null)
+  const [loader, setLoader] = useState(false );
+  const [loader2, setLoader2] = useState(false );
   const screenWidth = useScreenWidth();
   const { onChange } = useContext(FormHandlerContext);
   const { setAllFormData, setAllDocumentData, allFormData } =
@@ -32,6 +38,18 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const depositTakerId = location.state?.depositTakerId;
   const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
 
+  const handleChangeComment = (e : any) => {
+    const {value} = e?.target;
+    setComment(value)
+    setLoader2(false)
+    if (comment == "") {
+      setError("Comment should not be empty")
+      return
+    }
+    else{
+      setError("")
+    }
+  }
   const fetchSchema = async () => {
     try {
       setLoader(true);
@@ -162,11 +180,44 @@ const SchemesSearchDetailsSM: React.FC = () => {
     {
       header: "Scheme Details",
       content: (
-        <DynamicFields
-          formFields={allFormData?.formFields?.form_fields}
-          allFormData={allFormData}
-          onChange={onChange}
-        />
+        <>
+          <DynamicFields
+            formFields={allFormData?.formFields?.form_fields}
+            allFormData={allFormData}
+            onChange={onChange}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label
+                htmlFor="Status"
+                className="text-base font-normal text-gilroy-medium"
+              >
+                Status <span className="text-red-500">*</span>
+              </label>
+              <InputField value={allFormData?.other?.status} disabled/>
+            </div>
+            <div>
+              <label
+                htmlFor="Select Other Schemes"
+                className="text-base font-normal text-gilroy-medium"
+              >
+                Comment <span className="text-red-500">*</span>
+              </label>
+              <TextArea id="Select Other Schemes" placeholder="type comment " onChange={handleChangeComment}/>
+              <span className="text-red-400">{error}</span>
+            </div>
+
+            <div>
+              <label
+                htmlFor=""
+                className="text-base font-normal text-gilroy-medium mb-1"
+              >
+                Upload File
+              </label>
+              <FileUploadOpenKm setFileData={setFileData} fileData={fileData} />
+            </div>
+          </div>
+        </>
       ),
     },
     {
@@ -185,8 +236,37 @@ const SchemesSearchDetailsSM: React.FC = () => {
     },
   ];
   const handleBackButtonClick = () => {
+    setAllFormData(null)
     navigate("/dc/my-task");
   };
+
+  const handleAddCommnent = () => {
+    try {
+      setLoader2(true)
+      if (comment == "") {
+        setError("Comment should not be empty")
+        return
+      }
+      else{
+        setError("")
+      }
+
+      let user = jwtDecode(sessionStorage.getItem("access_token") ?? "");
+      let payload = {
+        user : user,
+        from: allFormData?.other?.status,
+        to: allFormData?.other?.status,
+        remark : comment,
+        documentId : fileData
+      }
+
+      console.log({payload});
+      
+      setLoader2(false)
+    } catch (error) {
+      setLoader2(false)
+    }
+  }
   return (
     <div className="flex flex-col min-h-screen ">
       <div className="mt-6 mx-8">
@@ -204,27 +284,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
       </div>
       <div className="mt-8 mb-8 mx-8">
         {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
-        <div className="grid grid-cols-2 space-x-3">
-          <div>
-            <label
-              htmlFor="Select Other Schemes"
-              className="text-base font-normal text-gilroy-medium"
-            >
-              Comment
-            </label>
-            <TextArea id="Select Other Schemes" placeholder="type comment "/>
-          </div>
 
-          <div>
-            <label
-              htmlFor="Select Other Schemes"
-              className="text-base font-normal text-gilroy-medium"
-            >
-              Upload File
-            </label>
-           <InputField type="file"/>
-          </div>
-        </div>
       </div>
       <div>
         <div
@@ -259,16 +319,17 @@ const SchemesSearchDetailsSM: React.FC = () => {
           </div>
           <div className="flex items-center">
             <button
+              onClick={handleAddCommnent}
+              disabled={loader2}
               type="submit"
               className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
             >
-              Submit
+              {loader2 ? <LoaderSpin /> : "Submit"}
             </button>
           </div>
         </div>
         <div>
           <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
-
           <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
             © 2024 Protean BUDs, All Rights Reserved.
           </p>
