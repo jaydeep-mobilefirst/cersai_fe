@@ -44,8 +44,6 @@ interface ContactUsData {
   };
 }
 
-const apiKey ="AIzaSyCqOKD0F0D8qah5Incp5zPDNrOsBOy3L1U"
-
 const ContactUs: React.FC = () => {
   const {
     title,
