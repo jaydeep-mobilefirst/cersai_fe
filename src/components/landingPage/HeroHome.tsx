@@ -120,3 +120,116 @@ const cardData2 = [
 ];
 
 export default HeroHome;
+// import React from 'react';
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import 'swiper/css';
+// import 'swiper/css/navigation';
+// import 'swiper/css/pagination';
+// import SwiperCore, { Navigation, Pagination } from 'swiper';
+
+// SwiperCore.use([Navigation, Pagination]);
+
+// const HeroHome = ({  }) => {
+//   const cardData1 = [
+//     {
+//       image: search_status,
+//       altText: "search_status",
+//       title: "Asset Based Search.",
+//       class:
+//         "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#D0FCC9]",
+//       card_class:
+//         " w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom mb-[34px] lg:mb-0",
+//     },
+//     {
+//       image: archive_book,
+//       altText: "archive_book",
+//       title: "Search for Movable, Immovable and Intangible properties.",
+//       class:
+//         "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#BBEBF0]",
+//       card_class:
+//         "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom lg:mt-[32px] lg:ml-[32px] mb-[34px] lg:mb-0",
+//     },
+//   ];
+  
+//   const cardData2 = [
+//     {
+//       image: cards,
+//       altText: "cards",
+//       title: "Borrowers can perform this search based on their PAN, DOB, Name.",
+//       class:
+//         "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#E1DFFE]",
+//       card_class:
+//         "w-[242px] h-[242px] bg-white rounded-[8px] border-10 shadow-custom lg:mt-[-32px] mb-[34px] lg:mb-0",
+//     },
+//     {
+//       image: user_search,
+//       altText: "user_search",
+//       title: "Borrower Based Search.",
+//       class:
+//         "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]",
+//       card_class:
+//         "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom lg:ml-[32px] mb-[34px] lg:mb-0",
+//     },
+//   ];
+//   return (
+//     <div className="mt-4 lg:mt-0 flex flex-col items-center justify-center md:-ml-2">
+//       <Swiper
+//         spaceBetween={30}
+//         slidesPerView={4}
+//         navigation
+//         pagination={{ clickable: true }}
+//         breakpoints={{
+//           640: {
+//             slidesPerView: 1,
+//             spaceBetween: 20,
+//           },
+//           768: {
+//             slidesPerView: 2,
+//             spaceBetween: 40,
+//           },
+//           1024: {
+//             slidesPerView: 4,
+//             spaceBetween: 50,
+//           },
+//         }}
+//       >
+//         <SwiperSlide>
+//           <div className="flex items-center justify-center flex-col lg:flex-row">
+//             {cardData1.map((card, index) => (
+//               <div key={index} className={card.card_class}>
+//                 <div className="ml-[24px] mr-[24px] mt-[32px]">
+//                   <div className={card.class}>
+//                     <img src={card.image} alt={card.altText} className=" " />
+//                   </div>
+//                   <p className="text-[20px] leading-[24px] mt-[24px] text-gilroy-medium">
+//                     {card.title}
+//                   </p>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         </SwiperSlide>
+
+//         <SwiperSlide>
+//           <div className="flex items-center justify-center flex-col lg:flex-row">
+//             {cardData2.map((card, index) => (
+//               <div key={index} className={card.card_class}>
+//                 <div className="ml-[24px] mr-[24px] mt-[32px]">
+//                   <div className={card.class}>
+//                     <img src={card.image} alt={card.altText} className=" " />
+//                   </div>
+//                   <p className="text-[20px] leading-[24px] mt-[24px]">
+//                     {card.title}
+//                   </p>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         </SwiperSlide>
+//       </Swiper>
+//     </div>
+//   );
+// };
+
+// export default HeroHome;
+
