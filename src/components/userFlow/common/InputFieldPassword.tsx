@@ -31,7 +31,8 @@ const InputFieldPassword: FC<InputProps> = forwardRef<
         style={{
           height: "56px",
           width: "100%",
-          padding: "8px 16px",
+          paddingRight: "48px",
+          paddingLeft: "16px",
         }}
         {...rest}
         ref={ref}

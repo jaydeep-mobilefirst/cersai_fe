@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/new_images/arrowDown.png";
@@ -11,17 +11,21 @@ import html2pdf from "html2pdf.js";
 import { regulatorSignupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
+
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isPdfMode, setIsPdfMode] = useState(false);
   const downloadPDF = () => {
     setIsDownloading(true);
+    setIsPdfMode(true);
     const element = document.getElementById("reviewContent");
+
     const isMobile = window.innerWidth <= 768;
     const options = {
-      margin: 1,
+      margin: 0.2,
       filename: "details.pdf",
       image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: isMobile ? 1 : 2 },
+      html2canvas: { scale: isMobile ? 2 : 4 },
       jsPDF: {
         unit: "in",
         format: isMobile ? "a4" : "letter",
@@ -34,10 +38,11 @@ const useDownloadPDF = () => {
       .save()
       .finally(() => {
         setIsDownloading(false);
+        setIsPdfMode(false);
       });
   };
 
-  return { downloadPDF, isDownloading };
+  return { downloadPDF, isDownloading, isPdfMode };
 };
 
 const ReviewDetailsRegulator = () => {
@@ -45,13 +50,19 @@ const ReviewDetailsRegulator = () => {
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData, documentData , masterEntityId} = useDepositTakerRegistrationStore(
-    (state) => state
-  );
+  const { allFormData, documentData, masterEntityId } =
+    useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
-  const { downloadPDF, isDownloading } = useDownloadPDF();
+  const { downloadPDF, isDownloading, isPdfMode } = useDownloadPDF();
+  useEffect(() => {
+    if (isPdfMode) {
+      document.body.classList.add("pdf-mode");
+    } else {
+      document.body.classList.remove("pdf-mode");
+    }
+  }, [isPdfMode]);
 
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();
@@ -70,7 +81,7 @@ const ReviewDetailsRegulator = () => {
           label: field?.label,
           sectionCode: sectionCode,
           value: field?.userInput,
-          key : field?.key
+          key: field?.key,
         };
       });
 
@@ -88,7 +99,10 @@ const ReviewDetailsRegulator = () => {
     finalResult = [...finalResult, ...docs];
 
     axios
-      .post(bffUrl + "/regulator/add-form-fields", { formData: finalResult,  masterId : masterEntityId })
+      .post(bffUrl + "/regulator/add-form-fields", {
+        formData: finalResult,
+        masterId: masterEntityId,
+      })
       .then((response: any) => {
         const data = response.data;
         if (data?.success) {
@@ -129,23 +143,36 @@ const ReviewDetailsRegulator = () => {
         <main className="flex-grow p-8 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             <h1 className="text-2xl font-bold mb-6">Review</h1>
-            <ReviewMainListing allFormData={allFormData} documentData={documentData} urlList={regulatorSignupSideBar}/>
+            <ReviewMainListing
+              allFormData={allFormData}
+              documentData={documentData}
+              urlList={regulatorSignupSideBar}
+              isPdfMode={isPdfMode}
+            />
 
-            <div className="flex flex-shrink-0 mt-[20px]">
-              <div className="justify-center align-center">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 accent-[#1c468e]"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  placeholder="ischecked"
-                />
-              </div>
-              <div className="leading-[24px] ml-4">
+            {!isPdfMode && (
+              <div className="flex flex-shrink-0 mt-[20px]">
+                <div className="justify-center align-center">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 accent-[#1c468e]"
+                    checked={isChecked}
+                    onChange={handleCheckboxChange}
+                    placeholder="ischecked"
+                  />
+                </div>
+                <div className="leading-[24px] ml-4">
                   I provide my consent to &nbsp;
-              <Link className="text-[#1c468e] underline cursor-pointer" to={"/"} target="_blank">BUDs act 2019</Link>
-            </div>
-            </div>
+                  <Link
+                    className="text-[#1c468e] underline cursor-pointer"
+                    to={"/"}
+                    target="_blank"
+                  >
+                    BUDs act 2019
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </main>
 

@@ -11,18 +11,20 @@ import html2pdf from "html2pdf.js";
 import { signupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
-
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isPdfMode, setIsPdfMode] = useState(false);
   const downloadPDF = () => {
     setIsDownloading(true);
+    setIsPdfMode(true);
     const element = document.getElementById("reviewContent");
+
     const isMobile = window.innerWidth <= 768;
     const options = {
-      margin: 0.4,
+      margin: [0.4, 0.4, 0.4, 0.4], // Adjusting the margins
       filename: "details.pdf",
       image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: isMobile ? 1 : 2 },
+      html2canvas: { scale: isMobile ? 3 : 5 }, // Increasing the scale
       jsPDF: {
         unit: "in",
         format: isMobile ? "a4" : "letter",
@@ -32,13 +34,18 @@ const useDownloadPDF = () => {
     html2pdf()
       .set(options)
       .from(element)
+      .toContainer()
+      .toCanvas()
+      .toImg()
+      .toPdf()
       .save()
       .finally(() => {
         setIsDownloading(false);
+        setIsPdfMode(false);
       });
   };
 
-  return { downloadPDF, isDownloading };
+  return { downloadPDF, isDownloading, isPdfMode };
 };
 
 const ReviewMain = () => {
@@ -51,7 +58,7 @@ const ReviewMain = () => {
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
-  const { downloadPDF, isDownloading } = useDownloadPDF();
+  const { downloadPDF, isDownloading, isPdfMode } = useDownloadPDF();
 
   const sectionCodes: any = {
     1: "de_verification",
@@ -227,22 +234,25 @@ const ReviewMain = () => {
               allFormData={allFormData}
               documentData={documentData}
               urlList={signupSideBar}
+              isPdfMode={isPdfMode}
             />
-            <div className="flex flex-shrink-0 mt-[20px]">
-              <div className="justify-center align-center">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 accent-[#1c648e]"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  placeholder="ischecked"
-                />
+            {!isPdfMode && (
+              <div className="flex flex-shrink-0 mt-[20px]">
+                <div className="justify-center align-center">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 accent-[#1c648e]"
+                    checked={isChecked}
+                    onChange={handleCheckboxChange}
+                    placeholder="ischecked"
+                  />
+                </div>
+                <div className="leading-[24px] ml-4 text-gilroy-medium">
+                  I here by declare that all information provided is best of my
+                  knowledge
+                </div>
               </div>
-              <div className="leading-[24px] ml-4 text-gilroy-medium">
-                I here by declare that all information provided is best of my
-                knowledge
-              </div>
-            </div>
+            )}
           </div>
         </main>
 

@@ -55,14 +55,14 @@ const Header = () => {
         </div>
         <div className="flex items-center justify-between">
           <div>
-            <div className="relative mr-4">
+            {/* <div className="relative mr-4">
               <img src={Notification} alt="notification" />
               <img
                 src={Reddot}
                 alt="notification count"
                 className="absolute top-0 right-0"
               />
-            </div>
+            </div> */}
           </div>
           <Link to="/ca/profile?current=competent">
             <div className="mr-4">
