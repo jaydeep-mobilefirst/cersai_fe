@@ -7,6 +7,7 @@ import TopDetail from "../components/landingPage/TopDetail";
 import Navbar from "../components/landingPage/Navbar";
 import Footer from "../components/landingPage/Footer";
 import DownloadList from "../components/downloads/DownloadList";
+import {data} from '../utils/hardText/landingPageText2';
 
 const Downloads=()=>{
     const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -19,10 +20,11 @@ const Downloads=()=>{
   
     const homePageCmsApi = () => {
       setLoader(true);
+      setHomePageData(data.data.content)
       axios
         .get(bffUrl + `/websitecontent/list/1`)
         .then((response) => {
-          setHomePageData(response?.data?.data?.content);
+          // setHomePageData(response?.data?.data?.content);
           setLoader(false);
         })
         .catch((error) => {

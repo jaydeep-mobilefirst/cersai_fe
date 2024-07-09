@@ -9,6 +9,9 @@ import { useLandingStore } from "../zust/useLandingStore";
 import axios from "axios";
 import { bffUrl } from "../utils/api";
 import LoaderSpin from "../components/LoaderSpin";
+import {data} from '../utils/hardText/landingPageText2';
+
+
 const Faq: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const [state, setState] = useState(true);
@@ -20,10 +23,12 @@ const Faq: React.FC = () => {
 
   const homePageCmsApi = () => {
     setLoader(true);
+    setHomePageData(data.data.content)
+
     axios
       .get(bffUrl + `/websitecontent/list/1`)
       .then((response) => {
-        setHomePageData(response?.data?.data?.content);
+        // setHomePageData(response?.data?.data?.content);
         setLoader(false);
       })
       .catch((error) => {

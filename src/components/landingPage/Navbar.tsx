@@ -14,6 +14,7 @@ const Navbar: React.FC = () => {
   const location = useLocation();
 
   const { homePageData } = useLandingStore((state) => state);
+  console.log("homepagedata",homePageData)
 
   useEffect(()=>{
     if (location.pathname === '/faq'){
@@ -73,13 +74,13 @@ const Navbar: React.FC = () => {
       <nav className="hidden w-full lg:flex h-[48px] bg-[#1c468e]">
         <div className="w-full text-[#ffffff] flex items-center justify-center">
           <ul className="flex lg:flex-row items-center">
-            {/* {homePageData?.navbar?.length > 0 && (
-              <> */}
-                {navbar.map((menuItem: any, index: any) => (
-                  <MenuItem key={index} text={menuItem} onClick={() => handleMenuClick(menuItem)} isActive={activeTab === menuItem}/>
+            {homePageData?.homePageData?.navbar?.length > 0 && (
+              <>
+                {homePageData?.homePageData?.navbar.map((menuItem: any, index: any) => (
+                  <MenuItem key={index} text={menuItem.text} onClick={() => handleMenuClick(menuItem.text)} isActive={activeTab === menuItem.text}/>
                 ))}
-              {/* </>
-            )} */}
+              </>
+            )}
           </ul>
         </div>
       </nav>
@@ -91,13 +92,13 @@ const Navbar: React.FC = () => {
         } lg:hidden w-1/8 h-screen bg-gradient-to-r from-[#3521cc] to-[#0b2551] fixed top-0 left-0 z-20`}
       >
         <ul className="flex flex-col h-full text-white">
-          {/* {homePageData?.navbar?.length > 0 && (
-            <> */}
-              {navbar.map((menuItem: any, index: any) => (
-                <MenuItem key={index} text={menuItem} onClick={() => handleMenuClick(menuItem)} isActive={activeTab === menuItem} />
+          {homePageData?.homePageData?.navbar?.length > 0 && (
+            <>
+              {homePageData?.homePageData?.navbar.map((menuItem: any, index: any) => (
+                <MenuItem key={index} text={menuItem.text} onClick={() => handleMenuClick(menuItem.text)} isActive={activeTab === menuItem.text} />
               ))}
-            {/* </>
-          )} */}
+            </>
+          )}
         </ul>
 
         {/* Close Icon*/}

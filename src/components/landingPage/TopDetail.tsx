@@ -11,6 +11,7 @@ import RegisterMailPopup from "../userFlow/common/RegisterMailPopup";
 import SetNewPasswordModel from "../userFlow/common/SetNewPasswordModel";
 import PasswordUpdateModel from "../userFlow/common/PasswordUpdateModel";
 import useTopDetailStore from "../../store/TopDetailStore";
+import { useLandingStore } from "../../zust/useLandingStore";
 
 interface AuthButtonProps {
   buttontext: string;
@@ -25,6 +26,10 @@ const TopDetail = () => {
   // const [showsNewPasswordModel, setShowsNewPasswordModel] = useState(true);
   // const [showsPasswordUpdateModel, setShowsPasswordUpdateModel] =
   //   useState(false);
+
+  const { homePageData } = useLandingStore((state) => state);
+
+
   const {
     isOpen,
     showLoginModel,
@@ -150,8 +155,8 @@ const TopDetail = () => {
         })}
       </div>
       <div className="flex items-center m-4 md:m-0">
-        <AuthButton buttontext={authlable[1]} onClick={openModal} />
-        <AuthButton buttontext={authlable[0]} onClick={openLoginModel} />
+        <AuthButton buttontext={homePageData?.homePageData?.authlable[1].text} onClick={openModal} />
+        <AuthButton buttontext={homePageData?.homePageData?.authlable[0].text} onClick={openLoginModel} />
       </div>
       {/* Conditionally render ModelDiv based on isOpen state */}
       {isOpen && (

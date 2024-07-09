@@ -133,10 +133,12 @@ import cards from "../../assets/images/cards.svg";
 import { useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { useLandingStore } from "../../zust/useLandingStore";
 
 const HeroHome = () => {
+  const { homePageData } = useLandingStore((state) => state);
   const navigate = useNavigate();
-  const buttons = [{ text: "Scheme Search" }, { text: "Deposit Taker Search" }];
+  const buttons = [{ text: homePageData?.homePageData?.hero[0]?.text }, { text: homePageData?.homePageData?.hero[1]?.text }];
 
   const onNavigateToSchemeSearch = (text: string) => {
     if (text === "Scheme Search") {
@@ -161,11 +163,10 @@ const HeroHome = () => {
     <div className="w-[100%] flex items-center justify-between px-4 lg:px-[100px] py-4 lg:py-[48px] flex-col lg:flex-row landing-hero-bg-image overflow-x-hidden">
       <div className="md:mr-2 md:w-[40%]">
         <div className="text-[34px] w-full text-gilroy-medium text-center lg:text-start">
-          Public Search
+          {homePageData?.homePageData?.hero[2]?.text}
         </div>
         <div className="xl:w-[485px] w-full text-[16px] leading-[24px] mt-[16px] text-gilroy-regular text-center lg:text-start">
-          General Public can undertake an online search in the Central Register
-          on payment of prescribed fee.
+        {homePageData?.homePageData?.hero[3].text}
         </div>
         <div className="buttons-container flex flex-wrap gap-[16px] justify-center lg:justify-start mt-[24px]">
           {buttons.map((menuItem, index) => (
