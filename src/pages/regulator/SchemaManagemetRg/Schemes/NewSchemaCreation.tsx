@@ -51,8 +51,6 @@ const SchemeDetails = () => {
           formFields: {
             form_fields: formFields?.map((field: any) => {
               if (field?.key === "depositTakerId") {
-                console.log({ field });
-
                 return {
                   ...field,
                   dropdown_options: {
@@ -132,6 +130,43 @@ const SchemeDetails = () => {
     }
   };
 
+  const handleOnchange = async ( event: any,
+    fieldData: any,
+    fieldType: string) => {
+      if (fieldData?.key === "depositTakerId") {
+        const res = await axios.get(bffUrl + '/deposit-taker/branch/' + event?.value)
+        let data = res.data;
+        let branches = data?.data?.branches?.map((b: any) => {
+          return {
+            name: b?.pinCode + " " + b?.district + " " + b?.state,
+            id: b?.id
+          }
+        })
+          setAllFormData({
+            ...allFormData,
+            formFields : {
+              form_fields : allFormData?.formFields?.form_fields?.map((f : any) => {
+                if (f?.key === 'branch') {
+                  return {
+                    ...f,
+                    dropdown_options : {...f?.dropdown_options, options : branches}
+                  }
+                }
+                else if (f?.key === "depositTakerId") {
+                  return {...f, userInput : event?.value}
+                }
+                else{
+                  return f;
+                }
+              })
+            }
+          })
+          
+      }
+      else{
+        onChange(event, fieldData, fieldType)
+      }
+  }
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
@@ -150,7 +185,7 @@ const SchemeDetails = () => {
               <DynamicFields
                 formFields={allFormData?.formFields?.form_fields}
                 allFormData={allFormData}
-                onChange={onChange}
+                onChange={handleOnchange}
               />
             </div>
             <div className="flex flex-shrink-0 mt-[20px]">

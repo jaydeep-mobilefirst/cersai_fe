@@ -18,8 +18,10 @@ const SchemaCreationForm = () => {
   const [popupData, setPopData] = useState({
     para1: '',
     para2: '',
-    show : false
+    show: false
   });
+  const entityType = sessionStorage.getItem("entityUniqueId");
+
   const navigate = useNavigate();
   const { collapsed } = useSidebarStore();
   const { setAllFormData, setAllDocumentData, allFormData } =
@@ -43,32 +45,65 @@ const SchemaCreationForm = () => {
       const response = await axios.get(`${bffUrl}/scheme/field-data/1`);
       // console.log(response, "response");
       if (response.data.success) {
-        const formFields = response?.data?.data?.formFields?.allFormFields.map(
-          (field: any) => ({
-            ...field,
-            userInput: "",
-            error: "",
-            typeId: field?.fieldTypeId,
-            // id: field.fieldTypeId,
-          })
-        );
+        let formFields = response?.data?.data?.formFields?.allFormFields.map(
+          async (field: any) => {
+            if (field?.key === 'depositTakerId') {
+              return {
+                ...field,
+                userInput: "",
+                error: "",
+                typeId: field?.fieldTypeId,
+                dropdown_options: {
+                  ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                    name: o?.uniqueId,
+                    id: o?.companyName,
+                  }))
+                }
+              }
+            }
+            else if (field?.key === 'branch') {
+              try {
+                const res = await axios.get(bffUrl + '/deposit-taker/branch/' + entityType)
+                let data = res.data;
+                let branches = data?.data?.branches?.map((b: any) => {
+                  return {
+                    name: b?.pinCode + " " + b?.district + " " + b?.state,
+                    id: b?.id
+                  }
+                })
+
+                return {
+                  ...field,
+                  userInput: "",
+                  error: "",
+                  typeId: field?.fieldTypeId,
+                  dropdown_options: { ...field?.dropdown_options, options: branches }
+                };
+              } catch (error) {
+                return {
+                  ...field,
+                  userInput: "",
+                  error: "",
+                  typeId: field?.fieldTypeId,
+                };
+              }
+            }
+            else {
+              return {
+                ...field,
+                userInput: "",
+                error: "",
+                typeId: field?.fieldTypeId,
+              };
+            }
+          }
+        )
+
+        formFields = await Promise.all(formFields)
 
         setAllFormData({
           ...response?.data?.data,
-          formFields: { form_fields: formFields?.map((field : any) => {
-            if (field?.key === 'depositTakerId') {
-              console.log({field});
-              
-              return  {...field, dropdown_options : {...field?.dropdown_options, options : field?.dropdown_options?.options?.map((o : any) => ({
-                name: o?.uniqueId,
-                id: o?.companyName,
-              }))}   
-             }
-            }
-            else{
-              return field;
-            }
-          } ) },
+          formFields: { form_fields: formFields },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,
@@ -78,7 +113,9 @@ const SchemaCreationForm = () => {
       console.error("Error fetching schema data:", error);
     }
   };
-  const entityType = sessionStorage.getItem("entityUniqueId");
+
+  console.log({ allFormData });
+
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoader(true);
@@ -100,7 +137,11 @@ const SchemaCreationForm = () => {
       // Creating the payload object that includes both formData and depositTakerId
       const payload = {
         createdBy: entityType,
-        formData: formData,
+        formData: [...formData, {
+          fieldId  : "55883089-b29c-4b73-ab17-45d6e062d6d4",
+          key:'depositTakerId',
+          value: entityType
+        }],
       };
 
       // Making the POST request with axios
@@ -108,21 +149,21 @@ const SchemaCreationForm = () => {
         `${bffUrl}/scheme-portal/add-form-fields`, // Assuming bffUrl is defined elsewhere
         payload // Sending the payload with depositTakerId and formData
       );
-      
+
       if (response.data?.success) {
         setSubmitted(true)
         setPopData({
-          para1 : 'Addition Successful',
-          para2 : response.data?.message,
-          show : true,
+          para1: 'Addition Successful',
+          para2: response.data?.message,
+          show: true,
         })
       }
-      else{
+      else {
         setSubmitted(false)
         setPopData({
-          para1 : 'Something went wrong',
-          para2 : response.data?.message,
-          show : true,
+          para1: 'Something went wrong',
+          para2: response.data?.message,
+          show: true,
         })
       }
       setLoader(false);
@@ -131,7 +172,7 @@ const SchemaCreationForm = () => {
       setLoader(false);
     }
   };
-  
+
 
   return (
     <div
@@ -166,27 +207,26 @@ const SchemaCreationForm = () => {
               </div>
             </div>
           </div>
-            <SuccessPopup
-                closePopup={() => {
-                 setPopData({...popupData, show : false})
-                  if (submitted) {
-                    navigate('/dt/scheme')
-                  }
-                }}
-                showPopup={() => {}}
-                toggle={popupData.show}
-                para1={popupData.para1}
-                para2={popupData.para2}
-                success={submitted}
-            />
+          <SuccessPopup
+            closePopup={() => {
+              setPopData({ ...popupData, show: false })
+              if (submitted) {
+                navigate('/dt/scheme')
+              }
+            }}
+            showPopup={() => { }}
+            toggle={popupData.show}
+            para1={popupData.para1}
+            para2={popupData.para2}
+            success={submitted}
+          />
 
           <div className="absolute bottom-0">
             <div
               className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
               style={{
-                width: `${
-                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
-                }`,
+                width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                  }`,
               }}
             >
               <div className="flex items-center space-x-6">
@@ -200,11 +240,10 @@ const SchemaCreationForm = () => {
                 <button
                   onClick={onSubmit}
                   type="submit"
-                  className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold ${
-                    !isChecked
+                  className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold ${!isChecked
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-[#163a7a]"
-                  }`}
+                    }`}
                   disabled={!isChecked}
                 >
                   {loader ? <LoaderSpin /> : "Create Scheme"}

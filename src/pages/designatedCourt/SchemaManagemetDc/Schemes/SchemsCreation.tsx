@@ -100,11 +100,13 @@ const NewSchemaCreation = () => {
     columnHelper.accessor((row: any) => row, {
       id: "action",
       cell: (info) => {
+        let createdBy = info?.cell?.row?.original?.createdBy;
         const NavigateScheme = (uniqueId: any, depositTakerId: any) => {
           navigate("/dc/my-task/audit-rail", {
             state: {
               uniqueId: uniqueId,
               depositTakerId: depositTakerId,
+              createdBy
             },
           });
         };
