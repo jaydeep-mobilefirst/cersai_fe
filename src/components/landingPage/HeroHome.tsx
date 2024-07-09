@@ -5,28 +5,8 @@
 // import archive_book from "../../assets/images/archive-book.svg";
 // import cards from "../../assets/images/cards.svg";
 // import { useNavigate } from "react-router-dom";
-// import Carousel from "react-multi-carousel";
-// import "react-multi-carousel/lib/styles.css";
 
 // const HeroHome = () => {
-//   const responsive = {
-//     superLargeDesktop: {
-//       breakpoint: { max: 4000, min: 3000 },
-//       items: 5,
-//     },
-//     desktop: {
-//       breakpoint: { max: 3000, min: 1024 },
-//       items: 4,
-//     },
-//     tablet: {
-//       breakpoint: { max: 1024, min: 464 },
-//       items: 2,
-//     },
-//     mobile: {
-//       breakpoint: { max: 464, min: 0 },
-//       items: 1,
-//     },
-//   };
 
 //   const navigate = useNavigate();
 //   const buttons = [{ text: "Scheme Search" }, { text: "Deposit Taker Search" }];
@@ -151,8 +131,8 @@ import user_search from "../../assets/images/user-search.svg";
 import archive_book from "../../assets/images/archive-book.svg";
 import cards from "../../assets/images/cards.svg";
 import { useNavigate } from "react-router-dom";
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const HeroHome = () => {
   const navigate = useNavigate();
@@ -175,7 +155,7 @@ const HeroHome = () => {
   };
 
   const groupedCardData1 = chunkArray(cardData1, 4); // Update chunk size to 4
-  console.log("4 data",groupedCardData1)
+  console.log("4 data", groupedCardData1);
 
   return (
     <div className="w-[100%] flex items-center justify-between px-4 lg:px-[100px] py-4 lg:py-[48px] flex-col lg:flex-row landing-hero-bg-image overflow-x-hidden">
@@ -192,48 +172,100 @@ const HeroHome = () => {
             <HeroButton
               key={index}
               text={menuItem.text}
-              onClick={() => onNavigateToSchemeSearch(menuItem.text)}
+              onClick={onNavigateToSchemeSearch}
             />
           ))}
         </div>
       </div>
-      <div className="md:w-[50%] w-full flex items-center justify-center mt-4 lg:mt-0 flex-col md:-ml-2 " >
-        <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} autoPlay={true} interval={5000}  >
+      <div className="md:w-[50%] w-full md:flex md:items-center md:justify-center mt-4 lg:mt-0 md:flex-col md:-ml-2 hidden -z-0">
+        <Carousel
+          showThumbs={false}
+          showStatus={false}
+          infiniteLoop={true}
+          autoPlay={true}
+          interval={5000}
+        >
           {groupedCardData1.map((group, index) => (
-            <div key={index} className="flex flex-col items-center md:flex-wrap md:justify-center md:px-12 px-4 py-2">
-              <div className="flex flex-col md:flex-row gap-x-4  lg:gap-x-0">
-              {group.slice(0, 2).map((card, index) => ( // First row, first 2 items
-                <div key={index} className={`${card.card_class} w-1/2 p-2`}> {/* Set width to 50% and add padding */}
-                  <div className="ml-[24px] mr-[24px] mt-[32px]">
-                    <div className={card.class}>
-                      <img src={card.image} alt={card.altText} className="" />
+            <div
+              key={index}
+              className="flex flex-col items-center md:flex-wrap md:justify-center md:px-12 px-4 py-2 pb-12"
+            >
+              <div className="flex flex-col md:flex-row gap-x-12  lg:gap-x-0">
+                {group.slice(0, 2).map(
+                  (
+                    card,
+                    index 
+                  ) => (
+                    <div key={index} className={`${card.card_class} w-1/2 p-2`}>
+                      {" "}
+                      <div className="ml-[24px] mr-[24px] mt-[32px]">
+                        <div className={card.class}>
+                          <img
+                            src={card.image}
+                            alt={card.altText}
+                            className=""
+                          />
+                        </div>
+                        <p className="text-[18px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
+                          {card.title}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-[18px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
-                      {card.title}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                  )
+                )}
               </div>
-              <div className="flex flex-col md:flex-row gap-x-4 lg:gap-x-0">
-              {group.slice(2, 4).map((card, index) => ( // Second row, last 2 items
-                <div key={index} className={`${card.card_class} w-1/2 p-2`}> {/* Set width to 50% and add padding */}
-                  <div className="ml-[24px] mr-[24px] mt-[32px]">
-                    <div className={card.class}>
-                      <img src={card.image} alt={card.altText} className="" />
+              <div className="flex flex-col md:flex-row gap-x-12 lg:gap-x-0">
+                {group.slice(2, 4).map(
+                  (
+                    card,
+                    index 
+                  ) => (
+                    <div key={index} className={`${card.card_class} w-1/2 p-2`}>
+                      {" "}
+                      <div className="ml-[24px] mr-[24px] mt-[32px]">
+                        <div className={card.class}>
+                          <img
+                            src={card.image}
+                            alt={card.altText}
+                            className=""
+                          />
+                        </div>
+                        <p className="text-[18px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
+                          {card.title}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-[18px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
-                      {card.title}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                  )
+                )}
               </div>
             </div>
           ))}
         </Carousel>
       </div>
-      
+      <div className="mt-[32px] md:hidden -z-0">
+        <Carousel
+          showThumbs={false}
+          showStatus={false}
+          infiniteLoop={true}
+          autoPlay={true}
+          interval={5000}
+        >
+          {cardData1.map((card, index) => (
+            <div className="flex flex-row items-center justify-center">
+              <div key={index} className={card.card_class}>
+                <div className="ml-[24px] mr-[24px] mt-[32px]">
+                  <div className={card.class}>
+                    <img src={card.image} alt={card.altText} className="" />
+                  </div>
+                  <p className="text-[20px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
+                    {card.title}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </Carousel>
+      </div>
     </div>
   );
 };
@@ -263,7 +295,7 @@ const cardData1: CardData[] = [
     class:
       "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#BBEBF0]",
     card_class:
-      "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom lg:mt-[32px] lg:ml-[32px] mb-[34px] lg:mb-0",
+      "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom md:mt-[32px] lg:ml-[32px] mb-[34px] lg:mb-0",
   },
   {
     image: cards,
@@ -299,7 +331,7 @@ const cardData1: CardData[] = [
     class:
       "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#BBEBF0]",
     card_class:
-      "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom lg:mt-[32px] lg:ml-[32px] mb-[34px] lg:mb-0",
+      "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom md:mt-[32px] lg:ml-[32px] mb-[34px] lg:mb-0",
   },
   {
     image: cards,
@@ -335,7 +367,7 @@ const cardData1: CardData[] = [
     class:
       "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#BBEBF0]",
     card_class:
-      "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom lg:mt-[32px] lg:ml-[32px] mb-[34px] lg:mb-0",
+      "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom md:mt-[32px] lg:ml-[32px] mb-[34px] lg:mb-0",
   },
   {
     image: user_search,
@@ -354,8 +386,7 @@ const cardData1: CardData[] = [
       "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]",
     card_class:
       "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom lg:ml-[32px] md:mt-[32px] mb-[34px] lg:mb-0",
-  }
+  },
 ];
-
 
 export default HeroHome;

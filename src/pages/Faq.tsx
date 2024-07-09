@@ -8,6 +8,7 @@ import { faqData } from "../utils/hardText/faqComponent";
 import { useLandingStore } from "../zust/useLandingStore";
 import axios from "axios";
 import { bffUrl } from "../utils/api";
+import LoaderSpin from "../components/LoaderSpin";
 const Faq: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const [state, setState] = useState(true);
@@ -32,20 +33,28 @@ const Faq: React.FC = () => {
   };
 
   return (
+
     <div className="min-h-screen flex flex-col">
       <LanguageBar />
       <TopDetail />
       <Navbar />
+      {loader? 
+      <div className="h-[500px] p-10">
+      <LoaderSpin/>
+      </div>
+      :
       <div className="md:p-[56px] p-[16px] buds-faq-background-image">
         <h1 className="text-[#24222B] text-xl font-bold text-gilroy-bold">
           Frequently asked questions (FAQs)
         </h1>
         <main>
+          
           {Object.entries(faqData).map(([key, section]) => (
             <FaqSection key={key} title={section.title} items={section.items} />
           ))}
         </main>
       </div>
+}
       <div className="md:pt-24">
         <Footer />
       </div>

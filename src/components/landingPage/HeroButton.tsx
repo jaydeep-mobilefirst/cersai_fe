@@ -7,7 +7,7 @@ const HeroButton: React.FC<SearchButtonProps> = ({ text, onClick }) => {
     onClick(text);
   };
   return (
-    <div className="">
+    <div className="z-10">
       <button
         onClick={onClickButton}
         className="rounded-[8px] border-[#1C468E] text-[#1C468E] border px-4 py-2 text-gilroy-semibold"

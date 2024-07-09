@@ -103,7 +103,6 @@ export const navbar = [
   "NOTIFICATIONS",
   "OPERATING GUIDELINES",
   "DOWNLOADS",
-  "TRAINING",
   "CONTACT US",
 ];
 
