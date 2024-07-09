@@ -118,7 +118,7 @@ const TopDetail = () => {
       </div>
       {isOpen && (
         <div
-          className="fixed top-0 left-0 w-full h-full bg-gray-800 opacity-30"
+          className="fixed top-0 left-0 w-full h-full bg-gray-800 opacity-30 z-10"
           onClick={closeModal}
         ></div>
       )}
@@ -155,7 +155,7 @@ const TopDetail = () => {
       </div>
       {/* Conditionally render ModelDiv based on isOpen state */}
       {isOpen && (
-        <div className="fixed flex-row justify-center items-center mt-[35%] md:mt-[50%] lg:mt-[30%] md:ml-[15%]">
+        <div className="fixed flex-row justify-center items-center mt-[35%] md:mt-[50%] lg:mt-[30%] md:ml-[15%] z-20">
           <RegisterModel closeModal={closeModal} />
         </div>
       )}

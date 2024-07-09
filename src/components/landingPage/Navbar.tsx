@@ -88,7 +88,7 @@ const Navbar: React.FC = () => {
       <nav
         className={`${
           showMenu ? "flex" : "hidden"
-        } lg:hidden w-1/8 h-screen bg-gradient-to-r from-[#54AD47] to-[#0b2551] fixed top-0 left-0 z-20`}
+        } lg:hidden w-1/8 h-screen bg-gradient-to-r from-[#3521cc] to-[#0b2551] fixed top-0 left-0 z-20`}
       >
         <ul className="flex flex-col h-full text-white">
           {/* {homePageData?.navbar?.length > 0 && (
