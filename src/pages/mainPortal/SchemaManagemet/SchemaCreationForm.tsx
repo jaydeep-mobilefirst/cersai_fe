@@ -26,7 +26,7 @@ const SchemaCreationForm = () => {
   const { collapsed } = useSidebarStore();
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
-  const { onChange, handleValidationChecks, updatePanFormField } =
+  const { onChange, handleValidationChecks, handleSchemeValidations } =
     useContext(FormHandlerContext);
 
   const handleBackButtonClick = () => {
@@ -114,7 +114,6 @@ const SchemaCreationForm = () => {
     }
   };
 
-  console.log({ allFormData });
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -126,6 +125,15 @@ const SchemaCreationForm = () => {
       setLoader(false);
       return;
     }
+    else{
+    // returns true if no error 
+    const schemeValidations = await handleSchemeValidations();
+    if (schemeValidations === false) {
+      setLoader(false);
+      return;
+    }
+    }
+
     try {
       // Mapping over the form fields to prepare the formData
       let formData = allFormData.formFields.form_fields.map((field: any) => ({

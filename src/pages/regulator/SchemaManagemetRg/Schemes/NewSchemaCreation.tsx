@@ -26,7 +26,7 @@ const SchemeDetails = () => {
   };
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
-  const { onChange, handleValidationChecks, updatePanFormField } =
+  const { onChange, handleValidationChecks, handleSchemeValidations } =
     useContext(FormHandlerContext);
   useEffect(() => {
     fetchSchema();
@@ -88,6 +88,14 @@ const SchemeDetails = () => {
       setLoader(false);
       return;
     }
+    else{
+      // returns true if no error 
+      const schemeValidations = await handleSchemeValidations();
+      if (schemeValidations === false) {
+        setLoader(false);
+        return;
+      }
+      }
     try {
       // Mapping over the form fields to prepare the formData
       let formData = allFormData.formFields.form_fields.map((field: any) => ({

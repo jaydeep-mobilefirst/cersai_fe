@@ -22,7 +22,7 @@ const SchemeDetails = () => {
   const [loader, setLoader] = useState(false);
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
-  const { onChange, handleValidationChecks, updatePanFormField } =
+  const { onChange, handleValidationChecks, handleSchemeValidations } =
     useContext(FormHandlerContext);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,13 +84,21 @@ const SchemeDetails = () => {
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoader(true);
-    const isFormValid = await handleValidationChecks(
+    let isFormValid = await handleValidationChecks(
       allFormData?.formFields?.form_fields
     );
     if (!isFormValid) {
       setLoader(false);
       return;
     }
+    else{
+      // returns true if no error 
+      const schemeValidations = await handleSchemeValidations();
+      if (schemeValidations === false) {
+        setLoader(false);
+        return;
+      }
+      }
     try {
       // Mapping over the form fields to prepare the formData
       let formData = allFormData.formFields.form_fields.map((field: any) => ({
