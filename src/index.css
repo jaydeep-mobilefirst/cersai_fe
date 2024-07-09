@@ -43,7 +43,8 @@
 }
 
 .buds-background-image {
-  background-image: url("./assets/images/new_images/bg.svg"), url("./assets/images/new_images/Vector.svg");
+  background-image: url("./assets/images/new_images/bg.svg"),
+    url("./assets/images/new_images/Vector.svg");
   background-size: auto, auto;
   background-repeat: no-repeat, no-repeat;
   background-position: center, center;
@@ -112,4 +113,9 @@
 
 .swal2-container {
   z-index: X;
+}
+/* Example CSS for PDF Mode */
+.pdf-mode #reviewContent {
+  width: 100%;
+  height: auto;
 }

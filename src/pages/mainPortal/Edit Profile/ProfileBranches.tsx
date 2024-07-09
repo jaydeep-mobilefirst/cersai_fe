@@ -13,15 +13,32 @@ import { useScreenWidth } from "../../../utils/screenSize";
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
-  const { branches, addBranch, removeBranch, setBranches } = useBranchStore(
-    (state) => ({
-      branches: state.branches,
-      addBranch: state.addBranch,
-      removeBranch: state.removeBranch,
-      setBranches: state.setBranches,
-    })
-  );
-  const [isChecked, setChecked] = useState(false);
+  // const { branches, addBranch, removeBranch, setBranches } = useBranchStore(
+  //   (state) => ({
+  //     branches: state.branches,
+  //     addBranch: state.addBranch,
+  //     removeBranch: state.removeBranch,
+  //     setBranches: state.setBranches,
+  //   })
+  // );
+  const {
+    branches,
+    addBranch,
+    removeBranch,
+    setBranches,
+    isChecked,
+    setChecked,
+    toggleChecked,
+  } = useBranchStore((state) => ({
+    branches: state.branches,
+    addBranch: state.addBranch,
+    removeBranch: state.removeBranch,
+    setBranches: state.setBranches,
+    isChecked: state.isChecked,
+    setChecked: state.setChecked,
+    toggleChecked: state.toggleChecked,
+  }));
+  // const [isChecked, setChecked] = useState(false);
 
   const {
     register,
@@ -93,7 +110,8 @@ const ProfileBranches = () => {
     }
   };
 
-  const handleCheckboxChange = () => setChecked(!isChecked);
+  // const handleCheckboxChange = () => setChecked(!isChecked);
+  const handleCheckboxChange = () => toggleChecked();
 
   return (
     <div className="bg-white p-7 w-full h-full ">
@@ -132,7 +150,7 @@ const ProfileBranches = () => {
               type="checkbox"
               checked={isChecked}
               onChange={handleCheckboxChange}
-              className="h-4 w-4 mr-2 rounded-lg accent-green-900"
+              className="h-4 w-4 mr-2 rounded-lg accent-[#1c468e]"
             />
             I declare all the information provided is correct as per my
             knowledge.

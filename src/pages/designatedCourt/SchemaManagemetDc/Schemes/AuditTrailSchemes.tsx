@@ -11,31 +11,51 @@ import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker
 import axios from "axios";
 import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
-import InputField from "../../../../components/form/InputField";
-import UploadFile from "../../UploadFile";
 import TextArea from "../../../../components/userFlow/form/TextArea";
+import FileUploadOpenKm from "../../../../components/buttons/FileUploadOpenKM";
+import InputField from "../../../../components/form/InputField";
+import { jwtDecode } from "jwt-decode";
+import Swal from "sweetalert2";
+
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
 }
 const SchemesSearchDetailsSM: React.FC = () => {
-  const [loader, setLoader] = useState(true);
+  const [error, setError] = useState<string>("")
+  const [comment, setComment] = useState<string>("")
+  const [fileData, setFileData] = useState<string | null>(null)
+  const [loader, setLoader] = useState(false );
+  const [loader2, setLoader2] = useState(false );
   const screenWidth = useScreenWidth();
   const { onChange } = useContext(FormHandlerContext);
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
   const navigate = useNavigate();
   const location = useLocation();
+  const createdBy = location.state?.createdBy?.substring(0,2)  
   const uniqueId = location.state?.uniqueId;
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
   const depositTakerId = location.state?.depositTakerId;
   const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
 
+  const handleChangeComment = (e : any) => {
+    const {value} = e?.target;
+    setComment(value)
+    setLoader2(false)
+    if (comment == "") {
+      setError("Comment should not be empty")
+      return
+    }
+    else{
+      setError("")
+    }
+  }
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/scheme/field-data/2`);
+      const response = await axios.get(`${bffUrl}/scheme/field-data/${createdBy === 'DT' ? 1 : 2}`);
       // console.log(response, "response");
       if (response.data.success) {
         const portalResponse = await axios.get(
@@ -43,41 +63,77 @@ const SchemesSearchDetailsSM: React.FC = () => {
         );
 
         const userData = portalResponse.data?.data?.schemes[0];
-        const formFields = response?.data?.data?.formFields?.allFormFields.map(
-          (field: any) => ({
-            ...field,
-            userInput: userData?.schemeFormData?.find(
-              (f: any) => f?.fieldId === field?.id
-            )?.value,
-            error: "",
-            disabled: true,
-            typeId: field?.fieldTypeId,
-            // id: field.fieldTypeId,
-          })
-        );
+        let formFields = response?.data?.data?.formFields?.allFormFields.map(
+          async (field: any) => {
+            if (field?.key === 'depositTakerId') {
+              return {
+                ...field,
+                userInput: userData?.schemeFormData?.find(
+                  (f: any) => f?.fieldId === field?.id
+                )?.value,
+                error: "",
+                disabled : true,
+                typeId: field?.fieldTypeId,
+                dropdown_options: {
+                  ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                    name: o?.uniqueId,
+                    id: o?.companyName,
+                  }))
+                }
+              }
+            }
+            else if (field?.key === 'branch') {
+              try {
+                const res = await axios.get(bffUrl + '/deposit-taker/branch/' + location.state.depositTakerId)
+                let data = res.data;
+                let branches = data?.data?.branches?.map((b: any) => {
+                  return {
+                    name: b?.pinCode + " " + b?.district + " " + b?.state,
+                    id: b?.id
+                  }
+                })
+
+                return {
+                  ...field,
+                  userInput: userData?.schemeFormData?.find(
+                    (f: any) => f?.fieldId === field?.id
+                  )?.value,
+                  disabled : true,
+                  error: "",
+                  typeId: field?.fieldTypeId,
+                  dropdown_options: { ...field?.dropdown_options, options: branches }
+                };
+              } catch (error) {
+                return {
+                  ...field,
+                  disabled : true,
+                  userInput: userData?.schemeFormData?.find(
+                    (f: any) => f?.fieldId === field?.id
+                  )?.value,
+                  error: "",
+                  typeId: field?.fieldTypeId,
+                };
+              }
+            }
+            else {
+              return {
+                ...field,
+                disabled : true,
+                userInput: userData?.schemeFormData?.find(
+                  (f: any) => f?.fieldId === field?.id
+                )?.value,
+                error: "",
+                typeId: field?.fieldTypeId,
+              };
+            }
+          }
+        )
+
+        formFields = await Promise.all(formFields)
 
         setAllFormData({
           ...response?.data?.data,
-          formFields: {
-            form_fields: formFields?.map((field: any) => {
-              if (field?.key === "depositTakerId") {
-                return {
-                  ...field,
-                  dropdown_options: {
-                    ...field?.dropdown_options,
-                    options: field?.dropdown_options?.options?.map(
-                      (o: any) => ({
-                        name: o?.uniqueId,
-                        id: o?.companyName,
-                      })
-                    ),
-                  },
-                };
-              } else {
-                return field;
-              }
-            }),
-          },
+          formFields: { form_fields: formFields },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,
@@ -162,11 +218,44 @@ const SchemesSearchDetailsSM: React.FC = () => {
     {
       header: "Scheme Details",
       content: (
-        <DynamicFields
-          formFields={allFormData?.formFields?.form_fields}
-          allFormData={allFormData}
-          onChange={onChange}
-        />
+        <>
+          <DynamicFields
+            formFields={allFormData?.formFields?.form_fields}
+            allFormData={allFormData}
+            onChange={onChange}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label
+                htmlFor="Status"
+                className="text-base font-normal text-gilroy-medium"
+              >
+                Status <span className="text-red-500">*</span>
+              </label>
+              <InputField value={allFormData?.other?.status} disabled/>
+            </div>
+            <div>
+              <label
+                htmlFor="Select Other Schemes"
+                className="text-base font-normal text-gilroy-medium"
+              >
+                Comment <span className="text-red-500">*</span>
+              </label>
+              <TextArea id="Select Other Schemes" placeholder="type comment " onChange={handleChangeComment}/>
+              <span className="text-red-400">{error}</span>
+            </div>
+
+            <div>
+              <label
+                htmlFor=""
+                className="text-base font-normal text-gilroy-medium mb-1"
+              >
+                Upload File
+              </label>
+              <FileUploadOpenKm setFileData={setFileData} fileData={fileData} />
+            </div>
+          </div>
+        </>
       ),
     },
     {
@@ -185,8 +274,62 @@ const SchemesSearchDetailsSM: React.FC = () => {
     },
   ];
   const handleBackButtonClick = () => {
+    setAllFormData(null)
     navigate("/dc/my-task");
   };
+
+  const handleAddCommnent = async () => {
+    try {
+      setLoader2(true)
+      if (comment == "") {
+        setError("Comment should not be empty")
+        return
+      }
+      else{
+        setError("")
+      }
+
+      let user : any = jwtDecode(sessionStorage.getItem("access_token") ?? "");
+      let payload = {
+        user : user?.name ?? "user not found",
+        from: allFormData?.other?.status,
+        to: allFormData?.other?.status,
+        remark : comment,
+        documentId : fileData
+      }
+      
+      try {
+        const response = await axios.patch(`${bffUrl}/scheme-portal/${uniqueId}/audit`, payload)
+        const data = response.data;
+        if (data?.success) {
+          Swal.fire({
+            text : data?.message,
+            icon : "success",
+            title : "Success",
+          })
+          fetchSchema();
+        }
+        else{
+          Swal.fire({
+            text : data?.message,
+            icon : "error",
+            title : "Something went wrong",
+          })
+        }
+        setLoader2(false)
+      } catch (error : any) {
+        Swal.fire({
+          text : error?.message,
+          icon : "error",
+          title : "Something went wrong",
+        })
+        setLoader2(false)
+      }
+      
+    } catch (error : any) {
+      setLoader2(false)
+    }
+  }
   return (
     <div className="flex flex-col min-h-screen ">
       <div className="mt-6 mx-8">
@@ -199,32 +342,12 @@ const SchemesSearchDetailsSM: React.FC = () => {
           className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
         />
         <p className="text-[#808080]">
-          Please update the coments under scheme details
+          Please update the comments under scheme details
         </p>
       </div>
       <div className="mt-8 mb-8 mx-8">
         {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
-        <div className="grid grid-cols-2 space-x-3">
-          <div>
-            <label
-              htmlFor="Select Other Schemes"
-              className="text-base font-normal text-gilroy-medium"
-            >
-              Comment
-            </label>
-            <TextArea id="Select Other Schemes" placeholder="type comment "/>
-          </div>
 
-          <div>
-            <label
-              htmlFor="Select Other Schemes"
-              className="text-base font-normal text-gilroy-medium"
-            >
-              Upload File
-            </label>
-           <InputField type="file"/>
-          </div>
-        </div>
       </div>
       <div>
         <div
@@ -259,16 +382,17 @@ const SchemesSearchDetailsSM: React.FC = () => {
           </div>
           <div className="flex items-center">
             <button
+              onClick={handleAddCommnent}
+              disabled={loader2}
               type="submit"
               className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
             >
-              Submit
+              {loader2 ? <LoaderSpin /> : "Submit"}
             </button>
           </div>
         </div>
         <div>
           <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
-
           <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
             © 2024 Protean BUDs, All Rights Reserved.
           </p>

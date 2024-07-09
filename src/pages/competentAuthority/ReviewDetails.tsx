@@ -16,26 +16,59 @@ import ReviewMainListing from "../../components/userFlow/common/ReviewMainListin
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isPdfMode, setIsPdfMode] = useState(false);
 
   const downloadPDF = () => {
     setIsDownloading(true);
+    setIsPdfMode(true);
     const element = document.getElementById("reviewContent");
-    html2pdf().from(element).save();
-    setIsDownloading(false);
+    // const isMobile = window.innerWidth <= 768;
+    // const options = {
+    //   margin: 0.4,
+    //   filename: "details.pdf",
+    //   image: { type: "jpeg", quality: 0.98 },
+    //   html2canvas: { scale: isMobile ? 1 : 2 },
+    //   jsPDF: {
+    //     unit: "in",
+    //     format: isMobile ? "a4" : "letter",
+    //     orientation: "portrait",
+    //   },
+    // };
+    const isMobile = window.innerWidth <= 768;
+    const options = {
+      margin: 0.4,
+      filename: "details.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: isMobile ? 2 : 4 },
+      jsPDF: {
+        unit: "in",
+        format: isMobile ? "a4" : "letter",
+        orientation: "portrait",
+      },
+    };
+    html2pdf()
+      .set(options)
+      .from(element)
+      .save()
+      .finally(() => {
+        setIsDownloading(false);
+        setIsPdfMode(false);
+      });
   };
 
-  return { downloadPDF, isDownloading };
+  return { downloadPDF, isDownloading, isPdfMode };
 };
 
 const ReviewDetails = () => {
   const Navigate = useNavigate();
-  const { downloadPDF, isDownloading } = useDownloadPDF();
+  const { downloadPDF, isDownloading, isPdfMode } = useDownloadPDF();
   const [loader, setLoader] = useState(false);
   const [para1, setPara1] = useState("");
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData, documentData, masterEntityId} = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData, masterEntityId } =
+    useDepositTakerRegistrationStore((state) => state);
 
   const submit = async (e: any) => {
     e.preventDefault();
@@ -43,44 +76,51 @@ const ReviewDetails = () => {
     let finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
-        let sectionCode = allFormData.entitySections?.find((section : any) => section?.id === field?.sectionId)?.sectionName;        
-        if (sectionCode === 'Nodal Details') {
-          sectionCode = 'Nodal Officer'
+        let sectionCode = allFormData.entitySections?.find(
+          (section: any) => section?.id === field?.sectionId
+        )?.sectionName;
+        if (sectionCode === "Nodal Details") {
+          sectionCode = "Nodal Officer";
         }
         return {
           fieldId: field?.id,
           label: field?.label,
           sectionCode: sectionCode,
           value: field?.userInput,
-          key : field?.key
+          key: field?.key,
         };
       });
 
-      let docs = documentData?.length > 0 && documentData?.map((doc : any) => {
+    let docs =
+      documentData?.length > 0 &&
+      documentData?.map((doc: any) => {
         return {
           fieldId: doc?.id,
           label: doc?.documentName,
           sectionCode: "Upload Documents",
           value: doc?.uploadFileId,
         };
-      })
+      });
 
-      finalResult = [...finalResult, ...docs]
-           
-      axios.post(
-          bffUrl + "/competent-authority/add-form-fields",
-          { formData: finalResult, masterId : masterEntityId}
-        )
-        .then((response : any) => {
-          const data = response.data;
-          if (data?.success) {           
-            // setSubmitModal( true)
-            setPara1(`Your registration request has been sent successfully and
+    finalResult = [...finalResult, ...docs];
+
+    axios
+      .post(bffUrl + "/competent-authority/add-form-fields", {
+        formData: finalResult,
+        masterId: masterEntityId,
+      })
+      .then((response: any) => {
+        const data = response.data;
+        if (data?.success) {
+          // setSubmitModal( true)
+          setPara1(`Your registration request has been sent successfully and
             approval/rejection of your registration will be informed to you
-            via email.`)
-            setPara2(`Your registration acknowledgement ID is ${data?.data?.newCompetentAuthority?.uniqueId}`)
-            setSubmitted(true)
-            setSubmitModal(true)
+            via email.`);
+          setPara2(
+            `Your registration acknowledgement ID is ${data?.data?.newCompetentAuthority?.uniqueId}`
+          );
+          setSubmitted(true);
+          setSubmitModal(true);
         } else {
           setPara1(`Something went wrong`);
           setPara2(`Please try again later`);
@@ -90,7 +130,7 @@ const ReviewDetails = () => {
       })
       .catch((e: any) => {
         setLoader(false);
-        setPara1(e?.response?.data?.detail?.message)
+        setPara1(e?.response?.data?.detail?.message);
         setPara2(`Please try again later`);
         setSubmitted(false);
         setSubmitModal(true);
@@ -105,7 +145,7 @@ const ReviewDetails = () => {
         <main className="flex-grow p-6 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             <h1 className="text-2xl font-bold mb-6">Review</h1>
-            {allFormData &&
+            {/* {allFormData &&
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
                   <div className="mb-[16px]" key={index}>
@@ -137,8 +177,6 @@ const ReviewDetails = () => {
                           {allFormData?.formFields?.form_fields
                             ?.filter((f: any) => f?.sectionId === section?.id)
                             ?.map((field: any, idx: number) => {
-
-
                               return (
                                 <div
                                   className={`sm:mr-[48px] flex justify-between ${
@@ -161,36 +199,37 @@ const ReviewDetails = () => {
                                 </div>
                               );
                             })}
-                            {
-                              section?.sectionName === "Upload Documents" && 
-                              documentData?.map((doc : any, idx : number) => {
-                                return <div
-                                className={`sm:mr-[48px] flex justify-between ${
-                                  idx % 2 === 0
-                                    ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
-                                    : ""
-                                } `}
-                                key={idx}
-                              >
-                                <div className="text-gray-500">
-                                  {doc?.documentName}
-                                  <span className="text-[#ff0000]">*</span>
+                          {section?.sectionName === "Upload Documents" &&
+                            documentData?.map((doc: any, idx: number) => {
+                              return (
+                                <div
+                                  className={`sm:mr-[48px] flex justify-between ${
+                                    idx % 2 === 0
+                                      ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                      : ""
+                                  } `}
+                                  key={idx}
+                                >
+                                  <div className="text-gray-500">
+                                    {doc?.documentName}
+                                    <span className="text-[#ff0000]">*</span>
+                                  </div>
+                                  <div>{doc?.fileName}</div>
                                 </div>
-                                <div>
-                                  {
-                                    doc?.fileName
-                                  }
-                                </div>
-                              </div>
-                              })
-                            }
+                              );
+                            })}
                         </div>
                       </div>
                     </div>
                   </div>
                 )
-              )}
-               <ReviewMainListing allFormData={allFormData} documentData={documentData} urlList={signupSideBarCompetent}/>
+              )} */}
+            <ReviewMainListing
+              allFormData={allFormData}
+              documentData={documentData}
+              urlList={signupSideBarCompetent}
+              isPdfMode={isPdfMode}
+            />
           </div>
         </main>
 
@@ -217,23 +256,23 @@ const ReviewDetails = () => {
                 onClick={submit} // Assuming this action should be tied to the Submit button
                 className="ml-[16px] w-auto md:w-[109px] md:h-[48px] text-gilroy-semibold rounded-[12px] bg-[#1c468e] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
               >
-              {loader ? <LoaderSpin /> : "Submit"}
+                {loader ? <LoaderSpin /> : "Submit"}
               </button>
             </div>
           </div>
         </div>
-        <SuccessPopup 
-            closePopup={() => {
+        <SuccessPopup
+          closePopup={() => {
             setSubmitModal(false);
             if (submitted) {
-              Navigate('/')
+              Navigate("/");
             }
           }}
-           showPopup={() => setSubmitModal(true)} 
-           toggle={submitModal} 
-           para1={para1}
-           para2={para2}
-           success={submitted}
+          showPopup={() => setSubmitModal(true)}
+          toggle={submitModal}
+          para1={para1}
+          para2={para2}
+          success={submitted}
         />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
           <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
