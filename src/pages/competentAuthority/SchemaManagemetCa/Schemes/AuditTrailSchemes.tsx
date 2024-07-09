@@ -44,6 +44,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
     useDepositTakerRegistrationStore((state) => state);
   const navigate = useNavigate();
   const location = useLocation();
+  const createdBy = location.state?.createdBy?.substring(0,2)  
   const uniqueId = location.state?.uniqueId;
   const depositTakerId = location.state?.depositTakerId;
   const [page, setPage] = useState<number>(1);
@@ -54,7 +55,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/scheme/field-data/2`);
+      const response = await axios.get(`${bffUrl}/scheme/field-data/${createdBy === 'DT' ? 1 : 2}`);
       // console.log(response, "response");
       if (response.data.success) {
         const portalResponse = await axios.get(
@@ -62,41 +63,77 @@ const SchemesSearchDetailsSM: React.FC = () => {
         );
 
         const userData = portalResponse.data?.data?.schemes[0];
-        const formFields = response?.data?.data?.formFields?.allFormFields.map(
-          (field: any) => ({
-            ...field,
-            userInput: userData?.schemeFormData?.find(
-              (f: any) => f?.fieldId === field?.id
-            )?.value,
-            error: "",
-            disabled: true,
-            typeId: field?.fieldTypeId,
-            // id: field.fieldTypeId,
-          })
-        );
+        let formFields = response?.data?.data?.formFields?.allFormFields.map(
+          async (field: any) => {
+            if (field?.key === 'depositTakerId') {
+              return {
+                ...field,
+                userInput: userData?.schemeFormData?.find(
+                  (f: any) => f?.fieldId === field?.id
+                )?.value,
+                error: "",
+                disabled : true,
+                typeId: field?.fieldTypeId,
+                dropdown_options: {
+                  ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                    name: o?.uniqueId,
+                    id: o?.companyName,
+                  }))
+                }
+              }
+            }
+            else if (field?.key === 'branch') {
+              try {
+                const res = await axios.get(bffUrl + '/deposit-taker/branch/' + location.state.depositTakerId)
+                let data = res.data;
+                let branches = data?.data?.branches?.map((b: any) => {
+                  return {
+                    name: b?.pinCode + " " + b?.district + " " + b?.state,
+                    id: b?.id
+                  }
+                })
+
+                return {
+                  ...field,
+                  userInput: userData?.schemeFormData?.find(
+                    (f: any) => f?.fieldId === field?.id
+                  )?.value,
+                  disabled : true,
+                  error: "",
+                  typeId: field?.fieldTypeId,
+                  dropdown_options: { ...field?.dropdown_options, options: branches }
+                };
+              } catch (error) {
+                return {
+                  ...field,
+                  disabled : true,
+                  userInput: userData?.schemeFormData?.find(
+                    (f: any) => f?.fieldId === field?.id
+                  )?.value,
+                  error: "",
+                  typeId: field?.fieldTypeId,
+                };
+              }
+            }
+            else {
+              return {
+                ...field,
+                disabled : true,
+                userInput: userData?.schemeFormData?.find(
+                  (f: any) => f?.fieldId === field?.id
+                )?.value,
+                error: "",
+                typeId: field?.fieldTypeId,
+              };
+            }
+          }
+        )
+
+        formFields = await Promise.all(formFields)
 
         setAllFormData({
           ...response?.data?.data,
-          formFields: {
-            form_fields: formFields?.map((field: any) => {
-              if (field?.key === "depositTakerId") {
-                return {
-                  ...field,
-                  dropdown_options: {
-                    ...field?.dropdown_options,
-                    options: field?.dropdown_options?.options?.map(
-                      (o: any) => ({
-                        name: o?.uniqueId,
-                        id: o?.companyName,
-                      })
-                    ),
-                  },
-                };
-              } else {
-                return field;
-              }
-            }),
-          },
+          formFields: { form_fields: formFields },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,

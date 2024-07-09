@@ -15,6 +15,7 @@ import TextArea from "../../../../components/userFlow/form/TextArea";
 import FileUploadOpenKm from "../../../../components/buttons/FileUploadOpenKM";
 import InputField from "../../../../components/form/InputField";
 import { jwtDecode } from "jwt-decode";
+import Swal from "sweetalert2";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -32,6 +33,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
     useDepositTakerRegistrationStore((state) => state);
   const navigate = useNavigate();
   const location = useLocation();
+  const createdBy = location.state?.createdBy?.substring(0,2)  
   const uniqueId = location.state?.uniqueId;
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
@@ -53,7 +55,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/scheme/field-data/2`);
+      const response = await axios.get(`${bffUrl}/scheme/field-data/${createdBy === 'DT' ? 1 : 2}`);
       // console.log(response, "response");
       if (response.data.success) {
         const portalResponse = await axios.get(
@@ -61,41 +63,77 @@ const SchemesSearchDetailsSM: React.FC = () => {
         );
 
         const userData = portalResponse.data?.data?.schemes[0];
-        const formFields = response?.data?.data?.formFields?.allFormFields.map(
-          (field: any) => ({
-            ...field,
-            userInput: userData?.schemeFormData?.find(
-              (f: any) => f?.fieldId === field?.id
-            )?.value,
-            error: "",
-            disabled: true,
-            typeId: field?.fieldTypeId,
-            // id: field.fieldTypeId,
-          })
-        );
+        let formFields = response?.data?.data?.formFields?.allFormFields.map(
+          async (field: any) => {
+            if (field?.key === 'depositTakerId') {
+              return {
+                ...field,
+                userInput: userData?.schemeFormData?.find(
+                  (f: any) => f?.fieldId === field?.id
+                )?.value,
+                error: "",
+                disabled : true,
+                typeId: field?.fieldTypeId,
+                dropdown_options: {
+                  ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                    name: o?.uniqueId,
+                    id: o?.companyName,
+                  }))
+                }
+              }
+            }
+            else if (field?.key === 'branch') {
+              try {
+                const res = await axios.get(bffUrl + '/deposit-taker/branch/' + location.state.depositTakerId)
+                let data = res.data;
+                let branches = data?.data?.branches?.map((b: any) => {
+                  return {
+                    name: b?.pinCode + " " + b?.district + " " + b?.state,
+                    id: b?.id
+                  }
+                })
+
+                return {
+                  ...field,
+                  userInput: userData?.schemeFormData?.find(
+                    (f: any) => f?.fieldId === field?.id
+                  )?.value,
+                  disabled : true,
+                  error: "",
+                  typeId: field?.fieldTypeId,
+                  dropdown_options: { ...field?.dropdown_options, options: branches }
+                };
+              } catch (error) {
+                return {
+                  ...field,
+                  disabled : true,
+                  userInput: userData?.schemeFormData?.find(
+                    (f: any) => f?.fieldId === field?.id
+                  )?.value,
+                  error: "",
+                  typeId: field?.fieldTypeId,
+                };
+              }
+            }
+            else {
+              return {
+                ...field,
+                disabled : true,
+                userInput: userData?.schemeFormData?.find(
+                  (f: any) => f?.fieldId === field?.id
+                )?.value,
+                error: "",
+                typeId: field?.fieldTypeId,
+              };
+            }
+          }
+        )
+
+        formFields = await Promise.all(formFields)
 
         setAllFormData({
           ...response?.data?.data,
-          formFields: {
-            form_fields: formFields?.map((field: any) => {
-              if (field?.key === "depositTakerId") {
-                return {
-                  ...field,
-                  dropdown_options: {
-                    ...field?.dropdown_options,
-                    options: field?.dropdown_options?.options?.map(
-                      (o: any) => ({
-                        name: o?.uniqueId,
-                        id: o?.companyName,
-                      })
-                    ),
-                  },
-                };
-              } else {
-                return field;
-              }
-            }),
-          },
+          formFields: { form_fields: formFields },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,
@@ -240,7 +278,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
     navigate("/dc/my-task");
   };
 
-  const handleAddCommnent = () => {
+  const handleAddCommnent = async () => {
     try {
       setLoader2(true)
       if (comment == "") {
@@ -251,19 +289,44 @@ const SchemesSearchDetailsSM: React.FC = () => {
         setError("")
       }
 
-      let user = jwtDecode(sessionStorage.getItem("access_token") ?? "");
+      let user : any = jwtDecode(sessionStorage.getItem("access_token") ?? "");
       let payload = {
-        user : user,
+        user : user?.name ?? "user not found",
         from: allFormData?.other?.status,
         to: allFormData?.other?.status,
         remark : comment,
         documentId : fileData
       }
-
-      console.log({payload});
       
-      setLoader2(false)
-    } catch (error) {
+      try {
+        const response = await axios.patch(`${bffUrl}/scheme-portal/${uniqueId}/audit`, payload)
+        const data = response.data;
+        if (data?.success) {
+          Swal.fire({
+            text : data?.message,
+            icon : "success",
+            title : "Success",
+          })
+          fetchSchema();
+        }
+        else{
+          Swal.fire({
+            text : data?.message,
+            icon : "error",
+            title : "Something went wrong",
+          })
+        }
+        setLoader2(false)
+      } catch (error : any) {
+        Swal.fire({
+          text : error?.message,
+          icon : "error",
+          title : "Something went wrong",
+        })
+        setLoader2(false)
+      }
+      
+    } catch (error : any) {
       setLoader2(false)
     }
   }
@@ -279,7 +342,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
           className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
         />
         <p className="text-[#808080]">
-          Please update the coments under scheme details
+          Please update the comments under scheme details
         </p>
       </div>
       <div className="mt-8 mb-8 mx-8">
