@@ -198,7 +198,7 @@ const HeroHome = () => {
         </div>
       </div>
       <div className="md:w-[50%] w-full flex items-center justify-center mt-4 lg:mt-0 flex-col md:-ml-2 " >
-        <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} autoPlay={true} interval={2000}  >
+        <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} autoPlay={true} interval={5000}  >
           {groupedCardData1.map((group, index) => (
             <div key={index} className="flex flex-col items-center md:flex-wrap md:justify-center md:px-12 px-4 py-2">
               <div className="flex flex-col md:flex-row gap-x-4  lg:gap-x-0">

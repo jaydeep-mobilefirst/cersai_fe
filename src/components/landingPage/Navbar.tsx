@@ -6,6 +6,7 @@ import close_icon from "../../assets/images/white_close.png";
 import { navbar } from "../../utils/hardText/landingpageText";
 import { useLandingStore } from "../../zust/useLandingStore";
 
+
 const Navbar: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("HOME");
@@ -72,13 +73,13 @@ const Navbar: React.FC = () => {
       <nav className="hidden w-full lg:flex h-[48px] bg-[#1c468e]">
         <div className="w-full text-[#ffffff] flex items-center justify-center">
           <ul className="flex lg:flex-row items-center">
-            {homePageData?.navbar?.length > 0 && (
-              <>
-                {homePageData?.navbar.map((menuItem: any, index: any) => (
+            {/* {homePageData?.navbar?.length > 0 && (
+              <> */}
+                {navbar.map((menuItem: any, index: any) => (
                   <MenuItem key={index} text={menuItem} onClick={() => handleMenuClick(menuItem)} isActive={activeTab === menuItem}/>
                 ))}
-              </>
-            )}
+              {/* </>
+            )} */}
           </ul>
         </div>
       </nav>
@@ -90,13 +91,13 @@ const Navbar: React.FC = () => {
         } lg:hidden w-1/8 h-screen bg-gradient-to-r from-[#54AD47] to-[#0b2551] fixed top-0 left-0 z-20`}
       >
         <ul className="flex flex-col h-full text-white">
-          {homePageData?.navbar?.length > 0 && (
-            <>
-              {homePageData?.navbar.map((menuItem: any, index: any) => (
+          {/* {homePageData?.navbar?.length > 0 && (
+            <> */}
+              {navbar.map((menuItem: any, index: any) => (
                 <MenuItem key={index} text={menuItem} onClick={() => handleMenuClick(menuItem)} isActive={activeTab === menuItem} />
               ))}
-            </>
-          )}
+            {/* </>
+          )} */}
         </ul>
 
         {/* Close Icon*/}

@@ -9,11 +9,11 @@ const LanguageBar = () => {
     <div>
       <div className="h-6 relative bg-[#ECECEB] flex items-center lg:justify-start overflow-auto">
         <div className="ml-[8px] lg:ml-[161px] text-center text-[#797979] text-xs font-normal leading-none flex items-center justify-start">
-          <div className="mx-[8px] text-gilroy-regular">
-            {homePageData?.languageLable}
+          <div className="mx-[8px] text-gilroy-regular">Languages :
+            {/* {homePageData?.languageLable} */}
           </div>
-          {homePageData?.languageData?.length > 0 && (
-            <>
+          {/* {homePageData?.languageData?.length > 0 && (
+            <> */}
               {languageData.map((languagename: any, idx: any) => {
                 return (
                   <div
@@ -26,8 +26,8 @@ const LanguageBar = () => {
                   </div>
                 );
               })}
-            </>
-          )}
+            {/* </>
+          )} */}
         </div>
       </div>
     </div>
