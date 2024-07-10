@@ -47,12 +47,12 @@ export const Footer = (props: Props) => {
         className="py-4 text-center mt-6 text-gilroy-regular"
         style={{ fontSize: "10px" }}
       >
-        COPYRIGHT © 2021 CBRS AI. ALL RIGHTS RESERVED.
+        {homePageData?.homePageData?.footerDescription[0]?.text}
         <div className="mt-4 md:mt-0 flex justify-center">
           <p>
-            Powered and managed by{" "}
+          {homePageData?.homePageData?.footerDescription[1]?.text}{" "}
             <span className="underline text-gilroy-regular font-bold">
-              NSE Data and Analytics Limited
+            {homePageData?.homePageData?.footerDescription[1]?.link}
             </span>
           </p>
         </div>

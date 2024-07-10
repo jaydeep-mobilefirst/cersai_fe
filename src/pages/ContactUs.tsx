@@ -70,7 +70,7 @@ const ContactUs: React.FC = () => {
 
   const homePageCmsApi = () => {
     setLoader(true);
-    setHomePageData(data.data.content)
+    // setHomePageData(data.data.content)
     axios
       .get(bffUrl + `/websitecontent/list/1`)
       .then((response) => {

@@ -24,11 +24,12 @@ const Landing = () => {
 
   const homePageCmsApi = () => {
     setLoader(true);
-    setHomePageData(data.data.content)
+    // setHomePageData(data.data.content)
     axios
       .get(bffUrl + `/websitecontent/list/1`)
       .then((response) => {
-        // setHomePageData(response?.data?.data?.content);
+        console.log("api-response",response)
+        setHomePageData(response?.data?.data?.content?.updatedStructure);
         setLoader(false);
       })
       .catch((error) => {
