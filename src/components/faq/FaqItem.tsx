@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ArrowOpen from "../../assets/images/arrow-open.svg";
 import ArrowClose from "../../assets/images/arrow-close.svg";
+import { faqDataa } from "../../utils/hardText/faqPageContent";
 
 interface FAQItemProps {
   question: string;
@@ -12,6 +13,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => setIsOpen(!isOpen);
+  console.log("faqdatasa",faqDataa);
 
   return (
 

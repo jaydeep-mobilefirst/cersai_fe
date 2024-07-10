@@ -150,13 +150,14 @@ const HeroHome = () => {
 
   const chunkArray = (array: any[], chunkSize: number): any[][] => {
     const chunks = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
+    for (let i = 0; i < array?.length; i += chunkSize) {
       chunks.push(array.slice(i, i + chunkSize));
     }
     return chunks;
   };
 
-  const groupedCardData1 = chunkArray(cardData1, 4); // Update chunk size to 4
+
+  const groupedCardData1 = chunkArray(homePageData?.homePageData?.carousel, 4); // Update chunk size to 4
   console.log("4 data", groupedCardData1);
 
   return (
@@ -202,13 +203,13 @@ const HeroHome = () => {
                       <div className="ml-[24px] mr-[24px] mt-[32px]">
                         <div className={card.class}>
                           <img
-                            src={card.image}
+                            src={card.img}
                             alt={card.altText}
                             className=""
                           />
                         </div>
                         <p className="text-[18px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
-                          {card.title}
+                          {card.text}
                         </p>
                       </div>
                     </div>
@@ -226,13 +227,13 @@ const HeroHome = () => {
                       <div className="ml-[24px] mr-[24px] mt-[32px]">
                         <div className={card.class}>
                           <img
-                            src={card.image}
+                            src={card.img}
                             alt={card.altText}
                             className=""
                           />
                         </div>
                         <p className="text-[18px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
-                          {card.title}
+                          {card.text}
                         </p>
                       </div>
                     </div>
@@ -251,15 +252,15 @@ const HeroHome = () => {
           autoPlay={true}
           interval={5000}
         >
-          {cardData1.map((card, index) => (
+          {homePageData?.homePageData?.carousel?.map((card:any, index:any) => (
             <div className="flex flex-row items-center justify-center">
               <div key={index} className={card.card_class}>
                 <div className="ml-[24px] mr-[24px] mt-[32px]">
                   <div className={card.class}>
-                    <img src={card.image} alt={card.altText} className="" />
+                    <img src={card.img} alt={card.altText} className="" />
                   </div>
                   <p className="text-[20px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
-                    {card.title}
+                    {card.text}
                   </p>
                 </div>
               </div>

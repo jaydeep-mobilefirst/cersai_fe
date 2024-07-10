@@ -28,7 +28,7 @@ const TopDetail = () => {
   //   useState(false);
 
   const { homePageData } = useLandingStore((state) => state);
-
+  // console.log("contactdetails",homePageData?.homePageData?.contactDetails)
 
   const {
     isOpen,
@@ -119,7 +119,7 @@ const TopDetail = () => {
   return (
     <div className="relative flex items-center justify-between flex-col md:flex-row my-[19px] mx-[16px] lg:mx-[169px]">
       <div className="m-4 md:m-0">
-        <img src={Logo} alt="logo" />
+        <img src={homePageData?.homePageData?.logo[0]?.img} alt="logo" />
       </div>
       {isOpen && (
         <div
@@ -128,11 +128,11 @@ const TopDetail = () => {
         ></div>
       )}
       <div className="flex items-start justify-start flex-col">
-        {contactDetails.map((data, idx) => {
+        {homePageData?.homePageData?.contactDetails?.map((data:any, idx:any) => {
           return (
             <div className="flex items-center justify-center mb-2" key={idx}>
               <div>
-                <img src={data?.imgsrc} alt="icon" />
+                <img src={data?.img} alt="icon" />
               </div>
               {idx === 2 ? (
                 <>
