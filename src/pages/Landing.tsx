@@ -11,6 +11,7 @@ import HeroHome from "../components/landingPage/HeroHome";
 import axios from "axios";
 import { bffUrl } from "../utils/api";
 import { useLandingStore } from "../zust/useLandingStore";
+import {data} from '../utils/hardText/landingPageText2';
 
 const Landing = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -23,10 +24,11 @@ const Landing = () => {
 
   const homePageCmsApi = () => {
     setLoader(true);
+    setHomePageData(data.data.content)
     axios
       .get(bffUrl + `/websitecontent/list/1`)
       .then((response) => {
-        setHomePageData(response?.data?.data?.content);
+        // setHomePageData(response?.data?.data?.content);
         setLoader(false);
       })
       .catch((error) => {
