@@ -22,7 +22,7 @@ const SchemeDetails = () => {
   const [loader, setLoader] = useState(false);
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
-  const { onChange, handleValidationChecks, updatePanFormField } =
+  const { onChange, handleValidationChecks, handleSchemeValidations } =
     useContext(FormHandlerContext);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,8 +52,6 @@ const SchemeDetails = () => {
           formFields: {
             form_fields: formFields?.map((field: any) => {
               if (field?.key === "depositTakerId") {
-                console.log({ field });
-
                 return {
                   ...field,
                   dropdown_options: {
@@ -69,7 +67,7 @@ const SchemeDetails = () => {
               } else {
                 return field;
               }
-            }),
+            })?.sort((a : any, b : any) => a.sortOrder - b.sortOrder),
           },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
@@ -84,13 +82,21 @@ const SchemeDetails = () => {
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoader(true);
-    const isFormValid = await handleValidationChecks(
+    let isFormValid = await handleValidationChecks(
       allFormData?.formFields?.form_fields
     );
     if (!isFormValid) {
       setLoader(false);
       return;
     }
+    else{
+      // returns true if no error 
+      const schemeValidations = await handleSchemeValidations();
+      if (schemeValidations === false) {
+        setLoader(false);
+        return;
+      }
+      }
     try {
       // Mapping over the form fields to prepare the formData
       let formData = allFormData.formFields.form_fields.map((field: any) => ({
@@ -146,11 +152,14 @@ const SchemeDetails = () => {
             id: b?.id
           }
         })
+
+        console.log({branches});
+        
           setAllFormData({
             ...allFormData,
             formFields : {
               form_fields : allFormData?.formFields?.form_fields?.map((f : any) => {
-                if (f?.key === 'branch') {
+                if (f?.key === 'branch') {                  
                   return {
                     ...f,
                     dropdown_options : {...f?.dropdown_options, options : branches}
