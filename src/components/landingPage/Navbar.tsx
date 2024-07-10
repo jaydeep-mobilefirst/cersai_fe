@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
             {homePageData?.homePageData?.navbar?.length > 0 && (
               <>
                 {homePageData?.homePageData?.navbar.map((menuItem: any, index: any) => (
-                  <MenuItem key={index} text={menuItem.text} onClick={() => handleMenuClick(menuItem.text)} isActive={activeTab === menuItem.text}/>
+                  <MenuItem key={index} text={menuItem.text.toUpperCase()} onClick={() => handleMenuClick(menuItem.text.toUpperCase())} isActive={activeTab === menuItem.text.toUpperCase()}/>
                 ))}
               </>
             )}
@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
           {homePageData?.homePageData?.navbar?.length > 0 && (
             <>
               {homePageData?.homePageData?.navbar.map((menuItem: any, index: any) => (
-                <MenuItem key={index} text={menuItem.text} onClick={() => handleMenuClick(menuItem.text)} isActive={activeTab === menuItem.text} />
+                <MenuItem key={index} text={menuItem.text.toUpperCase()} onClick={() => handleMenuClick(menuItem.text.toUpperCase())} isActive={activeTab === menuItem.text} />
               ))}
             </>
           )}
