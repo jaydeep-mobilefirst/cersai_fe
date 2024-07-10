@@ -60,7 +60,8 @@ const SchemeDetails = () => {
                         name: o?.uniqueId,
                         id: o?.companyName,
                       })
-                    ),
+                    )?.sort((a : any, b : any) => a.sortOrder - b.sortOrder)
+                    ,
                   },
                 };
               } else {

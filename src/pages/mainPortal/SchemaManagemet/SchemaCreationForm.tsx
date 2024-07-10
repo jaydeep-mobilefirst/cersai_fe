@@ -103,7 +103,7 @@ const SchemaCreationForm = () => {
 
         setAllFormData({
           ...response?.data?.data,
-          formFields: { form_fields: formFields },
+          formFields: { form_fields: formFields?.sort((a : any, b : any) => a.sortOrder - b.sortOrder) },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,

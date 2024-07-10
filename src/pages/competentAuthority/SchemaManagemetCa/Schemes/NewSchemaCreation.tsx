@@ -52,8 +52,6 @@ const SchemeDetails = () => {
           formFields: {
             form_fields: formFields?.map((field: any) => {
               if (field?.key === "depositTakerId") {
-                console.log({ field });
-
                 return {
                   ...field,
                   dropdown_options: {
@@ -69,7 +67,7 @@ const SchemeDetails = () => {
               } else {
                 return field;
               }
-            }),
+            })?.sort((a : any, b : any) => a.sortOrder - b.sortOrder),
           },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
@@ -154,11 +152,14 @@ const SchemeDetails = () => {
             id: b?.id
           }
         })
+
+        console.log({branches});
+        
           setAllFormData({
             ...allFormData,
             formFields : {
               form_fields : allFormData?.formFields?.form_fields?.map((f : any) => {
-                if (f?.key === 'branch') {
+                if (f?.key === 'branch') {                  
                   return {
                     ...f,
                     dropdown_options : {...f?.dropdown_options, options : branches}

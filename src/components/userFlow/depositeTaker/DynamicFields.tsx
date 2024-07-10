@@ -99,6 +99,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                   </div>
                 );
               case "select":
+              case "select_with_search":
                 return (
                   <div>
                     <label
@@ -109,6 +110,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                       <RequiredStar allFormData={allFormData} field={field} />
                     </label>
                     <SelectButton
+                      data={field}
                       onSelect={(data) =>
                         onChange && onChange(data, field, fieldType)
                       }
@@ -125,6 +127,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                       //  searchInputOnchange={handleSearchInputChange3}
                       //  searchInputValue={searchInputValue3}
                       showSearchInput={true}
+                      enableSearch={fieldType === 'select_with_search'}
                     />
                     <span className="text-red-500">{field?.error}</span>
                   </div>

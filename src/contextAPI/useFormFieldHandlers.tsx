@@ -200,7 +200,7 @@ const FormHandlerProviders = ({ children }: Props) => {
     } else if (fieldType === "date_picker") {
       const { value } = event.target;
       updateValue(value, fieldData?.id);
-    } else if (fieldType === "select") {
+    } else if (fieldType === "select" || fieldType === "select_with_search") {
       updateValue(event?.value, fieldData?.id);
       let sectionName = fieldData?.entityRegSection?.sectionName;
       console.log({ sectionName, fieldData });
