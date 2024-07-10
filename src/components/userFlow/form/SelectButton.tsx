@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./select_button.css";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import axios from "axios";
+import { bffUrl } from "../../../utils/api";
 
 interface Option {
   value: string;
@@ -17,33 +20,43 @@ type Props = {
   showSearchInput?: boolean;
   disabled?: boolean;
   backgroundColor?: string;
+  enableSearch ?: boolean;
+  data ?: any;
 };
 
 const SelectButton = ({
   setOption,
   options,
   placeholder,
-  searchInputOnchange,
-  searchInputValue,
   selectedOption,
   showSearchInput,
   onSelect,
   disabled,
   backgroundColor,
+  enableSearch = false,
+  data
 }: Props) => {
+  
+  const [loader, setLoader] = useState<boolean>(false);
+  const {allFormData} = useDepositTakerRegistrationStore(state => state)
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
   const [optionsToShow, setOptionsToShow] = useState<any[]>(options);
   useEffect(() => {
     setArrowDirectionToggle(false);
   }, [selectedOption]);
-
+  
+  useEffect(() => {
+    setOptionsToShow(options)
+  }, [options])
+  console.log({options, optionsToShow});
   // Find the label of the currently selected option
   const selectedLabel =
     options?.find((option: any) => option?.value === selectedOption)?.label ||
     placeholder;
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: any) => {
     if (
@@ -67,10 +80,44 @@ const SelectButton = ({
     };
   }, [arrowDirectionToggle]);
 
+  const handleSearch = (event : any) => {
+    const {value} = event?.target;
+    setSearchInputValue(value)
+    let key = data?.key;
+    let url = data?.dropdown_options?.api_link;
+    if (key === 'branch') {
+      setLoader(true)
+      let currentLoggedinEntity = sessionStorage.getItem('entityUniqueId')
+      let dtId = currentLoggedinEntity?.substring(0,2) === "DT" ? currentLoggedinEntity : 
+      allFormData?.formFields?.form_fields?.find((f : any) => f?.key === 'depositTakerId')?.userInput
+      url = url + currentLoggedinEntity + `?page=1&limit=100000Y`
+      setLoader(false)
+    }
+    else if(key === 'regulator'){
+      setLoader(true)
+      axios.get(`${bffUrl}${url}?status=APPROVED&page=1&limit=100000&searchText=${value}`)
+      .then((res : any) => {
+        if (res.data.success) {
+          let regulators = res?.data?.data?.regulators?.map((r : any) => {
+            return {
+              value : r?.uniqueId,
+              label : r?.regulatorName,
+            }
+          })
+
+          setOptionsToShow(regulators);
+        }
+        
+      })
+      .finally(() => setLoader(false))
+    }     
+  }
+
+
   return (
-    <div className="w-full relative">
+    <div className="w-full relative" ref={buttonRef}
+>
       <button
-        ref={buttonRef}
         style={{ backgroundColor }}
         disabled={disabled}
         className="h-[56px] px-2 md:px-8 py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left w-full"
@@ -120,7 +167,7 @@ const SelectButton = ({
           aria-labelledby="options-menu"
           style={{ padding: "8px 16px" }}
         >
-          {showSearchInput && searchInputOnchange && (
+          { enableSearch && (
             <div className="relative p-2">
               <input
                 type="search"
@@ -128,7 +175,7 @@ const SelectButton = ({
                 className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 focus:border-gray-300 focus:ring-1 focus:ring-gray-100 focus:outline-none"
                 placeholder="Search"
                 style={{ paddingLeft: "2.5rem" }}
-                onChange={searchInputOnchange}
+                onChange={handleSearch}
               />
             </div>
           )}
@@ -139,7 +186,7 @@ const SelectButton = ({
             aria-labelledby="options-menu"
             ref={dropdownRef}
           >
-            {options?.map((option, index) => (
+            {optionsToShow?.map((option, index) => (
               <a
                 key={index}
                 onClick={() => {
@@ -148,6 +195,8 @@ const SelectButton = ({
                   }
                   setArrowDirectionToggle(false);
                   if (onSelect) {
+                    console.log({option});
+                    
                     onSelect(option);
                   }
                 }}
