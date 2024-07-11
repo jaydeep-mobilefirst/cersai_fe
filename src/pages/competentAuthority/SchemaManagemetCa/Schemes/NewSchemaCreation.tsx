@@ -152,8 +152,6 @@ const SchemeDetails = () => {
             id: b?.id
           }
         })
-
-        console.log({branches});
         
           setAllFormData({
             ...allFormData,
