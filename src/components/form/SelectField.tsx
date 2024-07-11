@@ -111,7 +111,7 @@ const SelectField = ({
             {options.map((option, index) => (
               <a
                 key={index}
-                onClick={() => setOption(option.value)}
+                onClick={() => setOption(option)}
                 // href=""
                 className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 cursor-pointer"
                 role="menuitem"

@@ -26,9 +26,12 @@ const convertToDate = (isoString: string) => {
 
 const AuditTrail = () => {
   const { allFormData } = useDepositTakerRegistrationStore(state => state)
-  const [auditTrail, setAuditTrail] = useState(allFormData?.other?.schemeAuditTrail);
+  const [auditTrail, setAuditTrail] = useState([]);
   const columnHelper = createColumnHelper<TableType>();
 
+  useEffect(() => {
+    setAuditTrail(allFormData?.other?.schemeAuditTrail)
+  }, [allFormData])
   const columns = [
     columnHelper.accessor("id", {
       cell: (info: any) => info.renderValue(),
