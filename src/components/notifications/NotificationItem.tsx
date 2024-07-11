@@ -1,16 +1,23 @@
 import eyeShow from "../../assets/images/eye.svg";
 import React from "react";
 
+interface Notifications {
+  name: string;
+  text: string;
+  img: string | null;
+  link: string | null;
+}
+
 interface NotificationProps {
   title: string;
   date: string;
-  view: string;
+  buttons: Array<Notifications>;
 }
 
 const NotificationItem: React.FC<NotificationProps> = ({
   title,
   date,
-  view,
+  buttons
 }) => {
   return (
     <div className="p-3 bg-white rounded-lg border border-neutral-700/opacity-20 flex justify-between items-center md:mx-[56px] mx-[16px] mb-[12px]">
@@ -23,9 +30,9 @@ const NotificationItem: React.FC<NotificationProps> = ({
         </div>
       </div>
       <div className="h-11 md:px-4 px-3 md:py-2.5 py-2 bg-blue-900 rounded-lg justify-center items-center gap-2 inline-flex cursor-pointer">
-        <img src={eyeShow} alt="eye" className="w-6 h-6" />
+        <img src={buttons[0]?.img || ''} alt="eye" className="w-6 h-6" />
         <p className="text-white text-base font-normal text-gilroy-semibold">
-          View
+        {buttons[0]?.text}
         </p>
       </div>
     </div>

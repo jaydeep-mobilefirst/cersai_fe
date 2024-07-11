@@ -51,7 +51,9 @@ const Navbar: React.FC = () => {
       navigate("/training");
     }else if (text === "CONTACT US") {
       navigate("/contactus");
-    }
+    } else if (text === "OPERATING GUIDELINES") {
+      window.open("https://www.google.com", "_blank")
+  }
 
     setActiveTab(text);
     setShowMenu(false);

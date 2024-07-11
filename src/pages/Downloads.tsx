@@ -8,6 +8,7 @@ import Navbar from "../components/landingPage/Navbar";
 import Footer from "../components/landingPage/Footer";
 import DownloadList from "../components/downloads/DownloadList";
 import {data} from '../utils/hardText/landingPageText2';
+import { downloadPageData } from "../utils/hardText/downloadPageText";
 
 const Downloads=()=>{
     const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -24,7 +25,7 @@ const Downloads=()=>{
       axios
         .get(bffUrl + `/websitecontent/list/1`)
         .then((response) => {
-          // setHomePageData(response?.data?.data?.content);
+          setHomePageData(response?.data?.data?.content?.updatedStructure);
           setLoader(false);
         })
         .catch((error) => {
@@ -40,7 +41,7 @@ const Downloads=()=>{
           <div className="buds-faq-background-image">
           <div className="mt-[56px] md:px-[56px] px-[16px] ">
             <h1 className="text-xl font-bold text-[#24222B] text-gilroy-bold mb-[24px]">
-              Downloads
+              {downloadPageData?.data?.content?.downloadPageData?.heading[0]?.text}
             </h1>
           </div>
           <DownloadList/>

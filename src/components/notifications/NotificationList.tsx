@@ -2,27 +2,37 @@ import React, { useEffect, useState } from 'react';
 import NotificationItem from './NotificationItem';
 import {notifcationsData} from '../../utils/hardText/notificationsComponent'
 
-interface NotificationData {
-    title: string;
-    date: string;
-    view: string;
-}
+interface Notification {
+    name: string;
+    text: string;
+    img: string | null;
+    link: string | null;
+  }
 
-const NotificationsList: React.FC = () => {
-    const [notifications, setNotifications] = useState<NotificationData[]>([]);
+  interface NotificationsListProps {
+    notificationsData: {
+      heading: Array<Notification>;
+      button: Array<Notification>;
+      notifications: Array<Array<Notification>>;
+    };
+  }
 
-    useEffect(() => {
-        setNotifications(notifcationsData.notifications);
-    }, []);
+
+const NotificationsList: React.FC<NotificationsListProps> = ({notificationsData }) => {
+    // const [notifications, setNotifications] = useState<NotificationData[]>([]);
+
+    // useEffect(() => {
+    //     setNotifications(notifcationsData.notifications);
+    // }, []);
 
     return (
         <div >
-            {notifications.map((notification, index) => (
+            {notificationsData?.notifications.map((notification, index) => (
                 <NotificationItem
                     key={index}
-                    title={notification.title}
-                    date={notification.date}
-                    view={notification.view}
+                    title={notification[0].text}
+                    date={notification[1].text}
+                    buttons={notificationsData?.button}
                 />
             ))}
         </div>

@@ -13,7 +13,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => setIsOpen(!isOpen);
-  console.log("faqdatasa",faqDataa);
+  console.log("faqdatasa",faqDataa?.data?.content?.faqPageData?.arrows);
 
   return (
 
@@ -28,7 +28,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
     </div>
     <div className="flex justify-center items-center w-10 h-10" onClick={toggleOpen}>
       <img
-        src={isOpen ? ArrowClose : ArrowOpen}
+        src={isOpen ? faqDataa?.data?.content?.faqPageData?.arrows[1]?.img : faqDataa?.data?.content?.faqPageData?.arrows[0]?.img}
         alt="toggle"
         className="md:w-8 md:h-8 w-6 h-6"
       />

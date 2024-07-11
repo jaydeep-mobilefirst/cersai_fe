@@ -74,7 +74,7 @@ const ContactUs: React.FC = () => {
     axios
       .get(bffUrl + `/websitecontent/list/1`)
       .then((response) => {
-        // setHomePageData(response?.data?.data?.content);
+        setHomePageData(response?.data?.data?.content?.updatedStructure);
         setLoader(false);
       })
       .catch((error) => {

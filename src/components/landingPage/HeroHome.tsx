@@ -205,7 +205,7 @@ const HeroHome = () => {
                           <img
                             src={card.img}
                             alt={card.altText}
-                            className=""
+                            className="w-[56px] h-[56px]"
                           />
                         </div>
                         <p className="text-[18px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
@@ -229,7 +229,7 @@ const HeroHome = () => {
                           <img
                             src={card.img}
                             alt={card.altText}
-                            className=""
+                            className="w-[56px] h-[56px]"
                           />
                         </div>
                         <p className="text-[18px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
@@ -257,7 +257,7 @@ const HeroHome = () => {
               <div key={index} className={card.card_class}>
                 <div className="ml-[24px] mr-[24px] mt-[32px]">
                   <div className={card.class}>
-                    <img src={card.img} alt={card.altText} className="" />
+                    <img src={card.img} alt={card.altText} className="w-[56px] h-[56px]" />
                   </div>
                   <p className="text-[20px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
                     {card.text}
