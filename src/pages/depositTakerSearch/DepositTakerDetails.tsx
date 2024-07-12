@@ -223,7 +223,7 @@ const DepositSearchDetails: React.FC = () => {
 
   const accordionItems: AccordionItem[] = [
     {
-      header: "Audit Trail",
+      header: <h1 className="font-bold text-xl">Scheme Details</h1>,
       content: <>
                <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
           <div className="">
@@ -334,7 +334,7 @@ const DepositSearchDetails: React.FC = () => {
         </div>
       </div>
 
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <div
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
@@ -368,7 +368,7 @@ const DepositSearchDetails: React.FC = () => {
         <div>
           <div className="border-[#E6E6E6] border-[1px] mt-4"></div>
         </div>
-      </div>
+      </div> */}
 
       <div className="mt-[100px]">
         <Footer />

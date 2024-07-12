@@ -69,8 +69,8 @@ const AuditTrail = () => {
       header: () => <span>To</span>,
     }),
     columnHelper.accessor("remarks", {
-      cell: (info: any) => (
-        <>
+      cell: (info: any) => {        
+       return <>
           <div
             className=" flex items-center justify-center gap-2"
             // style={{ width: "200px" }}
@@ -81,7 +81,7 @@ const AuditTrail = () => {
             )}
           </div>
         </>
-      ),
+      },
       header: () => <span>Remarks</span>,
     }),
     columnHelper.accessor("date", {
