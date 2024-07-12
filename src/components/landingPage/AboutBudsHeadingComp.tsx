@@ -23,7 +23,7 @@ const AboutBudsHeadingComp = () => {
               <>
                 <div className=" flex flex-col items-center md:flex-row justify-start md:items-center" key={idx}>
                   <div className="mr-4 md:mr-6 mb-0 w-14 h-14 rounded-full bg-[#1C468E] flex justify-center items-center">
-                    <img src={item.img} alt="icon" className="w-[24px] h-[24px]" />
+                    <img src={item.img} alt="icon" className={`${item.text==="Ask for your CKYC Identifier now and open account faster with reduced paper-work"? "w-[16px] h-[20px]":"w-[24px] h-[24px]" }`} />
                   </div>
                   <p className="mt-2 md:mt-0 text-base text-gilroy-medium text-black font-normal leading-6">
                     {item.text}

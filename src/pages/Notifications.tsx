@@ -5,13 +5,14 @@ import Navbar from "../components/landingPage/Navbar";
 import TopDetail from "../components/landingPage/TopDetail";
 import NotificationsList from "../components/notifications/NotificationList";
 import { useLandingStore } from "../zust/useLandingStore";
+import { useNotificationStore } from "../zust/useNotificationStore";
 import axios from "axios";
 import { bffUrl } from "../utils/api";
-import { data } from "../utils/hardText/landingPageText2";
 import { notifcationsPageData } from "../utils/hardText/notificationsPageText";
 
 const Notifications: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
+  const { notificationPageDataa, setNotificationPageData } = useNotificationStore((state) => state);
   const [state, setState] = useState(true);
   const [loader, setLoader] = useState(false);
 
@@ -33,7 +34,26 @@ const Notifications: React.FC = () => {
         setLoader(false);
       });
   };
-  console.log("notificationdata", notifcationsPageData);
+
+  useEffect(() => {
+    notificationsPageCmsApi();
+  }, [state]);
+
+  const notificationsPageCmsApi = () => {
+    setLoader(true);
+    // setHomePageData(data.data.content)
+    axios
+      .get(bffUrl + `/websitecontent/list/3`)
+      .then((response) => {
+        setNotificationPageData(response?.data?.data?.content?.notificationsPageData);
+        setLoader(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
+  console.log("notificationdataupdated", notificationPageDataa);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -44,14 +64,14 @@ const Notifications: React.FC = () => {
         <div className="mt-[56px] md:px-[56px] px-[16px] ">
           <h1 className="text-xl font-bold text-[#24222B] text-gilroy-bold mb-[24px]">
             {
-              notifcationsPageData?.data?.content?.notificationsPageData
-                ?.heading[0]?.text
+              notificationPageDataa
+                ?.heading?.[0]?.text
             }
           </h1>
         </div>
         <NotificationsList
           notificationsData={
-            notifcationsPageData?.data?.content?.notificationsPageData
+            notificationPageDataa
           }
         />
         <div className="md:mt-[124px]">

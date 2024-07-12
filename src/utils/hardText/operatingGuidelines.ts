@@ -14,7 +14,7 @@ export const operatingGuidlinesData={
                     name: "link",
                     text: null,
                     img: null,
-                    link: "www.google.com",
+                    link: "https://www.google.com",
 
                 }
             ]

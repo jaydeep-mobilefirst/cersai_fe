@@ -5,7 +5,7 @@ import hamburger from "../../assets/images/hamburger_icon.svg";
 import close_icon from "../../assets/images/white_close.png";
 import { navbar } from "../../utils/hardText/landingpageText";
 import { useLandingStore } from "../../zust/useLandingStore";
-
+import { operatingGuidlinesData } from "../../utils/hardText/operatingGuidelines";
 
 const Navbar: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
     }else if (text === "CONTACT US") {
       navigate("/contactus");
     } else if (text === "OPERATING GUIDELINES") {
-      window.open("https://www.google.com", "_blank")
+      window.open(operatingGuidlinesData?.data?.content?.operatingGuidlinesPageData?.link[0]?.link, "_blank")
   }
 
     setActiveTab(text);

@@ -19,19 +19,15 @@ interface Notification {
 
 
 const NotificationsList: React.FC<NotificationsListProps> = ({notificationsData }) => {
-    // const [notifications, setNotifications] = useState<NotificationData[]>([]);
-
-    // useEffect(() => {
-    //     setNotifications(notifcationsData.notifications);
-    // }, []);
 
     return (
         <div >
-            {notificationsData?.notifications.map((notification, index) => (
+            {notificationsData?.notifications?.map((notification, index) => (
                 <NotificationItem
                     key={index}
-                    title={notification[0].text}
-                    date={notification[1].text}
+                    title={notification?.[0]?.text}
+                    links = {notification?.[0]?.link}
+                    date={notification?.[1].text}
                     buttons={notificationsData?.button}
                 />
             ))}

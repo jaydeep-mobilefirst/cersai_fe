@@ -1,4 +1,4 @@
-export const contactUsData = {
+export const contactUsPageData = {
   status: "success",
   message: "Contact Us - Website Content",
   code: 200,
@@ -143,7 +143,7 @@ export const contactUsData = {
             link: null,
           },
         ],
-        residentailProcessHeading: [
+        redressalProcessHeading: [
           {
             name: "text",
             text: "Complaint Redressal Process",
@@ -151,7 +151,7 @@ export const contactUsData = {
             link: null,
           },
         ],
-        residentailProcessDetails: [
+        redressalProcessDetails: [
           {
             name: "text",
             text: "At CERSAI, we believe in providing the best of our services to our registered entities and Public. We provide easy access to information on our portal; we also help you get your grievances redressed with ease. Resolving your problem helps us review our processes and take necessary steps to prevent recurrence. We aim to respond to your complaint with efficiency, courtesy and fairness.",

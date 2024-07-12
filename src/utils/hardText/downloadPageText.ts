@@ -26,83 +26,81 @@ export const downloadPageData = {
           },
         ],
         downloads: [
-          
-            {
-              name: "text",
-              text: "CKYC Templates - Individual And Legal Entity",
-              img: null,
-              link: null,
-            },
-            {
-              name: "text",
-              text: "CKYC Templates - Individual And Legal Entity",
-              img: null,
-              link: null,
-            },
-            {
-              name: "text",
-              text: "Frame 2085661016",
-              img: null,
-              link: null,
-            },
-            {
-              name: "text",
-              text: "CKYC Templates - Individual And Legal Entity",
-              img: null,
-              link: null,
-            },
-            {
-              name: "text",
-              text: "Frame 2085661016",
-              img: null,
-              link: null,
-            },
-            {
-              name: "text",
-              text: "CKYC Templates - Individual And Legal Entity",
-              img: null,
-              link: null,
-            },
-            {
-              name: "text",
-              text: "CKYC Templates - Individual And Legal Entity",
-              img: null,
-              link: null,
-            },
+          {
+            name: "text",
+            text: "CKYC Templates - Individual And Legal Entity",
+            img: null,
+            link: "https://www.google.com",
+          },
+          {
+            name: "text",
+            text: "CKYC Templates - Individual And Legal Entity",
+            img: null,
+            link: "https://www.google.com",
+          },
+          {
+            name: "text",
+            text: "Frame 2085661016",
+            img: null,
+            link: "https://www.google.com",
+          },
+          {
+            name: "text",
+            text: "CKYC Templates - Individual And Legal Entity",
+            img: null,
+            link: "https://www.google.com",
+          },
+          {
+            name: "text",
+            text: "Frame 2085661016",
+            img: null,
+            link: "https://www.google.com",
+          },
+          {
+            name: "text",
+            text: "CKYC Templates - Individual And Legal Entity",
+            img: null,
+            link: "https://www.google.com",
+          },
+          {
+            name: "text",
+            text: "CKYC Templates - Individual And Legal Entity",
+            img: null,
+            link: "https://www.google.com",
+          },
 
-            {
-              name: "text",
-              text: "Frame 2085661016",
-              img: null,
-              link: null,
-            },
-            {
-              name: "text",
-              text: "CKYC Templates - Individual And Legal Entity",
-              img: null,
-              link: null,
-            },
+          {
+            name: "text",
+            text: "Frame 2085661016",
+            img: null,
+            link: "https://www.google.com",
+          },
+          {
+            name: "text",
+            text: "CKYC Templates - Individual And Legal Entity",
+            img: null,
+            link: "https://www.google.com",
+          },
 
-            {
-              name: "text",
-              text: "Frame 2085661016",
-              img: null,
-              link: null,
-            },
-            {
-              name: "text",
-              text: "CKYC Templates - Individual And Legal Entity",
-              img: null,
-              link: null,
-            },
+          {
+            name: "text",
+            text: "Frame 2085661016",
+            img: null,
+            link: "https://www.google.com",
+          },
+          {
+            name: "text",
+            text: "CKYC Templates - Individual And Legal Entity",
+            img: null,
+            link: "https://www.google.com",
+          },
 
-            {
-              name: "text",
-              text: "Frame 2085661016",
-              img: null,
-              link: null,
-            },
-          
+          {
+            name: "text",
+            text: "Frame 2085661016",
+            img: null,
+            link: "https://www.google.com",
+          },
         ],
       },
     },
