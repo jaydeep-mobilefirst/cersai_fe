@@ -157,7 +157,7 @@ const DepositeTakerSearch: React.FC = () => {
   ];
 
   const status = [
-    {label : "All", value : ""},
+    {label : "Select Status", value : ""},
     { label: "Approved", value: "APPROVED" },
     { label: "Banned", value: "BANNED" },
     { label: "Rejected", value: "REJECTED" },
@@ -175,19 +175,19 @@ const DepositeTakerSearch: React.FC = () => {
     setSelectedDistrict(option?.value);
   };
   const handleSetStatus = (option: any) => {
-    setSelectedStatus(option?.label);
+    setSelectedStatus(option);
     setStatusForSearch(option?.value)
   };
 
   const handleSearchSubmit = (event : any) => {
     event?.preventDefault();
+    setPage(1)
     apiCall();
   }
 
   const handleSetSearchInput = (event : any) => {
     const {value} = event?.target;
     setSearchInput(value)
-
   }
   
   return (

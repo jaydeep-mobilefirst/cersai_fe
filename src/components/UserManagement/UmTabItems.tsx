@@ -15,19 +15,17 @@ const UmTabsItem: React.FC<MenuItemProps> = ({ text, isActive, onClick }) => {
     >
       <div
         className={`hover:text-gilroy-bold
-                       ${
-                         isActive
-                           ? "font-bold text-[#1C468E]"
-                           : "text-[#666666] "
-                       }
+                       ${isActive
+            ? "font-bold text-[#1C468E]"
+            : "text-[#666666] "
+          }
       `}
       >
         {text}
       </div>
       <div
-        className={` self-stretch h-1 rounded-sm ${
-          isActive ? "bg-[#1C468E]" : "bg-white"
-        }`}
+        className={` self-stretch h-1 rounded-sm ${isActive ? "bg-[#1C468E]" : "bg-white"
+          }`}
       ></div>
     </li>
   );

@@ -7,9 +7,6 @@ import RequiredStar from "./RequiredStar";
 import DynamicFileUpload from "./DynamicFileUpload";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 
-import { convertFileToBase64 } from "../../../utils/fileConversion";
-import { useState } from "react";
-
 type Props = {
   toggleUploadPopup?: () => void;
   setFieldData?: (data: any) => void;
