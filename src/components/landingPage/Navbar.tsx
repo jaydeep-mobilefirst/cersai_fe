@@ -6,6 +6,8 @@ import close_icon from "../../assets/images/white_close.png";
 import { navbar } from "../../utils/hardText/landingpageText";
 import { useLandingStore } from "../../zust/useLandingStore";
 import { operatingGuidlinesData } from "../../utils/hardText/operatingGuidelines";
+import axios from "axios";
+import { bffUrl } from "../../utils/api";
 
 const Navbar: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -14,51 +16,57 @@ const Navbar: React.FC = () => {
   const location = useLocation();
 
   const { homePageData } = useLandingStore((state) => state);
-  console.log("homepagedata",homePageData)
+  console.log("homepagedata", homePageData);
 
-  useEffect(()=>{
-    if (location.pathname === '/faq'){
-      setActiveTab("FAQ")
+  useEffect(() => {
+    if (location.pathname === "/faq") {
+      setActiveTab("FAQ");
+    } else if (location.pathname === "/notifications") {
+      setActiveTab("NOTIFICATIONS");
+    } else if (location.pathname === "/downloads") {
+      setActiveTab("DOWNLOADS");
+    } else if (location.pathname === "/training") {
+      setActiveTab("TRAINING");
+    } else if (location.pathname === "/contactus") {
+      setActiveTab("CONTACT US");
     }
-    else if (location.pathname === '/notifications'){
-      setActiveTab("NOTIFICATIONS")
-    }
-    else if (location.pathname === '/downloads'){
-      setActiveTab("DOWNLOADS")
-    }
-    else if (location.pathname === '/training'){
-      setActiveTab("TRAINING")
-    }
-    else if (location.pathname === '/contactus'){
-      setActiveTab("CONTACT US")
-    }
-  },[location.pathname])
+  }, [location.pathname]);
 
-  const handleMenuClick = (text:string) => {
+  const handleMenuClick = async (text: string) => {
     if (text === "FAQ") {
       navigate("/faq");
-      
-      
     } else if (text === "NOTIFICATIONS") {
       navigate("/notifications");
-    } else if (text === "HOME"){
+    } else if (text === "HOME") {
       navigate("/");
 
       // handle other routes if necessary
     } else if (text === "DOWNLOADS") {
       navigate("/downloads");
-    }else if (text === "TRAINING") {
+    } else if (text === "TRAINING") {
       navigate("/training");
-    }else if (text === "CONTACT US") {
+    } else if (text === "CONTACT US") {
       navigate("/contactus");
     } else if (text === "OPERATING GUIDELINES") {
-      window.open(operatingGuidlinesData?.data?.content?.operatingGuidlinesPageData?.link[0]?.link, "_blank")
-  }
+      try {
+        const response = await axios.get(bffUrl + `/websitecontent/list/4`);
+        const operatingGuidelinesLink =
+          response?.data?.data?.content?.content?.operatingGuidlinesPageData
+            ?.link?.[0]?.link; // Adjust according to your API response structure
+        console.log("link", operatingGuidelinesLink);
+        if (operatingGuidelinesLink) {
+          window.open(operatingGuidelinesLink, "_blank");
+        } else {
+          console.error("Operating guidelines link not found in API response.");
+        }
+      } catch (error) {
+        console.error("Error fetching operating guidelines:", error);
+      }
+    }
 
     setActiveTab(text);
     setShowMenu(false);
   };
-
 
   return (
     <div>
@@ -78,9 +86,18 @@ const Navbar: React.FC = () => {
           <ul className="flex lg:flex-row items-center">
             {homePageData?.homePageData?.navbar?.length > 0 && (
               <>
-                {homePageData?.homePageData?.navbar.map((menuItem: any, index: any) => (
-                  <MenuItem key={index} text={menuItem.text.toUpperCase()} onClick={() => handleMenuClick(menuItem.text.toUpperCase())} isActive={activeTab === menuItem.text.toUpperCase()}/>
-                ))}
+                {homePageData?.homePageData?.navbar.map(
+                  (menuItem: any, index: any) => (
+                    <MenuItem
+                      key={index}
+                      text={menuItem.text.toUpperCase()}
+                      onClick={() =>
+                        handleMenuClick(menuItem.text.toUpperCase())
+                      }
+                      isActive={activeTab === menuItem.text.toUpperCase()}
+                    />
+                  )
+                )}
               </>
             )}
           </ul>
@@ -96,9 +113,16 @@ const Navbar: React.FC = () => {
         <ul className="flex flex-col h-full text-white">
           {homePageData?.homePageData?.navbar?.length > 0 && (
             <>
-              {homePageData?.homePageData?.navbar.map((menuItem: any, index: any) => (
-                <MenuItem key={index} text={menuItem.text.toUpperCase()} onClick={() => handleMenuClick(menuItem.text.toUpperCase())} isActive={activeTab === menuItem.text} />
-              ))}
+              {homePageData?.homePageData?.navbar.map(
+                (menuItem: any, index: any) => (
+                  <MenuItem
+                    key={index}
+                    text={menuItem.text.toUpperCase()}
+                    onClick={() => handleMenuClick(menuItem.text.toUpperCase())}
+                    isActive={activeTab === menuItem.text}
+                  />
+                )
+              )}
             </>
           )}
         </ul>

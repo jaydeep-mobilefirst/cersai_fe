@@ -10,6 +10,7 @@ import { bffUrl } from "../utils/api";
 import Footer from "../components/landingPage/Footer";
 import { data } from "../utils/hardText/landingPageText2";
 import { contactUsPageData } from "../utils/hardText/contactUs";
+import LoaderSpin from "../components/LoaderSpin";
 
 const ContactUs: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -61,7 +62,12 @@ const ContactUs: React.FC = () => {
       <LanguageBar />
       <TopDetail />
       <Navbar />
-
+      {loader ? (
+        <div className="h-[500px] p-10">
+          <LoaderSpin />
+        </div>
+      ) : (
+        <>
       <div className="md:my-[56px] my-[12px] md:px-[56px] px-[16px] w-full">
         <h1 className="text-xl font-bold text-[#24222B] text-gilroy-bold mb-[24px]">
           {contactUsPageDataa?.heading?.[0]?.text}
@@ -159,6 +165,7 @@ const ContactUs: React.FC = () => {
       <div className="">
         <Footer />
       </div>
+      </>)}
     </div>
   );
 };

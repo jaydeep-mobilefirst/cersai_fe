@@ -9,45 +9,46 @@ interface FAQItemProps {
 }
 
 const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
-  
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => setIsOpen(!isOpen);
-  console.log("faqdatasa",faqDataa?.data?.content?.faqPageData?.arrows);
+  console.log("faqdatasa", faqDataa?.data?.content?.faqPageData?.arrows);
 
   return (
-
-    
     <div className="bg-white rounded-lg border border-neutral-300 mb-4">
-  <div
-    className="flex justify-between items-center cursor-pointer md:p-4 p-3"
-    
-  >
-    <div className="text-[#666] md:text-base text-[14px] font-medium w-[90%] text-gilroy-medium">
-      {question}
-    </div>
-    <div className="flex justify-center items-center w-10 h-10" onClick={toggleOpen}>
-      <img
-        src={isOpen ? faqDataa?.data?.content?.faqPageData?.arrows[1]?.img : faqDataa?.data?.content?.faqPageData?.arrows[0]?.img}
-        alt="toggle"
-        className="md:w-8 md:h-8 w-6 h-6"
-      />
-    </div>
-  </div>
-  {isOpen && (
-    <div className=" px-4 pb-4 text-[#666] md:text-base text-[14px] font-normal py-4 border rounded max-h-52 overflow-auto text-gilroy-medium">
-      {Array.isArray(answer) ? (
-        <ul className="list-disc pl-5">
-          {answer.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>{answer}</p>
+      <div className="flex justify-between items-center cursor-pointer md:p-4 p-3">
+        <div className="text-[#666] md:text-base text-[14px] font-medium w-[90%] text-gilroy-medium">
+          {question}
+        </div>
+        <div
+          className="flex justify-center items-center w-10 h-10"
+          onClick={toggleOpen}
+        >
+          <img
+            src={
+              isOpen
+                ? faqDataa?.data?.content?.faqPageData?.arrows[1]?.img
+                : faqDataa?.data?.content?.faqPageData?.arrows[0]?.img
+            }
+            alt="toggle"
+            className="md:w-8 md:h-8 w-6 h-6"
+          />
+        </div>
+      </div>
+      {isOpen && (
+        <div className=" px-4 pb-4 text-[#666] md:text-base text-[14px] font-normal py-4 border rounded max-h-52 overflow-auto text-gilroy-medium">
+          {Array.isArray(answer) ? (
+            <ul className="list-disc pl-5">
+              {answer.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>{answer}</p>
+          )}
+        </div>
       )}
     </div>
-  )}
-</div>
   );
 };
 

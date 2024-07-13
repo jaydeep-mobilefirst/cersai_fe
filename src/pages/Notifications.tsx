@@ -9,10 +9,12 @@ import { useNotificationStore } from "../zust/useNotificationStore";
 import axios from "axios";
 import { bffUrl } from "../utils/api";
 import { notifcationsPageData } from "../utils/hardText/notificationsPageText";
+import LoaderSpin from "../components/LoaderSpin";
 
 const Notifications: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
-  const { notificationPageDataa, setNotificationPageData } = useNotificationStore((state) => state);
+  const { notificationPageDataa, setNotificationPageData } =
+    useNotificationStore((state) => state);
   const [state, setState] = useState(true);
   const [loader, setLoader] = useState(false);
 
@@ -45,7 +47,9 @@ const Notifications: React.FC = () => {
     axios
       .get(bffUrl + `/websitecontent/list/3`)
       .then((response) => {
-        setNotificationPageData(response?.data?.data?.content?.notificationsPageData);
+        setNotificationPageData(
+          response?.data?.data?.content?.notificationsPageData
+        );
         setLoader(false);
       })
       .catch((error) => {
@@ -60,24 +64,24 @@ const Notifications: React.FC = () => {
       <LanguageBar />
       <TopDetail />
       <Navbar />
-      <div className="buds-faq-background-image">
-        <div className="mt-[56px] md:px-[56px] px-[16px] ">
-          <h1 className="text-xl font-bold text-[#24222B] text-gilroy-bold mb-[24px]">
-            {
-              notificationPageDataa
-                ?.heading?.[0]?.text
-            }
-          </h1>
+      {loader ? (
+        <div className="h-[500px] p-10">
+          <LoaderSpin />
         </div>
-        <NotificationsList
-          notificationsData={
-            notificationPageDataa
-          }
-        />
-        <div className="md:mt-[124px]">
-          <Footer />
+      ) : (
+        <div className="buds-faq-background-image">
+          <div className="mt-[56px] md:px-[56px] px-[16px] ">
+            <h1 className="text-xl font-bold text-[#24222B] text-gilroy-bold mb-[24px]">
+              {notificationPageDataa?.heading?.[0]?.text}
+            </h1>
+          </div>
+          <NotificationsList notificationsData={notificationPageDataa} />
+
+          <div className="md:mt-[124px]">
+            <Footer />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

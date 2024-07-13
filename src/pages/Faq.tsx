@@ -11,6 +11,7 @@ import axios from "axios";
 import { bffUrl } from "../utils/api";
 import LoaderSpin from "../components/LoaderSpin";
 import {data} from '../utils/hardText/landingPageText2';
+import FaqPage from "./FaqPage";
 
 interface FaqItem {
   question: string;
@@ -116,6 +117,9 @@ const Faq: React.FC = () => {
             ))}
         </main>
       </div>
+      // <div className="md:p-[56px] p-[16px] buds-faq-background-image">
+      // <FaqPage/>
+      // </div>
 }
       <div className="md:pt-24">
         <Footer />
