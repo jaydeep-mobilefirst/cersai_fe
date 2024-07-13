@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { faqData } from "../utils/hardText/faqExample";
+import { faqData } from "../../utils/hardText/faqExample";
 const FaqPage: React.FC = () => {
   const [isOpen, setIsOpen] = useState("");
 
