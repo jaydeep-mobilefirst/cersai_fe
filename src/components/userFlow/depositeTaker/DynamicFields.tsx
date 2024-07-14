@@ -189,7 +189,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                       <RequiredStar allFormData={allFormData} field={field} />
                     </label>
 
-                    {isDscKeyAvbl ? (
+                    {isDscKeyAvbl === "true" ? (
                       <DscKeyRegister />
                     ) : (
                       <DscButton
