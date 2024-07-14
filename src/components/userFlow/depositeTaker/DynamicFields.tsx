@@ -6,6 +6,7 @@ import DscButton from "../form/Dscbutton";
 import RequiredStar from "./RequiredStar";
 import DynamicFileUpload from "./DynamicFileUpload";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import DscKeyRegister from "../form/DscKeyRegister";
 
 import { convertFileToBase64 } from "../../../utils/fileConversion";
 import { useState } from "react";
@@ -30,10 +31,12 @@ type Props = {
 };
 
 const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
+
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
-  
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -127,7 +130,7 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                       //  searchInputOnchange={handleSearchInputChange3}
                       //  searchInputValue={searchInputValue3}
                       showSearchInput={true}
-                      enableSearch={fieldType === 'select_with_search'}
+                      enableSearch={fieldType === "select_with_search"}
                     />
                     <span className="text-red-500">{field?.error}</span>
                   </div>
@@ -189,13 +192,17 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                       <RequiredStar allFormData={allFormData} field={field} />
                     </label>
 
-                    <DscButton
-                      onFileUpload={(file) =>
-                        onChange && onChange(file, field, fieldType)
-                      }
-                      fname={field?.dscFileNAme}
-                      disabled={field?.disabled ? field?.disabled : false}
-                    />
+                    {isDscKeyAvbl ? (
+                      <DscKeyRegister />
+                    ) : (
+                      <DscButton
+                        onFileUpload={(file) =>
+                          onChange && onChange(file, field, fieldType)
+                        }
+                        fname={field?.dscFileNAme}
+                        disabled={field?.disabled ? field?.disabled : false}
+                      />
+                    )}
                     <span className="text-red-500">{field?.error}</span>
                   </div>
                 );
