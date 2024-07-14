@@ -5,6 +5,8 @@ import DirectBox from "../../assets/images/send.png";
 import ReactTable from "../userFlow/common/ReactTable";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { useEffect, useState } from "react";
+import { handleViewOpenkmFileWithDocumentId, isUUID } from "../../utils/commonFunction";
+import LoaderSpin from "../LoaderSpin";
 
 interface TableType {
   id: string;
@@ -26,9 +28,12 @@ const convertToDate = (isoString: string) => {
 
 const AuditTrail = () => {
   const { allFormData } = useDepositTakerRegistrationStore(state => state)
-  const [auditTrail, setAuditTrail] = useState(allFormData?.other?.schemeAuditTrail);
+  const [auditTrail, setAuditTrail] = useState([]);
   const columnHelper = createColumnHelper<TableType>();
 
+  useEffect(() => {
+    setAuditTrail(allFormData?.other?.schemeAuditTrail)
+  }, [allFormData])
   const columns = [
     columnHelper.accessor("id", {
       cell: (info: any) => info.renderValue(),
@@ -47,19 +52,25 @@ const AuditTrail = () => {
       header: () => <span>To</span>,
     }),
     columnHelper.accessor("remark", {
-      cell: (info: any) => (
-        <>
+      cell: (info: any) => {
+        let docId = info?.cell?.row?.original?.documentId        
+        const handleOpenFile = async (e : any) =>{
+          const isOk = handleViewOpenkmFileWithDocumentId(docId)
+          e.preventDefault();
+        }
+        return <>
           <div
             className=" flex items-center justify-between"
             style={{ width: "200px" }}
           >
             <p>{info.row.original.remark}</p>
-            {info.row.original.remark === "Complaint" && (
-              <img src={DirectBox} alt="DirectBox" className="w-6" />
-            )}
+            {docId && isUUID(docId) &&
+              <img src={DirectBox} alt="DirectBox" className="w-6 hover:cursor-pointer" 
+              onClick={handleOpenFile}/>
+            }
           </div>
         </>
-      ),
+      },
       header: () => <span>Remarks</span>,
     }),
     columnHelper.accessor("updatedAt", {
@@ -71,9 +82,7 @@ const AuditTrail = () => {
       header: () => <span>Date</span>,
     }),
   ];
-
-  console.log({ allFormData });
-
+  
   return (
     <div>
       <div

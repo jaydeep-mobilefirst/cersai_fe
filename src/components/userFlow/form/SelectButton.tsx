@@ -81,6 +81,7 @@ const SelectButton = ({
   }, [arrowDirectionToggle]);
 
   const handleSearch = (event : any) => {
+    event.preventDefault();
     const {value} = event?.target;
     setSearchInputValue(value)
     let key = data?.key;
@@ -100,7 +101,8 @@ const SelectButton = ({
         if (res.data.success) {
           let regulators = res?.data?.data?.regulators?.map((r : any) => {
             return {
-              value : r?.uniqueId,
+              value : r?.id,
+              id : r?.id,
               label : r?.regulatorName,
             }
           })
@@ -189,15 +191,15 @@ const SelectButton = ({
             {optionsToShow?.map((option, index) => (
               <a
                 key={index}
-                onClick={() => {
+                onClick={(e) => {
                   if (setOption) {
                     setOption(option.value);
+                    e.preventDefault()
                   }
                   setArrowDirectionToggle(false);
                   if (onSelect) {
-                    console.log({option});
-                    
                     onSelect(option);
+                    e.preventDefault()
                   }
                 }}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 cursor-pointer"

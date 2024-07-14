@@ -7,7 +7,7 @@ interface Option {
 type Props = {
   setOption: any;
   options: Option[];
-  selectedOption?: string | null;
+  selectedOption?: any | null;
   placeholder: string;
   searchInputOnchange?: any;
   searchInputValue?: string;
@@ -46,6 +46,7 @@ const SelectField = ({
     setArrowDirectionToggle(false);
     return () => {};
   }, [selectedOption]);
+  
   return (
     <div className="w-full relative" ref={dropdownRef}>
       <button
@@ -60,7 +61,7 @@ const SelectField = ({
           borderRadius: "8px",
         }}
       >
-        {selectedOption ? selectedOption : placeholder}
+        {selectedOption?.value !== "" ? selectedOption?.label : placeholder}
         <div>
           {!arrowDirectionToggle ? (
             <svg
@@ -111,7 +112,7 @@ const SelectField = ({
             {options.map((option, index) => (
               <a
                 key={index}
-                onClick={() => setOption(option.value)}
+                onClick={() => setOption(option)}
                 // href=""
                 className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-gray-900 cursor-pointer"
                 role="menuitem"

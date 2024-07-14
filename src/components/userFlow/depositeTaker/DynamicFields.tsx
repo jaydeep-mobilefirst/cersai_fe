@@ -8,9 +8,6 @@ import DynamicFileUpload from "./DynamicFileUpload";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import DscKeyRegister from "../form/DscKeyRegister";
 
-import { convertFileToBase64 } from "../../../utils/fileConversion";
-import { useState } from "react";
-
 type Props = {
   toggleUploadPopup?: () => void;
   setFieldData?: (data: any) => void;
