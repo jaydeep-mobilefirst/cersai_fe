@@ -100,7 +100,7 @@ const DscKeyRegister: React.FC = () => {
         onClick={detectSmartcardReaders}
         className="p-4 rounded-lg w-full bg-[#1c468e] text-[white]"
       >
-        Authenticate with DSC Key
+        Upload DSC certificate
       </button>
       <ExtensionModal
         open={isModalOpen}

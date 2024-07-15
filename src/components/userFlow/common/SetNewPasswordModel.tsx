@@ -21,10 +21,12 @@ import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
 import PasswordUpdateModel from "./PasswordUpdateModel";
 import DscAuth from "./DscAuth";
+import DscKeyRegister from "../form/DscKeyRegister";
 
 interface SetNewPasswordModelProps {}
 
 const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -285,13 +287,17 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
 
                       {decodedToken?.isDsc && (
                         <div className="mt-4 lg:mt-8">
-                          <DscAuth
-                            onFileUpload={handleFileUpload}
-                            disabled={false}
-                            fileName={fileName}
-                          >
-                            Upload Document
-                          </DscAuth>
+                          {isDscKeyAvbl === "false" ? (
+                            <DscAuth
+                              onFileUpload={handleFileUpload}
+                              disabled={false}
+                              fileName={fileName}
+                            >
+                              Upload Document
+                            </DscAuth>
+                          ) : (
+                            <DscKeyRegister />
+                          )}
                         </div>
                       )}
 
