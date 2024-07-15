@@ -21,7 +21,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
           {question}
         </div>
         <div
-          className="flex justify-center items-center w-10 h-10"
+          className="flex justify-center items-center w-[10%] h-10 "
           onClick={toggleOpen}
         >
           <img

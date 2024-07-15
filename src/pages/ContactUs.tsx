@@ -63,7 +63,7 @@ const ContactUs: React.FC = () => {
       <TopDetail />
       <Navbar />
       {loader ? (
-        <div className="h-[500px] p-10">
+        <div className="h-[850px] p-10 pt-[100px]">
           <LoaderSpin />
         </div>
       ) : (
@@ -132,21 +132,21 @@ const ContactUs: React.FC = () => {
 
         <div className="mb-6">
           <h2 className="md:text-base text-[14px] font-bold text-gilroy-semibold">
-            {contactUsPageDataa?.redressalProcessHeading?.[0]?.text}
+            {contactUsPageDataa?.residentailProcessHeading?.[0]?.text}
           </h2>
           <p className="md:text-base text-[14px] font-normal text-gilroy-medium mt-2">
-            {contactUsPageDataa?.redressalProcessDetails?.[0]?.text}
+            {contactUsPageDataa?.residentailProcessDetails?.[0]?.text}
           </p>
 
           <p className="">
             <a href="" className="text-blue-500 underline">
-              {contactUsPageDataa?.redressalProcessDetails?.[0]?.link}
+              {contactUsPageDataa?.residentailProcessDetails?.[0]?.link}
             </a>
           </p>
 
           <p className="">
             <a href="" className="text-blue-500 underline">
-              {contactUsPageDataa?.redressalProcessDetails?.[0]?.link2}
+              {contactUsPageDataa?.residentailProcessDetails?.[0]?.link2}
             </a>
           </p>
         </div>

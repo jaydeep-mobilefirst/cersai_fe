@@ -66,7 +66,7 @@ const Downloads=()=>{
           <TopDetail />
           <Navbar />
       {loader ? (
-        <div className="h-[500px] p-10">
+        <div className="h-[850px] p-10 pt-[100px]">
           <LoaderSpin />
         </div>
       ) : (

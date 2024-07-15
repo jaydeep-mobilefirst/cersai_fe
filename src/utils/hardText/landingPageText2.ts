@@ -150,7 +150,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#D0FCC9]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom ",
           },
           {
             name: "image",
@@ -161,7 +161,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#BBEBF0]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom md:mt-[32px] lg:ml-[32px] mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom ",
           },
           {
             name: "image",
@@ -172,7 +172,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#E1DFFE]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] border-10 shadow-custom  mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] border-10 shadow-custom  ",
           },
           {
             name: "image",
@@ -183,7 +183,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom lg:ml-[32px] md:mt-[32px]  mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom ",
           },
           {
             name: "image",
@@ -194,7 +194,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#D0FCC9]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom ",
           },
           {
             name: "image",
@@ -205,7 +205,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#BBEBF0]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom md:mt-[32px] lg:ml-[32px] mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom ",
           },
           {
             name: "image",
@@ -216,7 +216,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#E1DFFE]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] border-10 shadow-custom   mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] border-10 shadow-custom  ",
           },
           {
             name: "image",
@@ -227,7 +227,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom lg:ml-[32px] md:mt-[32px] mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom ",
           },
           {
             name: "image",
@@ -238,7 +238,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#D0FCC9]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom ",
           },
           {
             name: "image",
@@ -249,7 +249,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#BBEBF0]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom md:mt-[32px] lg:ml-[32px] mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom ",
           },
           {
             name: "image",
@@ -260,7 +260,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom ",
           },
           {
             name: "image",
@@ -271,7 +271,7 @@ export const data = {
             class:
               "flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]",
             card_class:
-              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom lg:ml-[32px] md:mt-[32px] mb-[34px] lg:mb-0",
+              "w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom ",
           },
         ],
         latestNewsComp: [
