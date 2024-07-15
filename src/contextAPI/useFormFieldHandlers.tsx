@@ -203,7 +203,7 @@ const FormHandlerProviders = ({ children }: Props) => {
     } else if (fieldType === "select" || fieldType === "select_with_search") {
       updateValue(event?.value, fieldData?.id);
       let sectionName = fieldData?.entityRegSection?.sectionName;
-      console.log({ sectionName, fieldData });
+      console.log({ fieldData });
 
       switch (sectionName) {
         case "Regulators Details":
