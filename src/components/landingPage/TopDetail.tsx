@@ -119,7 +119,7 @@ const TopDetail = () => {
   return (
     <div className="relative flex items-center justify-between flex-col md:flex-row my-[19px] mx-[16px] lg:mx-[169px]">
       <div className="m-4 md:m-0">
-        <img src={homePageData?.homePageData?.logo[0]?.img} alt="logo" />
+        <img src={homePageData?.homePageData?.logo[0]?.img} alt="logo" className="w-[88px] h-[88px]" />
       </div>
       {isOpen && (
         <div
@@ -132,7 +132,7 @@ const TopDetail = () => {
           return (
             <div className="flex items-center justify-center mb-2" key={idx}>
               <div>
-                <img src={data?.img} alt="icon" />
+                <img src={data?.img} alt="icon" className="w-[24px] h-[24px]" />
               </div>
               {idx === 2 ? (
                 <>

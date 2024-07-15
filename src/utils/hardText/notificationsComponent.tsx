@@ -1,4 +1,11 @@
 export const notifcationsData= {
+    heading:{
+        name: "text",
+        text: "",
+        img: null,
+        link: null,
+
+    },
     "notifications": [
       {
         "title": "Recently introduced customer centric facilities",
