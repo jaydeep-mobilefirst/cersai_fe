@@ -57,8 +57,8 @@ const DscKeyRegister: React.FC = () => {
   const sendCertificate = async (certificate: any) => {
     try {
       const response = await axios.post(
-        "https://cors-anywhere.herokuapp.com/" +
-          "https://indilabs-json.vercel.app/first",
+        // "https://cors-anywhere.herokuapp.com/" +
+        "https://indilabs-json.vercel.app/first",
         { certificate }
       );
 

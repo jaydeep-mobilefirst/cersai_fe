@@ -61,8 +61,8 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
   const sendCertificate = async (certificate: any) => {
     try {
       const response = await axios.post(
-        "https://cors-anywhere.herokuapp.com/" +
-          "https://indilabs-json.vercel.app/second",
+        // "https://cors-anywhere.herokuapp.com/" +
+        "https://indilabs-json.vercel.app/second",
         { certificate }
       );
 
