@@ -135,59 +135,62 @@ const Faq: React.FC = () => {
         //   </main>
         // </div>
         <div className="md:p-[56px] p-[16px] buds-faq-background-image">
-          
-    <div>
-      <h1 className="text-[#24222B] text-xl font-bold text-gilroy-bold">
-        {faqPageDataa?.heading?.[0]?.text}
-      </h1>
-      {faqPageDataa?.questionSections?.map(
-        (section :any, sectionIndex:any) => (
-          <div key={sectionIndex}>
-            <h2 className="text-[#000508] text-base font-bold text-gilroy-semibold mt-[28px] mb-[12px]">
-              {section?.subHeading?.[0]?.text}
-            </h2>
-            {section?.questions?.map((question:any, questionIndex:any) => (
-              <div className="bg-white rounded-lg border border-neutral-300 mb-4 ">
-                <div className="flex justify-between items-center cursor-pointer md:p-4 p-3">
-                  <div key={questionIndex} className="w-[90%]">
-                    <h3 className="text-[#666] md:text-base text-[14px] font-medium text-gilroy-medium">
-                      {question?.question}
-                    </h3>
-                  </div>
-                  <div
-                    className="flex justify-center items-center w-10 h-10"
-                    onClick={toggleOpen(question?.question)}
-                  >
-                    <img
-                      src={
-                        isOpen === question?.question
-                          ? faqPageDataa?.arrows?.[1]?.img
-                          : faqPageDataa?.arrows?.[0]?.img
-                      }
-                      alt="toggle"
-                      className="md:w-8 md:h-8 w-6 h-6"
-                    />
-                  </div>
+          <div>
+            <h1 className="text-[#24222B] text-xl font-bold text-gilroy-bold">
+              {faqPageDataa?.heading?.[0]?.text}
+            </h1>
+            {faqPageDataa?.questionSections?.map(
+              (section: any, sectionIndex: any) => (
+                <div key={sectionIndex}>
+                  <h2 className="text-[#000508] text-base font-bold text-gilroy-semibold mt-[28px] mb-[12px]">
+                    {section?.subHeading?.[0]?.text}
+                  </h2>
+                  {section?.questions?.map(
+                    (question: any, questionIndex: any) => (
+                      <div className="bg-white rounded-lg border border-neutral-300 mb-4 ">
+                        <div className="flex justify-between items-center cursor-pointer md:p-4 p-3">
+                          <div key={questionIndex} className="w-[90%]">
+                            <h3 className="text-[#666] md:text-base text-[14px] font-medium text-gilroy-medium">
+                              {question?.question}
+                            </h3>
+                          </div>
+                          <div
+                            className="flex justify-center items-center w-10 h-10"
+                            onClick={toggleOpen(question?.question)}
+                          >
+                            <img
+                              src={
+                                isOpen === question?.question
+                                  ? faqPageDataa?.arrows?.[1]?.img
+                                  : faqPageDataa?.arrows?.[0]?.img
+                              }
+                              alt="toggle"
+                              className="md:w-8 md:h-8 w-6 h-6"
+                            />
+                          </div>
+                        </div>
+                        {isOpen === question?.question && (
+                          <div className=" px-4 pb-4 text-[#666] md:text-base text-[14px] font-normal py-4 border rounded max-h-52 overflow-auto text-gilroy-medium">
+                            {Array.isArray(question?.answer) ? (
+                              <ul className="list-disc pl-5">
+                                {question?.answer?.map(
+                                  (answer: any, answerIndex: any) => (
+                                    <li key={answerIndex}>{answer}</li>
+                                  )
+                                )}
+                              </ul>
+                            ) : (
+                              <p>{question?.answer}</p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  )}
                 </div>
-                {isOpen === question?.question && (
-                  <div className=" px-4 pb-4 text-[#666] md:text-base text-[14px] font-normal py-4 border rounded max-h-52 overflow-auto text-gilroy-medium">
-                    {Array.isArray(question?.answer) ? (
-                      <ul className="list-disc pl-5">
-                        {question?.answer?.map((answer:any, answerIndex:any) => (
-                          <li key={answerIndex}>{answer}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>{question?.answer}</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
+              )
+            )}
           </div>
-        )
-      )}
-    </div>
         </div>
       )}
       <div className="md:pt-24">

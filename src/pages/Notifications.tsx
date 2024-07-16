@@ -48,7 +48,7 @@ const Notifications: React.FC = () => {
       .get(bffUrl + `/websitecontent/list/3`)
       .then((response) => {
         setNotificationPageData(
-          response?.data?.data?.content?.notificationsPageData
+          response?.data?.data?.content?.content?.notificationsPageData
         );
         setLoader(false);
       })
