@@ -72,7 +72,9 @@ const OpertaingGuidelines = () => {
         <LanguageBar />
         <TopDetail />
         <Navbar />
-
+        <div className="p-5 px-12 flex justify-center text-xl font-bold text-[#24222B] text-gilroy-bold">
+          Please go through the downloaded file.
+        </div>
         <div className="md:mt-[600px] mt-10">
           <Footer />
         </div>

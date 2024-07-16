@@ -26,118 +26,55 @@ export const notifcationsPageData = {
           },
         ],
         notifications: [
-          [
             {
-              name: "text",
               text: "Notification of KYC Download to Customers by CKYCRR",
-              img: null,
+              date: "May 23, 2024",
               link: "https://www.google.com",
             },
-            {
-              name: "date",
-              text: "May 23, 2024",
-              img: null,
-              link: null,
-            },
-          ],
-          [
             {
               name: "text",
               text: "Recently introduced customer centric facilities",
-              img: null,
+              date: "May 23, 2024",
               link: "https://www.google.com",
             },
-            {
-              name: "date",
-              text: "May 23, 2024",
-              img: null,
-              link: null,
-            },
-          ],
-          [
             {
               name: "text",
               text: "Status of implementation of advisory shared by CERSAI/2023-24/4949 (Public Sector Banks)",
-              img: null,
+              date: "May 23, 2024",
               link: "https://www.google.com",
             },
-            {
-              name: "date",
-              text: "May 23, 2024",
-              img: null,
-              link: null,
-            },
-          ],
-          [
             {
               name: "text",
               text: "Status of implementation of advisory shared by CERSAI/2023-24/4948 (All Reporting Entities except Public Sector Banks)",
-              img: null,
+              
+              date: "May 23, 2024",
               link: "https://www.google.com",
             },
-            {
-              name: "date",
-              text: "May 23, 2024",
-              img: null,
-              link: null,
-            },
-          ],
-          [
             {
               name: "text",
               text: "Status of implementation of advisory shared by CERSAI/2023-24/4949 (Public Sector Banks)",
-              img: null,
+              
               link: "https://www.google.com",
             },
-            {
-              name: "date",
-              text: "May 23, 2024",
-              img: null,
-              link: null,
-            },
-          ],
-          [
             {
               name: "text",
               text: "Central Know your Customer Record Registry - Status of Search & download facilities by RES CERSAI/2023-24/4950 (All Reporting Entities except Public Sector Banks)",
-              img: null,
+              date: "May 23, 2024",
               link: "https://www.google.com",
             },
-            {
-              name: "date",
-              text: "May 23, 2024",
-              img: null,
-              link: null,
-            },
-          ],
-          [
             {
               name: "text",
               text: "Status of implementation of advisory shared by CERSAI/2023-24/4949 (Public Sector Banks)",
-              img: null,
+              
+              date: "May 23, 2024",
               link: "https://www.google.com",
             },
-            {
-              name: "date",
-              text: "May 23, 2024",
-              img: null,
-              link: null,
-            },
-          ],
-          [
             {
               name: "text",
               text: "Status of implementation of advisory shared by CERSAI/2023-24/4949 (Public Sector Banks)",
-              img: null,
+              date: "May 23, 2024",
               link: "https://www.google.com",
             },
-            {
-              name: "date",
-              text: "May 23, 2024",
-              img: null,
-              link: null,
-            },
-          ],
         ],
       },
     },

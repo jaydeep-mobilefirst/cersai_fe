@@ -17,7 +17,7 @@ const DownloadItem: React.FC<DownloadComponentProps> = ({ title,link,buttons }) 
 
   const handleButtonClick = (link: string | null) => {
     if (link) {
-      window.open(link, '_blank');
+      window.open("https://"+link, '_blank');
     }
   };
   return (
