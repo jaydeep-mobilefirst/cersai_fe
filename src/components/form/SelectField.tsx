@@ -61,7 +61,7 @@ const SelectField = ({
           borderRadius: "8px",
         }}
       >
-        {selectedOption?.value !== "" ? selectedOption?.label : placeholder}
+        {selectedOption?.value ? selectedOption?.label : placeholder}
         <div>
           {!arrowDirectionToggle ? (
             <svg
