@@ -75,7 +75,11 @@ const NotificationItem: React.FC<NotificationProps> = ({
 
   const handleButtonClick = (link: string | null) => {
     if (link) {
-      window.open(link, '_blank');
+      if (link.startsWith('https:/')) {
+        window.open(link, '_blank');
+      } else {
+        window.open('https:/' + link, '_blank');
+      }
     }
   };
 

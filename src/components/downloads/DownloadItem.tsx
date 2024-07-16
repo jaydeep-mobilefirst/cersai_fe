@@ -17,8 +17,13 @@ const DownloadItem: React.FC<DownloadComponentProps> = ({ title,link,buttons }) 
 
   const handleButtonClick = (link: string | null) => {
     if (link) {
-      window.open("https://"+link, '_blank');
+      if (link.startsWith('https:/')) {
+        window.open(link, '_blank');
+      } else {
+        window.open('https:/' + link, '_blank');
+      }
     }
+    
   };
   return (
     <div className="md:w-[643px] xl:w-[48%] w-full min-h-16 md:px-4 px-2 py-3 bg-white rounded-lg border border-neutral-700/opacity-20 flex justify-start items-center">
