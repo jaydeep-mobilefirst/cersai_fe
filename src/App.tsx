@@ -92,6 +92,7 @@ import Notifications from "./pages/Notifications";
 import Downloads from "./pages/Downloads";
 import Training from "./pages/Training";
 import ContactUs from "./pages/ContactUs";
+import OpertaingGuidelines from "./pages/OperatingGuidelines";
 function App() {
   return (
     <div>
@@ -335,6 +336,7 @@ function App() {
           <Route element={<Downloads />} path="/downloads" />
           <Route element={<Training />} path="/training" />
           <Route element={<ContactUs />} path="/contactus" />
+          <Route element={<OpertaingGuidelines />} path="/operatingguidelines" />
           {/* <Route element={<RoleCreation />} path="/role" /> */}
         </Routes>
       </Router>

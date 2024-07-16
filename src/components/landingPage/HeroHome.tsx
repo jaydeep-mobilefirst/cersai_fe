@@ -134,6 +134,7 @@ import { useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useLandingStore } from "../../zust/useLandingStore";
+import {data} from '../../utils/hardText/landingPageText2';
 
 const HeroHome = () => {
   const { homePageData } = useLandingStore((state) => state);
@@ -160,6 +161,8 @@ const HeroHome = () => {
   const groupedCardData1 = chunkArray(homePageData?.homePageData?.carousel, 4); // Update chunk size to 4
   console.log("4 data", groupedCardData1);
 
+ 
+
   return (
     <div className="w-[100%] flex items-center justify-between px-4 lg:px-[100px] py-4 lg:py-[48px] flex-col lg:flex-row landing-hero-bg-image overflow-x-hidden">
       <div className="md:mr-2 md:w-[40%]">
@@ -167,13 +170,13 @@ const HeroHome = () => {
           {homePageData?.homePageData?.hero[2]?.text}
         </div>
         <div className="xl:w-[485px] w-full text-[16px] leading-[24px] mt-[16px] text-gilroy-regular text-center lg:text-start">
-        {homePageData?.homePageData?.hero[3].text}
+        {homePageData?.homePageData?.hero[3]?.text}
         </div>
         <div className="buttons-container flex flex-wrap gap-[16px] justify-center lg:justify-start mt-[24px]">
-          {buttons.map((menuItem, index) => (
+          {buttons?.map((menuItem, index) => (
             <HeroButton
               key={index}
-              text={menuItem.text}
+              text={menuItem?.text}
               onClick={onNavigateToSchemeSearch}
             />
           ))}
@@ -187,53 +190,57 @@ const HeroHome = () => {
           autoPlay={true}
           interval={5000}
         >
-          {groupedCardData1.map((group, index) => (
+          {groupedCardData1?.map((group, index) => (
             <div
               key={index}
               className="flex flex-col items-center md:flex-wrap md:justify-center md:px-12 px-4 py-2 pb-12"
             >
-              <div className="flex flex-col md:flex-row gap-x-12  lg:gap-x-0">
-                {group.slice(0, 2).map(
+              <div className="flex flex-col md:flex-row gap-x-12 md:gap-x-0">
+                {group?.slice(0, 2).map(
                   (
                     card,
                     index 
                   ) => (
-                    <div key={index} className={`${card.card_class} w-1/2 p-2`}>
+                    <div key={index}  className={`w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom p-2 ${
+                      index === 1 ? "md:mt-[32px] md:ml-[32px]" : ""
+                    }`} >
                       {" "}
-                      <div className="ml-[24px] mr-[24px] mt-[32px]">
-                        <div className={card.class}>
+                      <div className={` pl-[24px] pr-[24px] pt-[32px] `} >
+                        <div className="flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]">
                           <img
-                            src={card.img}
-                            alt={card.altText}
-                            className=""
+                            src={card?.img}
+                            alt={card?.altText}
+                            className="w-[56px] h-[56px]"
                           />
                         </div>
                         <p className="text-[18px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
-                          {card.text}
+                          {card?.text}
                         </p>
                       </div>
                     </div>
                   )
                 )}
               </div>
-              <div className="flex flex-col md:flex-row gap-x-12 lg:gap-x-0">
+              <div className="flex flex-col md:flex-row gap-x-12 md:gap-x-0">
                 {group.slice(2, 4).map(
                   (
                     card,
                     index 
                   ) => (
-                    <div key={index} className={`${card.card_class} w-1/2 p-2`}>
+                    <div key={index} className={`w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom p-2 ${
+                      index === 1 ? "md:mt-[32px]" : "md:mr-[32px]"
+                    }` } >
                       {" "}
-                      <div className="ml-[24px] mr-[24px] mt-[32px]">
-                        <div className={card.class}>
+                      <div className={`pl-[24px] pr-[24px] pt-[32px]  `} >
+                        <div className="flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]">
                           <img
-                            src={card.img}
-                            alt={card.altText}
-                            className=""
+                            src={card?.img}
+                            alt={card?.altText}
+                            className="w-[56px] h-[56px]"
                           />
                         </div>
                         <p className="text-[18px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
-                          {card.text}
+                          {card?.text}
                         </p>
                       </div>
                     </div>
@@ -254,13 +261,13 @@ const HeroHome = () => {
         >
           {homePageData?.homePageData?.carousel?.map((card:any, index:any) => (
             <div className="flex flex-row items-center justify-center">
-              <div key={index} className={card.card_class}>
+              <div key={index} className={card?.card_class}>
                 <div className="ml-[24px] mr-[24px] mt-[32px]">
-                  <div className={card.class}>
-                    <img src={card.img} alt={card.altText} className="" />
+                  <div className={card?.class}>
+                    <img src={card?.img} alt={card?.altText} className="w-[56px] h-[56px]" />
                   </div>
                   <p className="text-[20px] text-left leading-[24px] mt-[24px] text-gilroy-medium">
-                    {card.text}
+                    {card?.text}
                   </p>
                 </div>
               </div>

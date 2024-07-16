@@ -11,7 +11,8 @@ import HeroHome from "../components/landingPage/HeroHome";
 import axios from "axios";
 import { bffUrl } from "../utils/api";
 import { useLandingStore } from "../zust/useLandingStore";
-import {data} from '../utils/hardText/landingPageText2';
+import { data } from "../utils/hardText/landingPageText2";
+import LoaderSpin from "../components/LoaderSpin";
 
 const Landing = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -28,7 +29,7 @@ const Landing = () => {
     axios
       .get(bffUrl + `/websitecontent/list/1`)
       .then((response) => {
-        console.log("api-response",response)
+        console.log("api-response", response);
         setHomePageData(response?.data?.data?.content?.updatedStructure);
         setLoader(false);
       })
@@ -39,13 +40,22 @@ const Landing = () => {
   };
   return (
     <div>
+      
       <LanguageBar />
       <TopDetail />
       <Navbar />
-      <HeroHome />
-      <LatestNewsComp />
-      <AboutBudsHeadingComp />
-      <AboutBuds />
+      {loader ? (
+        <div className="h-[850px] p-10 pt-[100px]">
+          <LoaderSpin />
+        </div>
+      ) : (
+        <>
+          <HeroHome />
+          <LatestNewsComp />
+          <AboutBudsHeadingComp />
+          <AboutBuds />
+        </>
+      )}
       {/* <QueryResolutoinComp /> */}
       <Footer />
     </div>
