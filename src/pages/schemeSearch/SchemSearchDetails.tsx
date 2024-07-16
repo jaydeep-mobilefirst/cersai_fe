@@ -269,7 +269,7 @@ const SchemeSearchDetails: React.FC = () => {
         <Accordion items={accordionItems} />
       </div>
 
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <div
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
@@ -303,7 +303,7 @@ const SchemeSearchDetails: React.FC = () => {
         <div>
           <div className="border-[#E6E6E6] border-[1px] mt-4"></div>
         </div>
-      </div>
+      </div> */}
 
       <div className="mt-[100px]">
         <Footer />
