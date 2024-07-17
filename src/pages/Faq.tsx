@@ -143,7 +143,7 @@ const Faq: React.FC = () => {
               (section: any, sectionIndex: any) => (
                 <div key={sectionIndex}>
                   <h2 className="text-[#000508] text-base font-bold text-gilroy-semibold mt-[28px] mb-[12px]">
-                    {section?.subHeading?.[0]?.text}
+                    {section?.subHeading}
                   </h2>
                   {section?.questions?.map(
                     (question: any, questionIndex: any) => (
