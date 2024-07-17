@@ -275,7 +275,7 @@ const DepositeTakerSearch: React.FC = () => {
             />
           </div>
         </div>
-        <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
+        <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto ">
           <div className="">
           {loader ? (
                   <LoaderSpin />

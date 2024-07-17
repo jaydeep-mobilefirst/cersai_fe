@@ -64,6 +64,7 @@ const SchemeSearch: React.FC = () => {
         params: {
           page: page,
           limit: pageSize,
+          status : selectedOption1
         },
       });
       let currentPage = (parseInt(data?.page) - 1 ) * pageSize
@@ -71,10 +72,14 @@ const SchemeSearch: React.FC = () => {
       setTotal(data?.total);
       setLoader(false);
     } catch (error) {
+      setSchemaData([])
       console.error("Error fetching schemes:", error);
       setLoader(false);
     }
   };
+
+  console.log({selectedOption1});
+  
   
   useEffect(() => {
     fetchSchemes();
@@ -163,7 +168,7 @@ const SchemeSearch: React.FC = () => {
   };
 
   const handleSetOption4 = (value: any) => {
-    setSelectedOption4(value?.label);
+    setSelectedOption4(value);
     setSelectedOption1(value?.value)
   };
 
