@@ -25,9 +25,10 @@ type Props = {
     fieldType: string
   ) => Promise<void>;
   sectionId?: number;
+  disable?: boolean;
 };
 
-const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
+const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
 
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
@@ -190,7 +191,12 @@ const DynamicFields = ({ formFields, onChange, sectionId }: Props) => {
                     </label>
 
                     {isDscKeyAvbl === "true" ? (
-                      <DscKeyRegister />
+                      <DscKeyRegister
+                        disable={field?.disabled ? field?.disabled : false}
+                        onFileUpload={(file: any) =>
+                          onChange && onChange(file, field, fieldType)
+                        }
+                      />
                     ) : (
                       <DscButton
                         onFileUpload={(file) =>

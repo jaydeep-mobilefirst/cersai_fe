@@ -45,8 +45,10 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
         128
       );
       console.log(certificate, "certificate");
-      setDscCertificate(certificate);
-      sendCertificate(JSON.parse(certificate));
+      if (certificate) {
+        const strCert = JSON.stringify(JSON.parse(certificate));
+        setDscCertificate(strCert);
+      }
     } catch (error) {
       // alert("Please Insert and select Your DSC Certificate");
       Swal.fire({
@@ -58,41 +60,41 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
     }
   };
 
-  const sendCertificate = async (certificate: any) => {
-    try {
-      const response = await axios.post(
-        // "https://cors-anywhere.herokuapp.com/" +
-        "https://indilabs-json.vercel.app/second",
-        { certificate }
-      );
+  // const sendCertificate = async (certificate: any) => {
+  //   try {
+  //     const response = await axios.post(
+  //       // "https://cors-anywhere.herokuapp.com/" +
+  //       "https://indilabs-json.vercel.app/second",
+  //       { certificate }
+  //     );
 
-      console.log(response);
-      if (response?.data?.status === "INTERNAL_SERVER_ERROR") {
-        Swal.fire({
-          icon: "error",
-          title: "Internal Server Error",
-          text: "Unable to Process DSC",
-        });
-      } else {
-        setDscSelected(true);
-        Swal.fire({
-          icon: "success",
-          title: "DSC key fetched successfully",
-          text: "Unable to Process DSC",
-        });
-      }
-      setTimeout(() => {
-        // navigate("/home");
-      }, 3000);
-    } catch (error) {
-      console.error("Error sending certificate:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Internal Server Error",
-        text: "Unable to Process DSC",
-      });
-    }
-  };
+  //     console.log(response);
+  //     if (response?.data?.status === "INTERNAL_SERVER_ERROR") {
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Internal Server Error",
+  //         text: "Unable to Process DSC",
+  //       });
+  //     } else {
+  //       setDscSelected(true);
+  //       Swal.fire({
+  //         icon: "success",
+  //         title: "DSC key fetched successfully",
+  //         text: "Unable to Process DSC",
+  //       });
+  //     }
+  //     setTimeout(() => {
+  //       // navigate("/home");
+  //     }, 3000);
+  //   } catch (error) {
+  //     console.error("Error sending certificate:", error);
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Internal Server Error",
+  //       text: "Unable to Process DSC",
+  //     });
+  //   }
+  // };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);

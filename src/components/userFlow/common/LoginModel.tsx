@@ -154,7 +154,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
       .post(bffUrl + `/auth/mfa`, {
         entityType: selected,
         username: getValues("email"),
-        dscCertificateFile: base64Data,
+        dscCertificateFile:
+          isDscKeyAvbl === "true" ? dscCertificate : base64Data,
       })
       .then((respose) => {
         reset();

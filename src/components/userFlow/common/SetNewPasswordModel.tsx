@@ -54,6 +54,8 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
     otpVerified === "true"
   );
   const [showPasswordUpdateModel, setShowPasswordUpdateModel] = useState(false);
+  const [isDscSelected, setDscSelected] = useState<boolean>(false);
+  const [dscCertificate, setDscCertificate] = useState<any>();
 
   useEffect(() => {
     if (token && !decodedToken) {
@@ -92,8 +94,9 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
       dscCertificateFile: "xyz",
     };
 
-    if (decodedToken?.isDsc && base64Data) {
-      payload.dscCertificateFile = base64Data;
+    if (decodedToken?.isDsc && (base64Data || isDscSelected)) {
+      payload.dscCertificateFile =
+        isDscKeyAvbl === "true" ? dscCertificate : base64Data;
     }
 
     axios
@@ -296,7 +299,10 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
                               Upload Document
                             </DscAuth>
                           ) : (
-                            <DscKeyRegister />
+                            <DscKeyRegister
+                              setDscSelected={setDscSelected}
+                              setDscCertificate={setDscCertificate}
+                            />
                           )}
                         </div>
                       )}
