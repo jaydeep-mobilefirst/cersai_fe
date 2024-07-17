@@ -8,6 +8,8 @@ import LanguageBar from "../components/landingPage/LanguageBar";
 import TopDetail from "../components/landingPage/TopDetail";
 import Navbar from "../components/landingPage/Navbar";
 import Footer from "../components/landingPage/Footer";
+import { Link } from "react-router-dom";
+import { error } from "console";
 
 const OpertaingGuidelines = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -46,24 +48,23 @@ const OpertaingGuidelines = () => {
     axios
       .get(bffUrl + `/websitecontent/list/4`)
       .then((response) => {
-        setGuidelinesPageData(
-          response?.data?.data?.content?.operatingGuidlinesPageData?.link?.[0]
-            ?.link
-        );
+
+        // setGuidelinesPageData(
+        //   response?.data?.data?.content?.operatingGuidlinesPageData?.link?.[0]?.link
+        // );
+        const link = response?.data?.data?.content?.operatingGuidlinesPageData?.link?.[0]?.link;
+        if (link) {
+          setGuidelinesPageData(link);
+          window.open(link, "_blank");
+        }else{
+          console.log("No link found");
+        }
         setLoader(false);
       })
       .catch((error) => {
         console.log(error);
         setLoader(false);
       });
-
-    const operatingGuidelinesLink = guidelinesPageData; // Adjust according to your API response structure
-    console.log("link", operatingGuidelinesLink);
-    if (operatingGuidelinesLink) {
-      window.open(operatingGuidelinesLink, "_blank");
-    } else {
-      console.error("Operating guidelines link not found in API response.");
-    }
   };
 
   return (
