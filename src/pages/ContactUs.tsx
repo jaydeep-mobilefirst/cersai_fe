@@ -78,10 +78,10 @@ const ContactUs: React.FC = () => {
             {contactUsPageDataa?.heldDeskHeading?.[0]?.text}
           </h2>
           <p className="md:text-base text-[14px] font-normal text-gilroy-medium mt-2">
-            {contactUsPageDataa?.phoneNumberLabel?.[0]?.text} {contactUsPageDataa?.helpDeskDetails?.[0]?.text}
+            {contactUsPageDataa?.phoneNumberLabel?.[0]?.text}: {contactUsPageDataa?.helpDeskDetails?.[0]?.text}
           </p>
           <p className="md:text-base text-[14px] font-normal text-gilroy-medium">
-            {contactUsPageDataa?.emailLabel?.[0]?.text} {contactUsPageDataa?.helpDeskDetails?.[1]?.text}
+            {contactUsPageDataa?.emailLabel?.[0]?.text}: {contactUsPageDataa?.helpDeskDetails?.[1]?.text}
           </p>
         </div>
         <div className="md:flex md:flex-row md:gap-x-28 xl:gap-x-52 flex flex-col">
@@ -90,15 +90,15 @@ const ContactUs: React.FC = () => {
               {contactUsPageDataa?.ckycRegistrationQueriesHeading?.[0]?.text}
             </h2>
             <p className="md:text-base text-[14px] font-normal text-gilroy-medium mt-2">
-              {contactUsPageDataa?.nameLabel?.[0]?.text}{" "}
+              {contactUsPageDataa?.nameLabel?.[0]?.text}:{" "}
               {contactUsPageDataa?.ckycRegistrationQueriesDetails?.[0]?.text}
             </p>
             <p className="md:text-base text-[14px] font-normal text-gilroy-medium">
-              {contactUsPageDataa?.phoneNumberLabel?.[0]?.text}{" "}
+              {contactUsPageDataa?.phoneNumberLabel?.[0]?.text}:{" "}
               {contactUsPageDataa?.ckycRegistrationQueriesDetails?.[1]?.text}
             </p>
             <p className="md:text-base text-[14px] font-normal text-gilroy-medium">
-              {contactUsPageDataa?.emailLabel?.[0]?.text}{" "}
+              {contactUsPageDataa?.emailLabel?.[0]?.text}:{" "}
               {contactUsPageDataa?.ckycRegistrationQueriesDetails?.[2]?.text}
             </p>
           </div>
@@ -108,15 +108,15 @@ const ContactUs: React.FC = () => {
               {contactUsPageDataa?.complainceOfficerHeading?.[0]?.text}
             </h2>
             <p className="md:text-base text-[14px] font-normal text-gilroy-medium mt-2">
-              {contactUsPageDataa?.nameLabel?.[0]?.text}{" "}
+              {contactUsPageDataa?.nameLabel?.[0]?.text}:{" "}
               {contactUsPageDataa?.complainceOfficerDetails?.[0]?.text}
             </p>
             <p className="md:text-base text-[14px] font-normal text-gilroy-medium">
-              {contactUsPageDataa?.phoneNumberLabel?.[0]?.text}{" "}
+              {contactUsPageDataa?.phoneNumberLabel?.[0]?.text}:{" "}
               {contactUsPageDataa?.complainceOfficerDetails?.[1]?.text}
             </p>
             <p className="md:text-base text-[14px] font-normal text-gilroy-medium">
-              {contactUsPageDataa?.emailLabel?.[0]?.text}{" "}
+              {contactUsPageDataa?.emailLabel?.[0]?.text}:{" "}
               {contactUsPageDataa?.complainceOfficerDetails?.[2]?.text}
             </p>
           </div>
@@ -126,7 +126,7 @@ const ContactUs: React.FC = () => {
             {contactUsPageDataa?.addressHeading?.[0]?.text}
           </h2>
           <p className="md:text-base text-[14px] font-normal text-gilroy-medium mt-2">
-            {contactUsPageDataa?.addressLabel?.[0]?.text} {contactUsPageDataa?.addressDetails?.[0]?.text}
+            {contactUsPageDataa?.addressLabel?.[0]?.text}: {contactUsPageDataa?.addressDetails?.[0]?.text}
           </p>
         </div>
 
