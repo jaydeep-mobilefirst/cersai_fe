@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import ProfileBranchForm from "./ProfileBranchForm";
 import Footer from "../../../components/userFlow/userProfile/Footer";
@@ -9,7 +9,9 @@ import { bffUrl } from "../../../utils/api";
 import Swal from "sweetalert2";
 import { useBranchStore } from "../../../store/upate-profile/branch";
 import { useScreenWidth } from "../../../utils/screenSize";
-
+import Button from "../../../components/userFlow/common/Button";
+import uploadIcon from "../../../assets/images/directbox-send.svg"
+import LoaderSpin from "../../../components/LoaderSpin";
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
@@ -39,7 +41,9 @@ const ProfileBranches = () => {
     toggleChecked: state.toggleChecked,
   }));
   // const [isChecked, setChecked] = useState(false);
-
+  const [loader, setLoader] = useState<boolean>(false);
+  const [uploadInputKey, setUploadKey] = useState<number>(0)
+  const uploadButtonRef = useRef<HTMLInputElement>(null);
   const {
     register,
     handleSubmit,
@@ -52,6 +56,7 @@ const ProfileBranches = () => {
 
   const fetchBranches = async () => {
     try {
+      setLoader(true)
       const response = await axios.get(
         `${bffUrl}/deposit-taker/branch/${entityUniqueId}`
       );
@@ -71,14 +76,20 @@ const ProfileBranches = () => {
           ...branch, // Spread the entire branch object
         })),
       }); // Properly initializing form with fetched data including IDs
-    } catch (error) {
+      setLoader(false)
+    } 
+    catch (error) {
       console.error("Failed to fetch branches:", error);
+      setLoader(false)
+    }
+    finally {
+      setLoader(false)
     }
   };
 
   useEffect(() => {
     fetchBranches();
-  }, [reset, setBranches]);
+  }, [reset, setBranches, uploadInputKey]);
 
   const onSubmit = async (data: any) => {
     try {
@@ -113,10 +124,58 @@ const ProfileBranches = () => {
   // const handleCheckboxChange = () => setChecked(!isChecked);
   const handleCheckboxChange = () => toggleChecked();
 
+  const handleFileUpload = (event : any) => {
+    setLoader(true)
+    const file = event.target.files[0]
+    const formData = new FormData();
+    formData.set("file", file)
+    const entityId = sessionStorage.getItem('entityUniqueId');
+    axios.post(`${bffUrl}/deposit-taker/bulk-upload/${entityId}`, formData)
+    .then((res) => {
+      let data = res.data;
+      if (data.success) {
+        Swal.fire({
+          icon : "success",
+          text : data?.message,
+          title : "Successful"
+        })
+      }
+      else{
+        Swal.fire({
+          icon : "error",
+          text : data?.message,
+          title : "Error"
+        })
+      }
+    })
+    .catch((e) => {
+      Swal.fire({
+        title : "Unable upload file",
+        text : "Try again later!",
+        icon : "error"
+      })
+    })
+    .finally(() => {setLoader(false);setUploadKey(uploadInputKey + 1)});
+  }
+
+  const handleDownloadTemplate = () => {
+    axios.get(`${bffUrl}/deposit-taker/branches/sample-download`, {
+      method: 'GET',
+      responseType: 'blob', // important
+  }).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${Date.now()}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+  });
+  }
   return (
     <div className="bg-white p-7 w-full h-full ">
       <h1 className="font-semibold text-2xl mb-3">Upload Branches</h1>
-      <div className="flex flex-row justify-start align-middle text-gray-400">
+      <div className="flex-row align-middle text-gray-400 flex justify-between">
+        <div className="flex flex-row align-middle justify-start">
         <img
           src={infoIcon}
           alt="info"
@@ -124,12 +183,36 @@ const ProfileBranches = () => {
           height={25}
           width={25}
         />
-        <div>
-          You can upload branches in bulk. Please use this given template.
+        <div className="my-auto">
+          You can upload branches in bulk. Please use this given <span onClick={handleDownloadTemplate} className="text-blue-400 hover:cursor-pointer">Template</span>.
+        </div>
+        </div>
+
+        <div 
+          onClick={() => {
+            uploadButtonRef.current?.click();
+          }}
+        className="w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer">
+          <input 
+            onChange={handleFileUpload}   
+            type="file" name="" id="" 
+            className="hidden" 
+            accept=".xls, .xlsx"
+            ref={uploadButtonRef}
+            key={uploadInputKey}
+            />
+          <div className="justify-start items-center gap-1.5 inline-flex">
+            <div className="w-6 h-6 justify-center items-center flex">
+              <div className="w-6 h-6 relative">
+                <img src={uploadIcon} alt="" />
+              </div>
+            </div>
+            <div className="text-white text-base font-normal">Upload</div>
+          </div>
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {branches?.map((branch: any, index: any) => (
+        {loader ? <LoaderSpin/> : branches?.map((branch: any, index: any) => (
           <ProfileBranchForm
             key={branch.id || index} // Use index as key if branch.id is undefined
             branch={branch}
