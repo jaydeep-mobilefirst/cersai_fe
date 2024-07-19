@@ -11,6 +11,7 @@ import axios from "axios";
 import { bffUrl } from "../utils/api";
 import LoaderSpin from "../components/LoaderSpin";
 import { data } from "../utils/hardText/landingPageText2";
+import { useLangugaeStore } from "../zust/useLanguageUsStore";
 
 interface FaqItem {
   question: string;
@@ -58,6 +59,7 @@ const restructureFaqData = (faqPageData: any): FaqSection[] => {
 const Faq: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const { faqPageDataa, setFaqPageData } = useFaqStore((state) => state);
+  const {language} = useLangugaeStore((state) => state);
   const [state, setState] = useState(true);
   const [loader, setLoader] = useState(false);
   const [isOpen, setIsOpen] = useState("");
@@ -92,15 +94,19 @@ const Faq: React.FC = () => {
 
   useEffect(() => {
     faqPageCmsApi();
-  }, [state]);
+  }, [state,language]);
 
   const faqPageCmsApi = () => {
     setLoader(true);
 
     axios
-      .get(bffUrl + `/websitecontent/list/2`)
+      .get(bffUrl + `/websitecontent/get/name?wcname=faq`,{
+          headers: {
+            'Accept-Language': language
+          }
+      })
       .then((response) => {
-        setFaqPageData(response?.data?.data?.content?.faqPageData);
+        setFaqPageData(response?.data?.data?.content?.data?.faqPageData);
         setLoader(false);
         console.log("response", response);
       })
