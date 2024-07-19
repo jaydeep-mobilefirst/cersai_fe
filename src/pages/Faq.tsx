@@ -122,18 +122,7 @@ const Faq: React.FC = () => {
         <div className="h-[850px] p-10 pt-[100px]">
           <LoaderSpin />
         </div>
-      ) : (
-        // <div className="md:p-[56px] p-[16px] buds-faq-background-image">
-        //   <h1 className="text-[#24222B] text-xl font-bold text-gilroy-bold">
-        //     {faqPageDataa?.heading?.[0]?.text}
-        //   </h1>
-        //   <main>
-
-        //   {faqSections?.map((section, index) => (
-        //         <FaqSection key={index} title={section.title} items={section.items} />
-        //       ))}
-        //   </main>
-        // </div>
+      ) : faqPageDataa?.heading?.length > 0 ?(
         <div className="md:p-[56px] p-[16px] buds-faq-background-image">
           <div>
             <h1 className="text-[#24222B] text-xl font-bold text-gilroy-bold">
@@ -191,6 +180,10 @@ const Faq: React.FC = () => {
               )
             )}
           </div>
+        </div>
+      ):(
+        <div className="flex justify-center items-center h-[450px] text-xl font-bold text-[#24222B] text-gilroy-bold">
+          <h1>No data available</h1>
         </div>
       )}
       <div className="md:pt-24">
