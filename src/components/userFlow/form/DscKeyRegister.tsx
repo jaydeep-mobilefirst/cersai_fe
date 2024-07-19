@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ExtensionModal from "./ExtensionModal";
 import Swal from "sweetalert2";
+import UploadButtonFolderSvg from "../../../assets/images/new_images/uploadFile-2.png";
+import UploadButtonSvg1 from "../../../assets/images/UploadIcon.png";
 
 interface WindowWithSignerDigital extends Window {
   SignerDigital?: any;
@@ -13,8 +15,10 @@ declare let window: WindowWithSignerDigital;
 interface DscKeyLoginProps {
   setDscSelected?: (selected: boolean) => void;
   setDscCertificate?: (selected: any) => void;
+  isDscSelected?: boolean;
   disable?: boolean;
   onFileUpload?: (file: File | null | string) => void;
+  fieldData?: any;
 }
 
 const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
@@ -22,9 +26,13 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
   onFileUpload,
   setDscSelected,
   setDscCertificate,
+  isDscSelected,
+  fieldData,
 }) => {
   const [isSignerDigitalLoaded, setIsSignerDigitalLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [certName, setCertName] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,12 +57,19 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
         128
       );
       console.log(certificate, "certificate");
-      const strCert = JSON.stringify(JSON.parse(certificate)) ?? "";
+      const strCert = JSON.parse(certificate);
+
       if (onFileUpload) {
         onFileUpload(strCert);
+        setCertName(strCert?.SelCertSubject?.split(",")[0]);
+        if (setDscSelected) {
+          setDscSelected(true);
+        }
       }
+
       if (certificate && setDscCertificate && setDscSelected) {
         setDscCertificate(strCert);
+        setCertName(strCert?.SelCertSubject?.split(",")[0]);
         setDscSelected(true);
       }
     } catch (error) {
@@ -63,6 +78,9 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
         icon: "error",
         title: "Permission Denied by the user",
         text: "Unable to Process DSC",
+        customClass: {
+          container: "my-swal",
+        },
       });
       console.error("Error detecting smartcard readers:", error);
     }
@@ -107,17 +125,38 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
     setIsModalOpen(false);
   };
 
+  console.log(fieldData, "field dataaa");
   return (
-    <div>
+    <>
       <button
-        type="button"
-        disabled={disable}
-        onClick={detectSmartcardReaders}
-        className={`p-4 rounded-lg w-full bg-[#1c468e] text-[white] ${
-          disable && "bg-opacity-50 cursor-not-allowed"
+        className={`bg-[#f4f4f4] flex items-center justify-between p-2 rounded ${
+          disable ? "cursor-not-allowed" : "cursor-pointer"
         }`}
+        type="button"
+        onClick={detectSmartcardReaders}
+        disabled={disable}
       >
-        Upload DSC certificate
+        <div>
+          <img
+            src={UploadButtonFolderSvg}
+            alt="UploadButtonFolderSvg "
+            className=""
+          />
+        </div>
+        <p className=" text-[black] ">
+          {isDscSelected
+            ? certName
+            : fieldData?.userInput?.SelCertSubject
+            ? fieldData?.userInput?.SelCertSubject?.split(",")[0]
+            : "Upload DSC Certificate"}
+        </p>
+        <div
+          className={`text-white Rectangle151 w-10 h-10 rounded-md ${
+            isDscSelected ? "bg-[#1c468e]" : "bg-[#1c468e]"
+          }  flex justify-center items-center `}
+        >
+          <img src={UploadButtonSvg1} alt="UploadButtonSvg1" className="w-5" />
+        </div>
       </button>
       <ExtensionModal
         open={isModalOpen}
@@ -129,7 +168,7 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
           with a USB token.
         </p>
       </ExtensionModal>
-    </div>
+    </>
   );
 };
 

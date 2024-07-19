@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ExtensionModal from "./ExtensionModal";
 import Swal from "sweetalert2";
+import UploadButtonFolderSvg from "../../../assets/images/new_images/uploadFile-2.png";
+import UploadButtonSvg1 from "../../../assets/images/UploadIcon.png";
 
 interface WindowWithSignerDigital extends Window {
   SignerDigital?: any;
@@ -13,14 +15,18 @@ declare let window: WindowWithSignerDigital;
 interface DscKeyLoginProps {
   setDscSelected: (selected: boolean) => void;
   setDscCertificate: (selected: any) => void;
+  isDscSelected?: boolean;
 }
 
 const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
   setDscSelected,
   setDscCertificate,
+  isDscSelected,
 }) => {
   const [isSignerDigitalLoaded, setIsSignerDigitalLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [certName, setCertName] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,8 +52,10 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
       );
       console.log(certificate, "certificate");
       if (certificate) {
-        const strCert = JSON.stringify(JSON.parse(certificate));
+        const strCert = JSON.parse(certificate);
         setDscCertificate(strCert);
+        setDscSelected(true);
+        setCertName(strCert?.SelCertSubject?.split(",")[0]);
       }
     } catch (error) {
       // alert("Please Insert and select Your DSC Certificate");
@@ -55,6 +63,9 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
         icon: "error",
         title: "Permission Denied by the user",
         text: "Unable to Process DSC",
+        customClass: {
+          container: "my-swal",
+        },
       });
       console.error("Error detecting smartcard readers:", error);
     }
@@ -101,14 +112,30 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
   };
 
   return (
-    <div>
-      <button
-        type="button"
+    <>
+      <div
+        className="bg-[#f4f4f4] flex items-center justify-between p-2 cursor-pointer rounded"
         onClick={detectSmartcardReaders}
-        className="p-4 rounded-lg w-full bg-[#1c468e] text-[white]"
       >
-        Authenticate with DSC Key
-      </button>
+        <div>
+          <img
+            src={UploadButtonFolderSvg}
+            alt="UploadButtonFolderSvg "
+            className=""
+          />
+        </div>
+        <p className=" text-[black] ">
+          {isDscSelected ? certName : "Upload DSC Certificate"}
+        </p>
+        <button
+          type="button"
+          className={`text-white Rectangle151 w-10 h-10 rounded-md ${
+            isDscSelected ? "bg-[#1c468e]" : "bg-[#1c468e]"
+          }  flex justify-center items-center `}
+        >
+          <img src={UploadButtonSvg1} alt="UploadButtonSvg1" className="w-5" />
+        </button>
+      </div>
       <ExtensionModal
         open={isModalOpen}
         handleClose={handleCloseModal}
@@ -119,7 +146,7 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
           with a USB token.
         </p>
       </ExtensionModal>
-    </div>
+    </>
   );
 };
 

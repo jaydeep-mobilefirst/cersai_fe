@@ -347,6 +347,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                           </Dscbutton>
                         ) : (
                           <DscKeyLogin
+                            isDscSelected={isDscSelected}
                             setDscSelected={setDscSelected}
                             setDscCertificate={setDscCertificate}
                           />

@@ -7,6 +7,7 @@ import RequiredStar from "./RequiredStar";
 import DynamicFileUpload from "./DynamicFileUpload";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import DscKeyRegister from "../form/DscKeyRegister";
+import { useState } from "react";
 
 type Props = {
   toggleUploadPopup?: () => void;
@@ -30,6 +31,7 @@ type Props = {
 
 const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
+  const [isDscSelected, setDscSelected] = useState<boolean>(false);
 
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
@@ -196,6 +198,9 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         onFileUpload={(file: any) =>
                           onChange && onChange(file, field, fieldType)
                         }
+                        fieldData={field}
+                        setDscSelected={setDscSelected}
+                        isDscSelected={isDscSelected}
                       />
                     ) : (
                       <DscButton

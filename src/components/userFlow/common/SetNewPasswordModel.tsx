@@ -300,6 +300,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
                             </DscAuth>
                           ) : (
                             <DscKeyRegister
+                              isDscSelected={isDscSelected}
                               setDscSelected={setDscSelected}
                               setDscCertificate={setDscCertificate}
                             />
