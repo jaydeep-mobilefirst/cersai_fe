@@ -13,21 +13,27 @@ import { bffUrl } from "../utils/api";
 import { useLandingStore } from "../zust/useLandingStore";
 import { data } from "../utils/hardText/landingPageText2";
 import LoaderSpin from "../components/LoaderSpin";
+import { useLangugaeStore } from "../zust/useLanguageUsStore";
 
 const Landing = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
+  const {language} = useLangugaeStore((state) => state);
   const [state, setState] = useState(true);
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     homePageCmsApi();
-  }, [state]);
+  }, [state,language]);
 
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
     axios
-      .get(bffUrl + `/websitecontent/list/1`)
+      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+        headers: {
+          'Accept-Language': language
+        }
+    })
       .then((response) => {
         console.log("api-response", response);
         setHomePageData(response?.data?.data?.content?.updatedStructure);

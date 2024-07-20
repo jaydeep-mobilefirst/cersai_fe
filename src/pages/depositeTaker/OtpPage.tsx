@@ -488,6 +488,7 @@ const OtpPage: React.FC<OtpPageProps> = ({
         if (response.data.success) {
           setLoader(false);
           setMessageType("success");
+          
           setMessage(response.data.message);
           localStorage.setItem(
             "nodalVerification",
