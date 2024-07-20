@@ -64,6 +64,8 @@ const ReviewDetailsRegulator = () => {
     }
   }, [isPdfMode]);
 
+  console.log({allFormData});
+  
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();
     setLoader(true);
@@ -99,9 +101,10 @@ const ReviewDetailsRegulator = () => {
     finalResult = [...finalResult, ...docs];
 
     axios
-      .post(bffUrl + "/regulator/add-form-fields", {
-        formData: finalResult,
-        masterId: masterEntityId,
+    [allFormData?.returnJourney ? 'put' : 'post'](bffUrl + `/regulator/${allFormData?.returnJourney ? 'return-journey' : 'add-form-fields'}`, {
+      formData: finalResult,
+      masterId: masterEntityId,
+      identity : allFormData?.uniqueId,
       })
       .then((response: any) => {
         const data = response.data;

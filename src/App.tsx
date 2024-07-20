@@ -93,6 +93,7 @@ import Downloads from "./pages/Downloads";
 import Training from "./pages/Training";
 import ContactUs from "./pages/ContactUs";
 import OpertaingGuidelines from "./pages/OperatingGuidelines";
+import ReturnJourney from "./pages/ReturnJourney";
 function App() {
   return (
     <div>
@@ -310,6 +311,7 @@ function App() {
             </Route>
           </Route>
           <Route element={<Landing />} path="/" />
+          <Route element={<ReturnJourney />} path="/return-journey" />
           <Route element={<SchemeSearch />} path="/scheme-search" />
           <Route
             element={<SchemeSearchDetails />}

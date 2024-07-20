@@ -103,9 +103,9 @@ const ReviewDetails = () => {
       });
 
     finalResult = [...finalResult, ...docs];
-
-    axios
-      .post(bffUrl + "/competent-authority/add-form-fields", {
+    
+    axios[allFormData?.returnJourney ? 'put' : 'post'](bffUrl + `/competent-authority/${allFormData?.returnJourney ? 'return-journey' : 'add-form-fields'}`, {
+        identity : allFormData?.uniqueId,
         formData: finalResult,
         masterId: masterEntityId,
       })
