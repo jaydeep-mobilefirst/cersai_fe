@@ -37,6 +37,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   if (!otpVerified || otpVerified === "false") {
     sessionStorage.setItem("otp-sent", "false");
     sessionStorage.setItem("timerSec", "120");
+    sessionStorage.setItem("link", "/set-password?identity="+token);
     setTimeout(() => {
       navigate("/otp-verification?token=" + token);
     }, 3000);

@@ -93,6 +93,7 @@ import Downloads from "./pages/Downloads";
 import Training from "./pages/Training";
 import ContactUs from "./pages/ContactUs";
 import OpertaingGuidelines from "./pages/OperatingGuidelines";
+import ReturnJourney from "./pages/ReturnJourney";
 import UploadDSC3 from "./pages/mainPortal/UploadDSC3";
 import UploadDSC3Competent from "./pages/mainPortal/UploadDSC3Competent";
 import UploadDSC3Designated from "./pages/mainPortal/UploadDSC3Designated";
@@ -319,6 +320,7 @@ function App() {
             </Route>
           </Route>
           <Route element={<Landing />} path="/" />
+          <Route element={<ReturnJourney />} path="/return-journey" />
           <Route element={<SchemeSearch />} path="/scheme-search" />
           <Route
             element={<SchemeSearchDetails />}

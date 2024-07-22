@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
-
-import CrossIcon from "../../../assets/images/CrossIcon.svg";
-
 import MobileIcon from "../../../assets/images/MobileIcon.svg";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -16,6 +12,7 @@ import { bffUrl } from "../../../utils/api";
 import ButtonAuth from "./ButtonAuth";
 import Swal from "sweetalert2";
 import { isLinkExpired } from "../../../utils/commonFunction";
+import LoaderSpin from "../../LoaderSpin";
 
 interface LoginModelProps {}
 
@@ -24,6 +21,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
+  const link = sessionStorage.getItem("link")
   const decoded = jwtDecode(token ?? "");  
   const [loader, setLoader] = useState(false);
   const [button, setButton] = useState("Submit");
@@ -110,6 +108,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
+    setLoader(true)
     axios
       .post(`${bffUrl}/dual-otp/verifyotp`, {
         email: decodedToken?.email,
@@ -123,20 +122,21 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
           setShowError("");
           sessionStorage.setItem("otp-sent", "false");
           sessionStorage.setItem("timerSec", "120");
-          navigate("/set-password?identity=" + token);
+          navigate(link ?? "/");
           sessionStorage.setItem("otp-verified", "true");
         }
       })
       .catch((err: any) => {
         setShowError(err?.response?.data?.message);
-      });
+      })
+      .finally(() => setLoader(false))
   };
 
   const sendOtp = (event: any) => {
     event.preventDefault();
     if (Object.keys(decodedToken).length > 0) {
       console.log({ decodedToken }, "-------------------");
-
+      setLoader(true)
       axios
         .post(`${bffUrl}/dual-otp/sendotp`, {
           email: decodedToken?.email,
@@ -156,7 +156,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
             title: "Error",
             text: "Unable to Send OTP, Please try again later!",
           });
-        });
+        })
+        .finally(() => setLoader(false))
     }
   };
 
@@ -312,7 +313,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                       <ButtonAuth
                         type="submit"
                         loader={loader}
-                        label={!loader ? "Submit" : "Loading..."}
+                        label={!loader ? "Submit" : <><LoaderSpin/> &nbsp;Submitting</>}
                         onClick={onSubmit}
                         disabled={disabled}
                       />
@@ -328,8 +329,9 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                   <button
                     className=" bg-[#1C468E] rounded-xl p-3 text-sm font-semibold text-gilroy-medium text-white w-80"
                     onClick={sendOtp}
+                    disabled={loader}
                   >
-                    Send
+                    {!loader ? "Send" : <><LoaderSpin/>&nbsp;Sending...</>}
                   </button>
                 </div>
               )}
