@@ -16,6 +16,7 @@ import UploadButtonV2 from "../form/UploadButtonV2";
 import { bffUrl } from "../../../utils/api";
 import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
+import DscKeyLogin from "../form/DscKeyLogin";
 
 interface LoginModelProps {
   closeModal: () => void;
@@ -39,6 +40,10 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [roles, setRoles] = useState<any>();
   const [dsc, setDsc] = useState<boolean>(false);
   const [dscApiInProgress, setDscApiInProgress] = useState(false);
+  const [isDscSelected, setDscSelected] = useState<boolean>(false);
+  const [dscCertificate, setDscCertificate] = useState<any>();
+
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
 
   const {
     register,
@@ -149,7 +154,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
       .post(bffUrl + `/auth/mfa`, {
         entityType: selected,
         username: getValues("email"),
-        dscCertificateFile: base64Data,
+        dscCertificateFile:
+          isDscKeyAvbl === "true" ? dscCertificate : base64Data,
       })
       .then((respose) => {
         reset();
@@ -332,12 +338,20 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
                     {dsc && (
                       <>
-                        <Dscbutton
-                          onFileUpload={handleFileUpload}
-                          disabled={false}
-                        >
-                          Upload Document
-                        </Dscbutton>
+                        {isDscKeyAvbl === "false" ? (
+                          <Dscbutton
+                            onFileUpload={handleFileUpload}
+                            disabled={false}
+                          >
+                            Upload Document
+                          </Dscbutton>
+                        ) : (
+                          <DscKeyLogin
+                            isDscSelected={isDscSelected}
+                            setDscSelected={setDscSelected}
+                            setDscCertificate={setDscCertificate}
+                          />
+                        )}
                       </>
                     )}
                   </div>

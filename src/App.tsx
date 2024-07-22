@@ -93,6 +93,11 @@ import Downloads from "./pages/Downloads";
 import Training from "./pages/Training";
 import ContactUs from "./pages/ContactUs";
 import OpertaingGuidelines from "./pages/OperatingGuidelines";
+import UploadDSC3 from "./pages/mainPortal/UploadDSC3";
+import UploadDSC3Competent from "./pages/mainPortal/UploadDSC3Competent";
+import UploadDSC3Designated from "./pages/mainPortal/UploadDSC3Designated";
+import UploadDSC3Regulator from "./pages/mainPortal/UploadDSC3Regulator";
+import DashboardRegulator from "./pages/mainPortal/DashboardRegulator";
 function App() {
   return (
     <div>
@@ -103,6 +108,7 @@ function App() {
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<DashboardProfile />} path="profile" />
               <Route element={<ResetPassword />} path="resetpassword" />
+              <Route element={<UploadDSC3 />} path="uploaddsc3" />
               <Route element={<SchemaCreation />} path="scheme" />
               <Route element={<SchemaCreationForm />} path="scheme/form" />
               <Route element={<SchemeMasterForm />} path="scheme/creation" />
@@ -125,7 +131,7 @@ function App() {
               />
             </Route>
             <Route element={<MainPortalLayoutRegulator />} path="/rg">
-              <Route element={<Dashboard />} path="dashboard" />
+              <Route element={<DashboardRegulator />} path="dashboard" />
               <Route element={<MyTaskStatus />} path="mytask" />
               <Route element={<MyTaskForm />} path="mytask/form" />
               <Route element={<DepositSchemeCreation />} path="deposit-taker" />
@@ -165,6 +171,7 @@ function App() {
                 element={<ResetPasswordRegulator />}
                 path="resetpassword"
               />
+              <Route element={<UploadDSC3Regulator />} path="uploaddsc3" />
             </Route>
             <Route element={<MainPortalLayoutCompetent />} path="/ca">
               <Route element={<DashboardCompetent />} path="dashboard" />
@@ -214,6 +221,7 @@ function App() {
                 element={<ResetPasswordCompetent />}
                 path="resetpassword"
               />
+              <Route element={<UploadDSC3Competent />} path="uploaddsc3" />
             </Route>
             <Route element={<MainPortalLayoutDesignated />} path="/dc">
               <Route element={<DashboardCompetent />} path="dashboard" />
@@ -254,6 +262,7 @@ function App() {
                 element={<ResetPasswordDesignated />}
                 path="resetpassword"
               />
+              <Route element={<UploadDSC3Designated />} path="uploaddsc3" />
             </Route>
 
             <Route
@@ -336,7 +345,10 @@ function App() {
           <Route element={<Downloads />} path="/downloads" />
           <Route element={<Training />} path="/training" />
           <Route element={<ContactUs />} path="/contactus" />
-          <Route element={<OpertaingGuidelines />} path="/operatingguidelines" />
+          <Route
+            element={<OpertaingGuidelines />}
+            path="/operatingguidelines"
+          />
           {/* <Route element={<RoleCreation />} path="/role" /> */}
         </Routes>
       </Router>
