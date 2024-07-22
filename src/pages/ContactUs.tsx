@@ -11,23 +11,30 @@ import Footer from "../components/landingPage/Footer";
 import { data } from "../utils/hardText/landingPageText2";
 import { contactUsPageData } from "../utils/hardText/contactUs";
 import LoaderSpin from "../components/LoaderSpin";
+import { useLangugaeStore } from "../zust/useLanguageUsStore";
+import { hero } from "../utils/hardText/landingpageText";
 
 const ContactUs: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const { contactUsPageDataa, setcontactUsPageData } = useContactUsStore((state) => state);
+  const {language} = useLangugaeStore((state) => state);
   const [state, setState] = useState(true);
   const [loader, setLoader] = useState(false);
   const mapUrl =
     "https://www.google.com/maps/embed/v1/place?key=&q=CERSAI%2C%20Tower%20%E2%80%93%201%2C%20Office%20Block%2C%204th%20Floor%2C%20Plate-A%20%28Adjacent%20to%20Ring%20Road%29%2C%20NBCC%2C%20Kidwai%20Nagar%20East%2C%20New%20Delhi%20%E2%80%93%20110023&zoom=13";
   useEffect(() => {
     homePageCmsApi();
-  }, [state]);
+  }, [state,language]);
 
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
     axios
-      .get(bffUrl + `/websitecontent/list/1`)
+      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+        headers: {
+          'Accept-Language': language
+        }
+    })
       .then((response) => {
         setHomePageData(response?.data?.data?.content?.updatedStructure);
         setLoader(false);
@@ -39,16 +46,20 @@ const ContactUs: React.FC = () => {
   };
   useEffect(() => {
     contactUsPageCmsApi();
-  }, [state]);
+  }, [state,language]);
 
   const contactUsPageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
     axios
-      .get(bffUrl + `/websitecontent/list/6`)
+      .get(bffUrl + `/websitecontent/get/name?wcname=contact us`,{
+          headers: {
+            'Accept-Language': language
+        }
+      })
       .then((response) => {
         console.log("responsecontactuspage",response)
-        setcontactUsPageData(response?.data?.data?.content?.contactUsPageData);
+        setcontactUsPageData(response?.data?.data?.content?.data);
         setLoader(false);
       })
       .catch((error) => {

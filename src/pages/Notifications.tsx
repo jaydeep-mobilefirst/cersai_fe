@@ -10,9 +10,11 @@ import axios from "axios";
 import { bffUrl } from "../utils/api";
 import { notifcationsPageData } from "../utils/hardText/notificationsPageText";
 import LoaderSpin from "../components/LoaderSpin";
+import { useLangugaeStore } from "../zust/useLanguageUsStore";
 
 const Notifications: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
+  const {language} = useLangugaeStore((state) => state);
   const { notificationPageDataa, setNotificationPageData } =
     useNotificationStore((state) => state);
   const [state, setState] = useState(true);
@@ -20,13 +22,17 @@ const Notifications: React.FC = () => {
 
   useEffect(() => {
     homePageCmsApi();
-  }, [state]);
+  }, [state,language]);
 
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
     axios
-      .get(bffUrl + `/websitecontent/list/1`)
+      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+        headers: {
+          'Accept-Language': language
+        }
+    })
       .then((response) => {
         setHomePageData(response?.data?.data?.content?.updatedStructure);
         setLoader(false);
@@ -39,16 +45,20 @@ const Notifications: React.FC = () => {
 
   useEffect(() => {
     notificationsPageCmsApi();
-  }, [state]);
+  }, [state,language]);
 
   const notificationsPageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
     axios
-      .get(bffUrl + `/websitecontent/list/3`)
+      .get(bffUrl + `/websitecontent/get/name?wcname=notification`,{
+        headers: {
+          'Accept-Language': language
+        }
+      })
       .then((response) => {
         setNotificationPageData(
-          response?.data?.data?.content?.content?.notificationsPageData
+          response?.data?.data?.content?.data?.[0]?.notificationsPageData
         );
         setLoader(false);
       })
@@ -68,7 +78,7 @@ const Notifications: React.FC = () => {
         <div className="h-[850px] p-10 pt-[100px]">
           <LoaderSpin />
         </div>
-      ) : (
+      ) : notificationPageDataa?.heading?.length >0 ?(
         <div className="buds-faq-background-image">
           <div className="mt-[56px] md:px-[56px] px-[16px] ">
             <h1 className="text-xl font-bold text-[#24222B] text-gilroy-bold mb-[24px]">
@@ -77,11 +87,16 @@ const Notifications: React.FC = () => {
           </div>
           <NotificationsList notificationsData={notificationPageDataa} />
 
-          <div className="md:mt-[124px]">
-            <Footer />
-          </div>
+          
+        </div>
+      ):(
+        <div className="flex justify-center items-center h-[450px] text-xl font-bold text-[#24222B] text-gilroy-bold">
+          <h1>No data available</h1>
         </div>
       )}
+      <div className="md:mt-[124px]">
+            <Footer />
+          </div>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import axios from "axios";
 import { bffUrl } from "../utils/api";
 import LoaderSpin from "../components/LoaderSpin";
 import { data } from "../utils/hardText/landingPageText2";
+import { useLangugaeStore } from "../zust/useLanguageUsStore";
 
 interface FaqItem {
   question: string;
@@ -58,6 +59,7 @@ const restructureFaqData = (faqPageData: any): FaqSection[] => {
 const Faq: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const { faqPageDataa, setFaqPageData } = useFaqStore((state) => state);
+  const {language} = useLangugaeStore((state) => state);
   const [state, setState] = useState(true);
   const [loader, setLoader] = useState(false);
   const [isOpen, setIsOpen] = useState("");
@@ -72,14 +74,18 @@ const Faq: React.FC = () => {
 
   useEffect(() => {
     homePageCmsApi();
-  }, [state]);
+  }, [state,language]);
 
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
 
     axios
-      .get(bffUrl + `/websitecontent/list/1`)
+      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+        headers: {
+          'Accept-Language': language
+        }
+    })
       .then((response) => {
         setHomePageData(response?.data?.data?.content?.updatedStructure);
         setLoader(false);
@@ -92,15 +98,19 @@ const Faq: React.FC = () => {
 
   useEffect(() => {
     faqPageCmsApi();
-  }, [state]);
+  }, [state,language]);
 
   const faqPageCmsApi = () => {
     setLoader(true);
 
     axios
-      .get(bffUrl + `/websitecontent/list/2`)
+      .get(bffUrl + `/websitecontent/get/name?wcname=faq`,{
+          headers: {
+            'Accept-Language': language
+          }
+      })
       .then((response) => {
-        setFaqPageData(response?.data?.data?.content?.faqPageData);
+        setFaqPageData(response?.data?.data?.content?.data?.faqPageData);
         setLoader(false);
         console.log("response", response);
       })
@@ -122,18 +132,7 @@ const Faq: React.FC = () => {
         <div className="h-[850px] p-10 pt-[100px]">
           <LoaderSpin />
         </div>
-      ) : (
-        // <div className="md:p-[56px] p-[16px] buds-faq-background-image">
-        //   <h1 className="text-[#24222B] text-xl font-bold text-gilroy-bold">
-        //     {faqPageDataa?.heading?.[0]?.text}
-        //   </h1>
-        //   <main>
-
-        //   {faqSections?.map((section, index) => (
-        //         <FaqSection key={index} title={section.title} items={section.items} />
-        //       ))}
-        //   </main>
-        // </div>
+      ) : faqPageDataa?.heading?.length > 0 ?(
         <div className="md:p-[56px] p-[16px] buds-faq-background-image">
           <div>
             <h1 className="text-[#24222B] text-xl font-bold text-gilroy-bold">
@@ -191,6 +190,10 @@ const Faq: React.FC = () => {
               )
             )}
           </div>
+        </div>
+      ):(
+        <div className="flex justify-center items-center h-[450px] text-xl font-bold text-[#24222B] text-gilroy-bold">
+          <h1>No data available</h1>
         </div>
       )}
       <div className="md:pt-24">

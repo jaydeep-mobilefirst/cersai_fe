@@ -12,6 +12,7 @@ import SetNewPasswordModel from "../userFlow/common/SetNewPasswordModel";
 import PasswordUpdateModel from "../userFlow/common/PasswordUpdateModel";
 import useTopDetailStore from "../../store/TopDetailStore";
 import { useLandingStore } from "../../zust/useLandingStore";
+import { Link } from "react-router-dom";
 
 interface AuthButtonProps {
   buttontext: string;
@@ -140,7 +141,8 @@ const TopDetail = () => {
                     className="ml-4 text-[#797979] text-gilroy-regular cursor-pointer underline"
                     onClick={downloadReport}
                   >
-                    {data?.text}
+                    <Link target={"_blank"} to={data.link}> {data?.text}</Link>
+                   
                   </div>
                 </>
               ) : (
