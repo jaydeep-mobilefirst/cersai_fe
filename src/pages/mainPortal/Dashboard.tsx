@@ -3,18 +3,44 @@ import TaskTabs from "../../components/userFlow/mainPortal/TaskTabs";
 import { Outlet } from "react-router-dom";
 import TotalFoundationLineChart from "../../components/charts/TotalFoundationLineChart";
 import HorizontalBarChart from "../../components/charts/HorizontalBarChart";
+import DashboardTabsContainer from "../../components/schemeSearch/DashboardTabsContainer";
+import DoubleBarChart from "../../components/charts/DoubleBarChart";
 
 type Props = {};
 
 const Dashboard = (props: Props) => {
+  const tabsData = [
+    { text: "Total Schemes Registered", value: "1000k", bgColor: true },
+    {
+      text: "Total Active Schemes",
+      value: "1000k",
+      bgColor: true,
+    },
+    { text: "Total Schemes Banned", value: "1000k", bgColor: false },
+    {
+      text: "Total Schemes Under Litigation",
+      value: "1000k",
+      bgColor: true,
+    },
+  ];
+
   return (
     <div className="relative xl:ml-[20px]">
-      <h1 className="text-[20px] font-[700] mb-3">Dashboard</h1>
-      <div className="w-[100%] bg-[#E7F0FF] rounded-[24px] p-[24px]">
-        <TotalFoundationLineChart />
+      <h1 className="text-[25px] font-[400] mb-3">Business Statistics</h1>
+      <div className="mb-[20px]">
+        <DashboardTabsContainer tabsData={tabsData} />
       </div>
-      <div className="mt-5">
-        <HorizontalBarChart />
+
+      <div className="w-[100%] gap-[20px]  flex justify-between flex-wrap">
+        {/* <div className="w-[100%] sm:w-[48%] xl:w-[31.5%]">
+          <DoubleBarChart />
+        </div> */}
+        <div className="w-[100%] sm:w-[48%] xl:w-[31.5%]">
+          <TotalFoundationLineChart />
+        </div>
+        {/* <div className="w-[100%] sm:w-[48%] xl:w-[31.5%]">
+          <DoubleBarChart />
+        </div> */}
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ const tabs = [
     url: "resetpassword",
     rurl: "/dt/resetpassword",
   },
+  { title: "Upload DSC3", url: "uploaddsc3", rurl: "/dt/uploaddsc3" },
 ];
 
 const TaskTabs = (props: Props) => {
