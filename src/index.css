@@ -122,3 +122,7 @@
 .slider-wrapper{
   width: 30% !important;
 }
+
+.my-swal {
+  z-index: 9999; /* or any desired value */
+}

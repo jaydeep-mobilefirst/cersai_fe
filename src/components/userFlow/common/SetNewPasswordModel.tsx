@@ -21,10 +21,12 @@ import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
 import PasswordUpdateModel from "./PasswordUpdateModel";
 import DscAuth from "./DscAuth";
+import DscKeyRegister from "../form/DscKeyRegister";
 
 interface SetNewPasswordModelProps {}
 
 const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -52,6 +54,8 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
     otpVerified === "true"
   );
   const [showPasswordUpdateModel, setShowPasswordUpdateModel] = useState(false);
+  const [isDscSelected, setDscSelected] = useState<boolean>(false);
+  const [dscCertificate, setDscCertificate] = useState<any>();
 
   useEffect(() => {
     if (token && !decodedToken) {
@@ -90,8 +94,9 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
       dscCertificateFile: "xyz",
     };
 
-    if (decodedToken?.isDsc && base64Data) {
-      payload.dscCertificateFile = base64Data;
+    if (decodedToken?.isDsc && (base64Data || isDscSelected)) {
+      payload.dscCertificateFile =
+        isDscKeyAvbl === "true" ? dscCertificate : base64Data;
     }
 
     axios
@@ -285,13 +290,21 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
 
                       {decodedToken?.isDsc && (
                         <div className="mt-4 lg:mt-8">
-                          <DscAuth
-                            onFileUpload={handleFileUpload}
-                            disabled={false}
-                            fileName={fileName}
-                          >
-                            Upload Document
-                          </DscAuth>
+                          {isDscKeyAvbl === "false" ? (
+                            <DscAuth
+                              onFileUpload={handleFileUpload}
+                              disabled={false}
+                              fileName={fileName}
+                            >
+                              Upload Document
+                            </DscAuth>
+                          ) : (
+                            <DscKeyRegister
+                              isDscSelected={isDscSelected}
+                              setDscSelected={setDscSelected}
+                              setDscCertificate={setDscCertificate}
+                            />
+                          )}
                         </div>
                       )}
 

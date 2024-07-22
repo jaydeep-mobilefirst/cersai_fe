@@ -1,4 +1,12 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 
 const data = [
   { name: "Jan", test: 0, test1: 120, test2: 20 },
@@ -11,13 +19,13 @@ const data = [
 
 const TotalFoundationLineChart: React.FC = () => {
   return (
-    <div className="w-[50%] bg-white rounded-2xl justify-center overflow-x-auto p-5">
-      <div className="w-[154px] text-black text-[14px] font-[500] text-gilroy-medium leading-tight mb-5">
-        Total Foundation Registered
-      </div>
-
-      <div>
-        <LineChart width={418} height={184} data={data} className="-ml-[30px]">
+    <div className="w-[100%] bg-[#E7F0FF] rounded-[24px] justify-center overflow-x-auto p-3">
+      <h1 className="font-[700] text-[20px] ml-2">Lorem ipsum</h1>
+      <p className="mb-2 ml-2">
+        Lorem ipsum dolor sit amet, consectutor adipiscing elit.
+      </p>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data} className="-ml-[30px]">
           <Line
             type="monotone"
             dataKey="test"
@@ -40,7 +48,7 @@ const TotalFoundationLineChart: React.FC = () => {
             dot={false}
           />
           <CartesianGrid strokeDasharray="0 0" vertical={false} />
-
+          <Tooltip />
           <XAxis
             dataKey="name"
             tickLine={false}
@@ -53,6 +61,20 @@ const TotalFoundationLineChart: React.FC = () => {
             tickLine={false}
           />
         </LineChart>
+      </ResponsiveContainer>
+      <div className="flex items-center justify-between px-5">
+        <div className="flex gap-2 items-center">
+          <div className=" w-[15px] h-[15px] bg-[#6B3E96] rounded-[50%]"></div>
+          <p className="mb-3">Actual</p>
+        </div>
+        <div className="flex gap-2 items-center">
+          <div className=" w-[15px] h-[15px] bg-[#3D90D0] rounded-[50%]"></div>
+          <p className="mb-3">Estimated</p>
+        </div>
+        <div className="flex gap-2 items-center">
+          <div className=" w-[15px] h-[15px] bg-[#1C468E] rounded-[50%]"></div>
+          <p className="mb-3">Difference</p>
+        </div>
       </div>
     </div>
   );

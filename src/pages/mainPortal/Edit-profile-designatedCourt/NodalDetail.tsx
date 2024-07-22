@@ -211,6 +211,7 @@ const NodalDetails = (props: Props) => {
             allFormData={allFormData}
             formFields={formFields}
             onChange={onChange}
+            disable={true}
           />
 
           <div>

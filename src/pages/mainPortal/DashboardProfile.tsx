@@ -37,29 +37,31 @@ const DashboardProfile = (props: Props) => {
             console.log("Error");
           }
           // console.log(dtData, "respnse--------------");
-          let modifiedFormFields = response.data.data?.formFields?.map(
-            (o: any) => ({
+          let modifiedFormFields = response.data.data?.formFields
+            ?.map((o: any) => ({
               ...o,
               userInput: dtData
                 ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
                 : "",
               error: "",
-            })
-          )
-          ?.sort((a  :any, b : any) => a.sortOrder - b.sortOrder)
+            }))
+            ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
-           let modifiedFileFields =
+          let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
               ...o,
               file: dtData
-              ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value : "",
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
               error: "",
               fileName: dtData
-              ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value : "",
-              uploadFileId : dtData
-              ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value : ""
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              uploadFileId: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
             }));
-          
+
           let obj = {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
