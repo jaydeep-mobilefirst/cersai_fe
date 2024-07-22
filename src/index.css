@@ -120,5 +120,9 @@
   height: auto;
 }
 .slider-wrapper{
-  width: 20% !important;
+  width: 30% !important;
+}
+
+.my-swal {
+  z-index: 9999; /* or any desired value */
 }

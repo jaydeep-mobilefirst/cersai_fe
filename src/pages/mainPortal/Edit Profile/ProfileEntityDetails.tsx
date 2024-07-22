@@ -22,6 +22,7 @@ const ProfileEntityDetails = (props: Props) => {
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  console.log("formdata",allFormData)
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
 
@@ -54,14 +55,13 @@ const ProfileEntityDetails = (props: Props) => {
           return {
             ...field,
             disabled: [
-              "Pin Code",
-              "Pan Number",
-              "Company Name (As per Pan)",
-            ].includes(field.label),
+              "companyName",
+              "panNumber",
+            ].includes(field.key),
           };
         })
     : [];
-  // console.log(formFields, "formfield entitydetail");
+  console.log(formFields, "formfield entitydetail");
 
   const formData =
     formFields &&

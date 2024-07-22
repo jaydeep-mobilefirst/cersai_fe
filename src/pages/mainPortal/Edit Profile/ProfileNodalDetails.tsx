@@ -44,17 +44,12 @@ const ProfileNodalDetails = (props: Props) => {
           return {
             ...field,
             disabled: [
-              "Nodal Officer FirstName",
-              "Nodal Officer MiddleName",
-              "Nodal Officer LastName",
-              "Nodal Officer Mobile Number",
-              "Nodal Officer Email",
-              "DSC3 Certificate",
-            ].includes(field.label),
+              "nodalMobile","nodalEmail"
+            ].includes(field.key),
           };
         })
     : [];
-  // console.log(formFields, "nodalDetail");
+  console.log(formFields, "nodalDetail");
 
   const formData =
     formFields &&
@@ -207,6 +202,7 @@ const ProfileNodalDetails = (props: Props) => {
             allFormData={allFormData}
             formFields={formFields}
             onChange={onChange}
+            disable={true}
           />
 
           <div>

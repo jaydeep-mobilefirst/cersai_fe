@@ -36,7 +36,7 @@ interface IContextProps {
     sectionId: number,
     flag: boolean
   ) => Promise<void>;
-  handleSchemeValidations : () => Promise<boolean>
+  handleSchemeValidations: () => Promise<boolean>;
 }
 
 // declare function handleValidations(errors: any): void;
@@ -330,8 +330,14 @@ const FormHandlerProviders = ({ children }: Props) => {
       }
     } else if (fieldType === "DSC") {
       const file = event;
-      const base64String: string = await convertFileToBase64Async(file);
-      updateValue(base64String, fieldData?.id, file?.name);
+      const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
+
+      if (isDscKeyAvbl === "true") {
+        updateValue(file, fieldData?.id, "dsc");
+      } else {
+        const base64String: string = await convertFileToBase64Async(file);
+        updateValue(base64String, fieldData?.id, file?.name);
+      }
     }
   };
 
@@ -447,8 +453,8 @@ const FormHandlerProviders = ({ children }: Props) => {
       let validations = field?.regFormFieldsValidations
         ? field?.regFormFieldsValidations
         : field?.schemeFormValidations
-          ? field?.schemeFormValidations
-          : [];
+        ? field?.schemeFormValidations
+        : [];
       return {
         formId: field?.id?.toString(),
         fieldValue: field?.userInput,
@@ -476,8 +482,8 @@ const FormHandlerProviders = ({ children }: Props) => {
     let deDupCheck = !isAdding
       ? true
       : !formValidations
-        ? true
-        : await ValidateDeDup(
+      ? true
+      : await ValidateDeDup(
           formFields?.filter(
             (field: any) =>
               emailRegex.test(field?.userInput) ||
@@ -629,87 +635,126 @@ const FormHandlerProviders = ({ children }: Props) => {
     return true;
   };
 
-  const handleSchemeValidations = async () : Promise<boolean> =>  {
+  const handleSchemeValidations = async (): Promise<boolean> => {
     let errorCount = 0;
-    let updatedFormFields = allFormData?.formFields?.form_fields?.map((field: any) => {
-      let key = field?.key;
-      switch (key) {
-        case 'startDate':
-        case 'lastDate':
-          let startDate = key === 'startDate' ? field?.userInput : allFormData?.formFields?.form_fields?.find((field: any) => field?.key === 'startDate')?.userInput;
-          let endDate = key === 'lastDate' ? field?.userInput : allFormData?.formFields?.form_fields?.find((field: any) => field?.key === 'lastDate')?.userInput;
-          console.log({startDate
-            ,endDate});
-          
-          if (!startDate || !endDate) {
+    let updatedFormFields = allFormData?.formFields?.form_fields?.map(
+      (field: any) => {
+        let key = field?.key;
+        switch (key) {
+          case "startDate":
+          case "lastDate":
+            let startDate =
+              key === "startDate"
+                ? field?.userInput
+                : allFormData?.formFields?.form_fields?.find(
+                    (field: any) => field?.key === "startDate"
+                  )?.userInput;
+            let endDate =
+              key === "lastDate"
+                ? field?.userInput
+                : allFormData?.formFields?.form_fields?.find(
+                    (field: any) => field?.key === "lastDate"
+                  )?.userInput;
+            console.log({ startDate, endDate });
+
+            if (!startDate || !endDate) {
+              return field;
+            }
+
+            startDate = new Date(startDate).getTime();
+            endDate = new Date(endDate).getTime();
+            // let today = new Date().getMilliseconds();
+
+            // if () {
+
+            // }
+            console.log("Start Date > End Date", startDate > endDate);
+
+            if (startDate > endDate && key === "startDate") {
+              errorCount += 1;
+              return {
+                ...field,
+                error: "Start date should be before last date",
+              };
+            } else {
+              return { ...field, error: "" };
+            }
+
+          case "minInvestment":
+          case "maxInvestment":
+            let minInvestment =
+              key === "minInvestment"
+                ? field?.userInput
+                : allFormData?.formFields?.form_fields?.find(
+                    (field: any) => field?.key === "minInvestment"
+                  )?.userInput;
+            let maxInvestment =
+              key === "maxInvestment"
+                ? field?.userInput
+                : allFormData?.formFields?.form_fields?.find(
+                    (field: any) => field?.key === "maxInvestment"
+                  )?.userInput;
+
+            if (!minInvestment || !maxInvestment) {
+              return field;
+            }
+
+            if (
+              !Number.isInteger(parseInt(minInvestment)) ||
+              !Number.isInteger(parseInt(maxInvestment))
+            ) {
+              if (
+                !Number.isInteger(parseInt(minInvestment)) &&
+                key === "minInvestment"
+              ) {
+                errorCount += 1;
+                return {
+                  ...field,
+                  error: "Minimum investment value should be number",
+                };
+              }
+
+              if (
+                !Number.isInteger(parseInt(maxInvestment)) &&
+                key === "maxInvestment"
+              ) {
+                errorCount += 1;
+                return {
+                  ...field,
+                  error: "Maximum investment value should be number",
+                };
+              }
+            }
+
+            minInvestment = parseInt(minInvestment);
+            maxInvestment = parseInt(maxInvestment);
+
+            if (minInvestment > maxInvestment) {
+              if (key === "minInvestment") {
+                errorCount += 1;
+                return {
+                  ...field,
+                  error: "Amount should be less than max investment",
+                };
+              } else {
+                return { ...field, error: "" };
+              }
+            } else {
+              return { ...field, error: "" };
+            }
+          default:
             return field;
-          }
-
-          startDate = new Date(startDate).getTime()
-          endDate = new Date(endDate).getTime()
-          // let today = new Date().getMilliseconds();
-
-          // if () {
-            
-          // }
-          console.log("Start Date > End Date", startDate > endDate);
-          
-          if (startDate > endDate && key === 'startDate') {
-            errorCount += 1;
-            return { ...field, error: "Start date should be before last date" }
-          }
-          else {
-            return {...field, error : ""};
-          }
-
-        case 'minInvestment':
-        case 'maxInvestment':
-          let minInvestment = key === 'minInvestment' ? field?.userInput : allFormData?.formFields?.form_fields?.find((field: any) => field?.key === 'minInvestment')?.userInput;
-          let maxInvestment = key === 'maxInvestment' ? field?.userInput : allFormData?.formFields?.form_fields?.find((field: any) => field?.key === 'maxInvestment')?.userInput;
-
-          if (!minInvestment || !maxInvestment) {
-            return field;
-          }
-
-          if (!Number.isInteger(parseInt(minInvestment)) || !Number.isInteger(parseInt(maxInvestment))) {
-            if (!Number.isInteger(parseInt(minInvestment)) && key === 'minInvestment') {
-              errorCount += 1;
-              return { ...field, error: "Minimum investment value should be number" }
-            }
-
-            if (!Number.isInteger(parseInt(maxInvestment)) && key === 'maxInvestment') {
-              errorCount += 1;
-              return { ...field, error: "Maximum investment value should be number" }
-            }
-          }
-
-          minInvestment = parseInt(minInvestment)
-          maxInvestment = parseInt(maxInvestment)
-
-          if (minInvestment > maxInvestment) {
-            if (key === "minInvestment") {
-              errorCount += 1;
-              return { ...field, error: "Amount should be less than max investment" }
-            }
-            else{
-              return  {...field, error : ""}
-            }
-          }
-          else {
-            return {...field, error : ""};
-          }
-        default:
-          return field
+        }
       }
-    })
+    );
     setAllFormData({
       ...allFormData,
-      formFields : {
-        form_fields : updatedFormFields
-      }
+      formFields: {
+        form_fields: updatedFormFields,
+      },
     });
     return errorCount === 0;
-  }
+  };
 
   return (
     <FormHandlerContext.Provider
@@ -720,7 +765,7 @@ const FormHandlerProviders = ({ children }: Props) => {
         updatePanFormField,
         onFileChange,
         handleDocumentValidations,
-        handleSchemeValidations
+        handleSchemeValidations,
       }}
     >
       {children}

@@ -36,7 +36,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
 
   useEffect(() => {
     const data = signupSideBar.find((p) => p.path === location.pathname);
-    setPercentage(data?.percentage);
+    // setPercentage(data?.percentage);
     setPage(data?.path);
   }, [location.pathname])
 
@@ -64,22 +64,28 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
     }, 0)
     console.log({completed, totalSections, sections});
     
-     let percentage = (completed / totalSections) * 100;
+     let percentage = (completed / (totalSections-1)) * 100;
+     console.log("percentage",percentage)
      switch (true) {
       case percentage < 25:
         setProgressbar(widthPercentage[0])
+        setPercentage(0)
         break;
-      case percentage > 25 && percentage <= 50:
+      case percentage >= 25 && percentage < 50:
         setProgressbar(widthPercentage[25])
+        setPercentage(25)
         break;
-      case percentage > 50 && percentage <= 75:
+      case percentage >= 50 && percentage < 75:
         setProgressbar(widthPercentage[50])
+        setPercentage(50)
         break;
-      case percentage > 75 && percentage < 100:
+      case percentage === 75:
         setProgressbar(widthPercentage[75])
+        setPercentage(75)
         break;
       case percentage === 100:
-        setProgressbar(widthPercentage[75])
+          setProgressbar(widthPercentage[100])
+          setPercentage(100)
         break;
      
      

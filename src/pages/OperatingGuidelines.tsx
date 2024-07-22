@@ -10,9 +10,11 @@ import Navbar from "../components/landingPage/Navbar";
 import Footer from "../components/landingPage/Footer";
 import { Link } from "react-router-dom";
 import { error } from "console";
+import { useLangugaeStore } from "../zust/useLanguageUsStore";
 
 const OpertaingGuidelines = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
+  const {language} = useLangugaeStore((state) => state);
   const { guidelinesPageData, setGuidelinesPageData } =
     useOperatingGuidelinesStore((state) => state);
 
@@ -21,13 +23,17 @@ const OpertaingGuidelines = () => {
 
   useEffect(() => {
     homePageCmsApi();
-  }, [state]);
+  }, [state,language]);
 
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
     axios
-      .get(bffUrl + `/websitecontent/list/1`)
+      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+        headers: {
+          'Accept-Language': language
+        }
+    })
       .then((response) => {
         setHomePageData(response?.data?.data?.content?.updatedStructure);
         setLoader(false);
@@ -40,19 +46,23 @@ const OpertaingGuidelines = () => {
 
   useEffect(() => {
     guidelinesPageCmsApi();
-  }, [state]);
+  }, [state,language]);
 
   const guidelinesPageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
     axios
-      .get(bffUrl + `/websitecontent/list/4`)
+      .get(bffUrl + `/websitecontent/get/name?wcname=operating guidelines`,{
+        headers: {
+          'Accept-Language': language
+        }
+    })
       .then((response) => {
 
         // setGuidelinesPageData(
         //   response?.data?.data?.content?.operatingGuidlinesPageData?.link?.[0]?.link
         // );
-        const link = response?.data?.data?.content?.operatingGuidlinesPageData?.link?.[0]?.link;
+        const link = response?.data?.data?.content?.link;
         if (link) {
           setGuidelinesPageData(link);
           window.open(link, "_blank");

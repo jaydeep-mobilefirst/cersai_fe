@@ -103,22 +103,34 @@ const ReviewDetails = () => {
       });
 
     finalResult = [...finalResult, ...docs];
-    
+
     axios[allFormData?.returnJourney ? 'put' : 'post'](bffUrl + `/competent-authority/${allFormData?.returnJourney ? 'return-journey' : 'add-form-fields'}`, {
-        identity : allFormData?.uniqueId,
-        formData: finalResult,
-        masterId: masterEntityId,
-      })
+      identity: allFormData?.uniqueId,
+      formData: finalResult,
+      masterId: masterEntityId,
+    })
       .then((response: any) => {
         const data = response.data;
         if (data?.success) {
           // setSubmitModal( true)
-          setPara1(`Your registration request has been sent successfully and
-            approval/rejection of your registration will be informed to you
-            via email.`);
-          setPara2(
-            `Your registration acknowledgement ID is ${data?.data?.newCompetentAuthority?.uniqueId}`
-          );
+          if (allFormData?.returnJourney) {
+            setPara1(`Your resumption journey has been sent successfully and
+              approval/rejection of your resumption will be informed to you
+              via email.`);
+            setPara2(
+              ``
+            );
+          }
+          else {
+            setPara1(`Your registration request has been sent successfully and
+              approval/rejection of your registration will be informed to you
+              via email.`);
+            setPara2(
+              `Your registration acknowledgement ID is ${data?.data?.newCompetentAuthority?.uniqueId}`
+            );
+          }
+
+
           setSubmitted(true);
           setSubmitModal(true);
         } else {

@@ -109,12 +109,23 @@ const ReviewDetailsRegulator = () => {
       .then((response: any) => {
         const data = response.data;
         if (data?.success) {
-          setPara1(`Your registration request has been sent successfully and
-            approval/rejection of your registration will be informed to you
-            via email.`);
-          setPara2(
-            `Your registration acknowledgement ID is ${data?.data?.newRegulator?.uniqueId}`
-          );
+          if (allFormData?.returnJourney) {
+            setPara1(`Your resumption journey has been sent successfully and
+              approval/rejection of your resumption will be informed to you
+              via email.`);
+            setPara2(
+              ``
+            );
+          }
+          else{
+
+            setPara1(`Your registration request has been sent successfully and
+              approval/rejection of your registration will be informed to you
+              via email.`);
+            setPara2(
+              `Your registration acknowledgement ID is ${data?.data?.newRegulator?.uniqueId}`
+            );
+          }
           setSubmitted(true);
           setSubmitModal(true);
         } else {
