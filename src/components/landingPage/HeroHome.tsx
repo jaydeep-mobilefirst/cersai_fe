@@ -80,7 +80,7 @@ const HeroHome = () => {
                       index === 1 ? "md:mt-[32px] md:ml-[32px]" : ""
                     }`} >
                       {" "}
-                      <div className={` pl-[24px] pr-[24px] pt-[32px] `} >
+                      <div className={` pl-[24px] pr-[24px] pt-[32px] text-wrap`} >
                         <div className="flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]">
                           <img
                             src={card?.img}
@@ -106,7 +106,7 @@ const HeroHome = () => {
                       index === 1 ? "md:mt-[32px]" : `md:mr-[32px] `
                     }` } >
                       {" "}
-                      <div className={`pl-[24px] pr-[24px] pt-[32px]  `} >
+                      <div className={`pl-[24px] pr-[24px] pt-[32px] `} >
                         <div className="flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]">
                           <img
                             src={card?.img}
@@ -135,7 +135,7 @@ const HeroHome = () => {
           interval={5000}
         >
           {homePageData?.homePageData?.carousel?.map((card:any, index:any) => (
-            <div className="flex flex-row items-center justify-center">
+            <div className="flex flex-row items-center justify-center pb-8">
               <div key={index} className={card?.card_class}>
                 <div className="ml-[24px] mr-[24px] mt-[32px]">
                   <div className={card?.class}>

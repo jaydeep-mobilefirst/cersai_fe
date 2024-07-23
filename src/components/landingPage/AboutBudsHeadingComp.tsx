@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   aboutBudsHeadingComp,
   aboutBudsHeadingComp1,
@@ -42,8 +43,9 @@ const AboutBudsHeadingComp = () => {
                 {item.text}
                 <span className="text-[#1C468E] text-gilroy-medium underline cursor-pointer">
                   {" "}
-                  {item.link}
+                  <Link target={"_blank"} to={item?.link}> {item?.link}</Link>
                 </span>
+                
               </p>
             </div>
           );
