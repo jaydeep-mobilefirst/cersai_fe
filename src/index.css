@@ -126,3 +126,14 @@
 .my-swal {
   z-index: 9999; /* or any desired value */
 }
+
+/* Hide the spinner arrows */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* Optional: space between the input and buttons */
+}
+
+input[type=number] {
+  -moz-appearance: textfield; /* Firefox */
+}

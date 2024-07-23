@@ -133,6 +133,7 @@ const ProfileBranches = () => {
     axios.post(`${bffUrl}/deposit-taker/bulk-upload/${entityId}`, formData)
     .then((res) => {
       let data = res.data;
+      
       if (data.success) {
         Swal.fire({
           icon : "success",
@@ -151,7 +152,7 @@ const ProfileBranches = () => {
     .catch((e) => {
       Swal.fire({
         title : "Unable upload file",
-        text : "Try again later!",
+        text : e?.response?.data?.detail?.message,
         icon : "error"
       })
     })
