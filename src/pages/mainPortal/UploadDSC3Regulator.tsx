@@ -36,12 +36,12 @@ const UploadDSC3Regulator = () => {
     }
     console.log(dscCertificate, "clicked dsc3 submit");
 
-    const id = 10;
+    const userId = sessionStorage.getItem("userId");
 
     try {
       setLoader(true);
       const response = await axios.put(`${bffUrl}/user/updatedsc`, {
-        id: id,
+        id: Number(userId),
         dscCertificate: dscCertificate,
         // dscCertificate: btoa(dscCertificate?.Cert),
       });
