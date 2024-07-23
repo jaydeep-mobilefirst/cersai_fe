@@ -61,19 +61,19 @@ const DoubleBarChart: React.FC<DoubleBarChartProps> = ({ chartData }) => {
           <Line type="monotone" dataKey="amt" stroke="red" strokeWidth={20} />
         </BarChart>
       </ResponsiveContainer>
-      <div className="flex items-center justify-between px-5">
+      <div className="flex items-center justify-center gap-6 px-5">
         <div className="flex gap-2 items-center">
           <div className=" w-[15px] h-[15px] bg-[#3E7AEA] rounded-[50%]"></div>
-          <p className="mb-3">Actual</p>
+          <p className="">Actual</p>
         </div>
         <div className="flex gap-2 items-center">
           <div className=" w-[15px] h-[15px] bg-[#ffffff] rounded-[50%]"></div>
-          <p className="mb-3">Estimated</p>
+          <p className="">Estimated</p>
         </div>
-        <div className="flex gap-2 items-center">
+        {/* <div className="flex gap-2 items-center">
           <div className=" w-[15px] h-[15px] bg-violet-500 rounded-[50%]"></div>
           <p className="mb-3">Difference</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
