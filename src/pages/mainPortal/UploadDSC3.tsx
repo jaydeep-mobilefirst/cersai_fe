@@ -28,13 +28,45 @@ const UploadDSC3 = () => {
     }
   }, [isDscSelected]);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!isDscSelected) {
       setError(true);
       return;
     }
     console.log(dscCertificate, "clicked dsc3 submit");
+
+    const id = 10;
+
+    try {
+      setLoader(true);
+      const response = await axios.put(`${bffUrl}/user/updatedsc`, {
+        id: id,
+        dscCertificate: dscCertificate,
+        // dscCertificate: btoa(dscCertificate?.Cert),
+      });
+      console.log(response?.data);
+      setLoader(false);
+      Swal.fire({
+        icon: "success",
+        title: "DSC3 Updated Successfully",
+        text: "",
+        customClass: {
+          container: "my-swal",
+        },
+      });
+    } catch (error) {
+      console.error("Error updating DSC:", error);
+      setLoader(false);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Update DSC3",
+        text: "Failed to Update DSC3",
+        customClass: {
+          container: "my-swal",
+        },
+      });
+    }
   };
 
   return (

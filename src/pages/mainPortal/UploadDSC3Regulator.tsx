@@ -28,13 +28,29 @@ const UploadDSC3Regulator = () => {
     }
   }, [isDscSelected]);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!isDscSelected) {
       setError(true);
       return;
     }
     console.log(dscCertificate, "clicked dsc3 submit");
+
+    const id = 10;
+
+    try {
+      setLoader(true);
+      const response = await axios.put(`${bffUrl}/user/updatedsc`, {
+        id: id,
+        dscCertificate: dscCertificate,
+        // dscCertificate: btoa(dscCertificate?.Cert),
+      });
+      console.log(response?.data);
+      setLoader(false);
+    } catch (error) {
+      console.error("Error updating DSC:", error);
+      setLoader(false);
+    }
   };
 
   return (
