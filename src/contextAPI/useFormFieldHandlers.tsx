@@ -213,7 +213,7 @@ const FormHandlerProviders = ({ children }: Props) => {
           switch (fieldName) {
             case "regulatorName":
             case "competentAuthorityName":
-            case "designatedCourtname":
+            case "designatedCourtName":
               let data = fieldData?.dropdown_options?.options?.find(
                 (d: any) => d?.id === event?.id
               );
@@ -251,6 +251,8 @@ const FormHandlerProviders = ({ children }: Props) => {
                     disabled: true,
                   };
                 } else if (/\bState\b/i.test(field?.label)) {
+                  return { ...field, userInput: data?.stateId, disabled: true };
+                } else if (/\bJurisdiction\b/i.test(field?.label)) {
                   return { ...field, userInput: data?.stateId, disabled: true };
                 } else if (fieldData?.id === field?.id) {
                   return { ...field, userInput: event?.value, disabled: false };

@@ -26,7 +26,7 @@ const ComponentDetails: React.FC = () => {
 
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
-  );
+  ); 
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Competent Authority Details"
