@@ -94,7 +94,7 @@ const Notifications: React.FC = () => {
           <h1>No data available</h1>
         </div>
       )}
-      <div className="md:mt-[124px]">
+      <div className={` ${notificationPageDataa?.notifications?.length <=6 ? "mt-[600px]":"mt-[124px]"}`}>
             <Footer />
           </div>
     </div>

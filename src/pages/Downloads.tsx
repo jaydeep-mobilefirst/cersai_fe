@@ -94,7 +94,7 @@ const Downloads = () => {
         </div>
       )}
 
-      <div className="mt-[124px]">
+      <div className={` ${downloadPageDataa?.downloads?.length <=10 ? "mt-[560px]":"mt-[124px]"}`}>
         <Footer />
       </div>
     </div>

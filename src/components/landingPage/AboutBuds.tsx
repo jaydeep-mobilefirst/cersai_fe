@@ -1,6 +1,7 @@
 import VideoComp from "./VideoComp";
 import { aboutBuds } from "../../utils/hardText/landingpageText";
 import { useLandingStore } from "../../zust/useLandingStore";
+import { Link } from "react-router-dom";
 
 const AboutBuds = () => {
   const { homePageData } = useLandingStore((state) => state);
@@ -16,10 +17,12 @@ const AboutBuds = () => {
         </p>
         <div className="flex flex-col mt-[24px]">
           <div className="text-[#1C468E] text-base font-normal  underline leading-normal text-gilroy-regular">
-            {homePageData?.homePageData?.aboutBudsComp[2].link}
+            {/* {homePageData?.homePageData?.aboutBudsComp[2].link} */}
+            <Link target={"_blank"} to={homePageData?.homePageData?.aboutBudsComp[2].link}> {homePageData?.homePageData?.aboutBudsComp[2].text}</Link>
           </div>
           <div className="mt-[8px] text-[#1C468E] text-base font-normal  underline leading-normal text-gilroy-regular">
-            {homePageData?.homePageData?.aboutBudsComp[3].link}
+            {/* {homePageData?.homePageData?.aboutBudsComp[3].link} */}
+            <Link target={"_blank"} to={homePageData?.homePageData?.aboutBudsComp[3].link}> {homePageData?.homePageData?.aboutBudsComp[3].text}</Link>
           </div>
         </div>
       </div>

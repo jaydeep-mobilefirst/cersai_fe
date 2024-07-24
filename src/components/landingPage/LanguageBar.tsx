@@ -52,7 +52,7 @@ const LanguageBar = () => {
                   <div
                     className={`mx-[8px] cursor-pointer ${
                       idx === 1 ? "text-gilroy-medium" : "text-gilroy-regular"
-                    }`}
+                    } ${languagename.code===language ? "bg-[#0B2551] text-white p-2" : ""}`}
                     key={idx}
                     onClick={() => resetLangugae(languagename.code)}
                   >
