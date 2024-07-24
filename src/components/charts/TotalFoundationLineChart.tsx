@@ -65,15 +65,15 @@ const TotalFoundationLineChart: React.FC = () => {
       <div className="flex items-center justify-between px-5">
         <div className="flex gap-2 items-center">
           <div className=" w-[15px] h-[15px] bg-[#6B3E96] rounded-[50%]"></div>
-          <p className="mb-3">Actual</p>
+          <p className="">Actual</p>
         </div>
         <div className="flex gap-2 items-center">
           <div className=" w-[15px] h-[15px] bg-[#3D90D0] rounded-[50%]"></div>
-          <p className="mb-3">Estimated</p>
+          <p className="">Estimated</p>
         </div>
         <div className="flex gap-2 items-center">
           <div className=" w-[15px] h-[15px] bg-[#1C468E] rounded-[50%]"></div>
-          <p className="mb-3">Difference</p>
+          <p className="">Difference</p>
         </div>
       </div>
     </div>
