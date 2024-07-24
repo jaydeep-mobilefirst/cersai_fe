@@ -56,7 +56,7 @@ const HeroHome = () => {
           ))}
         </div>
       </div>
-      <div className="md:w-[50%] w-full md:flex md:items-center md:justify-center mt-4 lg:mt-0 md:flex-col md:-ml-2 hidden -z-0">
+      <div className=" w-full md:flex md:items-center md:justify-center mt-4 lg:mt-0 md:flex-col md:-ml-2 hidden -z-0">
         <Carousel
           showThumbs={false}
           showStatus={false}
@@ -136,9 +136,9 @@ const HeroHome = () => {
         >
           {homePageData?.homePageData?.carousel?.map((card:any, index:any) => (
             <div className="flex flex-row items-center justify-center pb-8">
-              <div key={index} className={card?.card_class}>
+              <div key={index} className="w-[242px] h-[242px] bg-white rounded-[8px] shadow-custom p-2">
                 <div className="ml-[24px] mr-[24px] mt-[32px]">
-                  <div className={card?.class}>
+                  <div className="flex items-center justify-center w-[56px] h-[56px] rounded-[8px] bg-[#FDDAFC]">
                     <img src={card?.img} alt={card?.altText} className="w-[56px] h-[56px]" />
                   </div>
                   <p className="text-[20px] text-left leading-[24px] mt-[24px] text-gilroy-medium">

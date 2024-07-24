@@ -93,7 +93,9 @@ const Navbar: React.FC = () => {
             {homePageData?.homePageData?.navbar?.length > 0 && (
               <>
                 {homePageData?.homePageData?.navbar.map(
+                  
                   (menuItem: any, index: any) => (
+                    menuItem.text !== "Operating Guidelines" &&
                     <MenuItem
                       key={index}
                       text={menuItem.text.toUpperCase()}
@@ -121,6 +123,7 @@ const Navbar: React.FC = () => {
             <>
               {homePageData?.homePageData?.navbar.map(
                 (menuItem: any, index: any) => (
+                  menuItem.text !== "Operating Guidelines" && 
                   <MenuItem
                     key={index}
                     text={menuItem.text.toUpperCase()}

@@ -175,7 +175,7 @@ const ContactUs: React.FC = () => {
               </p>
 
               <p className="text-blue-500 underline">
-                <Link target={"_blank"} to={contactUsPageDataa?.residentailProcessDetails?.[2]?.link2}>
+                <Link target={"_blank"} to={contactUsPageDataa?.residentailProcessDetails?.[2]?.link}>
                   {" "}
                   {contactUsPageDataa?.residentailProcessDetails?.[2]?.text}
                 </Link>
@@ -183,7 +183,7 @@ const ContactUs: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-full" style={{ width: "100%", height: "500px" }}>
+          {/* <div className="w-full" style={{ width: "100%", height: "500px" }}>
             <iframe
               width="100%"
               height="100%"
@@ -192,8 +192,8 @@ const ContactUs: React.FC = () => {
               aria-hidden="false"
               title="Google Map"
             ></iframe>
-          </div>
-          <div className="">
+          </div> */}
+          <div className="mt-40">
             <Footer />
           </div>
         </>
