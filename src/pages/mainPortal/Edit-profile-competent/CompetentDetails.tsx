@@ -33,6 +33,28 @@ const CompetentDetails = (props: Props) => {
   //       (f: any) => f?.sectionId === sectionId?.id
   //     )
   //   : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       .filter((field: any) => {
+  //         // Filtering fields based on sectionId
+  //         return field?.sectionId === sectionId?.id;
+  //       })
+  //       .map((field: any) => {
+  //         // Adding a 'disabled' property based on specific field labels
+  //         return {
+  //           ...field,
+  //           disabled: [
+  //             "Nodal Officer First Name",
+  //             "Nodal Officer Middle Name",
+  //             "Nodal Officer Last Name",
+  //             "Nodal Officer Mobile Number",
+  //             "Nodal Officer Email",
+  //             "DSC3 Certificate",
+  //           ].includes(field.label),
+  //         };
+  //       })
+  //   : [];
+  // console.log(formFields, "nodalDetail");
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
         .filter((field: any) => {
@@ -41,20 +63,15 @@ const CompetentDetails = (props: Props) => {
         })
         .map((field: any) => {
           // Adding a 'disabled' property based on specific field labels
+          const isDisabled = field.required === true ? true : false;
           return {
             ...field,
-            disabled: [
-              "Nodal Officer First Name",
-              "Nodal Officer Middle Name",
-              "Nodal Officer Last Name",
-              "Nodal Officer Mobile Number",
-              "Nodal Officer Email",
-              "DSC3 Certificate",
-            ].includes(field.label),
+            disabled: isDisabled,
           };
         })
     : [];
-  // console.log(formFields, "nodalDetail");
+
+  // console.log(formFields, "compenet");
 
   const formData =
     formFields &&

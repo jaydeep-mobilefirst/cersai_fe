@@ -22,7 +22,7 @@ const ProfileEntityDetails = (props: Props) => {
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
-  console.log("formdata",allFormData)
+  console.log("formdata", allFormData);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
 
@@ -41,6 +41,26 @@ const ProfileEntityDetails = (props: Props) => {
   //         f?.sectionId === verificationSectionId?.id
   //     )
   //   : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       .filter((field: any) => {
+  //         // Filtering fields based on sectionId
+  //         return (
+  //           field?.sectionId === entityDetailsSectionId?.id ||
+  //           field?.sectionId === verificationSectionId?.id
+  //         );
+  //       })
+  //       .map((field: any) => {
+  //         // Adding a 'disabled' property based on specific field labels
+  //         return {
+  //           ...field,
+  //           disabled: [
+  //             "companyName",
+  //             "panNumber",
+  //           ].includes(field.key),
+  //         };
+  //       })
+  //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
         .filter((field: any) => {
@@ -51,16 +71,16 @@ const ProfileEntityDetails = (props: Props) => {
           );
         })
         .map((field: any) => {
-          // Adding a 'disabled' property based on specific field labels
+          // Setting the 'disabled' property based on the 'canEditable' property
+          const isDisabled = field.required === true ? true : false;
+
           return {
             ...field,
-            disabled: [
-              "companyName",
-              "panNumber",
-            ].includes(field.key),
+            disabled: isDisabled,
           };
         })
     : [];
+
   console.log(formFields, "formfield entitydetail");
 
   const formData =
@@ -76,15 +96,22 @@ const ProfileEntityDetails = (props: Props) => {
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
-    const noError = await handleValidationChecks(formFields?.filter((field : any) => field?.disabled === false));
-    console.log({noError});
-    
+    const noError = await handleValidationChecks(
+      formFields?.filter((field: any) => field?.disabled === false)
+    );
+    console.log({ noError });
+
     if (noError) {
       if (noError) {
         axios
-          .patch(`${bffUrl}/deposit-taker/${sessionStorage.getItem('entityUniqueId')}`, {
-            formData: formData,
-          })
+          .patch(
+            `${bffUrl}/deposit-taker/${sessionStorage.getItem(
+              "entityUniqueId"
+            )}`,
+            {
+              formData: formData,
+            }
+          )
           .then((response) => {
             console.log(response, "response");
             Swal.fire({

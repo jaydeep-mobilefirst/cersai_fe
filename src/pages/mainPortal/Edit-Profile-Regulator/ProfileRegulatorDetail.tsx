@@ -29,10 +29,17 @@ const ProfileRegulatorDetails = (props: Props) => {
   );
 
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-    ? allFormData?.formFields?.form_fields?.filter(
-        (f: any) => f?.sectionId === sectionId?.id
-      )
+    ? allFormData?.formFields?.form_fields
+        ?.filter((f: any) => f?.sectionId === sectionId?.id)
+        .map((field: any) => {
+          const isDisabled = field.required === true ? true : false;
+          return {
+            ...field,
+            disabled: isDisabled,
+          };
+        })
     : [];
+  console.log(formFields);
   const formData =
     formFields &&
     formFields?.map((field: any) => ({
