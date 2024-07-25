@@ -125,7 +125,7 @@ const ReviewMain = () => {
       .catch((e: any) => {
         setLoader(false);
         setPara1(e?.response?.data?.detail?.message);
-        setPara2(`Please try again later`);
+        setPara2(e?.response?.data?.message);
         setSubmitted(false);
         setSubmitModal(true);
         setLoader(false);
@@ -237,8 +237,8 @@ const ReviewMain = () => {
               isPdfMode={isPdfMode}
             />
             {!isPdfMode && (
-              <div className="flex flex-shrink-0 mt-[20px]">
-                <div className="justify-center align-center">
+              <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
+                <div className="">
                   <input
                     type="checkbox"
                     className="h-4 w-4 accent-[#1c648e]"
@@ -247,7 +247,7 @@ const ReviewMain = () => {
                     placeholder="ischecked"
                   />
                 </div>
-                <div className="leading-[24px] ml-4 text-gilroy-medium">
+                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
                   I here by declare that all information provided is best of my
                   knowledge
                 </div>

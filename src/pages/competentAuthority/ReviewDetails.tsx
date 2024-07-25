@@ -143,7 +143,7 @@ const ReviewDetails = () => {
       .catch((e: any) => {
         setLoader(false);
         setPara1(e?.response?.data?.detail?.message);
-        setPara2(`Please try again later`);
+        setPara2(e?.response?.data?.message);
         setSubmitted(false);
         setSubmitModal(true);
         setLoader(false);

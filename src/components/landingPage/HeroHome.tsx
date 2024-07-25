@@ -56,7 +56,7 @@ const HeroHome = () => {
           ))}
         </div>
       </div>
-      <div className=" w-full md:flex md:items-center md:justify-center mt-4 lg:mt-0 md:flex-col md:-ml-2 hidden -z-0">
+      <div className="md:w-[40%] w-full md:flex md:items-center md:justify-center mt-4 lg:mt-0 md:flex-col md:-ml-2 hidden -z-0">
         <Carousel
           showThumbs={false}
           showStatus={false}
