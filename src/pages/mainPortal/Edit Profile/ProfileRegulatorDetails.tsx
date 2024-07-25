@@ -28,11 +28,26 @@ const ProfileRegulatorDetails = (props: Props) => {
     (s: any) => s?.sectionName === "Regulators Details"
   );
 
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields?.filter(
+  //       (f: any) => f?.sectionId === sectionId?.id
+  //     )
+  //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-    ? allFormData?.formFields?.form_fields?.filter(
-        (f: any) => f?.sectionId === sectionId?.id
-      )
+    ? allFormData?.formFields?.form_fields
+        .filter((f: any) => f?.sectionId === sectionId?.id)
+        .map((field: any) => {
+          // Setting the 'disabled' property based on the 'canEditable' property
+          const isDisabled = field.required === true ? true : false;
+
+          return {
+            ...field,
+            disabled: isDisabled,
+          };
+        })
     : [];
+
+  console.log({ formFields }, "regulator");
   const formData =
     formFields &&
     formFields?.map((field: any) => ({
@@ -48,9 +63,12 @@ const ProfileRegulatorDetails = (props: Props) => {
     const noError = await handleValidationChecks(formFields);
     if (noError) {
       axios
-        .patch(`${bffUrl}/deposit-taker/${sessionStorage.getItem('entityUniqueId')}`, {
-          formData: formData,
-        })
+        .patch(
+          `${bffUrl}/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+          {
+            formData: formData,
+          }
+        )
         .then((response) => {
           console.log(response, "response");
           Swal.fire({

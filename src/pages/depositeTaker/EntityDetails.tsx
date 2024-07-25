@@ -85,7 +85,13 @@ const EntityDetails: React.FC = () => {
           >
             <div
               className="flex flex-row items-center space-x-2"
-              onClick={() => Navigate("/depositetaker/signup/verification")}
+              onClick={() =>
+                Navigate("/depositetaker/signup/verification", {
+                  state: {
+                    panverified: true,
+                  },
+                })
+              }
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
