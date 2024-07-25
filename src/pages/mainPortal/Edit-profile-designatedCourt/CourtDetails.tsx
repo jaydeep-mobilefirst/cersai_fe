@@ -35,6 +35,27 @@ const CourtDetails = (props: Props) => {
   //       (f: any) => f?.sectionId === sectionId?.id
   //     )
   //   : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       .filter((field: any) => {
+  //         // Filtering fields based on sectionId
+  //         return field?.sectionId === sectionId?.id;
+  //       })
+  //       .map((field: any) => {
+  //         // Adding a 'disabled' property based on specific field labels
+  //         return {
+  //           ...field,
+  //           disabled: [
+  //             "Nodal Officer FirstName",
+  //             "Nodal Officer MiddleName",
+  //             "Nodal Officer LastName",
+  //             "Nodal Officer Mobile Number",
+  //             "Nodal Officer Email",
+  //             "DSC3 Certificate",
+  //           ].includes(field.label),
+  //         };
+  //       })
+  //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
         .filter((field: any) => {
@@ -43,16 +64,10 @@ const CourtDetails = (props: Props) => {
         })
         .map((field: any) => {
           // Adding a 'disabled' property based on specific field labels
+          const isDisabled = field.required === true ? true : false;
           return {
             ...field,
-            disabled: [
-              "Nodal Officer FirstName",
-              "Nodal Officer MiddleName",
-              "Nodal Officer LastName",
-              "Nodal Officer Mobile Number",
-              "Nodal Officer Email",
-              "DSC3 Certificate",
-            ].includes(field.label),
+            disabled: isDisabled,
           };
         })
     : [];
