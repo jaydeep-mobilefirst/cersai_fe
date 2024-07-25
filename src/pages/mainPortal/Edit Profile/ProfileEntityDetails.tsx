@@ -19,6 +19,7 @@ type Props = {};
 
 const ProfileEntityDetails = (props: Props) => {
   const Navigate = useNavigate();
+  const status = sessionStorage.getItem('user_status')
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
@@ -63,22 +64,30 @@ const ProfileEntityDetails = (props: Props) => {
   //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
-        .filter((field: any) => {
-          // Filtering fields based on sectionId
-          return (
-            field?.sectionId === entityDetailsSectionId?.id ||
-            field?.sectionId === verificationSectionId?.id
-          );
-        })
-        .map((field: any) => {
-          // Setting the 'disabled' property based on the 'canEditable' property
-          const isDisabled = field.required === true ? true : false;
+      .filter((field: any) => {
+        // Filtering fields based on sectionId
+        return (
+          field?.sectionId === entityDetailsSectionId?.id ||
+          field?.sectionId === verificationSectionId?.id
+        );
+      })
+      .map((field: any) => {
+        // Setting the 'disabled' property based on the 'canEditable' property
+        const isDisabled = field.required === true ? status === 'RETURNED' ? [
+          "companyName",
+          "panNumber",
+          'dateOfIncorporation'
+        ].includes(field.key) ? true :  false : true  : [
+          "companyName",
+          "panNumber",
+          'dateOfIncorporation'
+        ].includes(field.key) ? true : false;
 
-          return {
-            ...field,
-            disabled: isDisabled,
-          };
-        })
+        return {
+          ...field,
+          disabled: isDisabled,
+        };
+      })
     : [];
 
   console.log(formFields, "formfield entitydetail");

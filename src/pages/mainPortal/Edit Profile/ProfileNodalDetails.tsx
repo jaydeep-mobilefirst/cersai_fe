@@ -19,6 +19,7 @@ type Props = {};
 const ProfileNodalDetails = (props: Props) => {
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
+  const status = sessionStorage.getItem('user_status')
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
@@ -28,6 +29,8 @@ const ProfileNodalDetails = (props: Props) => {
     (s: any) => s?.sectionName === "Nodal Details"
   );
 
+  console.log({status});
+  
   // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
   //   ? allFormData?.formFields?.form_fields?.filter(
   //       (f: any) => f?.sectionId === sectionId?.id
@@ -55,7 +58,11 @@ const ProfileNodalDetails = (props: Props) => {
         })
         .map((field: any) => {
           // Adding a 'disabled' property based on specific field labels
-          const isDisabled = field.required === true ? true : false;
+          const isDisabled = field.required === true ? status === 'RETURNED' ? 
+          [
+            "companyName",
+            "panNumber",
+          ].includes(field.key) ? true :  false : true : ["nodalMobile", "nodalEmail"].includes(field.key) ? true :  false;
           return {
             ...field,
             disabled: isDisabled,
