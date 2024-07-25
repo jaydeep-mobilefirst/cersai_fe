@@ -99,11 +99,16 @@ const LoginModel: React.FC<LoginModelProps> = ({
         password: watch("password"),
         entityType: selected,
       });
-      // console.log(response?.data?.user?.id, "login model");
+      console.log(response?.data, "login model");
 
       sessionStorage.setItem(
         "access_token",
         response?.data?.response?.access_token
+      );
+
+      sessionStorage.setItem(
+        "user_status",
+        response?.data?.entityDetais?.status
       );
       sessionStorage.setItem(
         "refresh_token",
