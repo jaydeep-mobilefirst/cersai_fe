@@ -188,6 +188,7 @@ import axios, { AxiosError } from "axios";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
+import { bffUrl } from "../../utils/api";
 
 type Props = {};
 
@@ -226,20 +227,16 @@ const VerificationForm = (props: Props) => {
 
     const verifyPan = async (): Promise<boolean> => {
       try {
-        let company = formFields?.find((field: any, i: number) =>
-          /Company Name/i.test(field?.label)
-        );
-        let pan = formFields?.find((field: any, i: number) =>
-          /PAN Number/i.test(field?.label)
-        );
-
-        let response = await axios.post(
-          "http://107.178.253.95/cms/pandirectory/api",
-          {
-            name: company?.userInput?.toUpperCase(),
-            pan_no: pan?.userInput,
-          }
-        );
+        let company = formFields?.find((field : any, i : number) => field?.key === 'companyName' );
+        let pan = formFields?.find((field : any, i : number) =>  field?.key === 'panNumber');
+        let dob = formFields?.find((field : any, i : number) =>  field?.key === 'dateOfIncorporation')?.userInput?.split('-');
+        
+        
+        let response = await axios.post(bffUrl+"/pandirectory/api", {
+          name:company?.userInput?.toUpperCase(),
+          pan_no: pan?.userInput,
+          dob : dob[2]+"/"+dob[1]+"/"+dob[0]
+        })
         const data = response.data;
         if (data?.status !== "success") {
           setPara1(`Verification Failed`);
