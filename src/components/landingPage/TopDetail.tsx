@@ -29,7 +29,6 @@ const TopDetail = () => {
   //   useState(false);
 
   const { homePageData } = useLandingStore((state) => state);
-  // console.log("contactdetails",homePageData?.homePageData?.contactDetails)
 
   const {
     isOpen,

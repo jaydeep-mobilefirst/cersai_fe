@@ -268,7 +268,6 @@ const ReviewMainListing = ({
   documentData,
   isPdfMode,
 }: Props) => {
-  console.log("allformdata",allFormData)
   return (
     <>
       {allFormData &&

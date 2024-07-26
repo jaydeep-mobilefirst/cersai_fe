@@ -157,7 +157,6 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
               error: "",
               fileName: "",
             }));
-            console.log({response});
             
           let obj = {
             dropdownData,
@@ -181,14 +180,11 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const [selectedRadio, setSelectedRadio] = useState<any>(entities[0]);
 
   const handleSubmit = (e: any) => {
-    console.log();
     
     e.preventDefault();
     fetchFormFields();
     Navigate(selectedRadio?.path);
   };
-
-  console.log({data, selectedRadio});
   
 
   return (

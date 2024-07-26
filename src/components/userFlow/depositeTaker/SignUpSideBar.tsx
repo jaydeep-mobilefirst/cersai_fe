@@ -62,10 +62,8 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
         return acc + 0;
       }
     }, 0)
-    console.log({completed, totalSections, sections});
     
      let percentage = (completed / (totalSections-1)) * 100;
-     console.log("percentage",percentage)
      switch (true) {
       case percentage < 25:
         setProgressbar(widthPercentage[0])

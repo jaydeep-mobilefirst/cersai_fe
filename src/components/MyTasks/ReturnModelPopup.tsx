@@ -62,7 +62,6 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
       .post("/approval-engine/reason-code?reasonFor=RETURN")
       .then((response: any) => {
         if (response.data.success) {
-          console.log(response?.data?.data, "response");
           setOptionData(
             response?.data?.data?.map((f: any) => ({
               value: f.id,
@@ -120,7 +119,6 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
         }
       );
       setLoader(false);
-      console.log(response, "response");
       if (response.status === 201) {
         setApiSuccess(true);
         setApiError(false);

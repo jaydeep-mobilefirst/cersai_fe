@@ -12,7 +12,6 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => setIsOpen(!isOpen);
-  console.log("faqdatasa", faqDataa?.data?.content?.faqPageData?.arrows);
 
   return (
     <div className="bg-white rounded-lg border border-neutral-300 mb-4">

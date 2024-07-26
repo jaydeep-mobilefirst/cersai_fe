@@ -16,7 +16,6 @@ function useFetchFunctionalityForUAM(entityType : string) {
         setError(null);
       } catch (err : any) {
         if (attempt <= maxRetries) {
-          console.log(`Attempt ${attempt} failed, retrying...`);
           fetchData(attempt + 1);
         } else {
           console.error('Max retries reached:', err);

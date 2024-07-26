@@ -33,7 +33,7 @@ const HeroHome = () => {
 
 
   const groupedCardData1 = chunkArray(homePageData?.homePageData?.carousel, 4); // Update chunk size to 4
-  console.log("4 data", groupedCardData1)
+  
 
  
 

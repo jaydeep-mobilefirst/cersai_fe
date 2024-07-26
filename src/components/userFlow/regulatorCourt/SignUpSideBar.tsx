@@ -22,6 +22,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
   const [page, setPage] = useState<string | undefined>(location.pathname);
 
   const [percent, setPercentage] = useState<any>(0);
+
   const widthPercentage: any = {
     0: "w-0",
     25: "w-1/4",
@@ -29,19 +30,22 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
     75: "w-3/4",
     100: "w-full",
   };
+  const [progressBar, setProgressbar] = useState<string>(widthPercentage[0]);
 
   const handleClick = (des: string, num: number, path: string) => {
-    setPercentage(num);
-    setPage(path);
+    // setPercentage(num);
+    // setPage(path);
     Navigate(path);
   };
 
   useEffect(() => {
     const data = signupSideBarRegulator.find(
       (p) => p.path === location.pathname
+      
     );
-    setPercentage(data?.percentage);
+    // setPercentage(data?.percentage);
     setPage(data?.path);
+
   }, [location.pathname]);
 
   useEffect(() => {
@@ -55,6 +59,48 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
       clearTimeout(timeout);
     };
   }, [allFormData]); 
+
+  useEffect(() => {
+    let totalSections = sections?.length;
+    console.log(totalSections,sections)
+    let completed = sections?.reduce((acc, obj) => {
+      if (obj?.completed) {
+        return acc + 1;
+      }
+      else{
+        return acc + 0;
+      }
+    }, 0)
+    console.log({completed, totalSections, sections});
+    
+     let percentage = (completed / (totalSections)) * 100;
+     console.log("percentage",percentage)
+     switch (true) {
+      case percentage < 25:
+        setPercentage(0)
+        break;
+      case percentage >= 25 && percentage < 50:
+        setPercentage(25)
+        break;
+      case percentage >= 50 && percentage < 75:
+        setPercentage(50)
+        break;
+      case percentage === 75:
+        setPercentage(75)
+        break;
+      case percentage === 100:
+          setPercentage(100)
+        break;
+     
+     
+      default:
+        break;
+     }
+
+  }, [sections])
+  
+
+
   return (
     <div className="sm:w-[300px] h-[100vh] md:w-[349px] w-[250px] bg-[#E7F0FF]">
       {/* {isMenuOpen && (
@@ -92,6 +138,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
                 <div
                   // onClick={() =>
                   //   handleClick(item.description, item.percentage, item.path)
+                  
                   // }
                   key={item.id}
                   className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#1C468E] rounded-lg justify-between items-center inline-flex ${

@@ -619,13 +619,10 @@ const SelectButtonUserManagement = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: any) => {
-    console.log("Clicked outside");
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      console.log("Closing dropdown");
       setArrowDirectionToggle(false);
     }
     // Check if any other event handlers are intercepting the click event
-    console.log("Event bubbling path:", event.composedPath());
   };
 
   useEffect(() => {

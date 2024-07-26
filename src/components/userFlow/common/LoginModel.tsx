@@ -99,7 +99,6 @@ const LoginModel: React.FC<LoginModelProps> = ({
         password: watch("password"),
         entityType: selected,
       });
-      console.log(response?.data, "login model");
 
       sessionStorage.setItem(
         "access_token",
@@ -142,7 +141,6 @@ const LoginModel: React.FC<LoginModelProps> = ({
       setFormError(errorMessage);
       // if (err.response?.data?.error?.error_description) {
       //   setFormError(err.response.data.error?.error_description);
-      //   console.log(err, "error");
       //   setError(true);
       // } else {
       //   setFormError("An error occurred. Please try again.");
@@ -164,7 +162,6 @@ const LoginModel: React.FC<LoginModelProps> = ({
       })
       .then((respose) => {
         reset();
-        // console.log(respose);
         setLoader(false);
         if (selected === "DT") {
           navigate("/dt/dashboard");

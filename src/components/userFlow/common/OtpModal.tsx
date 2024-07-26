@@ -135,7 +135,6 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const sendOtp = (event: any) => {
     event.preventDefault();
     if (Object.keys(decodedToken).length > 0) {
-      console.log({ decodedToken }, "-------------------");
       setLoader(true)
       axios
         .post(`${bffUrl}/dual-otp/sendotp`, {
