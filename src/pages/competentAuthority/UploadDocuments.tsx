@@ -65,8 +65,6 @@ const UploadDocumentsRegulator = (props: Props) => {
     setFile(null);
     toggleDeletePopup();
   };
-
-  console.log({ documentData });
   const submit = async (e: any) => {
     e.preventDefault();
     const goodToGo = await handleDocumentValidations(

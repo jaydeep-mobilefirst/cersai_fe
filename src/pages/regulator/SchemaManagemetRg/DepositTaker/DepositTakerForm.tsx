@@ -67,9 +67,6 @@ const DepositTakerForm = () => {
           } catch (error) {
             console.log("Error");
           }
-          console.log({ dtData, response });
-
-          // console.log(dtData, "respnse--------------");
           let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
@@ -99,7 +96,6 @@ const DepositTakerForm = () => {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
-          // console.log(obj, "obj-----");
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
         } else {
@@ -192,7 +188,6 @@ const DepositTakerForm = () => {
       const arrayBuffer = data?.data?.data;
 
       await getFileDatafromBuffer(arrayBuffer);
-      // console.log({buffer, type, blob, url});
       // setViewLoader(false);
       fetchFormFields();
       // window.location.reload();

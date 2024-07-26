@@ -63,8 +63,6 @@ const ReviewDetailsRegulator = () => {
       document.body.classList.remove("pdf-mode");
     }
   }, [isPdfMode]);
-
-  console.log({allFormData});
   
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();

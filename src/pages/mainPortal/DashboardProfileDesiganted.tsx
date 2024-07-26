@@ -28,7 +28,6 @@ const DashboardProfileDesignateCourt = (props: Props) => {
     axios
       .get(`${bffUrl}/registration/field-data/4?status=addToProfile`)
       .then(async (response) => {
-        console.log(response?.data, "response");
 
         // if (response?.data?.success) {
         //   let dcData: any = [];
@@ -84,7 +83,6 @@ const DashboardProfileDesignateCourt = (props: Props) => {
           } catch (error) {
             console.log("Error");
           }
-          // console.log(dtData, "respnse--------------");
           let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
@@ -115,7 +113,6 @@ const DashboardProfileDesignateCourt = (props: Props) => {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
-          // console.log(obj, "obj-----");
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
         } else {

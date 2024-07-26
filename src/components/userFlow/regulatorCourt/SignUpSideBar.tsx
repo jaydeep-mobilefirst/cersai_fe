@@ -62,7 +62,6 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
 
   useEffect(() => {
     let totalSections = sections?.length;
-    console.log(totalSections,sections)
     let completed = sections?.reduce((acc, obj) => {
       if (obj?.completed) {
         return acc + 1;
@@ -71,10 +70,8 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
         return acc + 0;
       }
     }, 0)
-    console.log({completed, totalSections, sections});
     
      let percentage = (completed / (totalSections)) * 100;
-     console.log("percentage",percentage)
      switch (true) {
       case percentage < 25:
         setPercentage(0)

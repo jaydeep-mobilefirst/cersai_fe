@@ -44,13 +44,12 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const uniqueId = location.state?.uniqueId;
   const depositTakerId = location.state?.depositTakerId;
   const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
-  // console.log(entityDetailsFields, "entitydata");
   
   const fetchSchema = async () => {
     try {
       setLoader(true);
       const response = await axios.get(`${bffUrl}/scheme/field-data/${createdBy === 'DT' ? 1 : 2}`);
-      // console.log(response, "response");
+      
       if (response.data.success) {
         const portalResponse = await axios.get(
           `${bffUrl}/scheme-portal/${uniqueId}`
@@ -316,7 +315,6 @@ const SchemesSearchDetailsSM: React.FC = () => {
           icon: "error"
         })
       }
-      console.log({data});
     })
     .catch((e) => {
       Swal.fire({

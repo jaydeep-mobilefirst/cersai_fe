@@ -56,7 +56,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
     try {
       setLoader(true);
       const response = await axios.get(`${bffUrl}/scheme/field-data/${createdBy === 'DT' ? 1 : 2}`);
-      // console.log(response, "response");
+      
       if (response.data.success) {
         const portalResponse = await axios.get(
           `${bffUrl}/scheme-portal/${uniqueId}`

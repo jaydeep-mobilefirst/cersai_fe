@@ -17,23 +17,18 @@ const tabs = [
 const TaskTabsRegulator = (props: Props) => {
   const [activeTab, setActiveTab] = useState<string>("profile");
   const [url, setUrl] = useState<String>("");
-  console.log(url, "url  owais");
 
   const location = useLocation();
   const { pathname } = location;
-  console.log(pathname.split("/")[2], "path");
 
   useEffect(() => {
     const cmsPath = pathname.split("/")[2];
     setUrl(cmsPath);
-    console.log(cmsPath, "path");
   }, [pathname]);
 
   const handleTabClick = (tabName: string) => {
     setActiveTab(tabName);
   };
-
-  // console.log({ url });
 
   return (
     <div className="flex-col justify-center items-start max-sm:items-center inline-flex border-b w-full">

@@ -23,11 +23,8 @@ const ProfileEntityDetails = (props: Props) => {
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
-  console.log("formdata", allFormData);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
-
-  // console.log(allFormData, "allform data ");
 
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
@@ -90,8 +87,6 @@ const ProfileEntityDetails = (props: Props) => {
       })
     : [];
 
-  console.log(formFields, "formfield entitydetail");
-
   const formData =
     formFields &&
     formFields?.map((field: any) => ({
@@ -100,7 +95,6 @@ const ProfileEntityDetails = (props: Props) => {
       label: field.label,
       value: field.userInput,
     }));
-  // console.log(formData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -108,7 +102,6 @@ const ProfileEntityDetails = (props: Props) => {
     const noError = await handleValidationChecks(
       formFields?.filter((field: any) => field?.disabled === false)
     );
-    console.log({ noError });
 
     if (noError) {
       if (noError) {
@@ -122,7 +115,6 @@ const ProfileEntityDetails = (props: Props) => {
             }
           )
           .then((response) => {
-            console.log(response, "response");
             Swal.fire({
               icon: "success",
               text: "Entity Detail  update  successfully ",

@@ -69,7 +69,6 @@ const ProfileNodalDetails = (props: Props) => {
           };
         })
     : [];
-  console.log(formFields, "nodalDetail");
 
   const formData =
     formFields &&
@@ -79,8 +78,6 @@ const ProfileNodalDetails = (props: Props) => {
       label: field.label,
       value: field.userInput,
     }));
-
-  console.log(formData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -95,7 +92,6 @@ const ProfileNodalDetails = (props: Props) => {
           }
         )
         .then((response) => {
-          console.log(response, "response");
           Swal.fire({
             icon: "success",
             text: "Nodal Detail  update  successfully ",

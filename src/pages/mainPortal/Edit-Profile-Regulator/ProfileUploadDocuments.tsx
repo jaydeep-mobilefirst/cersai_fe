@@ -77,7 +77,6 @@ const ProfileUploadDocuments = (props: Props) => {
         }
       )
       .then((response) => {
-        // console.log(response, "response");
         Swal.fire({
           icon: "success",
           text: "Documents uploaded successfully",

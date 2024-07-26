@@ -155,7 +155,6 @@
 
 //         if (response.data.success) {
 //           setLoader(false);
-//           console.log(response, "response");
 //           setMessageType("success");
 //           setMessage(response.data.message);
 //           localStorage.setItem(

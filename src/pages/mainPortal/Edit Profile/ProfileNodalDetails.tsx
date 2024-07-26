@@ -28,9 +28,6 @@ const ProfileNodalDetails = (props: Props) => {
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Nodal Details"
   );
-
-  console.log({status});
-  
   // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
   //   ? allFormData?.formFields?.form_fields?.filter(
   //       (f: any) => f?.sectionId === sectionId?.id
@@ -69,7 +66,6 @@ const ProfileNodalDetails = (props: Props) => {
           };
         })
     : [];
-  console.log(formFields, "nodalDetail");
 
   const formData =
     formFields &&
@@ -79,8 +75,6 @@ const ProfileNodalDetails = (props: Props) => {
       label: field.label,
       value: field.userInput,
     }));
-
-  console.log(formData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -95,7 +89,6 @@ const ProfileNodalDetails = (props: Props) => {
           }
         )
         .then((response) => {
-          console.log(response, "response");
           Swal.fire({
             icon: "success",
             text: "Nodal Detail  update  successfully ",

@@ -37,7 +37,6 @@ const RoleCreation = () => {
 
 
   // States for Edit
-  // console.log( {loading, roles, page, pageSize, setFunctionalitySearch, setPage, setSearchString, totalPages});
   const [roleName, setRoleName] = useState<string | undefined>(undefined);
   const [isActive, setIsActive] = useState();
   const [roleEditId, setRoleEditId] = useState<number | undefined>();
@@ -68,7 +67,6 @@ const RoleCreation = () => {
       cell: (info: any) => {
         const value = info?.row?.original?.isActive;
         const id = info?.row?.original?.id;
-        // console.log(info?.row?.original?.id, "info");
         const StatusChange = () => {
           axios
             .patch(`${bffUrl}/role/status/`, {

@@ -46,7 +46,6 @@ const NodalDetails = (props: Props) => {
     setLoader(true);
     // False means validation fail
     const noError = await handleValidationChecks(formFields);
-    console.log(noError);
 
     setLoader(false);
     if (noError) {
@@ -65,8 +64,6 @@ const NodalDetails = (props: Props) => {
       }
     }
   };
-
-  console.log({ allFormData });
 
   return (
     <>

@@ -24,7 +24,6 @@ const AddUserForm = () => {
   const [submitted, setSubmitted] = useState(false)
   const editUserData = sessionStorage.getItem("editUserData");
   const operation = sessionStorage.getItem("operation");
-  console.log({ editUserData });
   const parsedEditUSerData = JSON.parse(editUserData ?? "{}");
   const userCreationURL = sessionStorage.getItem("userCreationURL");
   const { handleRefreshUAM } = uamStore((state) => state);
@@ -40,7 +39,6 @@ const AddUserForm = () => {
     { label: "Select Role", value: "", id: "" },
     ...JSON.parse(sessionStorage.getItem("customRoles") ?? "[]"),
   ];
-  console.log({ roles });
 
   const handleButtonClick = () => {
     // Set showPopup to true to display the popup
@@ -155,8 +153,6 @@ const AddUserForm = () => {
       reset();
     }
   }, [editUserData]);
-
-  console.log({ errors, parsedEditUSerData });
 
   return (
     <div className="mt-2 ">

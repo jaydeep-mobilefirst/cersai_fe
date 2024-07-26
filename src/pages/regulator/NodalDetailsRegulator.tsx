@@ -32,8 +32,6 @@ const NodalDetailsRegulator = () => {
     (f: any) => f?.sectionId === sectionId?.id
   );
   const screenWidth = useScreenWidth();
-
-  // console.log(formFields, "allFormData");
   const mobile = allFormData?.formFields?.form_fields?.find(
     (field: any) => field?.label === "Nodal Officer Mobile Number"
   )?.userInput;
@@ -54,7 +52,6 @@ const NodalDetailsRegulator = () => {
         email: email,
         mobile: mobile,
       });
-      // console.log(response.data.statusCode, "deposite taker otp ");
       if (response.data.statusCode === 201) {
         setShowOTPModel(true);
       } else {

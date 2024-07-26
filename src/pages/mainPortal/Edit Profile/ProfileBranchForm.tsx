@@ -60,7 +60,6 @@ const ProfileBranchForm: React.FC<Props> = ({
   // }, [selectedState, selectedDistrict, setValue, i]);
 
   // const handleSetState = (value: string) => {
-  //   console.log(value, "value");
   //   setSelectedState(value);
   //   setValue(`branches[${i}].state`, value); // Set state value
   // };
@@ -106,11 +105,9 @@ const ProfileBranchForm: React.FC<Props> = ({
     if (pinCode.length === 6) {
       try {
         const response = await axios.get(`${pincodeValidationUrl}/${pinCode}`);
-        // console.log(response?.data[0].PostOffice[0].District, "pinCode");
 
         // const state = response.data[0].PostOffice[0].State;
         // const district = response.data[0].PostOffice[0].District;
-        // console.log(state, district, "state and district");
         // setSelectedState(state);
         // setSelectedDistrict(district);
         // setValue(`branches[${i}].state`, state);

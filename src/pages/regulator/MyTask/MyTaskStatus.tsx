@@ -126,7 +126,6 @@ const MyTaskStatus = () => {
     columnHelper.accessor((row) => row, {
       id: "action",
       cell: (info: any) => {
-        console.log(info, "info");
         const {
           uniqueId,
           depositTakerName,
@@ -134,13 +133,6 @@ const MyTaskStatus = () => {
           status,
           approvalDocumentId,
         } = info.getValue();
-        console.log(
-          uniqueId,
-          depositTakerName,
-          status,
-          checkerId,
-          approvalDocumentId
-        );
         return (
           <div
             className="flex justify-center items-center "

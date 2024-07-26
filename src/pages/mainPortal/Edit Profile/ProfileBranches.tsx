@@ -101,7 +101,6 @@ const ProfileBranches = () => {
           branches: branchesToSubmit,
         }
       );
-      console.log(response?.data?.message, "branch");
       await fetchBranches();
 
       Swal.fire({

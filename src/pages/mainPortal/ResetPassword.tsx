@@ -25,7 +25,6 @@ const ResetPassword = () => {
   } = useForm();
 
   const onSubmit = async (data: any) => {
-    // console.log(data);
     setLoader(true);
     try {
       const response = await axios.post(`${bffUrl}/auth/resetpassword`, {
@@ -34,7 +33,6 @@ const ResetPassword = () => {
         newpassword: data.confirmPassword,
         entityType: entityType,
       });
-      console.log(response.data.message);
       setLoader(false);
       Swal.fire({
         icon: "success",
@@ -47,7 +45,6 @@ const ResetPassword = () => {
     } catch (error:unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          console.error('Error response data:', error.response.data.message);
         
       setLoader(false);
       Swal.fire({
