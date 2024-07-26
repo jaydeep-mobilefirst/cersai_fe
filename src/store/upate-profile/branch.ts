@@ -87,20 +87,37 @@ export const useBranchStore = create<BranchState>(
   persist<BranchState>(
     (set) => ({
       ...initialBranchState,
+      // addBranch: () => {
+      //   set((state) => ({
+      //     branches: [
+      //       ...state.branches,
+      //       {
+      //         id:
+      //           state.branches.reduce(
+      //             (maxId, branch) => Math.max(branch?.id, maxId),
+      //             0
+      //           ) + 1,
+      //       },
+      //     ],
+      //   }));
+      // },
       addBranch: () => {
-        set((state) => ({
-          branches: [
-            ...state.branches,
-            {
-              id:
-                state.branches.reduce(
-                  (maxId, branch) => Math.max(branch.id, maxId),
-                  0
-                ) + 1,
-            },
-          ],
-        }));
+        set((state) => {
+          // Check if all IDs are valid numbers; otherwise, default them to 0
+          const newId =
+            state.branches.reduce(
+              (maxId, branch) =>
+                Math.max(Number.isFinite(branch.id) ? branch.id : 0, maxId),
+              0 // Ensure the initial value is 0
+            ) + 1;
+
+          // console.log(`Adding branch with ID: ${newId}`);
+          return {
+            branches: [...state.branches, { id: newId }],
+          };
+        });
       },
+
       removeBranch: (branchId: number) => {
         set((state) => ({
           branches: state.branches.filter((branch) => branch.id !== branchId),
