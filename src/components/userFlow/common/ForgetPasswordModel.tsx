@@ -71,7 +71,6 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
         username: data.email,
         entityType: selected,
       });
-      // console.log(response, "response");
       setLoader(false);
       if (response.data.success) {
         closeForgetPasswordandShowRegisterMail();

@@ -152,7 +152,6 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
 }) => {
   // Calculate total pages
   const totalPages: number = Math.ceil(totalItems / itemsPerPage);
-  // console.log(totalPages);
 
   // Function to handle page change
   const handlePageChange = (pageNumber: number): void => {

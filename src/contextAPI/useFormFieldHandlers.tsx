@@ -74,7 +74,6 @@ const FormHandlerProviders = ({ children }: Props) => {
         }
       }
     );
-    // console.log(modifiedFormFields, "modifiedFormField");
     let obj = {
       ...allFormData,
       formFields: { form_fields: modifiedFormFields },
@@ -203,7 +202,6 @@ const FormHandlerProviders = ({ children }: Props) => {
     } else if (fieldType === "select" || fieldType === "select_with_search") {
       updateValue(event?.value, fieldData?.id);
       let sectionName = fieldData?.entityRegSection?.sectionName;
-      console.log({ fieldData });
 
       switch (sectionName) {
         case "Regulators Details":
@@ -546,7 +544,6 @@ const FormHandlerProviders = ({ children }: Props) => {
         });
 
         const data = checkDeDup.data;
-        console.log({ data });
 
         if (data?.data?.duplicate) {
           errors.push({
@@ -657,7 +654,6 @@ const FormHandlerProviders = ({ children }: Props) => {
                 : allFormData?.formFields?.form_fields?.find(
                     (field: any) => field?.key === "lastDate"
                   )?.userInput;
-            console.log({ startDate, endDate });
 
             if (!startDate || !endDate) {
               return field;
@@ -670,7 +666,6 @@ const FormHandlerProviders = ({ children }: Props) => {
             // if () {
 
             // }
-            console.log("Start Date > End Date", startDate > endDate);
 
             if (startDate > endDate && key === "startDate") {
               errorCount += 1;

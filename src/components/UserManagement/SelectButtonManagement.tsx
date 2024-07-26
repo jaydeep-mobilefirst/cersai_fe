@@ -620,7 +620,6 @@ const SelectButtonUserManagement = ({
 
   const handleClickOutside = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      console.log("Closing dropdown");
       setArrowDirectionToggle(false);
     }
   };

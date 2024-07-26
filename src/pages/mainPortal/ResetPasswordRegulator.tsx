@@ -40,18 +40,23 @@ const ResetPasswordRegulator = () => {
       Swal.fire({
         icon: "success",
         // text: " Reset password is update  successfully ",
-        text: response.data.message,
+        text: response.data.message || "Reset password is updated successfully",
         confirmButtonText: "Ok",
       });
       navigate("/");
       sessionStorage.clear();
-    } catch (error) {
+    } catch (error:unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.error('Error response data:', error.response.data.message);
+        
       setLoader(false);
       Swal.fire({
         icon: "error",
-        text: "Failed to update  Rest password",
+        text: error?.response?.data?.message || "Please try again later",
         confirmButtonText: "Ok",
       });
+    }}
     }
   };
 

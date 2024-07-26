@@ -19,7 +19,6 @@ const Navbar: React.FC = () => {
   const { homePageData } = useLandingStore((state) => state);
 
   const { guidelinesPageData } = useOperatingGuidelinesStore((state) => state);
-  console.log("homepagedata", homePageData);
 
   useEffect(() => {
     if (location.pathname === "/faq") {
@@ -53,18 +52,6 @@ const Navbar: React.FC = () => {
     } else if (text === "CONTACT US") {
       navigate("/contactus");
     } else if (text === "OPERATING GUIDELINES") {
-      // try {
-      //   const response = await axios.get(bffUrl + `/websitecontent/list/4`);
-      //   const operatingGuidelinesLink =response?.data?.data?.content?.operatingGuidlinesPageData?.link?.[0]?.link; // Adjust according to your API response structure
-      //   console.log("link", operatingGuidelinesLink);
-      //   if (operatingGuidelinesLink) {
-      //     window.open(operatingGuidelinesLink, "_blank");
-      //   } else {
-      //     console.error("Operating guidelines link not found in API response.");
-      //   }
-      // } catch (error) {
-      //   console.error("Error fetching operating guidelines:", error);
-      // }
       
       navigate("/operatingguidelines");
       } 

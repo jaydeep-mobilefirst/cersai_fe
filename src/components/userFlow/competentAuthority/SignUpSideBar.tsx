@@ -35,7 +35,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
 
   useEffect(() => {
     const data = signupSideBarCompetent.find((p) => p.path === location.pathname);
-    setPercentage(data?.percentage);
+    // setPercentage(data?.percentage);
     setPage(data?.path);
   }, [location.pathname])
 
@@ -50,6 +50,44 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
       clearTimeout(timeout)
     }
   },[allFormData])
+
+  useEffect(() => {
+    let totalSections = sections?.length;
+    let completed = sections?.reduce((acc, obj) => {
+      if (obj?.completed) {
+        return acc + 1;
+      }
+      else{
+        return acc + 0;
+      }
+    }, 0)
+    
+     let percentage = (completed / (totalSections)) * 100;
+     switch (true) {
+      case percentage < 25:
+        setPercentage(0)
+        break;
+      case percentage >= 25 && percentage < 50:
+        setPercentage(25)
+        break;
+      case percentage >= 50 && percentage < 75:
+        setPercentage(50)
+        break;
+      case percentage === 75:
+        setPercentage(75)
+        break;
+      case percentage === 100:
+          setPercentage(100)
+        break;
+     
+     
+      default:
+        break;
+     }
+
+  }, [sections])
+
+
 
   return (
     <div className="sidebar-container h-screen bg-[] flex flex-col">

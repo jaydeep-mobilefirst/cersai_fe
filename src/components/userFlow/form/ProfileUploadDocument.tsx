@@ -75,7 +75,6 @@ const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
       }
       const arrayBuffer = data?.data?.data
       await getFileDatafromBuffer(arrayBuffer); 
-      // console.log({buffer, type, blob, url});
       setViewLoader(false)
     } catch (error) {
       console.log({error});

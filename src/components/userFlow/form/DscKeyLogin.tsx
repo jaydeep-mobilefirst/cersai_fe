@@ -50,7 +50,6 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
         true,
         128
       );
-      console.log(certificate, "certificate");
       if (certificate) {
         const strCert = JSON.parse(certificate);
         setDscCertificate(strCert);
@@ -78,8 +77,6 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
   //       "https://indilabs-json.vercel.app/second",
   //       { certificate }
   //     );
-
-  //     console.log(response);
   //     if (response?.data?.status === "INTERNAL_SERVER_ERROR") {
   //       Swal.fire({
   //         icon: "error",

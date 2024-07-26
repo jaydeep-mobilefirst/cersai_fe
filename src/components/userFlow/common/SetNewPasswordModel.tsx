@@ -32,7 +32,6 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("identity");
   const otpVerified = sessionStorage.getItem("otp-verified");
-  console.log({ otpVerified });
 
   if (!otpVerified || otpVerified === "false") {
     sessionStorage.setItem("otp-sent", "false");
@@ -68,8 +67,6 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
       }
     }
   }, [token, decodedToken]);
-
-  console.log(decodedToken, "decoded token");
   const handleClose = () => {
     setShowPasswordModel(false);
   };

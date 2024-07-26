@@ -56,7 +56,6 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
         true,
         128
       );
-      console.log(certificate, "certificate");
       const strCert = JSON.parse(certificate);
 
       if (onFileUpload) {
@@ -93,8 +92,6 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
   //       "https://indilabs-json.vercel.app/first",
   //       { certificate }
   //     );
-
-  //     console.log(response?.data);
   //     if (response?.data?.status === "INTERNAL_SERVER_ERROR") {
   //       Swal.fire({
   //         icon: "error",
@@ -124,8 +121,6 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
-  console.log(fieldData, "field dataaa");
   return (
     <>
       <button

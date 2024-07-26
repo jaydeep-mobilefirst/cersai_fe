@@ -27,7 +27,7 @@ const style = {
 };
 
 const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, isActive, roleId, roleName, selectedFuncs = [], entityType }) => {
-  console.log({ functionalities, isActive, roleId, roleName, selectedFuncs, entityType });
+  
   const operation = sessionStorage.getItem('operation');
 
   const handleRoleAddedState = uamStore((state) => state.handleRefreshUAM);
@@ -147,7 +147,6 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
         resultObject
       )
         .then((res: any) => {
-          console.log({ res });
 
           if (res?.data?.success) {
             handleClose();

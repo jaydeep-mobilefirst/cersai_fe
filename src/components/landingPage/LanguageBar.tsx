@@ -20,7 +20,6 @@ const LanguageBar = () => {
       setLanguage(code);
     }
   };
-  console.log("languageName",language)
   return (
     <div>
       <div className="h-6 relative bg-[#ECECEB] flex items-center lg:justify-start overflow-auto">

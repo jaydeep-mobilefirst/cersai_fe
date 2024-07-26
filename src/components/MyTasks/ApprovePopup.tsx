@@ -57,7 +57,6 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
   const status = location?.state?.status;
 
   const userid = sessionStorage.getItem("userId");
-  console.log({ userid });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,7 +72,6 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
       .get("/approval-documents/list")
       .then((response: any) => {
         if (response.data.success) {
-          // console.log(response?.data?.data, "response");
           setSupportDocument(
             response?.data?.data?.map((f: any) => ({
               value: f.id,
@@ -89,7 +87,6 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
   //     .get("/admin/user/checker")
   //     .then((response: any) => {
   //       if (response.data.success) {
-  //         console.log(response?.data?.data, "response");
   //         setChecklist(
   //           response?.data?.data?.map((f: any) => ({
   //             value: f.id,
@@ -109,7 +106,6 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
   //     .get("/admin/user/checker")
   //     .then((response: any) => {
   //       if (response.data.success) {
-  //         console.log(response?.data?.data, "response");
 
   //         // Filter out the checker if their name matches the one stored in sessionStorage
   //         const filteredCheckers = response?.data?.data?.filter((f: any) => {
@@ -191,7 +187,6 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
       );
 
       setLoader(false);
-      console.log(response, "response");
       if (response.status === 201) {
         setApiSuccess(true);
         setApiError(false);
@@ -231,7 +226,6 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
         );
 
         setLoader(false);
-        console.log(response, "response");
         if (response.status === 201) {
           setApiSuccess(true);
           setApiError(false);

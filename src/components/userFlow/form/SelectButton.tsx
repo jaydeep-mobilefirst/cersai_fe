@@ -49,7 +49,6 @@ const SelectButton = ({
   useEffect(() => {
     setOptionsToShow(options)
   }, [options])
-  console.log({options, optionsToShow});
   // Find the label of the currently selected option
   const selectedLabel =
     options?.find((option: any) => option?.value === selectedOption)?.label ||

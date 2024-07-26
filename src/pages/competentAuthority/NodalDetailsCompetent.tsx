@@ -147,7 +147,7 @@ const NodalDetails = (props: Props) => {
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className="flex flex-row items-center space-x-2">
+            <div className="flex flex-row items-center space-x-2" onClick={() => Navigate("/competent/authority/uploaddocuments")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
