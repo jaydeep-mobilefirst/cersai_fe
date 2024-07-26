@@ -34,7 +34,6 @@ const UploadDSC3Regulator = () => {
       setError(true);
       return;
     }
-    console.log(dscCertificate, "clicked dsc3 submit");
 
     const userId = sessionStorage.getItem("userId");
 
@@ -45,7 +44,6 @@ const UploadDSC3Regulator = () => {
         dscCertificate: dscCertificate,
         // dscCertificate: btoa(dscCertificate?.Cert),
       });
-      console.log(response?.data);
       setLoader(false);
     } catch (error) {
       console.error("Error updating DSC:", error);

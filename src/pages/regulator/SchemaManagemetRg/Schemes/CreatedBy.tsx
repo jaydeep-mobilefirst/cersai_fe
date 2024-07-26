@@ -58,7 +58,6 @@ const CreatedBy = () => {
   });
   const onSubmit = (data: any) => {
     alert("Form submitted successfully!");
-    console.log({ data });
 
     reset();
   };

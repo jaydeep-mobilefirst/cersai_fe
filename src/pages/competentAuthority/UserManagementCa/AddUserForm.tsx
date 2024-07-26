@@ -35,7 +35,6 @@ const AddUserForm = () => {
 
   const onSubmit = (data: any) => {
     alert("Form submitted successfully!");
-    console.log({ data });
     setShowPopup(true);
 
     reset();

@@ -36,7 +36,6 @@ const DashboardProfile = (props: Props) => {
           } catch (error) {
             console.log("Error");
           }
-          // console.log(dtData, "respnse--------------");
           let modifiedFormFields = response.data.data?.formFields
             ?.map((o: any) => ({
               ...o,
@@ -66,7 +65,6 @@ const DashboardProfile = (props: Props) => {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
-          // console.log(obj, "obj-----");
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
         } else {

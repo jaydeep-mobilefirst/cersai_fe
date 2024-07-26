@@ -34,7 +34,6 @@ const UploadDSC3 = () => {
       setError(true);
       return;
     }
-    console.log(dscCertificate, "clicked dsc3 submit");
 
     const userId = sessionStorage.getItem("userId");
 
@@ -45,7 +44,6 @@ const UploadDSC3 = () => {
         dscCertificate: dscCertificate,
         // dscCertificate: btoa(dscCertificate?.Cert),
       });
-      console.log(response?.data);
       setLoader(false);
       Swal.fire({
         icon: "success",

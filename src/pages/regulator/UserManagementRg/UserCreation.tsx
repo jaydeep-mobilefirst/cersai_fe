@@ -31,7 +31,6 @@ const UserCreation = () => {
   const { handleRefreshUAM } = uamStore((state => state))
   const { loading, users, page, pageSize, setFunctionalitySearch, setPage, setSearchString, totalPages } = useFetchUsers(entityId);
 
-  console.log({ users });
 
   const navigate = useNavigate();
 
@@ -54,7 +53,6 @@ const UserCreation = () => {
       id: "name",
       cell: (info) => {
         const value: any = info.getValue();
-        console.log({ value });
         return <>{value?.firstName + " " + value?.lastName}</>
       },
       header: () => <span>Name</span>

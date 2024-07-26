@@ -27,8 +27,6 @@ const RegulatorDetails = (props: Props) => {
   );
   const screenWidth = useScreenWidth();
 
-  // console.log(allFormData, "allFormData in regulator");
-
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);

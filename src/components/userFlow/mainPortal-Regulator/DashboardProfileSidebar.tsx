@@ -32,7 +32,6 @@ const DashboardProfileSidebarRegulator = ({}: Props) => {
   useEffect(() => {
     const cmsPath = pathname.split("/")[1];
     // Extracting the first part after the domain
-    // console.log(cmsPath, "dashboard");
     setUrl("/" + cmsPath);
   }, []);
 

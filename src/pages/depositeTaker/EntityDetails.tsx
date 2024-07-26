@@ -37,11 +37,8 @@ const EntityDetails: React.FC = () => {
     const noError = await handleValidationChecks(formFields);
     setLoader(false);
 
-    console.log({ noError });
-
     if (noError) {
       const edit = params.get("edit");
-      console.log({ edit });
       if (edit !== undefined && edit !== null && edit !== "") {
         Navigate("/depositetaker/signup/reviewdetails");
       } else {

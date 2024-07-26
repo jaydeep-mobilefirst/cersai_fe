@@ -62,6 +62,7 @@ const SchemaCreation = () => {
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
+
       setLoader(false);
     }
   };
@@ -108,7 +109,6 @@ const SchemaCreation = () => {
             })
 
             .then((responce: any) => {
-              console.log(responce);
               fetchSchemes();
             })
             .catch((error) => {

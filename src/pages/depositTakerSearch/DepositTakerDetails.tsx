@@ -145,9 +145,6 @@ const DepositSearchDetails: React.FC = () => {
           } catch (error) {
             console.log("Error");
           }
-          // console.log({ dtData, response });
-
-          // console.log(dtData, "respnse--------------");
           let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
@@ -177,7 +174,6 @@ const DepositSearchDetails: React.FC = () => {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
-          // console.log(obj, "obj-----");
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
         } else {

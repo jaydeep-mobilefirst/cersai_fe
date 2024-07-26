@@ -39,7 +39,6 @@ const ProfileRegulatorDetails = (props: Props) => {
           };
         })
     : [];
-  console.log(formFields);
   const formData =
     formFields &&
     formFields?.map((field: any) => ({
@@ -62,7 +61,6 @@ const ProfileRegulatorDetails = (props: Props) => {
           }
         )
         .then((response) => {
-          // console.log(response, "response");
           Swal.fire({
             icon: "success",
             text: "Regulator Detail  update  successfully ",

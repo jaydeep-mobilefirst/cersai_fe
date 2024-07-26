@@ -84,7 +84,6 @@ const DepositeTakerSearch: React.FC = () => {
           let currentPage = (parseInt(res?.data?.data?.page) - 1 ) * pageSize    
           setTaskData(res?.data?.data?.depositTakers?.map((d : any, i: number) => ({...d, id : (i + 1) + currentPage})));
           setTotal(res?.data?.data?.total);
-          // console.log(res?.data?.data?.depositTakers, "res");
         }
         setLoader(false);
       })
@@ -139,7 +138,6 @@ const DepositeTakerSearch: React.FC = () => {
       cell: (info) => {
         // const value = info.getValue();
         const { uniqueId, nodalOfficerId } = info.getValue();
-        // console.log(info, "unique");
 
         return (
           <div

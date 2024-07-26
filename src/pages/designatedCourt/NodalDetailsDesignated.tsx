@@ -55,7 +55,6 @@ const NodalDetailsDesignated = () => {
         email: email,
         mobile: mobile,
       });
-      // console.log(response.data.statusCode, "deposite taker otp ");
       if (response.data.statusCode === 201) {
         setShowOTPModel(true);
       } else {

@@ -30,7 +30,6 @@ const DashboardProfileCompetent = (props: Props) => {
     axios
       .get(`${bffUrl}/registration/field-data/3?status=addToProfile`)
       .then(async (response) => {
-        // console.log(response, "resppnse");
         // if (response?.data?.success) {
         //   let dtData: any = [];
         //   try {
@@ -48,7 +47,6 @@ const DashboardProfileCompetent = (props: Props) => {
         //   } catch (error) {
         //     console.log("Error");
         //   }
-        //   // console.log(dtData, "respnse--------------");
         //   let modifiedFormFields = response.data.data?.formFields?.map(
         //     (o: any) => ({
         //       ...o,
@@ -78,7 +76,6 @@ const DashboardProfileCompetent = (props: Props) => {
         //     ...response?.data?.data,
         //     formFields: { form_fields: modifiedFormFields },
         //   };
-        //   // console.log(obj, "obj-----");
         //   setAllFormData(obj);
         //   setAllDocumentData(modifiedFileFields);
         // } else {
@@ -95,7 +92,6 @@ const DashboardProfileCompetent = (props: Props) => {
           } catch (error) {
             console.log("Error");
           }
-          // console.log(dtData, "respnse--------------");
           let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
@@ -126,7 +122,6 @@ const DashboardProfileCompetent = (props: Props) => {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
-          // console.log(obj, "obj-----");
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
         } else {

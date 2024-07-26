@@ -80,7 +80,6 @@ const UserCreation : React.FC<Props>=  ({entityType} : Props)  => {
       id: "name",
       cell: (info) => {
         const value: any = info.getValue();
-        console.log({ value });
         return <>{value?.firstName + " " + value?.lastName}</>
       },
       header: () => <span>Name</span>

@@ -47,7 +47,6 @@ const ComponentDetails: React.FC = () => {
 
     if (noError) {
       const edit = params.get("edit");
-      console.log({ edit });
       if (edit !== undefined && edit !== null && edit !== "") {
         Navigate("/competent/authority/reviewdetails");
       } else {

@@ -54,7 +54,6 @@ const CompetentDetails = (props: Props) => {
   //         };
   //       })
   //   : [];
-  // console.log(formFields, "nodalDetail");
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
         .filter((field: any) => {
@@ -71,8 +70,6 @@ const CompetentDetails = (props: Props) => {
         })
     : [];
 
-  // console.log(formFields, "compenet");
-
   const formData =
     formFields &&
     formFields?.map((field: any) => ({
@@ -81,8 +78,6 @@ const CompetentDetails = (props: Props) => {
       label: field.label,
       value: field.userInput,
     }));
-
-  // console.log(formData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -99,7 +94,6 @@ const CompetentDetails = (props: Props) => {
           }
         )
         .then((response) => {
-          console.log(response, "response");
           Swal.fire({
             icon: "success",
             text: "Nodal Detail  update  successfully ",

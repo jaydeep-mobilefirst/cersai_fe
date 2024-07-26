@@ -33,7 +33,6 @@ interface Props {
 const columnHelper = createColumnHelper<TableType>();
 
 const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
-  console.log({entityType});
   
   const entityId = sessionStorage.getItem('entityUniqueId') ?? ''
   const { uamFunctionalities } = useFetchFunctionalityForUAM(entityType);
@@ -45,7 +44,6 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
 
 
   // States for Edit
-  // console.log( {loading, roles, page, pageSize, setFunctionalitySearch, setPage, setSearchString, totalPages});
   const [roleName, setRoleName] = useState<string | undefined>(undefined);
   const [isActive, setIsActive] = useState();
   const [roleEditId, setRoleEditId] = useState<number | undefined>();
@@ -94,7 +92,6 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
       cell: (info: any) => {
         const value = info?.row?.original?.isActive;
         const id = info?.row?.original?.id;
-        // console.log(info?.row?.original?.id, "info");
         const StatusChange = () => {
           axios
             .patch(`${bffUrl}/role/status/`, {

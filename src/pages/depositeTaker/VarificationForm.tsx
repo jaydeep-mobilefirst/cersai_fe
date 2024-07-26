@@ -91,7 +91,6 @@
 //       panVerified = await verifyPan();
 //     }
 //     setLoader(false);
-//     console.log({ panVerified });
 
 //     if (noError && panVerified) {
 //       setAllVerified(true);

@@ -115,9 +115,7 @@ const DepositSchemaCreationForm = () => {
     resolver: yupResolver(SchemaFormValidation),
   });
   const onSubmit = (data: any) => {
-    console.log(data, "data");
     alert("Form submitted successfully!");
-    console.log({ data });
     setShowPopup(true);
 
     reset();
