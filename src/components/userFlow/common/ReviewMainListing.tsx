@@ -254,6 +254,7 @@
 // export default ReviewMainListing;
 import React from "react";
 import { Link } from "react-router-dom";
+import RequiredStar from "../depositeTaker/RequiredStar";
 
 type Props = {
   allFormData: any;
@@ -268,6 +269,7 @@ const ReviewMainListing = ({
   documentData,
   isPdfMode,
 }: Props) => {
+  console.log("allformdata", allFormData);
   return (
     <>
       {allFormData &&
@@ -332,7 +334,11 @@ const ReviewMainListing = ({
                         >
                           <div className="text-gray-500 w-1/2">
                             {field.label}
-                            <span className="text-red-500">*</span>
+                            {/* <span className="text-red-500">*</span> */}
+                            <RequiredStar
+                              field={field}
+                              allFormData={allFormData}
+                            />
                           </div>
                           <div className="text-right w-1/2">
                             {field?.dscFileNAme || field.userInput}
