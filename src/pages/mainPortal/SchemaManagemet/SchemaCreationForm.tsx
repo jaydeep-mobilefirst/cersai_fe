@@ -43,7 +43,6 @@ const SchemaCreationForm = () => {
   const fetchSchema = async () => {
     try {
       const response = await axios.get(`${bffUrl}/scheme/field-data/1`);
-      // console.log(response, "response");
       if (response.data.success) {
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {

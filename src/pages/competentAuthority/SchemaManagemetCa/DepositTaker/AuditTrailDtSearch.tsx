@@ -212,7 +212,6 @@
 //     );
 //     if (!isFormValid) {
 //       setLoader(false);
-//       console.log("Form validation failed");
 //       return;
 //     }
 //     const panVerified = await verifyPan();
@@ -254,7 +253,8 @@
 //         setLoader(false);
 //       }
 //     } else {
-//       console.log("PAN verification failed");
+
+
 //       setLoader(false);
 //     }
 //   };
@@ -585,7 +585,6 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         setLoader(false);
       }
     } else {
-      console.log("PAN verification failed");
       setLoader(false);
     }
   };
