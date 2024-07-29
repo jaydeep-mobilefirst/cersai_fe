@@ -1,22 +1,16 @@
-import React from "react";
 import HeroButton from "./HeroButton";
-import search_status from "../../assets/images/search-status.svg";
-import user_search from "../../assets/images/user-search.svg";
-import archive_book from "../../assets/images/archive-book.svg";
-import cards from "../../assets/images/cards.svg";
 import { useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useLandingStore } from "../../zust/useLandingStore";
-import {data} from '../../utils/hardText/landingPageText2';
 
 const HeroHome = () => {
   const { homePageData } = useLandingStore((state) => state);
   const navigate = useNavigate();
   const buttons = [{ text: homePageData?.homePageData?.hero[0]?.text }, { text: homePageData?.homePageData?.hero[1]?.text }];
 
-  const onNavigateToSchemeSearch = (text: string) => {
-    if (text === "Scheme Search") {
+  const onNavigateToSchemeSearch = (text: string) => {   
+    if (/scheme/i.test(text)) {
       navigate("/scheme-search");
     } else {
       navigate("/deposite-taker-search");
