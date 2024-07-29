@@ -144,7 +144,7 @@ const ResetPassword = () => {
               <InputFields
                 {...register("confirmPassword", {
                   validate: (value) =>
-                    value === newPassword || "The passwords do not match",
+                    (value === newPassword  ) || "The passwords do not match",
                 })}
                 type="password"
                 id="confirmPassword"

@@ -165,12 +165,11 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
       </div>
       <div>
         <div className="mt-5 mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-          <div className="flex-grow mt-[11px] mb-[35px] flex items-center  flex-wrap gap-4">
+          <div className="flex-grow mt-[11px] mb-[35px] flex items-center  flex-wrap gap-4 me-1">
             <InputFields
               height="45px"
-              width="500px"
               padding="10px"
-              placeholder="Search by Name/Functionality"
+              placeholder="Search by Name"
               onChange={onSearchStringChange}
               value={searchString}
             />

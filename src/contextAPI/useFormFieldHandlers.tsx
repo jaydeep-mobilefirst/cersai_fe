@@ -435,11 +435,11 @@ const FormHandlerProviders = ({ children }: Props) => {
       }
 
       return success;
-    } catch (error) {
+    } catch (error:any) {
       Swal.fire({
         icon: "error",
-        title: "Server Error : Code 500",
-        text: "Error while validating fields, Please try later!",
+        title: "",
+        text: error?.response?.data?.message,
       });
       return false;
     }
