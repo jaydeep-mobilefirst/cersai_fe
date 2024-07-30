@@ -46,7 +46,7 @@ const SchemaCreation = () => {
   const fetchSchemes = async () => {
     setLoader(true);
     try {
-      const { data } = await axios.get(
+      const data = await axios.get(
         `${bffUrl}/scheme-portal/scheme-by/${sessionStorage.getItem(
           "entityUniqueId"
         )}`,
@@ -59,17 +59,9 @@ const SchemaCreation = () => {
           },
         }
       );
-      console.log(data?.data, "data");
-      setSchemaData(data?.data);
-
-      setSchemaData(
-        data.data.map((item: any, index: any) => ({
-          ...item,
-          id: index + 1, // Assuming you want to use index as S.No.
-          status: item.status, // Or some logic to determine status
-        }))
-      );
-      setTotal(data?.total);
+      console.log(data?.data?.limit, "data");
+      setSchemaData(data?.data?.data);
+      setTotal(data?.data?.limit);
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
@@ -89,11 +81,22 @@ const SchemaCreation = () => {
       },
     });
   };
+  let count: number;
+  const serialNoGen = (page: number) => {
+    count = (page - 1) * 10;
+  };
+  serialNoGen(page);
 
   const columns = [
     columnHelper.accessor("id", {
       header: () => "S.No.",
-      cell: (info) => info.getValue(),
+      // cell: (info) => info.getValue(),
+      cell: () => {
+        while (count <= total) {
+          count++;
+          return count;
+        }
+      },
     }),
     columnHelper.accessor("uniqueId", {
       header: () => "Scheme ID",

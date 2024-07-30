@@ -1,60 +1,14 @@
-// import React, { useRef, useState } from 'react'
-// import Calender from './svgs/Calender'
-// import { dateFormattor } from '../../../utils/commonFunction'
-// type Props = {
-//     onChange ?: (event : any) => void
-// }
-
-// const DatePicker = ({onChange}: Props) => {
-//     const hiddenDateInput = useRef<HTMLInputElement>(null);
-//     const [dateSelected, setDateSelected] = useState<any>(undefined)
-//     const handleDateButtonClick = () => {
-//         if (hiddenDateInput.current) {
-//             hiddenDateInput.current.showPicker();
-//         }
-//     };
-
-//     const onChangeHandler = (event : any) => {
-//         if(onChange) {
-//             onChange(event); // Directly call the passed-in onChange function with the event
-//         }
-//         const {value} = event.target;
-//         if (value) {
-//             setDateSelected(dateFormattor(new Date(value)))
-//         }
-//     }
-//     return (
-//         <div className="flex justify-start items-center  h-[56px] w-[317px] border rounded-md">
-//             <button
-//                 onClick={handleDateButtonClick}
-//                 className="flex justify-between h-[56px] w-[317px] px-[8px] py-[16px] rounded-lg text-gray-600 bg-white hover:bg-gray-100 focus:outline-none"
-//             >
-//                 {dateSelected ? dateSelected : "Select Date"}
-//                 <div>
-//                     <Calender />
-//                 </div>
-//             </button>
-//             <input
-//                 ref={hiddenDateInput}
-//                 type="date"
-//                 className='absolute -z-10'
-//                 onChange={onChangeHandler}
-//             />
-//         </div>
-//     )
-// }
-
-// export default DatePicker
 // import React, { useRef, useState } from "react";
 // import Calender from "./svgs/Calender";
-// import { dateFormattor } from "../../../utils/commonFunction";
 
 // type Props = {
+//   disabled ?: boolean
 //   onChange?: (event: any) => void;
 //   userValue?: string;
+//   backgroundColor?: string; // New background color prop
 // };
 
-// const DatePicker = ({ onChange, userValue }: Props) => {
+// const DatePicker = ({ onChange, userValue, backgroundColor, disabled }: Props) => {
 //   const hiddenDateInput = useRef<HTMLInputElement>(null);
 //   const [dateSelected, setDateSelected] = useState<string | undefined>(
 //     userValue
@@ -77,16 +31,19 @@
 //   };
 
 //   return (
-//     <div className="flex justify-start items-center h-14 w-full max-w-[35rem] sm:max-w-sm md:max-w-md lg:max-w-2xl border rounded-md">
+//     <div className="flex justify-start items-center h-14 w-full max-w-[35rem] sm:max-w-[100%] md:max-w-md lg:max-w-2xl border rounded-md">
 //       <button
 //         type="button"
+//         disabled={disabled ? disabled : false}
 //         onClick={handleDateButtonClick}
-//         className="flex justify-between items-center h-full w-full px-2 py-2 rounded-lg text-gray-600 bg-white hover:bg-gray-100 focus:outline-none"
+//         className={`flex justify-between items-center h-full w-full px-2 py-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none`}
+//         style={{ backgroundColor: backgroundColor || "white" }} // Set background color
 //       >
 //         {dateSelected || "Select Date"}
 //         <Calender />
 //       </button>
 //       <input
+//         disabled={disabled ? disabled : false}
 //         defaultValue={userValue}
 //         ref={hiddenDateInput}
 //         type="date"
@@ -98,21 +55,32 @@
 // };
 
 // export default DatePicker;
-
 import React, { useRef, useState } from "react";
 import Calender from "./svgs/Calender";
 
 type Props = {
-  disabled ?: boolean
+  disabled?: boolean;
   onChange?: (event: any) => void;
   userValue?: string;
   backgroundColor?: string; // New background color prop
 };
 
-const DatePicker = ({ onChange, userValue, backgroundColor, disabled }: Props) => {
+const DatePicker = ({
+  onChange,
+  userValue,
+  backgroundColor,
+  disabled,
+}: Props) => {
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
   const hiddenDateInput = useRef<HTMLInputElement>(null);
   const [dateSelected, setDateSelected] = useState<string | undefined>(
-    userValue
+    userValue ? formatDate(userValue) : undefined
   );
 
   const handleDateButtonClick = () => {
@@ -122,12 +90,13 @@ const DatePicker = ({ onChange, userValue, backgroundColor, disabled }: Props) =
   };
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
     if (onChange) {
       onChange(event); // Call the passed-in onChange function with the event
     }
-    const { value } = event.target;
     if (value) {
-      setDateSelected(value);
+      const formattedDate = formatDate(value);
+      setDateSelected(formattedDate);
     }
   };
 
