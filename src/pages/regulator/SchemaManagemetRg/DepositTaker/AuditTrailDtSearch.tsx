@@ -268,6 +268,10 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
             icon: "success",
             text: `Successfully uploaded ${data?.data?.created?.count}/${total} Failed to upload ${data?.data?.failed?.count}/${total}`,
             title: "Successful",
+          }).then(() => {
+            if (data?.data?.failed?.count > 0) {
+              navigate("/rg/deposit-taker/failed-records", { state: { data } });
+            }
           });
         } else {
           Swal.fire({
