@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import Accordion from "../../../../components/customAccordin/CustomAccordin";
 import VerificationDetails from "./VerificationDetails";
 import EntityDetails from "./EntityDetails";
@@ -19,6 +19,9 @@ import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import SuccessPopup from "../../../../components/userFlow/depositeTaker/SuccessPopUp";
 import { dateFormattor, formatDate } from "../../../../utils/commonFunction";
+import Swal from "sweetalert2";
+import ReactTable from "../../../../components/userFlow/common/ReactTable";
+import { createColumnHelper } from "@tanstack/table-core";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -35,6 +38,9 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [para1, setPara1] = useState("");
   const [para2, setPara2] = useState("");
+  const [uploadInputKey, setUploadKey] = useState<number>(0);
+  const uploadButtonRef = useRef<HTMLInputElement>(null);
+
   const screenWidth = useScreenWidth();
 
   const { onChange, handleValidationChecks, updatePanFormField } =
@@ -230,6 +236,60 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     setPanSuccessModal(false);
   };
 
+  const handleDownloadTemplate = () => {
+    axios
+      .get(`${bffUrl}/deposit-taker/bulk-upload/sample-download`, {
+        method: "GET",
+        responseType: "blob", // important
+      })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `${Date.now()}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+      });
+  };
+
+  const handleFileUpload = (event: any) => {
+    setLoader(true);
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.set("file", file);
+    const entityId = sessionStorage.getItem("entityUniqueId");
+    axios
+      .post(`${bffUrl}/deposit-taker/bulk-upload`, formData)
+      .then((res) => {
+        let data = res.data;
+        const total = data?.data?.created?.count + data?.data?.failed?.count;
+        if (data.success) {
+          Swal.fire({
+            icon: "success",
+            text: `Successfully uploaded ${data?.data?.created?.count}/${total} Failed to upload ${data?.data?.failed?.count}/${total}`,
+            title: "Successful",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            text: data?.message,
+            title: "Error",
+          });
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "Unable upload file",
+          text: e?.response?.data?.detail?.message,
+          icon: "error",
+        });
+      })
+      .finally(() => {
+        setLoader(false);
+        setUploadKey(uploadInputKey + 1);
+      });
+  };
+
   return (
     <div className="flex flex-col justify-between h-screen">
       <div className="mt-6 mx-2">
@@ -246,19 +306,42 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
             />
             <p className="text-[#808080]">
               You can Upload Deposit Takers data in bulk. Please use this given
-              <span className="underline line-through:text-blue text-[#BFCFFF]">
-                Template
+              <span
+                onClick={handleDownloadTemplate}
+                className="text-blue-400 hover:cursor-pointer"
+              >
+                &nbsp;Template.
               </span>
             </p>
           </div>
-          <div className="mt-3 md:mt-0 lg:mt-0 xl:mt-0">
-            <button
-              onClick={handleUploadClick}
-              type="submit"
-              className="bg-[#1c468e] rounded-xl p-2 sm:p-3 text-white font-semibold text-sm sm:text-base w-24 sm:w-28 text-gilroy-semibold flex items-center justify-center"
-            >
-              <img src={UploadIcon} alt="UploadIcon" className="mr-1" /> Upload
-            </button>
+          <div
+            onClick={() => {
+              uploadButtonRef.current?.click();
+            }}
+            className="w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer"
+          >
+            <input
+              onChange={handleFileUpload}
+              type="file"
+              name=""
+              id=""
+              className="hidden"
+              accept=".xls, .xlsx"
+              ref={uploadButtonRef}
+              key={uploadInputKey}
+              disabled={loader}
+            />
+            <div className="justify-start items-center gap-1.5 inline-flex">
+              <div className="w-6 h-6 justify-center items-center flex">
+                <div className="w-6 h-6 relative">
+                  <img src={UploadIcon} alt="" />
+                </div>
+              </div>
+              <div className="text-white text-base font-normal">
+                {" "}
+                {loader ? <LoaderSpin /> : "Upload"}
+              </div>
+            </div>
           </div>
         </div>
       </div>
