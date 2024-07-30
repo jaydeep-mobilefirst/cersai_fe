@@ -18,6 +18,7 @@ import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker
 import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import SuccessPopup from "../../../../components/userFlow/depositeTaker/SuccessPopUp";
+import { dateFormattor, formatDate } from "../../../../utils/commonFunction";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -139,11 +140,17 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       const pan = allFormData?.formFields?.form_fields?.find((field: any) =>
         /PAN Number/i.test(field?.label)
       );
+      const dob = allFormData?.formFields?.form_fields?.find((field: any) =>
+        /Date of In-corporation/i.test(field?.label)
+      );
+      const formattedDob = formatDate(dob?.userInput);
+
       const response = await axios.post(
         "http://34.149.91.231/cms/pandirectory/api",
         {
           name: company?.userInput?.toUpperCase(),
           pan_no: pan?.userInput,
+          dob: formattedDob,
         }
       );
       const data = response.data;
@@ -190,7 +197,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         }));
         const response = await axios.post(
           bffUrl + "/deposit-taker/add-form-fields",
-          { formData , regulatorId : masterEntityId}
+          { formData, regulatorId: masterEntityId }
         );
         if (response.data.success) {
           setPara1(
