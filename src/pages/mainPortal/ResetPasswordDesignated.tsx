@@ -21,6 +21,8 @@ const ResetPasswordDesignated = () => {
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     watch,
     formState: { errors },
   } = useForm();
@@ -43,21 +45,34 @@ const ResetPasswordDesignated = () => {
       });
       navigate("/");
       sessionStorage.clear();
-    } catch (error:unknown) {
+    } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-        
-      setLoader(false);
-      Swal.fire({
-        icon: "error",
-        text: error?.response?.data?.message || "Please try again later",
-        confirmButtonText: "Ok",
-      });
-    }}
+          setLoader(false);
+          Swal.fire({
+            icon: "error",
+            text: error?.response?.data?.message || "Please try again later",
+            confirmButtonText: "Ok",
+          });
+        }
+      }
     }
   };
 
   const newPassword = watch("newPassword");
+  const oldPassword = watch("oldPassword");
+
+  // Trigger validation error if old and new passwords are the same
+  React.useEffect(() => {
+    if (newPassword === oldPassword && newPassword) {
+      setError("oldPassword", {
+        type: "manual",
+        message: "New password must be different from old password",
+      });
+    } else {
+      clearErrors("oldPassword");
+    }
+  }, [newPassword, oldPassword, setError, clearErrors]);
 
   // Password validation pattern
   const passwordValidation = {
