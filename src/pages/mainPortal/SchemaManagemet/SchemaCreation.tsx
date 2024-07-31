@@ -15,6 +15,7 @@ import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../../components/LoaderSpin";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type SchemeType = {
   id: number;
@@ -42,7 +43,7 @@ const SchemaCreation = () => {
       //     "entityUniqueId"
       //   )}`
       // );
-      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme-by/${sessionStorage.getItem(
+      const { data } = await axiosTokenInstance.get(`/scheme-portal/scheme-by/${sessionStorage.getItem(
           "entityUniqueId"
         )}`, {
         params: {

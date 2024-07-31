@@ -17,6 +17,7 @@ import { bffUrl } from "../../../utils/api";
 import uamStore from "../../../store/uamStore";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import LoaderSpin from "../../../components/LoaderSpin";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type TableType = {
   sno: number;
@@ -27,21 +28,31 @@ type TableType = {
 };
 
 interface Props {
-  entityType: 'DT' | 'DC' | "RG" | 'CA'
+  entityType: "DT" | "DC" | "RG" | "CA";
 }
 
 const columnHelper = createColumnHelper<TableType>();
 
 const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
-  
-  const entityId = sessionStorage.getItem('entityUniqueId') ?? ''
+  const entityId = sessionStorage.getItem("entityUniqueId") ?? "";
   const { uamFunctionalities } = useFetchFunctionalityForUAM(entityType);
-  const { handleRefreshUAM } = uamStore((state => state))
-  const { loading, roles, page, pageSize, setFunctionalitySearch, setPage, setSearchString, total, totalPages, searchString, handleSearch} = useFetchRoles(entityId);
+  const { handleRefreshUAM } = uamStore((state) => state);
+  const {
+    loading,
+    roles,
+    page,
+    pageSize,
+    setFunctionalitySearch,
+    setPage,
+    setSearchString,
+    total,
+    totalPages,
+    searchString,
+    handleSearch,
+  } = useFetchRoles(entityId);
   const [isAddRolePopupOpen, setIsAddRolePopupOpen] = useState(false);
   const [isEditRolePopupOpen, setIsEditRolePopupOpen] = useState(false);
   const [editRoleData, setEditRoleData] = useState<TableType | null>(null);
-
 
   // States for Edit
   const [roleName, setRoleName] = useState<string | undefined>(undefined);
@@ -49,14 +60,14 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
   const [roleEditId, setRoleEditId] = useState<number | undefined>();
   const [selectedFuncs, setSelectedFuncs] = useState<any[]>([]);
 
-  const handleAddRoleClick = (operation : 'add' | 'edit') => {
-    if (operation === 'add') {
+  const handleAddRoleClick = (operation: "add" | "edit") => {
+    if (operation === "add") {
       setIsActive(undefined);
       setRoleName(undefined);
       setRoleEditId(undefined);
       setSelectedFuncs([]);
     }
-    sessionStorage.setItem('operation', operation)
+    sessionStorage.setItem("operation", operation);
     setIsAddRolePopupOpen(true);
   };
 
@@ -68,14 +79,13 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
   let count: number;
   const serialNoGen = (page: number) => {
     count = (page - 1) * 10;
-  }
-  serialNoGen(page)
+  };
+  serialNoGen(page);
 
   const columns = [
     columnHelper.accessor("sno", {
       cell: (info) => {
-        while (count <= total)
-        {
+        while (count <= total) {
           count++;
           return count;
         }
@@ -93,20 +103,20 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
         const value = info?.row?.original?.isActive;
         const id = info?.row?.original?.id;
         const StatusChange = () => {
-          axios
-            .patch(`${bffUrl}/role/status/`, {
+          axiosTokenInstance
+            .patch(`/role/status/`, {
               id: id,
               status: !value,
             })
             .then((response: any) => {
               handleRefreshUAM();
             })
-            .catch((error: any) => { });
+            .catch((error: any) => {});
         };
 
         return (
           <div
-            className="flex flex-col md:flex-row justify-center gap-3"
+            className='flex flex-col md:flex-row justify-center gap-3'
             key={Math.random()}
           >
             <span>{value ? "Active" : "InActive"}</span>
@@ -121,23 +131,28 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
       cell: (info: any) => {
         const handleOnEdit = (event: any) => {
           event?.preventDefault();
-          const data = info.cell.row.original; 
+          const data = info.cell.row.original;
           setIsActive(data.isActive);
           setRoleName(data?.compositeRoleName);
           setRoleEditId(data?.id);
-          setSelectedFuncs(data?.functionalities?.map((f : any) => ({value : f.id, label : f.functionality, roleName : f.roleName})));
-          handleAddRoleClick('edit');
+          setSelectedFuncs(
+            data?.functionalities?.map((f: any) => ({
+              value: f.id,
+              label: f.functionality,
+              roleName: f.roleName,
+            }))
+          );
+          handleAddRoleClick("edit");
         };
         return (
           <>
-            <ActionButton variant="edit" onClick={handleOnEdit} />
+            <ActionButton variant='edit' onClick={handleOnEdit} />
           </>
         );
       },
       header: () => <span>Action</span>,
     },
   ];
-
 
   const options = [
     { value: "pdf", label: "PDF" },
@@ -146,72 +161,73 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
   ];
 
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
-  
+
   const handleSetOption1 = (value: any) => {
     setSelectedOption1(value?.label);
-    setFunctionalitySearch(value?.roleName)
-    
+    setFunctionalitySearch(value?.roleName);
   };
 
   const onSearchStringChange = (e: any) => {
     setSearchString(e.target.value);
   };
 
-  
   return (
-    <div className="relative xl:ml-[20px] pr-3">
-      <div className="mt-6">
-        <UmTabs entityType={entityType}/>
+    <div className='relative xl:ml-[20px] pr-3'>
+      <div className='mt-6'>
+        <UmTabs entityType={entityType} />
       </div>
       <div>
-        <div className="mt-5 mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-          <div className="flex-grow mt-[11px] mb-[35px] flex items-center  flex-wrap gap-4">
+        <div className='mt-5 mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
+          <div className='flex-grow mt-[11px] mb-[35px] flex items-center  flex-wrap gap-4'>
             <InputFields
-              height="45px"
-              width="500px"
-              padding="10px"
-              placeholder="Search by Name/Functionality"
+              height='45px'
+              width='500px'
+              padding='10px'
+              placeholder='Search by Name/Functionality'
               onChange={onSearchStringChange}
               value={searchString}
             />
           </div>
-          <div className="flex-grow">
+          <div className='flex-grow'>
             <SelectButtonTask
               setOption={handleSetOption1}
-              options={[{label : "All", value : null, roleName : ""}, ...uamFunctionalities]}
+              options={[
+                { label: "All", value: null, roleName: "" },
+                ...uamFunctionalities,
+              ]}
               selectedOption={selectedOption1}
-              placeholder="Functionality"
-              bgColor="#FFFFFF"
-              borderColor="#E7F0FF" // Custom border color
-              mdWidth="w-full"
+              placeholder='Functionality'
+              bgColor='#FFFFFF'
+              borderColor='#E7F0FF' // Custom border color
+              mdWidth='w-full'
             />
           </div>
-          <div className="flex-grow mt-2">
-            <button 
-            className="w-full h-[52px] border-2 rounded-md px-2 lg:px-[16px] flex justify-center items-center bg-[#1C468E] cursor-pointer"
-            onClick={handleSearch}
+          <div className='flex-grow mt-2'>
+            <button
+              className='w-full h-[52px] border-2 rounded-md px-2 lg:px-[16px] flex justify-center items-center bg-[#1C468E] cursor-pointer'
+              onClick={handleSearch}
             >
-              <img src={searchButton} alt="Search Button" className="mr-1" />
-              <span className="text-sm md:text-base font-normal text-white lg:text-[16px]">
+              <img src={searchButton} alt='Search Button' className='mr-1' />
+              <span className='text-sm md:text-base font-normal text-white lg:text-[16px]'>
                 Search
               </span>
             </button>
           </div>
-          <div className="flex-grow mt-2 space-x-4">
+          <div className='flex-grow mt-2 space-x-4'>
             <button
-              onClick={() => handleAddRoleClick('add')}
-              className="w-full h-[52px] border-2 rounded-md px-1 lg:px-[16px] border-[#1C468E] flex justify-center items-center bg-white cursor-pointer"
+              onClick={() => handleAddRoleClick("add")}
+              className='w-full h-[52px] border-2 rounded-md px-1 lg:px-[16px] border-[#1C468E] flex justify-center items-center bg-white cursor-pointer'
             >
-              <img src={addCircle} alt="Add Role Icon" className="mr-1" />
-              <span className="text-sm md:text-base font-normal text-[#1C468E] lg:text-[16px]">
+              <img src={addCircle} alt='Add Role Icon' className='mr-1' />
+              <span className='text-sm md:text-base font-normal text-[#1C468E] lg:text-[16px]'>
                 Add Role
               </span>
             </button>
           </div>
         </div>
         {isAddRolePopupOpen && (
-          <AddRolePopup 
-            onClose={() => setIsAddRolePopupOpen(false)} 
+          <AddRolePopup
+            onClose={() => setIsAddRolePopupOpen(false)}
             functionalities={uamFunctionalities}
             isActive={isActive}
             selectedFuncs={selectedFuncs}
@@ -228,18 +244,26 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
         )}
       </div>
 
-      <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-        <div className="max-w-full overflow-x-auto">
-          {loading ? <LoaderSpin/> : roles?.length > 0 ? <ReactTable defaultData={roles} columns={columns} /> : <div className="text-center w-full">No Data Available</div>}
+      <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
+        <div className='max-w-full overflow-x-auto'>
+          {loading ? (
+            <LoaderSpin />
+          ) : roles?.length > 0 ? (
+            <ReactTable defaultData={roles} columns={columns} />
+          ) : (
+            <div className='text-center w-full'>No Data Available</div>
+          )}
         </div>
-        <div className="mt-10">
-          {roles?.length > 0 && <CustomPagination
-            currentPage={page}
-            setCurrentPage={setPage}
-            totalItems={totalPages}
-            itemsPerPage={pageSize}
-            maxPageNumbersToShow={5}
-          />}
+        <div className='mt-10'>
+          {roles?.length > 0 && (
+            <CustomPagination
+              currentPage={page}
+              setCurrentPage={setPage}
+              totalItems={totalPages}
+              itemsPerPage={pageSize}
+              maxPageNumbersToShow={5}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ import ProfileBranches from "./Edit Profile/ProfileBranches";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import axios from "axios";
 import { bffUrl } from "../../utils/api";
+import { axiosTokenInstance } from "../../utils/axios";
 
 type Props = {};
 
@@ -22,8 +23,8 @@ const DashboardProfile = (props: Props) => {
   const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dtData: any = [];
