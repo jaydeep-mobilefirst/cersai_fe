@@ -62,12 +62,25 @@ const FailedRecords = () => {
           Failed Records
         </p>
         <div
-          className="custom-scrollbar w-full"
+          className="custom-scrollbar w-full mb-20"
           style={{ maxHeight: "360px", overflowY: "auto" }}
         >
-          <ReactTable defaultData={failedRecords} columns={columns} />
+          {failedRecords.length > 0 ? (
+            <ReactTable defaultData={failedRecords} columns={columns} />
+          ) : (
+            <div className="text-center p-5">No Data Available</div>
+          )}
         </div>
-        <div className="my-11 flex flex-col lg:flex-row lg:items-center justify-between">
+        {/* <div className="my-11 flex flex-col lg:flex-row lg:items-center justify-between">
+          <div
+            className="flex items-center cursor-pointer space-x-2 mb-3 lg:mb-0 md:ml-[5rem]"
+            onClick={() => navigate(-1)}
+          >
+            <img src={BackArrow} alt="Back Arrow" />
+            <p className="text-sm font-normal text-gilroy-regular">Back</p>
+          </div>
+        </div> */}
+        <div className="mt-72 flex flex-col lg:flex-row lg:items-center justify-between">
           <div
             className="flex items-center cursor-pointer space-x-2 mb-3 lg:mb-0 md:ml-[5rem]"
             onClick={() => navigate(-1)}
