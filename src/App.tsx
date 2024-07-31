@@ -174,6 +174,7 @@ function App() {
               />
               <Route element={<UploadDSC3Regulator />} path="uploaddsc3" />
             </Route>
+            
             <Route element={<MainPortalLayoutCompetent />} path="/ca">
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<SchemaCreationCa />} path="my-task" />

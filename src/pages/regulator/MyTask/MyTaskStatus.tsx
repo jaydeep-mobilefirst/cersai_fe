@@ -13,7 +13,7 @@ import CustomPagination from "../../../components/CustomPagination/CustomPaginat
 import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../../components/LoaderSpin";
-import { axiosInstance } from "../../../utils/axios";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type TableType = {
   id: number;
@@ -48,7 +48,7 @@ const MyTaskStatus = () => {
   const myTaskRg = async () => {
     setLoader(true);
     try {
-      const { data } = await axiosInstance.get(`/mytask/regulator-task`, {
+      const { data } = await axiosTokenInstance.get(`/mytask/regulator-task`, {
         params: {
           page: page,
           limit: pageSize,
@@ -57,19 +57,6 @@ const MyTaskStatus = () => {
           status: statusForSearch,
         },
       });
-      // if (data?.data?.depositTakers) {
-      //   const mappedData = data.data.depositTakers.map(
-      //     (item: any, index: number) => ({
-      //       ...item,
-      //       id: index + 1,
-      //       key: index,
-      //       depositTakerName: `${item?.approverRelation?.firstName || ""} ${
-      //         item?.approverRelation?.lastName || ""
-      //       }`,
-      //     })
-      //   );
-      //   setMyTaskData(mappedData);
-      // }
       setMyTaskData(data?.data?.depositTakers);
 
       setTotal(data?.data?.total);

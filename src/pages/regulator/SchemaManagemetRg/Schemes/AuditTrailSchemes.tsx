@@ -14,6 +14,8 @@ import LoaderSpin from "../../../../components/LoaderSpin";
 import SelectButton from "../../../../components/userFlow/form/SelectButton";
 import SelectButtonMultiselect from "../../../../components/UserManagement/SelectButtonMultiselect";
 import Swal from "sweetalert2";
+import { axiosTokenInstance } from "../../../../utils/axios";
+
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
@@ -48,13 +50,13 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(
-        `${bffUrl}/scheme/field-data/${createdBy === "DT" ? 1 : 2}`
+      const response = await axiosTokenInstance.get(
+        `/scheme/field-data/${createdBy === "DT" ? 1 : 2}`
       );
 
       if (response.data.success) {
-        const portalResponse = await axios.get(
-          `${bffUrl}/scheme-portal/${uniqueId}`
+        const portalResponse = await axiosTokenInstance.get(
+          `/scheme-portal/${uniqueId}`
         );
 
         const userData = portalResponse.data?.data?.schemes[0];
@@ -154,14 +156,14 @@ const SchemesSearchDetailsSM: React.FC = () => {
     }
   }, [uniqueId]);
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/${depositTakerId}`
+            let depositTakerData = await axiosTokenInstance.get(
+              `/deposit-taker/${depositTakerId}`
             );
             dtData =
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
@@ -217,9 +219,9 @@ const SchemesSearchDetailsSM: React.FC = () => {
 
   useEffect(() => {
     if (allFormData?.other?.depositTakerId) {
-      axios
+      axiosTokenInstance
         .get(
-          `${bffUrl}/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000`
+          `/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000`
         )
         .then((res) => {
           let data = res?.data?.data;
@@ -313,8 +315,8 @@ const SchemesSearchDetailsSM: React.FC = () => {
     };
 
     setLoader(true);
-    axios
-      .patch(bffUrl + "/scheme-portal/status", payload)
+    axiosTokenInstance
+      .patch("/scheme-portal/status", payload)
       .then((res) => {
         let data = res.data;
         if (data?.success) {

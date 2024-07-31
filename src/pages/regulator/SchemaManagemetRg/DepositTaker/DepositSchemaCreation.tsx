@@ -12,7 +12,7 @@ import SelectButtonTask from "../../../../components/ScehmaManagement/SelectButt
 import CustomPagination from "../../../../components/CustomPagination/CustomPagination";
 import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
-import { axiosInstance } from "../../../../utils/axios";
+import { axiosTokenInstance } from "../../../../utils/axios";
 import { bffUrl } from "../../../../utils/api";
 import axios from "axios";
 import LoaderSpin from "../../../../components/LoaderSpin";
@@ -58,7 +58,7 @@ const DepositSchemaCreation = () => {
   const myTaskRg = async () => {
     setLoader(true);
     try {
-      const { data } = await axiosInstance.get(`/deposit-taker`, {
+      const { data } = await axiosTokenInstance.get(`/deposit-taker`, {
         params: {
           page: page,
           limit: pageSize,

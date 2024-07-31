@@ -13,6 +13,7 @@ import axios from "axios";
 import { bffUrl } from "../../utils/api";
 import DashboardProfileSidebarRegulator from "../../components/userFlow/mainPortal-Regulator/DashboardProfileSidebar";
 import TaskTabsRegulator from "../../components/userFlow/mainPortal-Regulator/TaskTabsRegulator";
+import { axiosTokenInstance } from "../../utils/axios";
 
 type Props = {};
 
@@ -24,50 +25,9 @@ const DashboardProfileRegulator = (props: Props) => {
   const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/2?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/2?status=addToProfile`)
       .then(async (response) => {
-        // if (response?.data?.success) {
-        //   let dtData: any = [];
-        //   try {
-        //     let regulatorData = await axios.get(
-        //       `${bffUrl}/regulator/${entityUniqueId}`
-        //     );
-        //     // console.log(
-        //     //   regulatorData?.data?.data?.regulator?.regulatorFormData,
-        //     //   "regulator"
-        //     // );
-        //     dtData = regulatorData?.data?.data?.regulator?.regulatorFormData;
-        //   } catch (error) {
-        //     console.log("Error");
-        //   }
-        //   let modifiedFormFields = response.data.data?.formFields?.map(
-        //     (o: any) => ({
-        //       ...o,
-        //       userInput: dtData
-        //         ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-        //         : "",
-        //       error: "",
-        //     })
-        //   );
-
-        //   let modifiedFileFields =
-        //     response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
-        //       ...o,
-        //       file: "",
-        //       error: "",
-        //       fileName: "",
-        //     }));
-
-        //   let obj = {
-        //     ...response?.data?.data,
-        //     formFields: { form_fields: modifiedFormFields },
-        //   };
-        //   setAllFormData(obj);
-        //   setAllDocumentData(modifiedFileFields);
-        // } else {
-        //   throw new Error("Error getting data, Please try later!");
-        // }
         if (response?.data?.success) {
           let dtData: any = [];
           try {
