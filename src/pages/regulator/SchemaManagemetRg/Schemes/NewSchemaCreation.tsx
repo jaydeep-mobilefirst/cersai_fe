@@ -54,13 +54,12 @@ const SchemeDetails = () => {
                   ...field,
                   dropdown_options: {
                     ...field?.dropdown_options,
-                    options: field?.dropdown_options?.options?.map(
-                      (o: any) => ({
+                    options: field?.dropdown_options?.options
+                      ?.map((o: any) => ({
                         name: o?.uniqueId,
                         id: o?.companyName,
-                      })
-                    )?.sort((a : any, b : any) => a.sortOrder - b.sortOrder)
-                    ,
+                      }))
+                      ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder),
                   },
                 };
               } else {
@@ -87,15 +86,14 @@ const SchemeDetails = () => {
     if (!isFormValid) {
       setLoader(false);
       return;
-    }
-    else{
-      // returns true if no error 
+    } else {
+      // returns true if no error
       const schemeValidations = await handleSchemeValidations();
       if (schemeValidations === false) {
         setLoader(false);
         return;
       }
-      }
+    }
     try {
       // Mapping over the form fields to prepare the formData
       let formData = allFormData.formFields.form_fields.map((field: any) => ({
@@ -138,43 +136,43 @@ const SchemeDetails = () => {
     }
   };
 
-  const handleOnchange = async ( event: any,
+  const handleOnchange = async (
+    event: any,
     fieldData: any,
-    fieldType: string) => {
-      if (fieldData?.key === "depositTakerId") {
-        const res = await axios.get(bffUrl + '/deposit-taker/branch/' + event?.value)
-        let data = res.data;
-        let branches = data?.data?.branches?.map((b: any) => {
-          return {
-            name: b?.pinCode + " " + b?.district + " " + b?.state,
-            id: b?.id
-          }
-        })
-          setAllFormData({
-            ...allFormData,
-            formFields : {
-              form_fields : allFormData?.formFields?.form_fields?.map((f : any) => {
-                if (f?.key === 'branch') {
-                  return {
-                    ...f,
-                    dropdown_options : {...f?.dropdown_options, options : branches}
-                  }
-                }
-                else if (f?.key === "depositTakerId") {
-                  return {...f, userInput : event?.value}
-                }
-                else{
-                  return f;
-                }
-              })
+    fieldType: string
+  ) => {
+    if (fieldData?.key === "depositTakerId") {
+      const res = await axios.get(
+        bffUrl + "/deposit-taker/branch/" + event?.value
+      );
+      let data = res.data;
+      let branches = data?.data?.branches?.map((b: any) => {
+        return {
+          name: b?.pinCode + " " + b?.district + " " + b?.state,
+          id: b?.id,
+        };
+      });
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (f?.key === "branch") {
+              return {
+                ...f,
+                dropdown_options: { ...f?.dropdown_options, options: branches },
+              };
+            } else if (f?.key === "depositTakerId") {
+              return { ...f, userInput: event?.value };
+            } else {
+              return f;
             }
-          })
-          
-      }
-      else{
-        onChange(event, fieldData, fieldType)
-      }
-  }
+          }),
+        },
+      });
+    } else {
+      onChange(event, fieldData, fieldType);
+    }
+  };
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
@@ -196,7 +194,7 @@ const SchemeDetails = () => {
                 onChange={handleOnchange}
               />
             </div>
-            <div className="flex flex-shrink-0 mt-[20px]">
+            {/* <div className="flex flex-shrink-0 mt-[20px]">
               <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
                 <input
                   type="checkbox"
@@ -206,6 +204,21 @@ const SchemeDetails = () => {
                 />
               </div>
               <div className="leading-[24px]">
+                I declare all the Information provided is correct as per my
+                knowledge.
+              </div>
+            </div> */}
+            <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
+              <div className="">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 accent-[#1c648e]"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  placeholder="ischecked"
+                />
+              </div>
+              <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
                 I declare all the Information provided is correct as per my
                 knowledge.
               </div>

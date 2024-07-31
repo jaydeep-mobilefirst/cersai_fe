@@ -56,7 +56,7 @@ async function getMimeTypeFromArrayBuffer(arrayBuffer: any) {
 const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function isLinkExpired(data : any) : boolean {
+function isLinkExpired(data: any): boolean {
   // Getting the expiry date from the object
   const expiryDate = new Date(data?.expiryDate);
 
@@ -65,41 +65,58 @@ function isLinkExpired(data : any) : boolean {
 
   // Compare the current date and time with the expiry date
   if (currentDate > expiryDate) {
-      return true; // The link is expired
+    return true; // The link is expired
   } else {
-      return false; // The link is not expired
+    return false; // The link is not expired
   }
 }
 
-const getFileDatafromBuffer = async (arrayBuffer : any) => {    
+const getFileDatafromBuffer = async (arrayBuffer: any) => {
   const buffer = new Uint8Array(arrayBuffer);
   const type = await getMimeTypeFromArrayBuffer(buffer);
   const blob = new Blob([buffer], { type: type ?? "" });
   const imageUrl = URL.createObjectURL(blob);
-  window.open(imageUrl, '_blank', 'noopener')
-}
-const handleViewOpenkmFileWithDocumentId = async (uploadFileId : string) : Promise<boolean>=> {
+  window.open(imageUrl, "_blank", "noopener");
+};
+const handleViewOpenkmFileWithDocumentId = async (
+  uploadFileId: string
+): Promise<boolean> => {
   try {
     const response = await axios.get(`${bffUrl}/openkm/get/${uploadFileId}`);
     const data = await response.data;
     if (data?.status === "INTERNAL_SERVER_ERROR") {
-      alert("File not exists")
+      alert("File not exists");
       return false;
-    }
-    else{
-      const arrayBuffer = data?.data?.data
+    } else {
+      const arrayBuffer = data?.data?.data;
       await getFileDatafromBuffer(arrayBuffer);
-      return true
+      return true;
     }
-
   } catch (error) {
-    alert("Something went wrong!")
-    return false
+    alert("Something went wrong!");
+    return false;
   }
-}
+};
 
 const isUUID = (value: string): boolean => {
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return uuidRegex.test(value);
 };
-export { dateFormattor, panRegex, emailRegex, getMimeTypeFromArrayBuffer, isLinkExpired, handleViewOpenkmFileWithDocumentId, isUUID };
+const formatDate = (dateStr: any) => {
+  const date = new Date(dateStr);
+  const day = ("0" + date.getDate()).slice(-2);
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+export {
+  dateFormattor,
+  panRegex,
+  emailRegex,
+  getMimeTypeFromArrayBuffer,
+  isLinkExpired,
+  handleViewOpenkmFileWithDocumentId,
+  isUUID,
+  formatDate,
+};

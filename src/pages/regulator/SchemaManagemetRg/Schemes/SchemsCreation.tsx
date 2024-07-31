@@ -41,6 +41,15 @@ const NewSchemaCreation = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [total, setTotal] = useState<number>(0);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
+  const [searchInput, setSearchInput] = useState<string>("");
+
+  const handleSearchInput = (event: any) => {
+    event?.preventDefault();
+    const { value } = event?.target;
+    setSearchInput(value);
+  };
   const navigate = useNavigate();
 
   const fetchSchemes = async () => {
@@ -50,6 +59,8 @@ const NewSchemaCreation = () => {
         params: {
           page: page,
           limit: pageSize,
+          searchText: searchInput,
+          status: statusForSearch,
         },
       });
 
@@ -123,7 +134,7 @@ const NewSchemaCreation = () => {
             state: {
               uniqueId: uniqueId,
               depositTakerId: depositTakerId,
-              createdBy
+              createdBy,
             },
           });
         };
@@ -186,6 +197,24 @@ const NewSchemaCreation = () => {
     setSelectedOption4(value);
   };
 
+  const options = [
+    { value: "", label: "All" },
+    { value: "ACTIVE", label: "Active" },
+    { value: "BANNED", label: "Banned" },
+    { value: "UNDER_LETIGATION", label: "Under litigation" },
+  ];
+  const handleSetStatus = (option: any) => {
+    console.log(option, "option");
+    setSelectedStatus(option);
+
+    setStatusForSearch(option);
+  };
+
+  const handleClickSearch = () => {
+    setPage(1);
+    fetchSchemes();
+  };
+
   return (
     <div
       className="relative xl:ml-[40px]"
@@ -211,11 +240,14 @@ const NewSchemaCreation = () => {
                 height="40px"
                 // width="550px"
                 padding="10px"
+                onChange={handleSearchInput}
                 placeholder="Search by Unique ID/name"
+                value={searchInput}
               />
             </div>
             <div className=" flex items-center mt-7">
               <button
+                onClick={handleClickSearch}
                 className={`w-40 h-[45px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1c468e] cursor-pointer"} mt-2`}
               >
                 <img src={searchButton} alt="searchButton" />
@@ -240,11 +272,11 @@ const NewSchemaCreation = () => {
           <div className="mt-[25px] mb-[35px] ">
             <div className="">
               <p className="text-sm font-normal text-gilroy-medium ">
-                OR search by Geography
+                OR search by Status
               </p>
             </div>
             <div className="flex items-center flex-wrap gap-4">
-              <div className="">
+              {/* <div className="">
                 <SelectButtonTask
                   setOption={handleSetOption1}
                   options={options1}
@@ -267,13 +299,17 @@ const NewSchemaCreation = () => {
                   selectedOption={selectedOption3}
                   placeholder="Pune"
                 />
-              </div>
-              <div className="h-6 border-r-2 border-gray-300 "></div>
+              </div> */}
+              {/* <div className="h-6 border-r-2 border-gray-300 "></div> */}
               <div>
                 <SelectButtonTask
-                  setOption={handleSetOption4}
-                  options={options4}
-                  selectedOption={selectedOption4}
+                  // setOption={handleSetOption4}
+                  // options={options4}
+                  // selectedOption={selectedOption4}
+                  // placeholder="Status"
+                  setOption={handleSetStatus}
+                  options={options}
+                  selectedOption={selectedStatus}
                   placeholder="Status"
                 />
               </div>

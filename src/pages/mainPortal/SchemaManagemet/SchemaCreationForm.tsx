@@ -18,9 +18,9 @@ const SchemaCreationForm = () => {
   const [loader, setLoader] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [popupData, setPopData] = useState({
-    para1: '',
-    para2: '',
-    show: false
+    para1: "",
+    para2: "",
+    show: false,
   });
   const entityType = sessionStorage.getItem("entityUniqueId");
 
@@ -49,37 +49,40 @@ const SchemaCreationForm = () => {
       if (response.data.success) {
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
-            if (field?.key === 'depositTakerId') {
+            if (field?.key === "depositTakerId") {
               return {
                 ...field,
                 userInput: "",
                 error: "",
                 typeId: field?.fieldTypeId,
                 dropdown_options: {
-                  ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                  ...field?.dropdown_options,
+                  options: field?.dropdown_options?.options?.map((o: any) => ({
                     name: o?.uniqueId,
                     id: o?.companyName,
-                  }))
-                }
-              }
-            }
-            else if (field?.key === 'branch') {
+                  })),
+                },
+              };
+            } else if (field?.key === "branch") {
               try {
                 const res = await axiosTokenInstance.get('/deposit-taker/branch/' + entityType)
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
                   return {
                     name: b?.pinCode + " " + b?.district + " " + b?.state,
-                    id: b?.id
-                  }
-                })
+                    id: b?.id,
+                  };
+                });
 
                 return {
                   ...field,
                   userInput: "",
                   error: "",
                   typeId: field?.fieldTypeId,
-                  dropdown_options: { ...field?.dropdown_options, options: branches }
+                  dropdown_options: {
+                    ...field?.dropdown_options,
+                    options: branches,
+                  },
                 };
               } catch (error) {
                 return {
@@ -89,8 +92,7 @@ const SchemaCreationForm = () => {
                   typeId: field?.fieldTypeId,
                 };
               }
-            }
-            else {
+            } else {
               return {
                 ...field,
                 userInput: "",
@@ -99,13 +101,17 @@ const SchemaCreationForm = () => {
               };
             }
           }
-        )
+        );
 
-        formFields = await Promise.all(formFields)
+        formFields = await Promise.all(formFields);
 
         setAllFormData({
           ...response?.data?.data,
-          formFields: { form_fields: formFields?.sort((a : any, b : any) => a.sortOrder - b.sortOrder) },
+          formFields: {
+            form_fields: formFields?.sort(
+              (a: any, b: any) => a.sortOrder - b.sortOrder
+            ),
+          },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,
@@ -116,7 +122,6 @@ const SchemaCreationForm = () => {
     }
   };
 
-
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoader(true);
@@ -126,14 +131,13 @@ const SchemaCreationForm = () => {
     if (!isFormValid) {
       setLoader(false);
       return;
-    }
-    else{
-    // returns true if no error 
-    const schemeValidations = await handleSchemeValidations();
-    if (schemeValidations === false) {
-      setLoader(false);
-      return;
-    }
+    } else {
+      // returns true if no error
+      const schemeValidations = await handleSchemeValidations();
+      if (schemeValidations === false) {
+        setLoader(false);
+        return;
+      }
     }
 
     try {
@@ -147,11 +151,14 @@ const SchemaCreationForm = () => {
       // Creating the payload object that includes both formData and depositTakerId
       const payload = {
         createdBy: entityType,
-        formData: [...formData, {
-          fieldId  : "55883089-b29c-4b73-ab17-45d6e062d6d4",
-          key:'depositTakerId',
-          value: entityType
-        }],
+        formData: [
+          ...formData,
+          {
+            fieldId: "55883089-b29c-4b73-ab17-45d6e062d6d4",
+            key: "depositTakerId",
+            value: entityType,
+          },
+        ],
       };
 
       // Making the POST request with axios
@@ -161,20 +168,19 @@ const SchemaCreationForm = () => {
       );
 
       if (response.data?.success) {
-        setSubmitted(true)
+        setSubmitted(true);
         setPopData({
-          para1: 'Addition Successful',
+          para1: "Addition Successful",
           para2: response.data?.message,
           show: true,
-        })
-      }
-      else {
-        setSubmitted(false)
+        });
+      } else {
+        setSubmitted(false);
         setPopData({
-          para1: 'Something went wrong',
+          para1: "Something went wrong",
           para2: response.data?.message,
           show: true,
-        })
+        });
       }
       setLoader(false);
       // SuccessPopup();
@@ -182,7 +188,6 @@ const SchemaCreationForm = () => {
       setLoader(false);
     }
   };
-
 
   return (
     <div
@@ -202,7 +207,7 @@ const SchemaCreationForm = () => {
                 onChange={onChange}
               />
             </div>
-            <div className="flex flex-shrink-0 mt-[20px]">
+            {/* <div className="flex flex-shrink-0 mt-[20px]">
               <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
                 <input
                   type="checkbox"
@@ -215,16 +220,31 @@ const SchemaCreationForm = () => {
                 I declare all the Information provided is correct as per my
                 knowledge.
               </div>
+            </div> */}
+            <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
+              <div className="">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 accent-[#1c648e]"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  placeholder="ischecked"
+                />
+              </div>
+              <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
+                I declare all the Information provided is correct as per my
+                knowledge.
+              </div>
             </div>
           </div>
           <SuccessPopup
             closePopup={() => {
-              setPopData({ ...popupData, show: false })
+              setPopData({ ...popupData, show: false });
               if (submitted) {
-                navigate('/dt/scheme')
+                navigate("/dt/scheme");
               }
             }}
-            showPopup={() => { }}
+            showPopup={() => {}}
             toggle={popupData.show}
             para1={popupData.para1}
             para2={popupData.para2}
@@ -235,8 +255,9 @@ const SchemaCreationForm = () => {
             <div
               className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
               style={{
-                width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
-                  }`,
+                width: `${
+                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                }`,
               }}
             >
               <div className="flex items-center space-x-6">
@@ -250,10 +271,11 @@ const SchemaCreationForm = () => {
                 <button
                   onClick={onSubmit}
                   type="submit"
-                  className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold ${!isChecked
+                  className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold ${
+                    !isChecked
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-[#163a7a]"
-                    }`}
+                  }`}
                   disabled={!isChecked}
                 >
                   {loader ? <LoaderSpin /> : "Create Scheme"}

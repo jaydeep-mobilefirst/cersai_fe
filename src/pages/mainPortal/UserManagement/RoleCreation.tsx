@@ -167,13 +167,20 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
     setFunctionalitySearch(value?.roleName);
   };
 
+  // const onSearchStringChange = (e: any) => {
+  //   setSearchString(e.target.value);
+  // };
   const onSearchStringChange = (e: any) => {
-    setSearchString(e.target.value);
+    const value = e.target.value;
+    setSearchString(value);
+    if (value === "") {
+      handleSearch();
+    }
   };
 
   return (
-    <div className='relative xl:ml-[20px] pr-3'>
-      <div className='mt-6'>
+    <div className="relative xl:ml-[20px] pr-3">
+      <div className="mt-6">
         <UmTabs entityType={entityType} />
       </div>
       <div>
@@ -202,9 +209,9 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
               mdWidth='w-full'
             />
           </div>
-          <div className='flex-grow mt-2'>
+          <div className="flex-grow mt-2">
             <button
-              className='w-full h-[52px] border-2 rounded-md px-2 lg:px-[16px] flex justify-center items-center bg-[#1C468E] cursor-pointer'
+              className="w-full h-[52px] border-2 rounded-md px-2 lg:px-[16px] flex justify-center items-center bg-[#1C468E] cursor-pointer"
               onClick={handleSearch}
             >
               <img src={searchButton} alt='Search Button' className='mr-1' />
@@ -216,7 +223,7 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
           <div className='flex-grow mt-2 space-x-4'>
             <button
               onClick={() => handleAddRoleClick("add")}
-              className='w-full h-[52px] border-2 rounded-md px-1 lg:px-[16px] border-[#1C468E] flex justify-center items-center bg-white cursor-pointer'
+              className="w-full h-[52px] border-2 rounded-md px-1 lg:px-[16px] border-[#1C468E] flex justify-center items-center bg-white cursor-pointer"
             >
               <img src={addCircle} alt='Add Role Icon' className='mr-1' />
               <span className='text-sm md:text-base font-normal text-[#1C468E] lg:text-[16px]'>
@@ -244,17 +251,17 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
         )}
       </div>
 
-      <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
-        <div className='max-w-full overflow-x-auto'>
+      <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
+        <div className="max-w-full overflow-x-auto">
           {loading ? (
             <LoaderSpin />
           ) : roles?.length > 0 ? (
             <ReactTable defaultData={roles} columns={columns} />
           ) : (
-            <div className='text-center w-full'>No Data Available</div>
+            <div className="text-center w-full">No Data Available</div>
           )}
         </div>
-        <div className='mt-10'>
+        <div className="mt-10">
           {roles?.length > 0 && (
             <CustomPagination
               currentPage={page}
