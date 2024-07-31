@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-
 import { createColumnHelper } from "@tanstack/react-table";
-
 import Eye from "../../../../assets/images/eye2.svg";
 import addCircle from "../../../../assets/images/new_images/add-circle.png";
 import { Link } from "react-router-dom";
@@ -17,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
+import { axiosTokenInstance } from "../../../../utils/axios";
 
 type SchemeType = {
   id: number;
@@ -55,7 +54,7 @@ const NewSchemaCreation = () => {
   const fetchSchemes = async () => {
     setLoader(true);
     try {
-      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme`, {
+      const { data } = await axiosTokenInstance.get(`/scheme-portal/scheme`, {
         params: {
           page: page,
           limit: pageSize,

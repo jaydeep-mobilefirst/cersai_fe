@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { bffUrl } from '../utils/api';
 import uamStore from '../store/uamStore';
+import { axiosTokenInstance } from '../utils/axios';
 
 function useFetchRoles(entityId : string, perPage ?: number) {  
   const {update} = uamStore((state => state))
@@ -25,7 +26,7 @@ function useFetchRoles(entityId : string, perPage ?: number) {
         setLoading(false)
         return { roles : [], loading : false }
       }
-      const response = await axios.get(`${bffUrl}/role/list/${entityId}?page=${page}&pageSize=${pageSize}&search=${searchString}&functionality=${functionalitySearch}`);
+      const response = await axiosTokenInstance.get(`/role/list/${entityId}?page=${page}&pageSize=${pageSize}&search=${searchString}&functionality=${functionalitySearch}`);
       setData(response.data?.roles)
       // console.log(response.data?.roles?.length)
       setTotal(response.data?.roles?.length)

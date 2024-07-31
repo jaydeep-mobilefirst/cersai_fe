@@ -9,7 +9,9 @@ import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFie
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../../components/LoaderSpin";
-import SuccessPopup from "../../../components/userFlow/depositeTaker/SuccessPopUp";
+import SuccessPopup from "../../../components/userFlow/depositeTaker/SuccessPopUp"
+import { axiosTokenInstance } from "../../../utils/axios";
+
 const SchemaCreationForm = () => {
   const screenWidth = useScreenWidth();
   const [isChecked, setIsChecked] = useState(false);
@@ -42,7 +44,7 @@ const SchemaCreationForm = () => {
   }, []);
   const fetchSchema = async () => {
     try {
-      const response = await axios.get(`${bffUrl}/scheme/field-data/1`);
+      const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
       // console.log(response, "response");
       if (response.data.success) {
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
@@ -63,9 +65,7 @@ const SchemaCreationForm = () => {
               };
             } else if (field?.key === "branch") {
               try {
-                const res = await axios.get(
-                  bffUrl + "/deposit-taker/branch/" + entityType
-                );
+                const res = await axiosTokenInstance.get('/deposit-taker/branch/' + entityType)
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
                   return {
@@ -162,8 +162,8 @@ const SchemaCreationForm = () => {
       };
 
       // Making the POST request with axios
-      const response = await axios.post(
-        `${bffUrl}/scheme-portal/add-form-fields`, // Assuming bffUrl is defined elsewhere
+      const response = await axiosTokenInstance.post(
+        `/scheme-portal/add-form-fields`, // Assuming bffUrl is defined elsewhere
         payload // Sending the payload with depositTakerId and formData
       );
 

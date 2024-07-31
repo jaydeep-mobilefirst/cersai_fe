@@ -42,6 +42,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [dscApiInProgress, setDscApiInProgress] = useState(false);
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
   const [dscCertificate, setDscCertificate] = useState<any>();
+  const [responseData, setResponseDate] = useState<any>()
 
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
 
@@ -99,20 +100,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
         password: watch("password"),
         entityType: selected,
       });
-
-      sessionStorage.setItem(
-        "access_token",
-        response?.data?.response?.access_token
-      );
-
-      sessionStorage.setItem(
-        "user_status",
-        response?.data?.entityDetais?.status
-      );
-      sessionStorage.setItem(
-        "refresh_token",
-        response?.data?.response?.refresh_token
-      );
+      setResponseDate(response)
+    
       sessionStorage.setItem("firstName", response?.data?.user?.firstName);
       sessionStorage.setItem("masterId", response?.data?.entityDetais.masterId);
       sessionStorage.setItem("lastName", response?.data?.user?.lastName);
@@ -163,6 +152,19 @@ const LoginModel: React.FC<LoginModelProps> = ({
       .then((respose) => {
         reset();
         setLoader(false);
+        sessionStorage.setItem(
+          "access_token",
+          responseData?.data?.response?.access_token
+        );
+  
+        sessionStorage.setItem(
+          "user_status",
+          responseData?.data?.entityDetais?.status
+        );
+        sessionStorage.setItem(
+          "refresh_token",
+          responseData?.data?.response?.refresh_token
+        );
         if (selected === "DT") {
           navigate("/dt/dashboard");
         } else if (selected === "RG") {

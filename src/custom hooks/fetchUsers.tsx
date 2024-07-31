@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { bffUrl } from '../utils/api';
 import uamStore from '../store/uamStore';
+import { axiosTokenInstance } from '../utils/axios';
 
 function useFetchUsers(entityId : string) {
   const {update} = uamStore((state => state))
@@ -25,7 +26,7 @@ function useFetchUsers(entityId : string) {
         setLoading(false)
         return { roles : [], loading : false }
       }
-      const response = await axios.get(`${bffUrl}/user/list/${entityId}?page=${page}&pageSize=10&search=${searchString}&roleName=${functionalitySearch}`);      
+      const response = await axiosTokenInstance.get(`/user/list/${entityId}?page=${page}&pageSize=10&search=${searchString}&roleName=${functionalitySearch}`);      
       setData(response.data?.data?.userList)
       setPage(response.data?.data?.currentPage);
       setTotal(response.data?.data?.userList?.length)

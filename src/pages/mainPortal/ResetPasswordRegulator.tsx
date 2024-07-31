@@ -9,6 +9,7 @@ import { bffUrl } from "../../utils/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import TaskTabsRegulator from "../../components/userFlow/mainPortal-Regulator/TaskTabsRegulator";
+import { axiosTokenInstance } from "../../utils/axios";
 
 const ResetPasswordRegulator = () => {
   const screenWidth = useScreenWidth();
@@ -30,7 +31,7 @@ const ResetPasswordRegulator = () => {
   const onSubmit = async (data: any) => {
     setLoader(true);
     try {
-      const response = await axios.post(`${bffUrl}/auth/resetpassword`, {
+      const response = await axiosTokenInstance.post(`/auth/resetpassword`, {
         username: emailId,
         oldpassword: data?.oldPassword,
         newpassword: data.confirmPassword,
