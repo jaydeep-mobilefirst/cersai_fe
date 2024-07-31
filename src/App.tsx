@@ -104,6 +104,8 @@ function App() {
     <div>
       <Router>
         <Routes>
+
+          {/* restricted routes */}
           <Route element={<PrivateRoutes />}>
             <Route element={<MainPortalLayout />} path="/dt">
               <Route element={<Dashboard />} path="dashboard" />
@@ -267,7 +269,12 @@ function App() {
               <Route element={<UploadDSC3Designated />} path="uploaddsc3" />
             </Route>
 
-            <Route
+            
+          </Route>
+
+
+          {/* public routes */}
+          <Route
               element={<DepositTakerRegisterFlow />}
               path="/depositetaker/signup"
             >
@@ -319,7 +326,6 @@ function App() {
               <Route element={<NodalDetailsCompetent />} path="nodaldetails" />
               <Route element={<ReviewDetails />} path="reviewdetails" />
             </Route>
-          </Route>
           <Route element={<Landing />} path="/" />
           <Route element={<ReturnJourney />} path="/return-journey" />
           <Route element={<SchemeSearch />} path="/scheme-search" />
