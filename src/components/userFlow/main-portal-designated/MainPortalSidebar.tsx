@@ -48,6 +48,13 @@ const MainPortalSidebar = ({ layout }: Props) => {
   useEffect(() => {
     const cmsPath = location.pathname.split("/")[1];
     setUrl("/" + cmsPath);
+    const activePath = portalSideBarListDesignated?.find((item) =>
+      pathname.includes(item.url)
+    );
+    if (activePath) {
+      setActiveTab(activePath.url);
+    }
+
     if (
       location.pathname.startsWith("/ca/profile") &&
       searchParams.get("current") === "competent"
