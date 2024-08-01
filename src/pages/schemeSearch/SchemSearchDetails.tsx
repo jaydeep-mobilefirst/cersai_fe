@@ -206,7 +206,7 @@ const SchemeSearchDetails: React.FC = () => {
 
   useEffect(() => {
     if (allFormData?.other?.depositTakerId) {
-      axios.get(`${bffUrl}/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000`)
+      axios.get(`${bffUrl}/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000&status=ALL`)
       .then((res) => {
         let data = res?.data?.data;
         setSchemes(data?.map((d : any) => {

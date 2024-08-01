@@ -194,6 +194,7 @@ const DepositSearchDetails: React.FC = () => {
         params: {
           page: page,
           limit: pageSize,
+          status:'ALL'
         },
       });
       let currentPage = (parseInt(data?.page) - 1 ) * pageSize

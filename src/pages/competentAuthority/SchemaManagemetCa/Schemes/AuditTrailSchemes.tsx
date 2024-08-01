@@ -213,7 +213,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
 
   useEffect(() => {
     if (allFormData?.other?.depositTakerId) {
-      axios.get(`${bffUrl}/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000`)
+      axios.get(`${bffUrl}/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000&status=ALL`)
       .then((res) => {
         let data = res?.data?.data;
         setRawSchemes(data);
@@ -345,17 +345,17 @@ const SchemesSearchDetailsSM: React.FC = () => {
         <TaskTabsCa />
       </div>
       <div className="flex flex-row mt-3 mx-8">
-        <img
+        {/* <img
           src={InfoIcon}
           alt="InfoIcon"
           className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
-        />
-        <p className="text-[#808080]">
+        /> */}
+        {/* <p className="text-[#808080]">
           You can Upload Deposit Takers data in bulk. Please use this given
           <span className="underline line-through:text-blue text-[#BFCFFF]">
             Template
           </span>
-        </p>
+        </p> */}
       </div>
       <div className="mt-8 mb-8 mx-8">
         {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
