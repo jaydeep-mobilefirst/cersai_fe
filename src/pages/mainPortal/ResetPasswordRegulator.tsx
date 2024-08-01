@@ -38,14 +38,23 @@ const ResetPasswordRegulator = () => {
         entityType: entityType,
       });
       setLoader(false);
+      // Swal.fire({
+      //   icon: "success",
+      //   // text: " Reset password is update  successfully ",
+      //   text: response.data.message || "Reset password is updated successfully",
+      //   confirmButtonText: "Ok",
+      // });
+      // navigate("/");
+      // sessionStorage.clear();
       Swal.fire({
         icon: "success",
-        // text: " Reset password is update  successfully ",
         text: response.data.message || "Reset password is updated successfully",
         confirmButtonText: "Ok",
+      }).then(() => {
+        // Clear session and navigate only after success message is shown
+        sessionStorage.clear();
+        navigate("/");
       });
-      navigate("/");
-      sessionStorage.clear();
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response) {

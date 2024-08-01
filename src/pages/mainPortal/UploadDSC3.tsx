@@ -46,21 +46,23 @@ const UploadDSC3 = () => {
         // dscCertificate: btoa(dscCertificate?.Cert),
       });
       setLoader(false);
+
       Swal.fire({
         icon: "success",
-        title: "DSC3 Updated Successfully",
+        title: response?.data?.message || "DSC3 Updated Successfully",
         text: "",
         customClass: {
           container: "my-swal",
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating DSC:", error);
       setLoader(false);
       Swal.fire({
         icon: "error",
-        title: "Failed to Update DSC3",
-        text: "Failed to Update DSC3",
+
+        title: error?.response?.data?.message || "Failed to Update DSC",
+        text: "",
         customClass: {
           container: "my-swal",
         },
