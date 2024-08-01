@@ -40,6 +40,13 @@ const MainPortalSidebar = ({ layout }: Props) => {
   useEffect(() => {
     const cmsPath = location.pathname.split("/")[1];
     setUrl("/" + cmsPath);
+    // Set active tab based on the pathname
+    const activePath = portalSideBarListRegulator.find((item) =>
+      pathname.includes(item.url)
+    );
+    if (activePath) {
+      setActiveTab(activePath.url);
+    }
     if (
       location.pathname.startsWith("/rg/profile") &&
       searchParams.get("current") === "regulator"
