@@ -34,7 +34,7 @@ const SchemaCreation = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [total, setTotal] = useState<number>(0);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-  const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
+  const [statusForSearch, setStatusForSearch] = useState<string | null>('ALL');
 
   const [searchInput, setSearchInput] = useState<string>("");
   const handleSearchInput = (event: any) => {
@@ -53,7 +53,7 @@ const SchemaCreation = () => {
           params: {
             page: page,
             limit: pageSize,
-            searchText: searchInput,
+            nameSearchText: searchInput,
             status: statusForSearch,
           },
         }
