@@ -89,10 +89,11 @@ const SchemeSearch: React.FC = () => {
   const fetchSchemes = async () => {
     setLoader(true);
     try {
-      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme`, {
+      const { data } = await axios.get(`${bffUrl}/scheme-portal/solr-scheme`, {
         params: {
           page: page,
           limit: pageSize,
+          searchText: searchInput,
           status : selectedOption1
         },
       });
@@ -106,13 +107,10 @@ const SchemeSearch: React.FC = () => {
       setLoader(false);
     }
   };
-
-  console.log({selectedOption1});
-  
   
   useEffect(() => {
     fetchSchemes();
-  }, [page, pageSize]);
+  }, [page, pageSize, selectedOption1]);
 
   const columns = [
     // columnHelper.accessor("id", {
