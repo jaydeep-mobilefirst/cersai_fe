@@ -53,6 +53,12 @@ const EntityDetails: React.FC = () => {
       }
     }
   };
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+  
 
   return (
     <>
@@ -60,7 +66,7 @@ const EntityDetails: React.FC = () => {
       {/* <div className="flex flex-col p-6 w-full"> */}
       <form
         // className="flex flex-col justify-between h-full"
-        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+        className="flex items-center justify-between flex-col h-full lg:h-[100vh]" onKeyPress={handleKeyPress}
       >
         <div
           style={{

@@ -122,10 +122,11 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
       setError(false);
     } catch (error: any) {
+      console.log("error",error?.response?.data?.error)
       setError(true);
       const errorMessage =
-        error?.response?.data?.error?.error_description ||
-        error?.response?.data?.error?.message ||
+        error?.response?.data?.error ||
+        error?.response?.data?.message ||
         "User not found";
       setFormError(errorMessage);
       // if (err.response?.data?.error?.error_description) {
@@ -288,10 +289,10 @@ const LoginModel: React.FC<LoginModelProps> = ({
                     <InputFields
                       disabled={dscApiInProgress}
                       {...register("email", {
-                        required: "Email is required",
+                        required: "Email address or Mobile number is required",
                         pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: "Invalid email address",
+                          value: /^(\+?\d{1,4}[\s-]?)?(\d{10})|([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})$/i,
+                          message: "Invalid email address or mobile number",
                         },
                       })}
                       placeholder="Email id / Mobile no."

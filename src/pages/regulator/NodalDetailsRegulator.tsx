@@ -74,9 +74,15 @@ const NodalDetailsRegulator = () => {
     }
   };
 
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   return (
     <>
-      <form className="flex items-center justify-between flex-col h-full lg:h-[100vh]">
+      <form className="flex items-center justify-between flex-col h-full lg:h-[100vh]" onKeyDown={handleKeyPress}>
         <div
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
@@ -85,7 +91,7 @@ const NodalDetailsRegulator = () => {
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-0 w-full">
             <h1 className="text-xl md:text-2xl font-bold mx-10">
-              Nodal Details
+              Nodal Officer Details
             </h1>
 
             <div className="bg-white p-4 lg:p-[48px]">

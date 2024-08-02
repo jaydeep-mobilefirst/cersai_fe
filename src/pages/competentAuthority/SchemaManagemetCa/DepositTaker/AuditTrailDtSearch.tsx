@@ -225,7 +225,6 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         setLoader(false);
       }
     } else {
-      console.log("PAN verification failed");
       setLoader(false);
     }
   };

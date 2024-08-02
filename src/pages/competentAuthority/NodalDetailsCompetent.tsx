@@ -84,12 +84,19 @@ const NodalDetails = (props: Props) => {
     }
   };
 
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   return (
     <>
       {/* <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div> */}
       <form
         // className="p-4 flex flex-col w-full max-w-[100%] justify-between space-y-40"
         className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+        onKeyDown={handleKeyPress}
       >
         <div
           style={{
@@ -98,7 +105,7 @@ const NodalDetails = (props: Props) => {
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
-            <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
+            <h1 className="text-2xl font-bold mb-6">Nodal Officer Details</h1>
             <DynamicFields
               allFormData={allFormData}
               formFields={formFields}

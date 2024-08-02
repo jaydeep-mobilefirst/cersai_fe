@@ -48,11 +48,17 @@ const RegularDetailsForm = (props: Props) => {
     }
   };
 
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   return (
     <>
       <form
         // className="p-4 flex flex-col w-full max-w-[100%] justify-between"
-        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+        className="flex items-center justify-between flex-col h-full lg:h-[100vh]" onKeyDown={handleKeyPress}
       >
         <div
           style={{
