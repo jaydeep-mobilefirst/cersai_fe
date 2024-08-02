@@ -40,8 +40,15 @@ const SchemeMasterForm = () => {
 
         const userData = portalResponse.data?.data?.schemes[0];
 
+        
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
+            let userInput = userData?.schemeFormData?.find(
+              (f: any) => f?.fieldId === field?.id
+            )?.value
+
+            console.log({userInput});
+            
             if (field?.key === 'depositTakerId') {
               return {
                 ...field,
@@ -106,7 +113,9 @@ const SchemeMasterForm = () => {
           }
         )
 
+        
         formFields = await Promise.all(formFields)
+        console.log({userData, formFields});
 
         setAllFormData({
           ...response?.data?.data,

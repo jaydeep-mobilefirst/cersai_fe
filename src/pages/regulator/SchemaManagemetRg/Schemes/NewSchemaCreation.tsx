@@ -102,6 +102,7 @@ const SchemeDetails = () => {
         fieldId: field.id,
         value: field.userInput,
         key: field.key,
+        label : field?.label
       }));
 
       // Creating the payload object that includes both formData and depositTakerId
