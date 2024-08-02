@@ -11,6 +11,7 @@ import LoaderSpin from "../../components/LoaderSpin";
 import axios from "axios";
 import { bffUrl } from "../../utils/api";
 import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
+import Logo from "../../assets/images/logo.svg";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -34,7 +35,7 @@ const useDownloadPDF = () => {
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: 0.4,
-      filename: "details.pdf",
+      filename: "Reviewdetails.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 2 : 4 },
       jsPDF: {
@@ -155,12 +156,17 @@ const ReviewDetailsDesignated = () => {
 
     finalResult = [...finalResult, ...docs];
 
-    axios
-    [allFormData?.returnJourney ? 'put' : 'post'](bffUrl + `/designated-court/${allFormData?.returnJourney ? 'return-journey' : 'add-form-fields'}`, {
-        identity : allFormData?.uniqueId,
+    axios[allFormData?.returnJourney ? "put" : "post"](
+      bffUrl +
+        `/designated-court/${
+          allFormData?.returnJourney ? "return-journey" : "add-form-fields"
+        }`,
+      {
+        identity: allFormData?.uniqueId,
         formData: finalResult,
         masterId: masterEntityId,
-      })
+      }
+    )
       .then((response) => {
         const data = response.data;
         if (data?.success) {
@@ -168,12 +174,8 @@ const ReviewDetailsDesignated = () => {
             setPara1(`Your resumption journey has been sent successfully and
               approval/rejection of your resumption will be informed to you
               via email.`);
-            setPara2(
-              ``
-            );
-          }
-          else{
-
+            setPara2(``);
+          } else {
             setPara1(`Your registration request has been sent successfully and
               approval/rejection of your registration will be informed to you
               via email.`);
@@ -181,7 +183,7 @@ const ReviewDetailsDesignated = () => {
               `Your registration acknowledgement ID is ${data?.data?.newDesignatedCourt?.uniqueId}`
             );
           }
-         
+
           setSubmitted(true);
           setSubmitModal(true);
         } else {
@@ -207,7 +209,16 @@ const ReviewDetailsDesignated = () => {
         <header className="lg:p-[38px] border-b border-gray-200"></header>
         <main className="flex-grow p-6 overflow-auto custom-scrollbar">
           <div id="reviewContent">
-            <h1 className="text-2xl font-bold mb-6">Review</h1>
+            {isPdfMode && (
+              <div>
+                <img
+                  src={Logo}
+                  alt="logo"
+                  className="rounded-full h-[52px] w-[52px]"
+                />
+              </div>
+            )}
+            <h1 className="text-2xl font-bold mb-6">Review Details</h1>
             <ReviewMainListing
               allFormData={allFormData}
               documentData={documentData}

@@ -13,6 +13,7 @@ import axios from "axios";
 import { bffUrl } from "../../utils/api";
 import LoaderSpin from "../../components/LoaderSpin";
 import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
+import Logo from "../../assets/images/logo.svg";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -37,7 +38,7 @@ const useDownloadPDF = () => {
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: 0.4,
-      filename: "details.pdf",
+      filename: "Reviewdetails.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 2 : 4 },
       jsPDF: {
@@ -62,6 +63,7 @@ const useDownloadPDF = () => {
 const ReviewDetails = () => {
   const Navigate = useNavigate();
   const { downloadPDF, isDownloading, isPdfMode } = useDownloadPDF();
+
   const [loader, setLoader] = useState(false);
   const [para1, setPara1] = useState("");
   const [para2, setPara2] = useState("");
@@ -104,11 +106,17 @@ const ReviewDetails = () => {
 
     finalResult = [...finalResult, ...docs];
 
-    axios[allFormData?.returnJourney ? 'put' : 'post'](bffUrl + `/competent-authority/${allFormData?.returnJourney ? 'return-journey' : 'add-form-fields'}`, {
-      identity: allFormData?.uniqueId,
-      formData: finalResult,
-      masterId: masterEntityId,
-    })
+    axios[allFormData?.returnJourney ? "put" : "post"](
+      bffUrl +
+        `/competent-authority/${
+          allFormData?.returnJourney ? "return-journey" : "add-form-fields"
+        }`,
+      {
+        identity: allFormData?.uniqueId,
+        formData: finalResult,
+        masterId: masterEntityId,
+      }
+    )
       .then((response: any) => {
         const data = response.data;
         if (data?.success) {
@@ -117,11 +125,8 @@ const ReviewDetails = () => {
             setPara1(`Your resumption journey has been sent successfully and
               approval/rejection of your resumption will be informed to you
               via email.`);
-            setPara2(
-              ``
-            );
-          }
-          else {
+            setPara2(``);
+          } else {
             setPara1(`Your registration request has been sent successfully and
               approval/rejection of your registration will be informed to you
               via email.`);
@@ -129,7 +134,6 @@ const ReviewDetails = () => {
               `Your registration acknowledgement ID is ${data?.data?.newCompetentAuthority?.uniqueId}`
             );
           }
-
 
           setSubmitted(true);
           setSubmitModal(true);
@@ -156,7 +160,16 @@ const ReviewDetails = () => {
         <header className="lg:p-[38px] border-b border-gray-200"></header>
         <main className="flex-grow p-6 overflow-auto custom-scrollbar">
           <div id="reviewContent">
-            <h1 className="text-2xl font-bold mb-6">Review</h1>
+            {isPdfMode && (
+              <div>
+                <img
+                  src={Logo}
+                  alt="logo"
+                  className="rounded-full h-[52px] w-[52px]"
+                />
+              </div>
+            )}
+            <h1 className="text-2xl font-bold mb-6">Review Details</h1>
             {/* {allFormData &&
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
@@ -245,7 +258,10 @@ const ReviewDetails = () => {
           </div>
         </main>
 
-        <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
+        <div
+          className="flex justify-between items-center my-3 flex-col sm:flex-row"
+          onClick={() => Navigate(-1)}
+        >
           <div className=" ml-5">
             <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0">
               <img src={Arrow} alt="back Arrow" className="mr-2" />

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NodalDetailsSchema from "../../formValidationSchema/deposit_taker/NodalDetails.schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -48,6 +48,16 @@ const NodalDetails = (props: Props) => {
   const email = allFormData?.formFields?.form_fields?.find(
     (field: any) => field?.label === "Nodal Officer Email"
   )?.userInput;
+  useEffect(() => {
+    if (showOTPModel) {
+      const timeout = setTimeout(() => {
+        setShowOTPModel(false);
+      }, 5 * 60 * 1000); // 5 minutes
+
+      // Cleanup timeout on unmount or when showOTPModel changes
+      return () => clearTimeout(timeout);
+    }
+  }, [showOTPModel]);
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -154,7 +164,10 @@ const NodalDetails = (props: Props) => {
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className="flex flex-row items-center space-x-2" onClick={() => Navigate("/competent/authority/uploaddocuments")}>
+            <div
+              className="flex flex-row items-center space-x-2"
+              onClick={() => Navigate("/competent/authority/uploaddocuments")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -185,7 +198,7 @@ const NodalDetails = (props: Props) => {
                 {loader ? <LoaderSpin /> : "Save & Review"}
               </button>
             </div> */}
-             <div className="flex items-center ml-auto">
+            <div className="flex items-center ml-auto">
               <button
                 type="submit"
                 disabled={loader}
