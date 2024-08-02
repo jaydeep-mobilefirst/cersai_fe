@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useScreenWidth } from "../../utils/screenSize";
 import OtpPage from "./OtpPage";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
@@ -40,6 +40,16 @@ const NodalDetails = (props: Props) => {
   const email = allFormData?.formFields?.form_fields?.find(
     (field: any) => field?.label === "Nodal Officer Email"
   )?.userInput;
+  useEffect(() => {
+    if (showOTPModel) {
+      const timeout = setTimeout(() => {
+        setShowOTPModel(false);
+      }, 5 * 60 * 1000); // 5 minutes
+
+      // Cleanup timeout on unmount or when showOTPModel changes
+      return () => clearTimeout(timeout);
+    }
+  }, [showOTPModel]);
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();

@@ -6,7 +6,7 @@ import UploadButton from "../../components/userFlow/form/UploadButton";
 import { useScreenWidth } from "../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
 import axios from "axios";
@@ -38,6 +38,16 @@ const NodalDetailsRegulator = () => {
   const email = allFormData?.formFields?.form_fields?.find(
     (field: any) => field?.label === "Nodal Officer Email"
   )?.userInput;
+  useEffect(() => {
+    if (showOTPModel) {
+      const timeout = setTimeout(() => {
+        setShowOTPModel(false);
+      }, 5 * 60 * 1000); // 5 minutes
+
+      // Cleanup timeout on unmount or when showOTPModel changes
+      return () => clearTimeout(timeout);
+    }
+  }, [showOTPModel]);
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();

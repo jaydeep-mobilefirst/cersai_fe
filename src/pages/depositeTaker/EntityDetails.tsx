@@ -26,10 +26,17 @@ const EntityDetails: React.FC = () => {
     (s: any) => s?.sectionName === "Entity Details"
   );
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-    ? allFormData?.formFields?.form_fields?.filter(
-        (f: any) => f?.sectionId === sectionId?.id
-      )
+    ? allFormData?.formFields?.form_fields
+        ?.filter((f: any) => f?.sectionId === sectionId?.id)
+        .map((field: any) => {
+          return {
+            ...field,
+            disabled: ["State", "District"].includes(field.label),
+          };
+        })
     : [];
+
+  // console.log({ formFields }, "form filed");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
