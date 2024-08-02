@@ -22,6 +22,8 @@ import { bffUrl } from "../../utils/api";
 import LoaderSpin from "../../components/LoaderSpin";
 import useFetchStates from "../../contextAPI/useFetchStates";
 import useFetchDistrict from "../../contextAPI/useFetchDistrict";
+import { useLandingStore } from "../../zust/useLandingStore";
+import { useLangugaeStore } from "../../zust/useLanguageUsStore";
 
 type TableType = {
   id: number;
@@ -53,6 +55,34 @@ const DepositeTakerSearch: React.FC = () => {
 
   const [taskData, setTaskData] = useState([]);
   const navigate = useNavigate();
+  const { homePageData, setHomePageData } = useLandingStore((state) => state);
+  const {language} = useLangugaeStore((state) => state);
+
+  useEffect(() => {
+    homePageCmsApi();
+  }, [state,language]);
+
+  const homePageCmsApi = () => {
+    setLoader(true);
+    // setHomePageData(data.data.content)
+    axios
+      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+        headers: {
+          'Accept-Language': language
+        }
+    })
+      .then((response) => {
+        console.log("api-response", response);
+        setHomePageData(response?.data?.data?.content?.updatedStructure);
+        setLoader(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
+
+
   useEffect(() => {
     apiCall();
   }, [pageSize, page]);

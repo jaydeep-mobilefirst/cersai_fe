@@ -65,9 +65,17 @@ const NodalDetails = (props: Props) => {
     }
   };
 
+
+
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   return (
     <>
-      <form className="flex items-center justify-between flex-col h-full lg:h-[100vh]">
+      <form className="flex items-center justify-between flex-col h-full lg:h-[100vh]" onKeyPress={handleKeyPress}>
         <div
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
@@ -75,7 +83,7 @@ const NodalDetails = (props: Props) => {
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
-            <h1 className="text-2xl font-bold mb-6">Nodal Details</h1>
+            <h1 className="text-2xl font-bold mb-6">Nodal Officer Details</h1>
             <DynamicFields
               allFormData={allFormData}
               formFields={formFields}

@@ -100,6 +100,14 @@ const DatePicker = ({
     }
   };
 
+  const getCurrentDate = (): string => {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const year = today.getFullYear();
+    return `${year}-${month}-${day}`; // Format as YYYY-MM-DD for the input[type="date"]
+  };
+
   return (
     <div className="flex justify-start items-center h-14 w-full max-w-[35rem] sm:max-w-[100%] md:max-w-md lg:max-w-2xl border rounded-md">
       <button
@@ -119,6 +127,7 @@ const DatePicker = ({
         type="date"
         className="absolute opacity-0 -z-10"
         onChange={onChangeHandler}
+        max={getCurrentDate()} // Set max date to today
       />
     </div>
   );
