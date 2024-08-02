@@ -51,12 +51,12 @@ const VerificationForm = (props: Props) => {
         let company = formFields?.find((field : any, i : number) => field?.key === 'companyName' );
         let pan = formFields?.find((field : any, i : number) =>  field?.key === 'panNumber');
         let dob = formFields?.find((field : any, i : number) =>  field?.key === 'dateOfIncorporation');
-        
+       
         let response = await axios.post(bffUrl+"/pandirectory/api", {
           name:company?.userInput?.toUpperCase(),
           pan_no: pan?.userInput,
           // dob : dob[2]+"/"+dob[1]+"/"+dob[0]
-          dob : moment(dob).format("DD/MM/YYYY")
+          dob : moment(dob?.userInput).format("DD/MM/YYYY")
         })
         const data = response.data;
         if (data?.status !== "success") {
