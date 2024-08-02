@@ -80,6 +80,12 @@ const UploadDocumentsRegulator = (props: Props) => {
     }
   };
 
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   return (
     <>
       <div>
@@ -88,6 +94,7 @@ const UploadDocumentsRegulator = (props: Props) => {
         <form
           className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
           onSubmit={() => Navigate("/designated/court/nodaldetails")}
+          onKeyDown={handleKeyPress}
         >
           {showUploadPopup && (
             <UploadFile

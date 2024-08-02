@@ -36,6 +36,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
+  const today = new Date();
 
   return (
     <>

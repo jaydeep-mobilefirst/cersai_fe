@@ -122,10 +122,11 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
       setError(false);
     } catch (error: any) {
+      console.log("error",error?.response?.data?.error)
       setError(true);
       const errorMessage =
-        error?.response?.data?.error?.error_description ||
-        error?.response?.data?.error?.message ||
+        error?.response?.data?.error ||
+        error?.response?.data?.message ||
         "User not found";
       setFormError(errorMessage);
       // if (err.response?.data?.error?.error_description) {

@@ -67,10 +67,17 @@ const NodalDetailsDesignated = () => {
     }
   };
 
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   return (
     <>
       <form
         onSubmit={onSubmit}
+        onKeyDown={handleKeyPress}
         className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
       >
         <div
@@ -81,7 +88,7 @@ const NodalDetailsDesignated = () => {
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
             <h1 className="text-2xl font-bold mb-6 text-gilroy-medium">
-              Nodal Details
+              Nodal Officer Details
             </h1>
             <DynamicFields
               allFormData={allFormData}
