@@ -9,7 +9,7 @@ import ReturnModelPopup from "../../../components/MyTasks/ReturnModelPopup";
 import SubRejectModelPopup from "../../../components/MyTasks/SubRejectModelPopup";
 import "./mytaskform.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../../utils/axios";
+import { axiosTokenInstance } from "../../../utils/axios";
 import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import { number } from "yup";
@@ -52,7 +52,7 @@ const MyTaskForm = () => {
   const getBranches = () => {
     setLoader(true);
 
-    axiosInstance
+    axiosTokenInstance
       .get(`deposit-taker/branch/${depositTakerId}`)
       .then((res) => {
         setDataBranch(res?.data?.data?.branches);

@@ -15,6 +15,7 @@ import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../../components/LoaderSpin";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type SchemeType = {
   id: number;
@@ -32,33 +33,34 @@ const SchemaCreation = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [total, setTotal] = useState<number>(0);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [statusForSearch, setStatusForSearch] = useState<string | null>('ALL');
+
+  const [searchInput, setSearchInput] = useState<string>("");
+  const handleSearchInput = (event: any) => {
+    event?.preventDefault();
+    const { value } = event?.target;
+    setSearchInput(value);
+  };
   const navigate = useNavigate();
 
   const fetchSchemes = async () => {
     setLoader(true);
     try {
-      // const { data } = await axios.get(
-      //   `${bffUrl}/scheme-portal/scheme-by/${sessionStorage.getItem(
-      //     "entityUniqueId"
-      //   )}`
-      // );
-      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme-by/${sessionStorage.getItem(
-          "entityUniqueId"
-        )}`, {
-        params: {
-          page: page,
-          limit: pageSize,
-        },
-      });
-
-      setSchemaData(
-        data.data.map((item: any, index: any) => ({
-          ...item,
-          id: index + 1, // Assuming you want to use index as S.No.
-          status: item.status, // Or some logic to determine status
-        }))
+      const data = await axiosTokenInstance.get(
+        `/scheme-portal/scheme-by/${sessionStorage.getItem("entityUniqueId")}`,
+        {
+          params: {
+            page: page,
+            limit: pageSize,
+            nameSearchText: searchInput,
+            status: statusForSearch,
+          },
+        }
       );
-      setTotal(data?.total);
+      console.log(data?.data?.limit, "data");
+      setSchemaData(data?.data?.data);
+      setTotal(data?.data?.limit);
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
@@ -78,11 +80,22 @@ const SchemaCreation = () => {
       },
     });
   };
+  let count: number;
+  const serialNoGen = (page: number) => {
+    count = (page - 1) * 10;
+  };
+  serialNoGen(page);
 
   const columns = [
     columnHelper.accessor("id", {
       header: () => "S.No.",
-      cell: (info) => info.getValue(),
+      // cell: (info) => info.getValue(),
+      cell: () => {
+        while (count <= total) {
+          count++;
+          return count;
+        }
+      },
     }),
     columnHelper.accessor("uniqueId", {
       header: () => "Scheme ID",
@@ -117,8 +130,8 @@ const SchemaCreation = () => {
         };
 
         return (
-          <div key={Math.random()} className="flex justify-center items-center">
-            <p className="mr-2">{Activated ? "Active" : "inactive"}</p>
+          <div key={Math.random()} className='flex justify-center items-center'>
+            <p className='mr-2'>{Activated ? "Active" : "inactive"}</p>
             <ToggleSwitch enabled={Activated} apiCall={apiCall} />
           </div>
         );
@@ -130,10 +143,10 @@ const SchemaCreation = () => {
       cell: (info) => {
         const uniqueId = info?.row?.original?.uniqueId;
         return (
-          <div className="flex justify-center items-center ">
+          <div className='flex justify-center items-center '>
             {/* <Link to={"/dt/schema/creation"}> */}
             <div onClick={() => NavigateScheme(uniqueId)}>
-              <img src={Eye} alt="Eye " className="cursor-pointer" />
+              <img src={Eye} alt='Eye ' className='cursor-pointer' />
             </div>
             {/* </Link> */}
           </div>
@@ -189,49 +202,69 @@ const SchemaCreation = () => {
   const handleSetOption4 = (value: string) => {
     setSelectedOption4(value);
   };
+  const options = [
+    { value: "", label: "All" },
+    { value: "ACTIVE", label: "Active" },
+    { value: "BANNED", label: "Banned" },
+    { value: "UNDER_LETIGATION", label: "Under litigation" },
+  ];
+  const handleSetStatus = (option: any) => {
+    console.log(option, "option");
+    setSelectedStatus(option);
+
+    setStatusForSearch(option);
+  };
+
+  const handleClickSearch = () => {
+    setPage(1);
+    fetchSchemes();
+  };
   return (
     <div
-      className="relative xl:ml-[40px]"
+      className='relative xl:ml-[40px]'
       style={{ minHeight: "calc(100vh - 110px)" }}
     >
-      <div className="mt-6">
+      <div className='mt-6'>
         <TaskTabs />
       </div>
       <div>
-        <div className=" mt-2">
-          <div className=" flex  space-x-2  items-center flex-wrap">
-            <div className="md:w-[500px] lg:w-[600px] sm:w-[350px] w-[300px]">
-              <div className="mb-2">
+        <div className=' mt-2'>
+          <div className=' flex  space-x-2  items-center flex-wrap'>
+            <div className='md:w-[500px] lg:w-[600px] sm:w-[350px] w-[300px]'>
+              <div className='mb-2'>
                 <label
-                  htmlFor="Deposit taker Search"
-                  className="text-base font-normal text-gilroy-medium "
+                  htmlFor='Deposit taker Search'
+                  className='text-base font-normal text-gilroy-medium '
                 >
                   Scheme Search
                 </label>
               </div>
 
               <InputFields
-                height="40px"
+                height='40px'
                 // width="550px"
-                padding="10px"
-                placeholder="Search by Unique ID/name"
+                padding='10px'
+                onChange={handleSearchInput}
+                placeholder='Search by Unique ID/name'
+                value={searchInput}
               />
             </div>
-            <div className=" flex items-center mt-7">
+            <div className=' flex items-center mt-7'>
               <button
+                onClick={handleClickSearch}
                 className={`w-40 h-[45px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1c468e] cursor-pointer"} mt-2`}
               >
-                <img src={searchButton} alt="searchButton" />
-                <span className="ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium ">
+                <img src={searchButton} alt='searchButton' />
+                <span className='ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium '>
                   Search
                 </span>
               </button>
             </div>
-            <div className=" flex items-center mt-7">
-              <Link to="/dt/scheme/form">
-                <div className="w-40 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
-                  <img src={addCircle} alt="icon" />
-                  <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
+            <div className=' flex items-center mt-7'>
+              <Link to='/dt/scheme/form'>
+                <div className='w-40 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer'>
+                  <img src={addCircle} alt='icon' />
+                  <span className='ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium '>
                     New Scheme
                   </span>
                 </div>
@@ -240,14 +273,14 @@ const SchemaCreation = () => {
           </div>
         </div>
         <div>
-          <div className="mt-[25px] mb-[35px] ">
-            <div className="">
-              <p className="text-sm font-normal text-gilroy-medium ">
-                OR search by Geography
+          <div className='mt-[25px] mb-[35px] '>
+            <div className=''>
+              <p className='text-sm font-normal text-gilroy-medium '>
+                OR search by Status
               </p>
             </div>
-            <div className="flex items-center flex-wrap gap-4">
-              <div className="">
+            <div className='flex items-center flex-wrap gap-4'>
+              {/* <div className="">
                 <SelectButtonTask
                   setOption={handleSetOption1}
                   options={options1}
@@ -270,33 +303,37 @@ const SchemaCreation = () => {
                   selectedOption={selectedOption3}
                   placeholder="Pune"
                 />
-              </div>
-              <div className="h-6 border-r-2 border-gray-300 "></div>
+              </div> */}
+              {/* <div className="h-6 border-r-2 border-gray-300 "></div> */}
               <div>
                 <SelectButtonTask
-                  setOption={handleSetOption4}
-                  options={options4}
-                  selectedOption={selectedOption4}
-                  placeholder="Status"
+                  // setOption={handleSetOption4}
+                  // options={options4}
+                  // selectedOption={selectedOption4}
+                  // placeholder="Status"
+                  setOption={handleSetStatus}
+                  options={options}
+                  selectedOption={selectedStatus}
+                  placeholder='Status'
                 />
               </div>
             </div>
           </div>
         </div>
-        <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-          <div className=" mb-12">
+        <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
+          <div className=' mb-12'>
             {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
               <ReactTable defaultData={schemaData} columns={columns} />
             ) : (
-              <div className=" flex justify-center items-center">
+              <div className=' flex justify-center items-center'>
                 <h1>No data available</h1>
               </div>
             )}
           </div>
           {schemaData.length > 0 && (
-            <div className="absolute bottom-0 w-full">
+            <div className='absolute bottom-0 w-full'>
               <CustomPagination
                 currentPage={page}
                 setCurrentPage={setPage}

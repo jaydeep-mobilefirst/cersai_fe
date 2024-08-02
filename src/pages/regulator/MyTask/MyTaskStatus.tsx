@@ -13,7 +13,7 @@ import CustomPagination from "../../../components/CustomPagination/CustomPaginat
 import axios from "axios";
 import { bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../../components/LoaderSpin";
-import { axiosInstance } from "../../../utils/axios";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type TableType = {
   id: number;
@@ -37,30 +37,26 @@ const MyTaskStatus = () => {
   const [myTaskData, setMyTaskData] = useState([]);
   const navigate = useNavigate();
   const masterId = sessionStorage.getItem("masterId");
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const handleSearchInput = (event: any) => {
+    event?.preventDefault();
+    const { value } = event?.target;
+    setSearchInput(value);
+  };
   const myTaskRg = async () => {
     setLoader(true);
     try {
-      const { data } = await axiosInstance.get(`/mytask/regulator-task`, {
+      const { data } = await axiosTokenInstance.get(`/mytask/regulator-task`, {
         params: {
           page: page,
           limit: pageSize,
-          // regId: "RG02ID8",
           regId: masterId,
+          searchText: searchInput,
+          status: statusForSearch,
         },
       });
-      // if (data?.data?.depositTakers) {
-      //   const mappedData = data.data.depositTakers.map(
-      //     (item: any, index: number) => ({
-      //       ...item,
-      //       id: index + 1,
-      //       key: index,
-      //       depositTakerName: `${item?.approverRelation?.firstName || ""} ${
-      //         item?.approverRelation?.lastName || ""
-      //       }`,
-      //     })
-      //   );
-      //   setMyTaskData(mappedData);
-      // }
       setMyTaskData(data?.data?.depositTakers);
 
       setTotal(data?.data?.total);
@@ -201,6 +197,23 @@ const MyTaskStatus = () => {
   const handleSetOption4 = (value: string) => {
     setSelectedOption4(value);
   };
+  const options = [
+    { value: "", label: "All" },
+    { value: "ACTIVE", label: "Active" },
+    { value: "BANNED", label: "Banned" },
+    { value: "UNDER_LETIGATION", label: "Under litigation" },
+  ];
+  const handleSetStatus = (option: any) => {
+    console.log(option, "option");
+    setSelectedStatus(option);
+
+    setStatusForSearch(option);
+  };
+
+  const handleClickSearch = () => {
+    setPage(1);
+    myTaskRg();
+  };
 
   return (
     <div
@@ -225,11 +238,14 @@ const MyTaskStatus = () => {
                 // width="550px"
                 padding="10px"
                 placeholder="Search by Unique ID/name"
+                onChange={handleSearchInput}
+                value={searchInput}
               />
             </div>
 
             <div className=" flex items-center mt-7">
               <button
+                onClick={handleClickSearch}
                 className={`w-40 h-[45px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1c468e] cursor-pointer"} mt-2`}
               >
                 <img src={searchButton} alt="searchButton" />
@@ -244,11 +260,11 @@ const MyTaskStatus = () => {
           <div className="mt-[25px] mb-[35px] ">
             <div className="">
               <p className="text-sm font-normal text-gilroy-medium ">
-                OR search by Geography
+                OR search by Status
               </p>
             </div>
             <div className="flex items-center flex-wrap gap-4">
-              <div className="">
+              {/* <div className="">
                 <SelectButtonTask
                   setOption={handleSetOption1}
                   options={options1}
@@ -271,13 +287,17 @@ const MyTaskStatus = () => {
                   selectedOption={selectedOption3}
                   placeholder="Pune"
                 />
-              </div>
-              <div className="h-6 border-r-2 border-gray-300 "></div>
+              </div> */}
+              {/* <div className="h-6 border-r-2 border-gray-300 "></div> */}
               <div>
                 <SelectButtonTask
-                  setOption={handleSetOption4}
-                  options={options4}
-                  selectedOption={selectedOption4}
+                  // setOption={handleSetOption4}
+                  // options={options4}
+                  // selectedOption={selectedOption4}
+                  // placeholder="Status"
+                  setOption={handleSetStatus}
+                  options={options}
+                  selectedOption={selectedStatus}
                   placeholder="Status"
                 />
               </div>

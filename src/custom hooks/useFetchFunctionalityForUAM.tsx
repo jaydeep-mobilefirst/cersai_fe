@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { bffUrl } from '../utils/api';
+import { axiosTokenInstance } from '../utils/axios';
 
 function useFetchFunctionalityForUAM(entityType : string) {
   const maxRetries = 5
@@ -11,7 +12,7 @@ function useFetchFunctionalityForUAM(entityType : string) {
   useEffect(() => {
     const fetchData = async (attempt = 1) => {
       try {
-        const response = await axios.get(`${bffUrl}/role/basicfunctionalities/${entityType}`);
+        const response = await axiosTokenInstance.get(`/role/basicfunctionalities/${entityType}`);
         setData(response.data.map((f : any) => ({value : f.id, label : f.functionality, roleName : f.roleName})));
         setError(null);
       } catch (err : any) {

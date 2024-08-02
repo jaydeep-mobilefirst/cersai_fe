@@ -9,6 +9,8 @@ import axios from "axios";
 import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import SuccessPopup from "../../../../components/userFlow/depositeTaker/SuccessPopUp";
+import { axiosTokenInstance } from "../../../../utils/axios";
+
 const SchemeDetails = () => {
   const [submitted, setSubmitted] = useState(false);
   const [popupData, setPopData] = useState({
@@ -33,7 +35,7 @@ const SchemeDetails = () => {
   }, []);
   const fetchSchema = async () => {
     try {
-      const response = await axios.get(`${bffUrl}/scheme/field-data/2`);
+      const response = await axiosTokenInstance.get(`/scheme/field-data/2`);
       if (response.data.success) {
         const formFields = response?.data?.data?.formFields?.allFormFields.map(
           (field: any) => ({
@@ -54,13 +56,12 @@ const SchemeDetails = () => {
                   ...field,
                   dropdown_options: {
                     ...field?.dropdown_options,
-                    options: field?.dropdown_options?.options?.map(
-                      (o: any) => ({
+                    options: field?.dropdown_options?.options
+                      ?.map((o: any) => ({
                         name: o?.uniqueId,
                         id: o?.companyName,
-                      })
-                    )?.sort((a : any, b : any) => a.sortOrder - b.sortOrder)
-                    ,
+                      }))
+                      ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder),
                   },
                 };
               } else {
@@ -87,15 +88,14 @@ const SchemeDetails = () => {
     if (!isFormValid) {
       setLoader(false);
       return;
-    }
-    else{
-      // returns true if no error 
+    } else {
+      // returns true if no error
       const schemeValidations = await handleSchemeValidations();
       if (schemeValidations === false) {
         setLoader(false);
         return;
       }
-      }
+    }
     try {
       // Mapping over the form fields to prepare the formData
       let formData = allFormData.formFields.form_fields.map((field: any) => ({
@@ -111,8 +111,8 @@ const SchemeDetails = () => {
       };
 
       // Making the POST request with axios
-      const response = await axios.post(
-        `${bffUrl}/scheme-portal/add-form-fields`, // Assuming bffUrl is defined elsewhere
+      const response = await axiosTokenInstance.post(
+        `/scheme-portal/add-form-fields`, // Assuming bffUrl is defined elsewhere
         payload // Sending the payload with depositTakerId and formData
       );
 
@@ -138,65 +138,65 @@ const SchemeDetails = () => {
     }
   };
 
-  const handleOnchange = async ( event: any,
+  const handleOnchange = async (
+    event: any,
     fieldData: any,
-    fieldType: string) => {
-      if (fieldData?.key === "depositTakerId") {
-        const res = await axios.get(bffUrl + '/deposit-taker/branch/' + event?.value)
-        let data = res.data;
-        let branches = data?.data?.branches?.map((b: any) => {
-          return {
-            name: b?.pinCode + " " + b?.district + " " + b?.state,
-            id: b?.id
-          }
-        })
-          setAllFormData({
-            ...allFormData,
-            formFields : {
-              form_fields : allFormData?.formFields?.form_fields?.map((f : any) => {
-                if (f?.key === 'branch') {
-                  return {
-                    ...f,
-                    dropdown_options : {...f?.dropdown_options, options : branches}
-                  }
-                }
-                else if (f?.key === "depositTakerId") {
-                  return {...f, userInput : event?.value}
-                }
-                else{
-                  return f;
-                }
-              })
+    fieldType: string
+  ) => {
+    if (fieldData?.key === "depositTakerId") {
+      const res = await axiosTokenInstance.get(
+        "/deposit-taker/branch/" + event?.value
+      );
+      let data = res.data;
+      let branches = data?.data?.branches?.map((b: any) => {
+        return {
+          name: b?.pinCode + " " + b?.district + " " + b?.state,
+          id: b?.id,
+        };
+      });
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (f?.key === "branch") {
+              return {
+                ...f,
+                dropdown_options: { ...f?.dropdown_options, options: branches },
+              };
+            } else if (f?.key === "depositTakerId") {
+              return { ...f, userInput: event?.value };
+            } else {
+              return f;
             }
-          })
-          
-      }
-      else{
-        onChange(event, fieldData, fieldType)
-      }
-  }
+          }),
+        },
+      });
+    } else {
+      onChange(event, fieldData, fieldType);
+    }
+  };
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
   return (
     <div
-      className="mt-6 mx-8 relative"
+      className='mt-6 mx-8 relative'
       style={{ minHeight: "calc(100vh - 110px)" }}
     >
-      <div className="mt-2 ">
+      <div className='mt-2 '>
         <TaskTabsRg />
       </div>
-      <div className="-ml-7">
-        <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
-          <div className="w-full mb-40">
-            <div className="mt-10">
+      <div className='-ml-7'>
+        <div className='flex items-center justify-between flex-col h-full mx-10 my-0  '>
+          <div className='w-full mb-40'>
+            <div className='mt-10'>
               <DynamicFields
                 formFields={allFormData?.formFields?.form_fields}
                 allFormData={allFormData}
                 onChange={handleOnchange}
               />
             </div>
-            <div className="flex flex-shrink-0 mt-[20px]">
+            {/* <div className="flex flex-shrink-0 mt-[20px]">
               <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
                 <input
                   type="checkbox"
@@ -206,6 +206,21 @@ const SchemeDetails = () => {
                 />
               </div>
               <div className="leading-[24px]">
+                I declare all the Information provided is correct as per my
+                knowledge.
+              </div>
+            </div> */}
+            <div className='flex flex-shrink-0 mt-[20px] justify-start items-center'>
+              <div className=''>
+                <input
+                  type='checkbox'
+                  className='h-4 w-4 accent-[#1c648e]'
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  placeholder='ischecked'
+                />
+              </div>
+              <div className='leading-[24px] ml-4 text-gilroy-medium text-[14px]'>
                 I declare all the Information provided is correct as per my
                 knowledge.
               </div>
@@ -225,26 +240,26 @@ const SchemeDetails = () => {
             success={submitted}
           />
 
-          <div className="w-full absolute bottom-0">
+          <div className='w-full absolute bottom-0'>
             <div
-              className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
+              className='flex w-full p-4 lg:px-[30px] flex-row justify-end items-center'
               style={{
                 width: `${
                   screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
                 }`,
               }}
             >
-              <div className="flex items-center space-x-6">
+              <div className='flex items-center space-x-6'>
                 <p
                   onClick={handleBackButtonClick}
-                  className="text-[#1c468e] text-gilroy-medium cursor-pointer"
+                  className='text-[#1c468e] text-gilroy-medium cursor-pointer'
                 >
                   Discard
                 </p>
 
                 <button
                   onClick={onSubmit}
-                  type="submit"
+                  type='submit'
                   className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm text-gilroy-semibold ${
                     !isChecked
                       ? "opacity-50 cursor-not-allowed"
@@ -258,9 +273,9 @@ const SchemeDetails = () => {
               </div>
             </div>
             <div>
-              <div className="border-[#E6E6E6] border-[1px] lg:mt-4 "></div>
+              <div className='border-[#E6E6E6] border-[1px] lg:mt-4 '></div>
 
-              <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+              <p className='mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4'>
                 © 2024 Protean BUDs, All Rights Reserved.
               </p>
             </div>

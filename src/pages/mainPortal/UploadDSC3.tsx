@@ -9,6 +9,7 @@ import { bffUrl } from "../../utils/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import DscKeyLogin from "../../components/userFlow/form/DscKeyLogin";
+import { axiosTokenInstance } from "../../utils/axios";
 
 const UploadDSC3 = () => {
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
@@ -39,27 +40,29 @@ const UploadDSC3 = () => {
 
     try {
       setLoader(true);
-      const response = await axios.put(`${bffUrl}/user/updatedsc`, {
+      const response = await axiosTokenInstance.put(`/user/updatedsc`, {
         id: Number(userId),
         dscCertificate: dscCertificate,
         // dscCertificate: btoa(dscCertificate?.Cert),
       });
       setLoader(false);
+
       Swal.fire({
         icon: "success",
-        title: "DSC3 Updated Successfully",
+        title: response?.data?.message || "DSC3 Updated Successfully",
         text: "",
         customClass: {
           container: "my-swal",
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating DSC:", error);
       setLoader(false);
       Swal.fire({
         icon: "error",
-        title: "Failed to Update DSC3",
-        text: "Failed to Update DSC3",
+
+        title: error?.response?.data?.message || "Failed to Update DSC",
+        text: "",
         customClass: {
           container: "my-swal",
         },

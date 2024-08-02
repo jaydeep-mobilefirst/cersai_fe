@@ -8,6 +8,7 @@ import axios from "axios";
 import { bffUrl } from "../../utils/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { axiosTokenInstance } from "../../utils/axios";
 
 const ResetPassword = () => {
   const screenWidth = useScreenWidth();
@@ -21,13 +22,15 @@ const ResetPassword = () => {
     register,
     handleSubmit,
     watch,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data: any) => {
     setLoader(true);
     try {
-      const response = await axios.post(`${bffUrl}/auth/resetpassword`, {
+      const response = await axiosTokenInstance.post(`/auth/resetpassword`, {
         username: emailId,
         oldpassword: data?.oldPassword,
         newpassword: data.confirmPassword,
@@ -42,21 +45,34 @@ const ResetPassword = () => {
       });
       navigate("/");
       sessionStorage.clear();
-    } catch (error:unknown) {
+    } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-        
-      setLoader(false);
-      Swal.fire({
-        icon: "error",
-        text: error?.response?.data?.message || "Please try again later",
-        confirmButtonText: "Ok",
-      });
-    }}
+          setLoader(false);
+          Swal.fire({
+            icon: "error",
+            text: error?.response?.data?.message || "Please try again later",
+            confirmButtonText: "Ok",
+          });
+        }
+      }
     }
   };
 
   const newPassword = watch("newPassword");
+  const oldPassword = watch("oldPassword");
+
+  // Trigger validation error if old and new passwords are the same
+  React.useEffect(() => {
+    if (newPassword === oldPassword && newPassword) {
+      setError("oldPassword", {
+        type: "manual",
+        message: "New password must be different from old password",
+      });
+    } else {
+      clearErrors("oldPassword");
+    }
+  }, [newPassword, oldPassword, setError, clearErrors]);
 
   // Password validation pattern
   const passwordValidation = {

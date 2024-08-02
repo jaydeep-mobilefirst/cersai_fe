@@ -10,6 +10,7 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../../components/LoaderSpin";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -31,10 +32,10 @@ const SchemeMasterForm = () => {
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/scheme/field-data/1`);
+      const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
       if (response.data.success) {
-        const portalResponse = await axios.get(
-          `${bffUrl}/scheme-portal/${uniqueId}`
+        const portalResponse = await axiosTokenInstance.get(
+          `/scheme-portal/${uniqueId}`
         );
 
         const userData = portalResponse.data?.data?.schemes[0];
@@ -60,7 +61,7 @@ const SchemeMasterForm = () => {
             }
             else if (field?.key === 'branch') {
               try {
-                const res = await axios.get(bffUrl + '/deposit-taker/branch/' + entityType)
+                const res = await axiosTokenInstance.get('/deposit-taker/branch/' + entityType)
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
                   return {

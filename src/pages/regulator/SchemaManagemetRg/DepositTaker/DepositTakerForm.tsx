@@ -13,7 +13,7 @@ import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
 import SelectButton from "../../../../../src/components/userFlow/form/SelectButton";
 import { useScreenWidth } from "../../../../utils/screenSize";
 import LoaderSpin from "../../../../components/LoaderSpin";
-import { axiosInstance } from "../../../../utils/axios";
+import { axiosTokenInstance } from "../../../../utils/axios";
 import Button from "../../../../components/form/Button";
 import FolderIcon from "../../../../assets/images/new_images/FolderOpen.png";
 
@@ -34,7 +34,7 @@ const DepositTakerForm = () => {
   const getBranches = () => {
     setLoader(true);
 
-    axiosInstance
+    axiosTokenInstance
       .get(`deposit-taker/branch/${depositTakerId}`)
       .then((res: any) => {
         setDataBranch(res?.data?.data?.branches);
@@ -52,14 +52,14 @@ const DepositTakerForm = () => {
   }, []);
   const fetchFormFields = () => {
     setLoader(true);
-    axios
-      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/${depositTakerId}`
+            let depositTakerData = await axiosTokenInstance.get(
+              `/deposit-taker/${depositTakerId}`
             );
 
             dtData =
@@ -174,7 +174,7 @@ const DepositTakerForm = () => {
   const handleOnClikcView = async (uploadFileId: any) => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/openkm/get/${uploadFileId}`);
+      const response = await axiosTokenInstance.get(`/openkm/get/${uploadFileId}`);
       const data = await response.data;
       if (data?.status === "INTERNAL_SERVER_ERROR") {
         Swal.fire({

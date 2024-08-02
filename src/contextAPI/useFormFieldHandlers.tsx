@@ -523,9 +523,10 @@ const FormHandlerProviders = ({ children }: Props) => {
       RG: "regulator/dedupcheck",
       nodal: "user/dedup",
     };
+
     // Section is nodal then use nodal url else use usual url for that entity
     const isNodalSection = formFields?.some((field: any) =>
-      /nodal officer/i.test(field?.label)
+      /nodal/i.test(field?.label)
     );
     let URL = isNodalSection
       ? deDupURLs["nodal"]
@@ -535,7 +536,10 @@ const FormHandlerProviders = ({ children }: Props) => {
         /mobile/i.test(f?.label) ||
         /email/i.test(f?.label) ||
         /Pan Number/i.test(f?.label) ||
-        /emailid/i.test(f?.label)
+        /emailid/i.test(f?.label) ||
+        f?.key === "nodalMobile" ||
+        f?.key === "panNumber" ||
+        f?.key === "nodalEmail"
     );
     const promises = filteredFields.map(async (field: any) => {
       try {
