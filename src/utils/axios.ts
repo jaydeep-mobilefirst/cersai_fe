@@ -7,7 +7,7 @@ const uuid = uuidv4();
 
 const token = sessionStorage.getItem("access_token")
 
-export const axiosInstance = axios.create({
+export const axiosTraceIdInstance = axios.create({
   baseURL: `${bffUrl}`, // Base URL for all calls
   headers: {
     Traceid: uuid
