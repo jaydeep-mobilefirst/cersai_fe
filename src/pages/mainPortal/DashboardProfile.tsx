@@ -9,8 +9,6 @@ import ProfileRegulatorDetails from "./Edit Profile/ProfileRegulatorDetails";
 import ProfileUploadDocuments from "./Edit Profile/ProfileUploadDocuments";
 import ProfileBranches from "./Edit Profile/ProfileBranches";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import { axiosTokenInstance } from "../../utils/axios";
 
 type Props = {};
@@ -29,8 +27,8 @@ const DashboardProfile = (props: Props) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/${entityUniqueId}`
+            let depositTakerData = await axiosTokenInstance.get(
+              `/deposit-taker/${entityUniqueId}`
             );
             dtData =
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
