@@ -11,10 +11,9 @@ import folderOpen from "../../../assets/images/folder-open-light.svg";
 import UploadButtonSvg1 from "./svgs/UploadButtonSvg1";
 import { UploadButtonTexts } from "../../../utils/hardText/formComponents";
 import Button from "../common/Button";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import { getMimeTypeFromArrayBuffer } from "../../../utils/commonFunction";
 import Swal from "sweetalert2";
+import { axiosTokenInstance } from "../../../utils/axios";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onFileUpload?: (file: File | null) => void;
   deleteFile?: () => void;
@@ -62,7 +61,7 @@ const ProfileUploadDocument: FC<ButtonProps> = forwardRef<
   const handleOnClikcView = async () => {
     try {
       setViewLoader(true)
-      const response = await axios.get(`${bffUrl}/openkm/get/${props?.fileData?.uploadFileId}`);
+      const response = await axiosTokenInstance.get(`/openkm/get/${props?.fileData?.uploadFileId}`);
       const data = await response.data;
       if (data?.status === "INTERNAL_SERVER_ERROR") {
         Swal.fire({

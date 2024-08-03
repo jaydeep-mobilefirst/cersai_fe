@@ -15,7 +15,6 @@ import axios from "axios";
 import DynamicFields from "../../../../components/userFlow/depositeTaker/DynamicFields";
 import { FormHandlerContext } from "../../../../contextAPI/useFormFieldHandlers";
 import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker-registration/registrationStore";
-import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import SuccessPopup from "../../../../components/userFlow/depositeTaker/SuccessPopUp";
 import { formatDate } from "../../../../utils/commonFunction";

@@ -10,13 +10,12 @@ import infocircle from "../../../assets/images/info-circle (1).svg";
 import { useNavigate } from "react-router-dom";
 import useSidebarStore from "../../../store/SidebarStore";
 import SelectButton from "../../../components/userFlow/form/SelectButton";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import Swal from "sweetalert2";
 import uamStore from "../../../store/uamStore";
 import AdditionSuccessfulModalOne from "../../../components/UserManagement/AdditonSuccessfulModalOne";
 import failedLogo from "../../../assets/images/FailedIcon.svg"
 import LoaderSpin from "../../../components/LoaderSpin";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 const AddUserForm = () => {
   const [successData, setSuccessData] = useState<{heading : string, paragraph : string, logo : any}>({heading : "", paragraph : "", logo : undefined})
@@ -71,8 +70,8 @@ const AddUserForm = () => {
       nodalOfficerId: operation === 'edit' ? parsedEditUSerData?.id : undefined
     };
 
-    axios
-    [operation === 'edit' ? "put" : "post"](`${bffUrl}/user/${operation === 'edit' ? 'update' : 'add'}`, finalResult)
+    axiosTokenInstance
+    [operation === 'edit' ? "put" : "post"](`/user/${operation === 'edit' ? 'update' : 'add'}`, finalResult)
       .then((res: any) => {
         let data = res?.data;
         if (data?.success) {

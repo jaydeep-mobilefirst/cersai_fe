@@ -15,7 +15,6 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
-import { bffUrl } from "../../../utils/api";
 import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
 import PasswordUpdateModel from "./PasswordUpdateModel";

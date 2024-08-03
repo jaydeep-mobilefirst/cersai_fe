@@ -6,8 +6,6 @@ import close_icon from "../../assets/images/white_close.png";
 import { navbar } from "../../utils/hardText/landingpageText";
 import { useLandingStore } from "../../zust/useLandingStore";
 import { operatingGuidlinesData } from "../../utils/hardText/operatingGuidelines";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import { useOperatingGuidelinesStore } from "../../zust/useOperatingGuidelinesStore";
 
 const Navbar: React.FC = () => {

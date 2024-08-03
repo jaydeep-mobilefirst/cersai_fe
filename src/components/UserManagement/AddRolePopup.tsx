@@ -3,10 +3,9 @@ import { Box, Modal } from "@mui/material";
 import InputFields from "../userFlow/form/InputField";
 import SelectButtonMultiselect from "./SelectButtonMultiselect";
 import LoaderSpin from "../LoaderSpin";
-import axios from "axios";
 import Swal from "sweetalert2";
 import uamStore from "../../store/uamStore";
-import { bffUrl } from "../../utils/api";
+import { axiosTokenInstance } from "../../utils/axios";
 
 interface AddRolePopupProps {
   onClose: () => void;
@@ -58,6 +57,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
     ) {
       const selected = functionalities.find((f) => f.value === value.value);
       setSelectedFunctionalities((prev) => [...prev, selected]);
+      setErrors((prev) => ({ ...prev, dropdown: "" }));
     }
   };
 
@@ -142,8 +142,8 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
       resultObject.basicRoleIds.length > 0
     ) {
 
-      axios[roleId ? "put" : "post"](
-        `${bffUrl}/role/${roleId ? "update" : "add"}/`,
+      axiosTokenInstance[roleId ? "put" : "post"](
+        `/role/${roleId ? "update" : "add"}/`,
         resultObject
       )
         .then((res: any) => {
@@ -168,10 +168,11 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
 
           }
         })
-        .catch((e) => {
+        .catch((e:any) => {
+          console.log("role error",e)
           handleClose();
           Swal.fire({
-            title: "Internal Server Error!",
+            title: e?.response?.data?.message || "Internal Server Error!",
             icon: "error",
           });
         })
@@ -207,6 +208,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
                 onChange={handleChangeRoleName}
                 type="text"
                 value={nameOfRole}
+                disabled={!!roleId}
                 name="roleName"
                 id="documentName"
                 placeholder="Type Role Name"

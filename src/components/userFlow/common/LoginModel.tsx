@@ -1,8 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
 import MobileIcon from "../../../assets/images/MobileIcon.svg";
@@ -13,7 +11,6 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SelectButton from "../form/SelectButton";
 import UploadButtonV2 from "../form/UploadButtonV2";
-import { bffUrl } from "../../../utils/api";
 import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
 import DscKeyLogin from "../form/DscKeyLogin";
@@ -123,7 +120,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
       setError(false);
     } catch (error: any) {
-      console.log("error",error)
+      console.log("error",error?.error_description)
       setError(true);
       const errorMessage =
         error?.error_description ||
@@ -149,7 +146,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         entityType: selected,
         username: getValues("email"),
         dscCertificateFile:
-          isDscKeyAvbl === "true" ? dscCertificate : base64Data,
+          isDscKeyAvbl === "false" ? dscCertificate : base64Data,
       })
       .then((respose) => {
         reset();
@@ -345,7 +342,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
                     {dsc && (
                       <>
-                        {isDscKeyAvbl === "false" ? (
+                        {isDscKeyAvbl === "true" ? (
                           <Dscbutton
                             onFileUpload={handleFileUpload}
                             disabled={false}

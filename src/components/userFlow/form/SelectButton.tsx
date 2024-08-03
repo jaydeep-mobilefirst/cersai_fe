@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./select_button.css";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 interface Option {
   value: string;
@@ -95,7 +94,7 @@ const SelectButton = ({
     }
     else if(key === 'regulator'){
       setLoader(true)
-      axios.get(`${bffUrl}${url}?status=APPROVED&page=1&limit=100000&searchText=${value}`)
+      axiosTokenInstance.get(`${url}?status=APPROVED&page=1&limit=100000&searchText=${value}`)
       .then((res : any) => {
         if (res.data.success) {
           let regulators = res?.data?.data?.regulators?.map((r : any) => {

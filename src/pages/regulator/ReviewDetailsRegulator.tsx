@@ -5,7 +5,6 @@ import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/new_images/arrowDown.png";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import LoaderSpin from "../../components/LoaderSpin";
-import { bffUrl } from "../../utils/api";
 import html2pdf from "html2pdf.js";
 import { regulatorSignupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";

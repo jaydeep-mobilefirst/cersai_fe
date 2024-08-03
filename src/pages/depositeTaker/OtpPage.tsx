@@ -4,8 +4,6 @@
 // import { Box } from "@mui/material";
 // import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 // import { useNavigate } from "react-router-dom";
-// import { bffUrl } from "../../utils/api";
-// import axios from "axios";
 // import OTPInput from "react-otp-input";
 
 // // Responsive style adjustments with enhanced modal dimensions and padding
@@ -92,7 +90,7 @@
 
 //   const resendMobileOtp = async () => {
 //     try {
-//       await axios.post(`${bffUrl}/dual-otp/sendotp`, {
+//       await axios.post(`/dual-otp/sendotp`, {
 //         email: email,
 //         mobile: mobile,
 //       });
@@ -105,7 +103,7 @@
 
 //   const resendEmailOtp = async () => {
 //     try {
-//       await axios.post(`${bffUrl}/dual-otp/sendotp`, {
+//       await axios.post(`/dual-otp/sendotp`, {
 //         email: email,
 //         mobile: mobile,
 //       });
@@ -146,7 +144,7 @@
 //     if (mobileOtp.length === 6 && emailOtp.length === 6) {
 //       setLoader(true);
 //       try {
-//         const response = await axios.post(`${bffUrl}/dual-otp/verifyotp`, {
+//         const response = await axios.post(`/dual-otp/verifyotp`, {
 //           email: email,
 //           mobile: mobile,
 //           emailotp: emailOtp,
@@ -333,9 +331,8 @@ import Modal from "@mui/material/Modal";
 import { Box } from "@mui/material";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { useNavigate } from "react-router-dom";
-import { bffUrl } from "../../utils/api";
-import axios from "axios";
 import OTPInput from "react-otp-input";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 // Responsive style adjustments with enhanced modal dimensions and padding
 const style = {
@@ -422,7 +419,7 @@ const OtpPage: React.FC<OtpPageProps> = ({
 
   const resendMobileOtp = async () => {
     try {
-      await axios.post(`${bffUrl}/dual-otp/sendotp`, {
+      await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
       });
@@ -435,7 +432,7 @@ const OtpPage: React.FC<OtpPageProps> = ({
 
   const resendEmailOtp = async () => {
     try {
-      await axios.post(`${bffUrl}/dual-otp/sendotp`, {
+      await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
       });
@@ -477,7 +474,7 @@ const OtpPage: React.FC<OtpPageProps> = ({
       setLoader(true);
       setDisabled(true); // Disable the button after submission
       try {
-        const response = await axios.post(`${bffUrl}/dual-otp/verifyotp`, {
+        const response = await axiosTraceIdInstance.post(`/dual-otp/verifyotp`, {
           email: email,
           mobile: mobile,
           emailotp: emailOtp,

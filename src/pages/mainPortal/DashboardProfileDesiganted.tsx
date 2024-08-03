@@ -32,7 +32,7 @@ const DashboardProfileDesignateCourt = (props: Props) => {
         //   let dcData: any = [];
         //   try {
         //     let designatedCourt = await axios.get(
-        //       `${bffUrl}/designated-court/${entityUniqueId}`
+        //       `/designated-court/${entityUniqueId}`
         //     );
 
         //     dcData =

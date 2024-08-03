@@ -12,10 +12,9 @@ import { useNavigate } from "react-router-dom";
 import useFetchFunctionalityForUAM from "../../../custom hooks/useFetchFunctionalityForUAM";
 import uamStore from "../../../store/uamStore";
 import useFetchUsers from "../../../custom hooks/fetchUsers";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import useFetchRoles from "../../../custom hooks/fetchRoles";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type TableType = {
   id: string;
@@ -66,8 +65,8 @@ const UserCreation = () => {
         const value = info?.row?.original?.isActive;
         const id = info?.row?.original?.id;
         const StatusChange = () => {
-          axios
-            .patch(`${bffUrl}/user/status/`, {
+          axiosTokenInstance
+            .patch(`/user/status/`, {
               id: id,
               status: !value,
             })

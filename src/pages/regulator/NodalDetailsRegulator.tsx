@@ -12,7 +12,6 @@ import LoaderSpin from "../../components/LoaderSpin";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import OtpPage from "../depositeTaker/OtpPage";
-import { bffUrl } from "../../utils/api";
 import { axiosTraceIdInstance } from "../../utils/axios";
 
 const NodalDetailsRegulator = () => {

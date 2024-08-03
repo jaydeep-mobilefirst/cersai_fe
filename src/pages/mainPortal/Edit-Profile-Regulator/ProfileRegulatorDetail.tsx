@@ -11,8 +11,7 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type Props = {};
 
@@ -53,9 +52,9 @@ const ProfileRegulatorDetails = (props: Props) => {
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
     if (noError) {
-      axios
+      axiosTokenInstance
         .patch(
-          `${bffUrl}/regulator/${sessionStorage.getItem("entityUniqueId")}`,
+          `/regulator/${sessionStorage.getItem("entityUniqueId")}`,
           {
             formData: formData,
           }

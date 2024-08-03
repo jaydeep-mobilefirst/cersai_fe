@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useLandingStore } from "../../zust/useLandingStore";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 const HeroHome = () => {
   const [stateData, setStateData] = useState<any>();
@@ -19,8 +18,8 @@ const HeroHome = () => {
 
   useEffect(() => {
     setLoader(true);
-    axios
-      .post(bffUrl + "/websitecontent/stats", {
+    axiosTraceIdInstance
+      .post( "/websitecontent/stats", {
         keylist: [
           "totalSchemeUnderLetigation",
           "totalDepositTakerRegistered",

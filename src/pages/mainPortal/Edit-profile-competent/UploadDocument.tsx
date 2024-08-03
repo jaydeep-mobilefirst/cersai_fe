@@ -3,13 +3,12 @@ import { useScreenWidth } from "../../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../../components/LoaderSpin";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import UploadFile from "../../designatedCourt/UploadFile";
 import DeleteUpload from "../../designatedCourt/DeleteUpload";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
+import { axiosTokenInstance } from "../../../utils/axios";
 type Props = {};
 
 const UploadDocument = (props: Props) => {
@@ -68,9 +67,9 @@ const UploadDocument = (props: Props) => {
         value: field.uploadFileId,
       }));
 
-    axios
+      axiosTokenInstance
       .patch(
-        `${bffUrl}/competent-authority/${sessionStorage?.getItem(
+        `/competent-authority/${sessionStorage?.getItem(
           "entityUniqueId"
         )}`,
         {

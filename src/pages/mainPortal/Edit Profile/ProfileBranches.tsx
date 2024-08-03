@@ -4,7 +4,6 @@ import ProfileBranchForm from "./ProfileBranchForm";
 import Footer from "../../../components/userFlow/userProfile/Footer";
 import { useForm } from "react-hook-form";
 import infoIcon from "../../../assets/images/info-circle.svg";
-import { bffUrl } from "../../../utils/api";
 
 import Swal from "sweetalert2";
 import { useBranchStore } from "../../../store/upate-profile/branch";
@@ -12,6 +11,7 @@ import { useScreenWidth } from "../../../utils/screenSize";
 import Button from "../../../components/userFlow/common/Button";
 import uploadIcon from "../../../assets/images/directbox-send.svg";
 import LoaderSpin from "../../../components/LoaderSpin";
+import { axiosTokenInstance } from "../../../utils/axios";
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
@@ -57,8 +57,8 @@ const ProfileBranches = () => {
   const fetchBranches = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(
-        `${bffUrl}/deposit-taker/branch/${entityUniqueId}`
+      const response = await axiosTokenInstance.get(
+        `/deposit-taker/branch/${entityUniqueId}`
       );
       const fetchedBranches = response.data.data.branches;
       if (fetchedBranches.length === 0) {
@@ -95,8 +95,8 @@ const ProfileBranches = () => {
         const { id, ...branchData } = branch;
         return branch.id ? { id, ...branchData } : branchData;
       });
-      const response = await axios.post(
-        `${bffUrl}/deposit-taker/branch/${entityUniqueId}`,
+      const response = await axiosTokenInstance.post(
+        `/deposit-taker/branch/${entityUniqueId}`,
         {
           branches: branchesToSubmit,
         }
@@ -127,8 +127,8 @@ const ProfileBranches = () => {
     const formData = new FormData();
     formData.set("file", file);
     const entityId = sessionStorage.getItem("entityUniqueId");
-    axios
-      .post(`${bffUrl}/deposit-taker/bulk-upload/${entityId}`, formData)
+    axiosTokenInstance
+      .post(`/deposit-taker/bulk-upload/${entityId}`, formData)
       .then((res) => {
         let data = res.data;
 
@@ -160,8 +160,8 @@ const ProfileBranches = () => {
   };
 
   const handleDownloadTemplate = () => {
-    axios
-      .get(`${bffUrl}/deposit-taker/branches/sample-download`, {
+    axiosTokenInstance
+      .get(`/deposit-taker/branches/sample-download`, {
         method: "GET",
         responseType: "blob", // important
       })
