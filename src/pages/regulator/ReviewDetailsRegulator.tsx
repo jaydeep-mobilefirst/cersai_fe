@@ -10,6 +10,7 @@ import { regulatorSignupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
 import Logo from "../../assets/images/logo.svg";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
