@@ -1,11 +1,11 @@
 import React, { createContext } from "react";
 import { useDepositTakerRegistrationStore } from "../zust/deposit-taker-registration/registrationStore";
-import { bffUrl, pincodeValidationUrl } from "../utils/api";
-import axios from "axios";
+import { pincodeValidationUrl } from "../utils/api";
 import { convertFileToBase64Async } from "../utils/fileConversion";
 import Swal from "sweetalert2";
 import { emailRegex, panRegex } from "../utils/commonFunction";
 import { boolean } from "yup";
+import { axiosTraceIdInstance } from "../utils/axios";
 
 type Props = {
   children: React.ReactElement;
@@ -127,8 +127,8 @@ const FormHandlerProviders = ({ children }: Props) => {
               formData.append("unique_id", entityID);
             }
 
-            const fileUpload = await axios.post(
-              `${bffUrl}/openkm/save/temp/file`,
+            const fileUpload = await axiosTraceIdInstance.post(
+              `/openkm/save/temp/file`,
               formData,
               {
                 headers: {
@@ -154,8 +154,8 @@ const FormHandlerProviders = ({ children }: Props) => {
             field?.uploadFileId !== ""
           ) {
             try {
-              await axios.delete(
-                `${bffUrl}/openkm/file/delete/${field?.uploadFileId}`
+              await axiosTraceIdInstance.delete(
+                `/openkm/file/delete/${field?.uploadFileId}`
               );
               let fileName = event?.name ? event?.name : "";
               updateDocumentValue(event, field, fileName, uploadFileId);
@@ -289,7 +289,7 @@ const FormHandlerProviders = ({ children }: Props) => {
       }
 
       if (value.length === 6) {
-        const response = await axios.get(`${pincodeValidationUrl}/${value}`);
+        const response = await axiosTraceIdInstance.get(`${pincodeValidationUrl}/${value}`);
         const data = response?.data;
         let stateFormField = allFormData?.formFields?.form_fields?.find(
           (o: any) =>
@@ -421,8 +421,8 @@ const FormHandlerProviders = ({ children }: Props) => {
     formFieldsForValidations: any[]
   ): Promise<boolean> => {
     try {
-      const response = await axios?.post(
-        `${bffUrl}/validator/submit`,
+      const response = await axiosTraceIdInstance?.post(
+        `/validator/submit`,
         formFieldsForValidations
       );
       const data = await response?.data?.data;
@@ -543,7 +543,7 @@ const FormHandlerProviders = ({ children }: Props) => {
     );
     const promises = filteredFields.map(async (field: any) => {
       try {
-        const checkDeDup = await axios.post(`${bffUrl}/${URL}`, {
+        const checkDeDup = await axiosTraceIdInstance.post(`/${URL}`, {
           value: field?.userInput,
         });
 

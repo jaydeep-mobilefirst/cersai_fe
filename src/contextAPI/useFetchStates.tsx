@@ -1,6 +1,5 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { bffUrl } from '../utils/api';
+import { axiosTraceIdInstance } from '../utils/axios';
 
 type Props = {}
 
@@ -11,7 +10,7 @@ const useFetchStates = (props: Props) => {
 
   useEffect(() => {
     setStateLoader(true)
-    axios.get(`${bffUrl}/location/state/95?page=1&pagesize=100`)
+    axiosTraceIdInstance.get(`/location/state/95?page=1&pagesize=100`)
     .then((res) => {
       let data = res.data;
       if (data?.status === 'success') {

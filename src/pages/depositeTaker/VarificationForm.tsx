@@ -8,8 +8,8 @@ import axios, { AxiosError } from "axios";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
-import { bffUrl } from "../../utils/api";
 import moment from "moment";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 type Props = {};
 
@@ -52,7 +52,7 @@ const VerificationForm = (props: Props) => {
         let pan = formFields?.find((field : any, i : number) =>  field?.key === 'panNumber');
         let dob = formFields?.find((field : any, i : number) =>  field?.key === 'dateOfIncorporation');
        
-        let response = await axios.post(bffUrl+"/pandirectory/api", {
+        let response = await axiosTraceIdInstance.post("/pandirectory/api", {
           name:company?.userInput?.toUpperCase(),
           pan_no: pan?.userInput,
           // dob : dob[2]+"/"+dob[1]+"/"+dob[0]

@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import Logo from "../assets/images/logo2.svg";
 import Button from "../components/form/Button";
 import InputFieldPassword from "../components/form/InputFieldPassword";
-import axios from "axios";
-import { bffUrl } from "../utils/api";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InfoCircle from "../assets/images/info-circle-black.svg";
 import Swal from "sweetalert2";
+import { axiosTokenInstance } from "../utils/axios";
 
 const schema = yup.object().shape({
   password: yup
@@ -50,8 +49,8 @@ const SetPasswordPage = () => {
 
   const apiCall = () => {
     setLoader(true);
-    axios
-      .post(`${bffUrl}/user/setpassword`, {
+    axiosTokenInstance
+      .post(`/user/setpassword`, {
         identity: identity,
         password: watch("confirmPassword"),
       })

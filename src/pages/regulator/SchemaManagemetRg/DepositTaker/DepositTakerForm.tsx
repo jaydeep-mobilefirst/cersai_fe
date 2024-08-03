@@ -3,8 +3,6 @@ import TaskTabs from "../../../../components/ScehmaManagement/TaskTabsRg";
 import { createColumnHelper } from "@tanstack/table-core";
 import "./DepositTakerForm.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../../../utils/api";
 import { useDepositTakerRegistrationStore } from "../../../../store/registrationStore";
 import { getMimeTypeFromArrayBuffer } from "../../../../utils/commonFunction";
 import Swal from "sweetalert2";

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { createColumnHelper } from "@tanstack/table-core";
 import "./mytaskform.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import { useDepositTakerRegistrationStore } from "../../store/registrationStore";
 import { getMimeTypeFromArrayBuffer } from "../../utils/commonFunction";
 import Swal from "sweetalert2";
@@ -11,6 +9,7 @@ import ReactTable from "../../components/userFlow/common/ReactTable";
 
 import AuditTrail from "./AuditTrailDepositSearch";
 import Accordion from "../../components/customAccordin/CustomAccordin";
+import { axiosTokenInstance } from "../../utils/axios";
 type TableType = {
   sno: string;
   branchName: string;
@@ -123,14 +122,14 @@ const DepositTakerSearchForm = () => {
   const approveTimeStamp = location?.state?.approveTimeStamp;
 
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/3?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/3?status=addToProfile`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/competent-authority/${competentId}`
+            let depositTakerData = await axiosTokenInstance.get(
+              `/competent-authority/${competentId}`
             );
             dtData =
               depositTakerData?.data?.data?.competentAuthority
@@ -195,7 +194,7 @@ const DepositTakerSearchForm = () => {
   const handleOnClikcView = async (uploadFileId: any) => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/openkm/get/${uploadFileId}`);
+      const response = await axiosTokenInstance.get(`/openkm/get/${uploadFileId}`);
       const data = await response.data;
       if (data?.status === "INTERNAL_SERVER_ERROR") {
         Swal.fire({

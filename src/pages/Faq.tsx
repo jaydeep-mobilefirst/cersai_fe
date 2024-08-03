@@ -7,11 +7,10 @@ import TopDetail from "../components/landingPage/TopDetail";
 import { faqDataa } from "../utils/hardText/faqPageContent";
 import { useLandingStore } from "../zust/useLandingStore";
 import { useFaqStore } from "../zust/useFaqStore";
-import axios from "axios";
-import { bffUrl } from "../utils/api";
 import LoaderSpin from "../components/LoaderSpin";
 import { data } from "../utils/hardText/landingPageText2";
 import { useLangugaeStore } from "../zust/useLanguageUsStore";
+import { axiosTraceIdInstance } from "../utils/axios";
 
 interface FaqItem {
   question: string;
@@ -80,8 +79,8 @@ const Faq: React.FC = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
 
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=home`,{
         headers: {
           'Accept-Language': language
         }
@@ -103,8 +102,8 @@ const Faq: React.FC = () => {
   const faqPageCmsApi = () => {
     setLoader(true);
 
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=faq`,{
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=faq`,{
           headers: {
             'Accept-Language': language
           }

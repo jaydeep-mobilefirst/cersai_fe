@@ -1,6 +1,5 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { bffUrl } from '../utils/api';
+import { axiosTraceIdInstance } from '../utils/axios';
 
 type Props = {
   stateId : number | null | undefined
@@ -14,7 +13,7 @@ const useFetchDistrict = ({stateId}: Props) => {
   useEffect(() => {
     if (stateId) {
       setDistrictLoader(true)
-    axios.get(`${bffUrl}/location/district/${stateId}?page=1&pagesize=100`)
+      axiosTraceIdInstance.get(`/location/district/${stateId}?page=1&pagesize=100`)
     .then((res) => {
       let data = res.data;
       if (data?.status === 'success') {

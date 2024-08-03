@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { bffUrl } from '../utils/api';
 import uamStore from '../store/uamStore';
 import { axiosTokenInstance } from '../utils/axios';
 

@@ -4,7 +4,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useContext, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
-import axios from "axios";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 

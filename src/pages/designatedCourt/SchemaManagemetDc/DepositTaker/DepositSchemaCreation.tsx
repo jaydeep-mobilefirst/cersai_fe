@@ -12,7 +12,7 @@ import SelectButtonTask from "../../../../components/ScehmaManagement/SelectButt
 import CustomPagination from "../../../../components/CustomPagination/CustomPagination";
 import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabsDc from "../../../../components/ScehmaManagement/TaskTabsDc";
-import { axiosInstance } from "../../../../utils/axios";
+import { axiosTokenInstance } from "../../../../utils/axios";
 import LoaderSpin from "../../../../components/LoaderSpin";
 
 // type TableType = {
@@ -55,7 +55,7 @@ const DepositSchemaCreation = () => {
   const myTaskRg = async () => {
     setLoader(true);
     try {
-      const { data } = await axiosInstance.get(`/deposit-taker`, {
+      const { data } = await axiosTokenInstance.get(`/deposit-taker`, {
         params: {
           page: page,
           limit: pageSize,

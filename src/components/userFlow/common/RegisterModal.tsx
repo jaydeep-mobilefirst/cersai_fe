@@ -73,10 +73,9 @@ import {
   registrationFirstPage,
 } from "../../../utils/hardText/signuppageText";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../LoaderSpin";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import { axiosTraceIdInstance } from "../../../utils/axios";
 
 interface ModelDivProps {
   closeModal: () => void;
@@ -109,8 +108,8 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
 
   const apiCall = () => {
     setLoader(true);
-    axios
-      .get(`${bffUrl}/registration/entities`)
+    axiosTraceIdInstance
+      .get(`/registration/entities`)
       .then((responce) => {
         const data = responce?.data?.data;
         let sortedData = data.sort(
@@ -132,14 +131,14 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   };
 
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/${selectedRadio?.id}?status=addToRegistration`)
+    axiosTraceIdInstance
+      .get(`/registration/field-data/${selectedRadio?.id}?status=addToRegistration`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dropdownData = undefined;
           try {
-            let dropdownOptionsRes = await axios.get(
-              `${bffUrl}/registration/dropdown-components`
+            let dropdownOptionsRes = await axiosTraceIdInstance.get(
+              `/registration/dropdown-components`
             );
             dropdownData = dropdownOptionsRes?.data?.data;
           } catch (error) {

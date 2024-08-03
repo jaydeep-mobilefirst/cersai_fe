@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { bffUrl } from '../utils/api';
 import { axiosTokenInstance } from '../utils/axios';
 
 function useFetchFunctionalityForUAM(entityType : string) {

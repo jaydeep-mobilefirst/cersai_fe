@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLandingStore } from "../zust/useLandingStore";
-import axios from "axios";
-import { bffUrl } from "../utils/api";
 import LanguageBar from "../components/landingPage/LanguageBar";
 import TopDetail from "../components/landingPage/TopDetail";
 import Navbar from "../components/landingPage/Navbar";
 import Footer from "../components/landingPage/Footer";
 import { trainingPageData } from "../utils/hardText/trainingPageText";
 import QueryResolutionSessionComponent from "../components/training/QueryResolutionSessionComponent";
+import { axiosTraceIdInstance } from "../utils/axios";
 
 const Training = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -20,8 +19,8 @@ const Training = () => {
 
   const homePageCmsApi = () => {
     setLoader(true);
-    axios
-      .get(bffUrl + `/websitecontent/list/1`)
+    axiosTraceIdInstance
+      .get(`/websitecontent/list/1`)
       .then((response) => {
         setHomePageData(response?.data?.data?.content);
         setLoader(false);

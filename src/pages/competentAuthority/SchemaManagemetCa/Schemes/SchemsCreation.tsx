@@ -14,9 +14,8 @@ import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabsCa from "../../../../components/ScehmaManagement/TaskTabsCa";
 import EditIcon from "../../../../assets/images/editBlue.svg";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
+import { axiosTokenInstance } from "../../../../utils/axios";
 
 type SchemeType = {
   id: number;
@@ -54,7 +53,7 @@ const NewSchemaCreation = () => {
   const fetchSchemes = async () => {
     setLoader(true);
     try {
-      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme`, {
+      const { data } = await axiosTokenInstance.get(`/scheme-portal/scheme`, {
         params: {
           page: page,
           limit: pageSize,

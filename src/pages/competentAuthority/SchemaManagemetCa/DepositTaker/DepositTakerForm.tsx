@@ -3,8 +3,6 @@ import TaskTabs from "../../../../components/ScehmaManagement/TaskTabsRg";
 import { createColumnHelper } from "@tanstack/table-core";
 import "./DepositTakerForm.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../../../utils/api";
 import { useDepositTakerRegistrationStore } from "../../../../store/registrationStore";
 import { getMimeTypeFromArrayBuffer } from "../../../../utils/commonFunction";
 import Swal from "sweetalert2";
@@ -13,7 +11,7 @@ import TaskTabsCa from "../../../../components/ScehmaManagement/TaskTabsCa";
 import SelectButton from "../../../../../src/components/userFlow/form/SelectButton";
 import { useScreenWidth } from "../../../../utils/screenSize";
 import LoaderSpin from "../../../../components/LoaderSpin";
-import { axiosInstance } from "../../../../utils/axios";
+import { axiosTokenInstance } from "../../../../utils/axios";
 import FolderIcon from "../../../../assets/images/new_images/FolderOpen.png";
 import Button from "../../../../components/form/Button";
 
@@ -34,7 +32,7 @@ const DepositTakerForm = () => {
   const getBranches = () => {
     setLoader(true);
 
-    axiosInstance
+    axiosTokenInstance
       .get(`deposit-taker/branch/${depositTakerId}`)
       .then((res: any) => {
         setDataBranch(res?.data?.data?.branches);
@@ -52,14 +50,14 @@ const DepositTakerForm = () => {
   }, []);
   const fetchFormFields = () => {
     setLoader(true);
-    axios
-      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/${depositTakerId}`
+            let depositTakerData = await axiosTokenInstance.get(
+              `/deposit-taker/${depositTakerId}`
             );
 
             dtData =
@@ -174,7 +172,7 @@ const DepositTakerForm = () => {
   const handleOnClikcView = async (uploadFileId: any) => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/openkm/get/${uploadFileId}`);
+      const response = await axiosTokenInstance.get(`/openkm/get/${uploadFileId}`);
       const data = await response.data;
       if (data?.status === "INTERNAL_SERVER_ERROR") {
         Swal.fire({

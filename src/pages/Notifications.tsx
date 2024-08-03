@@ -6,11 +6,10 @@ import TopDetail from "../components/landingPage/TopDetail";
 import NotificationsList from "../components/notifications/NotificationList";
 import { useLandingStore } from "../zust/useLandingStore";
 import { useNotificationStore } from "../zust/useNotificationStore";
-import axios from "axios";
-import { bffUrl } from "../utils/api";
 import { notifcationsPageData } from "../utils/hardText/notificationsPageText";
 import LoaderSpin from "../components/LoaderSpin";
 import { useLangugaeStore } from "../zust/useLanguageUsStore";
+import { axiosTraceIdInstance } from "../utils/axios";
 
 const Notifications: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -27,8 +26,8 @@ const Notifications: React.FC = () => {
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=home`,{
         headers: {
           'Accept-Language': language
         }
@@ -50,8 +49,8 @@ const Notifications: React.FC = () => {
   const notificationsPageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=notification`,{
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=notification`,{
         headers: {
           'Accept-Language': language
         }

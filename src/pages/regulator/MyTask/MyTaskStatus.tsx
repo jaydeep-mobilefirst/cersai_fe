@@ -10,8 +10,6 @@ import searchButton from "../../../assets/images/search-normal.svg";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
 import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton";
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
 

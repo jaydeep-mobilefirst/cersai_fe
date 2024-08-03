@@ -12,8 +12,6 @@ import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
 import EditIcon from "../../../../assets/images/editBlue.svg";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../../utils/axios";
 

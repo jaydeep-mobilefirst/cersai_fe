@@ -11,8 +11,7 @@ import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type Props = {};
 
@@ -84,9 +83,9 @@ const CourtDetails = (props: Props) => {
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
     if (noError) {
-      axios
+      axiosTokenInstance
         .patch(
-          `${bffUrl}/designated-court/${sessionStorage.getItem(
+          `/designated-court/${sessionStorage.getItem(
             "entityUniqueId"
           )}`,
           {

@@ -12,10 +12,9 @@ import EditRolePopup from "../../../components/UserManagement/EditRolePopup"; //
 import useFetchFunctionalityForUAM from "../../../custom hooks/useFetchFunctionalityForUAM";
 import useFetchRoles from "../../../custom hooks/fetchRoles";
 import ActionButton from "../../../components/buttons/ActionButton";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import uamStore from "../../../store/uamStore";
 import InputFields from "../../../components/ScehmaManagement/InputField";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type TableType = {
   id: string;
@@ -68,8 +67,8 @@ const RoleCreation = () => {
         const value = info?.row?.original?.isActive;
         const id = info?.row?.original?.id;
         const StatusChange = () => {
-          axios
-            .patch(`${bffUrl}/role/status/`, {
+          axiosTokenInstance
+            .patch(`/role/status/`, {
               id: id,
               status: !value,
             })

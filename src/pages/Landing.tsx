@@ -8,12 +8,11 @@ import AboutBuds from "../components/landingPage/AboutBuds";
 import QueryResolutoinComp from "../components/landingPage/QueryResolutionCom";
 import Navbar from "../components/landingPage/Navbar";
 import HeroHome from "../components/landingPage/HeroHome";
-import axios from "axios";
-import { bffUrl } from "../utils/api";
 import { useLandingStore } from "../zust/useLandingStore";
 import { data } from "../utils/hardText/landingPageText2";
 import LoaderSpin from "../components/LoaderSpin";
 import { useLangugaeStore } from "../zust/useLanguageUsStore";
+import { axiosTraceIdInstance } from "../utils/axios";
 
 const Landing = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -28,8 +27,8 @@ const Landing = () => {
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=home`,{
         headers: {
           'Accept-Language': language
         }

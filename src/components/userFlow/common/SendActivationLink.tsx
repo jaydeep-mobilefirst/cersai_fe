@@ -1,10 +1,9 @@
-import axios from 'axios';
 import React, { useState } from 'react'
-import { bffUrl } from '../../../utils/api';
 import Swal from 'sweetalert2';
 import sendLink from './../../../assets/images/telegram.svg'
 import sent from './../../../assets/images/done.svg'
 import LoaderSpin from '../../LoaderSpin';
+import { axiosTraceIdInstance } from '../../../utils/axios';
 type Props = {
     email : string
 }
@@ -19,7 +18,7 @@ const SendActivationLink = ({email}: Props) => {
         }
         try {
             setLoader(true)
-            const response = await axios.post(`${bffUrl}/user/send-activation-link`, {username : email});
+            const response = await axiosTraceIdInstance.post(`/user/send-activation-link`, {username : email});
             const data = response.data;
             Swal.fire({
                 title : 'success',

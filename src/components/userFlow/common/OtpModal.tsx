@@ -6,13 +6,11 @@ import Modal from "@mui/material/Modal";
 import OtpInput from "react-otp-input";
 import { jwtDecode } from "jwt-decode";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-
-import { bffUrl } from "../../../utils/api";
 import ButtonAuth from "./ButtonAuth";
 import Swal from "sweetalert2";
 import { isLinkExpired } from "../../../utils/commonFunction";
 import LoaderSpin from "../../LoaderSpin";
+import { axiosTraceIdInstance } from "../../../utils/axios";
 
 interface LoginModelProps {}
 
@@ -109,8 +107,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoader(true)
-    axios
-      .post(`${bffUrl}/dual-otp/verifyotp`, {
+    axiosTraceIdInstance
+      .post(`/dual-otp/verifyotp`, {
         email: decodedToken?.email,
         mobile: decodedToken?.mobile,
         emailotp: emailOtp,
@@ -136,8 +134,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
     event.preventDefault();
     if (Object.keys(decodedToken).length > 0) {
       setLoader(true)
-      axios
-        .post(`${bffUrl}/dual-otp/sendotp`, {
+      axiosTraceIdInstance
+        .post(`/dual-otp/sendotp`, {
           email: decodedToken?.email,
           mobile: decodedToken?.mobile,
         })

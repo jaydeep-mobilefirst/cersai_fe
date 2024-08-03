@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { operatingGuidlinesData } from "../utils/hardText/operatingGuidelines";
-import axios from "axios";
-import { bffUrl } from "../utils/api";
 import { useOperatingGuidelinesStore } from "../zust/useOperatingGuidelinesStore";
 import { useLandingStore } from "../zust/useLandingStore";
 import LanguageBar from "../components/landingPage/LanguageBar";
@@ -11,6 +9,7 @@ import Footer from "../components/landingPage/Footer";
 import { Link } from "react-router-dom";
 import { error } from "console";
 import { useLangugaeStore } from "../zust/useLanguageUsStore";
+import { axiosTraceIdInstance } from "../utils/axios";
 
 const OpertaingGuidelines = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -28,8 +27,8 @@ const OpertaingGuidelines = () => {
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+    axiosTraceIdInstance
+      .get( `/websitecontent/get/name?wcname=home`,{
         headers: {
           'Accept-Language': language
         }
@@ -51,8 +50,8 @@ const OpertaingGuidelines = () => {
   const guidelinesPageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=operating guidelines`,{
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=operating guidelines`,{
         headers: {
           'Accept-Language': language
         }

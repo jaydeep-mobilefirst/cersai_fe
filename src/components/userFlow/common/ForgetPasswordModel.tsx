@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
@@ -11,8 +10,7 @@ import Button from "./Button";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SelectButton from "../form/SelectButton";
-
-import { bffUrl } from "../../../utils/api";
+import { axiosTraceIdInstance } from "../../../utils/axios";
 
 interface ForgetPasswordModelProps {
   closeForgetModel: () => void;
@@ -67,7 +65,7 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
     }
     setLoader(true);
     try {
-      const response = await axios.post(`${bffUrl}/user/forgotpassword`, {
+      const response = await axiosTraceIdInstance.post(`/user/forgotpassword`, {
         username: data.email,
         entityType: selected,
       });

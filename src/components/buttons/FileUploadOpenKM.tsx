@@ -7,8 +7,7 @@ import Swal from "sweetalert2";
 import ViewFile from "../userFlow/depositeTaker/ViewFile";
 import LoaderSpin from "../LoaderSpin";
 import trashIcon from "../../assets/images/trash.svg";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 type Props = {
     setFileData : any
@@ -72,8 +71,8 @@ const FileUploadOpenKm = ({ setFileData, fileData}: Props) => {
             try {
                 var formData = new FormData();
                 formData.append("file", event.target.files[0]);
-                const fileUpload = await axios.post(
-                  `${bffUrl}/openkm/save/temp/file`,
+                const fileUpload = await axiosTraceIdInstance.post(
+                  `/openkm/save/temp/file`,
                   formData,
                   {
                     headers: {
@@ -104,8 +103,8 @@ const FileUploadOpenKm = ({ setFileData, fileData}: Props) => {
     const deleteFile = async () => {
         setLoader(true)
         try {
-            await axios.delete(
-              `${bffUrl}/openkm/file/delete/${fileData}`
+            await axiosTraceIdInstance.delete(
+              `/openkm/file/delete/${fileData}`
             );
             setLoader(false)
             setFile(null);

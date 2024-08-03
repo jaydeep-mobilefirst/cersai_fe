@@ -1,9 +1,8 @@
-import axios from 'axios';
 import React, { useState } from 'react'
-import { bffUrl } from '../../../utils/api';
 import Swal from 'sweetalert2';
 import { getMimeTypeFromArrayBuffer } from '../../../utils/commonFunction';
 import LoaderSpin from '../../LoaderSpin';
+import { axiosTraceIdInstance } from '../../../utils/axios';
 
 type Props = {
     uploadFileId : string
@@ -23,7 +22,7 @@ const ViewFile = ({uploadFileId}: Props) => {
   const handleOnClikcView = async () => {
     try {
       setViewLoader(true)
-      const response = await axios.get(`${bffUrl}/openkm/get/${uploadFileId}`);
+      const response = await axiosTraceIdInstance.get(`/openkm/get/${uploadFileId}`);
       const data = await response.data;
       if (data?.status === "INTERNAL_SERVER_ERROR") {
         Swal.fire({

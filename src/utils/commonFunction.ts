@@ -1,6 +1,5 @@
-import axios from "axios";
-import { bffUrl } from "./api";
 import Swal from "sweetalert2";
+import { axiosTraceIdInstance } from "./axios";
 
 const dateFormattor = (date: Date) => {
   // Ensure the input is a Date object
@@ -82,7 +81,7 @@ const handleViewOpenkmFileWithDocumentId = async (
   uploadFileId: string
 ): Promise<boolean> => {
   try {
-    const response = await axios.get(`${bffUrl}/openkm/get/${uploadFileId}`);
+    const response = await axiosTraceIdInstance.get(`/openkm/get/${uploadFileId}`);
     const data = await response.data;
     if (data?.status === "INTERNAL_SERVER_ERROR") {
       alert("File not exists");

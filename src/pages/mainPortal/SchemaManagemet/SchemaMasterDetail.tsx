@@ -4,7 +4,6 @@ import Accordion from "../../../components/customAccordin/CustomAccordin";
 import AuditTrail from "../../../components/ScehmaManagement/AuditTrail";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 import { useLocation, useNavigate, useNavigation } from "react-router-dom";
-import { bffUrl } from "../../../utils/api";
 import { useContext, useEffect, useState } from "react";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";

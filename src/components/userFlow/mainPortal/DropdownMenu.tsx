@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import { axiosTokenInstance} from "../../../utils/axios";
 
 type DropdownMenuProps = {
   toggleDropdown: () => void; // This is a function prop
@@ -51,8 +50,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const logoutApiHandle = () => {
     setLoader(true);
     const refreshToken = sessionStorage.getItem("refresh_token");
-    axios
-      .post(`${bffUrl}/logout`, {
+    axiosTokenInstance
+      .post(`/logout`, {
         refresh_token: refreshToken,
       })
       .then((responce) => {

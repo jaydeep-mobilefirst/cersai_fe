@@ -15,13 +15,13 @@ import axios from "axios";
 import DynamicFields from "../../../../components/userFlow/depositeTaker/DynamicFields";
 import { FormHandlerContext } from "../../../../contextAPI/useFormFieldHandlers";
 import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker-registration/registrationStore";
-import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import SuccessPopup from "../../../../components/userFlow/depositeTaker/SuccessPopUp";
 import { formatDate } from "../../../../utils/commonFunction";
 import Swal from "sweetalert2";
 import ReactTable from "../../../../components/userFlow/common/ReactTable";
 import { createColumnHelper } from "@tanstack/table-core";
+import { axiosTokenInstance } from "../../../../utils/axios";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -74,11 +74,11 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
 
   const fetchFormFields = async () => {
     try {
-      const response = await axios.get(
-        `${bffUrl}/registration/field-data/${1}?status=addToRegistration`
+      const response = await axiosTokenInstance.get(
+        `/registration/field-data/${1}?status=addToRegistration`
       );
-      const dropdownOptionsRes = await axios.get(
-        `${bffUrl}/registration/dropdown-components`
+      const dropdownOptionsRes = await axiosTokenInstance.get(
+        `/registration/dropdown-components`
       );
       if (response?.data?.success) {
         const dropdownData = dropdownOptionsRes?.data?.data;
@@ -199,8 +199,8 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
           value: field.userInput,
           key: field.key,
         }));
-        const response = await axios.post(
-          bffUrl + "/deposit-taker/add-form-fields",
+        const response = await axiosTokenInstance.post(
+           "/deposit-taker/add-form-fields",
           { formData, regulatorId: masterEntityId }
         );
         if (response.data.success) {
@@ -234,8 +234,8 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   };
 
   const handleDownloadTemplate = () => {
-    axios
-      .get(`${bffUrl}/deposit-taker/bulk-upload/sample-download`, {
+    axiosTokenInstance
+      .get(`/deposit-taker/bulk-upload/sample-download`, {
         method: "GET",
         responseType: "blob", // important
       })
@@ -255,8 +255,8 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     const formData = new FormData();
     formData.set("file", file);
     const entityId = sessionStorage.getItem("entityUniqueId");
-    axios
-      .post(`${bffUrl}/deposit-taker/bulk-upload`, formData)
+    axiosTokenInstance
+      .post(`/deposit-taker/bulk-upload`, formData)
       .then((res) => {
         let data = res.data;
         const total = data?.data?.created?.count + data?.data?.failed?.count;

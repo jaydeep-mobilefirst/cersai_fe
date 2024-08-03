@@ -17,13 +17,12 @@ import VerticalLine from "../../assets/images/verticalLine.png";
 import ArrangeSquare from "../../assets/images/arrangeSquare.png";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import LoaderSpin from "../../components/LoaderSpin";
 import useFetchStates from "../../contextAPI/useFetchStates";
 import useFetchDistrict from "../../contextAPI/useFetchDistrict";
 import { useLandingStore } from "../../zust/useLandingStore";
 import { useLangugaeStore } from "../../zust/useLanguageUsStore";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 type TableType = {
   id: number;
@@ -65,8 +64,8 @@ const DepositeTakerSearch: React.FC = () => {
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=home`,{
         headers: {
           'Accept-Language': language
         }
@@ -99,8 +98,8 @@ const DepositeTakerSearch: React.FC = () => {
 
   const apiCall = () => {
     setLoader(true);
-    axios
-      .get(bffUrl + "/deposit-taker", {
+    axiosTraceIdInstance
+      .get("/deposit-taker", {
         params: {
           page: page,
           limit: pageSize,
