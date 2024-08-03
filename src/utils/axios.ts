@@ -9,6 +9,9 @@ const token = sessionStorage.getItem("access_token")
 
 export const axiosInstance = axios.create({
   baseURL: `${bffUrl}`, // Base URL for all calls
+  headers: {
+    Traceid: uuid
+  },
 });
 
 export const axiosTokenInstance = axios.create({
