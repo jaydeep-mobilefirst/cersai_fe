@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
 import MobileIcon from "../../../assets/images/MobileIcon.svg";
@@ -146,7 +147,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         entityType: selected,
         username: getValues("email"),
         dscCertificateFile:
-          isDscKeyAvbl === "false" ? dscCertificate : base64Data,
+          isDscKeyAvbl === "true" ? dscCertificate : base64Data,
       })
       .then((respose) => {
         reset();
@@ -342,7 +343,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
                     {dsc && (
                       <>
-                        {isDscKeyAvbl === "true" ? (
+                        {isDscKeyAvbl === "false" ? (
                           <Dscbutton
                             onFileUpload={handleFileUpload}
                             disabled={false}
