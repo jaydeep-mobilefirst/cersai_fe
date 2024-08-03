@@ -146,6 +146,7 @@ const SchemaCreationForm = () => {
         fieldId: field.id,
         value: field.userInput,
         key: field.key,
+        label : field?.label
       }));
 
       // Creating the payload object that includes both formData and depositTakerId
@@ -157,6 +158,7 @@ const SchemaCreationForm = () => {
             fieldId: "55883089-b29c-4b73-ab17-45d6e062d6d4",
             key: "depositTakerId",
             value: entityType,
+            label : "Deposit taker"
           },
         ],
       };

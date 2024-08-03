@@ -11,6 +11,7 @@ import html2pdf from "html2pdf.js";
 import { regulatorSignupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
+import Logo from "../../assets/images/logo.svg";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -23,7 +24,7 @@ const useDownloadPDF = () => {
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: 0.2,
-      filename: "details.pdf",
+      filename: "Reviewdetails.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 2 : 4 },
       jsPDF: {
@@ -63,7 +64,7 @@ const ReviewDetailsRegulator = () => {
       document.body.classList.remove("pdf-mode");
     }
   }, [isPdfMode]);
-  
+
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();
     setLoader(true);
@@ -98,12 +99,17 @@ const ReviewDetailsRegulator = () => {
 
     finalResult = [...finalResult, ...docs];
 
-    axios
-    [allFormData?.returnJourney ? 'put' : 'post'](bffUrl + `/regulator/${allFormData?.returnJourney ? 'return-journey' : 'add-form-fields'}`, {
-      formData: finalResult,
-      masterId: masterEntityId,
-      identity : allFormData?.uniqueId,
-      })
+    axios[allFormData?.returnJourney ? "put" : "post"](
+      bffUrl +
+        `/regulator/${
+          allFormData?.returnJourney ? "return-journey" : "add-form-fields"
+        }`,
+      {
+        formData: finalResult,
+        masterId: masterEntityId,
+        identity: allFormData?.uniqueId,
+      }
+    )
       .then((response: any) => {
         const data = response.data;
         if (data?.success) {
@@ -111,12 +117,8 @@ const ReviewDetailsRegulator = () => {
             setPara1(`Your resumption journey has been sent successfully and
               approval/rejection of your resumption will be informed to you
               via email.`);
-            setPara2(
-              ``
-            );
-          }
-          else{
-
+            setPara2(``);
+          } else {
             setPara1(`Your registration request has been sent successfully and
               approval/rejection of your registration will be informed to you
               via email.`);
@@ -154,7 +156,16 @@ const ReviewDetailsRegulator = () => {
         <header className="lg:p-[38px] border-b border-gray-200"></header>
         <main className="flex-grow p-8 overflow-auto custom-scrollbar">
           <div id="reviewContent">
-            <h1 className="text-2xl font-bold mb-6">Review</h1>
+            {isPdfMode && (
+              <div>
+                <img
+                  src={Logo}
+                  alt="logo"
+                  className="rounded-full h-[52px] w-[52px]"
+                />
+              </div>
+            )}
+            <h1 className="text-2xl font-bold mb-6">Review Details</h1>
             <ReviewMainListing
               allFormData={allFormData}
               documentData={documentData}

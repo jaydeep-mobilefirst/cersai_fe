@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useScreenWidth } from "../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
@@ -41,6 +41,16 @@ const NodalDetailsDesignated = () => {
   const email = allFormData?.formFields?.form_fields?.find(
     (field: any) => field?.label === "Nodal Officer Email"
   )?.userInput;
+  useEffect(() => {
+    if (showOTPModel) {
+      const timeout = setTimeout(() => {
+        setShowOTPModel(false);
+      }, 5 * 60 * 1000); // 5 minutes
+
+      // Cleanup timeout on unmount or when showOTPModel changes
+      return () => clearTimeout(timeout);
+    }
+  }, [showOTPModel]);
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -113,7 +123,10 @@ const NodalDetailsDesignated = () => {
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className="flex flex-row items-center space-x-2">
+            <div
+              className="flex flex-row items-center space-x-2"
+              onClick={() => Navigate("/designated/court/uploaddocuments")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -132,7 +145,6 @@ const NodalDetailsDesignated = () => {
               </svg>
               <button
                 role="button"
-                onClick={() => Navigate("/designated/court/uploaddocuments")}
                 className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
               >
                 Back
