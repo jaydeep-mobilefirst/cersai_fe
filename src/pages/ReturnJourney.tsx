@@ -42,7 +42,7 @@ const ReturnJourney = (props: Props) => {
           let dtData: any = [];
           try {
             let resData = await axiosTraceIdInstance.get(
-              `$/${decodedToken?.entityType === 'CA' ? 'competent-authority' :
+              `/${decodedToken?.entityType === 'CA' ? 'competent-authority' :
                 decodedToken?.entityType === 'RG' ? 'regulator' :
                   decodedToken?.entityType === 'DC' && 'designated-court'
               }/${decodedToken?.entityId}`
@@ -89,6 +89,20 @@ const ReturnJourney = (props: Props) => {
             returnJourney: true,
             uniqueId: identityToken
           };
+         
+          let dedupObj = {}
+          modifiedFormFields?.map(
+            (f: any) => {
+              if ( f?.key === "nodalMobile" ||
+                f?.key === "panNumber" ||
+                f?.key === "nodalEmail") {
+                dedupObj = {...dedupObj, [f?.key] : f?.userInput}
+              }
+            } 
+          );
+
+
+          sessionStorage?.setItem('original', JSON.stringify(dedupObj))
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
           Navigate(paths[decodedToken?.entityType]);

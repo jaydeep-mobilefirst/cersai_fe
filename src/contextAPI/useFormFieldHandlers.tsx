@@ -435,7 +435,7 @@ const FormHandlerProviders = ({ children }: Props) => {
       }
 
       return success;
-    } catch (error:any) {
+    } catch (error: any) {
       Swal.fire({
         icon: "error",
         title: "",
@@ -453,8 +453,8 @@ const FormHandlerProviders = ({ children }: Props) => {
       let validations = field?.regFormFieldsValidations
         ? field?.regFormFieldsValidations
         : field?.schemeFormValidations
-        ? field?.schemeFormValidations
-        : [];
+          ? field?.schemeFormValidations
+          : [];
       return {
         formId: field?.id?.toString(),
         fieldValue: field?.userInput,
@@ -482,8 +482,8 @@ const FormHandlerProviders = ({ children }: Props) => {
     let deDupCheck = !isAdding
       ? true
       : !formValidations
-      ? true
-      : await ValidateDeDup(
+        ? true
+        : await ValidateDeDup(
           formFields?.filter(
             (field: any) =>
               emailRegex.test(field?.userInput) ||
@@ -541,6 +541,24 @@ const FormHandlerProviders = ({ children }: Props) => {
         f?.key === "panNumber" ||
         f?.key === "nodalEmail"
     );
+    let dataFromServer = JSON.parse(sessionStorage.getItem('original') ?? '{}')
+    let keys = Object.keys(dataFromServer)
+
+    let dedupCheckFormFields = filteredFields?.filter((e: any) => {
+      let userInput = e?.userInput
+      if (keys?.includes(e?.key) && dataFromServer[e?.key] !== userInput) {
+        return e;
+      }
+    })
+
+    if (dedupCheckFormFields?.length === 0) {
+      sessionStorage.setItem('needToVerify', 'no')
+      return true
+    } else {
+      sessionStorage.setItem('needToVerify', 'yes')
+      filteredFields = dedupCheckFormFields;
+    }
+
     const promises = filteredFields.map(async (field: any) => {
       try {
         const checkDeDup = await axiosTraceIdInstance.post(`/${URL}`, {
@@ -650,14 +668,14 @@ const FormHandlerProviders = ({ children }: Props) => {
               key === "startDate"
                 ? field?.userInput
                 : allFormData?.formFields?.form_fields?.find(
-                    (field: any) => field?.key === "startDate"
-                  )?.userInput;
+                  (field: any) => field?.key === "startDate"
+                )?.userInput;
             let endDate =
               key === "lastDate"
                 ? field?.userInput
                 : allFormData?.formFields?.form_fields?.find(
-                    (field: any) => field?.key === "lastDate"
-                  )?.userInput;
+                  (field: any) => field?.key === "lastDate"
+                )?.userInput;
 
             if (!startDate || !endDate) {
               return field;
@@ -687,14 +705,14 @@ const FormHandlerProviders = ({ children }: Props) => {
               key === "minInvestment"
                 ? field?.userInput
                 : allFormData?.formFields?.form_fields?.find(
-                    (field: any) => field?.key === "minInvestment"
-                  )?.userInput;
+                  (field: any) => field?.key === "minInvestment"
+                )?.userInput;
             let maxInvestment =
               key === "maxInvestment"
                 ? field?.userInput
                 : allFormData?.formFields?.form_fields?.find(
-                    (field: any) => field?.key === "maxInvestment"
-                  )?.userInput;
+                  (field: any) => field?.key === "maxInvestment"
+                )?.userInput;
 
             if (!minInvestment || !maxInvestment) {
               return field;
