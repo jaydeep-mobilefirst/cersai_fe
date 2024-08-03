@@ -157,6 +157,18 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
               fileName: "",
             }));
             
+            let dedupObj = {}
+             modifiedFormFields?.map(
+              (f: any) => {
+                if ( f?.key === "nodalMobile" ||
+                  f?.key === "panNumber" ||
+                  f?.key === "nodalEmail") {
+                  dedupObj = {...dedupObj, [f?.key] : f?.userInput}
+                }
+              } 
+            );
+
+            sessionStorage?.setItem('original', JSON.stringify(dedupObj))
           let obj = {
             dropdownData,
             ...response?.data?.data,

@@ -482,6 +482,10 @@ const OtpPage: React.FC<OtpPageProps> = ({
         });
 
         if (response.data.success) {
+          const dataFromServer = JSON.parse(sessionStorage.getItem('original') ??'{}')
+          dataFromServer['nodalMobile'] = mobile
+          dataFromServer['nodalEmail'] = email
+          sessionStorage.setItem('original', JSON.stringify(dataFromServer)) 
           setLoader(false);
           setMessageType("success");
           

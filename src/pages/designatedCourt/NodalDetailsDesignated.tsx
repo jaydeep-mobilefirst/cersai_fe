@@ -58,8 +58,8 @@ const NodalDetailsDesignated = () => {
     const noError = await handleValidationChecks(formFields);
 
     setLoader(false);
-
-    if (noError) {
+    let needVerification = sessionStorage.getItem('needToVerify')
+    if (noError && (needVerification ? needVerification === 'yes' : true)) {
       const response = await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
@@ -73,6 +73,9 @@ const NodalDetailsDesignated = () => {
           text: "Error sending OTP, Please try later",
         });
       }
+    }
+    else{
+      Navigate('/designated/court/reviewdetails')
     }
   };
 
