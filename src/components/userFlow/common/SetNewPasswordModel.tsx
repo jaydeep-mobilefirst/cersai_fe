@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
 
@@ -22,6 +21,7 @@ import { convertFileToBase64 } from "../../../utils/fileConversion";
 import PasswordUpdateModel from "./PasswordUpdateModel";
 import DscAuth from "./DscAuth";
 import DscKeyRegister from "../form/DscKeyRegister";
+import { axiosTraceIdInstance } from "../../../utils/axios";
 
 interface SetNewPasswordModelProps {}
 
@@ -97,8 +97,8 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
         isDscKeyAvbl === "true" ? dscCertificate : base64Data;
     }
 
-    axios
-      .post(`${bffUrl}/user/setpassword`, payload)
+    axiosTraceIdInstance
+      .post(`/user/setpassword`, payload)
       .then((response) => {
         setLoader(false);
         setShowPasswordModel(false);

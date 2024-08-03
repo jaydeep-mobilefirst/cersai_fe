@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import DynamicFields from "../../../../components/userFlow/depositeTaker/DynamicFields";
 import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../../contextAPI/useFormFieldHandlers";
-import axios from "axios";
-import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import SuccessPopup from "../../../../components/userFlow/depositeTaker/SuccessPopUp";
 import { axiosTokenInstance } from "../../../../utils/axios";

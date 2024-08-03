@@ -7,8 +7,6 @@ import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
 import InfoIcon from "../../../../assets/images/info-circle.svg";
 import { useDepositTakerRegistrationStore } from "../../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../../contextAPI/useFormFieldHandlers";
-import axios from "axios";
-import { bffUrl } from "../../../../utils/api";
 import DynamicFields from "../../../../components/userFlow/depositeTaker/DynamicFields";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import SelectButton from "../../../../components/userFlow/form/SelectButton";
@@ -81,8 +79,8 @@ const SchemesSearchDetailsSM: React.FC = () => {
               };
             } else if (field?.key === "branch") {
               try {
-                const res = await axios.get(
-                  bffUrl +
+                const res = await axiosTokenInstance.get(
+                  
                     "/deposit-taker/branch/" +
                     location.state.depositTakerId
                 );

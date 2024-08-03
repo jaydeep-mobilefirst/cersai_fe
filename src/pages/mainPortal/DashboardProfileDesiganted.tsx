@@ -6,14 +6,13 @@ import { useSearchParams } from "react-router-dom";
 import ProfileResponsiveTabs from "../../components/userFlow/main-portal-designated/ProfileResponsiveTabs";
 
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 
 import CourtDetails from "./Edit-profile-designatedCourt/CourtDetails";
 import NodalDetails from "./Edit-profile-designatedCourt/NodalDetail";
 import UploadDocument from "./Edit-profile-designatedCourt/UploadDocument";
 
 import TaskTabsDesignated from "../../components/userFlow/main-portal-designated/TaskTabs";
+import { axiosTokenInstance } from "../../utils/axios";
 
 type Props = {};
 
@@ -25,8 +24,8 @@ const DashboardProfileDesignateCourt = (props: Props) => {
   const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/4?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/4?status=addToProfile`)
       .then(async (response) => {
 
         // if (response?.data?.success) {
@@ -74,8 +73,8 @@ const DashboardProfileDesignateCourt = (props: Props) => {
         if (response?.data?.success) {
           let dcData: any = [];
           try {
-            let designatedCourt = await axios.get(
-              `${bffUrl}/designated-court/${entityUniqueId}`
+            let designatedCourt = await axiosTokenInstance.get(
+              `/designated-court/${entityUniqueId}`
             );
             dcData =
               designatedCourt.data.data.designatedCourt

@@ -5,8 +5,6 @@ import TopDetail from "../components/landingPage/TopDetail";
 import Navbar from "../components/landingPage/Navbar";
 import { useLandingStore } from "../zust/useLandingStore";
 import { useContactUsStore } from "../zust/usContactUsStore";
-import axios from "axios";
-import { bffUrl } from "../utils/api";
 import Footer from "../components/landingPage/Footer";
 import { data } from "../utils/hardText/landingPageText2";
 import { contactUsPageData } from "../utils/hardText/contactUs";
@@ -14,6 +12,7 @@ import LoaderSpin from "../components/LoaderSpin";
 import { useLangugaeStore } from "../zust/useLanguageUsStore";
 import { hero } from "../utils/hardText/landingpageText";
 import { Link } from "react-router-dom";
+import { axiosTraceIdInstance } from "../utils/axios";
 
 const ContactUs: React.FC = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -32,8 +31,8 @@ const ContactUs: React.FC = () => {
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=home`, {
+    axiosTraceIdInstance
+      .get( `/websitecontent/get/name?wcname=home`, {
         headers: {
           "Accept-Language": language,
         },
@@ -54,8 +53,8 @@ const ContactUs: React.FC = () => {
   const contactUsPageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=Contact us`, {
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=Contact us`, {
         headers: {
           "Accept-Language": language,
         },

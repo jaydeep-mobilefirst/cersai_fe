@@ -5,10 +5,10 @@ import { useScreenWidth } from "../../utils/screenSize";
 import TaskTabs from "../../components/userFlow/mainPortal/TaskTabs";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import TaskTabsDesignated from "../../components/userFlow/main-portal-designated/TaskTabs";
+import { axiosTokenInstance } from "../../utils/axios";
 
 const ResetPasswordDesignated = () => {
   const screenWidth = useScreenWidth();
@@ -30,7 +30,7 @@ const ResetPasswordDesignated = () => {
   const onSubmit = async (data: any) => {
     setLoader(true);
     try {
-      const response = await axios.post(`${bffUrl}/auth/resetpassword`, {
+      const response = await axiosTokenInstance.post(`/auth/resetpassword`, {
         username: emailId,
         oldpassword: data?.oldPassword,
         newpassword: data.confirmPassword,

@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLandingStore } from "../zust/useLandingStore";
-
-import axios from "axios";
-import { bffUrl } from "../utils/api";
 import LanguageBar from "../components/landingPage/LanguageBar";
 import TopDetail from "../components/landingPage/TopDetail";
 import Navbar from "../components/landingPage/Navbar";
@@ -13,6 +10,7 @@ import { downloadPageData } from "../utils/hardText/downloadPageText";
 import { useDownloadStore } from "../zust/useDownloadStore";
 import { useLangugaeStore } from "../zust/useLanguageUsStore";
 import LoaderSpin from "../components/LoaderSpin";
+import { axiosTraceIdInstance } from "../utils/axios";
 
 const Downloads = () => {
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
@@ -30,8 +28,8 @@ const Downloads = () => {
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=home`,{
         headers: {
           'Accept-Language': language
         }
@@ -53,8 +51,8 @@ const Downloads = () => {
   const downloadPageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=downloads`,{
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=downloads`,{
         headers: {
           'Accept-Language': language
         }

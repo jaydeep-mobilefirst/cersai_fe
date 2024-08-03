@@ -12,8 +12,6 @@ import { useNavigate } from "react-router-dom";
 import useFetchFunctionalityForUAM from "../../../custom hooks/useFetchFunctionalityForUAM";
 import uamStore from "../../../store/uamStore";
 import useFetchUsers from "../../../custom hooks/fetchUsers";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import useFetchRoles from "../../../custom hooks/fetchRoles";
 import SendActivationLink from "../../../components/userFlow/common/SendActivationLink";

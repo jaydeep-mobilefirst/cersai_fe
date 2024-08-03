@@ -12,10 +12,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import AuditTrail from "../../components/ScehmaManagement/AuditTrail";
 import LoaderSpin from "../../components/LoaderSpin";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -45,11 +44,11 @@ const SchemeSearchDetails: React.FC = () => {
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/scheme/field-data/${createdBy === 'DT' ? 1 : 2}`);
+      const response = await axiosTraceIdInstance.get(`/scheme/field-data/${createdBy === 'DT' ? 1 : 2}`);
       // console.log(response, "response");
       if (response.data.success) {
-        const portalResponse = await axios.get(
-          `${bffUrl}/scheme-portal/${uniqueId}`
+        const portalResponse = await axiosTraceIdInstance.get(
+          `/scheme-portal/${uniqueId}`
         );
 
         const userData = portalResponse.data?.data?.schemes[0];
@@ -74,7 +73,7 @@ const SchemeSearchDetails: React.FC = () => {
             }
             else if (field?.key === 'branch') {
               try {
-                const res = await axios.get(bffUrl + '/deposit-taker/branch/' + location.state.depositTakerId)
+                const res = await axiosTraceIdInstance.get('/deposit-taker/branch/' + location.state.depositTakerId)
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
                   return {
@@ -144,14 +143,14 @@ const SchemeSearchDetails: React.FC = () => {
   }, [uniqueId]);
   const fetchFormFields = () => {
     setLoader2(true)
-    axios
-      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+    axiosTraceIdInstance
+      .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/${depositTakerId}`
+            let depositTakerData = await axiosTraceIdInstance.get(
+              `/deposit-taker/${depositTakerId}`
             );
             dtData =
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
@@ -206,7 +205,7 @@ const SchemeSearchDetails: React.FC = () => {
 
   useEffect(() => {
     if (allFormData?.other?.depositTakerId) {
-      axios.get(`${bffUrl}/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000&status=ALL`)
+      axiosTraceIdInstance.get(`/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000&status=ALL`)
       .then((res) => {
         let data = res?.data?.data;
         setSchemes(data?.map((d : any) => {

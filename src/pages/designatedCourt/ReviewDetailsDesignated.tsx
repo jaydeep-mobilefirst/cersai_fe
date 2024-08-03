@@ -8,10 +8,9 @@ import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-regis
 import { signupSideBarDesignated } from "../../utils/hardText/signUpDesignatedText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 import LoaderSpin from "../../components/LoaderSpin";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
 import Logo from "../../assets/images/logo.svg";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -156,8 +155,7 @@ const ReviewDetailsDesignated = () => {
 
     finalResult = [...finalResult, ...docs];
 
-    axios[allFormData?.returnJourney ? "put" : "post"](
-      bffUrl +
+    axiosTraceIdInstance[allFormData?.returnJourney ? "put" : "post"](
         `/designated-court/${
           allFormData?.returnJourney ? "return-journey" : "add-form-fields"
         }`,

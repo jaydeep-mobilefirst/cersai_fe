@@ -3,8 +3,6 @@ import TaskTabs from "../../../../components/ScehmaManagement/TaskTabsRg";
 import { createColumnHelper } from "@tanstack/table-core";
 import "./DepositTakerForm.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../../../utils/api";
 import { useDepositTakerRegistrationStore } from "../../../../store/registrationStore";
 import { getMimeTypeFromArrayBuffer } from "../../../../utils/commonFunction";
 import Swal from "sweetalert2";
@@ -174,7 +172,7 @@ const DepositTakerForm = () => {
   const handleOnClikcView = async (uploadFileId: any) => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/openkm/get/${uploadFileId}`);
+      const response = await axiosTokenInstance.get(`/openkm/get/${uploadFileId}`);
       const data = await response.data;
       if (data?.status === "INTERNAL_SERVER_ERROR") {
         Swal.fire({

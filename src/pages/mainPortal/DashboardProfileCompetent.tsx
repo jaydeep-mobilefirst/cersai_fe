@@ -8,14 +8,14 @@ import ProfileRegulatorDetails from "./Edit Profile/ProfileRegulatorDetails";
 import ProfileUploadDocuments from "./Edit-Profile-Regulator/ProfileUploadDocuments";
 
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
+
 import DashboardProfileSidebarRegulator from "../../components/userFlow/mainPortal-Regulator/DashboardProfileSidebar";
 
 import CompetentDetails from "./Edit-profile-competent/CompetentDetails";
 import NodalDetails from "./Edit-profile-competent/NodalDetails";
 import UploadDocument from "./Edit-profile-competent/UploadDocument";
 import TaskTabsCompetent from "../../components/userFlow/main-portal-competent/TaskTabs";
+import { axiosTokenInstance } from "../../utils/axios";
 
 type Props = {};
 
@@ -27,14 +27,14 @@ const DashboardProfileCompetent = (props: Props) => {
   const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/3?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/3?status=addToProfile`)
       .then(async (response) => {
         // if (response?.data?.success) {
         //   let dtData: any = [];
         //   try {
-        //     let competentData = await axios.get(
-        //       `${bffUrl}/competent-authority/${entityUniqueId}`
+        //     let competentData = await     axiosTokenInstance.get(
+        //       `/competent-authority/${entityUniqueId}`
         //     );
         //     // console.log(
         //     //   competentData?.data?.data?.competentAuthority
@@ -84,8 +84,9 @@ const DashboardProfileCompetent = (props: Props) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/competent-authority/${entityUniqueId}`
+            let depositTakerData = await     axiosTokenInstance
+            .get(
+              `/competent-authority/${entityUniqueId}`
             );
             dtData =
               depositTakerData?.data?.data?.competentAuthority?.competentAuthorityData;

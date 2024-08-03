@@ -9,11 +9,10 @@ import folderOpen from "../../assets/images/folder-open.svg";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 import { signupSideBarCompetent } from "../../utils/hardText/signUpCompetentText";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import LoaderSpin from "../../components/LoaderSpin";
 import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
 import Logo from "../../assets/images/logo.svg";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -106,8 +105,7 @@ const ReviewDetails = () => {
 
     finalResult = [...finalResult, ...docs];
 
-    axios[allFormData?.returnJourney ? "put" : "post"](
-      bffUrl +
+    axiosTraceIdInstance[allFormData?.returnJourney ? "put" : "post"](
         `/competent-authority/${
           allFormData?.returnJourney ? "return-journey" : "add-form-fields"
         }`,

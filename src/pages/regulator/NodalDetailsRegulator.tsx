@@ -9,11 +9,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
-import axios from "axios";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import OtpPage from "../depositeTaker/OtpPage";
 import { bffUrl } from "../../utils/api";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 const NodalDetailsRegulator = () => {
   const [params, setParams] = useSearchParams();
@@ -58,7 +58,7 @@ const NodalDetailsRegulator = () => {
     setLoader(false);
 
     if (noError) {
-      const response = await axios.post(`${bffUrl}/dual-otp/sendotp`, {
+      const response = await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
       });

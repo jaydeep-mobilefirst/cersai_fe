@@ -10,8 +10,6 @@ import SubRejectModelPopup from "../../../components/MyTasks/SubRejectModelPopup
 import "./mytaskform.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { axiosTokenInstance } from "../../../utils/axios";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import { number } from "yup";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { useDepositTakerRegistrationStore } from "../../../store/registrationStore";
@@ -70,14 +68,14 @@ const MyTaskForm = () => {
   }, [depositTakerId]);
   const fetchFormFields = () => {
     setLoader1(true);
-    axios
-      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/${depositTakerId}`
+            let depositTakerData = await axiosTokenInstance.get(
+              `/deposit-taker/${depositTakerId}`
             );
 
             dtData =
@@ -191,7 +189,7 @@ const MyTaskForm = () => {
   const handleOnClikcView = async (uploadFileId: any) => {
     try {
       setLoader(true);
-      const response = await axios.get(`${bffUrl}/openkm/get/${uploadFileId}`);
+      const response = await axiosTokenInstance.get(`/openkm/get/${uploadFileId}`);
       const data = await response.data;
       if (data?.status === "INTERNAL_SERVER_ERROR") {
         Swal.fire({

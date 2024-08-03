@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/new_images/arrowDown.png";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import axios from "axios";
 import LoaderSpin from "../../components/LoaderSpin";
 import { bffUrl } from "../../utils/api";
 import html2pdf from "html2pdf.js";
@@ -99,8 +98,7 @@ const ReviewDetailsRegulator = () => {
 
     finalResult = [...finalResult, ...docs];
 
-    axios[allFormData?.returnJourney ? "put" : "post"](
-      bffUrl +
+    axiosTraceIdInstance[allFormData?.returnJourney ? "put" : "post"](
         `/regulator/${
           allFormData?.returnJourney ? "return-journey" : "add-form-fields"
         }`,

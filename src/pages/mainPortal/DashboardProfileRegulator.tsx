@@ -9,8 +9,6 @@ import ProfileRegulatorDetails from "./Edit-Profile-Regulator/ProfileRegulatorDe
 import ProfileUploadDocuments from "./Edit-Profile-Regulator/ProfileUploadDocuments";
 
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import DashboardProfileSidebarRegulator from "../../components/userFlow/mainPortal-Regulator/DashboardProfileSidebar";
 import TaskTabsRegulator from "../../components/userFlow/mainPortal-Regulator/TaskTabsRegulator";
 import { axiosTokenInstance } from "../../utils/axios";
@@ -31,8 +29,8 @@ const DashboardProfileRegulator = (props: Props) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let regulatorData = await axios.get(
-              `${bffUrl}/regulator/${entityUniqueId}`
+            let regulatorData = await axiosTokenInstance.get(
+              `/regulator/${entityUniqueId}`
             );
             dtData = dtData =
               regulatorData?.data?.data?.regulator?.regulatorFormData;

@@ -10,14 +10,13 @@ import AuditTrail from "../../components/depositTakerSearch/AuditTrailDepositSea
 
 import { useScreenWidth } from "../../utils/screenSize";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { useEffect, useState } from "react";
 import LoaderSpin from "../../components/LoaderSpin";
 import { createColumnHelper } from "@tanstack/table-core";
 import CustomPagination from "../../components/CustomPagination/CustomPagination";
 import ReactTable from "../../components/userFlow/common/ReactTable";
+import { axiosTraceIdInstance } from "../../utils/axios";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
@@ -130,14 +129,14 @@ const DepositSearchDetails: React.FC = () => {
   const [total, setTotal] = useState<number>(0);
   const fetchFormFields = () => {
     setLoader(true);
-    axios
-      .get(`${bffUrl}/registration/field-data/1?status=addToProfile`)
+    axiosTraceIdInstance
+      .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/deposit-taker/${depositTakerId}`
+            let depositTakerData = await axiosTraceIdInstance.get(
+              `/deposit-taker/${depositTakerId}`
             );
 
             dtData =
@@ -190,7 +189,7 @@ const DepositSearchDetails: React.FC = () => {
   const fetchSchemes = async () => {
     setLoader2(true);
     try {
-      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme-by/${depositTakerId}`, {
+      const { data } = await axiosTraceIdInstance.get(`/scheme-portal/scheme-by/${depositTakerId}`, {
         params: {
           page: page,
           limit: pageSize,

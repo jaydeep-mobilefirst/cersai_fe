@@ -13,8 +13,6 @@ import CustomPagination from "../../../../components/CustomPagination/CustomPagi
 import ToggleSwitch from "../../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
 import { axiosTokenInstance } from "../../../../utils/axios";
-import { bffUrl } from "../../../../utils/api";
-import axios from "axios";
 import LoaderSpin from "../../../../components/LoaderSpin";
 
 // type TableType = {

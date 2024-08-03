@@ -16,13 +16,12 @@ import VerticalLine from "../../assets/images/verticalLine.png";
 
 import { useEffect, useState } from "react";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import LoaderSpin from "../../components/LoaderSpin";
 import useFetchStates from "../../contextAPI/useFetchStates";
 import useFetchDistrict from "../../contextAPI/useFetchDistrict";
 import { useLandingStore } from "../../zust/useLandingStore";
 import { useLangugaeStore } from "../../zust/useLanguageUsStore";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 type SchemeType = {
   id: number;
@@ -69,8 +68,8 @@ const SchemeSearch: React.FC = () => {
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
-    axios
-      .get(bffUrl + `/websitecontent/get/name?wcname=home`,{
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=home`,{
         headers: {
           'Accept-Language': language
         }
@@ -89,7 +88,7 @@ const SchemeSearch: React.FC = () => {
   const fetchSchemes = async () => {
     setLoader(true);
     try {
-      const { data } = await axios.get(`${bffUrl}/scheme-portal/solr-scheme`, {
+      const { data } = await axiosTraceIdInstance.get(`/scheme-portal/solr-scheme`, {
         params: {
           page: page,
           limit: pageSize,

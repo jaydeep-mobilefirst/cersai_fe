@@ -8,9 +8,8 @@ import SelectButtonTask from "../../../../components/ScehmaManagement/SelectButt
 import CustomPagination from "../../../../components/CustomPagination/CustomPagination";
 import TaskTabsDc from "../../../../components/ScehmaManagement/TaskTabsDc";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../../../utils/api";
 import LoaderSpin from "../../../../components/LoaderSpin";
+import { axiosTokenInstance } from "../../../../utils/axios";
 
 type SchemeType = {
   id: number;
@@ -45,7 +44,8 @@ const NewSchemaCreation = () => {
     setLoader(true);
     try {
       // const uniqueId = sessionStorage.getItem("entityUniqueId");
-      const { data } = await axios.get(`${bffUrl}/scheme-portal/scheme`, {
+      const { data } = await     axiosTokenInstance
+      .get(`/scheme-portal/scheme`, {
         params: {
           page: page,
           limit: pageSize,

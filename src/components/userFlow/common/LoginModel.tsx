@@ -17,6 +17,7 @@ import { bffUrl } from "../../../utils/api";
 import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
 import DscKeyLogin from "../form/DscKeyLogin";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 interface LoginModelProps {
   closeModal: () => void;
@@ -93,7 +94,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
     setError(false);
 
     try {
-      const response = await axios.post(`${bffUrl}/auth/login`, {
+      const response = await axiosTokenInstance.post(`/auth/login`, {
         // username: data.email,
         username: watch("email"),
         // password: data.password,
@@ -122,10 +123,10 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
       setError(false);
     } catch (error: any) {
-      console.log("error",error?.response?.data?.error)
+      console.log("error",error)
       setError(true);
       const errorMessage =
-        error?.response?.data?.error ||
+        error?.error_description ||
         error?.response?.data?.message ||
         "User not found";
       setFormError(errorMessage);
@@ -143,8 +144,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
   const apicallDsc = () => {
     setLoader(true);
-    axios
-      .post(bffUrl + `/auth/mfa`, {
+    axiosTokenInstance
+      .post(`/auth/mfa`, {
         entityType: selected,
         username: getValues("email"),
         dscCertificateFile:
@@ -177,6 +178,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         }
       })
       .catch((error) => {
+        
         setFormError(error?.response?.data?.message);
         setLoader(false);
       });

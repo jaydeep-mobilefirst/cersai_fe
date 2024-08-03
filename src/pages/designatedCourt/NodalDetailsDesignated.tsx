@@ -6,9 +6,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import LoaderSpin from "../../components/LoaderSpin";
 import OtpPage from "../depositeTaker/OtpPage";
-import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import Swal from "sweetalert2";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 const NodalDetailsDesignated = () => {
   const [params, setParams] = useSearchParams();
@@ -61,7 +60,7 @@ const NodalDetailsDesignated = () => {
     setLoader(false);
 
     if (noError) {
-      const response = await axios.post(`${bffUrl}/dual-otp/sendotp`, {
+      const response = await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
       });

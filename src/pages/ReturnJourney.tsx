@@ -2,9 +2,8 @@ import React, { useEffect } from 'react'
 import LoaderSpin from '../components/LoaderSpin'
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
-import { bffUrl } from '../utils/api';
 import { useDepositTakerRegistrationStore } from '../zust/deposit-taker-registration/registrationStore';
+import { axiosTraceIdInstance } from '../utils/axios';
 
 type Props = {}
 export const paths: any = {
@@ -32,8 +31,8 @@ const ReturnJourney = (props: Props) => {
   }
   let decodedToken: any = jwtDecode(identityToken ?? "eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoibnVsbCJ9.O-b2MQ9bKh0MxkRqdx4l0VROhzWq6Bi1IXW2VXN_9I0")
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/${decodedToken?.entityType === 'CA' ? 3 :
+    axiosTraceIdInstance
+      .get(`/registration/field-data/${decodedToken?.entityType === 'CA' ? 3 :
           decodedToken?.entityType === 'RG' ? 2 :
             decodedToken?.entityType === 'DC' ? 4 : 1
         }?status=addToProfile`)
@@ -42,8 +41,8 @@ const ReturnJourney = (props: Props) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let resData = await axios.get(
-              `${bffUrl}/${decodedToken?.entityType === 'CA' ? 'competent-authority' :
+            let resData = await axiosTraceIdInstance.get(
+              `$/${decodedToken?.entityType === 'CA' ? 'competent-authority' :
                 decodedToken?.entityType === 'RG' ? 'regulator' :
                   decodedToken?.entityType === 'DC' && 'designated-court'
               }/${decodedToken?.entityId}`

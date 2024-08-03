@@ -3,8 +3,6 @@ import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
 import { useScreenWidth } from "../../../utils/screenSize";
 import { useNavigate } from "react-router-dom";
 import useSidebarStore from "../../../store/SidebarStore";
-import { bffUrl } from "../../../utils/api";
-import axios from "axios";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
