@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import ErrorCircleRed from "../../assets/images/info-circleRed.svg";
 import add from "../../assets/images/add.svg";
 
-import { axiosInstance } from "../../utils/axios";
+import { axiosTokenInstance } from "../../utils/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import SelectButtonV3 from "../userFlow/form/SelectButtonV3";
 import ButtonComp from "./ButtonComp";
@@ -68,7 +68,7 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
   // }, [checkerId]);
 
   const apiCall = () => {
-    axiosInstance
+    axiosTokenInstance
       .get("/approval-documents/list")
       .then((response: any) => {
         if (response.data.success) {
@@ -80,7 +80,7 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
           );
         }
       })
-      .catch((err) => {});
+      .catch((err:any) => {});
   };
   // const apiCallChecker = () => {
   //   axiosUAMInstance
@@ -176,7 +176,7 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
 
     try {
       setLoader(true);
-      const response = await axiosInstance.post(
+      const response = await axiosTokenInstance.post(
         `/approval-engine/update-status`,
         {
           uniqueId: depositTakerId,
@@ -215,7 +215,7 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
     if (approvalDocumentId) {
       try {
         setLoader(true);
-        const response = await axiosInstance.post(
+        const response = await axiosTokenInstance.post(
           `/approval-engine/update-status`,
           {
             uniqueId: depositTakerId,

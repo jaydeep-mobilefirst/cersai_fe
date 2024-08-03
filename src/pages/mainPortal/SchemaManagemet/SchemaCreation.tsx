@@ -12,8 +12,6 @@ import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton"
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
 import ToggleSwitch from "../../../components/ScehmaManagement/ToggleSwitch";
 import TaskTabs from "../../../components/ScehmaManagement/TaskTabs";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
 
@@ -116,8 +114,8 @@ const SchemaCreation = () => {
         const Activated = info?.row?.original?.active;
         const uniqueId = info?.row?.original?.uniqueId;
         const apiCall = () => {
-          axios
-            .patch(`${bffUrl}/scheme-portal/${uniqueId}/active`, {
+          axiosTokenInstance
+            .patch(`/scheme-portal/${uniqueId}/active`, {
               isActive: !Activated,
             })
 

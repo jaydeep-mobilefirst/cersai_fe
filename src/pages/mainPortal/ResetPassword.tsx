@@ -5,7 +5,6 @@ import { useScreenWidth } from "../../utils/screenSize";
 import TaskTabs from "../../components/userFlow/mainPortal/TaskTabs";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { axiosTokenInstance } from "../../utils/axios";

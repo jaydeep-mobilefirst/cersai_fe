@@ -9,7 +9,7 @@ import ProfileRegulatorDetails from "./Edit Profile/ProfileRegulatorDetails";
 import ProfileUploadDocuments from "./Edit Profile/ProfileUploadDocuments";
 import ProfileBranches from "./Edit Profile/ProfileBranches";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import { axiosTokenInstance } from "../../utils/axios";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 type Props = {};
 
@@ -21,13 +21,13 @@ const DashboardProfile = (props: Props) => {
   const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
-    axiosTokenInstance
+    axiosTraceIdInstance
       .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axiosTokenInstance.get(
+            let depositTakerData = await axiosTraceIdInstance.get(
               `/deposit-taker/${entityUniqueId}`
             );
             dtData =

@@ -6,7 +6,7 @@ import add from "../../assets/images/add.svg";
 import TextArea from "../../components/userFlow/common/TextArea";
 import SelectButton from "../../components/userFlow/form/SelectButton";
 import ButtonComp from "./ButtonComp";
-import { axiosInstance } from "../../utils/axios";
+import { axiosTokenInstance } from "../../utils/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import SelectButtonV3 from "../userFlow/form/SelectButtonV3";
 
@@ -58,7 +58,7 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
   }, [text]);
 
   const apiCall = () => {
-    axiosInstance
+    axiosTokenInstance
       .post("/approval-engine/reason-code?reasonFor=RETURN")
       .then((response: any) => {
         if (response.data.success) {
@@ -109,7 +109,7 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
 
     try {
       setLoader(true);
-      const response = await axiosInstance.post(
+      const response = await axiosTokenInstance.post(
         `/approval-engine/update-status`,
         {
           uniqueId: depositTakerId,
