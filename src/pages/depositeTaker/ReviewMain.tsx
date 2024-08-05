@@ -4,12 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/new_images/arrowDown.png";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-
 import LoaderSpin from "../../components/LoaderSpin";
 import html2pdf from "html2pdf.js";
 import { signupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 import Logo from "../../assets/images/logo.svg";
 const useDownloadPDF = () => {
