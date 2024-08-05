@@ -63,6 +63,7 @@ type Props = {
   onChange?: (event: any) => void;
   userValue?: string;
   backgroundColor?: string; // New background color prop
+  maxDate?: string;
 };
 
 const DatePicker = ({
@@ -70,6 +71,7 @@ const DatePicker = ({
   userValue,
   backgroundColor,
   disabled,
+  maxDate,
 }: Props) => {
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -115,7 +117,10 @@ const DatePicker = ({
         disabled={disabled ? disabled : false}
         onClick={handleDateButtonClick}
         className={`flex justify-between items-center h-full w-full px-2 py-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none`}
-        style={{ backgroundColor: backgroundColor || "white" }} // Set background color
+        // style={{ backgroundColor: backgroundColor || "white" }} // Set background color
+        style={{
+          backgroundColor: disabled ? "	#E5E4E2" : backgroundColor || "white",
+        }}
       >
         {dateSelected || "Select Date"}
         <Calender />
@@ -127,7 +132,7 @@ const DatePicker = ({
         type="date"
         className="absolute opacity-0 -z-10"
         onChange={onChangeHandler}
-        max={getCurrentDate()} // Set max date to today
+        max={maxDate === "dateOfIncorporation" ? getCurrentDate() : undefined} // Set max date to today
       />
     </div>
   );

@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import { axiosTraceIdInstance } from "./axios";
+import { useEffect, useState } from "react";
 
 const dateFormattor = (date: Date) => {
   // Ensure the input is a Date object
@@ -81,7 +82,9 @@ const handleViewOpenkmFileWithDocumentId = async (
   uploadFileId: string
 ): Promise<boolean> => {
   try {
-    const response = await axiosTraceIdInstance.get(`/openkm/get/${uploadFileId}`);
+    const response = await axiosTraceIdInstance.get(
+      `/openkm/get/${uploadFileId}`
+    );
     const data = await response.data;
     if (data?.status === "INTERNAL_SERVER_ERROR") {
       alert("File not exists");
@@ -109,6 +112,20 @@ const formatDate = (dateStr: any) => {
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
+function useDebounce(value: any, delay: any) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 export {
   dateFormattor,
   panRegex,
@@ -118,4 +135,5 @@ export {
   handleViewOpenkmFileWithDocumentId,
   isUUID,
   formatDate,
+  useDebounce,
 };

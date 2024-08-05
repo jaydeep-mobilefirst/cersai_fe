@@ -168,15 +168,18 @@ interface InputProps extends InputHTMLAttributes<HTMLTextAreaElement> {
 
 const TextArea: FC<InputProps> = forwardRef<HTMLTextAreaElement, InputProps>(
   (props, ref) => {
-    const { backgroundColor = "white", className, ...rest } = props; // Destructure backgroundColor and provide a default
+    const { backgroundColor = "white", className, disabled, ...rest } = props; // Destructure backgroundColor and provide a default
+    const bgColor = disabled ? "#E5E4E2" : backgroundColor;
 
     return (
       <div className="relative w-full">
         <textarea
           className={`form-textarea mt-1 block w-full border-gray-300 shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 textarea-component px-4 py-3.5 border h-[55px] sm:h-[55px] rounded-md ${className} `}
-          style={{ backgroundColor }} // Apply the backgroundColor style
+          // style={{ backgroundColor }} // Apply the backgroundColor style
+          style={{ backgroundColor: bgColor }}
           {...rest}
           ref={ref}
+          disabled={disabled}
         ></textarea>
         <div className="absolute bottom-0 right-0 pr-3 pb-2.5 flex items-center pointer-events-none">
           <svg
