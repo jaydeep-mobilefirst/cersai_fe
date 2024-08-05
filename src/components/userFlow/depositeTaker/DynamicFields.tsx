@@ -148,6 +148,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                       <RequiredStar allFormData={allFormData} field={field} />
                     </label>
                     <DatePicker
+                      maxDate={field?.key}
                       disabled={field?.disabled ? field?.disabled : false}
                       onChange={(e) =>
                         onChange && onChange(e, field, fieldType)

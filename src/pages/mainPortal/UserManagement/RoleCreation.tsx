@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import addCircle from "../../../assets/images/add-circleb.svg";
 import searchButton from "../../../assets/images/search-normal.svg";
@@ -16,6 +16,7 @@ import uamStore from "../../../store/uamStore";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
+import { useDebounce } from "../../../utils/commonFunction";
 
 type TableType = {
   sno: number;
@@ -57,6 +58,7 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
   const [isActive, setIsActive] = useState();
   const [roleEditId, setRoleEditId] = useState<number | undefined>();
   const [selectedFuncs, setSelectedFuncs] = useState<any[]>([]);
+  const debouncedSearchTerm = useDebounce(searchString, 500);
 
   const handleAddRoleClick = (operation: "add" | "edit") => {
     if (operation === "add") {
@@ -114,7 +116,7 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
 
         return (
           <div
-            className='flex flex-col md:flex-row justify-center gap-3'
+            className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
             <span>{value ? "Active" : "InActive"}</span>
@@ -144,7 +146,7 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
         };
         return (
           <>
-            <ActionButton variant='edit' onClick={handleOnEdit} />
+            <ActionButton variant="edit" onClick={handleOnEdit} />
           </>
         );
       },
@@ -164,17 +166,23 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
     setSelectedOption1(value?.label);
     setFunctionalitySearch(value?.roleName);
   };
-
-  // const onSearchStringChange = (e: any) => {
-  //   setSearchString(e.target.value);
-  // };
-  const onSearchStringChange = (e: any) => {
-    const value = e.target.value;
-    setSearchString(value);
-    if (value === "") {
+  useEffect(() => {
+    if (debouncedSearchTerm.trim() === "") {
       handleSearch();
     }
+  }, [debouncedSearchTerm]);
+
+  const onSearchStringChange = (e: any) => {
+    setSearchString(e.target.value);
   };
+
+  // const onSearchStringChange = (e: any) => {
+  //   const value = e.target.value;
+  //   setSearchString(value);
+  //   if (value?.trim() === "") {
+  //     handleSearch();
+  //   }
+  // };
 
   return (
     <div className="relative xl:ml-[20px] pr-3">
@@ -192,7 +200,7 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
               value={searchString}
             />
           </div>
-          <div className='flex-grow'>
+          <div className="flex-grow">
             <SelectButtonTask
               setOption={handleSetOption1}
               options={[
@@ -200,10 +208,10 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
                 ...uamFunctionalities,
               ]}
               selectedOption={selectedOption1}
-              placeholder='Functionality'
-              bgColor='#FFFFFF'
-              borderColor='#E7F0FF' // Custom border color
-              mdWidth='w-full'
+              placeholder="Functionality"
+              bgColor="#FFFFFF"
+              borderColor="#E7F0FF" // Custom border color
+              mdWidth="w-full"
             />
           </div>
           <div className="flex-grow mt-2">
@@ -211,19 +219,19 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
               className="w-full h-[52px] border-2 rounded-md px-2 lg:px-[16px] flex justify-center items-center bg-[#1C468E] cursor-pointer"
               onClick={handleSearch}
             >
-              <img src={searchButton} alt='Search Button' className='mr-1' />
-              <span className='text-sm md:text-base font-normal text-white lg:text-[16px]'>
+              <img src={searchButton} alt="Search Button" className="mr-1" />
+              <span className="text-sm md:text-base font-normal text-white lg:text-[16px]">
                 Search
               </span>
             </button>
           </div>
-          <div className='flex-grow mt-2 space-x-4'>
+          <div className="flex-grow mt-2 space-x-4">
             <button
               onClick={() => handleAddRoleClick("add")}
               className="w-full h-[52px] border-2 rounded-md px-1 lg:px-[16px] border-[#1C468E] flex justify-center items-center bg-white cursor-pointer"
             >
-              <img src={addCircle} alt='Add Role Icon' className='mr-1' />
-              <span className='text-sm md:text-base font-normal text-[#1C468E] lg:text-[16px]'>
+              <img src={addCircle} alt="Add Role Icon" className="mr-1" />
+              <span className="text-sm md:text-base font-normal text-[#1C468E] lg:text-[16px]">
                 Add Role
               </span>
             </button>
