@@ -15,7 +15,7 @@ import UploadButtonV2 from "../form/UploadButtonV2";
 import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
 import DscKeyLogin from "../form/DscKeyLogin";
-import { axiosTokenInstance } from "../../../utils/axios";
+import { axiosTraceIdInstance } from "../../../utils/axios";
 
 interface LoginModelProps {
   closeModal: () => void;
@@ -92,7 +92,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
     setError(false);
 
     try {
-      const response = await axiosTokenInstance.post(`/auth/login`, {
+      const response = await axiosTraceIdInstance.post(`/auth/login`, {
         // username: data.email,
         username: watch("email"),
         // password: data.password,
@@ -124,7 +124,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       console.log("error",error?.error_description)
       setError(true);
       const errorMessage =
-        error?.error_description ||
+        error?.response?.data?.error ||
         error?.response?.data?.message ||
         "User not found";
       setFormError(errorMessage);
@@ -142,7 +142,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
   const apicallDsc = () => {
     setLoader(true);
-    axiosTokenInstance
+    axiosTraceIdInstance
       .post(`/auth/mfa`, {
         entityType: selected,
         username: getValues("email"),
