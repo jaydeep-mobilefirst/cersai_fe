@@ -95,7 +95,7 @@ const CourtDetails = (props: Props) => {
         .then((response) => {
           Swal.fire({
             icon: "success",
-            text: "Court Detail  update  successfully ",
+            text: "Court Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/dc/profile?current=document");
@@ -103,7 +103,7 @@ const CourtDetails = (props: Props) => {
         .catch((err) => {
           Swal.fire({
             icon: "error",
-            text: "Failed to update Nodal Details",
+            text: "Failed to update Court Details",
             confirmButtonText: "Ok",
           });
         });
