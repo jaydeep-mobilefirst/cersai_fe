@@ -155,20 +155,20 @@ const ReviewDetails = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-between h-screen">
-        <header className="lg:p-[38px] border-b border-gray-200"></header>
-        <main className="flex-grow p-6 overflow-auto custom-scrollbar">
-          <div id="reviewContent">
+      <div className='flex flex-col justify-between h-screen'>
+        <header className='lg:p-[38px] border-b border-gray-200'></header>
+        <main className='flex-grow p-6 overflow-auto custom-scrollbar'>
+          <div id='reviewContent'>
             {isPdfMode && (
               <div>
                 <img
                   src={Logo}
-                  alt="logo"
-                  className="rounded-full h-[52px] w-[52px]"
+                  alt='logo'
+                  className='rounded-full h-[52px] w-[52px]'
                 />
               </div>
             )}
-            <h1 className="text-2xl font-bold mb-6">Review Details</h1>
+            <h1 className='text-2xl font-bold mb-6'>Review Details</h1>
             {/* {allFormData &&
               allFormData?.entitySections?.map(
                 (section: any, index: number) => (
@@ -257,31 +257,31 @@ const ReviewDetails = () => {
           </div>
         </main>
 
-        <div
-          className="flex justify-between items-center my-3 flex-col sm:flex-row"
-          onClick={() => Navigate(-1)}
-        >
-          <div className=" ml-5">
-            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0">
-              <img src={Arrow} alt="back Arrow" className="mr-2" />
+        <div className='flex justify-between items-center my-3 flex-col sm:flex-row'>
+          <div className=' ml-5'>
+            <button
+              className='text-gilroy-regular text-sm flex items-center p-4 sm:p-0'
+              onClick={() => Navigate(-1)}
+            >
+              <img src={Arrow} alt='back Arrow' className='mr-2' />
               Back
             </button>
           </div>
-          <div className="flex mr-7">
+          <div className='flex mr-7'>
             <div>
               <button
                 onClick={downloadPDF}
-                className="w-auto md:w-[208px] md:h-[48px] text-gilroy-semibold gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className={`w-auto md:w-[208px] md:h-[48px] text-gilroy-semibold gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]  `}
               >
-                <img src={download} alt="download" className="mr-2" />
+                <img src={download} alt='download' className='mr-2' />
                 {isDownloading ? "Downloading..." : "Download PDF"}
               </button>
             </div>
             <div>
               <button
-                type="submit"
+                type='submit'
                 onClick={submit} // Assuming this action should be tied to the Submit button
-                className="ml-[16px] w-auto md:w-[109px] md:h-[48px] text-gilroy-semibold rounded-[12px] bg-[#1c468e] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className='ml-[16px] w-auto md:w-[109px] md:h-[48px] text-gilroy-semibold rounded-[12px] bg-[#1c468e] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]'
               >
                 {loader ? <LoaderSpin /> : "Submit"}
               </button>
@@ -301,8 +301,8 @@ const ReviewDetails = () => {
           para2={para2}
           success={submitted}
         />
-        <footer className="p-4 border-[#E6E6E6] border-[1px] ">
-          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+        <footer className='p-4 border-[#E6E6E6] border-[1px] '>
+          <p className='text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4'>
             © 2024 Protean BUDs, All Rights Reserved.
           </p>
         </footer>

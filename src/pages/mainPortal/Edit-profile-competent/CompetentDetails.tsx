@@ -95,7 +95,7 @@ const CompetentDetails = (props: Props) => {
         .then((response) => {
           Swal.fire({
             icon: "success",
-            text: "Nodal Detail  update  successfully ",
+            text: "Competent Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/ca/profile?current=document");
@@ -103,7 +103,7 @@ const CompetentDetails = (props: Props) => {
         .catch((err) => {
           Swal.fire({
             icon: "error",
-            text: "Failed to update Nodal Details",
+            text: "Failed to update Competent Details",
             confirmButtonText: "Ok",
           });
         });

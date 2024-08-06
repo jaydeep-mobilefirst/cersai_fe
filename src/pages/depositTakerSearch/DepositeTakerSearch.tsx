@@ -37,8 +37,8 @@ type TableType = {
 const columnHelper = createColumnHelper<TableType>();
 
 const DepositeTakerSearch: React.FC = () => {
-  const [stateId, setStateId] = useState<number | null | undefined>(null)
-  const [searchInput, setSearchInput] = useState<string>("")
+  const [stateId, setStateId] = useState<number | null | undefined>(null);
+  const [searchInput, setSearchInput] = useState<string>("");
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
   const [state, setSelectedState] = useState<string | null>(null);
   const [district, setSelectedDistrict] = useState<string | null>(null);
@@ -55,21 +55,21 @@ const DepositeTakerSearch: React.FC = () => {
   const [taskData, setTaskData] = useState([]);
   const navigate = useNavigate();
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
-  const {language} = useLangugaeStore((state) => state);
+  const { language } = useLangugaeStore((state) => state);
 
   useEffect(() => {
     homePageCmsApi();
-  }, [state,language]);
+  }, [state, language]);
 
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
     axiosTraceIdInstance
-      .get(`/websitecontent/get/name?wcname=home`,{
+      .get(`/websitecontent/get/name?wcname=home`, {
         headers: {
-          'Accept-Language': language
-        }
-    })
+          "Accept-Language": language,
+        },
+      })
       .then((response) => {
         console.log("api-response", response);
         setHomePageData(response?.data?.data?.content?.updatedStructure);
@@ -80,7 +80,6 @@ const DepositeTakerSearch: React.FC = () => {
         setLoader(false);
       });
   };
-
 
   useEffect(() => {
     apiCall();
@@ -95,23 +94,22 @@ const DepositeTakerSearch: React.FC = () => {
     });
   };
 
-
   const apiCall = () => {
     setLoader(true);
     axiosTraceIdInstance
-      .get("/deposit-taker", {
+      .get("/deposit-taker/solr", {
         params: {
           page: page,
           limit: pageSize,
-          userId: 1,
-          searchText : searchInput,
-          status : statusForSearch
+          // userId: 1,
+          searchText: searchInput,
+          status: statusForSearch,
         },
       })
       .then((res) => {
         if (res.status === 200) {
-          let currentPage = (parseInt(res?.data?.data?.page) - 1 ) * pageSize    
-          setTaskData(res?.data?.data?.depositTakers?.map((d : any, i: number) => ({...d, id : (i + 1) + currentPage})));
+          let currentPage = (parseInt(res?.data?.data?.page) - 1) * pageSize;
+          setTaskData(res?.data?.data);
           setTotal(res?.data?.data?.total);
         }
         setLoader(false);
@@ -120,12 +118,11 @@ const DepositeTakerSearch: React.FC = () => {
         console.log(error.message);
         setLoader(false);
       });
-  }
-
+  };
 
   const columns = [
     columnHelper.accessor("id", {
-      cell: (info) =>  (info.renderValue() ? info.renderValue() : "N/A"),
+      cell: (info) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>S.No.</span>,
     }),
     columnHelper.accessor("uniqueId", {
@@ -139,7 +136,7 @@ const DepositeTakerSearch: React.FC = () => {
     columnHelper.accessor("companyName", {
       cell: (info) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => (
-        <div className="flex justify-center items-center">
+        <div className='flex justify-center items-center'>
           <p> Deposit Taker Name</p>
           {/* <img
             // src={SortIcon}
@@ -152,7 +149,7 @@ const DepositeTakerSearch: React.FC = () => {
     columnHelper.accessor("status", {
       cell: (info) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => (
-        <div className="flex justify-center items-center">
+        <div className='flex justify-center items-center'>
           <p> Status</p>
           {/* <img
             // src={SortIcon}
@@ -170,11 +167,11 @@ const DepositeTakerSearch: React.FC = () => {
 
         return (
           <div
-            className="flex justify-center items-center"
+            className='flex justify-center items-center'
             onClick={() => NavigateDepositTaker(uniqueId, nodalOfficerId)}
           >
             {/* <Link to={"/entitymaster/deposit/form"}> */}
-            <img src={Eye} alt="Eye " className="cursor-pointer" />
+            <img src={Eye} alt='Eye ' className='cursor-pointer' />
             {/* </Link> */}
           </div>
         );
@@ -184,7 +181,7 @@ const DepositeTakerSearch: React.FC = () => {
   ];
 
   const status = [
-    {label : "Select Status", value : ""},
+    { label: "Select Status", value: "" },
     { label: "Approved", value: "APPROVED" },
     { label: "Banned", value: "BANNED" },
     { label: "Rejected", value: "REJECTED" },
@@ -194,37 +191,37 @@ const DepositeTakerSearch: React.FC = () => {
     setSelectedOption1(value);
   };
 
-  const handleSetState = (option : any) => {
+  const handleSetState = (option: any) => {
     setSelectedState(option?.value);
-    setStateId(option?.stateId)
+    setStateId(option?.stateId);
   };
   const handleSetDistrict = (option: any) => {
     setSelectedDistrict(option?.value);
   };
   const handleSetStatus = (option: any) => {
     setSelectedStatus(option);
-    setStatusForSearch(option?.value)
+    setStatusForSearch(option?.value);
   };
 
-  const handleSearchSubmit = (event : any) => {
+  const handleSearchSubmit = (event: any) => {
     event?.preventDefault();
-    setPage(1)
+    setPage(1);
     apiCall();
-  }
+  };
 
-  const handleSetSearchInput = (event : any) => {
-    const {value} = event?.target;
-    setSearchInput(value)
-  }
-  
+  const handleSetSearchInput = (event: any) => {
+    const { value } = event?.target;
+    setSearchInput(value);
+  };
+
   return (
     <div>
       <LanguageBar />
       <TopDetail />
       <Navbar />
-      <div className="w-[100%] p-[50px] flex flex-col gap-[40px]">
+      <div className='w-[100%] p-[50px] flex flex-col gap-[40px]'>
         <DepositeSearchTabsContainer />
-        <div className="flex items-center gap-4 flex-wrap">
+        <div className='flex items-center gap-4 flex-wrap'>
           {/* <div className="w-[30%] min-w-[150px] max-w-[317px] ">
             <label
               htmlFor="Deposit taker Search"
@@ -240,31 +237,31 @@ const DepositeTakerSearch: React.FC = () => {
               height="56px"
             />
           </div> */}
-          <div className="w-[60%] min-w-[200px]">
+          <div className='w-[60%] min-w-[200px]'>
             <label
-              htmlFor="Deposit taker Search"
-              className="text-base font-normal text-gilroy-medium "
+              htmlFor='Deposit taker Search'
+              className='text-base font-normal text-gilroy-medium '
             >
               Deposit Taker Search
             </label>
-            <div className="mt-2">
+            <div className='mt-2'>
               <InputField
                 onChange={handleSetSearchInput}
                 value={searchInput}
-                height="40px"
-                padding="10px"
-                placeholder="Search by Unique ID/name"
+                height='40px'
+                padding='10px'
+                placeholder='Search by Unique ID/name'
               />
             </div>
           </div>
-          <div className=" flex items-center self-end ">
+          <div className=' flex items-center self-end '>
             <button
-              type="button"
+              type='button'
               onClick={handleSearchSubmit}
               className={`w-[146px] h-[56px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1c468e] cursor-pointer"} mt-2`}
             >
-              <img src={searchButton} alt="searchButton" />
-              <span className="ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium ">
+              <img src={searchButton} alt='searchButton' />
+              <span className='ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium '>
                 Search
               </span>
             </button>
@@ -272,12 +269,12 @@ const DepositeTakerSearch: React.FC = () => {
         </div>
         <div>
           <label
-            htmlFor="Deposit taker Search"
-            className="text-base font-normal text-gilroy-medium "
+            htmlFor='Deposit taker Search'
+            className='text-base font-normal text-gilroy-medium '
           >
             QR Search by
           </label>
-          <div className=" w-[60%] sm:w-[60%] lg:w-[40%] flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <div className=' w-[60%] sm:w-[60%] lg:w-[40%] flex items-center gap-2 flex-wrap sm:flex-nowrap'>
             {/* <SelectField
               setOption={handleSetState}
               options={[{label : "All", value : "", stateId : null}, ...states?.map((s : any) => ({value : s?.name, label : s?.name, stateId : s?.id}))]}
@@ -297,37 +294,37 @@ const DepositeTakerSearch: React.FC = () => {
               setOption={handleSetStatus}
               options={status}
               selectedOption={selectedStatus}
-              placeholder="Status"
-              height="40px"
+              placeholder='Status'
+              height='40px'
             />
           </div>
         </div>
-        <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto ">
-          <div className="">
-          {loader ? (
-                  <LoaderSpin />
-                ) : taskData?.length > 0 ? (
-                  <ReactTable defaultData={taskData} columns={columns} />
-                ) : (
-                  <div className=" flex justify-center items-center">
-                    <h1>No data available</h1>
-                  </div>
-                )}
+        <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto '>
+          <div className=''>
+            {loader ? (
+              <LoaderSpin />
+            ) : taskData?.length > 0 ? (
+              <ReactTable defaultData={taskData} columns={columns} />
+            ) : (
+              <div className=' flex justify-center items-center'>
+                <h1>No data available</h1>
+              </div>
+            )}
           </div>
-          <div className="mt-10">
-          {taskData?.length > 0 && (
-                  <CustomPagination
-                    currentPage={page}
-                    setCurrentPage={setPage}
-                    totalItems={total}
-                    itemsPerPage={pageSize}
-                    maxPageNumbersToShow={5}
-                  />
-                )}
+          <div className='mt-10'>
+            {taskData?.length > 0 && (
+              <CustomPagination
+                currentPage={page}
+                setCurrentPage={setPage}
+                totalItems={total}
+                itemsPerPage={pageSize}
+                maxPageNumbersToShow={5}
+              />
+            )}
           </div>
         </div>
       </div>
-      <div className="mt-[100px]">
+      <div className='mt-[100px]'>
         <Footer />
       </div>
     </div>

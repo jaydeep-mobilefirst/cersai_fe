@@ -1,4 +1,6 @@
+import React, { useState, useEffect } from "react";
 import SchemeSearchTab from "./schemeSearchTab";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 interface TabData {
   text: string;
@@ -7,20 +9,49 @@ interface TabData {
 }
 
 const SchemeSearchTabsContainer: React.FC = () => {
+  const [data, setData] = useState<any>([]);
+
+  useEffect(() => {
+    stateData();
+  }, []);
+
+  const stateData = () => {
+    axiosTraceIdInstance
+      .post("/websitecontent/stats", {
+        keylist: [
+          "totalSchemeUnderLetigation",
+          "totalSchemeRegistered",
+          "totalSchemeBanned",
+          "totalSchemeActive",
+        ],
+      })
+      .then((response) => {
+        setData(response?.data?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  console.log(data);
+
   const tabsData: TabData[] = [
-    { text: "Scheme Registered", value: "1000k", bgColor: true },
-    { text: "Banned", value: "1000k", bgColor: false },
-    { text: "Active", value: "1000k", bgColor: true },
-    { text: "Under litigation", value: "1000k", bgColor: false },
     {
-      text: "Active - deposits not being taken",
-      value: "1000k",
+      text: "Scheme Registered",
+      value: data[1]?.totalSchemeRegistered,
       bgColor: true,
     },
+    { text: "Banned", value: data[2]?.totalSchemeBanned, bgColor: false },
+    { text: "Active", value: data[3]?.totalSchemeActive, bgColor: true },
+    {
+      text: "Under litigation",
+      value: data[0]?.totalSchemeUnderLetigation,
+      bgColor: false,
+    }
   ];
 
   return (
-    <div className=" bg-[#E7F0FF] rounded-[24px] flex items-center gap-8 flex-wrap px-[26px] py-[24px] 2xl:justify-between">
+    <div className=' bg-[#E7F0FF] rounded-[24px] flex items-center gap-8 flex-wrap px-[26px] py-[24px] 2xl:justify-between'>
       {tabsData.map((each, idx) => (
         <SchemeSearchTab
           key={idx}

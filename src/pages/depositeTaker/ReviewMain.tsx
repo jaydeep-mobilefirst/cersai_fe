@@ -139,21 +139,21 @@ const ReviewMain = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-between h-screen">
-        <header className="lg:p-[38px] border-b border-gray-200"></header>
-        <main className="flex-grow p-8 overflow-auto custom-scrollbar">
-          <div id="reviewContent">
+      <div className='flex flex-col justify-between h-screen'>
+        <header className='lg:p-[38px] border-b border-gray-200'></header>
+        <main className='flex-grow p-8 overflow-auto custom-scrollbar'>
+          <div id='reviewContent'>
             {isPdfMode && (
               <div>
                 <img
                   src={Logo}
-                  alt="logo"
-                  className="rounded-full h-[52px] w-[52px]"
+                  alt='logo'
+                  className='rounded-full h-[52px] w-[52px]'
                 />
               </div>
             )}
 
-            <h1 className="text-2xl font-bold mb-6 font-bold">
+            <h1 className='text-2xl font-bold mb-6 font-bold'>
               Review Details
             </h1>
 
@@ -164,17 +164,17 @@ const ReviewMain = () => {
               isPdfMode={isPdfMode}
             />
             {!isPdfMode && (
-              <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
-                <div className="">
+              <div className='flex flex-shrink-0 mt-[20px] justify-start items-center'>
+                <div className=''>
                   <input
-                    type="checkbox"
-                    className="h-4 w-4 accent-[#1c648e]"
+                    type='checkbox'
+                    className='h-4 w-4 accent-[#1c648e]'
                     checked={isChecked}
                     onChange={handleCheckboxChange}
-                    placeholder="ischecked"
+                    placeholder='ischecked'
                   />
                 </div>
-                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
+                <div className='leading-[24px] ml-4 text-gilroy-medium text-[14px]'>
                   I here by declare that all information provided is best of my
                   knowledge
                 </div>
@@ -183,25 +183,26 @@ const ReviewMain = () => {
           </div>
         </main>
 
-        <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
-          <div className=" ml-5">
+        <div className='flex justify-between items-center my-3 flex-col sm:flex-row'>
+          <div className=' ml-5'>
             <button
-              className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0"
-              role="button"
+              className='text-gilroy-regular text-sm flex items-center p-4 sm:p-0'
+              role='button'
               onClick={() => Navigate("/depositetaker/signup/nodaldetails")}
             >
-              <img src={Arrow} alt="back Arrow" className="mr-2" />
+              <img src={Arrow} alt='back Arrow' className='mr-2' />
               Back
             </button>
           </div>
-          <div className="flex mr-9">
+          <div className='flex mr-9'>
             <div>
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className="w-auto md:w-[208px] md:h-[48px] gap-[8px] text-gilroy-semibold flex rounded-[12px] text-[#1C468E] border border-[#1C468E] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className={`w-auto md:w-[208px] md:h-[48px] gap-[8px] text-gilroy-semibold flex rounded-[12px] text-[#1C468E] border border-[#1C468E] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px] 
+                  ${ isChecked ? "" : "opacity-50"}`}
               >
-                <img src={download} alt="download" className="mr-2" />
+                <img src={download} alt='download' className='mr-2' />
                 {isDownloading ? "Downloading..." : "Download PDF"}
               </button>
             </div>
@@ -231,8 +232,8 @@ const ReviewMain = () => {
           para2={para2}
           success={submitted}
         />
-        <footer className="p-4 border-[#E6E6E6] border-[1px] ">
-          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+        <footer className='p-4 border-[#E6E6E6] border-[1px] '>
+          <p className='text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4'>
             © 2024 Protean BUDs, All Rights Reserved.
           </p>
         </footer>

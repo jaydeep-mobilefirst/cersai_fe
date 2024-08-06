@@ -11,7 +11,7 @@ const tabs = [
     url: "resetpassword",
     rurl: "/ca/resetpassword",
   },
-  { title: "Upload DSC3", url: "uploaddsc3", rurl: "/ca/uploaddsc3" },
+  { title: "Update DSC 3 Certificate", url: "uploaddsc3", rurl: "/ca/uploaddsc3" },
 ];
 
 const TaskTabsCompetent = (props: Props) => {
