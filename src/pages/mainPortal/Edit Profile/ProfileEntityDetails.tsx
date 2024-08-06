@@ -116,7 +116,7 @@ const ProfileEntityDetails = (props: Props) => {
           .then((response) => {
             Swal.fire({
               icon: "success",
-              text: "Entity Detail  update  successfully ",
+              text: "Entity Details updated successfully",
               confirmButtonText: "Ok",
             });
             Navigate("/dt/profile?current=nodal");

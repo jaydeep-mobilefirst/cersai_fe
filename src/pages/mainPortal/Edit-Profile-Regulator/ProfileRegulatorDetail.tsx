@@ -62,7 +62,7 @@ const ProfileRegulatorDetails = (props: Props) => {
         .then((response) => {
           Swal.fire({
             icon: "success",
-            text: "Regulator Detail  update  successfully ",
+            text: "Regulator Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/rg/profile?current=nodal");

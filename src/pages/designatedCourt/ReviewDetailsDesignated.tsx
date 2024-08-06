@@ -259,7 +259,7 @@ const ReviewDetailsDesignated = () => {
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className="w-auto md:w-[208px] md:h-[48px] gap-2 text-gilroy-semibold flex rounded-xl text-blue-700 border border-blue-700 p-3 md:pt-3 md:pr-6 md:pb-3 md:pl-6"
+                className={`w-auto md:w-[208px] md:h-[48px] gap-2 text-gilroy-semibold flex rounded-xl text-blue-700 border border-blue-700 p-3 md:pt-3 md:pr-6 md:pb-3 md:pl-6  ${ isChecked ? "" : "opacity-50"}`}
               >
                 <img src={download} alt="download" className="mr-2" />
                 {isDownloading ? "Downloading..." : "Download PDF"}

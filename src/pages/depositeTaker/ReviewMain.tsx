@@ -199,7 +199,8 @@ const ReviewMain = () => {
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className='w-auto md:w-[208px] md:h-[48px] gap-[8px] text-gilroy-semibold flex rounded-[12px] text-[#1C468E] border border-[#1C468E] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]'
+                className={`w-auto md:w-[208px] md:h-[48px] gap-[8px] text-gilroy-semibold flex rounded-[12px] text-[#1C468E] border border-[#1C468E] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px] 
+                  ${ isChecked ? "" : "opacity-50"}`}
               >
                 <img src={download} alt='download' className='mr-2' />
                 {isDownloading ? "Downloading..." : "Download PDF"}

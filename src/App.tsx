@@ -99,6 +99,7 @@ import UploadDSC3Competent from "./pages/mainPortal/UploadDSC3Competent";
 import UploadDSC3Designated from "./pages/mainPortal/UploadDSC3Designated";
 import UploadDSC3Regulator from "./pages/mainPortal/UploadDSC3Regulator";
 import DashboardRegulator from "./pages/mainPortal/DashboardRegulator";
+import DashboardDesignated from "./pages/mainPortal/DashboardDesignated";
 function App() {
   return (
     <div>
@@ -228,7 +229,7 @@ function App() {
               <Route element={<UploadDSC3Competent />} path="uploaddsc3" />
             </Route>
             <Route element={<MainPortalLayoutDesignated />} path="/dc">
-              <Route element={<DashboardCompetent />} path="dashboard" />
+              <Route element={<DashboardDesignated />} path="dashboard" />
               <Route element={<SchemaCreationDc />} path="my-task" />
 
               <Route
