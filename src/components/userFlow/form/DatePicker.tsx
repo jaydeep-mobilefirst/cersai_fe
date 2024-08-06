@@ -73,6 +73,7 @@ const DatePicker = ({
   disabled,
   maxDate,
 }: Props) => {
+  // console.log({ maxDate }, "key");
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
@@ -109,6 +110,15 @@ const DatePicker = ({
     const year = today.getFullYear();
     return `${year}-${month}-${day}`; // Format as YYYY-MM-DD for the input[type="date"]
   };
+  const determineMaxDate = (): string | undefined => {
+    if (
+      maxDate === "dateOfIncorporation" ||
+      maxDate === "Regulator approval Date"
+    ) {
+      return getCurrentDate(); // Restrict to today's date if conditions are met
+    }
+    return undefined; // No restriction if no condition is met
+  };
 
   return (
     <div className="flex justify-start items-center h-14 w-full max-w-[35rem] sm:max-w-[100%] md:max-w-md lg:max-w-2xl border rounded-md">
@@ -132,7 +142,8 @@ const DatePicker = ({
         type="date"
         className="absolute opacity-0 -z-10"
         onChange={onChangeHandler}
-        max={maxDate === "dateOfIncorporation" ? getCurrentDate() : undefined} // Set max date to today
+        // max={maxDate === "dateOfIncorporation" ? getCurrentDate() : undefined} // Set max date to today
+        max={determineMaxDate()}
       />
     </div>
   );

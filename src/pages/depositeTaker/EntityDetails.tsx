@@ -25,18 +25,33 @@ const EntityDetails: React.FC = () => {
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
   );
-  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-    ? allFormData?.formFields?.form_fields
-        ?.filter((f: any) => f?.sectionId === sectionId?.id)
-        .map((field: any) => {
-          return {
-            ...field,
-            disabled: ["State", "District"].includes(field.label),
-          };
-        })
-    : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       ?.filter((f: any) => f?.sectionId === sectionId?.id)
+  //       .map((field: any) => {
+  //         return {
+  //           ...field,
+  //           disabled: ["State", "District"].includes(field.label),
+  //         };
+  //       })
+  //   : [];
+  const formFields =
+    allFormData?.formFields?.form_fields
+      ?.filter((f: any) => f?.sectionId === sectionId?.id)
+      .map((field: any) => {
+        const disableLabels = ["State", "District"];
 
-  // console.log({ formFields }, "form filed");
+        const disableKeys = ["State", "District"];
+
+        return {
+          ...field,
+          disabled:
+            disableLabels.includes(field.label) ||
+            disableKeys.includes(field.key),
+        };
+      }) || [];
+
+  console.log({ formFields }, "form filed");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -58,7 +73,6 @@ const EntityDetails: React.FC = () => {
       event.preventDefault();
     }
   };
-  
 
   return (
     <>
@@ -66,7 +80,8 @@ const EntityDetails: React.FC = () => {
       {/* <div className="flex flex-col p-6 w-full"> */}
       <form
         // className="flex flex-col justify-between h-full"
-        className="flex items-center justify-between flex-col h-full lg:h-[100vh]" onKeyPress={handleKeyPress}
+        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+        onKeyPress={handleKeyPress}
       >
         <div
           style={{

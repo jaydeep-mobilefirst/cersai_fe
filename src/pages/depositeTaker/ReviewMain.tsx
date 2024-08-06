@@ -23,7 +23,7 @@ const useDownloadPDF = () => {
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: [0.4, 0.4, 0.4, 0.4], // Adjusting the margins
-      filename: "Reviewdetails.pdf",
+      filename: "DepositTakerDetail.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 3 : 5 }, // Increasing the scale
       jsPDF: {
@@ -100,7 +100,7 @@ const ReviewMain = () => {
 
     finalResult = [...finalResult, ...docs];
     axiosTraceIdInstance
-      .post( "/deposit-taker/add-form-fields", {
+      .post("/deposit-taker/add-form-fields", {
         formData: finalResult,
         regulatorId: masterEntityId,
       })

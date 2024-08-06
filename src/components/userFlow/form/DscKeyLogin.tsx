@@ -122,7 +122,7 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
           />
         </div>
         <p className=" text-[black] ">
-          {isDscSelected ? certName : "Upload DSC Certificate"}
+          {isDscSelected ? certName : "DSC Certificate"}
         </p>
         <button
           type="button"
