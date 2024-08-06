@@ -37,7 +37,8 @@ const useDownloadPDF = () => {
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: 0.4,
-      filename: "Reviewdetails.pdf",
+      // filename: "Reviewdetails.pdf",
+      filename: "CompetentDetails.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 2 : 4 },
       jsPDF: {

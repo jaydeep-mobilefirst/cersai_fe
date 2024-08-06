@@ -23,7 +23,8 @@ const useDownloadPDF = () => {
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: 0.2,
-      filename: "Reviewdetails.pdf",
+      // filename: "Reviewdetails.pdf",
+      filename: "RegulatorDetails.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 2 : 4 },
       jsPDF: {
@@ -99,9 +100,9 @@ const ReviewDetailsRegulator = () => {
     finalResult = [...finalResult, ...docs];
 
     axiosTraceIdInstance[allFormData?.returnJourney ? "put" : "post"](
-        `/regulator/${
-          allFormData?.returnJourney ? "return-journey" : "add-form-fields"
-        }`,
+      `/regulator/${
+        allFormData?.returnJourney ? "return-journey" : "add-form-fields"
+      }`,
       {
         formData: finalResult,
         masterId: masterEntityId,

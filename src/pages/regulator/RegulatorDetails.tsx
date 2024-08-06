@@ -21,15 +21,49 @@ const RegulatorDetails = (props: Props) => {
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Regulators Details"
   );
+  // const formFields =
+  //   allFormData?.formFields?.form_fields
+  //     ?.filter((f: any) => f?.sectionId === sectionId?.id)
+  //     .map((field: any) => {
+  //       return {
+  //         ...field,
+  //         disabled: [
+  //           "State",
+  //           "District",
+  //           "Address Line 1",
+  //           "Address Line 2",
+  //         ].includes(field.label),
+  //       };
+  //     }) || [];
   const formFields =
     allFormData?.formFields?.form_fields
       ?.filter((f: any) => f?.sectionId === sectionId?.id)
       .map((field: any) => {
+        const disableLabels = [
+          "State",
+          "District",
+          "Address Line 1",
+          "Address Line 2",
+          "Pin Code",
+        ];
+
+        const disableKeys = [
+          "state",
+          "district",
+          "addressLine1",
+          "addressLine2",
+          "pincode",
+        ];
+
         return {
           ...field,
-          disabled: ["State", "District"].includes(field.label),
+          disabled:
+            disableLabels.includes(field.label) ||
+            disableKeys.includes(field.key),
         };
       }) || [];
+  // console.log({ formFields }, "formfiled");
+
   const screenWidth = useScreenWidth();
 
   const onSubmit = async (event: any) => {

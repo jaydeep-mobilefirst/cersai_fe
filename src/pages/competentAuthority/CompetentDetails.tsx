@@ -31,16 +31,43 @@ const ComponentDetails: React.FC = () => {
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Competent Authority Details"
   );
-  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-    ? allFormData?.formFields?.form_fields
-        ?.filter((f: any) => f?.sectionId === sectionId?.id)
-        .map((field: any) => {
-          return {
-            ...field,
-            disabled: ["State", "Jurisdiction"].includes(field.label),
-          };
-        })
-    : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       ?.filter((f: any) => f?.sectionId === sectionId?.id)
+  //       .map((field: any) => {
+  //         return {
+  //           ...field,
+  //           disabled: ["State", "Jurisdiction"].includes(field.label),
+  //         };
+  //       })
+  //   : [];
+  const formFields =
+    allFormData?.formFields?.form_fields
+      ?.filter((f: any) => f?.sectionId === sectionId?.id)
+      .map((field: any) => {
+        const disableLabels = [
+          "State",
+          "Jurisdiction",
+          "Address Line 1",
+          "Address Line 2",
+          "Pin Code",
+        ];
+
+        const disableKeys = [
+          "state",
+          "Jurisdiction",
+          "addressLine1",
+          "addressLine2",
+          "pincode",
+        ];
+
+        return {
+          ...field,
+          disabled:
+            disableLabels.includes(field.label) ||
+            disableKeys.includes(field.key),
+        };
+      }) || [];
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();

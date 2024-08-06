@@ -25,13 +25,41 @@ const DesignatedCourtDetails: React.FC = () => {
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Designated Court Details"
   );
+  // const formFields =
+  //   allFormData?.formFields?.form_fields
+  //     ?.filter((f: any) => f?.sectionId === sectionId?.id)
+  //     .map((field: any) => {
+  //       return {
+  //         ...field,
+  //         disabled: ["State", "Jurisdiction"].includes(field.label),
+  //       };
+  //     }) || [];
+
   const formFields =
     allFormData?.formFields?.form_fields
       ?.filter((f: any) => f?.sectionId === sectionId?.id)
       .map((field: any) => {
+        const disableLabels = [
+          "State",
+          "Jurisdiction",
+          "Address Line 1",
+          "Address Line 2",
+          "Pin Code",
+        ];
+
+        const disableKeys = [
+          "stateKey",
+          "Jurisdiction",
+          "addressLine1",
+          "addressLine2",
+          "pincode",
+        ];
+
         return {
           ...field,
-          disabled: ["State", "Jurisdiction"].includes(field.label),
+          disabled:
+            disableLabels.includes(field.label) ||
+            disableKeys.includes(field.key),
         };
       }) || [];
 

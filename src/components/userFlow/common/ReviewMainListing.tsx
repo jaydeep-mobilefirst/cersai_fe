@@ -252,8 +252,8 @@
 // };
 
 // export default ReviewMainListing;
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import RequiredStar from "../depositeTaker/RequiredStar";
 
 type Props = {
@@ -269,8 +269,20 @@ const ReviewMainListing = ({
   documentData,
   isPdfMode,
 }: Props) => {
-  console.log({allFormData});
-  
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if any field's userInput is empty
+    const hasEmptyUserInput = allFormData?.formFields?.form_fields?.some(
+      (field: any) => field.key === "dsc3" && !field.userInput
+    );
+
+    // Navigate if the condition is met
+    if (hasEmptyUserInput) {
+      navigate(-1);
+    }
+  }, [allFormData, navigate]);
+
   return (
     <>
       {allFormData &&
@@ -336,13 +348,15 @@ const ReviewMainListing = ({
                           <div className="text-gray-500 w-1/2">
                             {field.label}
                             {/* <span className="text-red-500">*</span> */}
-                            {/* <RequiredStar
+                            <RequiredStar
                               field={field}
                               allFormData={allFormData}
-                            /> */}
+                            />
                           </div>
                           <div className="text-right w-1/2 overflow">
-                            {field?.dscFileNAme || field?.key === 'dsc3' ? "DSC Uploaded" : field.userInput}
+                            {field?.dscFileNAme || field?.key === "dsc3"
+                              ? "DSC Uploaded"
+                              : field.userInput}
                           </div>
                         </div>
                       ))}
