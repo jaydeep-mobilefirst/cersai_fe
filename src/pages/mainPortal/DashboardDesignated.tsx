@@ -1,47 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TaskTabs from "../../components/userFlow/mainPortal/TaskTabs";
 import { Outlet } from "react-router-dom";
 import TotalFoundationLineChart from "../../components/charts/TotalFoundationLineChart";
 import HorizontalBarChart from "../../components/charts/HorizontalBarChart";
 import DashboardTabsContainer from "../../components/schemeSearch/DashboardTabsContainer";
 import DoubleBarChart from "../../components/charts/DoubleBarChart";
+import { axiosTokenInstance } from "../../utils/axios";
 
 type Props = {};
 
 const DashboardDesignated = (props: Props) => {
+  
+  const [state, setState] = useState({
+    totalDepositTakerRegistered: 0,
+    totalDepositTakerApproved: 0,
+    totalSchemeRegistered: 0,
+    totalSchemeActive: 0,
+    totalSchemeBanned: 0,
+    totalSchemeUnderLetigation: 0,
+  });
+  const [loader, setLoader] = useState(false);
+  const [isOpen, setIsOpen] = useState("");
+
+  useEffect(() => {
+    dashboardCaApi();
+  }, []);
+
+  const dashboardCaApi = () => {
+    setLoader(true);
+    axiosTokenInstance
+      .get(`/dashboard?type=dc`,{
+    })
+      .then((response) => {
+        console.log("response", response);
+        const responseData = response.data.data;
+        setState({
+          totalDepositTakerRegistered: responseData[0].totalDepositTakerRegistered,
+          totalDepositTakerApproved: responseData[1].totalDepositTakerApproved,
+          totalSchemeRegistered: responseData[2].totalSchemeRegistered,
+          totalSchemeActive: responseData[3].totalSchemeActive,
+          totalSchemeBanned: responseData[4].totalSchemeBanned,
+          totalSchemeUnderLetigation: responseData[5].totalSchemeUnderLetigation,
+        });
+        setLoader(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
+
   const tabsData = [
-    { text: "Deposite Taker Registered", value: "1000k", bgColor: true },
-    { text: "Total Deposite Taker Approved", value: "1000k", bgColor: false },
-    {
-      text: "Total Schemes Banned By Authority",
-      value: "1000k",
-      bgColor: true,
-    },
-    {
-      text: "Total Schemes Under Litigation post banned",
-      value: "1000k",
-      bgColor: false,
-    },
-    {
-      text: "Total Schemes Registered",
-      value: "1000k",
-      bgColor: false,
-    },
-    {
-      text: "Total Active Schemes",
-      value: "1000k",
-      bgColor: true,
-    },
-    {
-      text: "Total schemes Banned",
-      value: "1000k",
-      bgColor: false,
-    },
-    {
-      text: "Total schemes Under Litigation",
-      value: "1000k",
-      bgColor: true,
-    },
+    { text: "Deposit Taker Registered", value: `${state.totalDepositTakerRegistered}`, bgColor: true },
+    { text: "Total Deposit Taker Approved", value: `${state.totalDepositTakerApproved}`, bgColor: false },
+    { text: "Total Schemes Registered", value: `${state.totalSchemeRegistered}`, bgColor: false },
+    { text: "Total Active Schemes", value: `${state.totalSchemeActive}`, bgColor: true },
+    { text: "Total Schemes Banned", value: `${state.totalSchemeBanned}`, bgColor: false },
+    { text: "Total Schemes Under Litigation", value: `${state.totalSchemeUnderLetigation}`, bgColor: true },
   ];
 
   const chartData = [
