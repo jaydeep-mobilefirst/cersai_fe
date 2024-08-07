@@ -20,6 +20,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
   const link = sessionStorage.getItem("link")
+  console.log("link", link)
   const decoded = jwtDecode(token ?? "");  
   const [loader, setLoader] = useState(false);
   const [button, setButton] = useState("Submit");
