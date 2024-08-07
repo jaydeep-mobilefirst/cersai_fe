@@ -70,7 +70,7 @@ export const useDepositTakerRegistrationStore = create<Types>()(
     }),
     {
       name: "deposit-taker-registration-store",
-      getStorage: () => localStorage,
+      getStorage: () => sessionStorage,
     } as PersistOptions<Types>
   )
 );

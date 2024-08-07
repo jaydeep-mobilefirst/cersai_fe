@@ -122,6 +122,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
           sessionStorage.setItem("otp-sent", "false");
           sessionStorage.setItem("timerSec", "120");
           navigate(link ?? "/");
+          // navigate(link ?? "/set-password");
           sessionStorage.setItem("otp-verified", "true");
         }
       })
