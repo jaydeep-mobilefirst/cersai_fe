@@ -11,7 +11,7 @@ const DepositeSearchTab: React.FC<DepositeSearchTabProps> = ({
 }) => {
   return (
     <div
-      className={`min-w-[170px] sm:min-w-[220px] lg:w-[232px] w-[18%] h-[100px] rounded-[12px] flex flex-col justify-between px-3 py-2 ${
+      className={`min-w-[170px] sm:min-w-[220px] lg:w-[298px] w-[18%] h-[100px] rounded-[12px] flex flex-col justify-between px-4 py-3 ${
         bgColor ? "bg-[#7398D7]" : "bg-[#ffffff]"
       }`}
     >

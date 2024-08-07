@@ -161,6 +161,10 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
       message: "Atleast 1 uppercase",
     },
     {
+      test: (value: string) => /[a-z]/.test(value),
+      message: "Atleast 1 lowercase",
+    },
+    {
       test: (value: string) => /[0-9]/.test(value),
       message: "Atleast 1 numeric value",
     },

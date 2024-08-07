@@ -20,6 +20,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
   const link = sessionStorage.getItem("link")
+  console.log("link", link)
   const decoded = jwtDecode(token ?? "");  
   const [loader, setLoader] = useState(false);
   const [button, setButton] = useState("Submit");
@@ -121,6 +122,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
           sessionStorage.setItem("otp-sent", "false");
           sessionStorage.setItem("timerSec", "120");
           navigate(link ?? "/");
+          // navigate(link ?? "/set-password");
           sessionStorage.setItem("otp-verified", "true");
         }
       })
