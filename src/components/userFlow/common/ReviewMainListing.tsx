@@ -271,17 +271,17 @@ const ReviewMainListing = ({
 }: Props) => {
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   // Check if any field's userInput is empty
-  //   const hasEmptyUserInput = allFormData?.formFields?.form_fields?.some(
-  //     (field: any) => field.key === "dsc3" && !field.userInput
-  //   );
+  useEffect(() => {
+    // Check if any field's userInput is empty
+    const hasEmptyUserInput = allFormData?.formFields?.form_fields?.some(
+      (field: any) => field.key === "dsc3" && !field.userInput
+    );
 
-  //   // Navigate if the condition is met
-  //   if (hasEmptyUserInput) {
-  //     navigate(-1);
-  //   }
-  // }, [allFormData, navigate]);
+    // Navigate if the condition is met
+    if (hasEmptyUserInput) {
+      navigate(-1);
+    }
+  }, [allFormData, navigate]);
 
   return (
     <>
