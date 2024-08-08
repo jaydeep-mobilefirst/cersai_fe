@@ -24,8 +24,8 @@ import { useLangugaeStore } from "../../zust/useLanguageUsStore";
 import { axiosTraceIdInstance } from "../../utils/axios";
 
 type SchemeType = {
-  id: number;
-  uniqueId: string;
+  sn: number;
+  id: string;
   name: string;
   depositTakerId: string;
   // createdBy: string;
@@ -97,7 +97,7 @@ const SchemeSearch: React.FC = () => {
         },
       });
       let currentPage = (parseInt(data?.page) - 1 ) * pageSize
-      setSchemaData(data?.data?.map((d : any, i: number) => ({...d, id : (i + 1) + currentPage})));
+      setSchemaData(data?.data?.map((d : any, i: number) => ({...d, sn : (i + 1) + currentPage})));
       setTotal(data?.total);
       setLoader(false);
     } catch (error) {
@@ -116,11 +116,11 @@ const SchemeSearch: React.FC = () => {
     //   cell: (info: any) => info.renderValue(),
     //   header: () => <span>Sr. No.</span>,
     // }),
-    columnHelper.accessor("id", {
+    columnHelper.accessor("sn", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Sr. No.</span>,
     }),
-    columnHelper.accessor("uniqueId", {
+    columnHelper.accessor("id", {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Scheme ID</span>,
     }),
@@ -166,7 +166,7 @@ const SchemeSearch: React.FC = () => {
             },
           });
         };
-        const uniqueId = info?.row?.original?.uniqueId;
+        const uniqueId = info?.row?.original?.id;
         const depositTakerId = info?.row?.original?.depositTakerId;
         return (
           <div className="flex justify-center items-center ">
