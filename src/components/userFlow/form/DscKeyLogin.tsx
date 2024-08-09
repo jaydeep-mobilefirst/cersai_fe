@@ -52,6 +52,23 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
       );
       if (certificate) {
         const strCert = JSON.parse(certificate);
+        const expiryDate = new Date(strCert?.ExpDate);
+        // const expiryDate = new Date("2023-06-22T13:37:00+05:30");
+        // const currentDate = new Date("2026-06-23T13:37:00+05:30");
+        const currentDate = new Date();
+
+        if (expiryDate < currentDate) {
+          Swal.fire({
+            icon: "error",
+            title: "Invalid Certificate",
+            text: "The selected DSC certificate has expired.",
+            customClass: {
+              container: "my-swal",
+            },
+          });
+          return;
+        }
+
         setDscCertificate(strCert);
         setDscSelected(true);
         setCertName(strCert?.SelCertSubject?.split(",")[0]);
@@ -69,40 +86,6 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
       console.error("Error detecting smartcard readers:", error);
     }
   };
-
-  // const sendCertificate = async (certificate: any) => {
-  //   try {
-  //     const response = await axios.post(
-  //       // "https://cors-anywhere.herokuapp.com/" +
-  //       "https://indilabs-json.vercel.app/second",
-  //       { certificate }
-  //     );
-  //     if (response?.data?.status === "INTERNAL_SERVER_ERROR") {
-  //       Swal.fire({
-  //         icon: "error",
-  //         title: "Internal Server Error",
-  //         text: "Unable to Process DSC",
-  //       });
-  //     } else {
-  //       setDscSelected(true);
-  //       Swal.fire({
-  //         icon: "success",
-  //         title: "DSC key fetched successfully",
-  //         text: "Unable to Process DSC",
-  //       });
-  //     }
-  //     setTimeout(() => {
-  //       // navigate("/home");
-  //     }, 3000);
-  //   } catch (error) {
-  //     console.error("Error sending certificate:", error);
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Internal Server Error",
-  //       text: "Unable to Process DSC",
-  //     });
-  //   }
-  // };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);

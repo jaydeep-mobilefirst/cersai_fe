@@ -58,6 +58,23 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
       );
       const strCert = JSON.parse(certificate);
 
+      const expiryDate = new Date(strCert?.ExpDate);
+      // const expiryDate = new Date("2023-06-22T13:37:00+05:30");
+      // const currentDate = new Date("2026-06-23T13:37:00+05:30");
+      const currentDate = new Date();
+
+      if (expiryDate < currentDate) {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Certificate",
+          text: "The selected DSC certificate has expired.",
+          customClass: {
+            container: "my-swal",
+          },
+        });
+        return;
+      }
+
       if (onFileUpload) {
         onFileUpload(strCert);
         setCertName(strCert?.SelCertSubject?.split(",")[0]);
