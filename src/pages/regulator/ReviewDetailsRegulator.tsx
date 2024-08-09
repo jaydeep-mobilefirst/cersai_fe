@@ -184,13 +184,13 @@ const ReviewDetailsRegulator = () => {
                   />
                 </div>
                 <div className="leading-[24px] ml-4">
-                  I provide my consent to &nbsp;
+                I here by declare that all information provided is best of my knowledge &nbsp;
                   <Link
                     className="text-[#1c468e] underline cursor-pointer"
-                    to={"/"}
+                    to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
                     target="_blank"
                   >
-                    BUDs act 2019
+                    Terms and Conditions
                   </Link>
                 </div>
               </div>

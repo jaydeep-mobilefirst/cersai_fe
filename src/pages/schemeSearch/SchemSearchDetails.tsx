@@ -154,6 +154,7 @@ const SchemeSearchDetails: React.FC = () => {
             );
             dtData =
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
+              console.log("dtData", dtData);
           } catch (error) {
             
             console.log("Error");
@@ -208,6 +209,7 @@ const SchemeSearchDetails: React.FC = () => {
       axiosTraceIdInstance.get(`/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000&status=ALL`)
       .then((res) => {
         let data = res?.data?.data;
+        console.log("Data", res);
         setSchemes(data?.map((d : any) => {
           return {
             label : d?.name,
