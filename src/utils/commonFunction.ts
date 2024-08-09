@@ -126,6 +126,7 @@ function useDebounce(value: any, delay: any) {
 
   return debouncedValue;
 }
+
 export {
   dateFormattor,
   panRegex,

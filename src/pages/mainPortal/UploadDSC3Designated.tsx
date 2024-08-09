@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import DscKeyLogin from "../../components/userFlow/form/DscKeyLogin";
 import { axiosTokenInstance } from "../../utils/axios";
+import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 
 const UploadDSC3Designated = () => {
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
@@ -17,8 +18,22 @@ const UploadDSC3Designated = () => {
 
   const screenWidth = useScreenWidth();
   const customClass = "flex flex-col w-full mt-4 justify-between w-full";
+  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
 
   const navigate = useNavigate();
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Nodal Details"
+  );
+  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+    ? allFormData?.formFields?.form_fields.filter((field: any) => {
+        // Filtering fields based on sectionId
+        return field?.sectionId === sectionId?.id;
+      })
+    : [];
+
+  const dsc3UserInput = formFields.find(
+    (field: any) => field.key === "dsc3"
+  )?.userInput;
 
   useEffect(() => {
     console.log(isError);
@@ -84,6 +99,7 @@ const UploadDSC3Designated = () => {
             isDscSelected={isDscSelected}
             setDscSelected={setDscSelected}
             setDscCertificate={setDscCertificate}
+            dsc3UserInput={dsc3UserInput}
           />
           {isError && <p className="text-red-500">select DSC3 certificate</p>}
         </div>
