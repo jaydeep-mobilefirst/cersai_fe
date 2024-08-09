@@ -117,7 +117,7 @@ export const profileSideBarList = [
     percentage: 0,
   },
   {
-    title: "Nodal Details",
+    title: "Nodal Officer Details",
     url: "nodal",
     rurl: "/dt/profile?current=nodal",
     percentage: 25,
@@ -152,7 +152,7 @@ export const profileSideBarListRegulator = [
   },
 
   {
-    title: "Nodal Details",
+    title: "Nodal Officer Details",
     url: "nodal",
     rurl: "/rg/profile?current=nodal",
     percentage: 25,
@@ -180,7 +180,7 @@ export const profileSideBarListCompetent = [
     percentage: 25,
   },
   {
-    title: "Nodal Details",
+    title: "Nodal Officer Details",
     url: "nodal",
     rurl: "/ca/profile?current=nodal",
     percentage: 100,
@@ -201,7 +201,7 @@ export const profileSideBarListDesignated = [
     percentage: 25,
   },
   {
-    title: "Nodal Details",
+    title: "Nodal Officer Details",
     url: "nodal",
     rurl: "/dc/profile?current=nodal",
     percentage: 100,

@@ -16,12 +16,14 @@ interface DscKeyLoginProps {
   setDscSelected: (selected: boolean) => void;
   setDscCertificate: (selected: any) => void;
   isDscSelected?: boolean;
+  dsc3UserInput?: string;
 }
 
 const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
   setDscSelected,
   setDscCertificate,
   isDscSelected,
+  dsc3UserInput,
 }) => {
   const [isSignerDigitalLoaded, setIsSignerDigitalLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -105,7 +107,12 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
           />
         </div>
         <p className=" text-[black] ">
-          {isDscSelected ? certName : "DSC Certificate"}
+          {/* {isDscSelected ? certName : "DSC Certificate"} */}
+          {isDscSelected
+            ? certName
+            : dsc3UserInput && dsc3UserInput.length
+            ? dsc3UserInput.replace(/^"|"$/g, "").slice(0, 9)
+            : "DSC Certificate"}
         </p>
         <button
           type="button"
