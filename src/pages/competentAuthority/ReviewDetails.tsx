@@ -65,6 +65,7 @@ const ReviewDetails = () => {
   const { downloadPDF, isDownloading, isPdfMode } = useDownloadPDF();
 
   const [loader, setLoader] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const [para1, setPara1] = useState("");
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
@@ -151,6 +152,11 @@ const ReviewDetails = () => {
         setSubmitModal(true);
         setLoader(false);
       });
+  };
+  
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(event.target.checked);
   };
 
   return (
@@ -254,6 +260,25 @@ const ReviewDetails = () => {
               urlList={signupSideBarCompetent}
               isPdfMode={isPdfMode}
             />
+            
+            {!isPdfMode && (
+              <div className='flex flex-shrink-0 mt-[20px] justify-start items-center'>
+                <div className=''>
+                  <input
+                    type='checkbox'
+                    className='h-4 w-4 accent-[#1c648e]'
+                    checked={isChecked}
+                    onChange={handleCheckboxChange}
+                    placeholder='ischecked'
+                  />
+                </div>
+                <div className='leading-[24px] ml-4 text-gilroy-medium text-[14px]'>
+                  I here by declare that all information provided is best of my
+                  knowledge &nbsp;
+                  <Link className="text-[#1c468e] underline cursor-pointer" target={"_blank"} to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"> Terms and Conditions</Link>
+                </div>
+              </div>
+            )}
           </div>
         </main>
 
@@ -271,7 +296,7 @@ const ReviewDetails = () => {
             <div>
               <button
                 onClick={downloadPDF}
-                className={`w-auto md:w-[208px] md:h-[48px] text-gilroy-semibold gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]  `}
+                className={`w-auto md:w-[208px] md:h-[48px] text-gilroy-semibold gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]   ${ isChecked ? "" : "opacity-50"}`}
               >
                 <img src={download} alt='download' className='mr-2' />
                 {isDownloading ? "Downloading..." : "Download PDF"}
@@ -281,7 +306,9 @@ const ReviewDetails = () => {
               <button
                 type='submit'
                 onClick={submit} // Assuming this action should be tied to the Submit button
-                className='ml-[16px] w-auto md:w-[109px] md:h-[48px] text-gilroy-semibold rounded-[12px] bg-[#1c468e] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]'
+                className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] text-gilroy-semibold rounded-[12px] bg-[#1c468e] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px] ${
+                  isChecked ? "bg-[#1C468E]" : "bg-[#1C468E] opacity-50"
+                }`}
               >
                 {loader ? <LoaderSpin /> : "Submit"}
               </button>

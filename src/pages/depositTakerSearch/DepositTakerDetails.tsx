@@ -17,6 +17,8 @@ import { createColumnHelper } from "@tanstack/table-core";
 import CustomPagination from "../../components/CustomPagination/CustomPagination";
 import ReactTable from "../../components/userFlow/common/ReactTable";
 import { axiosTraceIdInstance } from "../../utils/axios";
+import { useLandingStore } from "../../zust/useLandingStore";
+import { useLangugaeStore } from "../../zust/useLanguageUsStore";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
@@ -45,7 +47,32 @@ const DepositSearchDetails: React.FC = () => {
   const depositTakerId = location.state?.depositTakerId;
 
   const nodalOfficerId = location.state.nodalOfficerId;
+  const { homePageData, setHomePageData } = useLandingStore((state) => state);
+  const { language } = useLangugaeStore((state) => state);
 
+  useEffect(() => {
+    homePageCmsApi();
+  }, [language]);
+
+  const homePageCmsApi = () => {
+    setLoader(true);
+    // setHomePageData(data.data.content)
+    axiosTraceIdInstance
+      .get(`/websitecontent/get/name?wcname=home`, {
+        headers: {
+          "Accept-Language": language,
+        },
+      })
+      .then((response) => {
+        console.log("api-response", response);
+        setHomePageData(response?.data?.data?.content?.updatedStructure);
+        setLoader(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
 
   // Scheme 
   const columns = [
@@ -105,6 +132,7 @@ const DepositSearchDetails: React.FC = () => {
         };
         const uniqueId = info?.row?.original?.uniqueId;
         const depositTakerId = info?.row?.original?.depositTakerId;
+        console.log("display", info?.row?.original);
         return (
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}

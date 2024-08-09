@@ -8,6 +8,7 @@ import DeleteUpload from "../../../pages/regulator/DeleteUpload";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import Swal from "sweetalert2";
+import LoaderSpin from "../../LoaderSpin";
 
 type Props = {
     data: any
@@ -32,6 +33,7 @@ const DynamicFileUpload = ({ data }: Props) => {
 
     const closePopup = () => {
         setShowUploadPopup(false);
+        setLoader(true)
     };
 
     const toggleDeletePopup = () => {
@@ -65,6 +67,7 @@ const DynamicFileUpload = ({ data }: Props) => {
             // Check for file size
             if (event.target.files[0]?.size > maxFileSize) {
                 closePopup();
+                setLoader(true)
                 let AllowedFileSizeinMB = maxFileSize / (1024 * 1024)
                 let CurrentFileSizeinMB = event.target.files[0]?.size / (1024 * 1024)
                 Swal.fire({
@@ -79,6 +82,7 @@ const DynamicFileUpload = ({ data }: Props) => {
             // Check for File Type
             if (!allowedMimeTypes.includes(event.target.files[0]?.type)) {
                 closePopup();
+                setLoader(true)
                 Swal.fire({
                     icon : "warning",
                     title : "File type allowed only "+ fieldType,
@@ -99,9 +103,12 @@ const DynamicFileUpload = ({ data }: Props) => {
             setLoader(false)
         }
     };
+
+    console.log("loader", loader)
     
     return (
         <div key={data?.id}>
+
             {showUploadPopup && (
                 <UploadFile
                     fileSize={data?.fileSizeLimit}
@@ -150,12 +157,23 @@ const DynamicFileUpload = ({ data }: Props) => {
                     </div>
                 </div>
                 <div className="flex flex-row mt-1 justify-end w-full md:w-auto">
-                    {data?.uploadFileId && (
+                    {/* {data?.uploadFileId ? (
                         <DeleteFileButton
                             fieldData={data}
                             fieldType={fieldType}
                             onFileChange={onFileChange}
                         />
+                    ):(loader ? (<LoaderSpin />):"")} */}
+                    {loader ? (
+                        <LoaderSpin />
+                    ) : (
+                        data?.uploadFileId && (
+                            <DeleteFileButton
+                                fieldData={data}
+                                fieldType={fieldType}
+                                onFileChange={onFileChange}
+                            />
+                        )
                     )}
                     <div className="mt-1">
                         <button
