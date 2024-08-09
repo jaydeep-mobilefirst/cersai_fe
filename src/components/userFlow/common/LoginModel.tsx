@@ -152,6 +152,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       .then((respose) => {
         reset();
         setLoader(false);
+        sessionStorage.setItem("reload", "true");
         sessionStorage.setItem(
           "access_token",
           responseData?.data?.response?.access_token
