@@ -175,6 +175,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
         } else {
           navigate("/ca/dashboard");
         }
+        handleClose()
       })
       .catch((error) => {
         

@@ -46,14 +46,6 @@ const MainPortalSidebar = ({ layout }: Props) => {
   } = useSidebarStore();
 
   useEffect(() => {
-    const reloadToken = sessionStorage.getItem("reload");
-    if (reloadToken) {
-      window.location.reload();
-      sessionStorage.setItem("reload", "");
-    }
-  }, []);
-
-  useEffect(() => {
     const cmsPath = location.pathname.split("/")[1];
     setUrl("/" + cmsPath);
 
@@ -133,11 +125,40 @@ const MainPortalSidebar = ({ layout }: Props) => {
   const refreshPage = sessionStorage.getItem('refreshCount') 
 
   useEffect(() => {
-    if (!isActive || refreshPage == '2') {
+    const reloadToken = sessionStorage.getItem("reload");
+    if (reloadToken) {
+      window.location.reload();
+      sessionStorage.setItem("reload", "");
+    }
+  }, []);
+
+  useEffect(()=>{
+    const refreshCount = () => {
+         // Get the current count from sessionStorage
+    const count = parseInt(sessionStorage.getItem('refreshCount') || '0', 10);
+
+    // Update the count and save it back to sessionStorage
+    const newCount = count + 1;
+    sessionStorage.setItem('refreshCount', newCount.toString());
+    } 
+
+    // Add event listener for beforeunload
+    window.addEventListener('beforeunload', refreshCount);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', refreshCount);
+    };
+
+   
+  },[state])
+
+  useEffect(() => {
+    if (!isActive || refreshPage == '1') {
       sessionStorage.clear();
       Swal.fire({
         icon: "error",
-        title: refreshPage == '2' ? "Dont refresh the page. Please login again" : "User inactive for 10 min. Please login again",
+        title: refreshPage == '1' ? "Dont refresh the page. Please login again" : "User inactive for 10 min. Please login again",
       });
       navigate("/");
     }
