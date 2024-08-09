@@ -25,9 +25,9 @@ import { useLangugaeStore } from "../../zust/useLanguageUsStore";
 import { axiosTraceIdInstance } from "../../utils/axios";
 
 type TableType = {
-  id: number;
-  uniqueId: string;
-  panNumber: string;
+  sn: number;
+  id: string;
+  panCard: string;
   companyName: string;
   status: string;
   action: boolean;
@@ -83,7 +83,7 @@ const DepositeTakerSearch: React.FC = () => {
 
   useEffect(() => {
     apiCall();
-  }, [pageSize, page]);
+  }, [pageSize, page,statusForSearch]);
 
   const NavigateDepositTaker = (id: string, nodalOfficerId: any) => {
     navigate("/deposite-taker-search-form", {
@@ -125,11 +125,11 @@ const DepositeTakerSearch: React.FC = () => {
       cell: (info) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>S.No.</span>,
     }),
-    columnHelper.accessor("uniqueId", {
+    columnHelper.accessor("id", {
       cell: (info) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Deposit Taker ID</span>,
     }),
-    columnHelper.accessor("panNumber", {
+    columnHelper.accessor("panCard", {
       cell: (info) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>PAN</span>,
     }),
@@ -163,12 +163,11 @@ const DepositeTakerSearch: React.FC = () => {
       id: "action",
       cell: (info) => {
         // const value = info.getValue();
-        const { uniqueId, nodalOfficerId } = info.getValue();
-
+        const { id, nodalOfficerId } = info.getValue();
         return (
           <div
             className='flex justify-center items-center'
-            onClick={() => NavigateDepositTaker(uniqueId, nodalOfficerId)}
+            onClick={() => NavigateDepositTaker(id, nodalOfficerId)}
           >
             {/* <Link to={"/entitymaster/deposit/form"}> */}
             <img src={Eye} alt='Eye ' className='cursor-pointer' />
@@ -185,6 +184,7 @@ const DepositeTakerSearch: React.FC = () => {
     { label: "Approved", value: "APPROVED" },
     { label: "Banned", value: "BANNED" },
     { label: "Rejected", value: "REJECTED" },
+    { label: "Incomplete", value: "INCOMPLETE" },
   ];
 
   const handleSetOption1 = (value: string) => {

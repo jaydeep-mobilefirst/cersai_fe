@@ -38,7 +38,7 @@ useEffect(() => {
   ];
 
   return (
-    <div className="w-[100%] bg-[#E7F0FF] rounded-[24px] flex items-center gap-8 flex-wrap px-[24px] py-[24px]">
+    <div className="w-[100%] bg-[#E7F0FF] rounded-[24px] flex items-center gap-8 flex-wrap px-[24px] py-[24px] 2xl:justify-between">
       {tabsData.map((each, idx) => (
         <DepositeSearchTab
           key={idx}

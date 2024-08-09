@@ -34,6 +34,7 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
   const [certName, setCertName] = useState("");
 
   const navigate = useNavigate();
+  console.log({ fieldData }, "filed data");
 
   useEffect(() => {
     const checkSignerDigital = setInterval(() => {
@@ -107,10 +108,15 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
           />
         </div>
         <p className=" text-[black] ">
-          {isDscSelected
+          {/* {isDscSelected
             ? certName
             : fieldData?.userInput?.SelCertSubject
             ? fieldData?.userInput?.SelCertSubject?.split(",")[0]
+            : "Upload DSC Certificate"} */}
+          {isDscSelected
+            ? certName
+            : fieldData?.userInput?.replace(/^"|"$/g, "").slice(0, 6)
+            ? fieldData?.userInput?.replace(/^"|"$/g, "").slice(0, 6)
             : "Upload DSC Certificate"}
         </p>
         <div

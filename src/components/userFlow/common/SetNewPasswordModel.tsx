@@ -35,7 +35,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   if (!otpVerified || otpVerified === "false") {
     sessionStorage.setItem("otp-sent", "false");
     sessionStorage.setItem("timerSec", "120");
-    sessionStorage.setItem("link", "/set-password?identity="+token);
+    sessionStorage.setItem("link", "/set-password?identity=" + token);
     setTimeout(() => {
       navigate("/otp-verification?token=" + token);
     }, 3000);
@@ -45,6 +45,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
 
   const [error, setError] = useState<boolean>(false);
   const [base64Data, setBase64Data] = useState<string>("");
+  const [errormessage, setErromessage] = useState<string>("");
   const [hexData, setHexData] = useState("");
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [decodedToken, setDecodedToken] = useState<any>(null);
@@ -103,20 +104,24 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
         setShowPasswordModel(false);
         setTimeout(() => {
           sessionStorage.setItem("otp-verified", "false");
-        }, 3000);
+        }, 60000);
         setShowPasswordUpdateModel(true);
       })
       .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error?.response?.data?.message,
-        });
+        // Swal.fire({
+        //   icon: "error",
+        //   title: "Error",
+        //   text: error?.response?.data?.message,
+        // });
+        setErromessage(
+          error?.response?.data?.message || error?.response?.data?.error
+        );
+        // alert(error?.response?.data?.message);
         setLoader(false);
         setTimeout(() => {
           sessionStorage.setItem("otp-verified", "false");
         }, 3000);
-        navigate("/");
+        // navigate("/");
       });
   };
 
@@ -307,6 +312,11 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
                             />
                           )}
                         </div>
+                      )}
+                      {errormessage && (
+                        <p className=" flex justify-center items-center text-red-500 mt-3">
+                          {errormessage}
+                        </p>
                       )}
 
                       <div className="flex justify-center items-center mt-12">

@@ -19,9 +19,9 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
-  const link = sessionStorage.getItem("link")
-  console.log("link", link)
-  const decoded = jwtDecode(token ?? "");  
+  const link = sessionStorage.getItem("link");
+  console.log("link", link);
+  const decoded = jwtDecode(token ?? "");
   const [loader, setLoader] = useState(false);
   const [button, setButton] = useState("Submit");
   const [startTimer, setStartTimer] = useState(false);
@@ -107,7 +107,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
-    setLoader(true)
+    setLoader(true);
     axiosTraceIdInstance
       .post(`/dual-otp/verifyotp`, {
         email: decodedToken?.email,
@@ -129,13 +129,13 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
       .catch((err: any) => {
         setShowError(err?.response?.data?.message);
       })
-      .finally(() => setLoader(false))
+      .finally(() => setLoader(false));
   };
 
   const sendOtp = (event: any) => {
     event.preventDefault();
     if (Object.keys(decodedToken).length > 0) {
-      setLoader(true)
+      setLoader(true);
       axiosTraceIdInstance
         .post(`/dual-otp/sendotp`, {
           email: decodedToken?.email,
@@ -156,7 +156,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
             text: "Unable to Send OTP, Please try again later!",
           });
         })
-        .finally(() => setLoader(false))
+        .finally(() => setLoader(false));
     }
   };
 
@@ -217,24 +217,27 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                   )}
                 </div>
               </div>
-              {isLinkExpired(decoded) ? 
-              <main className="mt-40 flex flex-col justify-center items-center bg-[#ffffff]">
-              <h1 className="text-2xl font-extrabold text-[#1C468E] tracking-widest">Link is expired</h1>
-              <div className="bg-[#E7F0FF] px-2 text-sm rounded mt-2">
-                Contact the administrator for activation link
-              </div>
-              <button className="mt-5">
-                <a className="relative inline-block text-sm font-medium text-[#E7F0FF] group focus:outline-none focus:ring">
-                  <span className="absolute inset-0 transition-transform translate-x-0.5 translate-y-0.5 bg-[#E7F0FF] group-hover:translate-y-0 group-hover:translate-x-0" />
-                  <Link className="relative block px-8 py-3 bg-[#1C468E] border border-current" to={"/"}>
-                    Go Home!
-                  </Link>
-                </a>
-              </button>
-            </main>
-            
-              :
-              sentOtp ? (
+              {isLinkExpired(decoded) ? (
+                <main className="mt-40 flex flex-col justify-center items-center bg-[#ffffff]">
+                  <h1 className="text-2xl font-extrabold text-[#1C468E] tracking-widest">
+                    Link is expired
+                  </h1>
+                  <div className="bg-[#E7F0FF] px-2 text-sm rounded mt-2">
+                    Contact the administrator for activation link
+                  </div>
+                  <button className="mt-5">
+                    <a className="relative inline-block text-sm font-medium text-[#E7F0FF] group focus:outline-none focus:ring">
+                      <span className="absolute inset-0 transition-transform translate-x-0.5 translate-y-0.5 bg-[#E7F0FF] group-hover:translate-y-0 group-hover:translate-x-0" />
+                      <Link
+                        className="relative block px-8 py-3 bg-[#1C468E] border border-current"
+                        to={"/"}
+                      >
+                        Go Home!
+                      </Link>
+                    </a>
+                  </button>
+                </main>
+              ) : sentOtp ? (
                 <form className="">
                   <div className="mt-6 md:mt-[24px] relative flex items-center justify-center flex-col">
                     <label htmlFor="">Mobile</label>
@@ -312,7 +315,15 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                       <ButtonAuth
                         type="submit"
                         loader={loader}
-                        label={!loader ? "Submit" : <><LoaderSpin/> &nbsp;Submitting</>}
+                        label={
+                          !loader ? (
+                            "Submit"
+                          ) : (
+                            <>
+                              <LoaderSpin /> &nbsp;Submitting
+                            </>
+                          )
+                        }
                         onClick={onSubmit}
                         disabled={disabled}
                       />
@@ -330,7 +341,14 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                     onClick={sendOtp}
                     disabled={loader}
                   >
-                    {!loader ? "Send" : <><LoaderSpin/>&nbsp;Sending...</>}
+                    {!loader ? (
+                      "Send"
+                    ) : (
+                      <>
+                        <LoaderSpin />
+                        &nbsp;Sending...
+                      </>
+                    )}
                   </button>
                 </div>
               )}
