@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
@@ -13,9 +12,10 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SelectButton from "../form/SelectButton";
 import UploadButtonV2 from "../form/UploadButtonV2";
-import { bffUrl } from "../../../utils/api";
 import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
+import DscKeyLogin from "../form/DscKeyLogin";
+import { axiosTraceIdInstance } from "../../../utils/axios";
 
 interface LoginModelProps {
   closeModal: () => void;
@@ -39,6 +39,11 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [roles, setRoles] = useState<any>();
   const [dsc, setDsc] = useState<boolean>(false);
   const [dscApiInProgress, setDscApiInProgress] = useState(false);
+  const [isDscSelected, setDscSelected] = useState<boolean>(false);
+  const [dscCertificate, setDscCertificate] = useState<any>();
+  const [responseData, setResponseDate] = useState<any>()
+
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
 
   const {
     register,
@@ -87,24 +92,17 @@ const LoginModel: React.FC<LoginModelProps> = ({
     setError(false);
 
     try {
-      const response = await axios.post(`${bffUrl}/auth/login`, {
+      const response = await axiosTraceIdInstance.post(`/auth/login`, {
         // username: data.email,
         username: watch("email"),
         // password: data.password,
         password: watch("password"),
         entityType: selected,
       });
-      console.log(response?.data?.user?.UserRoles, "login model");
-
-      sessionStorage.setItem(
-        "access_token",
-        response?.data?.response?.access_token
-      );
-      sessionStorage.setItem(
-        "refresh_token",
-        response?.data?.response?.refresh_token
-      );
+      setResponseDate(response)
+    
       sessionStorage.setItem("firstName", response?.data?.user?.firstName);
+      sessionStorage.setItem("masterId", response?.data?.entityDetais.masterId);
       sessionStorage.setItem("lastName", response?.data?.user?.lastName);
       sessionStorage.setItem("emailId", response.data.user?.emailId);
       sessionStorage.setItem("entityType", response.data.user?.entityType);
@@ -112,6 +110,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
         "entityUniqueId",
         response.data.user?.entityUniqueId
       );
+      sessionStorage.setItem("userId", response?.data?.user?.id);
+
       setRoles(response?.data?.user?.UserRoles);
       setDsc(true);
       setDscApiInProgress(true);
@@ -120,14 +120,20 @@ const LoginModel: React.FC<LoginModelProps> = ({
       }
 
       setError(false);
-    } catch (err: any) {
+    } catch (error: any) {
+      console.log("error",error?.error_description)
       setError(true);
-      if (err.response?.data?.error?.error_description) {
-        setFormError(err.response.data.error?.error_description);
-        setError(true);
-      } else {
-        setFormError("An error occurred. Please try again.");
-      }
+      const errorMessage =
+        error?.response?.data?.error ||
+        error?.response?.data?.message ||
+        "User not found";
+      setFormError(errorMessage);
+      // if (err.response?.data?.error?.error_description) {
+      //   setFormError(err.response.data.error?.error_description);
+      //   setError(true);
+      // } else {
+      //   setFormError("An error occurred. Please try again.");
+      // }
     } finally {
       setLoader(false);
       // setError(false);
@@ -136,16 +142,30 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
   const apicallDsc = () => {
     setLoader(true);
-    axios
-      .post(bffUrl + `/auth/mfa`, {
+    axiosTraceIdInstance
+      .post(`/auth/mfa`, {
         entityType: selected,
         username: getValues("email"),
-        dscCertificateFile: base64Data,
+        dscCertificateFile:
+          isDscKeyAvbl === "true" ? dscCertificate : base64Data,
       })
       .then((respose) => {
         reset();
-        console.log(respose);
         setLoader(false);
+        sessionStorage.setItem("reload", "true");
+        sessionStorage.setItem(
+          "access_token",
+          responseData?.data?.response?.access_token
+        );
+  
+        sessionStorage.setItem(
+          "user_status",
+          responseData?.data?.entityDetais?.status
+        );
+        sessionStorage.setItem(
+          "refresh_token",
+          responseData?.data?.response?.refresh_token
+        );
         if (selected === "DT") {
           navigate("/dt/dashboard");
         } else if (selected === "RG") {
@@ -155,8 +175,10 @@ const LoginModel: React.FC<LoginModelProps> = ({
         } else {
           navigate("/ca/dashboard");
         }
+        handleClose()
       })
       .catch((error) => {
+        
         setFormError(error?.response?.data?.message);
         setLoader(false);
       });
@@ -269,10 +291,10 @@ const LoginModel: React.FC<LoginModelProps> = ({
                     <InputFields
                       disabled={dscApiInProgress}
                       {...register("email", {
-                        required: "Email is required",
+                        required: "Email address or Mobile number is required",
                         pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: "Invalid email address",
+                          value: /^(\+?\d{1,4}[\s-]?)?(\d{10})|([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})$/i,
+                          message: "Invalid email address or mobile number",
                         },
                       })}
                       placeholder="Email id / Mobile no."
@@ -323,12 +345,20 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
                     {dsc && (
                       <>
-                        <Dscbutton
-                          onFileUpload={handleFileUpload}
-                          disabled={false}
-                        >
-                          Upload Document
-                        </Dscbutton>
+                        {isDscKeyAvbl === "false" ? (
+                          <Dscbutton
+                            onFileUpload={handleFileUpload}
+                            disabled={false}
+                          >
+                            Upload Document
+                          </Dscbutton>
+                        ) : (
+                          <DscKeyLogin
+                            isDscSelected={isDscSelected}
+                            setDscSelected={setDscSelected}
+                            setDscCertificate={setDscCertificate}
+                          />
+                        )}
                       </>
                     )}
                   </div>

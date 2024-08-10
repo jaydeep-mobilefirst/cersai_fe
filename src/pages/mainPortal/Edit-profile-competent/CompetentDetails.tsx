@@ -11,8 +11,7 @@ import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type Props = {};
 
@@ -33,6 +32,27 @@ const CompetentDetails = (props: Props) => {
   //       (f: any) => f?.sectionId === sectionId?.id
   //     )
   //   : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       .filter((field: any) => {
+  //         // Filtering fields based on sectionId
+  //         return field?.sectionId === sectionId?.id;
+  //       })
+  //       .map((field: any) => {
+  //         // Adding a 'disabled' property based on specific field labels
+  //         return {
+  //           ...field,
+  //           disabled: [
+  //             "Nodal Officer First Name",
+  //             "Nodal Officer Middle Name",
+  //             "Nodal Officer Last Name",
+  //             "Nodal Officer Mobile Number",
+  //             "Nodal Officer Email",
+  //             "DSC3 Certificate",
+  //           ].includes(field.label),
+  //         };
+  //       })
+  //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
         .filter((field: any) => {
@@ -41,20 +61,13 @@ const CompetentDetails = (props: Props) => {
         })
         .map((field: any) => {
           // Adding a 'disabled' property based on specific field labels
+          const isDisabled = field.required === true ? true : false;
           return {
             ...field,
-            disabled: [
-              "Nodal Officer FirstName",
-              "Nodal Officer MiddleName",
-              "Nodal Officer LastName",
-              "Nodal Officer Mobile Number",
-              "Nodal Officer Email",
-              "DSC3 Certificate",
-            ].includes(field.label),
+            disabled: isDisabled,
           };
         })
     : [];
-  // console.log(formFields, "nodalDetail");
 
   const formData =
     formFields &&
@@ -65,16 +78,14 @@ const CompetentDetails = (props: Props) => {
       value: field.userInput,
     }));
 
-  // console.log(formData, "formData");
-
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
     const noError = await handleValidationChecks(formFields, false);
     if (noError) {
-      axios
+      axiosTokenInstance
         .patch(
-          `${bffUrl}/competent-authority/${sessionStorage.getItem(
+          `/competent-authority/${sessionStorage.getItem(
             "entityUniqueId"
           )}`,
           {
@@ -82,10 +93,9 @@ const CompetentDetails = (props: Props) => {
           }
         )
         .then((response) => {
-          console.log(response, "response");
           Swal.fire({
             icon: "success",
-            text: "Nodal Detail  update  successfully ",
+            text: "Competent Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/ca/profile?current=document");
@@ -93,7 +103,7 @@ const CompetentDetails = (props: Props) => {
         .catch((err) => {
           Swal.fire({
             icon: "error",
-            text: "Failed to update Nodal Details",
+            text: "Failed to update Competent Details",
             confirmButtonText: "Ok",
           });
         });

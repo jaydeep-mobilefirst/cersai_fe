@@ -11,6 +11,7 @@ const tabs = [
     url: "resetpassword",
     rurl: "/dc/resetpassword",
   },
+  { title: "Update DSC 3 Certificate", url: "uploaddsc3", rurl: "/dc/uploaddsc3" },
 ];
 
 const TaskTabsDesignated = (props: Props) => {

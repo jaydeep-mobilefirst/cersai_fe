@@ -11,6 +11,7 @@ const tabs = [
     url: "resetpassword",
     rurl: "/dt/resetpassword",
   },
+  { title: "Update DSC 3 Certificate", url: "uploaddsc3", rurl: "/dt/uploaddsc3" },
 ];
 
 const TaskTabs = (props: Props) => {
@@ -28,8 +29,6 @@ const TaskTabs = (props: Props) => {
   const handleTabClick = (tabName: string) => {
     setActiveTab(tabName);
   };
-
-  // console.log({ url });
 
   return (
     <div className="flex-col justify-center items-start max-sm:items-center inline-flex border-b w-full">

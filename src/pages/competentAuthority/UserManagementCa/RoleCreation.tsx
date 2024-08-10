@@ -357,7 +357,7 @@ const RoleCreation = () => {
   return (
     <div className="relative xl:ml-[20px] pr-3">
       <div className="mt-6">
-        <UmTabs />
+        {/* <UmTabs /> */}
       </div>
       <div>
         <div className="mt-5 mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
@@ -412,9 +412,9 @@ const RoleCreation = () => {
             </button>
           </div>
         </div>
-        {isAddRolePopupOpen && (
+        {/* {isAddRolePopupOpen && (
           <AddRolePopup onClose={() => setIsAddRolePopupOpen(false)} />
-        )}
+        )} */}
         {isEditRolePopupOpen && editRoleData && (
           <EditRolePopup
             roleData={editRoleData}

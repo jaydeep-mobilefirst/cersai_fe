@@ -11,8 +11,7 @@ import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type Props = {};
 
@@ -21,19 +20,38 @@ const CourtDetails = (props: Props) => {
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
-  // console.log(allFormData, "allform data");
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
-  // console.log({ allFormData }, "all form data courtdetail---- ");
 
   const sectionId = allFormData?.entitySections?.find(
-    (s: any) => s?.sectionName === "Court Details"
+    (s: any) => s?.sectionName === "Designated Court Details"
   );
 
   // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
   //   ? allFormData?.formFields?.form_fields?.filter(
   //       (f: any) => f?.sectionId === sectionId?.id
   //     )
+  //   : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       .filter((field: any) => {
+  //         // Filtering fields based on sectionId
+  //         return field?.sectionId === sectionId?.id;
+  //       })
+  //       .map((field: any) => {
+  //         // Adding a 'disabled' property based on specific field labels
+  //         return {
+  //           ...field,
+  //           disabled: [
+  //             "Nodal Officer FirstName",
+  //             "Nodal Officer MiddleName",
+  //             "Nodal Officer LastName",
+  //             "Nodal Officer Mobile Number",
+  //             "Nodal Officer Email",
+  //             "DSC3 Certificate",
+  //           ].includes(field.label),
+  //         };
+  //       })
   //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
@@ -43,16 +61,10 @@ const CourtDetails = (props: Props) => {
         })
         .map((field: any) => {
           // Adding a 'disabled' property based on specific field labels
+          const isDisabled = field.required === true ? true : false;
           return {
             ...field,
-            disabled: [
-              "Nodal Officer FirstName",
-              "Nodal Officer MiddleName",
-              "Nodal Officer LastName",
-              "Nodal Officer Mobile Number",
-              "Nodal Officer Email",
-              "DSC3 Certificate",
-            ].includes(field.label),
+            disabled: isDisabled,
           };
         })
     : [];
@@ -66,16 +78,14 @@ const CourtDetails = (props: Props) => {
       value: field.userInput,
     }));
 
-  // console.log(formData, "formData");
-
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
     if (noError) {
-      axios
+      axiosTokenInstance
         .patch(
-          `${bffUrl}/designated-court/${sessionStorage.getItem(
+          `/designated-court/${sessionStorage.getItem(
             "entityUniqueId"
           )}`,
           {
@@ -83,10 +93,9 @@ const CourtDetails = (props: Props) => {
           }
         )
         .then((response) => {
-          console.log(response, "response");
           Swal.fire({
             icon: "success",
-            text: "Court Detail  update  successfully ",
+            text: "Court Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/dc/profile?current=document");
@@ -94,7 +103,7 @@ const CourtDetails = (props: Props) => {
         .catch((err) => {
           Swal.fire({
             icon: "error",
-            text: "Failed to update Nodal Details",
+            text: "Failed to update Court Details",
             confirmButtonText: "Ok",
           });
         });

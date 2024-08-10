@@ -9,29 +9,72 @@ import LoaderSpin from "../../components/LoaderSpin";
 const DesignatedCourtDetails: React.FC = () => {
   const screenWidth = useScreenWidth();
   const [params, setParams] = useSearchParams();
-  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
+  const {
+    onChange,
+    handleValidationChecks,
+    onFileChange,
+    handleDocumentValidations,
+  } = useContext(FormHandlerContext);
   const [loader, setLoader] = useState(false);
   const Navigate = useNavigate();
 
-  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
 
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Court Details");
-  const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Designated Court Details"
+  );
+  // const formFields =
+  //   allFormData?.formFields?.form_fields
+  //     ?.filter((f: any) => f?.sectionId === sectionId?.id)
+  //     .map((field: any) => {
+  //       return {
+  //         ...field,
+  //         disabled: ["State", "Jurisdiction"].includes(field.label),
+  //       };
+  //     }) || [];
 
+  const formFields =
+    allFormData?.formFields?.form_fields
+      ?.filter((f: any) => f?.sectionId === sectionId?.id)
+      .map((field: any) => {
+        const disableLabels = [
+          "State",
+          "Jurisdiction",
+          "Address Line 1",
+          "Address Line 2",
+          "Pin Code",
+        ];
 
-  const onSubmit = async (event : any) => {
+        const disableKeys = [
+          "stateKey",
+          "Jurisdiction",
+          "addressLine1",
+          "addressLine2",
+          "pincode",
+        ];
+
+        return {
+          ...field,
+          disabled:
+            disableLabels.includes(field.label) ||
+            disableKeys.includes(field.key),
+        };
+      }) || [];
+
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true)
-    const noError = await handleValidationChecks(formFields)    
-    setLoader(false)
-    
+    setLoader(true);
+    const noError = await handleValidationChecks(formFields);
+    setLoader(false);
+
     if (noError) {
-      const edit = params.get('edit');
+      const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate('/designated/court/reviewdetails')
-      }
-      else{
-        Navigate('/designated/court/uploaddocuments ')
+        Navigate("/designated/court/reviewdetails");
+      } else {
+        Navigate("/designated/court/uploaddocuments ");
       }
     }
   };
@@ -52,7 +95,13 @@ const DesignatedCourtDetails: React.FC = () => {
             <h1 className="text-2xl font-bold mb-6 text-gilroy-medium">
               Court Details
             </h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
+            <DynamicFields
+              allFormData={allFormData}
+              formFields={formFields}
+              onChange={onChange}
+              documentFields={documentData}
+              onFileChange={onFileChange}
+            />
           </div>
         </div>
 
@@ -63,12 +112,21 @@ const DesignatedCourtDetails: React.FC = () => {
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className="flex items-center ml-auto">
+            {/* <div className="flex items-center ml-auto">
               <button
                 type="submit"
                 className="bg-[#1c468e] rounded-xl p-3 text-white text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold"
               >
-                {loader ? <LoaderSpin/> : "Save & Continue"}
+                {loader ? <LoaderSpin /> : "Save & Continue"}
+              </button>
+            </div> */}
+            <div className="flex items-center ml-auto">
+              <button
+                type="submit"
+                className="bg-[#1c468e] rounded-xl p-3 text-white text-sm text-gilroy-semibold"
+                style={{ width: "150px" }}
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
               </button>
             </div>
           </div>

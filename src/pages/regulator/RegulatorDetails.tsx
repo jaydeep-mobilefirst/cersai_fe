@@ -4,7 +4,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useContext, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
-import axios from "axios";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 
@@ -22,30 +21,66 @@ const RegulatorDetails = (props: Props) => {
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Regulators Details"
   );
-  const formFields = allFormData?.formFields?.form_fields?.filter(
-    (f: any) => f?.sectionId === sectionId?.id
-  );
-  const screenWidth = useScreenWidth();
+  // const formFields =
+  //   allFormData?.formFields?.form_fields
+  //     ?.filter((f: any) => f?.sectionId === sectionId?.id)
+  //     .map((field: any) => {
+  //       return {
+  //         ...field,
+  //         disabled: [
+  //           "State",
+  //           "District",
+  //           "Address Line 1",
+  //           "Address Line 2",
+  //         ].includes(field.label),
+  //       };
+  //     }) || [];
+  const formFields =
+    allFormData?.formFields?.form_fields
+      ?.filter((f: any) => f?.sectionId === sectionId?.id)
+      .map((field: any) => {
+        const disableLabels = [
+          "State",
+          "District",
+          "Address Line 1",
+          "Address Line 2",
+          "Pin Code",
+        ];
 
-  console.log(allFormData, "allFormData");
+        const disableKeys = [
+          "state",
+          "district",
+          "addressLine1",
+          "addressLine2",
+          "pincode",
+        ];
+
+        return {
+          ...field,
+          disabled:
+            disableLabels.includes(field.label) ||
+            disableKeys.includes(field.key),
+        };
+      }) || [];
+  // console.log({ formFields }, "formfiled");
+
+  const screenWidth = useScreenWidth();
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
     setLoader(false);
-    
+
     if (noError) {
-      const edit = params.get('edit');
+      const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate('/regulator/court/reviewdetails')
-      }
-      else{
-        Navigate('/regulator/court/uploaddocuments')
+        Navigate("/regulator/court/reviewdetails");
+      } else {
+        Navigate("/regulator/court/uploaddocuments");
       }
     }
   };
-  
 
   return (
     <>
@@ -77,12 +112,22 @@ const RegulatorDetails = (props: Props) => {
                 }`,
               }}
             >
-              <div className="flex items-center ml-auto">
+              {/* <div className="flex items-center ml-auto">
                 <button
                   type="submit"
                   disabled={loader}
                   onClick={onSubmit}
                   className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                >
+                  {loader ? <LoaderSpin /> : "Save & Continue"}
+                </button>
+              </div> */}
+              <div className="flex items-center ml-auto">
+                <button
+                  type="submit"
+                  disabled={loader}
+                  onClick={onSubmit}
+                  className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
                 >
                   {loader ? <LoaderSpin /> : "Save & Continue"}
                 </button>

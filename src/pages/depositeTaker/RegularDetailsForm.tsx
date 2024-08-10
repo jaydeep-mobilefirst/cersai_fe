@@ -1,10 +1,6 @@
 import { useContext, useState } from "react";
-import InputFields from "../../components/userFlow/form/InputField";
-import DatePicker from "../../components/userFlow/form/DatePicker";
 import { useScreenWidth } from "../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import TextArea from "../../components/userFlow/form/TextArea";
-import SelectButton from "../../components/userFlow/form/SelectButton";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -14,42 +10,55 @@ type Props = {};
 
 const RegularDetailsForm = (props: Props) => {
   const screenWidth = useScreenWidth();
-  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
+  const {
+    onChange,
+    handleValidationChecks,
+    onFileChange,
+    handleDocumentValidations,
+  } = useContext(FormHandlerContext);
   const [loader, setLoader] = useState(false);
-  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
   const Navigate = useNavigate();
   const [params, setParams] = useSearchParams();
 
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Regulators Details");
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Regulators Details"
+  );
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-  ? allFormData?.formFields?.form_fields?.filter(
-      (f: any) => f?.sectionId === sectionId?.id
-    )
-  : [];  
+    ? allFormData?.formFields?.form_fields?.filter(
+        (f: any) => f?.sectionId === sectionId?.id
+      )
+    : [];
 
-  const onSubmit = async (event : any) => {
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true)
-    const noError = await handleValidationChecks(formFields)    
-    setLoader(false)
-    
+    setLoader(true);
+    const noError = await handleValidationChecks(formFields);
+    setLoader(false);
+
     if (noError) {
-      const edit = params.get('edit');
+      const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate('/depositetaker/signup/reviewdetails')
-      }
-      else{
-        Navigate('/depositetaker/signup/nodaldetails')
+        Navigate("/depositetaker/signup/reviewdetails");
+      } else {
+        Navigate("/depositetaker/signup/nodaldetails");
       }
     }
-  }; 
+  };
 
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
 
   return (
     <>
       <form
         // className="p-4 flex flex-col w-full max-w-[100%] justify-between"
-        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+        className="flex items-center justify-between flex-col h-full lg:h-[100vh]" onKeyDown={handleKeyPress}
       >
         <div
           style={{
@@ -59,7 +68,13 @@ const RegularDetailsForm = (props: Props) => {
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
             <h1 className="text-2xl font-bold mb-6">Regulator Details</h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
+            <DynamicFields
+              allFormData={allFormData}
+              formFields={formFields}
+              onChange={onChange}
+              documentFields={documentData}
+              onFileChange={onFileChange}
+            />
           </div>
         </div>
 
@@ -70,9 +85,10 @@ const RegularDetailsForm = (props: Props) => {
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className="flex flex-row items-center space-x-2 "               
-            onClick={() => Navigate('/depositetaker/signup/entitydetails')}
->
+            <div
+              className="flex flex-row items-center space-x-2 "
+              onClick={() => Navigate("/depositetaker/signup/entitydetails")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -90,20 +106,31 @@ const RegularDetailsForm = (props: Props) => {
                 />
               </svg>
               <button
-              onClick={() => Navigate('/depositetaker/signup/entitydetails')}
-              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
+                onClick={() => Navigate("/depositetaker/signup/entitydetails")}
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
+              >
                 Back
               </button>
             </div>
-            <div className="flex items-center">
-            <button
-                  type="submit"
-                  disabled={loader}
-                  onClick={onSubmit}
-                  className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
-                >
-                  {loader ? <LoaderSpin/> : "Save & Continue"}
-                </button>
+            {/* <div className="flex items-center">
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
+              </button>
+            </div> */}
+            <div className="flex items-center ml-auto">
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
+              </button>
             </div>
           </div>
           <div>

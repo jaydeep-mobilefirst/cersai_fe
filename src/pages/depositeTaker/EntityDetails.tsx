@@ -9,36 +9,68 @@ import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields
 const EntityDetails: React.FC = () => {
   const screenWidth = useScreenWidth();
   const [params, setParams] = useSearchParams();
-  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
+  const {
+    onChange,
+    handleValidationChecks,
+    onFileChange,
+    handleDocumentValidations,
+  } = useContext(FormHandlerContext);
   const [loader, setLoader] = useState(false);
   const Navigate = useNavigate();
 
-  const {allFormData, documentData} = useDepositTakerRegistrationStore((state : any) => state)
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state: any) => state
+  );
 
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Entity Details");
-  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-  ? allFormData?.formFields?.form_fields?.filter(
-      (f: any) => f?.sectionId === sectionId?.id
-    )
-  : [];
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Entity Details"
+  );
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       ?.filter((f: any) => f?.sectionId === sectionId?.id)
+  //       .map((field: any) => {
+  //         return {
+  //           ...field,
+  //           disabled: ["State", "District"].includes(field.label),
+  //         };
+  //       })
+  //   : [];
+  const formFields =
+    allFormData?.formFields?.form_fields
+      ?.filter((f: any) => f?.sectionId === sectionId?.id)
+      .map((field: any) => {
+        const disableLabels = ["State", "District"];
 
-  const onSubmit = async (event : any) => {
+        const disableKeys = ["State", "District"];
+
+        return {
+          ...field,
+          disabled:
+            disableLabels.includes(field.label) ||
+            disableKeys.includes(field.key),
+        };
+      }) || [];
+
+  console.log({ formFields }, "form filed");
+
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true)
-    const noError = await handleValidationChecks(formFields)    
-    setLoader(false)
-    
-    console.log({noError});
-    
+    setLoader(true);
+    const noError = await handleValidationChecks(formFields);
+    setLoader(false);
+
     if (noError) {
-      const edit = params.get('edit');
-      console.log({edit});
+      const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate('/depositetaker/signup/reviewdetails')
+        Navigate("/depositetaker/signup/reviewdetails");
+      } else {
+        Navigate("/depositetaker/signup/regulatordetails");
       }
-      else{
-        Navigate('/depositetaker/signup/regulatordetails')
-      }
+    }
+  };
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
     }
   };
 
@@ -49,6 +81,7 @@ const EntityDetails: React.FC = () => {
       <form
         // className="flex flex-col justify-between h-full"
         className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+        onKeyPress={handleKeyPress}
       >
         <div
           style={{
@@ -58,7 +91,13 @@ const EntityDetails: React.FC = () => {
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           <div className="bg-white p-6 w-full">
             <h1 className="text-2xl font-bold mb-6">Entity Details</h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
+            <DynamicFields
+              allFormData={allFormData}
+              formFields={formFields}
+              onChange={onChange}
+              documentFields={documentData}
+              onFileChange={onFileChange}
+            />
           </div>
         </div>
 
@@ -69,9 +108,15 @@ const EntityDetails: React.FC = () => {
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className="flex flex-row items-center space-x-2"
-            onClick={() => Navigate('/depositetaker/signup/verification')}
-
+            <div
+              className="flex flex-row items-center space-x-2"
+              onClick={() =>
+                Navigate("/depositetaker/signup/verification", {
+                  state: {
+                    panverified: true,
+                  },
+                })
+              }
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -89,20 +134,29 @@ const EntityDetails: React.FC = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-              <button 
-              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
+              <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
                 Back
               </button>
             </div>
-            <div className="flex items-center">
-            <button
-                  type="submit"
-                  disabled={loader}
-                  onClick={onSubmit}
-                  className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
-                >
-                  {loader ? <LoaderSpin/> : "Save & Continue"}
-                </button>
+            {/* <div className="flex items-center">
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
+              </button>
+            </div> */}
+            <div className="flex items-center ml-auto">
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
+              </button>
             </div>
           </div>
           <div>
@@ -120,8 +174,6 @@ const EntityDetails: React.FC = () => {
 };
 
 export default EntityDetails;
-
-
 
 /**
 <div>

@@ -4,24 +4,28 @@ import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/new_images/arrowDown.png";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import axios from "axios";
 import LoaderSpin from "../../components/LoaderSpin";
-import { bffUrl } from "../../utils/api";
 import html2pdf from "html2pdf.js";
 import { signupSideBar } from "../../utils/hardText/signuppageText";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
+import ReviewMainListing from "../../components/userFlow/common/ReviewMainListing";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
+import Logo from "../../assets/images/logo.svg";
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isPdfMode, setIsPdfMode] = useState(false);
   const downloadPDF = () => {
     setIsDownloading(true);
+    setIsPdfMode(true);
     const element = document.getElementById("reviewContent");
+
     const isMobile = window.innerWidth <= 768;
     const options = {
-      margin: 1,
-      filename: "details.pdf",
+      margin: [0.4, 0.4, 0.4, 0.4], // Adjusting the margins
+      filename: "DepositTakerDetail.pdf",
       image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: isMobile ? 1 : 2 },
+      html2canvas: { scale: isMobile ? 3 : 5 }, // Increasing the scale
       jsPDF: {
         unit: "in",
         format: isMobile ? "a4" : "letter",
@@ -31,13 +35,18 @@ const useDownloadPDF = () => {
     html2pdf()
       .set(options)
       .from(element)
+      .toContainer()
+      .toCanvas()
+      .toImg()
+      .toPdf()
       .save()
       .finally(() => {
         setIsDownloading(false);
+        setIsPdfMode(false);
       });
   };
 
-  return { downloadPDF, isDownloading };
+  return { downloadPDF, isDownloading, isPdfMode };
 };
 
 const ReviewMain = () => {
@@ -45,11 +54,12 @@ const ReviewMain = () => {
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { allFormData, documentData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData, masterEntityId } =
+    useDepositTakerRegistrationStore((state) => state);
   const Navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
-  const { downloadPDF, isDownloading } = useDownloadPDF();
+  const { downloadPDF, isDownloading, isPdfMode } = useDownloadPDF();
 
   const sectionCodes: any = {
     1: "de_verification",
@@ -57,7 +67,6 @@ const ReviewMain = () => {
     3: "de_regulations_details",
     4: "Nodal Officer",
   };
-  console.log({ allFormData });
 
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();
@@ -65,40 +74,43 @@ const ReviewMain = () => {
     let finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
+        let sectionCode = allFormData?.entitySections?.find(
+          (section: any) => section?.id === field?.sectionId
+        )?.sectionName;
         return {
           fieldId: field?.id,
           label: field?.label,
-          sectionCode: sectionCodes[field?.sectionId],
+          sectionCode: sectionCode,
           value: field?.userInput,
+          key: field?.key,
         };
       });
 
-      let docs = documentData?.length > 0 ? documentData?.map((doc : any) => {
-        return {
-          fieldId: doc?.id,
-          label: doc?.documentName,
-          sectionCode: "Upload Documents",
-          value: doc?.uploadFileId,
-        };
-      }) : []
+    let docs =
+      documentData?.length > 0
+        ? documentData?.map((doc: any) => {
+            return {
+              fieldId: doc?.id,
+              label: doc?.documentName,
+              sectionCode: "Upload Documents",
+              value: doc?.uploadFileId,
+            };
+          })
+        : [];
 
-      finalResult = [...finalResult, ...docs]
-
-    axios
-      .post(bffUrl + "/deposit-taker/add-form-fields", {
+    finalResult = [...finalResult, ...docs];
+    axiosTraceIdInstance
+      .post("/deposit-taker/add-form-fields", {
         formData: finalResult,
+        regulatorId: masterEntityId,
       })
       .then((response: any) => {
-        console.log({ response });
-
         const data = response.data;
-        console.log({ data });
-
         if (data?.success) {
           // setSubmitModal( true)
-          setPara1(`Your registration request has been sent successfully and
-          approval/rejection of your registration will be informed to you
-          via email.`);
+          setPara1(
+            `Thank you for signing up. We have sent account activation link on registered email ID. Please continue setting up account.`
+          );
           setPara2(
             `Your registration acknowledgement ID is ${data?.data?.newDepositTaker?.uniqueId}`
           );
@@ -113,8 +125,8 @@ const ReviewMain = () => {
       })
       .catch((e: any) => {
         setLoader(false);
-        setPara1(e?.response?.data?.detail?.message)
-        setPara2(`Please try again later`);
+        setPara1(e?.response?.data?.detail?.message);
+        setPara2(e?.response?.data?.message);
         setSubmitted(false);
         setSubmitModal(true);
         setLoader(false);
@@ -127,132 +139,71 @@ const ReviewMain = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-between h-screen">
-        <header className="lg:p-[38px] border-b border-gray-200"></header>
-        <main className="flex-grow p-8 overflow-auto custom-scrollbar">
-          <div id="reviewContent">
-            <h1 className="text-2xl font-bold mb-6 font-bold">Review</h1>
-            {allFormData &&
-              allFormData?.entitySections?.map(
-                (section: any, index: number) => (
-                  <div className="mb-[16px]" key={index}>
-                    <div className="rounded-t-lg bg-[#E7F0FF] flex justify-between h-[57px]">
-                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[20px] lg:text-[20px] pb-2 text-nowrap font-bold text-2xl" >
-                        {section?.sectionName}
-                      </p>
-                      <button className="text-[#1C468E] text-[16px] lg:text-[20px] mr-[13px] font-bold">
-                        {section?.sectionName !== "Verification" ? (
-                          <Link
-                            to={
-                              signupSideBar.find(
-                                (sec) =>
-                                  sec?.description === section?.sectionName
-                              )?.path + "?edit=true"
-                            }
-                          >
-                            Edit
-                          </Link>
-                        ) : (
-                          "Success"
-                        )}
-                      </button>
-                    </div>
-
-                    <div className="shadow-sm p-5 rounded-md ">
-                      <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px] text-gilroy-medium">
-                        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                          {allFormData?.formFields?.form_fields
-                            ?.filter((f: any) => f?.sectionId === section?.id)
-                            ?.map((field: any, idx: number) => {
-                              console.log({
-                                field,
-                              });
-
-                              return (
-                                <div
-                                  className={`sm:mr-[48px] flex justify-between ${
-                                    idx % 2 === 0
-                                      ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
-                                      : ""
-                                  } `}
-                                  key={idx}
-                                >
-                                  <div className="text-gray-500">
-                                    {field.label}
-                                    <span className="text-[#ff0000]">*</span>
-                                  </div>
-                                  <div>
-                                    {field?.dscFileNAme !== "" &&
-                                    field?.dscFileNAme !== undefined
-                                      ? field?.dscFileNAme
-                                      : field.userInput}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                            {
-                              section?.sectionName === "Upload Documents" && 
-                              documentData?.map((doc : any, idx : number) => {
-                                return <div
-                                className={`sm:mr-[48px] flex justify-between ${
-                                  idx % 2 === 0
-                                    ? "sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
-                                    : ""
-                                } `}
-                                key={idx}
-                              >
-                                <div className="text-gray-500">
-                                  {doc?.documentName}
-                                  <span className="text-[#ff0000]">*</span>
-                                </div>
-                                <div>
-                                  {
-                                    doc?.fileName
-                                  }
-                                </div>
-                              </div>
-                              })
-                            }
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              )}
-
-            <div className="flex flex-shrink-0 mt-[20px]">
-              <div className="justify-center align-center">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 accent-[#1c648e]"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  placeholder="ischecked"
+      <div className='flex flex-col justify-between h-screen'>
+        <header className='lg:p-[38px] border-b border-gray-200'></header>
+        <main className='flex-grow p-8 overflow-auto custom-scrollbar'>
+          <div id='reviewContent'>
+            {isPdfMode && (
+              <div>
+                <img
+                  src={Logo}
+                  alt='logo'
+                  className='rounded-full h-[52px] w-[52px]'
                 />
               </div>
-              <div className="leading-[24px] ml-4 text-gilroy-medium">
-                I here by declare that all information provided is best of my
-                knowledge
+            )}
+
+            <h1 className='text-2xl font-bold mb-6 font-bold'>
+              Review Details
+            </h1>
+
+            <ReviewMainListing
+              allFormData={allFormData}
+              documentData={documentData}
+              urlList={signupSideBar}
+              isPdfMode={isPdfMode}
+            />
+            {!isPdfMode && (
+              <div className='flex flex-shrink-0 mt-[20px] justify-start items-center'>
+                <div className=''>
+                  <input
+                    type='checkbox'
+                    className='h-4 w-4 accent-[#1c648e]'
+                    checked={isChecked}
+                    onChange={handleCheckboxChange}
+                    placeholder='ischecked'
+                  />
+                </div>
+                <div className='leading-[24px] ml-4 text-gilroy-medium text-[14px]'>
+                  I here by declare that all information provided is best of my
+                  knowledge &nbsp;
+                  <Link className="text-[#1c468e] underline cursor-pointer" target={"_blank"} to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"> Terms and Conditions</Link>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </main>
 
-        <div className="flex justify-between items-center my-3 flex-col sm:flex-row">
-          <div className=" ml-5">
-            <button className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0" role="button" onClick={() => Navigate('/depositetaker/signup/nodaldetails')}>
-              <img src={Arrow} alt="back Arrow" className="mr-2" />
+        <div className='flex justify-between items-center my-3 flex-col sm:flex-row'>
+          <div className=' ml-5'>
+            <button
+              className='text-gilroy-regular text-sm flex items-center p-4 sm:p-0'
+              role='button'
+              onClick={() => Navigate("/depositetaker/signup/nodaldetails")}
+            >
+              <img src={Arrow} alt='back Arrow' className='mr-2' />
               Back
             </button>
           </div>
-          <div className="flex mr-9">
+          <div className='flex mr-9'>
             <div>
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className="w-auto md:w-[208px] md:h-[48px] gap-[8px] text-gilroy-semibold flex rounded-[12px] text-[#1C468E] border border-[#1C468E] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]"
+                className={`w-auto md:w-[208px] md:h-[48px] gap-[8px] text-gilroy-semibold flex rounded-[12px] text-[#1C468E] border border-[#1C468E] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px] 
+                  ${ isChecked ? "" : "opacity-50"}`}
               >
-                <img src={download} alt="download" className="mr-2" />
+                <img src={download} alt='download' className='mr-2' />
                 {isDownloading ? "Downloading..." : "Download PDF"}
               </button>
             </div>
@@ -273,7 +224,7 @@ const ReviewMain = () => {
           closePopup={() => {
             setSubmitModal(false);
             if (submitted) {
-              Navigate('/')
+              Navigate("/");
             }
           }}
           showPopup={() => setSubmitModal(true)}
@@ -282,8 +233,8 @@ const ReviewMain = () => {
           para2={para2}
           success={submitted}
         />
-        <footer className="p-4 border-[#E6E6E6] border-[1px] ">
-          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+        <footer className='p-4 border-[#E6E6E6] border-[1px] '>
+          <p className='text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4'>
             © 2024 Protean BUDs, All Rights Reserved.
           </p>
         </footer>

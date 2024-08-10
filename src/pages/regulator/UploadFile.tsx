@@ -10,14 +10,16 @@ interface UploadFileProps {
   handleFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
   toggleUploadPopup: () => void;
   closePopup: () => void;
+  fileTypes ?: string
+  fileSize ?: number
 }
 
 const UploadFile: React.FC<UploadFileProps> = ({
   showUploadPopup,
-  file,
   handleFileChange,
-  toggleUploadPopup,
   closePopup,
+  fileTypes,
+  fileSize
 }) => {
   return (
     <Modal
@@ -67,10 +69,10 @@ const UploadFile: React.FC<UploadFileProps> = ({
                 </div>
               </div>
               <p className="text-[#000000] mb-2 text-xs text-font-Gilroy-Regular">
-                Supported formates: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT
+                Supported formates: {fileTypes ? fileTypes : "JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT"}
               </p>
               <p className="text-[#000000] mb-4 text-xs font-Gilroy-Regular">
-                File size: Less than 500kb
+                File size: Less than {fileSize ? fileSize/1000 + " MB" : "5 MB"}
               </p>
             </div>
             <div className="text-center">

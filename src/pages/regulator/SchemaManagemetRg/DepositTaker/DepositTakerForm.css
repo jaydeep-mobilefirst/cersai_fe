@@ -1,0 +1,16 @@
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 50%; /* Adjust the height as needed */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #e7f0ff !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1c468e !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #1c468e !important;
+}

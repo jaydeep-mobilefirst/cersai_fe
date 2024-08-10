@@ -43,11 +43,18 @@
 }
 
 .buds-background-image {
-  background-image: url("./assets/images/new_images/bg.svg"), url("./assets/images/new_images/Vector.svg");
+  background-image: url("./assets/images/new_images/bg.svg"),
+    url("./assets/images/new_images/Vector.svg");
   background-size: auto, auto;
   background-repeat: no-repeat, no-repeat;
   background-position: center, center;
   background-position: right bottom, left bottom;
+}
+.buds-faq-background-image {
+  background-image: url("./assets/images/Vector.png");
+  background-size: auto, auto;
+  background-repeat: no-repeat, no-repeat;
+  background-position: right top;
 }
 
 .query-bg-image {
@@ -102,4 +109,42 @@
   border-radius: 7px;
   background: #e7e7e7;
   margin: 12px;
+}
+
+.swal2-container {
+  z-index: X;
+}
+/* Example CSS for PDF Mode */
+.pdf-mode #reviewContent {
+  width: 100%;
+  height: auto;
+}
+.slider-wrapper{
+  width: 30% !important;
+}
+
+.my-swal {
+  z-index: 9999; /* or any desired value */
+}
+
+/* Hide the spinner arrows */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* Optional: space between the input and buttons */
+}
+
+input[type=number] {
+  -moz-appearance: textfield; /* Firefox */
+}
+@media (min-width: 768px) {
+  .control-dots {
+    padding-right: 100px !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .control-dots {
+    padding-right: 150px !important;
+  }
 }

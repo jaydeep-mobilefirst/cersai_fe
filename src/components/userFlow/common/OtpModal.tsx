@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
-
-import CrossIcon from "../../../assets/images/CrossIcon.svg";
-
 import MobileIcon from "../../../assets/images/MobileIcon.svg";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import OtpInput from "react-otp-input";
 import { jwtDecode } from "jwt-decode";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-
-import { bffUrl } from "../../../utils/api";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ButtonAuth from "./ButtonAuth";
 import Swal from "sweetalert2";
+import { isLinkExpired } from "../../../utils/commonFunction";
+import LoaderSpin from "../../LoaderSpin";
+import { axiosTraceIdInstance } from "../../../utils/axios";
 
 interface LoginModelProps {}
 
@@ -23,6 +19,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
+  const link = sessionStorage.getItem("link");
+  console.log("link", link);
   const decoded = jwtDecode(token ?? "");
   const [loader, setLoader] = useState(false);
   const [button, setButton] = useState("Submit");
@@ -109,8 +107,9 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
-    axios
-      .post(`${bffUrl}/dual-otp/verifyotp`, {
+    setLoader(true);
+    axiosTraceIdInstance
+      .post(`/dual-otp/verifyotp`, {
         email: decodedToken?.email,
         mobile: decodedToken?.mobile,
         emailotp: emailOtp,
@@ -122,22 +121,23 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
           setShowError("");
           sessionStorage.setItem("otp-sent", "false");
           sessionStorage.setItem("timerSec", "120");
-          navigate("/set-password?identity=" + token);
+          navigate(link ?? "/");
+          // navigate(link ?? "/set-password");
           sessionStorage.setItem("otp-verified", "true");
         }
       })
       .catch((err: any) => {
         setShowError(err?.response?.data?.message);
-      });
+      })
+      .finally(() => setLoader(false));
   };
 
   const sendOtp = (event: any) => {
     event.preventDefault();
     if (Object.keys(decodedToken).length > 0) {
-      console.log({ decodedToken }, "-------------------");
-
-      axios
-        .post(`${bffUrl}/dual-otp/sendotp`, {
+      setLoader(true);
+      axiosTraceIdInstance
+        .post(`/dual-otp/sendotp`, {
           email: decodedToken?.email,
           mobile: decodedToken?.mobile,
         })
@@ -155,7 +155,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
             title: "Error",
             text: "Unable to Send OTP, Please try again later!",
           });
-        });
+        })
+        .finally(() => setLoader(false));
     }
   };
 
@@ -216,7 +217,27 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                   )}
                 </div>
               </div>
-              {sentOtp ? (
+              {isLinkExpired(decoded) ? (
+                <main className="mt-40 flex flex-col justify-center items-center bg-[#ffffff]">
+                  <h1 className="text-2xl font-extrabold text-[#1C468E] tracking-widest">
+                    Link is expired
+                  </h1>
+                  <div className="bg-[#E7F0FF] px-2 text-sm rounded mt-2">
+                    Contact the administrator for activation link
+                  </div>
+                  <button className="mt-5">
+                    <a className="relative inline-block text-sm font-medium text-[#E7F0FF] group focus:outline-none focus:ring">
+                      <span className="absolute inset-0 transition-transform translate-x-0.5 translate-y-0.5 bg-[#E7F0FF] group-hover:translate-y-0 group-hover:translate-x-0" />
+                      <Link
+                        className="relative block px-8 py-3 bg-[#1C468E] border border-current"
+                        to={"/"}
+                      >
+                        Go Home!
+                      </Link>
+                    </a>
+                  </button>
+                </main>
+              ) : sentOtp ? (
                 <form className="">
                   <div className="mt-6 md:mt-[24px] relative flex items-center justify-center flex-col">
                     <label htmlFor="">Mobile</label>
@@ -294,7 +315,15 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                       <ButtonAuth
                         type="submit"
                         loader={loader}
-                        label={!loader ? "Submit" : "Loading..."}
+                        label={
+                          !loader ? (
+                            "Submit"
+                          ) : (
+                            <>
+                              <LoaderSpin /> &nbsp;Submitting
+                            </>
+                          )
+                        }
                         onClick={onSubmit}
                         disabled={disabled}
                       />
@@ -310,8 +339,16 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                   <button
                     className=" bg-[#1C468E] rounded-xl p-3 text-sm font-semibold text-gilroy-medium text-white w-80"
                     onClick={sendOtp}
+                    disabled={loader}
                   >
-                    Send
+                    {!loader ? (
+                      "Send"
+                    ) : (
+                      <>
+                        <LoaderSpin />
+                        &nbsp;Sending...
+                      </>
+                    )}
                   </button>
                 </div>
               )}

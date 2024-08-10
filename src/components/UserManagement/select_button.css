@@ -1,0 +1,15 @@
+  /* Custom scrollbar styles for Webkit browsers like Chrome, Safari */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 39px;
+    flex-shrink: 0;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color:#1C468E;
+    border-radius: 16px;
+  }

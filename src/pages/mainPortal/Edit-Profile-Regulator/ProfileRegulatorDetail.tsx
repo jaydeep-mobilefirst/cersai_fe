@@ -11,8 +11,7 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type Props = {};
 
@@ -29,9 +28,15 @@ const ProfileRegulatorDetails = (props: Props) => {
   );
 
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-    ? allFormData?.formFields?.form_fields?.filter(
-        (f: any) => f?.sectionId === sectionId?.id
-      )
+    ? allFormData?.formFields?.form_fields
+        ?.filter((f: any) => f?.sectionId === sectionId?.id)
+        .map((field: any) => {
+          const isDisabled = field.required === true ? true : false;
+          return {
+            ...field,
+            disabled: isDisabled,
+          };
+        })
     : [];
   const formData =
     formFields &&
@@ -47,18 +52,17 @@ const ProfileRegulatorDetails = (props: Props) => {
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
     if (noError) {
-      axios
+      axiosTokenInstance
         .patch(
-          `${bffUrl}/regulator/${sessionStorage.getItem("entityUniqueId")}`,
+          `/regulator/${sessionStorage.getItem("entityUniqueId")}`,
           {
             formData: formData,
           }
         )
         .then((response) => {
-          // console.log(response, "response");
           Swal.fire({
             icon: "success",
-            text: "Regulator Detail  update  successfully ",
+            text: "Regulator Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/rg/profile?current=nodal");

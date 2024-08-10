@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 
 import LoginPageIcon from "../../../assets/images/Login-bud.svg";
 
@@ -16,25 +15,27 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
-import { bffUrl } from "../../../utils/api";
 import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
 import PasswordUpdateModel from "./PasswordUpdateModel";
 import DscAuth from "./DscAuth";
+import DscKeyRegister from "../form/DscKeyRegister";
+import { axiosTraceIdInstance } from "../../../utils/axios";
 
 interface SetNewPasswordModelProps {}
 
 const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("identity");
   const otpVerified = sessionStorage.getItem("otp-verified");
-  console.log({ otpVerified });
 
   if (!otpVerified || otpVerified === "false") {
     sessionStorage.setItem("otp-sent", "false");
     sessionStorage.setItem("timerSec", "120");
+    sessionStorage.setItem("link", "/set-password?identity=" + token);
     setTimeout(() => {
       navigate("/otp-verification?token=" + token);
     }, 3000);
@@ -44,6 +45,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
 
   const [error, setError] = useState<boolean>(false);
   const [base64Data, setBase64Data] = useState<string>("");
+  const [errormessage, setErromessage] = useState<string>("");
   const [hexData, setHexData] = useState("");
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [decodedToken, setDecodedToken] = useState<any>(null);
@@ -52,6 +54,8 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
     otpVerified === "true"
   );
   const [showPasswordUpdateModel, setShowPasswordUpdateModel] = useState(false);
+  const [isDscSelected, setDscSelected] = useState<boolean>(false);
+  const [dscCertificate, setDscCertificate] = useState<any>();
 
   useEffect(() => {
     if (token && !decodedToken) {
@@ -63,8 +67,6 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
       }
     }
   }, [token, decodedToken]);
-
-  console.log(decodedToken, "decoded token");
   const handleClose = () => {
     setShowPasswordModel(false);
   };
@@ -90,31 +92,36 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
       dscCertificateFile: "xyz",
     };
 
-    if (decodedToken?.isDsc && base64Data) {
-      payload.dscCertificateFile = base64Data;
+    if (decodedToken?.isDsc && (base64Data || isDscSelected)) {
+      payload.dscCertificateFile =
+        isDscKeyAvbl === "true" ? dscCertificate : base64Data;
     }
 
-    axios
-      .post(`${bffUrl}/user/setpassword`, payload)
+    axiosTraceIdInstance
+      .post(`/user/setpassword`, payload)
       .then((response) => {
         setLoader(false);
         setShowPasswordModel(false);
         setTimeout(() => {
           sessionStorage.setItem("otp-verified", "false");
-        }, 3000);
+        }, 60000);
         setShowPasswordUpdateModel(true);
       })
       .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error?.response?.data?.message,
-        });
+        // Swal.fire({
+        //   icon: "error",
+        //   title: "Error",
+        //   text: error?.response?.data?.message,
+        // });
+        setErromessage(
+          error?.response?.data?.message || error?.response?.data?.error
+        );
+        // alert(error?.response?.data?.message);
         setLoader(false);
         setTimeout(() => {
           sessionStorage.setItem("otp-verified", "false");
         }, 3000);
-        navigate("/");
+        // navigate("/");
       });
   };
 
@@ -157,6 +164,10 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
     {
       test: (value: string) => /[A-Z]/.test(value),
       message: "Atleast 1 uppercase",
+    },
+    {
+      test: (value: string) => /[a-z]/.test(value),
+      message: "Atleast 1 lowercase",
     },
     {
       test: (value: string) => /[0-9]/.test(value),
@@ -263,11 +274,11 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
                           placeholder="Confirm Password"
                           error={error}
                         />
-                        {errors.confirmPassword?.message && (
+                        {/* {errors.confirmPassword?.message && (
                           <p className="text-red-500">
                             {errors.confirmPassword.message as string}
                           </p>
-                        )}
+                        )} */}
                         {confirmPassword && (
                           <p
                             className={
@@ -277,22 +288,35 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
                             }
                           >
                             {confirmPassword === password
-                              ? "Passwords match"
-                              : "Passwords do not match"}
+                              ? "Password & confirm password  match"
+                              : "Password & confirm password do not match"}
                           </p>
                         )}
                       </div>
 
                       {decodedToken?.isDsc && (
                         <div className="mt-4 lg:mt-8">
-                          <DscAuth
-                            onFileUpload={handleFileUpload}
-                            disabled={false}
-                            fileName={fileName}
-                          >
-                            Upload Document
-                          </DscAuth>
+                          {isDscKeyAvbl === "false" ? (
+                            <DscAuth
+                              onFileUpload={handleFileUpload}
+                              disabled={false}
+                              fileName={fileName}
+                            >
+                              Upload Document
+                            </DscAuth>
+                          ) : (
+                            <DscKeyRegister
+                              isDscSelected={isDscSelected}
+                              setDscSelected={setDscSelected}
+                              setDscCertificate={setDscCertificate}
+                            />
+                          )}
                         </div>
+                      )}
+                      {errormessage && (
+                        <p className=" flex justify-center items-center text-red-500 mt-3">
+                          {errormessage}
+                        </p>
                       )}
 
                       <div className="flex justify-center items-center mt-12">

@@ -12,20 +12,18 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type Props = {};
 
 const ProfileEntityDetails = (props: Props) => {
   const Navigate = useNavigate();
+  const status = sessionStorage.getItem('user_status')
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
-
-  // console.log(allFormData, "allform data ");
 
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
@@ -40,28 +38,53 @@ const ProfileEntityDetails = (props: Props) => {
   //         f?.sectionId === verificationSectionId?.id
   //     )
   //   : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       .filter((field: any) => {
+  //         // Filtering fields based on sectionId
+  //         return (
+  //           field?.sectionId === entityDetailsSectionId?.id ||
+  //           field?.sectionId === verificationSectionId?.id
+  //         );
+  //       })
+  //       .map((field: any) => {
+  //         // Adding a 'disabled' property based on specific field labels
+  //         return {
+  //           ...field,
+  //           disabled: [
+  //             "companyName",
+  //             "panNumber",
+  //           ].includes(field.key),
+  //         };
+  //       })
+  //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
-        .filter((field: any) => {
-          // Filtering fields based on sectionId
-          return (
-            field?.sectionId === entityDetailsSectionId?.id ||
-            field?.sectionId === verificationSectionId?.id
-          );
-        })
-        .map((field: any) => {
-          // Adding a 'disabled' property based on specific field labels
-          return {
-            ...field,
-            disabled: [
-              "Pin Code",
-              "Pan Number",
-              "Company Name (As per Pan)",
-            ].includes(field.label),
-          };
-        })
+      .filter((field: any) => {
+        // Filtering fields based on sectionId
+        return (
+          field?.sectionId === entityDetailsSectionId?.id ||
+          field?.sectionId === verificationSectionId?.id
+        );
+      })
+      .map((field: any) => {
+        // Setting the 'disabled' property based on the 'canEditable' property
+        const isDisabled = field.required === true ? status === 'RETURNED' ? [
+          "companyName",
+          "panNumber",
+          'dateOfIncorporation'
+        ].includes(field.key) ? true :  false : true  : [
+          "companyName",
+          "panNumber",
+          'dateOfIncorporation'
+        ].includes(field.key) ? true : false;
+
+        return {
+          ...field,
+          disabled: isDisabled,
+        };
+      })
     : [];
-  // console.log(formFields, "formfield entitydetail");
 
   const formData =
     formFields &&
@@ -71,25 +94,29 @@ const ProfileEntityDetails = (props: Props) => {
       label: field.label,
       value: field.userInput,
     }));
-  // console.log(formData, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
-    const noError = await handleValidationChecks(formFields?.filter((field : any) => field?.disabled === false));
-    console.log({noError});
-    
+    const noError = await handleValidationChecks(
+      formFields?.filter((field: any) => field?.disabled === false)
+    );
+
     if (noError) {
       if (noError) {
-        axios
-          .patch(`${bffUrl}/deposit-taker/${sessionStorage.getItem('entityUniqueId')}`, {
-            formData: formData,
-          })
+        axiosTokenInstance
+          .patch(
+            `/deposit-taker/${sessionStorage.getItem(
+              "entityUniqueId"
+            )}`,
+            {
+              formData: formData,
+            }
+          )
           .then((response) => {
-            console.log(response, "response");
             Swal.fire({
               icon: "success",
-              text: "Entity Detail  update  successfully ",
+              text: "Entity Details updated successfully",
               confirmButtonText: "Ok",
             });
             Navigate("/dt/profile?current=nodal");

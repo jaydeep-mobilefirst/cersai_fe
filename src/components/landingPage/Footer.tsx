@@ -1,8 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLandingStore } from "../../zust/useLandingStore";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type Props = {};
 
 export const Footer = (props: Props) => {
+  const { homePageData } = useLandingStore((state) => state);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('');
+
+  useEffect(() => {
+    if (location.pathname === '/faq') {
+      setActiveTab('FAQ');
+    } else if (location.pathname === '/notifications') {
+      setActiveTab('NOTIFICATIONS');
+    } else if (location.pathname === '/downloads') {
+      setActiveTab('DOWNLOADS');
+    } else if (location.pathname === '/training') {
+      setActiveTab('TRAINING');
+    } else if (location.pathname === '/contactus') {
+      setActiveTab('CONTACT US');
+    } else if (location.pathname === '/operatingguidelines') {
+      setActiveTab('OPERATING GUIDELINES');
+    }
+  }, [location.pathname]);
+
+  const handleMenuClick = async (text:any) => {
+    if (text === 'FAQ') {
+      navigate('/faq');
+    } else if (text === 'NOTIFICATIONS') {
+      navigate('/notifications');
+    } else if (text === 'HOME') {
+      navigate('/');
+    } else if (text === 'DOWNLOADS') {
+      navigate('/downloads');
+    } else if (text === 'TRAINING') {
+      navigate('/training');
+    } else if (text === 'CONTACT US') {
+      navigate('/contactus');
+    } else if (text === 'OPERATING GUIDELINES') {
+      navigate('/operatingguidelines');
+    }
+    
+    setActiveTab(text);
+  };
+
+
   let arr = [
     { heading: "Home", link: "#" },
     { heading: "FAQ", link: "#" },
@@ -22,17 +66,20 @@ export const Footer = (props: Props) => {
         {/* primary nav */}
         <div className="w-full md:flex md:items-center md:w-auto md:space-x-4 md:justify-center flex-wrap">
           <>
-            {arr.map((link, idx) => {
-              if (link.heading === "Sitemap") {
+            {homePageData?.homePageData?.footer?.map((link:any,index:any) => {
+              if (link.text === "Contact Us") {
                 return (
-                  <p className="block px-2 py-1 border-white md:inline-block pr-6 text-gilroy-medium"  key={idx}>
-                    {link.heading.toUpperCase()}
+                  <p className="block px-2 py-1 border-white md:inline-block pr-6 text-gilroy-medium cursor-pointer"  key={index} onClick={() => handleMenuClick(link.text.toUpperCase())}>
+                    {link.text.toUpperCase()}
                   </p>
                 );
+              }else if (link.text === "Sitemap" || link.text === "Operating Guidelines") {
+                // Skip rendering these links
+                return null;
               }
               return (
-                <p className="block px-2 py-1 md:border-r border-white md:inline-block pr-6 text-gilroy-medium" key={idx}>
-                  {link.heading.toUpperCase()}
+                <p className="block px-2 py-1 md:border-r border-white md:inline-block pr-6 text-gilroy-medium cursor-pointer" key={index} onClick={() => handleMenuClick(link.text.toUpperCase())}>
+                  {link.text.toUpperCase()}
                 </p>
               );
             })}
@@ -44,12 +91,12 @@ export const Footer = (props: Props) => {
         className="py-4 text-center mt-6 text-gilroy-regular"
         style={{ fontSize: "10px" }}
       >
-        COPYRIGHT © 2021 CBRS AI. ALL RIGHTS RESERVED.
+        {homePageData?.homePageData?.footerDescription[0]?.text}
         <div className="mt-4 md:mt-0 flex justify-center">
           <p>
-            Powered and managed by{" "}
+          {homePageData?.homePageData?.footerDescription[1]?.text}{" "}
             <span className="underline text-gilroy-regular font-bold">
-              NSE Data and Analytics Limited
+            {homePageData?.homePageData?.footerDescription[1]?.link}
             </span>
           </p>
         </div>

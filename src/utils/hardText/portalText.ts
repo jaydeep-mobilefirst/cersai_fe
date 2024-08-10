@@ -5,6 +5,9 @@ import myTaskWhiteIcon from "../../assets/images/myTaskWhiteIcon.svg";
 import entityMasterIcon from "../../assets/images/entitymaster.svg";
 import entityMasterWhiteIcon from "../../assets/images/entitymasterwhite.svg";
 
+import TaskIcon from "../../assets/images/task.svg";
+import TaskIconWhite from "../../assets/images/task-2.svg";
+
 export const portalSideBarList = [
   {
     title: "Dashboard",
@@ -15,8 +18,8 @@ export const portalSideBarList = [
   },
   {
     title: "Scheme Management",
-    url: "/dt/mytask",
-    rurl: "/dt/mytask",
+    url: "/dt/scheme",
+    rurl: "/dt/scheme",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
@@ -38,16 +41,23 @@ export const portalSideBarListRegulator = [
     selectlogo: dashboardWhiteLogo,
   },
   {
-    title: "My Task",
-    url: "/rg/my-task",
-    rurl: "/rg/my-task",
+    title: "My Tasks",
+    url: "/rg/mytask",
+    rurl: "/rg/mytask",
+    logo: TaskIcon,
+    selectlogo: TaskIconWhite,
+  },
+  {
+    title: "Scheme Management",
+    url: "/rg/deposit-taker",
+    rurl: "/rg/deposit-taker",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
   {
     title: "User Management",
-    url: "/rg/usermanagment",
-    rurl: "/rg/usermanagment",
+    url: "/rg/usermanagement",
+    rurl: "/rg/usermanagement",
     logo: entityMasterIcon,
     selectlogo: entityMasterWhiteIcon,
   },
@@ -61,16 +71,16 @@ export const portalSideBarListCompetent = [
     selectlogo: dashboardWhiteLogo,
   },
   {
-    title: "My Task",
-    url: "/ca/my-task",
-    rurl: "/ca/my-task",
+    title: "Scheme Management",
+    url: "/ca/deposit-taker",
+    rurl: "/ca/deposit-taker",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
   {
     title: "User Management",
-    url: "/ca/usermanagment",
-    rurl: "/ca/usermanagment",
+    url: "/ca/usermanagement",
+    rurl: "/ca/usermanagement",
     logo: entityMasterIcon,
     selectlogo: entityMasterWhiteIcon,
   },
@@ -84,16 +94,16 @@ export const portalSideBarListDesignated = [
     selectlogo: dashboardWhiteLogo,
   },
   {
-    title: "My Task",
-    url: "/dc/my-task",
-    rurl: "/dc/my-task",
+    title: "Scheme Management",
+    url: "/dc/deposit-taker",
+    rurl: "/dc/deposit-taker",
     logo: myTaskIcon,
     selectlogo: myTaskWhiteIcon,
   },
   {
     title: "User Management",
-    url: "/dc/usermanagment",
-    rurl: "/dc/usermanagment",
+    url: "/dc/usermanagement",
+    rurl: "/dc/usermanagement",
     logo: entityMasterIcon,
     selectlogo: entityMasterWhiteIcon,
   },
@@ -103,10 +113,11 @@ export const profileSideBarList = [
     title: "Entity Details",
     url: "entity",
     rurl: "/dt/profile?current=entity",
+
     percentage: 0,
   },
   {
-    title: "Nodal Details",
+    title: "Nodal Officer Details",
     url: "nodal",
     rurl: "/dt/profile?current=nodal",
     percentage: 25,
@@ -141,7 +152,7 @@ export const profileSideBarListRegulator = [
   },
 
   {
-    title: "Nodal Details",
+    title: "Nodal Officer Details",
     url: "nodal",
     rurl: "/rg/profile?current=nodal",
     percentage: 25,
@@ -169,7 +180,7 @@ export const profileSideBarListCompetent = [
     percentage: 25,
   },
   {
-    title: "Nodal Details",
+    title: "Nodal Officer Details",
     url: "nodal",
     rurl: "/ca/profile?current=nodal",
     percentage: 100,
@@ -190,7 +201,7 @@ export const profileSideBarListDesignated = [
     percentage: 25,
   },
   {
-    title: "Nodal Details",
+    title: "Nodal Officer Details",
     url: "nodal",
     rurl: "/dc/profile?current=nodal",
     percentage: 100,

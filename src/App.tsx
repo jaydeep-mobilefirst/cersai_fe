@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import PrivateRoutes from "./utils/PrivateRoute";
@@ -37,27 +38,38 @@ import SchemaCreationForm from "./pages/mainPortal/SchemaManagemet/SchemaCreatio
 import SchemaCreation from "./pages/mainPortal/SchemaManagemet/SchemaCreation";
 import SchemeMasterForm from "./pages/mainPortal/SchemaManagemet/SchemaMasterDetail";
 
+import DepositSearchMg from "./pages/regulator/SchemaManagemetRg/DepositTaker/AuditTrailDtSearch";
+import DepositTakerForm from "./pages/regulator/SchemaManagemetRg/DepositTaker/DepositTakerForm";
+import DepositSchemeCreation from "./pages/regulator/SchemaManagemetRg/DepositTaker/DepositSchemaCreation";
+import FailedRecords from "./pages/regulator/SchemaManagemetRg/DepositTaker/FailedRecords";
+import SchemaCreationFormRg from "./pages/regulator/SchemaManagemetRg/Schemes/NewSchemaCreation";
+import SchemaCreationRg from "./pages/regulator/SchemaManagemetRg/Schemes/SchemsCreation";
+import SchemeDetailsRg from "./pages/regulator/SchemaManagemetRg/Schemes/NewSchemaCreation";
+import MyTaskStatus from "./pages/regulator/MyTask/MyTaskStatus";
+import MyTaskForm from "./pages/regulator/MyTask/MyTaskForm";
+import AuditTrailRg from "./pages/regulator/SchemaManagemetRg/Schemes/AuditTrailSchemes";
+
+import DepositSearchMgCa from "./pages/competentAuthority/SchemaManagemetCa/DepositTaker/AuditTrailDtSearch";
+import DepositTakerFormCa from "./pages/competentAuthority/SchemaManagemetCa/DepositTaker/DepositTakerForm";
+import DepositSchemeCreationCa from "./pages/competentAuthority/SchemaManagemetCa/DepositTaker/DepositSchemaCreation";
+import FailedRecordsCa from "./pages/competentAuthority/SchemaManagemetCa/DepositTaker/FailedRecords";
+import SchemaCreationFormCa from "./pages/competentAuthority/SchemaManagemetCa/Schemes/NewSchemaCreation";
+import SchemaCreationCa from "./pages/competentAuthority/SchemaManagemetCa/Schemes/SchemsCreation";
+import SchemeDetailsCa from "./pages/competentAuthority/SchemaManagemetCa/Schemes/NewSchemaCreation";
+import AuditTrailCa from "./pages/competentAuthority/SchemaManagemetCa/Schemes/AuditTrailSchemes";
+
+import DepositTakerFormDc from "./pages/designatedCourt/SchemaManagemetDc/DepositTaker/DepositTakerForm";
+import DepositSchemeCreationDc from "./pages/designatedCourt/SchemaManagemetDc/DepositTaker/DepositSchemaCreation";
+import SchemaCreationDc from "./pages/designatedCourt/SchemaManagemetDc/Schemes/SchemsCreation";
+import AuditTrailDc from "./pages/designatedCourt/SchemaManagemetDc/Schemes/AuditTrailSchemes";
+
 import RoleCreation from "./pages/mainPortal/UserManagement/RoleCreation";
 import UserCreation from "./pages/mainPortal/UserManagement/UserCreation";
 import UserMasterForm from "./pages/mainPortal/UserManagement/UserMasterForm";
 import EditUserForm from "./pages/mainPortal/UserManagement/EditUserMasterForm";
-
-import RoleCreationRg from "./pages/regulator/UserManagementRg/RoleCreation";
-import UserCreationRg from "./pages/regulator/UserManagementRg/UserCreation";
-import UserMasterFormRg from "./pages/regulator/UserManagementRg/UserMasterForm";
 import EditUserFormRg from "./pages/regulator/UserManagementRg/EditUserMasterForm";
-
-import RoleCreationCa from "./pages/competentAuthority/UserManagementCa/RoleCreation";
-import UserCreationCa from "./pages/competentAuthority/UserManagementCa/UserCreation";
-import UserMasterFormCa from "./pages/competentAuthority/UserManagementCa/UserMasterForm";
 import EditUserFormCa from "./pages/competentAuthority/UserManagementCa/EditUserMasterForm";
-
-import RoleCreationDc from "./pages/designatedCourt/UserManagementDc/RoleCreation";
-import UserCreationDc from "./pages/designatedCourt/UserManagementDc/UserCreation";
-import UserMasterFormDc from "./pages/designatedCourt/UserManagementDc/UserMasterForm";
 import EditRolePopupDc from "./pages/designatedCourt/UserManagementDc/EditUserMasterForm";
-
-import SetPassword from "./pages/SetPassowrd";
 import SetNewPasswordModel from "./components/userFlow/common/SetNewPasswordModel";
 import OtpModel from "./components/userFlow/common/OtpModal";
 import MainPortalLayoutRegulator from "./layouts/portal/MainPortalLayoutRegulator";
@@ -70,29 +82,52 @@ import ResetPasswordCompetent from "./pages/mainPortal/ResetPasswordCompetent";
 import ResetPasswordDesignated from "./pages/mainPortal/ResetPasswordDesignated";
 import DashboardProfileDesignateCourt from "./pages/mainPortal/DashboardProfileDesiganted";
 import MainPortalLayoutDesignated from "./layouts/portal/MainPortalLayoutDesignated";
-
+import DepositTakerSearchForm from "./pages/depositTakerSearch/DepositTakerDetails";
+import SchemeSearch from "./pages/schemeSearch/SchemeSearch";
+import SchemeSearchDetails from "./pages/schemeSearch/SchemSearchDetails";
+import DepositeTakerSearch from "./pages/depositTakerSearch/DepositeTakerSearch";
+import DepositeTakerSearchDetails from "./pages/depositTakerSearch/DepositeTakerSearchDetails";
+import Faq from "./pages/Faq";
+import Notifications from "./pages/Notifications";
+import Downloads from "./pages/Downloads";
+import Training from "./pages/Training";
+import ContactUs from "./pages/ContactUs";
+import OpertaingGuidelines from "./pages/OperatingGuidelines";
+import ReturnJourney from "./pages/ReturnJourney";
+import UploadDSC3 from "./pages/mainPortal/UploadDSC3";
+import UploadDSC3Competent from "./pages/mainPortal/UploadDSC3Competent";
+import UploadDSC3Designated from "./pages/mainPortal/UploadDSC3Designated";
+import UploadDSC3Regulator from "./pages/mainPortal/UploadDSC3Regulator";
+import DashboardRegulator from "./pages/mainPortal/DashboardRegulator";
+import DashboardDesignated from "./pages/mainPortal/DashboardDesignated";
 function App() {
   return (
     <div>
       <Router>
         <Routes>
+
+          {/* restricted routes */}
           <Route element={<PrivateRoutes />}>
             <Route element={<MainPortalLayout />} path="/dt">
               <Route element={<Dashboard />} path="dashboard" />
               <Route element={<DashboardProfile />} path="profile" />
               <Route element={<ResetPassword />} path="resetpassword" />
-              <Route element={<SchemaCreation />} path="mytask" />
-              <Route element={<SchemaCreationForm />} path="mytask/form" />
-              <Route element={<SchemeMasterForm />} path="mytask/schema" />
+              <Route element={<UploadDSC3 />} path="uploaddsc3" />
+              <Route element={<SchemaCreation />} path="scheme" />
+              <Route element={<SchemaCreationForm />} path="scheme/form" />
+              <Route element={<SchemeMasterForm />} path="scheme/creation" />
               <Route
-                element={<UserCreation />}
+                element={<UserCreation entityType="DT" />}
                 path="usermanagement/usercreation"
               />
-              <Route element={<RoleCreation />} path="usermanagement" />
+              <Route
+                element={<RoleCreation entityType="DT" />}
+                path="usermanagement"
+              />
 
               <Route
                 element={<UserMasterForm />}
-                path="usermanagement/usermasterum"
+                path="usermanagement/usermaster"
               />
               <Route
                 element={<EditUserForm />}
@@ -100,20 +135,39 @@ function App() {
               />
             </Route>
             <Route element={<MainPortalLayoutRegulator />} path="/rg">
-              <Route element={<Dashboard />} path="dashboard" />
-              <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<RoleCreationRg />} path="usermanagment" />
+              <Route element={<DashboardRegulator />} path="dashboard" />
+              <Route element={<MyTaskStatus />} path="mytask" />
+              <Route element={<MyTaskForm />} path="mytask/form" />
+              <Route element={<DepositSchemeCreation />} path="deposit-taker" />
+              <Route element={<DepositTakerForm />} path="deposit-taker/form" />
+              <Route element={<DepositSearchMg />} path="deposit-taker/audit" />
               <Route
-                element={<UserCreationRg />}
-                path="usermanagment/usercreation"
+                element={<FailedRecords />}
+                path="deposit-taker/failed-records"
+              />
+              <Route element={<AuditTrailRg />} path="my-task/audit-rail" />
+              <Route element={<SchemaCreationRg />} path="my-task" />
+
+              <Route element={<SchemaCreationFormRg />} path="my-task/form" />
+              <Route
+                element={<SchemeDetailsRg />}
+                path="my-task/new-scheme-creation"
               />
               <Route
-                element={<UserMasterFormRg />}
-                path="usermanagment/usermaster"
+                element={<RoleCreation entityType="RG" />}
+                path="usermanagement"
+              />
+              <Route
+                element={<UserCreation entityType="RG" />}
+                path="usermanagement/usercreation"
+              />
+              <Route
+                element={<UserMasterForm />}
+                path="usermanagement/usermaster"
               />
               <Route
                 element={<EditUserFormRg />}
-                path="usermanagement/editusermasterum"
+                path="usermanagement/editusermaster"
               />
 
               <Route element={<DashboardProfileRegulator />} path="profile" />
@@ -121,18 +175,46 @@ function App() {
                 element={<ResetPasswordRegulator />}
                 path="resetpassword"
               />
+              <Route element={<UploadDSC3Regulator />} path="uploaddsc3" />
             </Route>
+            
             <Route element={<MainPortalLayoutCompetent />} path="/ca">
               <Route element={<DashboardCompetent />} path="dashboard" />
-              <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<RoleCreationCa />} path="usermanagment" />
+              <Route element={<SchemaCreationCa />} path="my-task" />
+              <Route element={<SchemaCreationFormCa />} path="my-task/form" />
               <Route
-                element={<UserCreationCa />}
-                path="usermanagment/usercreation"
+                element={<DepositSchemeCreationCa />}
+                path="deposit-taker"
               />
               <Route
-                element={<UserMasterFormCa />}
-                path="usermanagment/usermaster"
+                element={<DepositTakerFormCa />}
+                path="deposit-taker/form"
+              />
+              <Route
+                element={<DepositSearchMgCa />}
+                path="deposit-taker/audit"
+              />
+              <Route
+                element={<FailedRecordsCa />}
+                path="deposit-taker/failed-records"
+              />
+              <Route element={<AuditTrailCa />} path="my-task/audit-rail" />
+              <Route
+                element={<SchemeDetailsCa />}
+                path="my-task/new-scheme-creation"
+              />
+
+              <Route
+                element={<RoleCreation entityType="CA" />}
+                path="usermanagement"
+              />
+              <Route
+                element={<UserCreation entityType="CA" />}
+                path="usermanagement/usercreation"
+              />
+              <Route
+                element={<UserMasterForm />}
+                path="usermanagement/usermaster"
               />
               <Route
                 element={<EditUserFormCa />}
@@ -144,18 +226,34 @@ function App() {
                 element={<ResetPasswordCompetent />}
                 path="resetpassword"
               />
+              <Route element={<UploadDSC3Competent />} path="uploaddsc3" />
             </Route>
             <Route element={<MainPortalLayoutDesignated />} path="/dc">
-              <Route element={<DashboardCompetent />} path="dashboard" />
-              <Route element={<h1> in Progesss</h1>} path="my-task" />
-              <Route element={<RoleCreationDc />} path="usermanagment" />
+              <Route element={<DashboardDesignated />} path="dashboard" />
+              <Route element={<SchemaCreationDc />} path="my-task" />
+
               <Route
-                element={<UserCreationDc />}
-                path="usermanagment/usercreation"
+                element={<DepositSchemeCreationDc />}
+                path="deposit-taker"
               />
               <Route
-                element={<UserMasterFormDc />}
-                path="usermanagment/usermaster"
+                element={<DepositTakerFormDc />}
+                path="deposit-taker/form"
+              />
+
+              <Route element={<AuditTrailDc />} path="my-task/audit-rail" />
+
+              <Route
+                element={<RoleCreation entityType="DC" />}
+                path="usermanagement"
+              />
+              <Route
+                element={<UserCreation entityType="DC" />}
+                path="usermanagement/usercreation"
+              />
+              <Route
+                element={<UserMasterForm />}
+                path="usermanagement/usermaster"
               />
               <Route
                 element={<EditRolePopupDc />}
@@ -169,9 +267,15 @@ function App() {
                 element={<ResetPasswordDesignated />}
                 path="resetpassword"
               />
+              <Route element={<UploadDSC3Designated />} path="uploaddsc3" />
             </Route>
 
-            <Route
+            
+          </Route>
+
+
+          {/* public routes */}
+          <Route
               element={<DepositTakerRegisterFlow />}
               path="/depositetaker/signup"
             >
@@ -223,12 +327,39 @@ function App() {
               <Route element={<NodalDetailsCompetent />} path="nodaldetails" />
               <Route element={<ReviewDetails />} path="reviewdetails" />
             </Route>
-          </Route>
           <Route element={<Landing />} path="/" />
+          <Route element={<ReturnJourney />} path="/return-journey" />
+          <Route element={<SchemeSearch />} path="/scheme-search" />
+          <Route
+            element={<SchemeSearchDetails />}
+            path="/scheme-search-details"
+          />
+          <Route
+            element={<DepositeTakerSearch />}
+            path="/deposite-taker-search"
+          />
+          <Route
+            element={<DepositTakerSearchForm />}
+            path="/deposite-taker-search-form"
+          />
+          <Route
+            element={<DepositeTakerSearchDetails />}
+            path="/deposite-taker-search-details"
+          />
+
           {/* <Route element={<SetPassword />} path="/set-password" /> */}
           <Route element={<SetNewPasswordModel />} path="/set-password" />
           <Route element={<OtpModel />} path="/otp-verification" />
-          <Route element={<RoleCreation />} path="/role" />
+          <Route element={<Faq />} path="/faq" />
+          <Route element={<Notifications />} path="/notifications" />
+          <Route element={<Downloads />} path="/downloads" />
+          <Route element={<Training />} path="/training" />
+          <Route element={<ContactUs />} path="/contactus" />
+          <Route
+            element={<OpertaingGuidelines />}
+            path="/operatingguidelines"
+          />
+          {/* <Route element={<RoleCreation />} path="/role" /> */}
         </Routes>
       </Router>
     </div>

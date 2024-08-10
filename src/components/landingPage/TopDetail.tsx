@@ -10,6 +10,9 @@ import ForgetPasswordModel from "../userFlow/common/ForgetPasswordModel";
 import RegisterMailPopup from "../userFlow/common/RegisterMailPopup";
 import SetNewPasswordModel from "../userFlow/common/SetNewPasswordModel";
 import PasswordUpdateModel from "../userFlow/common/PasswordUpdateModel";
+import useTopDetailStore from "../../store/TopDetailStore";
+import { useLandingStore } from "../../zust/useLandingStore";
+import { Link } from "react-router-dom";
 
 interface AuthButtonProps {
   buttontext: string;
@@ -17,13 +20,30 @@ interface AuthButtonProps {
 }
 
 const TopDetail = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [showLoginModel, setShowLoginModel] = useState(false);
-  const [showForgetModel, setShowForgetModel] = useState(false);
-  const [showRegisterMailModel, setShowRegisterMailModel] = useState(false);
-  const [showsNewPasswordModel, setShowsNewPasswordModel] = useState(true);
-  const [showsPasswordUpdateModel, setShowsPasswordUpdateModel] =
-    useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [showLoginModel, setShowLoginModel] = useState(false);
+  // const [showForgetModel, setShowForgetModel] = useState(false);
+  // const [showRegisterMailModel, setShowRegisterMailModel] = useState(false);
+  // const [showsNewPasswordModel, setShowsNewPasswordModel] = useState(true);
+  // const [showsPasswordUpdateModel, setShowsPasswordUpdateModel] =
+  //   useState(false);
+
+  const { homePageData } = useLandingStore((state) => state);
+
+  const {
+    isOpen,
+    showLoginModel,
+    showForgetModel,
+    showRegisterMailModel,
+    showsNewPasswordModel,
+    showsPasswordUpdateModel,
+    setIsOpen,
+    setShowLoginModel,
+    setShowForgetModel,
+    setShowRegisterMailModel,
+    setShowsNewPasswordModel,
+    setShowsPasswordUpdateModel,
+  } = useTopDetailStore();
 
   const openModal = () => {
     setIsOpen(true);
@@ -99,20 +119,20 @@ const TopDetail = () => {
   return (
     <div className="relative flex items-center justify-between flex-col md:flex-row my-[19px] mx-[16px] lg:mx-[169px]">
       <div className="m-4 md:m-0">
-        <img src={Logo} alt="logo" />
+        <img src={homePageData?.homePageData?.logo[0]?.img} alt="logo" className="w-[88px] h-[88px]" />
       </div>
       {isOpen && (
         <div
-          className="fixed top-0 left-0 w-full h-full bg-gray-800 opacity-30"
+          className="fixed top-0 left-0 w-full h-full bg-gray-800 opacity-30 z-10"
           onClick={closeModal}
         ></div>
       )}
       <div className="flex items-start justify-start flex-col">
-        {contactDetails.map((data, idx) => {
+        {homePageData?.homePageData?.contactDetails?.map((data:any, idx:any) => {
           return (
             <div className="flex items-center justify-center mb-2" key={idx}>
               <div>
-                <img src={data?.imgsrc} alt="icon" />
+                <img src={data?.img} alt="icon" className="w-[24px] h-[24px]" />
               </div>
               {idx === 2 ? (
                 <>
@@ -120,7 +140,8 @@ const TopDetail = () => {
                     className="ml-4 text-[#797979] text-gilroy-regular cursor-pointer underline"
                     onClick={downloadReport}
                   >
-                    {data?.text}
+                    <Link target={"_blank"} to={data.link}> {data?.text}</Link>
+                   
                   </div>
                 </>
               ) : (
@@ -135,12 +156,12 @@ const TopDetail = () => {
         })}
       </div>
       <div className="flex items-center m-4 md:m-0">
-        <AuthButton buttontext={authlable[1]} onClick={openModal} />
-        <AuthButton buttontext={authlable[0]} onClick={openLoginModel} />
+        <AuthButton buttontext={homePageData?.homePageData?.authlable[1].text} onClick={openModal} />
+        <AuthButton buttontext={homePageData?.homePageData?.authlable[0].text} onClick={openLoginModel} />
       </div>
       {/* Conditionally render ModelDiv based on isOpen state */}
       {isOpen && (
-        <div className="fixed flex-row justify-center items-center mt-[35%] md:mt-[50%] lg:mt-[30%] md:ml-[15%]">
+        <div className="fixed flex-row justify-center items-center mt-[35%] md:mt-[50%] lg:mt-[30%] md:ml-[15%] z-20">
           <RegisterModel closeModal={closeModal} />
         </div>
       )}

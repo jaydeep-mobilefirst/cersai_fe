@@ -11,14 +11,14 @@ import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type Props = {};
 
 const ProfileNodalDetails = (props: Props) => {
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
+  const status = sessionStorage.getItem('user_status')
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
@@ -27,11 +27,24 @@ const ProfileNodalDetails = (props: Props) => {
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Nodal Details"
   );
-
   // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
   //   ? allFormData?.formFields?.form_fields?.filter(
   //       (f: any) => f?.sectionId === sectionId?.id
   //     )
+  //   : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       .filter((field: any) => {
+  //         // Filtering fields based on sectionId
+  //         return field?.sectionId === sectionId?.id;
+  //       })
+  //       .map((field: any) => {
+  //         // Adding a 'disabled' property based on specific field labels
+  //         return {
+  //           ...field,
+  //           disabled: ["nodalMobile", "nodalEmail"].includes(field.key),
+  //         };
+  //       })
   //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
@@ -41,20 +54,17 @@ const ProfileNodalDetails = (props: Props) => {
         })
         .map((field: any) => {
           // Adding a 'disabled' property based on specific field labels
+          const isDisabled = field.required === true ? status === 'RETURNED' ? 
+          [
+            "companyName",
+            "panNumber",
+          ].includes(field.key) ? true :  false : true : ["nodalMobile", "nodalEmail"].includes(field.key) ? true :  false;
           return {
             ...field,
-            disabled: [
-              "Nodal Officer FirstName",
-              "Nodal Officer MiddleName",
-              "Nodal Officer LastName",
-              "Nodal Officer Mobile Number",
-              "Nodal Officer Email",
-              "DSC3 Certificate",
-            ].includes(field.label),
+            disabled: isDisabled,
           };
         })
     : [];
-  // console.log(formFields, "nodalDetail");
 
   const formData =
     formFields &&
@@ -65,25 +75,22 @@ const ProfileNodalDetails = (props: Props) => {
       value: field.userInput,
     }));
 
-  console.log(formData, "formData");
-
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
     const noError = await handleValidationChecks(formFields, false);
     if (noError) {
-      axios
+      axiosTokenInstance
         .patch(
-          `${bffUrl}/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+          `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
           {
             formData: formData,
           }
         )
         .then((response) => {
-          console.log(response, "response");
           Swal.fire({
             icon: "success",
-            text: "Nodal Detail  update  successfully ",
+            text: "Nodal Officer details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/dt/profile?current=regulator");
@@ -207,6 +214,7 @@ const ProfileNodalDetails = (props: Props) => {
             allFormData={allFormData}
             formFields={formFields}
             onChange={onChange}
+            disable={true}
           />
 
           <div>

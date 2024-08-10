@@ -6,14 +6,13 @@ import { useSearchParams } from "react-router-dom";
 import ProfileResponsiveTabs from "../../components/userFlow/main-portal-designated/ProfileResponsiveTabs";
 
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import axios from "axios";
-import { backendBaseUrl, bffUrl } from "../../utils/api";
 
 import CourtDetails from "./Edit-profile-designatedCourt/CourtDetails";
 import NodalDetails from "./Edit-profile-designatedCourt/NodalDetail";
 import UploadDocument from "./Edit-profile-designatedCourt/UploadDocument";
 
 import TaskTabsDesignated from "../../components/userFlow/main-portal-designated/TaskTabs";
+import { axiosTokenInstance } from "../../utils/axios";
 
 type Props = {};
 
@@ -25,16 +24,15 @@ const DashboardProfileDesignateCourt = (props: Props) => {
   const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/4?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/4?status=addToProfile`)
       .then(async (response) => {
-        console.log(response?.data, "response");
 
         // if (response?.data?.success) {
         //   let dcData: any = [];
         //   try {
         //     let designatedCourt = await axios.get(
-        //       `${bffUrl}/designated-court/${entityUniqueId}`
+        //       `/designated-court/${entityUniqueId}`
         //     );
 
         //     dcData =
@@ -75,8 +73,8 @@ const DashboardProfileDesignateCourt = (props: Props) => {
         if (response?.data?.success) {
           let dcData: any = [];
           try {
-            let designatedCourt = await axios.get(
-              `${bffUrl}/designated-court/${entityUniqueId}`
+            let designatedCourt = await axiosTokenInstance.get(
+              `/designated-court/${entityUniqueId}`
             );
             dcData =
               designatedCourt.data.data.designatedCourt
@@ -84,7 +82,6 @@ const DashboardProfileDesignateCourt = (props: Props) => {
           } catch (error) {
             console.log("Error");
           }
-          // console.log(dtData, "respnse--------------");
           let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
@@ -93,7 +90,8 @@ const DashboardProfileDesignateCourt = (props: Props) => {
                 : "",
               error: "",
             })
-          );
+          )?.sort((a  :any, b : any) => a.sortOrder - b.sortOrder)
+
 
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
@@ -114,7 +112,6 @@ const DashboardProfileDesignateCourt = (props: Props) => {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
-          // console.log(obj, "obj-----");
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
         } else {

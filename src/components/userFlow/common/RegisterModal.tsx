@@ -73,10 +73,9 @@ import {
   registrationFirstPage,
 } from "../../../utils/hardText/signuppageText";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { backendBaseUrl, bffUrl } from "../../../utils/api";
 import LoaderSpin from "../../LoaderSpin";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import { axiosTraceIdInstance } from "../../../utils/axios";
 
 interface ModelDivProps {
   closeModal: () => void;
@@ -97,7 +96,7 @@ export const paths: any = {
 };
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const Navigate = useNavigate();
-  const { entities, setEntities, setAllFormData, setAllDocumentData } =
+  const { entities, setEntities, setAllFormData, setAllDocumentData,sections, setSections } =
     useDepositTakerRegistrationStore((state) => state);
   const [data, setData] = useState<EntityType[]>(entities);
   const [loader, setLoader] = useState<boolean>(false);
@@ -109,8 +108,8 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
 
   const apiCall = () => {
     setLoader(true);
-    axios
-      .get(`${bffUrl}/registration/entities`)
+    axiosTraceIdInstance
+      .get(`/registration/entities`)
       .then((responce) => {
         const data = responce?.data?.data;
         let sortedData = data.sort(
@@ -132,22 +131,24 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   };
 
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/${selectedRadio?.id}?status=addToRegistration`)
+    axiosTraceIdInstance
+      .get(`/registration/field-data/${selectedRadio?.id}?status=addToRegistration`)
       .then(async (response) => {
         if (response?.data?.success) {
           let dropdownData = undefined;
           try {
-            let dropdownOptionsRes = await axios.get(
-              `${bffUrl}/registration/dropdown-components`
+            let dropdownOptionsRes = await axiosTraceIdInstance.get(
+              `/registration/dropdown-components`
             );
             dropdownData = dropdownOptionsRes?.data?.data;
           } catch (error) {
             console.log("Error");
           }
-          let modifiedFormFields = response?.data?.data?.formFields?.map(
+          let modifiedFormFields = response?.data?.data?.formFields
+          ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+          ?.map(
             (o: any) => ({ ...o, userInput: "", error: "" })
-          );
+          )
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
               ...o,
@@ -155,6 +156,19 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
               error: "",
               fileName: "",
             }));
+            
+            let dedupObj = {}
+             modifiedFormFields?.map(
+              (f: any) => {
+                if ( f?.key === "nodalMobile" ||
+                  f?.key === "panNumber" ||
+                  f?.key === "nodalEmail") {
+                  dedupObj = {...dedupObj, [f?.key] : f?.userInput}
+                }
+              } 
+            );
+
+            sessionStorage?.setItem('original', JSON.stringify(dedupObj))
           let obj = {
             dropdownData,
             ...response?.data?.data,
@@ -163,6 +177,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
           };
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
+          setSections(response?.data?.data?.entitySections?.map((e : any) => ({...e, completed : false})))
         } else {
           throw new Error("Error getting data, Please try later!");
         }
@@ -176,14 +191,11 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const [selectedRadio, setSelectedRadio] = useState<any>(entities[0]);
 
   const handleSubmit = (e: any) => {
-    console.log();
     
     e.preventDefault();
     fetchFormFields();
     Navigate(selectedRadio?.path);
   };
-
-  console.log({data, selectedRadio});
   
 
   return (

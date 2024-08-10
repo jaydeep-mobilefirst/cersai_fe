@@ -1,106 +1,88 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import addCircle from "../../../assets/images/add-circleb.svg";
 import searchButton from "../../../assets/images/search-normal.svg";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
-import SelectButtonTask from "../../../components/userFlow/regulatorCourt/SelectButtonManagement";
+import SelectButtonTask from "../../../components/UserManagement/SelectButtonManagement";
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
-import ToggleSwitch from "../../../components/userFlow/regulatorCourt/ToggleSwitch";
-import UmTabs from "../../../components/userFlow/regulatorCourt/UmTabs";
+import ToggleSwitch from "../../../components/UserManagement/ToggleSwitch";
+import UmTabs from "../../../components/UserManagement/UmTabs";
 import edit from "../../../assets/images/bedit.svg";
 import { useNavigate } from "react-router-dom";
+import useFetchFunctionalityForUAM from "../../../custom hooks/useFetchFunctionalityForUAM";
+import uamStore from "../../../store/uamStore";
+import useFetchUsers from "../../../custom hooks/fetchUsers";
+import InputFields from "../../../components/ScehmaManagement/InputField";
+import useFetchRoles from "../../../custom hooks/fetchRoles";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type TableType = {
-  sno: string;
-  depositTakerName: string;
-  depositTakerId: string;
-  status: string;
-  action: boolean;
+  id: string;
+  Name: string;
+  role: string;
+  isActive: boolean;
 };
 
 const columnHelper = createColumnHelper<TableType>();
 
 const UserCreation = () => {
+  const entityId = sessionStorage.getItem('entityUniqueId') ?? ''
+  const { handleRefreshUAM } = uamStore((state => state))
+  const { loading, users, page, pageSize, setFunctionalitySearch, setPage, setSearchString, totalPages } = useFetchUsers(entityId);
+
+
   const navigate = useNavigate();
 
   const handleAddUserClick = () => {
-    navigate("/rg/usermanagment/usermaster");
+    navigate("/rg/usermanagement/usermaster");
   };
 
-  const defaultData: TableType[] = [
-    {
-      sno: "01",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      depositTakerId: "Lorem ipsum dolor",
-      status: "Active",
-      action: false,
-    },
-    {
-      sno: "02",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      depositTakerId: "Lorem ipsum dolor",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "03",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      depositTakerId: "Lorem ipsum dolor",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "04",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      depositTakerId: "Lorem ipsum dolor",
-      status: "pending",
-      action: false,
-    },
-    {
-      sno: "05",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      depositTakerId: "Lorem ipsum dolor",
-      status: "pending",
-      action: true,
-    },
-    {
-      sno: "06",
-      depositTakerName: "Lorem ipsum dolor sit amet",
-      depositTakerId: "Lorem ipsum dolor",
-      status: "pending",
-      action: false,
-    },
-  ];
 
   const handleEditClick = (user: TableType) => {
     navigate("/rg/usermanagement/editusermasterum");
   };
 
   const columns = [
-    columnHelper.accessor("sno", {
+    columnHelper.accessor("id", {
       cell: (info) => info.renderValue(),
       header: () => <span>S.No.</span>,
     }),
 
-    columnHelper.accessor("depositTakerName", {
-      cell: (info) => info.renderValue(),
-      header: () => <span>User Name</span>,
+    columnHelper.accessor((row) => row, {
+      id: "name",
+      cell: (info) => {
+        const value: any = info.getValue();
+        return <>{value?.firstName + " " + value?.lastName}</>
+      },
+      header: () => <span>Name</span>
     }),
-    columnHelper.accessor("depositTakerId", {
+    columnHelper.accessor("role", {
       cell: (info) => info.renderValue(),
       header: () => <span>Role</span>,
     }),
-    columnHelper.accessor("status", {
+    columnHelper.accessor("isActive", {
       cell: (info) => {
-        const value = info?.row?.original?.action;
+        const value = info?.row?.original?.isActive;
+        const id = info?.row?.original?.id;
+        const StatusChange = () => {
+          axiosTokenInstance
+            .patch(`/user/status/`, {
+              id: id,
+              status: !value,
+            })
+            .then((response: any) => {
+              handleRefreshUAM();
+            })
+            .catch((error: any) => { });
+        };
 
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span> {value ? "Active" : "In-Active"}</span>
-            <ToggleSwitch enabled={value} />
+            <span>{value ? "Active" : "InActive"}</span>
+            <ToggleSwitch enabled={value} apiCall={StatusChange} />
           </div>
         );
       },
@@ -150,21 +132,24 @@ const UserCreation = () => {
     setSelectedOption3(value);
   };
 
+  const handleSearch = (e: any) => {
+    setSearchString(e.target.value);
+  };
+
   return (
     <div className="relative xl:ml-[20px] pr-3">
       <div className="mt-6">
-        <UmTabs />
+        {/* <UmTabs /> */}
       </div>
       <div>
         <div className="mt-5 mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3  ">
-          <div className="flex-grow">
-            <SelectButtonTask
-              setOption={handleSetOption1}
-              options={options}
-              selectedOption={selectedOption1}
-              placeholder="Name"
-              mdWidth="w-full"
-              borderColor="#E7F0FF"
+          <div className="flex-grow mt-[11px] mb-[35px] flex items-center  flex-wrap gap-4">
+            <InputFields
+              height="45px"
+              width="500px"
+              padding="10px"
+              placeholder="Search by Name/Role"
+              onChange={handleSearch}
             />
           </div>
           <div className="flex-grow">
@@ -173,16 +158,6 @@ const UserCreation = () => {
               options={options}
               selectedOption={selectedOption2}
               placeholder="Role"
-              mdWidth="w-full"
-              borderColor="#E7F0FF"
-            />
-          </div>
-          <div className="flex-grow">
-            <SelectButtonTask
-              setOption={handleSetOption3}
-              options={options}
-              selectedOption={selectedOption3}
-              placeholder="Functionaly"
               mdWidth="w-full"
               borderColor="#E7F0FF"
             />
@@ -211,12 +186,14 @@ const UserCreation = () => {
 
       <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
         <div className="max-w-full overflow-x-auto">
-          <ReactTable defaultData={defaultData} columns={columns} />
+          {users?.length > 0 && <ReactTable defaultData={users} columns={columns} />}
         </div>
         <div className="mt-10">
           <CustomPagination
-            totalItems={defaultData.length}
-            itemsPerPage={5}
+            currentPage={page}
+            setCurrentPage={setPage}
+            totalItems={totalPages}
+            itemsPerPage={pageSize}
             maxPageNumbersToShow={5}
           />
         </div>

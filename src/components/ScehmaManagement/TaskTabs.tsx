@@ -6,14 +6,14 @@ type Props = {};
 
 const tabs = [
   {
-    title: "Schema Creation",
-    url: "mytask",
-    rurl: "/dt/mytask",
+    title: "Scheme Creation",
+    url: "scheme",
+    rurl: "/dt/scheme",
   },
 ];
 
 const TaskTabs = (props: Props) => {
-  const [activeTab, setActiveTab] = useState<string>("mytask");
+  const [activeTab, setActiveTab] = useState<string>("scheme");
   const [url, setUrl] = useState<String>("");
 
   const location = useLocation();
@@ -27,8 +27,6 @@ const TaskTabs = (props: Props) => {
   const handleTabClick = (tabName: string) => {
     setActiveTab(tabName);
   };
-
-  // console.log({ url });
 
   return (
     <div className="flex-col justify-center items-start max-sm:items-center inline-flex border-b w-full">

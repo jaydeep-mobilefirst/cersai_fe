@@ -34,21 +34,19 @@ const AddUserForm = () => {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data, "data");
     alert("Form submitted successfully!");
-    console.log({ data });
     setShowPopup(true);
 
     reset();
   };
 
   const handleBackButtonClick = () => {
-    navigate("/rg/usermanagment/usercreation");
+    navigate("/rg/usermanagement/usercreation");
   };
 
   return (
-    <div className="relative xl:ml-[40px]">
-      <div className="pr-10">
+    <div className="mt-2 ">
+      <div className="-ml-9 -mr-9">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex items-center justify-between flex-col h-full lg:h-[75vh] "

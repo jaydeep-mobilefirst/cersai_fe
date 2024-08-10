@@ -11,8 +11,7 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type Props = {};
 
@@ -28,10 +27,23 @@ const ProfileRegulatorDetails = (props: Props) => {
     (s: any) => s?.sectionName === "Regulators Details"
   );
 
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields?.filter(
+  //       (f: any) => f?.sectionId === sectionId?.id
+  //     )
+  //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-    ? allFormData?.formFields?.form_fields?.filter(
-        (f: any) => f?.sectionId === sectionId?.id
-      )
+    ? allFormData?.formFields?.form_fields
+        .filter((f: any) => f?.sectionId === sectionId?.id)
+        .map((field: any) => {
+          // Setting the 'disabled' property based on the 'canEditable' property
+          const isDisabled = field.required === true ? true : false;
+
+          return {
+            ...field,
+            disabled: isDisabled,
+          };
+        })
     : [];
   const formData =
     formFields &&
@@ -47,15 +59,17 @@ const ProfileRegulatorDetails = (props: Props) => {
     setLoader(true);
     const noError = await handleValidationChecks(formFields);
     if (noError) {
-      axios
-        .patch(`${bffUrl}/deposit-taker/${sessionStorage.getItem('entityUniqueId')}`, {
-          formData: formData,
-        })
+      axiosTokenInstance
+        .patch(
+          `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+          {
+            formData: formData,
+          }
+        )
         .then((response) => {
-          console.log(response, "response");
           Swal.fire({
             icon: "success",
-            text: "Regulator Detail  update  successfully ",
+            text: "Regulator Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/dt/profile?current=documents");

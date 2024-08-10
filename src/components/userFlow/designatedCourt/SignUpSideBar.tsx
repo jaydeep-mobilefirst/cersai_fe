@@ -3,7 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import HeadComp from "./HeadCom";
 import { signupSideBarDesignated } from "../../../utils/hardText/signUpDesignatedText";
-import CrossIcon from "../../../assets/images/CrossIcon.svg";
+import blueTickImage from "../../../assets/images/tickCircleBlue.svg"
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 interface SignUpSideBarProps {
   isMenuOpen?: boolean;
   toggleMenu?: () => void;
@@ -15,6 +16,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
 }) => {
   const Navigate = useNavigate();
   const location = useLocation();
+  const {allFormData, sections} = useDepositTakerRegistrationStore(state => state)
 
   // Initialize page state with the path of the first item in signupSideBarDesignated array
   const [page, setPage] = useState<string>(signupSideBarDesignated[0].path);
@@ -36,13 +38,48 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
 
   useEffect(() => {
     const data = signupSideBarDesignated.find((p) => p.path === location.pathname);
-    setPercentage(data?.percentage);
+    // setPercentage(data?.percentage);
     if (data) {
       setPage(data?.path);
     }
   }, [location.pathname])
 
-  console.log(location.pathname);
+  useEffect(() => {
+    let totalSections = sections?.length;
+    let completed = sections?.reduce((acc, obj) => {
+      if (obj?.completed) {
+        return acc + 1;
+      }
+      else{
+        return acc + 0;
+      }
+    }, 0)
+    
+     let percentage = (completed / (totalSections)) * 100;
+     switch (true) {
+      case percentage < 25:
+        setPercentage(0)
+        break;
+      case percentage >= 25 && percentage < 50:
+        setPercentage(25)
+        break;
+      case percentage >= 50 && percentage < 75:
+        setPercentage(50)
+        break;
+      case percentage === 75:
+        setPercentage(75)
+        break;
+      case percentage === 100:
+          setPercentage(100)
+        break;
+     
+     
+      default:
+        break;
+     }
+
+  }, [sections])
+
   
   return (
     <div className="sm:w-[300px] w-[250px] h-[100vh] md:w-[349px] bg-[#E7F0FF]">
@@ -79,9 +116,9 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
             {signupSideBarDesignated.map((item: any) => {
               return (
                 <div
-                  onClick={() =>
-                    handleClick(item.description, item.percentage, item.path)
-                  }
+                  // onClick={() =>
+                  //   handleClick(item.description, item.percentage, item.path)
+                  // }
                   key={item.id}
                   className={` mb-[16px] w-full md:w-[290px] h-14 p-2 bg-[#1c468e] rounded-lg justify-between items-center inline-flex ${
                     item.path === page
@@ -114,7 +151,11 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
                       {item.description}
                     </p>
                   </div>
-                  <img src={item.tickImgSrc} className="w-6 h-6" alt="icon" />
+                  {
+                    sections?.find((s) => item?.description?.trim() === s?.sectionName?.trim())?.completed &&
+                    <img src={item.path === page ? item?.tickImgSrc : blueTickImage} className="w-6 h-6 stroke-black" />
+                  }
+                  {/* <img src={item.tickImgSrc} className="w-6 h-6" alt="icon" /> */}
                 </div>
               );
             })}

@@ -22,7 +22,7 @@ const UploadDocumentsRegulator = (props: Props) => {
   );
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Upload Documents"
-  )?.id
+  )?.id;
   const { onFileChange, handleDocumentValidations } =
     useContext(FormHandlerContext);
   const screenWidth = useScreenWidth();
@@ -34,7 +34,9 @@ const UploadDocumentsRegulator = (props: Props) => {
   const [loader, setLoader] = useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fieldData?.fileType)?.name;
+    const fieldType = allFormData?.fileTypes?.find(
+      (type: any) => type?.id === fieldData?.fileType
+    )?.name;
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0]);
       onFileChange(event.target.files[0], fieldData, fieldType);
@@ -56,39 +58,50 @@ const UploadDocumentsRegulator = (props: Props) => {
   };
 
   const handleDeleteFile = () => {
-    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fieldData?.fileType)?.name;
+    const fieldType = allFormData?.fileTypes?.find(
+      (type: any) => type?.id === fieldData?.fileType
+    )?.name;
     onFileChange("", fieldData, fieldType);
     setFile(null);
     toggleDeletePopup();
   };
-
-  console.log({ documentData });
   const submit = async (e: any) => {
     e.preventDefault();
-    const goodToGo = await handleDocumentValidations(documentData[0]?.sectionId);
+    const goodToGo = await handleDocumentValidations(
+      documentData[0]?.sectionId
+    );
     if (goodToGo) {
-      const edit = params.get('edit');
+      const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate('/competent/authority/reviewdetails')
-      }
-      else {
-        Navigate('/competent/authority/nodaldetails');
+        Navigate("/competent/authority/reviewdetails");
+      } else {
+        Navigate("/competent/authority/nodaldetails");
       }
     }
-  }
+  };
+
+  const handleKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
 
   return (
     <>
       <div>
         <div className="border-[#E6E6E6] border-[1px] -mt-[6px]"></div>
 
-        <form className="flex items-center justify-between flex-col h-full lg:h-[100vh]" onSubmit={() => Navigate('/designated/court/nodaldetails')}>
+        <form
+          className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
+          onSubmit={() => Navigate("/designated/court/nodaldetails")}
+          onKeyDown={handleKeyPress}
+        >
           {showUploadPopup && (
             <UploadFile
               showUploadPopup={showUploadPopup}
               closePopup={closePopup}
               file={file}
-              toggleUploadPopup={() => { }}
+              toggleUploadPopup={() => {}}
               handleFileChange={handleFileChange}
             />
           )}
@@ -127,11 +140,17 @@ const UploadDocumentsRegulator = (props: Props) => {
             <div
               className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
               style={{
-                width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
-                  }`,
+                width: `${
+                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                }`,
               }}
             >
-              <div className="flex flex-row items-center space-x-2">
+              <div
+                className="flex flex-row items-center space-x-2"
+                onClick={() =>
+                  Navigate("/competent/authority/competentdetails")
+                }
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -150,8 +169,8 @@ const UploadDocumentsRegulator = (props: Props) => {
                 </svg>
                 <button
                   role="button"
-                  onClick={() => Navigate('/competent/authority/competentdetails')}
-                  className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
+                  className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
+                >
                   Back
                 </button>
               </div>

@@ -61,12 +61,12 @@ const tabs = [
   {
     title: "Role Creation",
     url: "rolecreation",
-    rurl: "/dc/usermanagment",
+    rurl: "/dc/usermanagement",
   },
   {
     title: "User Creation",
     url: "usercreation",
-    rurl: "/dc/usermanagment/usercreation",
+    rurl: "/dc/usermanagement/usercreation",
   },
 ];
 

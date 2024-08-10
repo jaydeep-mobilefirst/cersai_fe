@@ -34,16 +34,14 @@ const AddUserForm = () => {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data, "data");
     alert("Form submitted successfully!");
-    console.log({ data });
     setShowPopup(true);
 
     reset();
   };
 
   const handleBackButtonClick = () => {
-    navigate("/ca/usermanagment/usercreation");
+    navigate("/ca/usermanagement/usercreation");
   };
 
   return (
@@ -90,13 +88,13 @@ const AddUserForm = () => {
                   </label>
                   <InputFields
                     placeholder="Type here"
-                    {...register("middleName")}
+                    // {...register("middleName")}
                   />
-                  {errors?.middleName && (
+                  {/* {errors?.middleName && (
                     <p className="text-red-500">
                       {errors?.middleName?.message}
                     </p>
-                  )}
+                  )} */}
                 </div>
 
                 <div>

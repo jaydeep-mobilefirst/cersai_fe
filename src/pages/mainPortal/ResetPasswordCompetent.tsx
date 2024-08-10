@@ -5,10 +5,10 @@ import { useScreenWidth } from "../../utils/screenSize";
 import TaskTabs from "../../components/userFlow/mainPortal/TaskTabs";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { bffUrl } from "../../utils/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import TaskTabsCompetent from "../../components/userFlow/main-portal-competent/TaskTabs";
+import { axiosTokenInstance } from "../../utils/axios";
 
 const ResetPasswordCompetent = () => {
   const screenWidth = useScreenWidth();
@@ -22,40 +22,58 @@ const ResetPasswordCompetent = () => {
     register,
     handleSubmit,
     watch,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data: any) => {
-    // console.log(data);
     setLoader(true);
     try {
-      const response = await axios.post(`${bffUrl}/auth/resetpassword`, {
+      const response = await  axiosTokenInstance
+      .post(`/auth/resetpassword`, {
         username: emailId,
         oldpassword: data?.oldPassword,
         newpassword: data.confirmPassword,
         entityType: entityType,
       });
-      console.log(response.data.message);
       setLoader(false);
       Swal.fire({
         icon: "success",
         // text: " Reset password is update  successfully ",
-        text: response.data.message,
+        text: response.data.message || "Reset password is updated successfully",
         confirmButtonText: "Ok",
       });
       navigate("/");
       sessionStorage.clear();
-    } catch (error) {
-      setLoader(false);
-      Swal.fire({
-        icon: "error",
-        text: "Failed to update  Rest password",
-        confirmButtonText: "Ok",
-      });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          setLoader(false);
+          Swal.fire({
+            icon: "error",
+            text: error?.response?.data?.message || "Please try again later",
+            confirmButtonText: "Ok",
+          });
+        }
+      }
     }
   };
 
   const newPassword = watch("newPassword");
+  const oldPassword = watch("oldPassword");
+
+  // Trigger validation error if old and new passwords are the same
+  React.useEffect(() => {
+    if (newPassword === oldPassword && newPassword) {
+      setError("oldPassword", {
+        type: "manual",
+        message: "New password must be different from old password",
+      });
+    } else {
+      clearErrors("oldPassword");
+    }
+  }, [newPassword, oldPassword, setError, clearErrors]);
 
   // Password validation pattern
   const passwordValidation = {

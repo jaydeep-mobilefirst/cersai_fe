@@ -8,14 +8,14 @@ import ProfileRegulatorDetails from "./Edit Profile/ProfileRegulatorDetails";
 import ProfileUploadDocuments from "./Edit-Profile-Regulator/ProfileUploadDocuments";
 
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import axios from "axios";
-import { backendBaseUrl, bffUrl } from "../../utils/api";
+
 import DashboardProfileSidebarRegulator from "../../components/userFlow/mainPortal-Regulator/DashboardProfileSidebar";
 
 import CompetentDetails from "./Edit-profile-competent/CompetentDetails";
 import NodalDetails from "./Edit-profile-competent/NodalDetails";
 import UploadDocument from "./Edit-profile-competent/UploadDocument";
 import TaskTabsCompetent from "../../components/userFlow/main-portal-competent/TaskTabs";
+import { axiosTokenInstance } from "../../utils/axios";
 
 type Props = {};
 
@@ -27,15 +27,14 @@ const DashboardProfileCompetent = (props: Props) => {
   const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
-    axios
-      .get(`${bffUrl}/registration/field-data/3?status=addToProfile`)
+    axiosTokenInstance
+      .get(`/registration/field-data/3?status=addToProfile`)
       .then(async (response) => {
-        // console.log(response, "resppnse");
         // if (response?.data?.success) {
         //   let dtData: any = [];
         //   try {
-        //     let competentData = await axios.get(
-        //       `${bffUrl}/competent-authority/${entityUniqueId}`
+        //     let competentData = await     axiosTokenInstance.get(
+        //       `/competent-authority/${entityUniqueId}`
         //     );
         //     // console.log(
         //     //   competentData?.data?.data?.competentAuthority
@@ -48,7 +47,6 @@ const DashboardProfileCompetent = (props: Props) => {
         //   } catch (error) {
         //     console.log("Error");
         //   }
-        //   // console.log(dtData, "respnse--------------");
         //   let modifiedFormFields = response.data.data?.formFields?.map(
         //     (o: any) => ({
         //       ...o,
@@ -78,7 +76,6 @@ const DashboardProfileCompetent = (props: Props) => {
         //     ...response?.data?.data,
         //     formFields: { form_fields: modifiedFormFields },
         //   };
-        //   // console.log(obj, "obj-----");
         //   setAllFormData(obj);
         //   setAllDocumentData(modifiedFileFields);
         // } else {
@@ -87,15 +84,15 @@ const DashboardProfileCompetent = (props: Props) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await axios.get(
-              `${bffUrl}/competent-authority/${entityUniqueId}`
+            let depositTakerData = await     axiosTokenInstance
+            .get(
+              `/competent-authority/${entityUniqueId}`
             );
             dtData =
               depositTakerData?.data?.data?.competentAuthority?.competentAuthorityData;
           } catch (error) {
             console.log("Error");
           }
-          // console.log(dtData, "respnse--------------");
           let modifiedFormFields = response.data.data?.formFields?.map(
             (o: any) => ({
               ...o,
@@ -119,14 +116,13 @@ const DashboardProfileCompetent = (props: Props) => {
               uploadFileId: dtData
                 ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
                 : "",
-            }));
-          console.log({ modifiedFileFields });
+            }))?.sort((a  :any, b : any) => a.sortOrder - b.sortOrder)
+
 
           let obj = {
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
           };
-          // console.log(obj, "obj-----");
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
         } else {

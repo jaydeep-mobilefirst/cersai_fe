@@ -1,101 +1,124 @@
 import { useScreenWidth } from "../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
+import moment from "moment";
+import { axiosTraceIdInstance } from "../../utils/axios";
 
 type Props = {};
 
 const VerificationForm = (props: Props) => {
   const [loader, setLoader] = useState(false);
-  const {onChange, handleValidationChecks, updatePanFormField, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
+  const location = useLocation();
+  const panverified = location.state?.panverified;
+  const {
+    onChange,
+    handleValidationChecks,
+    updatePanFormField,
+    onFileChange,
+    handleSectionCompletionTrack,
+  } = useContext(FormHandlerContext);
   const Navigate = useNavigate();
-  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Verification");
-  const formFields = allFormData?.formFields?.form_fields?.filter((f : any) => f?.sectionId === sectionId?.id);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Verification"
+  );
+  const formFields = allFormData?.formFields?.form_fields?.filter(
+    (f: any) => f?.sectionId === sectionId?.id
+  );
   const screenWidth = useScreenWidth();
 
-  // Pan modal data 
-  const [para1, setPara1] = useState('')
-  const [para2, setPara2] = useState('')
+  // Pan modal data
+  const [para1, setPara1] = useState("");
+  const [para2, setPara2] = useState("");
   const [panSuccessModal, setPanSuccessModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [allVerified, setAllVerified] = useState(false);
-  const onSubmit = async (event : any) => {
+
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
 
-    // Verify Pan
-
-    const verifyPan = async () : Promise<boolean> => {
+    const verifyPan = async (): Promise<boolean> => {
       try {
-        let company = formFields?.find((field : any, i : number) => field?.label === "Company Name (As per Pan)");
-        let pan = formFields?.find((field : any, i : number) =>  field?.label === "Pan Number");
-        
-        let response = await axios.post("http://34.149.91.231/cms/pandirectory/api", {
+        let company = formFields?.find((field : any, i : number) => field?.key === 'companyName' );
+        let pan = formFields?.find((field : any, i : number) =>  field?.key === 'panNumber');
+        let dob = formFields?.find((field : any, i : number) =>  field?.key === 'dateOfIncorporation');
+       
+        let response = await axiosTraceIdInstance.post("/pandirectory/api", {
           name:company?.userInput?.toUpperCase(),
-          pan_no: pan?.userInput
+          pan_no: pan?.userInput,
+          // dob : dob[2]+"/"+dob[1]+"/"+dob[0]
+          dob : moment(dob?.userInput).format("DD/MM/YYYY")
         })
         const data = response.data;
         if (data?.status !== "success") {
-          setPara1(`Verification Failed`)
-          setPara2(`${data?.message}`)
-          setSubmitted(false)
-          setPanSuccessModal(true)
+          setPara1(`Verification Failed`);
+          setPara2(`${data?.message}`);
+          setSubmitted(false);
+          setPanSuccessModal(true);
+          return false;
         }
-        
+
         const panUpdate = updatePanFormField(data, pan);
-
         return panUpdate;
-        
       } catch (error) {
-        alert("Error while verifying pan, Please try later!")
-        return false
+        if (axios.isAxiosError(error)) {
+          Swal.fire({
+            text: error.response?.data?.message,
+            title: "Error",
+            icon: "error",
+          });
+          return false;
+        }
+        return false;
       }
+    };
 
-    }
-
-    setLoader(true)
-    const noError = await handleValidationChecks(formFields)
+    setLoader(true);
+    const noError = await handleValidationChecks(formFields);
     let panVerified = undefined;
     if (noError) {
-     panVerified = await verifyPan();  
-    } 
-    setLoader(false)
-    
+      panVerified = await verifyPan();
+    }
+    setLoader(false);
+    console.log({ panVerified });
+
     if (noError && panVerified) {
       setAllVerified(true);
-      setPara1(`Verification Successful`)
-      setPara2(`Your PAN Details have been successfully verified.`)
-      setSubmitted(true)
-      setPanSuccessModal(true)
-      // Swal.fire({
-      //   icon : "success",
-      //   text : "Pan Verified Successfully!",
-      //   confirmButtonText : "Ok"
-      // })
-      // .then((confirm : any) => {
-      //   
-      // })
+      setPara1(`Verification Successful`);
+      setPara2(`Your PAN Details have been successfully verified.`);
+      setSubmitted(true);
+      if (!panverified) {
+        setPanSuccessModal(true);
+      } else {
+        Navigate("/depositetaker/signup/entitydetails");
+      }
+    } else {
+      setTimeout(async () => {
+        await handleSectionCompletionTrack(sectionId?.id, false);
+      }, 2000);
     }
-  };  
-  
-  const handleClosePopup = () =>{
-    setPanSuccessModal(false)
+  };
+
+  const handleClosePopup = () => {
+    setPanSuccessModal(false);
     if (allVerified) {
-      Navigate('/depositetaker/signup/entitydetails')
+      Navigate("/depositetaker/signup/entitydetails");
     }
-  }
+  };
+
   return (
     <>
       <div className="">
-        <form
-          className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
-        >
+        <form className="flex items-center justify-between flex-col h-full lg:h-[100vh]">
           <div
             style={{
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
@@ -106,8 +129,13 @@ const VerificationForm = (props: Props) => {
               Verification
             </h1>
             <div className="bg-white p-4 lg:p-[48px] text-gilroy-medium">
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>
-
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+                documentFields={documentData}
+                onFileChange={onFileChange}
+              />
             </div>
           </div>
           <div>
@@ -118,15 +146,15 @@ const VerificationForm = (props: Props) => {
                   screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
                 }`,
               }}
-            > 
+            >
               <div className="flex items-center ml-auto">
                 <button
                   type="submit"
                   disabled={loader}
                   onClick={onSubmit}
-                  className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                  className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
                 >
-                  {loader ? <LoaderSpin/> : "Verify details"}
+                  {loader ? <LoaderSpin /> : "Verify details"}
                 </button>
               </div>
             </div>

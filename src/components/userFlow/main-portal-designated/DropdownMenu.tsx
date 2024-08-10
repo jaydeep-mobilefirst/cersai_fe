@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { backendBaseUrl, bffUrl } from "../../../utils/api";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import { axiosTraceIdInstance } from "../../../utils/axios";
 
-// import { authBaseUrl } from "../../utils/api";
 type DropdownMenuProps = {
   toggleDropdown: () => void; // This is a function prop
   isOpen: boolean; // This is a boolean state
@@ -52,8 +50,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const logoutApiHandle = () => {
     setLoader(true);
     const refreshToken = sessionStorage.getItem("refresh_token");
-    axios
-      .post(`${bffUrl}/logout`, {
+    axiosTraceIdInstance
+      .post(`/logout`, {
         refresh_token: refreshToken,
       })
       .then((responce) => {
@@ -115,21 +113,20 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            <div
+            {/* <div
               className="block px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100"
               role="menuitem"
             >
               Dashboard
-            </div>
-            {/* <Link to={"/dt/profile?current=entity"}> */}
+            </div> */}
+            {/*            
             <div
               onClick={handleSetting}
               className="block px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100 cursor-pointer"
               role="menuitem"
             >
               Setting
-            </div>
-            {/* </Link> */}
+            </div> */}
 
             {loader ? (
               <div className="flex items-start px-4 py-2 text-base text-gilroy-regular text-gray-700 hover:bg-gray-100">

@@ -3,13 +3,12 @@ import { useScreenWidth } from "../../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../../components/LoaderSpin";
-import axios from "axios";
-import { bffUrl } from "../../../utils/api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import UploadFile from "../../designatedCourt/UploadFile";
 import DeleteUpload from "../../designatedCourt/DeleteUpload";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type Props = {};
 
@@ -27,7 +26,7 @@ const ProfileUploadDocuments = (props: Props) => {
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Upload Documents"
-  )?.id
+  )?.id;
 
   const { onFileChange, handleDocumentValidations } =
     useContext(FormHandlerContext);
@@ -50,13 +49,13 @@ const ProfileUploadDocuments = (props: Props) => {
   // };
 
   const onSubmit = async (e: any) => {
-    setLoader(true)
-    e.preventDefault();    
+    setLoader(true);
+    e.preventDefault();
     const goodToGo = await handleDocumentValidations(
       documentData.map((d: { sectionId: number }) => d?.sectionId)
     );
     if (!goodToGo) {
-      setLoader(false)
+      setLoader(false);
       return;
     }
 
@@ -69,15 +68,14 @@ const ProfileUploadDocuments = (props: Props) => {
         value: field.uploadFileId,
       }));
 
-    axios
+      axiosTokenInstance
       .patch(
-        `${bffUrl}/regulator/${sessionStorage?.getItem("entityUniqueId")}`,
+        `/regulator/${sessionStorage?.getItem("entityUniqueId")}`,
         {
           formData: formData,
         }
       )
       .then((response) => {
-        // console.log(response, "response");
         Swal.fire({
           icon: "success",
           text: "Documents uploaded successfully",
@@ -85,7 +83,7 @@ const ProfileUploadDocuments = (props: Props) => {
         });
       })
       .catch((err) => {
-        setLoader(false)
+        setLoader(false);
         Swal.fire({
           icon: "error",
           text: err?.response?.data?.detail?.message,
@@ -110,21 +108,25 @@ const ProfileUploadDocuments = (props: Props) => {
   };
 
   const handleDeleteFile = () => {
-    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fieldData?.fileType)?.name;
+    const fieldType = allFormData?.fileTypes?.find(
+      (type: any) => type?.id === fieldData?.fileType
+    )?.name;
     onFileChange("", fieldData, fieldType);
     setFile(null);
     toggleDeletePopup();
-  }; 
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fieldType = allFormData?.fileTypes?.find((type: any) => type?.id === fieldData?.fileType)?.name;
-     if (event.target.files && event.target.files.length > 0) {
-       setFile(event.target.files[0]);
-       onFileChange(event.target.files[0], fieldData, fieldType);
-       toggleUploadPopup();
-       closePopup();
-     }
-   };
+    const fieldType = allFormData?.fileTypes?.find(
+      (type: any) => type?.id === fieldData?.fileType
+    )?.name;
+    if (event.target.files && event.target.files.length > 0) {
+      setFile(event.target.files[0]);
+      onFileChange(event.target.files[0], fieldData, fieldType);
+      toggleUploadPopup();
+      closePopup();
+    }
+  };
 
   return (
     <>
@@ -135,29 +137,30 @@ const ProfileUploadDocuments = (props: Props) => {
         }}
       >
         {showUploadPopup && (
-            <UploadFile
-              showUploadPopup={showUploadPopup}
-              closePopup={closePopup}
-              file={file}
-              handleFileChange={handleFileChange}
-            />
-          )}
-          {showDeletePopup && (
-            <DeleteUpload
-              file={file}
-              handleDeleteFile={handleDeleteFile}
-              toggleDeletePopup={toggleDeletePopup}
-              showDeletePopup={showDeletePopup}
-            />
-          )}
-        <div className="p-6 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-5 space-y-0">
+          <UploadFile
+            showUploadPopup={showUploadPopup}
+            closePopup={closePopup}
+            file={file}
+            handleFileChange={handleFileChange}
+          />
+        )}
+        {showDeletePopup && (
+          <DeleteUpload
+            file={file}
+            handleDeleteFile={handleDeleteFile}
+            toggleDeletePopup={toggleDeletePopup}
+            showDeletePopup={showDeletePopup}
+          />
+        )}
+        <div className="p-4 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-5 space-y-0">
+          <h1 className="text-xl text-gilroy-bold">Upload Documents</h1>
           <DynamicFields
-              allFormData={allFormData}
-              documentFields={documentData}
-              toggleUploadPopup={toggleUploadPopup}
-              setFieldData={setFieldData}
-              sectionId={sectionId}
-              onFileChange={onFileChange}
+            allFormData={allFormData}
+            documentFields={documentData}
+            toggleUploadPopup={toggleUploadPopup}
+            setFieldData={setFieldData}
+            sectionId={sectionId}
+            onFileChange={onFileChange}
           />
         </div>
         <div className="p-4">

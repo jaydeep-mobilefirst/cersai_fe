@@ -16,34 +16,73 @@ const ComponentDetails: React.FC = () => {
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [showOTPModel, setShowOTPModel] = useState<boolean>(false);
-  const {onChange, handleValidationChecks, onFileChange, handleDocumentValidations} = useContext(FormHandlerContext)
+  const {
+    onChange,
+    handleValidationChecks,
+    onFileChange,
+    handleDocumentValidations,
+  } = useContext(FormHandlerContext);
   const [loader, setLoader] = useState(false);
 
-  const {allFormData, documentData} = useDepositTakerRegistrationStore(state => state)
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
 
-  const sectionId = allFormData?.entitySections?.find((s : any) => s?.sectionName === "Competent Details");
-  const formFields = Array.isArray(allFormData?.formFields?.form_fields)
-  ? allFormData?.formFields?.form_fields?.filter(
-      (f: any) => f?.sectionId === sectionId?.id
-    )
-  : [];
-  
-  const onSubmit = async (event : any) => {
+  const sectionId = allFormData?.entitySections?.find(
+    (s: any) => s?.sectionName === "Competent Authority Details"
+  );
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       ?.filter((f: any) => f?.sectionId === sectionId?.id)
+  //       .map((field: any) => {
+  //         return {
+  //           ...field,
+  //           disabled: ["State", "Jurisdiction"].includes(field.label),
+  //         };
+  //       })
+  //   : [];
+  const formFields =
+    allFormData?.formFields?.form_fields
+      ?.filter((f: any) => f?.sectionId === sectionId?.id)
+      .map((field: any) => {
+        const disableLabels = [
+          "State",
+          "Jurisdiction",
+          "Address Line 1",
+          "Address Line 2",
+          "Pin Code",
+        ];
+
+        const disableKeys = [
+          "state",
+          "Jurisdiction",
+          "addressLine1",
+          "addressLine2",
+          "pincode",
+        ];
+
+        return {
+          ...field,
+          disabled:
+            disableLabels.includes(field.label) ||
+            disableKeys.includes(field.key),
+        };
+      }) || [];
+
+  const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true)
+    setLoader(true);
     // False means validation fail
-    const noError = await handleValidationChecks(formFields)
-  
-    setLoader(false)
+    const noError = await handleValidationChecks(formFields);
+
+    setLoader(false);
 
     if (noError) {
-      const edit = params.get('edit');
-      console.log({edit});
+      const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate('/competent/authority/reviewdetails')
-      }
-      else{
-        Navigate('/competent/authority/uploaddocuments')
+        Navigate("/competent/authority/reviewdetails");
+      } else {
+        Navigate("/competent/authority/uploaddocuments");
       }
     }
   };
@@ -66,7 +105,13 @@ const ComponentDetails: React.FC = () => {
             <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
               Competent Details
             </h1>
-            <DynamicFields allFormData={allFormData} formFields={formFields} onChange={onChange} documentFields={documentData} onFileChange={onFileChange}/>  
+            <DynamicFields
+              allFormData={allFormData}
+              formFields={formFields}
+              onChange={onChange}
+              documentFields={documentData}
+              onFileChange={onFileChange}
+            />
           </div>
         </div>
 
@@ -93,7 +138,7 @@ const ComponentDetails: React.FC = () => {
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className="flex flex-row items-center space-x-2">
+            {/* <div className="flex flex-row items-center space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -113,16 +158,26 @@ const ComponentDetails: React.FC = () => {
               <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
                 Back
               </button>
-            </div>
-            <div className="flex items-center">
-                <button
-                  type="submit"
-                  disabled={loader}
-                  onClick={onSubmit}
-                  className="bg-[#1c468e] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
-                >
-                  {loader ? <LoaderSpin/> : "Save & Continue"}
-                </button>
+            </div> */}
+            {/* <div className="flex items-center ml-auto">
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#1c468e] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
+              </button>
+            </div> */}
+            <div className="flex items-center ml-auto">
+              <button
+                type="submit"
+                disabled={loader}
+                onClick={onSubmit}
+                className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+              >
+                {loader ? <LoaderSpin /> : "Save & Continue"}
+              </button>
             </div>
           </div>
           <div>

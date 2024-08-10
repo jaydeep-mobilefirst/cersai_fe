@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import TextArea from "../../../components/userFlow/form/TextArea";
 import SelectButton from "../../../components/userFlow/form/SelectButton";
-import addCircle from "../../../assets/images/add-circle.svg";
-import minusCircle from "../../../assets/images/minus-cirlce.svg";
+// import addCircle from "../../../assets/images/add-circle.svg";
+import addCircle from "../../../assets/images/add-user.svg";
+// import minusCircle from "../../../assets/images/minus-cirlce.svg";
+import minusCircle from "../../../assets/images/MinusIcon.svg";
 import InputFields from "../../../components/userFlow/common/InputField";
 import axios from "axios";
 import { pincodeValidationUrl } from "../../../utils/api";
@@ -58,7 +60,6 @@ const ProfileBranchForm: React.FC<Props> = ({
   // }, [selectedState, selectedDistrict, setValue, i]);
 
   // const handleSetState = (value: string) => {
-  //   console.log(value, "value");
   //   setSelectedState(value);
   //   setValue(`branches[${i}].state`, value); // Set state value
   // };
@@ -104,11 +105,9 @@ const ProfileBranchForm: React.FC<Props> = ({
     if (pinCode.length === 6) {
       try {
         const response = await axios.get(`${pincodeValidationUrl}/${pinCode}`);
-        // console.log(response?.data[0].PostOffice[0].District, "pinCode");
 
         // const state = response.data[0].PostOffice[0].State;
         // const district = response.data[0].PostOffice[0].District;
-        // console.log(state, district, "state and district");
         // setSelectedState(state);
         // setSelectedDistrict(district);
         // setValue(`branches[${i}].state`, state);
@@ -134,7 +133,7 @@ const ProfileBranchForm: React.FC<Props> = ({
 
   return (
     <div className="my-3">
-      <div className="flex flex-row justify-between bg-[#EEF7EB] p-2 rounded-md">
+      <div className="flex flex-row justify-between bg-[#E7F0FF] p-2 rounded-md">
         <span>Branch {i + 1}</span>
         <div className="flex flex-row cursor-pointer">
           <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
@@ -160,6 +159,10 @@ const ProfileBranchForm: React.FC<Props> = ({
             placeholder="Enter address"
             {...register(`branches[${i}].addressLine1`, {
               required: "Address Line 1 is required",
+              pattern: {
+                value: /^[a-zA-Z0-9\s,.-]*$/,
+                message: "Address Line 1 contains invalid characters",
+              },
             })}
           />
           {errors?.branches?.[i]?.addressLine1 && (
@@ -179,6 +182,10 @@ const ProfileBranchForm: React.FC<Props> = ({
             placeholder="Enter address line 2"
             {...register(`branches[${i}].addressLine2`, {
               required: "Address Line 2 is required",
+              pattern: {
+                value: /^[a-zA-Z0-9\s,.-]*$/,
+                message: "Address Line 2 contains invalid characters",
+              },
             })}
           />
           {errors?.branches?.[i]?.addressLine2 && (
