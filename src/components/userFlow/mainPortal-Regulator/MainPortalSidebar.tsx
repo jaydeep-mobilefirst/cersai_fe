@@ -10,6 +10,7 @@ import CrossIcon from "../../../assets/images/CrossIcon.svg";
 import Header from "./Header";
 import useSidebarStore from "../../../store/SidebarStore";
 import { useCollapseStore } from "../../../store/SidebarStore";
+import Swal from "sweetalert2";
 
 type Props = {
   layout: React.ReactElement | null;
@@ -27,6 +28,9 @@ const MainPortalSidebar = ({ layout }: Props) => {
     setActiveTab,
   } = useSidebarStore();
   const [mSidebarOpen, setMSidebarOpen] = useState<boolean>(false);
+  const [state, setState] = useState<boolean>(true);
+  const [isActive, setIsActive] = useState<boolean>(true);
+  const [timeoutId, setTimeoutId] = useState<any>(null);
 
   const location = useLocation();
 
@@ -78,6 +82,79 @@ const MainPortalSidebar = ({ layout }: Props) => {
   const onToggleSideBar = () => {
     setMSidebarOpen(!mSidebarOpen);
   };
+
+  const handleUserActivity = () => {
+    setIsActive(true);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    // Set a timeout to mark the user as inactive after 10 minutes (600000 ms)
+    const newTimeoutId = setTimeout(() => {
+      setIsActive(false);
+    }, 600000);
+    setTimeoutId(newTimeoutId);
+  };
+
+  useEffect(() => {
+    // Add event listeners for user activity
+    window.addEventListener("mousemove", handleUserActivity);
+    window.addEventListener("keydown", handleUserActivity);
+    window.addEventListener("focus", handleUserActivity);
+    window.addEventListener("click", handleUserActivity);
+
+    // Cleanup event listeners on component unmount
+    return () => {
+      window.removeEventListener("mousemove", handleUserActivity);
+      window.removeEventListener("keydown", handleUserActivity);
+      window.removeEventListener("focus", handleUserActivity);
+      window.removeEventListener("click", handleUserActivity);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
+
+  const refreshPage = sessionStorage.getItem('refreshCount') 
+
+  useEffect(() => {
+    const reloadToken = sessionStorage.getItem("reload");
+    if (reloadToken) {
+      window.location.reload();
+      sessionStorage.setItem("reload", "");
+    }
+  }, []);
+
+  useEffect(()=>{
+    const refreshCount = () => {
+         // Get the current count from sessionStorage
+    const count = parseInt(sessionStorage.getItem('refreshCount') || '0', 10);
+
+    // Update the count and save it back to sessionStorage
+    const newCount = count + 1;
+    sessionStorage.setItem('refreshCount', newCount.toString());
+    } 
+
+    // Add event listener for beforeunload
+    window.addEventListener('beforeunload', refreshCount);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', refreshCount);
+    };
+
+   
+  },[state])
+
+  useEffect(() => {
+    if (!isActive || refreshPage == '1') {
+      sessionStorage.clear();
+      Swal.fire({
+        icon: "error",
+        title: refreshPage == '1' ? "Dont refresh the page. Please login again" : "User inactive for 10 min. Please login again",
+      });
+      navigate("/");
+    }
+  });
 
   return (
     <>
