@@ -182,7 +182,7 @@ const ProfileBranchForm: React.FC<Props> = ({
           <TextArea
             placeholder="Enter address line 2"
             {...register(`branches[${i}].addressLine2`, {
-              required: "Address Line 2 is required",
+              // required: "Address Line 2 is required",
               pattern: {
                 value: /^[a-zA-Z0-9\s,.-]*$/,
                 message: "Address Line 2 contains invalid characters",
