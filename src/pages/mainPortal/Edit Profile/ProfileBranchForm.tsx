@@ -8,6 +8,7 @@ import minusCircle from "../../../assets/images/MinusIcon.svg";
 import InputFields from "../../../components/userFlow/common/InputField";
 import axios from "axios";
 import { pincodeValidationUrl } from "../../../utils/api";
+import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
 
 interface Branch {
   addressLine1: string;
@@ -198,7 +199,7 @@ const ProfileBranchForm: React.FC<Props> = ({
           <label htmlFor={`pinCode-${i}`} className="text-base font-normal">
             Pin Code
           </label>
-          <InputFields
+          <InputFieldsV2
             type="number"
             placeholder="Enter pin code"
             {...register(`branches[${i}].pinCode`, {
@@ -241,7 +242,7 @@ const ProfileBranchForm: React.FC<Props> = ({
           {errors?.branches?.[i]?.state && (
             <p className="text-red-500">{errors.branches[i].state.message}</p>
           )} */}
-          <InputFields
+          <InputFieldsV2
             type="text"
             disabled={true}
             placeholder="type here"
@@ -255,7 +256,7 @@ const ProfileBranchForm: React.FC<Props> = ({
           <label htmlFor={`district-${i}`} className="text-base font-normal">
             District <span className="text-red-500">*</span>
           </label>
-          <InputFields
+          <InputFieldsV2
             disabled={true}
             type="text"
             placeholder="type here"
