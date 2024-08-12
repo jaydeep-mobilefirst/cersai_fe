@@ -124,7 +124,7 @@
 }
 
 .my-swal {
-  z-index: 9999; /* or any desired value */
+  z-index: 9999; 
 }
 
 /* Hide the spinner arrows */
