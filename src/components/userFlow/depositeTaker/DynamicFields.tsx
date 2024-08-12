@@ -59,7 +59,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                   <div>
                     <label
                       htmlFor={field?.label}
-                      className="block text-[#000000] text-base font-normal text-gilroy-medium"
+                      className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto"
                     >
                       {field?.label}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -83,7 +83,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                   <div className="">
                     <label
                       htmlFor={field?.label}
-                      className="text-base font-normal text-text-gilroy-medium"
+                      className="text-base font-normal text-text-gilroy-medium whitespace-nowrap overflow-x-auto"
                     >
                       {field?.label}{" "}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -110,7 +110,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                   <div>
                     <label
                       htmlFor="district"
-                      className="text-base font-normal text-gilroy-medium"
+                      className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto"
                     >
                       {field?.label}{" "}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -143,7 +143,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                   <div>
                     <label
                       htmlFor="district"
-                      className="text-base font-normal text-gilroy-medium"
+                      className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto"
                     >
                       {field?.label}{" "}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -164,7 +164,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                   <div>
                     <label
                       htmlFor={field?.label}
-                      className="block text-[#000000] text-base font-normal text-gilroy-medium"
+                      className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto"
                     >
                       {field?.label}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -190,7 +190,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                   <div className="flex flex-col">
                     <label
                       htmlFor={field?.label}
-                      className="block text-[#000000] text-base font-normal text-gilroy-medium"
+                      className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto"
                     >
                       {field?.label}
                       <RequiredStar allFormData={allFormData} field={field} />

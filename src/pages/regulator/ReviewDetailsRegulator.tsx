@@ -173,11 +173,11 @@ const ReviewDetailsRegulator = () => {
             />
 
             {!isPdfMode && (
-              <div className="flex flex-shrink-0 mt-[20px]">
-                <div className="justify-center align-center">
+              <div className="flex flex-shrink-0 mt-[20px] items-center">
+                <div className="">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 accent-[#1c468e]"
+                    className="h-4 w-4 accent-[#1c468e] flex items-center"
                     checked={isChecked}
                     onChange={handleCheckboxChange}
                     placeholder="ischecked"

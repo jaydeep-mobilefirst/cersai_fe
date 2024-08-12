@@ -33,7 +33,7 @@ export const signupSideBarCompetent = [
       path:"/competent/authority/nodaldetails",
       imgSrc: buildings,
       imgSrcHighlighted:buildingsHigh,
-      description: "Nodal Details",
+      description: "Nodal Officer Details",
       tickImgSrc: tickCircleWhite,
       percentage: 50,
     },

@@ -266,7 +266,7 @@ const ReviewDetails = () => {
                 <div className=''>
                   <input
                     type='checkbox'
-                    className='h-4 w-4 accent-[#1c648e]'
+                    className='h-4 w-4 accent-[#1c648e] flex items-center'
                     checked={isChecked}
                     onChange={handleCheckboxChange}
                     placeholder='ischecked'
