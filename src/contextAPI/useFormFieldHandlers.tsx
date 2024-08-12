@@ -209,6 +209,7 @@ const FormHandlerProviders = ({ children }: Props) => {
         case "Designated Court Details":
           let fieldName = fieldData?.key;
           switch (fieldName) {
+            case "regulatorName":
             case "regulatorNameRG":
             case "competentAuthorityName":
             case "designatedCourtName":
