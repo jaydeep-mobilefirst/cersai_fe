@@ -209,7 +209,7 @@ const FormHandlerProviders = ({ children }: Props) => {
         case "Designated Court Details":
           let fieldName = fieldData?.key;
           switch (fieldName) {
-            case "regulatorName":
+            case "regulatorNameRG":
             case "competentAuthorityName":
             case "designatedCourtName":
               let data = fieldData?.dropdown_options?.options?.find(
@@ -289,7 +289,9 @@ const FormHandlerProviders = ({ children }: Props) => {
       }
 
       if (value.length === 6) {
-        const response = await axiosTraceIdInstance.get(`${pincodeValidationUrl}/${value}`);
+        const response = await axiosTraceIdInstance.get(
+          `${pincodeValidationUrl}/${value}`
+        );
         const data = response?.data;
         let stateFormField = allFormData?.formFields?.form_fields?.find(
           (o: any) =>
@@ -453,8 +455,8 @@ const FormHandlerProviders = ({ children }: Props) => {
       let validations = field?.regFormFieldsValidations
         ? field?.regFormFieldsValidations
         : field?.schemeFormValidations
-          ? field?.schemeFormValidations
-          : [];
+        ? field?.schemeFormValidations
+        : [];
       return {
         formId: field?.id?.toString(),
         fieldValue: field?.userInput,
@@ -482,8 +484,8 @@ const FormHandlerProviders = ({ children }: Props) => {
     let deDupCheck = !isAdding
       ? true
       : !formValidations
-        ? true
-        : await ValidateDeDup(
+      ? true
+      : await ValidateDeDup(
           formFields?.filter(
             (field: any) =>
               emailRegex.test(field?.userInput) ||
@@ -541,21 +543,21 @@ const FormHandlerProviders = ({ children }: Props) => {
         f?.key === "panNumber" ||
         f?.key === "nodalEmail"
     );
-    let dataFromServer = JSON.parse(sessionStorage.getItem('original') ?? '{}')
-    let keys = Object.keys(dataFromServer)
+    let dataFromServer = JSON.parse(sessionStorage.getItem("original") ?? "{}");
+    let keys = Object.keys(dataFromServer);
 
     let dedupCheckFormFields = filteredFields?.filter((e: any) => {
-      let userInput = e?.userInput
+      let userInput = e?.userInput;
       if (keys?.includes(e?.key) && dataFromServer[e?.key] !== userInput) {
         return e;
       }
-    })
+    });
 
     if (dedupCheckFormFields?.length === 0) {
-      sessionStorage.setItem('needToVerify', 'no')
-      return true
+      sessionStorage.setItem("needToVerify", "no");
+      return true;
     } else {
-      sessionStorage.setItem('needToVerify', 'yes')
+      sessionStorage.setItem("needToVerify", "yes");
       filteredFields = dedupCheckFormFields;
     }
 
@@ -668,14 +670,14 @@ const FormHandlerProviders = ({ children }: Props) => {
               key === "startDate"
                 ? field?.userInput
                 : allFormData?.formFields?.form_fields?.find(
-                  (field: any) => field?.key === "startDate"
-                )?.userInput;
+                    (field: any) => field?.key === "startDate"
+                  )?.userInput;
             let endDate =
               key === "lastDate"
                 ? field?.userInput
                 : allFormData?.formFields?.form_fields?.find(
-                  (field: any) => field?.key === "lastDate"
-                )?.userInput;
+                    (field: any) => field?.key === "lastDate"
+                  )?.userInput;
 
             if (!startDate || !endDate) {
               return field;
@@ -705,14 +707,14 @@ const FormHandlerProviders = ({ children }: Props) => {
               key === "minInvestment"
                 ? field?.userInput
                 : allFormData?.formFields?.form_fields?.find(
-                  (field: any) => field?.key === "minInvestment"
-                )?.userInput;
+                    (field: any) => field?.key === "minInvestment"
+                  )?.userInput;
             let maxInvestment =
               key === "maxInvestment"
                 ? field?.userInput
                 : allFormData?.formFields?.form_fields?.find(
-                  (field: any) => field?.key === "maxInvestment"
-                )?.userInput;
+                    (field: any) => field?.key === "maxInvestment"
+                  )?.userInput;
 
             if (!minInvestment || !maxInvestment) {
               return field;
