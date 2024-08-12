@@ -86,38 +86,6 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
     }
   };
 
-  // const sendCertificate = async (certificate: any) => {
-  //   try {
-  //     const response = await axios.post(
-  //       // "https://cors-anywhere.herokuapp.com/" +
-  //       "https://indilabs-json.vercel.app/first",
-  //       { certificate }
-  //     );
-  //     if (response?.data?.status === "INTERNAL_SERVER_ERROR") {
-  //       Swal.fire({
-  //         icon: "error",
-  //         title: "Internal Server Error",
-  //         text: "Unable to Process DSC",
-  //       });
-  //     } else {
-  //       Swal.fire({
-  //         icon: "success",
-  //         title: "DSC key fetcheds successfully",
-  //         text: "Unable to Process DSC",
-  //       });
-  //     }
-  //     setTimeout(() => {
-  //       // navigate("/home");
-  //     }, 3000);
-  //   } catch (error) {
-  //     console.error("Error sending certificate:", error);
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Internal Server Error",
-  //       text: "Unable to Process DSC",
-  //     });
-  //   }
-  // };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
