@@ -259,7 +259,11 @@ const ProfileBranches = () => {
 
         <div>
           <Footer disabled={!isChecked} />
-          <button type="submit" className="mt-4 btn-primary"></button>
+          <button
+            onSubmit={onSubmit}
+            type="submit"
+            className="mt-4 btn-primary"
+          ></button>
         </div>
       </form>
     </div>
