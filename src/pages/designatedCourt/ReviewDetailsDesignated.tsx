@@ -208,7 +208,7 @@ const ReviewDetailsDesignated = () => {
         <header className="lg:p-[38px] border-b border-gray-200"></header>
         <main className="flex-grow p-6 overflow-auto custom-scrollbar">
           <div id="reviewContent">
-            {isPdfMode && (
+            {/* {isPdfMode && (
               <div>
                 <img
                   src={Logo}
@@ -217,7 +217,28 @@ const ReviewDetailsDesignated = () => {
                 />
               </div>
             )}
-            <h1 className="text-2xl font-bold mb-6">Review Details</h1>
+            <h1 className="text-2xl font-bold mb-6">Review Details</h1> */}
+            {isPdfMode && (
+              <div className="flex items-center">
+                <img src={Logo} alt="logo" className="rounded-full h-28 w-28" />
+                <div className=" w-auto  mx-auto">
+                  <p className="text-xl text-gilroy-bold font-bold">
+                    Central Registry of Securitization Asset
+                  </p>
+                  <p className="text-xl text-gilroy-bold font-bold">
+                    Reconstruction and Security Interest of India
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <h1
+              className={`text-2xl font-bold mb-6 ${
+                isPdfMode ? "flex justify-center items-center" : ""
+              }`}
+            >
+              Review Details
+            </h1>
             <ReviewMainListing
               allFormData={allFormData}
               documentData={documentData}
@@ -239,8 +260,13 @@ const ReviewDetailsDesignated = () => {
               <div className="leading-6 ml-4 text-gilroy-medium">
                 I hereby declare that all information provided is best of my
                 knowledge&nbsp;
-                  <Link className="text-[#1c468e] underline cursor-pointer" target={"_blank"} to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf">I accept the Terms and Conditions</Link>
-
+                <Link
+                  className="text-[#1c468e] underline cursor-pointer"
+                  target={"_blank"}
+                  to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
+                >
+                  I accept the Terms and Conditions
+                </Link>
               </div>
             </div>
           )}
@@ -262,7 +288,9 @@ const ReviewDetailsDesignated = () => {
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className={`w-auto md:w-[208px] md:h-[48px] gap-2 text-gilroy-semibold flex rounded-xl text-blue-700 border border-blue-700 p-3 md:pt-3 md:pr-6 md:pb-3 md:pl-6  ${ isChecked ? "" : "opacity-50"}`}
+                className={`w-auto md:w-[208px] md:h-[48px] gap-2 text-gilroy-semibold flex rounded-xl text-blue-700 border border-blue-700 p-3 md:pt-3 md:pr-6 md:pb-3 md:pl-6  ${
+                  isChecked ? "" : "opacity-50"
+                }`}
               >
                 <img src={download} alt="download" className="mr-2" />
                 {isDownloading ? "Downloading..." : "Download PDF"}

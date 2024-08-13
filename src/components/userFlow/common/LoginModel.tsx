@@ -268,6 +268,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                     >
                       Select Entity
                     </label>
+
                     <SelectButton
                       disabled={dscApiInProgress}
                       setOption={handleSelectOption}

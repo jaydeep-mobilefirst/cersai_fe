@@ -8,6 +8,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { axiosTokenInstance } from "../../utils/axios";
+import Tooltip from "@mui/material/Tooltip";
 
 const ResetPassword = () => {
   const screenWidth = useScreenWidth();
@@ -94,6 +95,14 @@ const ResetPassword = () => {
         "Password must contain at least one special character",
     },
   };
+  const popperModifiers = [
+    {
+      name: "offset",
+      options: {
+        offset: [0, -8], // Adjust the vertical offset value (second value) to 0 or a negative number
+      },
+    },
+  ];
 
   return (
     <>
@@ -116,14 +125,23 @@ const ResetPassword = () => {
               >
                 Old Password<span className="text-red-500">*</span>
               </label>
-              <InputFields
-                {...register("oldPassword", {
-                  required: "Old password is required",
-                })}
-                type="password"
-                id="oldPassword"
-                placeholder="Type Old Password"
-              />
+              <Tooltip
+                title="Enter your current password"
+                placement="bottom"
+                arrow
+                PopperProps={{
+                  modifiers: popperModifiers,
+                }}
+              >
+                <InputFields
+                  {...register("oldPassword", {
+                    required: "Old password is required",
+                  })}
+                  type="password"
+                  id="oldPassword"
+                  placeholder="Type Old Password"
+                />
+              </Tooltip>
               {errors.oldPassword && (
                 <p className="text-red-500">
                   {errors.oldPassword.message as string}
@@ -137,12 +155,21 @@ const ResetPassword = () => {
               >
                 New Password<span className="text-red-500">*</span>
               </label>
-              <InputFields
-                {...register("newPassword", passwordValidation)}
-                type="password"
-                id="newPassword"
-                placeholder="Type New Password"
-              />
+              <Tooltip
+                title="Enter your new password"
+                placement="bottom"
+                arrow
+                PopperProps={{
+                  modifiers: popperModifiers,
+                }}
+              >
+                <InputFields
+                  {...register("newPassword", passwordValidation)}
+                  type="password"
+                  id="newPassword"
+                  placeholder="Type New Password"
+                />
+              </Tooltip>
               {errors.newPassword && (
                 <p className="text-red-500">
                   {errors.newPassword.message as string}
@@ -156,15 +183,24 @@ const ResetPassword = () => {
               >
                 Confirm Password<span className="text-red-500">*</span>
               </label>
-              <InputFields
-                {...register("confirmPassword", {
-                  validate: (value) =>
-                    (value === newPassword  ) || "The passwords do not match",
-                })}
-                type="password"
-                id="confirmPassword"
-                placeholder="Type Confirm Password"
-              />
+              <Tooltip
+                title="Re-enter your new password to confirm"
+                placement="bottom"
+                arrow
+                PopperProps={{
+                  modifiers: popperModifiers,
+                }}
+              >
+                <InputFields
+                  {...register("confirmPassword", {
+                    validate: (value) =>
+                      value === newPassword || "The passwords do not match",
+                  })}
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Type Confirm Password"
+                />
+              </Tooltip>
               {errors.confirmPassword && (
                 <p className="text-red-500">
                   {errors.confirmPassword.message as string}

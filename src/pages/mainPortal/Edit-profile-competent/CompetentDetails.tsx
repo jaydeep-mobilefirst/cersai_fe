@@ -24,7 +24,7 @@ const CompetentDetails = (props: Props) => {
     useContext(FormHandlerContext);
 
   const sectionId = allFormData?.entitySections?.find(
-    (s: any) => s?.sectionName === "Nodal Details"
+    (s: any) => s?.sectionName === "Competent Authority Details"
   );
 
   // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
@@ -85,9 +85,7 @@ const CompetentDetails = (props: Props) => {
     if (noError) {
       axiosTokenInstance
         .patch(
-          `/competent-authority/${sessionStorage.getItem(
-            "entityUniqueId"
-          )}`,
+          `/competent-authority/${sessionStorage.getItem("entityUniqueId")}`,
           {
             formData: formData,
           }
