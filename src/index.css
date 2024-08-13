@@ -119,22 +119,22 @@
   width: 100%;
   height: auto;
 }
-.slider-wrapper{
+.slider-wrapper {
   width: 30% !important;
 }
 
 .my-swal {
-  z-index: 9999; /* or any desired value */
+  z-index: 9999; 
 }
 
 /* Hide the spinner arrows */
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0; /* Optional: space between the input and buttons */
 }
 
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
 }
 @media (min-width: 768px) {
@@ -147,4 +147,15 @@ input[type=number] {
   .control-dots {
     padding-right: 150px !important;
   }
+}
+swal2-popup {
+  z-index: 9999 !important; /* Significantly higher z-index for the popup */
+}
+
+.swal2-container {
+  z-index: 9998 !important; /* Ensure the container is just below the popup */
+}
+
+.swal2-backdrop-show {
+  z-index: 9997 !important; /* Backdrop slightly lower than container and popup */
 }

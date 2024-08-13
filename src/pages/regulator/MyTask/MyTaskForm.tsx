@@ -203,10 +203,10 @@ const MyTaskForm = () => {
       const arrayBuffer = data?.data?.data;
 
       await getFileDatafromBuffer(arrayBuffer);
-      // setViewLoader(false);
+      setLoader(false);
     } catch (error) {
       console.log({ error });
-      // setViewLoader(false);
+      setLoader(false);
     }
   };
 
