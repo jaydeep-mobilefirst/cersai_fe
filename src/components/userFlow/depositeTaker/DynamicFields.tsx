@@ -8,6 +8,7 @@ import DynamicFileUpload from "./DynamicFileUpload";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import DscKeyRegister from "../form/DscKeyRegister";
 import { useState } from "react";
+import Tooltip from "@mui/material/Tooltip";
 
 type Props = {
   toggleUploadPopup?: () => void;
@@ -64,6 +65,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                       {field?.label}
                       <RequiredStar allFormData={allFormData} field={field} />
                     </label>
+
                     <InputFields
                       disabled={field?.disabled ? field?.disabled : false}
                       // disabled={(field?.label === "PAN NUMBER" || field?.label ==="Company Name (As per Pan)")}
@@ -92,6 +94,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                       &&
                       <span className="text-[#ff0000]">*</span>} */}
                     </label>
+
                     <TextArea
                       value={field?.userInput}
                       disabled={field?.disabled ? field?.disabled : false}

@@ -22,6 +22,7 @@ const NodalDetails = (props: Props) => {
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
+  console.log({ allFormData }, "allform data");
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Nodal Details"
@@ -85,9 +86,7 @@ const NodalDetails = (props: Props) => {
     if (noError) {
       axiosTokenInstance
         .patch(
-          `/competent-authority/${sessionStorage.getItem(
-            "entityUniqueId"
-          )}`,
+          `/competent-authority/${sessionStorage.getItem("entityUniqueId")}`,
           {
             formData: formData,
           }
