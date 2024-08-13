@@ -190,7 +190,7 @@ const ReviewDetailsRegulator = () => {
                     to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
                     target="_blank"
                   >
-                    Terms and Conditions
+                   I accept the Terms and Conditions
                   </Link>
                 </div>
               </div>

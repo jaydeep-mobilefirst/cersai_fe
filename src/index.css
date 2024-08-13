@@ -102,6 +102,20 @@
   background-color: #385723;
   border-radius: 16px;
 }
+.custom-scrollbar1::-webkit-scrollbar {
+  width: auto;
+  height: 2px;
+  flex-shrink: 0;
+}
+
+.custom-scrollbar1::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar1::-webkit-scrollbar-thumb {
+  background-color: #1c468e;
+  border-radius: 16px;
+}
 
 .inputStyle {
   width: 3rem !important;

@@ -275,7 +275,7 @@ const ReviewDetails = () => {
                 <div className='leading-[24px] ml-4 text-gilroy-medium text-[14px]'>
                   I here by declare that all information provided is best of my
                   knowledge &nbsp;
-                  <Link className="text-[#1c468e] underline cursor-pointer" target={"_blank"} to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"> Terms and Conditions</Link>
+                  <Link className="text-[#1c468e] underline cursor-pointer" target={"_blank"} to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf">I accept the Terms and Conditions</Link>
                 </div>
               </div>
             )}
