@@ -70,7 +70,7 @@ const ProfileRegulatorDetails = (props: Props) => {
         .catch((err) => {
           Swal.fire({
             icon: "error",
-            text: "Failed to Regulator Nodal Details",
+            text: "Failed to Update Regulator Details",
             confirmButtonText: "Ok",
           });
         });

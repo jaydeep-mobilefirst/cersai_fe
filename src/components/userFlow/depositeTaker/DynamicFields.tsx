@@ -40,6 +40,15 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const today = new Date();
   console.log({ allFormData }, "all form data");
 
+  const popperModifiers = [
+    {
+      name: "offset",
+      options: {
+        offset: [0, -15], // Adjust the vertical offset value (second value) to 0 or a negative number
+      },
+    },
+  ];
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -57,169 +66,217 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
               case "phone_number":
               case "email":
                 return (
-                  <div>
-                    <label
-                      htmlFor={field?.label}
-                      className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto"
-                    >
-                      {field?.label}
-                      <RequiredStar allFormData={allFormData} field={field} />
-                    </label>
+                  <Tooltip
+                    title={field?.label}
+                    arrow
+                    PopperProps={{
+                      modifiers: popperModifiers,
+                    }}
+                  >
+                    <div>
+                      <label
+                        htmlFor={field?.label}
+                        className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                      >
+                        {field?.label}
+                        <RequiredStar allFormData={allFormData} field={field} />
+                      </label>
 
-                    <InputFields
-                      disabled={field?.disabled ? field?.disabled : false}
-                      // disabled={(field?.label === "PAN NUMBER" || field?.label ==="Company Name (As per Pan)")}
-                      value={field?.userInput}
-                      onChange={(e) =>
-                        onChange && onChange && onChange(e, field, fieldType)
-                      }
-                      type={fieldType}
-                      id={field?.label}
-                      placeholder={field?.placeholder}
-                    />
-                    <span className="text-red-500">{field?.error}</span>
-                  </div>
+                      <InputFields
+                        disabled={field?.disabled ? field?.disabled : false}
+                        // disabled={(field?.label === "PAN NUMBER" || field?.label ==="Company Name (As per Pan)")}
+                        value={field?.userInput}
+                        onChange={(e) =>
+                          onChange && onChange && onChange(e, field, fieldType)
+                        }
+                        type={fieldType}
+                        id={field?.label}
+                        placeholder={field?.placeholder}
+                      />
+                      <span className="text-red-500">{field?.error}</span>
+                    </div>
+                  </Tooltip>
                 );
               case "textarea":
                 return (
-                  <div className="">
-                    <label
-                      htmlFor={field?.label}
-                      className="text-base font-normal text-text-gilroy-medium whitespace-nowrap overflow-x-auto"
-                    >
-                      {field?.label}{" "}
-                      <RequiredStar allFormData={allFormData} field={field} />
-                      {/* {field?.regFormFieldsValidations && 
+                  <Tooltip
+                    title={field?.label}
+                    arrow
+                    PopperProps={{
+                      modifiers: popperModifiers,
+                    }}
+                  >
+                    <div className="">
+                      <label
+                        htmlFor={field?.label}
+                        className="text-base font-normal text-text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                      >
+                        {field?.label}{" "}
+                        <RequiredStar allFormData={allFormData} field={field} />
+                        {/* {field?.regFormFieldsValidations && 
                       field?.regFormFieldsValidations?.some((v : any) => v?.validationId === allFormData?.validations?.find((d : any) => d?.vld_type_name === "Required")?.id)
                       &&
                       <span className="text-[#ff0000]">*</span>} */}
-                    </label>
+                      </label>
 
-                    <TextArea
-                      value={field?.userInput}
-                      disabled={field?.disabled ? field?.disabled : false}
-                      onChange={(e) =>
-                        onChange && onChange(e, field, fieldType)
-                      }
-                      id={field?.label}
-                      placeholder={field?.placeholder}
-                    />
-                    <span className="text-red-500">{field?.error}</span>
-                  </div>
+                      <TextArea
+                        value={field?.userInput}
+                        disabled={field?.disabled ? field?.disabled : false}
+                        onChange={(e) =>
+                          onChange && onChange(e, field, fieldType)
+                        }
+                        id={field?.label}
+                        placeholder={field?.placeholder}
+                      />
+                      <span className="text-red-500">{field?.error}</span>
+                    </div>
+                  </Tooltip>
                 );
               case "select":
               case "select_with_search":
                 return (
-                  <div>
-                    <label
-                      htmlFor="district"
-                      className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto"
-                    >
-                      {field?.label}{" "}
-                      <RequiredStar allFormData={allFormData} field={field} />
-                    </label>
-                    <SelectButton
-                      data={field}
-                      onSelect={(data) =>
-                        onChange && onChange(data, field, fieldType)
-                      }
-                      options={field?.dropdown_options?.options?.map(
-                        (d: any) => ({
-                          value: d?.name,
-                          label: d?.name,
-                          id: d?.id,
-                        })
-                      )}
-                      selectedOption={field?.userInput}
-                      placeholder={field?.placeholder}
-                      disabled={field?.disabled}
-                      //  searchInputOnchange={handleSearchInputChange3}
-                      //  searchInputValue={searchInputValue3}
-                      showSearchInput={true}
-                      enableSearch={fieldType === "select_with_search"}
-                    />
-                    <span className="text-red-500">{field?.error}</span>
-                  </div>
+                  <Tooltip
+                    title={field?.label}
+                    arrow
+                    PopperProps={{
+                      modifiers: popperModifiers,
+                    }}
+                  >
+                    <div>
+                      <label
+                        htmlFor="district"
+                        className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                      >
+                        {field?.label}{" "}
+                        <RequiredStar allFormData={allFormData} field={field} />
+                      </label>
+                      <SelectButton
+                        data={field}
+                        onSelect={(data) =>
+                          onChange && onChange(data, field, fieldType)
+                        }
+                        options={field?.dropdown_options?.options?.map(
+                          (d: any) => ({
+                            value: d?.name,
+                            label: d?.name,
+                            id: d?.id,
+                          })
+                        )}
+                        selectedOption={field?.userInput}
+                        placeholder={field?.placeholder}
+                        disabled={field?.disabled}
+                        //  searchInputOnchange={handleSearchInputChange3}
+                        //  searchInputValue={searchInputValue3}
+                        showSearchInput={true}
+                        enableSearch={fieldType === "select_with_search"}
+                      />
+                      <span className="text-red-500">{field?.error}</span>
+                    </div>
+                  </Tooltip>
                 );
               case "date_picker":
                 return (
-                  <div>
-                    <label
-                      htmlFor="district"
-                      className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto"
-                    >
-                      {field?.label}{" "}
-                      <RequiredStar allFormData={allFormData} field={field} />
-                    </label>
-                    <DatePicker
-                      maxDate={field?.key || field?.label}
-                      disabled={field?.disabled ? field?.disabled : false}
-                      onChange={(e) =>
-                        onChange && onChange(e, field, fieldType)
-                      }
-                      userValue={field?.userInput}
-                    />
-                    <span className="text-red-500">{field?.error}</span>
-                  </div>
+                  <Tooltip
+                    title={field?.label}
+                    arrow
+                    PopperProps={{
+                      modifiers: popperModifiers,
+                    }}
+                  >
+                    <div>
+                      <label
+                        htmlFor="district"
+                        className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                      >
+                        {field?.label}{" "}
+                        <RequiredStar allFormData={allFormData} field={field} />
+                      </label>
+                      <DatePicker
+                        maxDate={field?.key || field?.label}
+                        disabled={field?.disabled ? field?.disabled : false}
+                        onChange={(e) =>
+                          onChange && onChange(e, field, fieldType)
+                        }
+                        userValue={field?.userInput}
+                      />
+                      <span className="text-red-500">{field?.error}</span>
+                    </div>
+                  </Tooltip>
                 );
               case "pincode":
                 return (
-                  <div>
-                    <label
-                      htmlFor={field?.label}
-                      className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto"
-                    >
-                      {field?.label}
-                      <RequiredStar allFormData={allFormData} field={field} />
-                    </label>
-                    <InputFields
-                      // max={6}
-                      // min={6}
-                      value={field?.userInput}
-                      onChange={(e) =>
-                        onChange && onChange(e, field, fieldType)
-                      }
-                      type={"number"}
-                      id={field?.label}
-                      placeholder={field?.placeholder}
-                      disabled={field?.disabled ? field?.disabled : false}
-                    />
-                    <span className="text-red-500">{field?.error}</span>
-                  </div>
+                  <Tooltip
+                    title={field?.label}
+                    arrow
+                    PopperProps={{
+                      modifiers: popperModifiers,
+                    }}
+                  >
+                    <div>
+                      <label
+                        htmlFor={field?.label}
+                        className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                      >
+                        {field?.label}
+                        <RequiredStar allFormData={allFormData} field={field} />
+                      </label>
+                      <InputFields
+                        // max={6}
+                        // min={6}
+                        value={field?.userInput}
+                        onChange={(e) =>
+                          onChange && onChange(e, field, fieldType)
+                        }
+                        type={"number"}
+                        id={field?.label}
+                        placeholder={field?.placeholder}
+                        disabled={field?.disabled ? field?.disabled : false}
+                      />
+                      <span className="text-red-500">{field?.error}</span>
+                    </div>
+                  </Tooltip>
                 );
 
               case "DSC":
                 return (
-                  <div className="flex flex-col">
-                    <label
-                      htmlFor={field?.label}
-                      className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto"
-                    >
-                      {field?.label}
-                      <RequiredStar allFormData={allFormData} field={field} />
-                    </label>
+                  <Tooltip
+                    title={field?.label}
+                    arrow
+                    PopperProps={{
+                      modifiers: popperModifiers,
+                    }}
+                  >
+                    <div className="flex flex-col">
+                      <label
+                        htmlFor={field?.label}
+                        className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                      >
+                        {field?.label}
+                        <RequiredStar allFormData={allFormData} field={field} />
+                      </label>
 
-                    {isDscKeyAvbl === "true" ? (
-                      <DscKeyRegister
-                        disable={field?.disabled ? field?.disabled : false}
-                        onFileUpload={(file: any) =>
-                          onChange && onChange(file, field, fieldType)
-                        }
-                        fieldData={field}
-                        setDscSelected={setDscSelected}
-                        isDscSelected={isDscSelected}
-                      />
-                    ) : (
-                      <DscButton
-                        onFileUpload={(file) =>
-                          onChange && onChange(file, field, fieldType)
-                        }
-                        fname={field?.dscFileNAme}
-                        disabled={field?.disabled ? field?.disabled : false}
-                      />
-                    )}
-                    <span className="text-red-500">{field?.error}</span>
-                  </div>
+                      {isDscKeyAvbl === "true" ? (
+                        <DscKeyRegister
+                          disable={field?.disabled ? field?.disabled : false}
+                          onFileUpload={(file: any) =>
+                            onChange && onChange(file, field, fieldType)
+                          }
+                          fieldData={field}
+                          setDscSelected={setDscSelected}
+                          isDscSelected={isDscSelected}
+                        />
+                      ) : (
+                        <DscButton
+                          onFileUpload={(file) =>
+                            onChange && onChange(file, field, fieldType)
+                          }
+                          fname={field?.dscFileNAme}
+                          disabled={field?.disabled ? field?.disabled : false}
+                        />
+                      )}
+                      <span className="text-red-500">{field?.error}</span>
+                    </div>
+                  </Tooltip>
                 );
               default:
                 return <></>;

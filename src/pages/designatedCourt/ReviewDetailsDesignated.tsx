@@ -265,8 +265,7 @@ const ReviewDetailsDesignated = () => {
                   target={"_blank"}
                   to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
                 >
-                  {" "}
-                  Terms and Conditions
+                  I accept the Terms and Conditions
                 </Link>
               </div>
             </div>
