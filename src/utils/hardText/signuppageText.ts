@@ -114,7 +114,7 @@ export const signupSideBar = [
     path:"/depositetaker/signup/nodaldetails",
     imgSrc: buildings,
     imgSrcHighlighted:buildingsHigh,
-    description: "Nodal Details",
+    description: "Nodal Officer Details",
     tickImgSrc: tickCircleWhite,
     percentage: 75,
   },

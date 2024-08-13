@@ -8,6 +8,7 @@ import DynamicFileUpload from "./DynamicFileUpload";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import DscKeyRegister from "../form/DscKeyRegister";
 import { useState } from "react";
+import Tooltip from '@mui/material/Tooltip';
 
 type Props = {
   toggleUploadPopup?: () => void;
@@ -39,6 +40,16 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const today = new Date();
   console.log({ allFormData }, "all form data");
 
+
+  const popperModifiers = [
+    {
+      name: "offset",
+      options: {
+        offset: [0, -15], // Adjust the vertical offset value (second value) to 0 or a negative number
+      },
+    },
+  ];
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -56,10 +67,15 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
               case "phone_number":
               case "email":
                 return (
+                  <Tooltip title={field?.label} arrow
+                  PopperProps={{
+                    modifiers: popperModifiers,
+                  }}
+  >
                   <div>
                     <label
                       htmlFor={field?.label}
-                      className="block text-[#000000] text-base font-normal text-gilroy-medium"
+                      className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                     >
                       {field?.label}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -77,13 +93,18 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     />
                     <span className="text-red-500">{field?.error}</span>
                   </div>
+                  </Tooltip>
                 );
               case "textarea":
                 return (
+                  <Tooltip title={field?.label} arrow 
+                  PopperProps={{
+                    modifiers: popperModifiers,
+                  }}>
                   <div className="">
                     <label
                       htmlFor={field?.label}
-                      className="text-base font-normal text-text-gilroy-medium"
+                      className="text-base font-normal text-text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                     >
                       {field?.label}{" "}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -103,14 +124,19 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     />
                     <span className="text-red-500">{field?.error}</span>
                   </div>
+                  </Tooltip>
                 );
               case "select":
               case "select_with_search":
                 return (
+                  <Tooltip title={field?.label} arrow 
+                  PopperProps={{
+                    modifiers: popperModifiers,
+                  }}>
                   <div>
                     <label
                       htmlFor="district"
-                      className="text-base font-normal text-gilroy-medium"
+                      className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                     >
                       {field?.label}{" "}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -137,13 +163,18 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     />
                     <span className="text-red-500">{field?.error}</span>
                   </div>
+                  </Tooltip>
                 );
               case "date_picker":
                 return (
+                  <Tooltip title={field?.label} arrow 
+                  PopperProps={{
+                    modifiers: popperModifiers,
+                  }}>
                   <div>
                     <label
                       htmlFor="district"
-                      className="text-base font-normal text-gilroy-medium"
+                      className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                     >
                       {field?.label}{" "}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -158,13 +189,18 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     />
                     <span className="text-red-500">{field?.error}</span>
                   </div>
+                  </Tooltip>
                 );
               case "pincode":
                 return (
+                  <Tooltip title={field?.label} arrow 
+                  PopperProps={{
+                    modifiers: popperModifiers,
+                  }}>
                   <div>
                     <label
                       htmlFor={field?.label}
-                      className="block text-[#000000] text-base font-normal text-gilroy-medium"
+                      className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                     >
                       {field?.label}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -183,14 +219,19 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     />
                     <span className="text-red-500">{field?.error}</span>
                   </div>
+                  </Tooltip>
                 );
 
               case "DSC":
                 return (
+                  <Tooltip title={field?.label} arrow 
+                  PopperProps={{
+                    modifiers: popperModifiers,
+                  }}>
                   <div className="flex flex-col">
                     <label
                       htmlFor={field?.label}
-                      className="block text-[#000000] text-base font-normal text-gilroy-medium"
+                      className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                     >
                       {field?.label}
                       <RequiredStar allFormData={allFormData} field={field} />
@@ -217,6 +258,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     )}
                     <span className="text-red-500">{field?.error}</span>
                   </div>
+                  </Tooltip>
                 );
               default:
                 return <></>;

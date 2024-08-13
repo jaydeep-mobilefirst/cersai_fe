@@ -239,7 +239,7 @@ const ReviewDetailsDesignated = () => {
               <div className="leading-6 ml-4 text-gilroy-medium">
                 I hereby declare that all information provided is best of my
                 knowledge&nbsp;
-                  <Link className="text-[#1c468e] underline cursor-pointer" target={"_blank"} to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"> Terms and Conditions</Link>
+                  <Link className="text-[#1c468e] underline cursor-pointer" target={"_blank"} to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf">I accept the Terms and Conditions</Link>
 
               </div>
             </div>
