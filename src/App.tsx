@@ -295,6 +295,12 @@ function App() {
           <Route element={<DesignatedCourtRegister />} path="/designated/court">
             <Route
               element={<DesignatedCourtDetails />}
+              path="designateddetails"
+            />
+            <Route
+              element={<UploloadDocumentsDesignated />}
+              path="uploaddocuments"
+            />
             <Route element={<NodalDetailsDesignated />} path="nodaldetails" />
             <Route element={<ReviewDetailsDesignated />} path="reviewdetails" />
           </Route>
