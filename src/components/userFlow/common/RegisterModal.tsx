@@ -105,6 +105,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
     setSections,
   } = useDepositTakerRegistrationStore((state) => state);
   const [data, setData] = useState<EntityType[]>(entities);
+  console.log("data",data)
   const [loader, setLoader] = useState<boolean>(false);
   useEffect(() => {
     if (entities.length <= 0) {
@@ -200,6 +201,7 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
       });
   };
   const [selectedRadio, setSelectedRadio] = useState<any>(entities[0]);
+  console.log("selected radio",selectedRadio)
 
   const handleSubmit = (e: any) => {
     e.preventDefault();

@@ -40,9 +40,10 @@ const ResetPassword = () => {
       Swal.fire({
         icon: "success",
         // text: " Reset password is update  successfully ",
-        text: response.data.message || "Reset password is updated successfully",
+        text:
+          response.data.message ||
+          "Password changed successfully. Please login again using the new password",
         confirmButtonText: "Ok",
-
       }).then(() => {
         navigate("/");
         sessionStorage.clear();
@@ -55,10 +56,6 @@ const ResetPassword = () => {
             icon: "error",
             text: error?.response?.data?.message || "Please try again later",
             confirmButtonText: "Ok",
-          }).then(()=>{
-            navigate("/dt/resetpassword")
-            sessionStorage.clear();
-
           });
         }
       }
@@ -73,7 +70,7 @@ const ResetPassword = () => {
     if (newPassword === oldPassword && newPassword) {
       setError("oldPassword", {
         type: "manual",
-        message: "New password must be different from old password",
+        message: "Old and New Password could not be same",
       });
     } else {
       clearErrors("oldPassword");
@@ -99,6 +96,8 @@ const ResetPassword = () => {
       specialChar: (v: any) =>
         /[!@#$%^&*(),.?":{}|<>]/.test(v) ||
         "Password must contain at least one special character",
+      notSameAsOld: (v: any) =>
+        v !== oldPassword || "Old and New Password could not be the same",
     },
   };
   const popperModifiers = [
