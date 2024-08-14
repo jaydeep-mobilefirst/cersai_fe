@@ -1,7 +1,7 @@
 import { useScreenWidth } from "../../utils/screenSize";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../components/LoaderSpin";
 import axios, { AxiosError } from "axios";
@@ -16,6 +16,8 @@ type Props = {};
 const VerificationForm = (props: Props) => {
   const [loader, setLoader] = useState(false);
   const location = useLocation();
+  console.log({ location }, "location");
+
   const panverified = location.state?.panverified;
   const {
     onChange,
@@ -48,16 +50,22 @@ const VerificationForm = (props: Props) => {
 
     const verifyPan = async (): Promise<boolean> => {
       try {
-        let company = formFields?.find((field : any, i : number) => field?.key === 'companyName' );
-        let pan = formFields?.find((field : any, i : number) =>  field?.key === 'panNumber');
-        let dob = formFields?.find((field : any, i : number) =>  field?.key === 'dateOfIncorporation');
-       
+        let company = formFields?.find(
+          (field: any, i: number) => field?.key === "companyName"
+        );
+        let pan = formFields?.find(
+          (field: any, i: number) => field?.key === "panNumber"
+        );
+        let dob = formFields?.find(
+          (field: any, i: number) => field?.key === "dateOfIncorporation"
+        );
+
         let response = await axiosTraceIdInstance.post("/pandirectory/api", {
-          name:company?.userInput?.toUpperCase(),
+          name: company?.userInput?.toUpperCase(),
           pan_no: pan?.userInput,
           // dob : dob[2]+"/"+dob[1]+"/"+dob[0]
-          dob : moment(dob?.userInput).format("DD/MM/YYYY")
-        })
+          dob: moment(dob?.userInput).format("DD/MM/YYYY"),
+        });
         const data = response.data;
         if (data?.status !== "success") {
           setPara1(`Verification Failed`);

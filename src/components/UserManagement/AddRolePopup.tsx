@@ -14,7 +14,7 @@ interface AddRolePopupProps {
   roleId?: number;
   roleName?: string;
   isActive?: boolean;
-  entityType: "DT" | "RG" | "CA" | "DC"
+  entityType: "DT" | "RG" | "CA" | "DC";
 }
 
 const style = {
@@ -25,12 +25,19 @@ const style = {
   p: 4,
 };
 
-const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, isActive, roleId, roleName, selectedFuncs = [], entityType }) => {
-  
-  const operation = sessionStorage.getItem('operation');
+const AddRolePopup: React.FC<AddRolePopupProps> = ({
+  onClose,
+  functionalities,
+  isActive,
+  roleId,
+  roleName,
+  selectedFuncs = [],
+  entityType,
+}) => {
+  const operation = sessionStorage.getItem("operation");
 
   const handleRoleAddedState = uamStore((state) => state.handleRefreshUAM);
-  const [loader, setLoader] = useState<boolean>(false)
+  const [loader, setLoader] = useState<boolean>(false);
   const [selectedFunctionalities, setSelectedFunctionalities] =
     useState<any[]>(selectedFuncs);
   const [errors, setErrors] = useState<{ roleName: string; dropdown: string }>({
@@ -77,12 +84,12 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
   };
 
   useEffect(() => {
-    if (operation === 'add') {
-    setSelectedFunctionalities([])
-    setErrors({ roleName: '', dropdown: '' })
-    setNameOfRole('')
+    if (operation === "add") {
+      setSelectedFunctionalities([]);
+      setErrors({ roleName: "", dropdown: "" });
+      setNameOfRole("");
     }
-  }, [])
+  }, []);
   // const handleSave = () => {
   //   if (roleFunctionality !== "") {
   //     setIsSuccessPopupOpen(true);
@@ -114,9 +121,9 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
       setErrors((prev) => ({ ...prev, roleName: "" }));
     }
 
-    setLoader(true)
+    setLoader(true);
     let resultObject;
-    let entityId = sessionStorage.getItem('entityUniqueId');
+    let entityId = sessionStorage.getItem("entityUniqueId");
     if (roleId) {
       resultObject = {
         compositeRoleName: nameOfRole,
@@ -125,7 +132,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
         compositeRoleId: roleId,
         isActive: isActive,
         entityType: entityType,
-        entityId
+        entityId,
       };
     } else {
       resultObject = {
@@ -133,7 +140,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
         basicRoleIds: selectedFunctionalities.map((f) => f.value),
         description: "Admin Role With all access",
         entityType: entityType,
-        entityId
+        entityId,
       };
     }
 
@@ -141,13 +148,11 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
       resultObject.compositeRoleName !== "" &&
       resultObject.basicRoleIds.length > 0
     ) {
-
       axiosTokenInstance[roleId ? "put" : "post"](
         `/role/${roleId ? "update" : "add"}/`,
         resultObject
       )
         .then((res: any) => {
-
           if (res?.data?.success) {
             handleClose();
             handleRoleAddedState();
@@ -163,23 +168,21 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
             Swal.fire({
               title: "Error",
               icon: "error",
-              text: res?.data?.error?.errorMessage
-            })
-
+              text: res?.data?.error?.errorMessage || "Please try again",
+            });
           }
         })
-        .catch((e:any) => {
-          console.log("role error",e)
+        .catch((e: any) => {
+          console.log("role error", e);
           handleClose();
           Swal.fire({
             title: e?.response?.data?.message || "Internal Server Error!",
             icon: "error",
           });
         })
-        .finally(() => setLoader(false))
+        .finally(() => setLoader(false));
     }
   };
-
 
   return (
     <Modal
@@ -234,9 +237,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({ onClose, functionalities, i
                   remove={remove}
                   className="relative"
                 />
-                <span className="text-red-400 ml-1">
-                  {errors["dropdown"]}
-                </span>
+                <span className="text-red-400 ml-1">{errors["dropdown"]}</span>
               </div>
             </div>
             <div className="mt-[24px]">
