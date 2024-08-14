@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import DscKeyLogin from "../../components/userFlow/form/DscKeyLogin";
 import { axiosTokenInstance } from "../../utils/axios";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import TaskTabsRegulator from "../../components/userFlow/mainPortal-Regulator/TaskTabsRegulator";
 
 const UploadDSC3Regulator = () => {
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
@@ -86,7 +87,8 @@ const UploadDSC3Regulator = () => {
   return (
     <>
       <div className="mt-6 mx-6">
-        <TaskTabs />
+        {/* <TaskTabs /> */}
+        <TaskTabsRegulator />
       </div>
       <form
         onSubmit={handleSubmit}

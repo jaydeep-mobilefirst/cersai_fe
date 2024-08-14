@@ -63,7 +63,7 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
           Swal.fire({
             icon: "error",
             title: "Invalid Certificate",
-            text: "The selected DSC certificate has expired.",
+            text: "Your DSC Certificate is expired. Please use the valid DSC3 Certificate",
             customClass: {
               container: "my-swal",
             },
@@ -93,6 +93,11 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
     setIsModalOpen(false);
   };
 
+  // console.log(dsc3UserInput, "dsc vinay ip ....");
+  // const dscName = JSON.parse(dsc3UserInput)?.SelCertSubject?.split(",")[0];
+
+  // console.log(dsc3UserInput, "dsc inputtt vivvvv");
+
   return (
     <>
       <div
@@ -111,7 +116,7 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
           {isDscSelected
             ? certName
             : dsc3UserInput && dsc3UserInput.length
-            ? dsc3UserInput.replace(/^"|"$/g, "").slice(0, 9)
+            ? dsc3UserInput.replace(/^"|"$/g, "").slice(19, 35)
             : "DSC Certificate"}
         </p>
         <button

@@ -34,7 +34,12 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
   const [certName, setCertName] = useState("");
 
   const navigate = useNavigate();
-  console.log({ fieldData }, "filed data");
+
+  console.log(JSON.parse(fieldData?.userInput), "filed dataaaa");
+
+  const dscName = JSON.parse(fieldData?.userInput)?.SelCertSubject?.split(
+    ","
+  )[0];
 
   useEffect(() => {
     const checkSignerDigital = setInterval(() => {
@@ -68,7 +73,7 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
         Swal.fire({
           icon: "error",
           title: "Invalid Certificate",
-          text: "The selected DSC certificate has expired.",
+          text: "Your DSC Certificate is expired. Please use the valid DSC3 Certificate",
           customClass: {
             container: "my-swal",
           },
@@ -103,7 +108,6 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
     }
   };
 
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -132,8 +136,8 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
             : "Upload DSC Certificate"} */}
           {isDscSelected
             ? certName
-            : fieldData?.userInput?.replace(/^"|"$/g, "").slice(0, 6)
-            ? fieldData?.userInput?.replace(/^"|"$/g, "").slice(0, 6)
+            : dscName
+            ? dscName
             : "Upload DSC Certificate"}
         </p>
         <div
