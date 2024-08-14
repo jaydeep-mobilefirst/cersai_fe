@@ -293,12 +293,12 @@ const ReviewMainListing = ({
             <div className="mb-4" key={index}>
               <div
                 className={`rounded-t-lg bg-blue-100 flex justify-between h-14 ${
-                  isPdfMode ? "flex-col" : ""
+                  isPdfMode ? "flex-col h-20" : ""
                 }`}
               >
                 <p
                   className={`lg:w-40 ml-4 mt-4 text-xl lg:text-xl pb-2 text-nowrap font-bold ${
-                    isPdfMode ? "mb-2" : ""
+                    isPdfMode ? "mb-2 " : ""
                   }`}
                 >
                   {section?.sectionName}
