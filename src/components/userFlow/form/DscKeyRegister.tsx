@@ -35,11 +35,11 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
 
   const navigate = useNavigate();
 
-  console.log(JSON.parse(fieldData?.userInput), "filed dataaaa");
+  // console.log(JSON.parse(fieldData?.userInput), "filed dataaaa");
 
-  const dscName = JSON.parse(fieldData?.userInput)?.SelCertSubject?.split(
-    ","
-  )[0];
+  // const dscName = JSON.parse(fieldData?.userInput)?.SelCertSubject?.split(
+  //   ","
+  // )[0];
 
   useEffect(() => {
     const checkSignerDigital = setInterval(() => {
@@ -111,6 +111,7 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
   return (
     <>
       <button
@@ -129,16 +130,16 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
           />
         </div>
         <p className=" text-[black] ">
-          {/* {isDscSelected
+          {isDscSelected
             ? certName
             : fieldData?.userInput?.SelCertSubject
             ? fieldData?.userInput?.SelCertSubject?.split(",")[0]
-            : "Upload DSC Certificate"} */}
-          {isDscSelected
-            ? certName
-            : dscName
-            ? dscName
             : "Upload DSC Certificate"}
+          {/* {isDscSelected
+            ? certName
+            : fieldData?.length
+            ? fieldData?.userInput?.replace(/^"|"$/g, "")?.slice(19, 35)
+            : "Upload DSC Certificate"} */}
         </p>
         <div
           className={`text-white Rectangle151 w-10 h-10 rounded-md ${
