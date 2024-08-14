@@ -42,9 +42,11 @@ const ResetPassword = () => {
         // text: " Reset password is update  successfully ",
         text: response.data.message || "Reset password is updated successfully",
         confirmButtonText: "Ok",
+
+      }).then(() => {
+        navigate("/");
+        sessionStorage.clear();
       });
-      navigate("/");
-      sessionStorage.clear();
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -53,6 +55,10 @@ const ResetPassword = () => {
             icon: "error",
             text: error?.response?.data?.message || "Please try again later",
             confirmButtonText: "Ok",
+          }).then(()=>{
+            navigate("/dt/resetpassword")
+            sessionStorage.clear();
+
           });
         }
       }

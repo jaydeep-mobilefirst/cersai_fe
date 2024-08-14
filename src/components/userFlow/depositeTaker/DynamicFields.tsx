@@ -48,6 +48,8 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
       },
     },
   ];
+  
+  
 
   return (
     <>
