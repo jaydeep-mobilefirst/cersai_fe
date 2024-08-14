@@ -202,7 +202,7 @@ const ReviewDetailsRegulator = () => {
                     to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
                     target="_blank"
                   >
-                   I accept the Terms and Conditions
+                    I accept the Terms and Conditions
                   </Link>
                 </div>
               </div>
@@ -214,7 +214,7 @@ const ReviewDetailsRegulator = () => {
           <div className=" ml-5">
             <button
               className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0"
-              onClick={() => Navigate("/regulator/court/nodaldetails")}
+              onClick={() => Navigate("/regulator/nodaldetails")}
             >
               <img src={Arrow} alt="back Arrow" className="mr-2" />
               Back
