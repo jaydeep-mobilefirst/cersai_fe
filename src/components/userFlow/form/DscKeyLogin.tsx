@@ -93,7 +93,6 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
     setIsModalOpen(false);
   };
 
-  // console.log(dsc3UserInput, "dsc vinay ip ....");
   // const dscName = JSON.parse(dsc3UserInput)?.SelCertSubject?.split(",")[0];
 
   // console.log(dsc3UserInput, "dsc inputtt vivvvv");
@@ -112,12 +111,12 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
           />
         </div>
         <p className=" text-[black] ">
-          {/* {isDscSelected ? certName : "DSC Certificate"} */}
-          {isDscSelected
+          {isDscSelected ? certName : "DSC Certificate"}
+          {/* {isDscSelected
             ? certName
             : dsc3UserInput && dsc3UserInput.length
             ? dsc3UserInput.replace(/^"|"$/g, "").slice(19, 35)
-            : "DSC Certificate"}
+            : "DSC Certificate"} */}
         </p>
         <button
           type="button"
