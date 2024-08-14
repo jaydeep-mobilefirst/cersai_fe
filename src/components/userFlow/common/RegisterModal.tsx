@@ -90,14 +90,20 @@ type EntityType = {
 
 export const paths: any = {
   DT: "/depositetaker/signup/verification",
-  RG: "/regulator/court/regulatordetails",
+  RG: "/regulator/regulatordetails",
   DC: "designated/court/designateddetails",
   CA: "/competent/authority/competentdetails",
 };
 const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const Navigate = useNavigate();
-  const { entities, setEntities, setAllFormData, setAllDocumentData,sections, setSections } =
-    useDepositTakerRegistrationStore((state) => state);
+  const {
+    entities,
+    setEntities,
+    setAllFormData,
+    setAllDocumentData,
+    sections,
+    setSections,
+  } = useDepositTakerRegistrationStore((state) => state);
   const [data, setData] = useState<EntityType[]>(entities);
   const [loader, setLoader] = useState<boolean>(false);
   useEffect(() => {
@@ -132,7 +138,9 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
 
   const fetchFormFields = () => {
     axiosTraceIdInstance
-      .get(`/registration/field-data/${selectedRadio?.id}?status=addToRegistration`)
+      .get(
+        `/registration/field-data/${selectedRadio?.id}?status=addToRegistration`
+      )
       .then(async (response) => {
         if (response?.data?.success) {
           let dropdownData = undefined;
@@ -145,10 +153,8 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
             console.log("Error");
           }
           let modifiedFormFields = response?.data?.data?.formFields
-          ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
-          ?.map(
-            (o: any) => ({ ...o, userInput: "", error: "" })
-          )
+            ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+            ?.map((o: any) => ({ ...o, userInput: "", error: "" }));
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
               ...o,
@@ -156,28 +162,33 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
               error: "",
               fileName: "",
             }));
-            
-            let dedupObj = {}
-             modifiedFormFields?.map(
-              (f: any) => {
-                if ( f?.key === "nodalMobile" ||
-                  f?.key === "panNumber" ||
-                  f?.key === "nodalEmail") {
-                  dedupObj = {...dedupObj, [f?.key] : f?.userInput}
-                }
-              } 
-            );
 
-            sessionStorage?.setItem('original', JSON.stringify(dedupObj))
+          let dedupObj = {};
+          modifiedFormFields?.map((f: any) => {
+            if (
+              f?.key === "nodalMobile" ||
+              f?.key === "panNumber" ||
+              f?.key === "nodalEmail"
+            ) {
+              dedupObj = { ...dedupObj, [f?.key]: f?.userInput };
+            }
+          });
+
+          sessionStorage?.setItem("original", JSON.stringify(dedupObj));
           let obj = {
             dropdownData,
             ...response?.data?.data,
             formFields: { form_fields: modifiedFormFields },
-            currentEntity : selectedRadio
+            currentEntity: selectedRadio,
           };
           setAllFormData(obj);
           setAllDocumentData(modifiedFileFields);
-          setSections(response?.data?.data?.entitySections?.map((e : any) => ({...e, completed : false})))
+          setSections(
+            response?.data?.data?.entitySections?.map((e: any) => ({
+              ...e,
+              completed: false,
+            }))
+          );
         } else {
           throw new Error("Error getting data, Please try later!");
         }
@@ -191,12 +202,10 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const [selectedRadio, setSelectedRadio] = useState<any>(entities[0]);
 
   const handleSubmit = (e: any) => {
-    
     e.preventDefault();
     fetchFormFields();
     Navigate(selectedRadio?.path);
   };
-  
 
   return (
     <div className="text-gilroy-regular md:p-[40px] m-[2.5%] w-[95%] md:w-[586px] md:h-[370px] p-8  bg-white rounded-3xl">

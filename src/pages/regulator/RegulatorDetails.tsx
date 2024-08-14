@@ -75,9 +75,9 @@ const RegulatorDetails = (props: Props) => {
     if (noError) {
       const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate("/regulator/court/reviewdetails");
+        Navigate("/regulator/reviewdetails");
       } else {
-        Navigate("/regulator/court/uploaddocuments");
+        Navigate("/regulator/uploaddocuments");
       }
     }
   };

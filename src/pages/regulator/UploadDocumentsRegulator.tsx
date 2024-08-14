@@ -28,9 +28,9 @@ const UploadDocumentsRegulator = (props: Props) => {
     if (goodToGo) {
       const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate("/regulator/court/reviewdetails");
+        Navigate("/regulator/reviewdetails");
       } else {
-        Navigate("/regulator/court/nodaldetails");
+        Navigate("/regulator/nodaldetails");
       }
     }
   };
@@ -45,7 +45,10 @@ const UploadDocumentsRegulator = (props: Props) => {
     <>
       <div>
         <div className="border-[#E6E6E6] border-[1px] -mt-[6px]"></div>
-        <form className="flex items-center justify-between flex-col h-full lg:h-[100vh] " onKeyDown={handleKeyPress}>
+        <form
+          className="flex items-center justify-between flex-col h-full lg:h-[100vh] "
+          onKeyDown={handleKeyPress}
+        >
           <div
             style={{
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
@@ -90,7 +93,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                 </svg>
                 <button
                   className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
-                  onClick={() => Navigate("/regulator/court/regulatordetails")}
+                  onClick={() => Navigate("/regulator/regulatordetails")}
                 >
                   Back
                 </button>

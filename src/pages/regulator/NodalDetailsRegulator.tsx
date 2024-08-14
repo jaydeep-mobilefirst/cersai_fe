@@ -72,7 +72,7 @@ const NodalDetailsRegulator = () => {
       }
     } else {
       if (noError) {
-        Navigate("/regulator/court/reviewdetails");
+        Navigate("/regulator/reviewdetails");
       }
     }
   };
@@ -86,7 +86,7 @@ const NodalDetailsRegulator = () => {
   return (
     <>
       <form
-        className='flex items-center justify-between flex-col h-full lg:h-[100vh]'
+        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
         onKeyDown={handleKeyPress}
       >
         <div
@@ -94,13 +94,13 @@ const NodalDetailsRegulator = () => {
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
           }}
         >
-          <div className='border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full'></div>
-          <div className='bg-white p-0 w-full'>
-            <h1 className='text-xl md:text-2xl font-bold mx-10'>
+          <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+          <div className="bg-white p-0 w-full">
+            <h1 className="text-xl md:text-2xl font-bold mx-10">
               Nodal Officer Details
             </h1>
 
-            <div className='bg-white p-4 lg:p-[48px]'>
+            <div className="bg-white p-4 lg:p-[48px]">
               <DynamicFields
                 allFormData={allFormData}
                 formFields={formFields}
@@ -109,7 +109,7 @@ const NodalDetailsRegulator = () => {
 
               {showOTPModel && (
                 <OtpPage
-                  redirectLink='/regulator/court/reviewdetails'
+                  redirectLink="/regulator/reviewdetails"
                   closeShowOtpModel={() => setShowOTPModel(false)}
                 />
               )}
@@ -119,31 +119,31 @@ const NodalDetailsRegulator = () => {
 
         <div>
           <div
-            className='flex w-full p-4 lg:px-[30px] flex-row justify-between items-center'
+            className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
             style={{
               width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
             }}
           >
-            <div className='flex flex-row items-center space-x-2'>
+            <div className="flex flex-row items-center space-x-2">
               <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='24'
-                height='24'
-                viewBox='0 0 24 24'
-                fill='none'
-                className='shrink-0'
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="shrink-0"
               >
                 <path
-                  d='M15 6L9 12L15 18'
-                  stroke='#1D1D1B'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
+                  d="M15 6L9 12L15 18"
+                  stroke="#1D1D1B"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
               <button
-                className='text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular'
-                onClick={() => Navigate("/regulator/court/uploaddocuments")}
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
+                onClick={() => Navigate("/regulator/uploaddocuments")}
               >
                 Back
               </button>
@@ -158,21 +158,21 @@ const NodalDetailsRegulator = () => {
                 {loader ? <LoaderSpin /> : "Save & Review"}
               </button>
             </div> */}
-            <div className='flex items-center ml-auto'>
+            <div className="flex items-center ml-auto">
               <button
-                type='submit'
+                type="submit"
                 disabled={loader}
                 onClick={onSubmit}
-                className='bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm '
+                className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
               >
                 {loader ? <LoaderSpin /> : "Save & Continue"}
               </button>
             </div>
           </div>
           <div>
-            <div className='border-[#E6E6E6] border-[1px] lg:mt-4'></div>
+            <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 
-            <p className='mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4'>
+            <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
               © 2024 Protean BUDs, All Rights Reserved.
             </p>
           </div>
