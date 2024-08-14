@@ -72,6 +72,10 @@ const ResetPassword = () => {
         type: "manual",
         message: "Old and New Password could not be same",
       });
+      setError("newPassword", {
+        type: "manual",
+        message: "Old and New Password could not be same",
+      });
     } else {
       clearErrors("oldPassword");
     }
@@ -96,8 +100,6 @@ const ResetPassword = () => {
       specialChar: (v: any) =>
         /[!@#$%^&*(),.?":{}|<>]/.test(v) ||
         "Password must contain at least one special character",
-      notSameAsOld: (v: any) =>
-        v !== oldPassword || "Old and New Password could not be the same",
     },
   };
   const popperModifiers = [
