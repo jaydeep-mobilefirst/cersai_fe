@@ -34,7 +34,12 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
   const [certName, setCertName] = useState("");
 
   const navigate = useNavigate();
-  console.log({ fieldData }, "filed data");
+
+  console.log(JSON.parse(fieldData?.userInput), "filed dataaaa");
+
+  const dscName = JSON.parse(fieldData?.userInput)?.SelCertSubject?.split(
+    ","
+  )[0];
 
   useEffect(() => {
     const checkSignerDigital = setInterval(() => {
@@ -58,6 +63,23 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
         128
       );
       const strCert = JSON.parse(certificate);
+
+      const expiryDate = new Date(strCert?.ExpDate);
+      // const expiryDate = new Date("2023-06-22T13:37:00+05:30");
+      // const currentDate = new Date("2026-06-23T13:37:00+05:30");
+      const currentDate = new Date();
+
+      if (expiryDate < currentDate) {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Certificate",
+          text: "Your DSC Certificate is expired. Please use the valid DSC3 Certificate",
+          customClass: {
+            container: "my-swal",
+          },
+        });
+        return;
+      }
 
       if (onFileUpload) {
         onFileUpload(strCert);
@@ -85,7 +107,6 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
       console.error("Error detecting smartcard readers:", error);
     }
   };
-
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -115,8 +136,8 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
             : "Upload DSC Certificate"} */}
           {isDscSelected
             ? certName
-            : fieldData?.userInput?.replace(/^"|"$/g, "").slice(0, 6)
-            ? fieldData?.userInput?.replace(/^"|"$/g, "").slice(0, 6)
+            : dscName
+            ? dscName
             : "Upload DSC Certificate"}
         </p>
         <div
