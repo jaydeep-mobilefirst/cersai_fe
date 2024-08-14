@@ -156,15 +156,26 @@ const ReviewDetailsRegulator = () => {
         <main className="flex-grow p-8 overflow-auto custom-scrollbar">
           <div id="reviewContent">
             {isPdfMode && (
-              <div>
-                <img
-                  src={Logo}
-                  alt="logo"
-                  className="rounded-full h-[52px] w-[52px]"
-                />
+              <div className="flex items-center">
+                <img src={Logo} alt="logo" className="rounded-full h-28 w-28" />
+                <div className=" w-auto  mx-auto">
+                  <p className="text-xl text-gilroy-bold font-bold">
+                    Central Registry of Securitization Asset
+                  </p>
+                  <p className="text-xl text-gilroy-bold font-bold">
+                    Reconstruction and Security Interest of India
+                  </p>
+                </div>
               </div>
             )}
-            <h1 className="text-2xl font-bold mb-6">Review Details</h1>
+
+            <h1
+              className={`text-2xl font-bold mb-6 ${
+                isPdfMode ? "flex justify-center items-center" : ""
+              }`}
+            >
+              Review Details
+            </h1>
             <ReviewMainListing
               allFormData={allFormData}
               documentData={documentData}
@@ -173,24 +184,25 @@ const ReviewDetailsRegulator = () => {
             />
 
             {!isPdfMode && (
-              <div className="flex flex-shrink-0 mt-[20px]">
-                <div className="justify-center align-center">
+              <div className="flex flex-shrink-0 mt-[20px] items-center">
+                <div className="">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 accent-[#1c468e]"
+                    className="h-4 w-4 accent-[#1c468e] flex items-center"
                     checked={isChecked}
                     onChange={handleCheckboxChange}
                     placeholder="ischecked"
                   />
                 </div>
                 <div className="leading-[24px] ml-4">
-                  I provide my consent to &nbsp;
+                  I here by declare that all information provided is best of my
+                  knowledge &nbsp;
                   <Link
                     className="text-[#1c468e] underline cursor-pointer"
-                    to={"/"}
+                    to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
                     target="_blank"
                   >
-                    BUDs act 2019
+                   I accept the Terms and Conditions
                   </Link>
                 </div>
               </div>
@@ -213,7 +225,9 @@ const ReviewDetailsRegulator = () => {
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className={`w-auto md:w-[208px] md:h-[48px] gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px] text-gilroy-semibold ${ isChecked ? "" : "opacity-50"}` }
+                className={`w-auto md:w-[208px] md:h-[48px] gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px] text-gilroy-semibold ${
+                  isChecked ? "" : "opacity-50"
+                }`}
               >
                 <img src={download} alt="download" className="mr-2" />
                 {isDownloading ? "Downloading..." : "Download PDF"}

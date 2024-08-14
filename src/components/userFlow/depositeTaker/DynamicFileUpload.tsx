@@ -168,30 +168,26 @@ const DynamicFileUpload = ({ data }: Props) => {
               onFileChange={onFileChange}
             />
           )}
-          {loader ? (
-            <LoaderSpin />
-          ) : (
-            <div className="mt-1">
-              <button
-                type="button"
-                className="bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]"
-                onClick={() => {
-                  if (toggleUploadPopup && !data?.uploadFileId) {
-                    toggleUploadPopup();
-                  }
-                  if (setFieldData && !data?.uploadFileId) {
-                    setFieldData(data);
-                  }
-                }}
-              >
-                {data?.uploadFileId ? (
-                  <ViewFile uploadFileId={data?.uploadFileId} />
-                ) : (
-                  <img src={UploadIcon} alt="Upload" className="w-5" />
-                )}
-              </button>
-            </div>
-          )}
+          <div className="mt-1">
+            <button
+              type="button"
+              className="bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]"
+              onClick={() => {
+                if (toggleUploadPopup && !data?.uploadFileId) {
+                  toggleUploadPopup();
+                }
+                if (setFieldData && !data?.uploadFileId) {
+                  setFieldData(data);
+                }
+              }}
+            >
+              {data?.uploadFileId ? (
+                <ViewFile uploadFileId={data?.uploadFileId} />
+              ) : (
+                <img src={UploadIcon} alt="Upload" className="w-5" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
       <span className="text-red-500">{data?.error}</span>

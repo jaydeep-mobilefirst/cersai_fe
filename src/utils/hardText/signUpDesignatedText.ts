@@ -33,7 +33,7 @@ export const signupSideBarDesignated = [
       path:"/designated/court/nodaldetails",
       imgSrc: buildings,
       imgSrcHighlighted:buildingsHigh,
-      description: "Nodal Details",
+      description: "Nodal Officer Details",
       tickImgSrc: tickCircleWhite,
       percentage: 50,
     },

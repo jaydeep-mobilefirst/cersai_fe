@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SelectButton from "../form/SelectButton";
 import { axiosTraceIdInstance } from "../../../utils/axios";
+import Swal from "sweetalert2";
 
 interface ForgetPasswordModelProps {
   closeForgetModel: () => void;
@@ -78,9 +79,15 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
       }
     } catch (error: any) {
       setLoader(false);
-      setFormError(
-        error?.response?.data?.message || "An error occurred. Please try again"
-      );
+      // setFormError(
+      //   error?.response?.data?.message || "An error occurred. Please try again"
+      // );
+      Swal.fire({
+        icon: "error",
+        text:
+          error?.response?.data?.message ||
+          "An error occurred. Please try again",
+      });
     }
   };
 

@@ -116,6 +116,10 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
         setErromessage(
           error?.response?.data?.message || error?.response?.data?.error
         );
+        Swal.fire({
+          icon: "error",
+          text: error?.response?.data?.message || error?.response?.data?.error,
+        });
         // alert(error?.response?.data?.message);
         setLoader(false);
         setTimeout(() => {
@@ -313,11 +317,11 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
                           )}
                         </div>
                       )}
-                      {errormessage && (
+                      {/* {errormessage && (
                         <p className=" flex justify-center items-center text-red-500 mt-3">
                           {errormessage}
                         </p>
-                      )}
+                      )} */}
 
                       <div className="flex justify-center items-center mt-12">
                         <Button
