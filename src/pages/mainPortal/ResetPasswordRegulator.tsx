@@ -47,7 +47,7 @@ const ResetPasswordRegulator = () => {
       // sessionStorage.clear();
       Swal.fire({
         icon: "success",
-        text: response.data.message || "Reset password is updated successfully",
+        text: response.data.message || "Password changed successfully. Please login again using the new password",
         confirmButtonText: "Ok",
       }).then(() => {
         // Clear session and navigate only after success message is shown
@@ -75,7 +75,7 @@ const ResetPasswordRegulator = () => {
     if (newPassword === oldPassword && newPassword) {
       setError("oldPassword", {
         type: "manual",
-        message: "New password must be different from old password",
+        message: "Old and New Password could not be same",
       });
     } else {
       clearErrors("oldPassword");
