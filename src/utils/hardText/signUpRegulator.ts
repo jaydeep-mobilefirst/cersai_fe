@@ -32,7 +32,7 @@ export const signupSideBarRegulator = [
     path: "/regulator/nodaldetails",
     imgSrc: buildings,
     imgSrcHighlighted: buildingsHigh,
-    description: "Nodal Officer Details",
+    description: "Nodal Details",
     tickImgSrc: tickCircleWhite,
     percentage: 50,
   },

@@ -137,6 +137,7 @@ const UploadDocumentsRegulator = (props: Props) => {
           </div>
 
           <div>
+            {documentData?.length>0 &&
             <div
               className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
               style={{
@@ -183,7 +184,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                   {loader ? <LoaderSpin /> : "Save & Continue"}
                 </button>
               </div>
-            </div>
+            </div>}
             <div>
               <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
               <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">

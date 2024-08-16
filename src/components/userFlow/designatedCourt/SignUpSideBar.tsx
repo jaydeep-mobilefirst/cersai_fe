@@ -148,7 +148,7 @@ const SignUpSideBar: React.FC<SignUpSideBarProps> = ({
                     )}
 
                     <p className="ml-[10px]  text-base font-normal leading-tight">
-                      {item.description}
+                    {item.description ==="Nodal Details"?"Nodal Officer Details":item.description}
                     </p>
                   </div>
                   {
