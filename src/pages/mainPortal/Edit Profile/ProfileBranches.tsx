@@ -121,42 +121,97 @@ const ProfileBranches = () => {
   // const handleCheckboxChange = () => setChecked(!isChecked);
   const handleCheckboxChange = () => toggleChecked();
 
-  const handleFileUpload = (event: any) => {
+  // const handleFileUpload = (event: any) => {
+  //   setLoader(true);
+  //   const file = event.target.files[0];
+  //   console.log(file, "file");
+  //   const formData = new FormData();
+  //   formData.set("file", file);
+  //   const entityId = sessionStorage.getItem("entityUniqueId");
+  //   axiosTokenInstance
+  //     .post(`/deposit-taker/bulk-upload/${entityId}`, formData)
+  //     .then((res) => {
+  //       let data = res.data;
+
+  //       if (data.success) {
+  //         Swal.fire({
+  //           icon: "success",
+  //           text: data?.message,
+  //           title: "Successful",
+  //         });
+  //       } else {
+  //         Swal.fire({
+  //           icon: "error",
+  //           text: data?.message,
+  //           title: "Error",
+  //         });
+  //       }
+  //     })
+  //     .catch((e) => {
+  //       Swal.fire({
+  //         title: "Unable upload file",
+  //         text: e?.response?.data?.detail?.message,
+  //         icon: "error",
+  //       });
+  //     })
+  //     .finally(() => {
+  //       setLoader(false);
+  //       setUploadKey(uploadInputKey + 1);
+  //     });
+  // };
+  const handleFileUpload = async (event: any) => {
     setLoader(true);
     const file = event.target.files[0];
-    const formData = new FormData();
-    formData.set("file", file);
-    const entityId = sessionStorage.getItem("entityUniqueId");
-    axiosTokenInstance
-      .post(`/deposit-taker/bulk-upload/${entityId}`, formData)
-      .then((res) => {
-        let data = res.data;
 
-        if (data.success) {
-          Swal.fire({
-            icon: "success",
-            text: data?.message,
-            title: "Successful",
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            text: data?.message,
-            title: "Error",
-          });
-        }
-      })
-      .catch((e) => {
-        Swal.fire({
-          title: "Unable upload file",
-          text: e?.response?.data?.detail?.message,
-          icon: "error",
-        });
-      })
-      .finally(() => {
-        setLoader(false);
-        setUploadKey(uploadInputKey + 1);
+    if (!file) {
+      Swal.fire({
+        icon: "error",
+        text: "No file selected for upload",
+        title: "Error",
       });
+      setLoader(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const entityId = sessionStorage.getItem("entityUniqueId");
+
+    try {
+      const response = await axiosTokenInstance.post(
+        `/deposit-taker/bulk-upload/${entityId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.success) {
+        Swal.fire({
+          icon: "success",
+          text: response.data.message,
+          title: "Successful",
+        });
+        setUploadKey(uploadInputKey + 1); // Reset the file input
+      } else {
+        Swal.fire({
+          icon: "error",
+          text: response.data.message,
+          title: "Error",
+        });
+      }
+    } catch (error: any) {
+      Swal.fire({
+        title: "Unable to upload file",
+        text: error?.response?.data?.detail?.message || "An error occurred",
+        icon: "error",
+      });
+    } finally {
+      setLoader(false);
+    }
   };
 
   const handleDownloadTemplate = () => {

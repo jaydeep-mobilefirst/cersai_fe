@@ -189,7 +189,9 @@ const MyTaskForm = () => {
   const handleOnClikcView = async (uploadFileId: any) => {
     try {
       setLoader(true);
-      const response = await axiosTokenInstance.get(`/openkm/get/${uploadFileId}`);
+      const response = await axiosTokenInstance.get(
+        `/openkm/get/${uploadFileId}`
+      );
       const data = await response.data;
       if (data?.status === "INTERNAL_SERVER_ERROR") {
         Swal.fire({
@@ -203,6 +205,7 @@ const MyTaskForm = () => {
       const arrayBuffer = data?.data?.data;
 
       await getFileDatafromBuffer(arrayBuffer);
+      await fetchFormFields();
       setLoader(false);
     } catch (error) {
       console.log({ error });

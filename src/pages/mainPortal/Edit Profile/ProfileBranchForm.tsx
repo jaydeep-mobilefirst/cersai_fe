@@ -200,7 +200,7 @@ const ProfileBranchForm: React.FC<Props> = ({
             htmlFor={`addressLine2-${i}`}
             className="text-base font-normal"
           >
-            Address line 2
+            Address line 2 <span className="text-red-500">*</span>
           </label>
           <Tooltip
             title={
@@ -217,7 +217,7 @@ const ProfileBranchForm: React.FC<Props> = ({
             <TextArea
               placeholder="Enter address line 2"
               {...register(`branches[${i}].addressLine2`, {
-                // required: "Address Line 2 is required",
+                required: "Address Line 2 is required",
                 pattern: {
                   value: /^[a-zA-Z0-9\s,.-]*$/,
                   message: "Address Line 2 contains invalid characters",

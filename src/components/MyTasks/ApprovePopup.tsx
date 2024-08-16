@@ -67,21 +67,21 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
   //   setCheckerSelected(false);
   // }, [checkerId]);
 
-  const apiCall = () => {
-    axiosTokenInstance
-      .get("/approval-documents/list")
-      .then((response: any) => {
-        if (response.data.success) {
-          setSupportDocument(
-            response?.data?.data?.map((f: any) => ({
-              value: f.id,
-              label: f.name,
-            }))
-          );
-        }
-      })
-      .catch((err:any) => {});
-  };
+  // const apiCall = () => {
+  //   axiosTokenInstance
+  //     .get("/approval-documents/list")
+  //     .then((response: any) => {
+  //       if (response.data.success) {
+  //         setSupportDocument(
+  //           response?.data?.data?.map((f: any) => ({
+  //             value: f.id,
+  //             label: f.name,
+  //           }))
+  //         );
+  //       }
+  //     })
+  //     .catch((err:any) => {});
+  // };
   // const apiCallChecker = () => {
   //   axiosUAMInstance
   //     .get("/admin/user/checker")
@@ -127,10 +127,10 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
   //     });
   // };
 
-  useEffect(() => {
-    apiCall();
-    // apiCallChecker();
-  }, []);
+  // useEffect(() => {
+  //   apiCall();
+  //   // apiCallChecker();
+  // }, []);
 
   const options1 = [
     { value: "Pvt Ltd", label: "Pvt Ltd" },
