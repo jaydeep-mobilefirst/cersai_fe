@@ -60,7 +60,7 @@ const ResetPasswordDesignated = () => {
           setLoader(false);
           Swal.fire({
             icon: "error",
-            text: error?.response?.data?.message || "Please try again later",
+            text: error?.response?.data?.error || error?.response?.data?.message || "Please try again later",
             confirmButtonText: "Ok",
           });
         }
@@ -78,8 +78,13 @@ const ResetPasswordDesignated = () => {
         type: "manual",
         message: "Old and New Password could not be same",
       });
+      setError("newPassword", {
+        type: "manual",
+        message: "Old and New Password could not be same",
+      });
     } else {
       clearErrors("oldPassword");
+      clearErrors("newPassword");
     }
   }, [newPassword, oldPassword, setError, clearErrors]);
 
@@ -183,7 +188,7 @@ const ResetPasswordDesignated = () => {
             </div>
           </div>
           <div>
-            <Footer loader={loader} />
+            <Footer loader={loader} disabled={Object.keys(errors).length > 0}/>
           </div>
           {/* <button
             type="submit"

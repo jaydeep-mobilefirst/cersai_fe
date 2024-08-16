@@ -116,6 +116,7 @@ const NodalDetails = (props: Props) => {
         )}
 
         <div>
+          {formFields?.length &&
           <div
             className='flex w-full p-4 lg:px-[30px] flex-row justify-between items-center'
             style={{
@@ -166,7 +167,7 @@ const NodalDetails = (props: Props) => {
                 {loader ? <LoaderSpin /> : "Save & Continue"}
               </button>
             </div>
-          </div>
+          </div>}
           <div>
             <div className='border-[#E6E6E6] border-[1px] lg:mt-4'></div>
 

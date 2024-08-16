@@ -458,7 +458,7 @@ const MyTaskForm = () => {
                             key={index}
                             className="rounded-t-lg rounded-b-lg bg-[#e7f0ff] flex justify-between items-center h-16 text-gilroy-bold mb-4"
                           >
-                            <div className="flex p-7 space-x-2 ">
+                            <div className="flex p-7 space-x-2 items-center">
                               <div className="">
                                 <img
                                   src={FolderIcon}
@@ -470,9 +470,9 @@ const MyTaskForm = () => {
                                 <h1 className="text-sm font-normal text-gilroy-medium text-[#1D1D1B]">
                                   {uploadItem?.documentName}
                                 </h1>
-                                <p className="text-base font-normal text-gilroy-medium text-gray-400">
+                                {/* <p className="text-base font-normal text-gilroy-medium text-gray-400">
                                   Document.pdf
-                                </p>
+                                </p> */}
                               </div>
                             </div>
                             <div className="mr-3">

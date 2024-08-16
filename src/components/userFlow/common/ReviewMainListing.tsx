@@ -282,6 +282,7 @@ const ReviewMainListing = ({
       navigate(-1);
     }
   }, [allFormData, navigate]);
+  console.log("alformdataa---",allFormData)
 
   return (
     <>
@@ -301,7 +302,7 @@ const ReviewMainListing = ({
                     isPdfMode ? "mb-2 " : ""
                   }`}
                 >
-                  {section?.sectionName}
+                  {section?.sectionName ==="Nodal Details"?"Nodal Officer Details":section?.sectionName}
                 </p>
                 {!isPdfMode && (
                   <button className="text-blue-700 text-lg lg:text-xl mr-3 font-bold">

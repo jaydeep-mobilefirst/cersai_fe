@@ -155,6 +155,7 @@ const VerificationForm = (props: Props) => {
                 }`,
               }}
             >
+              {formFields?.length>0 &&
               <div className="flex items-center ml-auto">
                 <button
                   type="submit"
@@ -164,7 +165,7 @@ const VerificationForm = (props: Props) => {
                 >
                   {loader ? <LoaderSpin /> : "Verify details"}
                 </button>
-              </div>
+              </div>}
             </div>
             <SuccessPopup
               closePopup={handleClosePopup}
