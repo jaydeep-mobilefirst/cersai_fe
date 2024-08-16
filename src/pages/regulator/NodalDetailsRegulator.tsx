@@ -118,6 +118,7 @@ const NodalDetailsRegulator = () => {
         </div>
 
         <div>
+          {formFields?.length>0 &&
           <div
             className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
             style={{
@@ -168,7 +169,7 @@ const NodalDetailsRegulator = () => {
                 {loader ? <LoaderSpin /> : "Save & Continue"}
               </button>
             </div>
-          </div>
+          </div>}
           <div>
             <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 
