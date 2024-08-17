@@ -58,6 +58,37 @@ const NodalDetails = (props: Props) => {
     }
   }, [showOTPModel]);
 
+  const verifyDscWithNodalOfficer = (data: any) => {
+    const firstNameObj = data.find(
+      (item: { label: string }) => item.label === "Nodal Officer First Name"
+    );
+    const lastNameObj = data.find(
+      (item: { label: string }) => item.label === "Nodal Officer Last Name"
+    );
+
+    const dscObj = data.find(
+      (item: { label: string }) => item.label === "DSC3 Certificate"
+    );
+
+    const firstName = firstNameObj?.userInput?.toUpperCase();
+    const lastName = lastNameObj?.userInput?.toUpperCase();
+    const dscCertName =
+      dscObj?.userInput?.SelCertSubject?.split(",")[0]?.toUpperCase();
+
+    const certNameParts = dscCertName.replace("CN=", "").split(" ");
+
+    const isMatch =
+      (certNameParts[0] === lastName && certNameParts[1] === firstName) ||
+      (certNameParts[0] === firstName && certNameParts[1] === lastName);
+    return isMatch;
+
+    // if (dscCertName.includes(firstName) && dscCertName.includes(lastName)) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+  };
+
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
@@ -65,6 +96,17 @@ const NodalDetails = (props: Props) => {
     const noError = await handleValidationChecks(formFields);
 
     setLoader(false);
+
+    if (verifyDscWithNodalOfficer(formFields)) {
+      console.log("name checked");
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Name",
+        text: "Nodal Officer name should match with DSC3",
+      });
+      return;
+    }
 
     let needVerification = sessionStorage.getItem("needToVerify");
     if (noError && (needVerification ? needVerification === "yes" : true)) {
@@ -99,7 +141,7 @@ const NodalDetails = (props: Props) => {
       {/* <div className="border-[#E6E6E6] border-[1px] -mt-[3px]"></div> */}
       <form
         // className="p-4 flex flex-col w-full max-w-[100%] justify-between space-y-40"
-        className='flex items-center justify-between flex-col h-full lg:h-[100vh]'
+        className="flex items-center justify-between flex-col h-full lg:h-[100vh]"
         onKeyDown={handleKeyPress}
       >
         <div
@@ -107,9 +149,9 @@ const NodalDetails = (props: Props) => {
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
           }}
         >
-          <div className='border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full'></div>
-          <div className='bg-white p-6 w-full'>
-            <h1 className='text-2xl font-bold mb-6'>Nodal Officer Details</h1>
+          <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+          <div className="bg-white p-6 w-full">
+            <h1 className="text-2xl font-bold mb-6">Nodal Officer Details</h1>
             <DynamicFields
               allFormData={allFormData}
               formFields={formFields}
@@ -121,7 +163,7 @@ const NodalDetails = (props: Props) => {
         </div>
         {showOTPModel && (
           <OtpPage
-            redirectLink='/competent/authority/reviewdetails'
+            redirectLink="/competent/authority/reviewdetails"
             closeShowOtpModel={() => setShowOTPModel(false)}
           />
         )}
@@ -162,38 +204,40 @@ const NodalDetails = (props: Props) => {
           </p>
         </div> */}
         <div>
-          {formFields?.length>0 &&
-          <div
-            className='flex w-full p-4 lg:px-[30px] flex-row justify-between items-center'
-            style={{
-              width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-            }}
-          >
+          {formFields?.length > 0 && (
             <div
-              className='flex flex-row items-center space-x-2'
-              onClick={() => Navigate("/competent/authority/uploaddocuments")}
+              className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
+              style={{
+                width: `${
+                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                }`,
+              }}
             >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='24'
-                height='24'
-                viewBox='0 0 24 24'
-                fill='none'
-                className='shrink-0'
+              <div
+                className="flex flex-row items-center space-x-2"
+                onClick={() => Navigate("/competent/authority/uploaddocuments")}
               >
-                <path
-                  d='M15 6L9 12L15 18'
-                  stroke='#1D1D1B'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
-              <button className='text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular'>
-                Back
-              </button>
-            </div>
-            {/* <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="shrink-0"
+                >
+                  <path
+                    d="M15 6L9 12L15 18"
+                    stroke="#1D1D1B"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
+                  Back
+                </button>
+              </div>
+              {/* <div className="flex items-center">
               <button
                 type="submit"
                 disabled={loader}
@@ -203,21 +247,22 @@ const NodalDetails = (props: Props) => {
                 {loader ? <LoaderSpin /> : "Save & Review"}
               </button>
             </div> */}
-            <div className='flex items-center ml-auto'>
-              <button
-                type='submit'
-                disabled={loader}
-                onClick={onSubmit}
-                className='bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm '
-              >
-                {loader ? <LoaderSpin /> : "Save & Continue"}
-              </button>
+              <div className="flex items-center ml-auto">
+                <button
+                  type="submit"
+                  disabled={loader}
+                  onClick={onSubmit}
+                  className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+                >
+                  {loader ? <LoaderSpin /> : "Save & Continue"}
+                </button>
+              </div>
             </div>
-          </div>}
+          )}
           <div>
-            <div className='border-[#E6E6E6] border-[1px] lg:mt-4'></div>
+            <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 
-            <p className='mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4'>
+            <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
               © 2024 Protean BUDs, All Rights Reserved.
             </p>
           </div>
