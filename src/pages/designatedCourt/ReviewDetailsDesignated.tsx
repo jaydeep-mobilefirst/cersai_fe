@@ -35,7 +35,7 @@ const useDownloadPDF = () => {
     const options = {
       margin: 0.4,
       // filename: "Reviewdetails.pdf",
-      filename: "DesignatedCourt.pdf",
+      filename: `DesignatedCourt_${Date.now()}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 2 : 4 },
       jsPDF: {
