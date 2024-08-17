@@ -23,7 +23,7 @@ const useDownloadPDF = () => {
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: [0.4, 0.4, 0.4, 0.4], // Adjusting the margins
-      filename: "DepositTakerDetail.pdf",
+      filename: `DepositTaker_${Date.now()}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 3 : 5 }, // Increasing the scale
       jsPDF: {
