@@ -155,17 +155,18 @@ const VerificationForm = (props: Props) => {
                 }`,
               }}
             >
-              {formFields?.length>0 &&
-              <div className="flex items-center ml-auto">
-                <button
-                  type="submit"
-                  disabled={loader}
-                  onClick={onSubmit}
-                  className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
-                >
-                  {loader ? <LoaderSpin /> : "Verify details"}
-                </button>
-              </div>}
+              {formFields?.length > 0 && (
+                <div className="flex items-center ml-auto">
+                  <button
+                    type="submit"
+                    disabled={loader}
+                    onClick={onSubmit}
+                    className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+                  >
+                    {loader ? <LoaderSpin /> : "Verify details"}
+                  </button>
+                </div>
+              )}
             </div>
             <SuccessPopup
               closePopup={handleClosePopup}
