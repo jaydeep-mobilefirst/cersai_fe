@@ -19,11 +19,23 @@ const useDownloadPDF = () => {
     setIsDownloading(true);
     setIsPdfMode(true);
     const element = document.getElementById("reviewContent");
-
+    const getCurrentDateTimeee = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+    
+      return `${day}-${month}-${year}-${hours}-${minutes}-${seconds}`;
+    };
+    console.log("------",getCurrentDateTimeee())
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: [0.4, 0.4, 0.4, 0.4], // Adjusting the margins
-      filename: `DepositTaker_${Date.now()}.pdf`,
+      filename: `DepositTaker_${getCurrentDateTimeee()}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 3 : 5 }, // Increasing the scale
       jsPDF: {
@@ -182,9 +194,7 @@ const ReviewMain = () => {
                     placeholder="ischecked"
                   />
                 </div>
-                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
-                  I here by declare that all information provided is best of my
-                  knowledge &nbsp;
+                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">I hereby declare that all information provided by me is correct and &nbsp;
                   <Link
                     className="text-[#1c468e] underline cursor-pointer"
                     target={"_blank"}
