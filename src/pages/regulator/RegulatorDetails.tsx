@@ -42,19 +42,11 @@ const RegulatorDetails = (props: Props) => {
         const disableLabels = [
           "State",
           "District",
-          "Address Line 1",
-          "Address Line 2",
-          "Pin Code",
         ];
-
         const disableKeys = [
           "state",
-          "district",
-          "addressLine1",
-          "addressLine2",
-          "pincode",
+          "district"
         ];
-
         return {
           ...field,
           disabled:
@@ -62,8 +54,10 @@ const RegulatorDetails = (props: Props) => {
             disableKeys.includes(field.key),
         };
       }) || [];
-  // console.log({ formFields }, "formfiled");
-
+  
+  const formFieldss = allFormData?.formFields?.form_fields?.filter(
+    (f: any) => f?.sectionId === sectionId?.id
+  );
   const screenWidth = useScreenWidth();
 
   const onSubmit = async (event: any) => {
