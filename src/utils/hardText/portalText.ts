@@ -16,13 +16,13 @@ export const portalSideBarList = [
     logo: dashboardLogo,
     selectlogo: dashboardWhiteLogo,
   },
-  {
-    title: "Scheme Management",
-    url: "/dt/scheme",
-    rurl: "/dt/scheme",
-    logo: myTaskIcon,
-    selectlogo: myTaskWhiteIcon,
-  },
+  // {
+  //   title: "Scheme Management",
+  //   url: "/dt/scheme",
+  //   rurl: "/dt/scheme",
+  //   logo: myTaskIcon,
+  //   selectlogo: myTaskWhiteIcon,
+  // },
   {
     title: "User Management",
     url: "/dt/usermanagement",
