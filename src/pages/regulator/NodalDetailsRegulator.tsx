@@ -15,6 +15,8 @@ import OtpPage from "../depositeTaker/OtpPage";
 import { axiosTraceIdInstance } from "../../utils/axios";
 
 const NodalDetailsRegulator = () => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
+
   const [params, setParams] = useSearchParams();
   const [showOTPModel, setShowOTPModel] = useState<boolean>(false);
   const [loader, setLoader] = useState(false);
@@ -86,15 +88,17 @@ const NodalDetailsRegulator = () => {
     const noError = await handleValidationChecks(formFields);
 
     setLoader(false);
-    if (verifyDscWithNodalOfficer(formFields)) {
-      console.log("name checked");
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Name",
-        text: "Nodal Officer name should match with DSC3",
-      });
-      return;
+    if (isDscKeyAvbl === "true" && noError) {
+      if (verifyDscWithNodalOfficer(formFields)) {
+        console.log("name checked");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Name",
+          text: "Nodal Officer name should match with DSC3",
+        });
+        return;
+      }
     }
     let needVerification = sessionStorage.getItem("needToVerify");
     if (noError && (needVerification ? needVerification === "yes" : true)) {

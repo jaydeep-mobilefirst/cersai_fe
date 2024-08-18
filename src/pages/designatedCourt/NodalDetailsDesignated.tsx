@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { axiosTraceIdInstance } from "../../utils/axios";
 
 const NodalDetailsDesignated = () => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const [params, setParams] = useSearchParams();
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
@@ -89,15 +90,17 @@ const NodalDetailsDesignated = () => {
     const noError = await handleValidationChecks(formFields);
 
     setLoader(false);
-    if (verifyDscWithNodalOfficer(formFields)) {
-      console.log("name checked");
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Name",
-        text: "Nodal Officer name should match with DSC3",
-      });
-      return;
+    if (isDscKeyAvbl === "true" && noError) {
+      if (verifyDscWithNodalOfficer(formFields)) {
+        console.log("name checked");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Name",
+          text: "Nodal Officer name should match with DSC3",
+        });
+        return;
+      }
     }
     let needVerification = sessionStorage.getItem("needToVerify");
     if (noError && (needVerification ? needVerification === "yes" : true)) {

@@ -31,11 +31,23 @@ const useDownloadPDF = () => {
     //     orientation: "portrait",
     //   },
     // };
+    const getCurrentDateTime = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+    
+      return `${day}-${month}-${year}-${hours}-${minutes}-${seconds}-${milliseconds}`;
+    };
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: 0.4,
       // filename: "Reviewdetails.pdf",
-      filename: `DesignatedCourt_${Date.now()}.pdf`,
+      filename: `DesignatedCourt_${getCurrentDateTime()}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 2 : 4 },
       jsPDF: {
@@ -258,8 +270,7 @@ const ReviewDetailsDesignated = () => {
                 />
               </div>
               <div className="leading-6 ml-4 text-gilroy-medium">
-                I hereby declare that all information provided is best of my
-                knowledge&nbsp;
+              I hereby declare that all information provided by me is correct and &nbsp;
                 <Link
                   className="text-[#1c468e] underline cursor-pointer"
                   target={"_blank"}

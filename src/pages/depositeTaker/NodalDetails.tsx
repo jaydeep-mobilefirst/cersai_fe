@@ -12,6 +12,7 @@ import { axiosTraceIdInstance } from "../../utils/axios";
 type Props = {};
 
 const NodalDetails = (props: Props) => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const [params, setParams] = useSearchParams();
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
@@ -89,16 +90,19 @@ const NodalDetails = (props: Props) => {
 
     console.log(noError, "noerror");
     setLoader(false);
-    if (verifyDscWithNodalOfficer(formFields)) {
-      console.log("name checked");
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Name",
-        text: "Nodal Officer name should match with DSC3",
-      });
-      return;
+    if (isDscKeyAvbl === "true" && noError) {
+      if (verifyDscWithNodalOfficer(formFields)) {
+        console.log("name checked");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Name",
+          text: "Nodal Officer name should match with DSC3",
+        });
+        return;
+      }
     }
+
     let needVerification = sessionStorage.getItem("needToVerify");
     if (noError && (needVerification ? needVerification === "yes" : true)) {
       const response = await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
