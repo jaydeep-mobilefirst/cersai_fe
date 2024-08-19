@@ -193,7 +193,24 @@ const DynamicFileUpload = ({ data }: Props) => {
           )}</>)}
           
           <div className="mt-1">
-            <button
+            {data?.uploadFileId ? (<>  <button
+              type="button"
+              className="bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]"
+              onClick={() => {
+                if (toggleUploadPopup && !data?.uploadFileId) {
+                  toggleUploadPopup();
+                }
+                if (setFieldData && !data?.uploadFileId) {
+                  setFieldData(data);
+                }
+              }}
+            >
+              {data?.uploadFileId ? (
+                <ViewFile uploadFileId={data?.uploadFileId} />
+              ) : (
+                <img src={UploadIcon} alt="Upload" className="w-5" />
+              )}
+            </button></>) : (<>  <button
               type="button"
               className="bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]"
               disabled={disableFieldStatus}
@@ -211,7 +228,8 @@ const DynamicFileUpload = ({ data }: Props) => {
               ) : (
                 <img src={UploadIcon} alt="Upload" className="w-5" />
               )}
-            </button>
+            </button></>)}
+          
           </div>
         </div>
       </div>

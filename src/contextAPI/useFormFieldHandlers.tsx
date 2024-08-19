@@ -204,7 +204,7 @@ const FormHandlerProviders = ({ children }: Props) => {
       let sectionName = fieldData?.entityRegSection?.sectionName;
 
       switch (sectionName) {
-        // case "Regulators Details":
+        case "Regulators Details":
         case "Competent Authority Details":
         case "Designated Court Details":
           let fieldName = fieldData?.key;
@@ -226,31 +226,31 @@ const FormHandlerProviders = ({ children }: Props) => {
                 ) {
                   return {
                     ...field,
-                    userInput: data?.address1,
+                    userInput: fieldName !== 'regulatorNameRG' ? data?.address1 : "",
                     disabled: true,
                   };
                 } else if (
                   /\bpin code\b/i.test(field?.label) ||
                   /\bpincode\b/i.test(field?.label)
                 ) {
-                  return { ...field, userInput: data?.pincode, disabled: true };
+                  return { ...field, userInput: fieldName !== 'regulatorNameRG' ? data?.pincode : "", disabled: true };
                 } else if (
                   /\baddress line 2\b/i.test(field?.label) ||
                   /\baddress 2\b/i.test(field?.label)
                 ) {
                   return {
                     ...field,
-                    userInput: data?.address2,
+                    userInput: fieldName !== 'regulatorNameRG' ? data?.address2 : "",
                     disabled: true,
                   };
                 } else if (/\bDistrict\b/i.test(field?.label)) {
                   return {
                     ...field,
-                    userInput: data?.districtId,
+                    userInput: fieldName !== 'regulatorNameRG' ? data?.districtId : "",
                     disabled: true,
                   };
                 } else if (/\bState\b/i.test(field?.label)) {
-                  return { ...field, userInput: data?.stateId, disabled: true };
+                  return { ...field, userInput: fieldName !== 'regulatorNameRG' ? data?.stateId : "", disabled: true };
                 } else if (/\bJurisdiction\b/i.test(field?.label)) {
                   return { ...field, userInput: data?.stateId, disabled: true };
                 } else if (fieldData?.id === field?.id) {

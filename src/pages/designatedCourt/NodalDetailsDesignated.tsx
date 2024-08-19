@@ -52,37 +52,76 @@ const NodalDetailsDesignated = () => {
     }
   }, [showOTPModel]);
 
+  // const verifyDscWithNodalOfficer = (data: any) => {
+  //   const firstNameObj = data.find(
+  //     (item: { label: string }) => item.label === "Nodal Officer First Name"
+  //   );
+  //   const lastNameObj = data.find(
+  //     (item: { label: string }) => item.label === "Nodal Officer Last Name"
+  //   );
+
+  //   const dscObj = data.find(
+  //     (item: { label: string }) => item.label === "DSC3 Certificate"
+  //   );
+
+  //   const firstName = firstNameObj?.userInput?.toUpperCase();
+  //   const lastName = lastNameObj?.userInput?.toUpperCase();
+  //   const dscCertName =
+  //     dscObj?.userInput?.SelCertSubject?.split(",")[0]?.toUpperCase();
+
+  //   const certNameParts = dscCertName.replace("CN=", "").split(" ");
+
+  //   const isMatch =
+  //     (certNameParts[0] === lastName && certNameParts[1] === firstName) ||
+  //     (certNameParts[0] === firstName && certNameParts[1] === lastName);
+  //   return isMatch;
+
+  //   // if (dscCertName.includes(firstName) && dscCertName.includes(lastName)) {
+  //   //   return true;
+  //   // } else {
+  //   //   return false;
+  //   // }
+  // };
+
+
   const verifyDscWithNodalOfficer = (data: any) => {
+    // Extract names from the data array
     const firstNameObj = data.find(
       (item: { label: string }) => item.label === "Nodal Officer First Name"
+    );
+    const middleNameObj = data.find(
+      (item: { label: string }) => item.label === "Nodal Officer Last Name"
     );
     const lastNameObj = data.find(
       (item: { label: string }) => item.label === "Nodal Officer Last Name"
     );
+    const firstName = firstNameObj ? firstNameObj.userInput.toUpperCase().split(" ").filter((part: string | any[]) => part.length > 0) : [];
+    const middleName = middleNameObj ? middleNameObj.userInput.toUpperCase().split(" ").filter((part: string | any[]) => part.length > 0) : [];
+    const lastName = lastNameObj ? lastNameObj.userInput.toUpperCase().split(" ").filter((part: string | any[]) => part.length > 0) : [];
+
+    // Check if required names are provided
+    if (firstName.length === 0 || lastName.length === 0) {
+      return false;
+    }
 
     const dscObj = data.find(
       (item: { label: string }) => item.label === "DSC3 Certificate"
     );
 
-    const firstName = firstNameObj?.userInput?.toUpperCase();
-    const lastName = lastNameObj?.userInput?.toUpperCase();
     const dscCertName =
       dscObj?.userInput?.SelCertSubject?.split(",")[0]?.toUpperCase();
 
-    const certNameParts = dscCertName.replace("CN=", "").split(" ");
+    // Extract and normalize names from the certificate name
+    const certNameParts = dscCertName.replace("CN=", "").toUpperCase().split(" ").filter(Boolean);
 
-    const isMatch =
-      (certNameParts[0] === lastName && certNameParts[1] === firstName) ||
-      (certNameParts[0] === firstName && certNameParts[1] === lastName);
+    // Combine names into a single array
+    const combinedNames = [...firstName, ...middleName, ...lastName].sort();
+    const certNameSorted = certNameParts.sort();
+    // Check if all parts of combined names are present in the certificate name
+    const isMatch = combinedNames.length === certNameSorted.length && combinedNames.every((part, index) => part === certNameSorted[index]);
     return isMatch;
-
-    // if (dscCertName.includes(firstName) && dscCertName.includes(lastName)) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
   };
-
+  
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
