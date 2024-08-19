@@ -142,29 +142,56 @@ const ProfileBranchForm: React.FC<Props> = ({
     },
   ];
 
+  const disabledField = sessionStorage.getItem("user_status");
+
+  const checkStatus = (status: any): any => {
+    switch (disabledField) {
+      case "TRANSIT":
+        return true;
+      case "MOD_REFER_TO_REGULATOR":
+        return true;
+      case "REFER_TO_REGULATOR":
+        return true;
+      case "MOD_TRANSIT":
+        return true;
+      // case "PENDING":
+      //   return true;
+      default:
+        return false;
+    }
+  };
+
+  const disableFieldStatus = checkStatus(disabledField);
+
   return (
-    <div className="my-3">
-      <div className="flex flex-row justify-between bg-[#E7F0FF] p-2 rounded-md">
+    <div className='my-3'>
+      <div className='flex flex-row justify-between bg-[#E7F0FF] p-2 rounded-md'>
         <span>Branch {i + 1}</span>
-        <div className="flex flex-row cursor-pointer">
-          <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
-          {i + 1 > 1 && (
-            <img
-              src={minusCircle}
-              alt="Remove"
-              className="ml-2"
-              onClick={() => removeBranch(i)}
-            />
-          )}
-        </div>
+        {disableFieldStatus ? (
+          <></>
+        ) : (
+          <>
+            <div className='flex flex-row cursor-pointer'>
+              <img src={addCircle} alt='Add' onClick={() => addBranch(i)} />
+              {i + 1 > 1 && (
+                <img
+                  src={minusCircle}
+                  alt='Remove'
+                  className='ml-2'
+                  onClick={() => removeBranch(i)}
+                />
+              )}
+            </div>
+          </>
+        )}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+      <div className='grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 mt-6'>
         <div>
           <label
             htmlFor={`addressLine1-${i}`}
-            className="text-base font-normal"
+            className='text-base font-normal'
           >
-            Address line 1 <span className="text-red-500">*</span>
+            Address line 1 <span className='text-red-500'>*</span>
           </label>
           <Tooltip
             title={
@@ -175,11 +202,12 @@ const ProfileBranchForm: React.FC<Props> = ({
             PopperProps={{
               modifiers: popperModifiers,
             }}
-            placement="bottom"
+            placement='bottom'
             arrow
           >
             <TextArea
-              placeholder="Enter address"
+              placeholder='Enter address'
+              disabled={disableFieldStatus}
               {...register(`branches[${i}].addressLine1`, {
                 required: "Address Line 1 is required",
                 pattern: {
@@ -190,7 +218,7 @@ const ProfileBranchForm: React.FC<Props> = ({
             />
           </Tooltip>
           {errors?.branches?.[i]?.addressLine1 && (
-            <p className="text-red-500">
+            <p className='text-red-500'>
               {errors.branches[i].addressLine1.message}
             </p>
           )}
@@ -198,9 +226,9 @@ const ProfileBranchForm: React.FC<Props> = ({
         <div>
           <label
             htmlFor={`addressLine2-${i}`}
-            className="text-base font-normal"
+            className='text-base font-normal'
           >
-            Address line 2 <span className="text-red-500">*</span>
+            Address line 2 <span className='text-red-500'>*</span>
           </label>
           <Tooltip
             title={
@@ -208,14 +236,15 @@ const ProfileBranchForm: React.FC<Props> = ({
                 ? "Edit Address Line 2"
                 : "Enter Address Line 2"
             }
-            placement="bottom"
+            placement='bottom'
             arrow
             PopperProps={{
               modifiers: popperModifiers,
             }}
           >
             <TextArea
-              placeholder="Enter address line 2"
+              placeholder='Enter address line 2'
+              disabled={disableFieldStatus}
               {...register(`branches[${i}].addressLine2`, {
                 required: "Address Line 2 is required",
                 pattern: {
@@ -226,13 +255,13 @@ const ProfileBranchForm: React.FC<Props> = ({
             />
           </Tooltip>
           {errors?.branches?.[i]?.addressLine2 && (
-            <p className="text-red-500">
+            <p className='text-red-500'>
               {errors.branches[i].addressLine2.message}
             </p>
           )}
         </div>
         <div>
-          <label htmlFor={`pinCode-${i}`} className="text-base font-normal">
+          <label htmlFor={`pinCode-${i}`} className='text-base font-normal'>
             Pin Code
           </label>
           <Tooltip
@@ -241,15 +270,16 @@ const ProfileBranchForm: React.FC<Props> = ({
                 ? "Edit PinCode"
                 : "Enter PinCode"
             }
-            placement="bottom"
+            placement='bottom'
             arrow
             PopperProps={{
               modifiers: popperModifiers,
             }}
           >
             <InputFieldsV2
-              type="number"
-              placeholder="Enter pin code"
+              type='number'
+              placeholder='Enter pin code'
+              disabled={disableFieldStatus}
               {...register(`branches[${i}].pinCode`, {
                 required: "Pin code is required",
                 minLength: {
@@ -266,14 +296,14 @@ const ProfileBranchForm: React.FC<Props> = ({
             />
           </Tooltip>
           {errors?.branches?.[i]?.pinCode && (
-            <p className="text-red-500">{errors.branches[i].pinCode.message}</p>
+            <p className='text-red-500'>{errors.branches[i].pinCode.message}</p>
           )}
-          {pinCodeError && <p className="text-red-500">{pinCodeError}</p>}
+          {pinCodeError && <p className='text-red-500'>{pinCodeError}</p>}
         </div>
 
         <div>
-          <label htmlFor={`state-${i}`} className="text-base font-normal">
-            State <span className="text-red-500">*</span>
+          <label htmlFor={`state-${i}`} className='text-base font-normal'>
+            State <span className='text-red-500'>*</span>
           </label>
           {/* <SelectButton
             options={Stateoptions}
@@ -295,16 +325,16 @@ const ProfileBranchForm: React.FC<Props> = ({
             title={
               getValues(`branches[${i}].state`) ? "Edit State" : "Enter State"
             }
-            placement="bottom"
+            placement='bottom'
             arrow
             PopperProps={{
               modifiers: popperModifiers,
             }}
           >
             <InputFieldsV2
-              type="text"
+              type='text'
               disabled={true}
-              placeholder="type here"
+              placeholder='type here'
               {...register(`branches[${i}].state`, {
                 required: " state is required",
               })}
@@ -313,8 +343,8 @@ const ProfileBranchForm: React.FC<Props> = ({
         </div>
 
         <div>
-          <label htmlFor={`district-${i}`} className="text-base font-normal">
-            District <span className="text-red-500">*</span>
+          <label htmlFor={`district-${i}`} className='text-base font-normal'>
+            District <span className='text-red-500'>*</span>
           </label>
           <Tooltip
             title={
@@ -322,7 +352,7 @@ const ProfileBranchForm: React.FC<Props> = ({
                 ? "Edit District"
                 : "Enter District"
             }
-            placement="bottom"
+            placement='bottom'
             arrow
             PopperProps={{
               modifiers: popperModifiers,
@@ -330,8 +360,8 @@ const ProfileBranchForm: React.FC<Props> = ({
           >
             <InputFieldsV2
               disabled={true}
-              type="text"
-              placeholder="type here"
+              type='text'
+              placeholder='type here'
               {...register(`branches[${i}].district`, {
                 required: " district is required",
               })}

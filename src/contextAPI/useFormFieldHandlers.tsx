@@ -204,7 +204,7 @@ const FormHandlerProviders = ({ children }: Props) => {
       let sectionName = fieldData?.entityRegSection?.sectionName;
 
       switch (sectionName) {
-        case "Regulators Details":
+        // case "Regulators Details":
         case "Competent Authority Details":
         case "Designated Court Details":
           let fieldName = fieldData?.key;

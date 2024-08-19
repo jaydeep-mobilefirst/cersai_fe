@@ -48,12 +48,31 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
       },
     },
   ];
-  
-  
+
+  const disabledField = sessionStorage.getItem("user_status");
+
+  const checkStatus = (status: any): any => {
+    switch (disabledField) {
+      case "TRANSIT":
+        return true;
+      case "MOD_REFER_TO_REGULATOR":
+        return true;
+      case "REFER_TO_REGULATOR":
+        return true;
+      case "MOD_TRANSIT":
+        return true;
+      // case "PENDING":
+      //   return true;
+      default:
+        return false;
+    }
+  };
+
+  const disableFieldStatus = checkStatus(disabledField)
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
         {formFields &&
           formFields?.length > 0 &&
           formFields?.map((field: any) => {
@@ -78,14 +97,14 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     <div>
                       <label
                         htmlFor={field?.label}
-                        className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                        className='block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
                       >
                         {field?.label}
                         <RequiredStar allFormData={allFormData} field={field} />
                       </label>
 
                       <InputFields
-                        disabled={field?.disabled ? field?.disabled : false}
+                        disabled={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
                         // disabled={(field?.label === "PAN NUMBER" || field?.label ==="Company Name (As per Pan)")}
                         value={field?.userInput}
                         onChange={(e) =>
@@ -95,7 +114,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         id={field?.label}
                         placeholder={field?.placeholder}
                       />
-                      <span className="text-red-500">{field?.error}</span>
+                      <span className='text-red-500'>{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
@@ -108,10 +127,10 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                       modifiers: popperModifiers,
                     }}
                   >
-                    <div className="">
+                    <div className=''>
                       <label
                         htmlFor={field?.label}
-                        className="text-base font-normal text-text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                        className='text-base font-normal text-text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
                       >
                         {field?.label}{" "}
                         <RequiredStar allFormData={allFormData} field={field} />
@@ -123,14 +142,14 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
 
                       <TextArea
                         value={field?.userInput}
-                        disabled={field?.disabled ? field?.disabled : false}
+                        disabled={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
                         onChange={(e) =>
                           onChange && onChange(e, field, fieldType)
                         }
                         id={field?.label}
                         placeholder={field?.placeholder}
                       />
-                      <span className="text-red-500">{field?.error}</span>
+                      <span className='text-red-500'>{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
@@ -146,8 +165,8 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                   >
                     <div>
                       <label
-                        htmlFor="district"
-                        className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                        htmlFor='district'
+                        className='text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
                       >
                         {field?.label}{" "}
                         <RequiredStar allFormData={allFormData} field={field} />
@@ -166,13 +185,13 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         )}
                         selectedOption={field?.userInput}
                         placeholder={field?.placeholder}
-                        disabled={field?.disabled}
+                        disabled={disableFieldStatus ? disableFieldStatus : field?.disabled}
                         //  searchInputOnchange={handleSearchInputChange3}
                         //  searchInputValue={searchInputValue3}
                         showSearchInput={true}
                         enableSearch={fieldType === "select_with_search"}
                       />
-                      <span className="text-red-500">{field?.error}</span>
+                      <span className='text-red-500'>{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
@@ -187,21 +206,21 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                   >
                     <div>
                       <label
-                        htmlFor="district"
-                        className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                        htmlFor='district'
+                        className='text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
                       >
                         {field?.label}{" "}
                         <RequiredStar allFormData={allFormData} field={field} />
                       </label>
                       <DatePicker
                         maxDate={field?.key || field?.label}
-                        disabled={field?.disabled ? field?.disabled : false}
+                        disabled={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
                         onChange={(e) =>
                           onChange && onChange(e, field, fieldType)
                         }
                         userValue={field?.userInput}
                       />
-                      <span className="text-red-500">{field?.error}</span>
+                      <span className='text-red-500'>{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
@@ -217,7 +236,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     <div>
                       <label
                         htmlFor={field?.label}
-                        className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                        className='block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
                       >
                         {field?.label}
                         <RequiredStar allFormData={allFormData} field={field} />
@@ -232,9 +251,9 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         type={"number"}
                         id={field?.label}
                         placeholder={field?.placeholder}
-                        disabled={field?.disabled ? field?.disabled : false}
+                        disabled={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
                       />
-                      <span className="text-red-500">{field?.error}</span>
+                      <span className='text-red-500'>{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
@@ -248,10 +267,10 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                       modifiers: popperModifiers,
                     }}
                   >
-                    <div className="flex flex-col">
+                    <div className='flex flex-col'>
                       <label
                         htmlFor={field?.label}
-                        className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                        className='block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
                       >
                         {field?.label}
                         <RequiredStar allFormData={allFormData} field={field} />
@@ -259,7 +278,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
 
                       {isDscKeyAvbl === "true" ? (
                         <DscKeyRegister
-                          disable={field?.disabled ? field?.disabled : false}
+                          disable={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
                           onFileUpload={(file: any) =>
                             onChange && onChange(file, field, fieldType)
                           }
@@ -273,10 +292,10 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                             onChange && onChange(file, field, fieldType)
                           }
                           fname={field?.dscFileNAme}
-                          disabled={field?.disabled ? field?.disabled : false}
+                          disabled={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
                         />
                       )}
-                      <span className="text-red-500">{field?.error}</span>
+                      <span className='text-red-500'>{field?.error}</span>
                     </div>
                   </Tooltip>
                 );

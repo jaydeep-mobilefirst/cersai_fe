@@ -229,23 +229,45 @@ const ProfileBranches = () => {
         link.click();
       });
   };
+
+  const disabledField = sessionStorage.getItem("user_status");
+
+  const checkStatus = (status: any): any => {
+    switch (disabledField) {
+      case "TRANSIT":
+        return true;
+      case "MOD_REFER_TO_REGULATOR":
+        return true;
+      case "REFER_TO_REGULATOR":
+        return true;
+      case "MOD_TRANSIT":
+        return true;
+      // case "PENDING":
+      //   return true;
+      default:
+        return false;
+    }
+  };
+
+  const disableFieldStatus = checkStatus(disabledField);
+
   return (
-    <div className="bg-white p-7 w-full h-full ">
-      <h1 className="font-semibold text-2xl mb-3">Upload Branches</h1>
-      <div className="flex-row align-middle text-gray-400 flex justify-between">
-        <div className="flex flex-row align-middle justify-start">
+    <div className='bg-white p-7 w-full h-full '>
+      <h1 className='font-semibold text-2xl mb-3'>Upload Branches</h1>
+      <div className='flex-row align-middle text-gray-400 flex justify-between'>
+        <div className='flex flex-row align-middle justify-start'>
           <img
             src={infoIcon}
-            alt="info"
-            className="mr-2"
+            alt='info'
+            className='mr-2'
             height={25}
             width={25}
           />
-          <div className="my-auto">
+          <div className='my-auto'>
             You can upload branches in bulk. Please use this given{" "}
             <span
               onClick={handleDownloadTemplate}
-              className="text-blue-400 hover:cursor-pointer"
+              className='text-blue-400 hover:cursor-pointer'
             >
               Template
             </span>
@@ -257,25 +279,26 @@ const ProfileBranches = () => {
           onClick={() => {
             uploadButtonRef.current?.click();
           }}
-          className="w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer"
+          className='w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer'
         >
           <input
             onChange={handleFileUpload}
-            type="file"
-            name=""
-            id=""
-            className="hidden"
-            accept=".xls, .xlsx"
+            type='file'
+            name=''
+            id=''
+            className='hidden'
+            accept='.xls, .xlsx'
             ref={uploadButtonRef}
             key={uploadInputKey}
+            disabled={disableFieldStatus}
           />
-          <div className="justify-start items-center gap-1.5 inline-flex">
-            <div className="w-6 h-6 justify-center items-center flex">
-              <div className="w-6 h-6 relative">
-                <img src={uploadIcon} alt="" />
+          <div className='justify-start items-center gap-1.5 inline-flex'>
+            <div className='w-6 h-6 justify-center items-center flex'>
+              <div className='w-6 h-6 relative'>
+                <img src={uploadIcon} alt='' />
               </div>
             </div>
-            <div className="text-white text-base font-normal">Upload</div>
+            <div className='text-white text-base font-normal'>Upload</div>
           </div>
         </div>
       </div>
@@ -299,25 +322,32 @@ const ProfileBranches = () => {
             />
           ))
         )}
-        <div className="mt-4">
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={handleCheckboxChange}
-              className="h-4 w-4 mr-2 rounded-lg accent-[#1c468e]"
-            />
-            I declare all the information provided is correct as per my
-            knowledge.
-          </label>
-        </div>
+        {disableFieldStatus ? (
+          <></>
+        ) : (
+          <>
+            {" "}
+            <div className='mt-4'>
+              <label className='flex items-center'>
+                <input
+                  type='checkbox'
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  className='h-4 w-4 mr-2 rounded-lg accent-[#1c468e]'
+                />
+                I declare all the information provided is correct as per my
+                knowledge.
+              </label>
+            </div>
+          </>
+        )}
 
         <div>
           <Footer disabled={!isChecked} />
           <button
             onSubmit={onSubmit}
-            type="submit"
-            className="mt-4 btn-primary"
+            type='submit'
+            className='mt-4 btn-primary'
           ></button>
         </div>
       </form>
