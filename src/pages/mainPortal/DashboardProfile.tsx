@@ -99,7 +99,7 @@ const DashboardProfile = (props: Props) => {
       </div>
       <div className="flex flex-row">
         <div className="hidden lg:block">
-          <DashboardProfileSidebar />
+          <DashboardProfileSidebar fetchFormFields={fetchFormFields} />
         </div>
         {current === "entity" && <ProfileEntityDetails />}
         {current === "nodal" && <ProfileNodalDetails />}
