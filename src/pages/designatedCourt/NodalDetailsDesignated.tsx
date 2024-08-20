@@ -90,7 +90,7 @@ const NodalDetailsDesignated = () => {
       (item: { label: string }) => item.label === "Nodal Officer First Name"
     );
     const middleNameObj = data.find(
-      (item: { label: string }) => item.label === "Nodal Officer Last Name"
+      (item: { label: string }) => item.label === "Nodal Officer Middle Name"
     );
     const lastNameObj = data.find(
       (item: { label: string }) => item.label === "Nodal Officer Last Name"
