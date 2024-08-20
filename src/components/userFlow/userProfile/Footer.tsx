@@ -26,6 +26,8 @@ const Footer: React.FC<FooterProps> = ({ onSubmit, loader, disabled }) => {
     }
   };
 
+  const currentPath = window.location.pathname;
+
   const disableFieldStatus = checkStatus(disabledField);
 
   return (
@@ -33,7 +35,7 @@ const Footer: React.FC<FooterProps> = ({ onSubmit, loader, disabled }) => {
       {" "}
       <div className='flex flex-col sm:flex-row justify-end sm:justify-end items-center space-y-4 sm:space-y-0 pt-4 pb-4'>
         <div className='flex items-center'>
-          {disableFieldStatus ? (
+          {disableFieldStatus && currentPath === '/dt/profile' ? (
             <></>
           ) : (
             <>
