@@ -27,7 +27,6 @@ const DashboardProfileDesignateCourt = (props: Props) => {
     axiosTokenInstance
       .get(`/registration/field-data/4?status=addToProfile`)
       .then(async (response) => {
-
         // if (response?.data?.success) {
         //   let dcData: any = [];
         //   try {
@@ -82,16 +81,15 @@ const DashboardProfileDesignateCourt = (props: Props) => {
           } catch (error) {
             console.log("Error");
           }
-          let modifiedFormFields = response.data.data?.formFields?.map(
-            (o: any) => ({
+          let modifiedFormFields = response.data.data?.formFields
+            ?.map((o: any) => ({
               ...o,
               userInput: dcData
                 ? dcData?.find((data: any) => data?.fieldId === o?.id)?.value
                 : "",
               error: "",
-            })
-          )?.sort((a  :any, b : any) => a.sortOrder - b.sortOrder)
-
+            }))
+            ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
@@ -140,7 +138,7 @@ const DashboardProfileDesignateCourt = (props: Props) => {
       </div>
       <div className="flex flex-row">
         <div className="hidden lg:block">
-          <DashboardProfileSidebar />
+          <DashboardProfileSidebar fetchFormFields={fetchFormFields} />
         </div>
 
         {current === "court" && <CourtDetails />}

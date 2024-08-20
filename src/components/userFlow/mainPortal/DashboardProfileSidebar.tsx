@@ -150,7 +150,9 @@ import { useNavigate } from "react-router-dom";
 import rightArrow from "../../../assets/images/ArrowDark.svg";
 import whiteRightArrow from "../../../assets/images/rightArrowWhiteallWhite.svg";
 
-type Props = {};
+type Props = {
+  fetchFormFields: () => void;
+};
 
 const widthPercentage: any = {
   0: "w-0",
@@ -160,7 +162,7 @@ const widthPercentage: any = {
   100: "w-full",
 };
 
-const DashboardProfileSidebar = ({}: Props) => {
+const DashboardProfileSidebar = ({ fetchFormFields }: Props) => {
   const [percent, setPercentage] = useState<number>(0);
   const [mSidebar, setMsidebar] = useState<boolean>(false);
   const [url, setUrl] = useState<string>("");
@@ -194,6 +196,7 @@ const DashboardProfileSidebar = ({}: Props) => {
   const optionOnclick = (url: string, percentage: number) => {
     setPercentage(percentage);
     setSearchParams({ current: url });
+    fetchFormFields();
   };
 
   const firstName = sessionStorage.getItem("firstName") || "First";

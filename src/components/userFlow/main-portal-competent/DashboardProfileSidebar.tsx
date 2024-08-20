@@ -4,7 +4,9 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import rightArrow from "../../../assets/images/ArrowDark.svg";
 import whiteRightArrow from "../../../assets/images/rightArrowWhiteallWhite.svg";
-type Props = {};
+type Props = {
+  fetchFormFields: () => void;
+};
 const widthPercentage: any = {
   0: "w-5",
   25: "w-1/4",
@@ -13,7 +15,7 @@ const widthPercentage: any = {
   100: "w-full",
 };
 
-const DashboardProfileSidebar = ({}: Props) => {
+const DashboardProfileSidebar = ({ fetchFormFields }: Props) => {
   const [percent, setPercentage] = useState<any>(0);
   const [mSidebar, setMsidebar] = useState<boolean>(false);
   const [url, setUrl] = useState<String>("");
@@ -40,7 +42,9 @@ const DashboardProfileSidebar = ({}: Props) => {
     navigate(-1);
   };
 
-  const optionOnclick = (url: String) => {};
+  const optionOnclick = (url: String) => {
+    fetchFormFields();
+  };
   const firstName = sessionStorage.getItem("firstName");
   const lastName = sessionStorage.getItem("lastName");
 
