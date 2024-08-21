@@ -99,7 +99,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
     // Set a timeout to mark the user as inactive after 10 minutes (600000 ms)
     const newTimeoutId = setTimeout(() => {
       setIsActive(false);
-    }, 6000);
+    }, 600000);
     setTimeoutId(newTimeoutId);
   };
 
@@ -122,7 +122,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
     };
   }, [timeoutId]);
 
-  const refreshPage = sessionStorage.getItem('refreshCount') 
+  const refreshPage = sessionStorage.getItem("refreshCount");
 
   useEffect(() => {
     const reloadToken = sessionStorage.getItem("reload");
@@ -132,33 +132,34 @@ const MainPortalSidebar = ({ layout }: Props) => {
     }
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const refreshCount = () => {
-         // Get the current count from sessionStorage
-    const count = parseInt(sessionStorage.getItem('refreshCount') || '0', 10);
+      // Get the current count from sessionStorage
+      const count = parseInt(sessionStorage.getItem("refreshCount") || "0", 10);
 
-    // Update the count and save it back to sessionStorage
-    const newCount = count + 1;
-    sessionStorage.setItem('refreshCount', newCount.toString());
-    } 
+      // Update the count and save it back to sessionStorage
+      const newCount = count + 1;
+      sessionStorage.setItem("refreshCount", newCount.toString());
+    };
 
     // Add event listener for beforeunload
-    window.addEventListener('beforeunload', refreshCount);
+    window.addEventListener("beforeunload", refreshCount);
 
     // Cleanup event listener on component unmount
     return () => {
-      window.removeEventListener('beforeunload', refreshCount);
+      window.removeEventListener("beforeunload", refreshCount);
     };
-
-   
-  },[state])
+  }, [state]);
 
   useEffect(() => {
-    if (!isActive || refreshPage == '1') {
+    if (!isActive || refreshPage == "1") {
       sessionStorage.clear();
       Swal.fire({
         icon: "error",
-        title: refreshPage == '1' ? "Dont refresh the page. Please login again" : "User inactive for 10 min. Please login again",
+        title:
+          refreshPage == "1"
+            ? "Dont refresh the page. Please login again"
+            : "User inactive for 10 min. Please login again",
       });
       navigate("/");
     }

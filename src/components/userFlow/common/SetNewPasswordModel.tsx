@@ -57,6 +57,8 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
   const [dscCertificate, setDscCertificate] = useState<any>();
 
+  console.log(decodedToken, "decoded token...");
+
   useEffect(() => {
     if (token && !decodedToken) {
       try {
@@ -150,7 +152,50 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
     }
   };
 
+  const verifyDscWithNodalOfficer = () => {
+    // Extract names from the data array
+    const firstName = decodedToken?.firstName;
+    const middleName = decodedToken?.middleName;
+    const lastName = decodedToken?.lastName;
+
+    // Check if required names are provided
+    if (firstName.length === 0 || lastName.length === 0) {
+      return false;
+    }
+
+    const dscCertName =
+      dscCertificate?.SelCertSubject?.split(",")[0]?.toUpperCase();
+
+    // Extract and normalize names from the certificate name
+    const certNameParts = dscCertName
+      .replace("CN=", "")
+      .toUpperCase()
+      .split(" ")
+      .filter(Boolean);
+
+    // Combine names into a single array
+    const combinedNames = [firstName, middleName, lastName].sort();
+    const certNameSorted = certNameParts.sort();
+    // Check if all parts of combined names are present in the certificate name
+    const isMatch =
+      combinedNames.length === certNameSorted.length &&
+      combinedNames.every((part, index) => part === certNameSorted[index]);
+    return isMatch;
+  };
+
   const handleFormSubmit = async (data: any) => {
+    if (verifyDscWithNodalOfficer()) {
+      console.log("name checked");
+    } else {
+      setLoader(false);
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Name",
+        text: "Name should match with DSC3",
+      });
+      return;
+    }
+
     try {
       await apiCall();
     } catch (error) {}

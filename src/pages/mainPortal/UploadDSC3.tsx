@@ -104,7 +104,7 @@ const UploadDSC3 = () => {
       .filter(Boolean);
 
     // Combine names into a single array
-    const combinedNames = [firstName, middleName, lastName].sort();
+    const combinedNames = [...firstName, ...middleName, ...lastName].sort();
     const certNameSorted = certNameParts.sort();
     // Check if all parts of combined names are present in the certificate name
     const isMatch =

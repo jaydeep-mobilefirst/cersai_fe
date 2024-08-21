@@ -94,13 +94,13 @@ const NodalDetails = (props: Props) => {
   const verifyDscWithNodalOfficer = (data: any) => {
     // Extract names from the data array
     const firstNameObj = data.find(
-      (item: { label: string }) => item.label === "Nodal Officer First Name"
+      (item: { key: string }) => item.key === "nodalFirstname"
     );
     const middleNameObj = data.find(
-      (item: { label: string }) => item.label === "Nodal Officer Middle Name"
+      (item: { key: string }) => item.key === "nodalMiddlename"
     );
     const lastNameObj = data.find(
-      (item: { label: string }) => item.label === "Nodal Officer Last Name"
+      (item: { key: string }) => item.key === "nodalLastname"
     );
     const firstName = firstNameObj
       ? firstNameObj.userInput
