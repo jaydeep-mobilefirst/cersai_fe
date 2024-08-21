@@ -419,11 +419,11 @@ const OtpPage: React.FC<OtpPageProps> = ({
 
   const resendMobileOtp = async () => {
     try {
+      setMobileTimer(60);
       await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
       });
-      setMobileTimer(60);
       localStorage.setItem("mobileTimer", "60");
     } catch (error) {
       console.error("Failed to resend mobile OTP:", error);
@@ -432,11 +432,11 @@ const OtpPage: React.FC<OtpPageProps> = ({
 
   const resendEmailOtp = async () => {
     try {
+      setEmailTimer(60);
       await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
       });
-      setEmailTimer(60);
       localStorage.setItem("emailTimer", "60");
     } catch (error) {
       console.error("Failed to resend email OTP:", error);
@@ -474,21 +474,26 @@ const OtpPage: React.FC<OtpPageProps> = ({
       setLoader(true);
       setDisabled(true); // Disable the button after submission
       try {
-        const response = await axiosTraceIdInstance.post(`/dual-otp/verifyotp`, {
-          email: email,
-          mobile: mobile,
-          emailotp: emailOtp,
-          mobileotp: mobileOtp,
-        });
+        const response = await axiosTraceIdInstance.post(
+          `/dual-otp/verifyotp`,
+          {
+            email: email,
+            mobile: mobile,
+            emailotp: emailOtp,
+            mobileotp: mobileOtp,
+          }
+        );
 
         if (response.data.success) {
-          const dataFromServer = JSON.parse(sessionStorage.getItem('original') ??'{}')
-          dataFromServer['nodalMobile'] = mobile
-          dataFromServer['nodalEmail'] = email
-          sessionStorage.setItem('original', JSON.stringify(dataFromServer)) 
+          const dataFromServer = JSON.parse(
+            sessionStorage.getItem("original") ?? "{}"
+          );
+          dataFromServer["nodalMobile"] = mobile;
+          dataFromServer["nodalEmail"] = email;
+          sessionStorage.setItem("original", JSON.stringify(dataFromServer));
           setLoader(false);
           setMessageType("success");
-          
+
           setMessage(response.data.message);
           localStorage.setItem(
             "nodalVerification",
