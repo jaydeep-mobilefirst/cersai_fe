@@ -16,6 +16,7 @@ import { axiosTokenInstance } from "../../../utils/axios";
 type Props = {};
 
 const ProfileNodalDetails = (props: Props) => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
@@ -78,18 +79,92 @@ const ProfileNodalDetails = (props: Props) => {
       value: field.userInput,
     }));
 
+  console.log(formFields, "form dataa owais");
+
+  const verifyDscWithNodalOfficer = (data: any) => {
+    // Extract names from the data array
+    const firstNameObj = data.find(
+      (item: { key: string }) => item.key === "nodalFirstname"
+    );
+    const middleNameObj = data.find(
+      (item: { key: string }) => item.key === "nodalMiddlename"
+    );
+    const lastNameObj = data.find(
+      (item: { key: string }) => item.key === "nodalLastname"
+    );
+    const firstName = firstNameObj
+      ? firstNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+    const middleName = middleNameObj
+      ? middleNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+    const lastName = lastNameObj
+      ? lastNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+
+    // Check if required names are provided
+    if (firstName.length === 0 || lastName.length === 0) {
+      return false;
+    }
+
+    const dscObj = data.find(
+      (item: { label: string }) => item.label === "DSC3 Certificate"
+    );
+
+    const dscCertName =
+      dscObj?.userInput?.SelCertSubject?.split(",")[0]?.toUpperCase();
+
+    // Extract and normalize names from the certificate name
+    const certNameParts = dscCertName
+      .replace("CN=", "")
+      .toUpperCase()
+      .split(" ")
+      .filter(Boolean);
+
+    // Combine names into a single array
+    const combinedNames = [...firstName, ...middleName, ...lastName].sort();
+    const certNameSorted = certNameParts.sort();
+    // Check if all parts of combined names are present in the certificate name
+    const isMatch =
+      combinedNames.length === certNameSorted.length &&
+      combinedNames.every((part, index) => part === certNameSorted[index]);
+    return isMatch;
+  };
+
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
+    console.log(formFields, "profile form fieldsss");
     const noError = await handleValidationChecks(formFields, false);
+
+    if (isDscKeyAvbl === "true" && noError) {
+      if (verifyDscWithNodalOfficer(formFields)) {
+        console.log("name checked");
+      } else {
+        setLoader(false);
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Name",
+          text: "Nodal Officer name should match with DSC3",
+        });
+        return;
+      }
+    }
+
     if (noError) {
       axiosTokenInstance
-        .patch(
-          `/regulator/${sessionStorage.getItem("entityUniqueId")}`,
-          {
-            formData: formData,
-          }
-        )
+        .patch(`/regulator/${sessionStorage.getItem("entityUniqueId")}`, {
+          formData: formData,
+        })
         .then((response) => {
           Swal.fire({
             icon: "success",

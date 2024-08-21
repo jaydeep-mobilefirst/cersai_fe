@@ -102,9 +102,24 @@ const NodalDetails = (props: Props) => {
     const lastNameObj = data.find(
       (item: { label: string }) => item.label === "Nodal Officer Last Name"
     );
-    const firstName = firstNameObj ? firstNameObj.userInput.toUpperCase().split(" ").filter((part: string | any[]) => part.length > 0) : [];
-    const middleName = middleNameObj ? middleNameObj.userInput.toUpperCase().split(" ").filter((part: string | any[]) => part.length > 0) : [];
-    const lastName = lastNameObj ? lastNameObj.userInput.toUpperCase().split(" ").filter((part: string | any[]) => part.length > 0) : [];
+    const firstName = firstNameObj
+      ? firstNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+    const middleName = middleNameObj
+      ? middleNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+    const lastName = lastNameObj
+      ? lastNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
 
     // Check if required names are provided
     if (firstName.length === 0 || lastName.length === 0) {
@@ -119,13 +134,19 @@ const NodalDetails = (props: Props) => {
       dscObj?.userInput?.SelCertSubject?.split(",")[0]?.toUpperCase();
 
     // Extract and normalize names from the certificate name
-    const certNameParts = dscCertName.replace("CN=", "").toUpperCase().split(" ").filter(Boolean);
+    const certNameParts = dscCertName
+      .replace("CN=", "")
+      .toUpperCase()
+      .split(" ")
+      .filter(Boolean);
 
     // Combine names into a single array
     const combinedNames = [...firstName, ...middleName, ...lastName].sort();
     const certNameSorted = certNameParts.sort();
     // Check if all parts of combined names are present in the certificate name
-    const isMatch = combinedNames.length === certNameSorted.length && combinedNames.every((part, index) => part === certNameSorted[index]);
+    const isMatch =
+      combinedNames.length === certNameSorted.length &&
+      combinedNames.every((part, index) => part === certNameSorted[index]);
     return isMatch;
   };
 
