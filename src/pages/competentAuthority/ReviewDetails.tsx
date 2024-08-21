@@ -284,11 +284,11 @@ const ReviewDetails = () => {
             />
 
             {!isPdfMode && (
-              <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
-                <div className="">
+              <div className="flex flex-shrink-0 mt-[20px] items-start">
+                <div className="mt-0.5">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 accent-[#1c648e] flex items-center"
+                    className="h-4 w-4 accent-[#1c648e] "
                     checked={isChecked}
                     onChange={handleCheckboxChange}
                     placeholder="ischecked"
@@ -296,13 +296,13 @@ const ReviewDetails = () => {
                 </div>
                 <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
                   I hereby declare that all information provided by me is
-                  correct and &nbsp;
+                  correct and I agree to the &nbsp;
                   <Link
                     className="text-[#1c468e] underline cursor-pointer"
                     target={"_blank"}
                     to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
                   >
-                    I agree to the Terms and Conditions
+                    Terms and Conditions
                   </Link>
                 </div>
               </div>

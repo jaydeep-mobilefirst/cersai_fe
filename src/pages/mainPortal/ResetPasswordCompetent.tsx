@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import TaskTabsCompetent from "../../components/userFlow/main-portal-competent/TaskTabs";
 import { axiosTokenInstance } from "../../utils/axios";
+import InputFieldPassword from "../../components/userFlow/common/InputFieldPassword";
 
 const ResetPasswordCompetent = () => {
   const screenWidth = useScreenWidth();
@@ -30,8 +31,7 @@ const ResetPasswordCompetent = () => {
   const onSubmit = async (data: any) => {
     setLoader(true);
     try {
-      const response = await  axiosTokenInstance
-      .post(`/auth/resetpassword`, {
+      const response = await axiosTokenInstance.post(`/auth/resetpassword`, {
         username: emailId,
         oldpassword: data?.oldPassword,
         newpassword: data.confirmPassword,
@@ -41,7 +41,9 @@ const ResetPasswordCompetent = () => {
       Swal.fire({
         icon: "success",
         // text: " Reset password is update  successfully ",
-        text: response.data.message || "Password changed successfully. Please login again using the new password",
+        text:
+          response.data.message ||
+          "Password changed successfully. Please login again using the new password",
         confirmButtonText: "Ok",
       }).then(() => {
         // Clear session and navigate only after success message is shown
@@ -54,7 +56,10 @@ const ResetPasswordCompetent = () => {
           setLoader(false);
           Swal.fire({
             icon: "error",
-            text: error?.response?.data?.error || error?.response?.data?.message || "Please try again later",
+            text:
+              error?.response?.data?.error ||
+              error?.response?.data?.message ||
+              "Please try again later",
             confirmButtonText: "Ok",
           });
         }
@@ -125,11 +130,10 @@ const ResetPasswordCompetent = () => {
               >
                 Old Password<span className="text-red-500">*</span>
               </label>
-              <InputFields
+              <InputFieldPassword
                 {...register("oldPassword", {
                   required: "Old password is required",
                 })}
-                type="password"
                 id="oldPassword"
                 placeholder="Type Old Password"
               />
@@ -146,9 +150,8 @@ const ResetPasswordCompetent = () => {
               >
                 New Password<span className="text-red-500">*</span>
               </label>
-              <InputFields
+              <InputFieldPassword
                 {...register("newPassword", passwordValidation)}
-                type="password"
                 id="newPassword"
                 placeholder="Type New Password"
               />
@@ -165,12 +168,11 @@ const ResetPasswordCompetent = () => {
               >
                 Confirm Password<span className="text-red-500">*</span>
               </label>
-              <InputFields
+              <InputFieldPassword
                 {...register("confirmPassword", {
                   validate: (value) =>
                     value === newPassword || "The passwords do not match",
                 })}
-                type="password"
                 id="confirmPassword"
                 placeholder="Type Confirm Password"
               />
@@ -182,7 +184,7 @@ const ResetPasswordCompetent = () => {
             </div>
           </div>
           <div>
-            <Footer loader={loader} disabled={Object.keys(errors).length > 0}/>
+            <Footer loader={loader} disabled={Object.keys(errors).length > 0} />
           </div>
           {/* <button
             type="submit"

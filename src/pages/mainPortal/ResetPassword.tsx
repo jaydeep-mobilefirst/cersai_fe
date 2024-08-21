@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { axiosTokenInstance } from "../../utils/axios";
 import Tooltip from "@mui/material/Tooltip";
+import InputFieldPassword from "../../components/userFlow/common/InputFieldPassword";
 
 const ResetPassword = () => {
   const screenWidth = useScreenWidth();
@@ -54,9 +55,12 @@ const ResetPassword = () => {
           setLoader(false);
           Swal.fire({
             icon: "error",
-            text: error?.response?.data?.error || error?.response?.data?.message || "Please try again later",
+            text:
+              error?.response?.data?.error ||
+              error?.response?.data?.message ||
+              "Please try again later",
             confirmButtonText: "Ok",
-          })
+          });
         }
       }
     }
@@ -141,11 +145,10 @@ const ResetPassword = () => {
                   modifiers: popperModifiers,
                 }}
               >
-                <InputFields
+                <InputFieldPassword
                   {...register("oldPassword", {
                     required: "Old password is required",
                   })}
-                  type="password"
                   id="oldPassword"
                   placeholder="Type Old Password"
                 />
@@ -171,9 +174,8 @@ const ResetPassword = () => {
                   modifiers: popperModifiers,
                 }}
               >
-                <InputFields
+                <InputFieldPassword
                   {...register("newPassword", passwordValidation)}
-                  type="password"
                   id="newPassword"
                   placeholder="Type New Password"
                 />
@@ -199,12 +201,11 @@ const ResetPassword = () => {
                   modifiers: popperModifiers,
                 }}
               >
-                <InputFields
+                <InputFieldPassword
                   {...register("confirmPassword", {
                     validate: (value) =>
                       value === newPassword || "The passwords do not match",
                   })}
-                  type="password"
                   id="confirmPassword"
                   placeholder="Type Confirm Password"
                 />
@@ -217,7 +218,7 @@ const ResetPassword = () => {
             </div>
           </div>
           <div>
-            <Footer loader={loader} disabled={Object.keys(errors).length > 0}/>
+            <Footer loader={loader} disabled={Object.keys(errors).length > 0} />
           </div>
           {/* <button
             type="submit"

@@ -10,6 +10,7 @@ import axios from "axios";
 import { pincodeValidationUrl } from "../../../utils/api";
 import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
 import Tooltip from "@mui/material/Tooltip";
+import Swal from "sweetalert2";
 
 interface Branch {
   addressLine1: string;
@@ -98,7 +99,6 @@ const ProfileBranchForm: React.FC<Props> = ({
       }, delay);
     };
   };
-
   const fetchLocationData = async (pinCode: string): Promise<void> => {
     if (!pinCode || pinCode.length !== 6) {
       setPinCodeError("Pin code must be 6 digits");
@@ -109,17 +109,22 @@ const ProfileBranchForm: React.FC<Props> = ({
       try {
         const response = await axios.get(`${pincodeValidationUrl}/${pinCode}`);
 
-        // const state = response.data[0].PostOffice[0].State;
-        // const district = response.data[0].PostOffice[0].District;
-        // setSelectedState(state);
-        // setSelectedDistrict(district);
-        // setValue(`branches[${i}].state`, state);
-        // setValue(`branches[${i}].district`, district);
-        if (response.data[0] && response.data[0].PostOffice[0]) {
+        if (response.data && response.data[0] && response.data[0].PostOffice) {
           const state = response.data[0].PostOffice[0].State;
           const district = response.data[0].PostOffice[0].District;
           setValue(`branches[${i}].state`, state);
           setValue(`branches[${i}].district`, district);
+        } else if (
+          response.data[0].Status === "Error" &&
+          response.data[0].Message === "No records found"
+        ) {
+          // Using SweetAlert2 to show error message
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "No data found for this pin code!",
+          });
+          setPinCodeError("No data found for this pin code");
         } else {
           setPinCodeError("No data found for this pin code");
         }
@@ -129,6 +134,37 @@ const ProfileBranchForm: React.FC<Props> = ({
       }
     }
   };
+
+  // const fetchLocationData = async (pinCode: string): Promise<void> => {
+  //   if (!pinCode || pinCode.length !== 6) {
+  //     setPinCodeError("Pin code must be 6 digits");
+  //     return;
+  //   }
+  //   setPinCodeError("");
+  //   if (pinCode.length === 6) {
+  //     try {
+  //       const response = await axios.get(`${pincodeValidationUrl}/${pinCode}`);
+
+  //       // const state = response.data[0].PostOffice[0].State;
+  //       // const district = response.data[0].PostOffice[0].District;
+  //       // setSelectedState(state);
+  //       // setSelectedDistrict(district);
+  //       // setValue(`branches[${i}].state`, state);
+  //       // setValue(`branches[${i}].district`, district);
+  //       if (response.data[0] && response.data[0].PostOffice[0]) {
+  //         const state = response.data[0].PostOffice[0].State;
+  //         const district = response.data[0].PostOffice[0].District;
+  //         setValue(`branches[${i}].state`, state);
+  //         setValue(`branches[${i}].district`, district);
+  //       } else {
+  //         setPinCodeError("No data found for this pin code");
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch location data:", error);
+  //       setPinCodeError("Failed to fetch data for the pin code");
+  //     }
+  //   }
+  // };
   const debouncedFetchLocation = useCallback(
     debounce(fetchLocationData, 500),
     []
@@ -166,20 +202,20 @@ const ProfileBranchForm: React.FC<Props> = ({
   const disableFieldStatus = checkStatus(disabledField);
 
   return (
-    <div className='my-3'>
-      <div className='flex flex-row justify-between bg-[#E7F0FF] p-2 rounded-md'>
+    <div className="my-3">
+      <div className="flex flex-row justify-between bg-[#E7F0FF] p-2 rounded-md">
         <span>Branch {i + 1}</span>
         {disableFieldStatus ? (
           <></>
         ) : (
           <>
-            <div className='flex flex-row cursor-pointer'>
-              <img src={addCircle} alt='Add' onClick={() => addBranch(i)} />
+            <div className="flex flex-row cursor-pointer">
+              <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
               {i + 1 > 1 && (
                 <img
                   src={minusCircle}
-                  alt='Remove'
-                  className='ml-2'
+                  alt="Remove"
+                  className="ml-2"
                   onClick={() => removeBranch(i)}
                 />
               )}
@@ -187,13 +223,13 @@ const ProfileBranchForm: React.FC<Props> = ({
           </>
         )}
       </div>
-      <div className='grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 mt-6'>
+      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
         <div>
           <label
             htmlFor={`addressLine1-${i}`}
-            className='text-base font-normal'
+            className="text-base font-normal"
           >
-            Address line 1 <span className='text-red-500'>*</span>
+            Address line 1 <span className="text-red-500">*</span>
           </label>
           <Tooltip
             title={
@@ -204,11 +240,11 @@ const ProfileBranchForm: React.FC<Props> = ({
             PopperProps={{
               modifiers: popperModifiers,
             }}
-            placement='bottom'
+            placement="bottom"
             arrow
           >
             <TextArea
-              placeholder='Enter address'
+              placeholder="Enter address"
               disabled={disableFieldStatus}
               {...register(`branches[${i}].addressLine1`, {
                 required: "Address Line 1 is required",
@@ -220,7 +256,7 @@ const ProfileBranchForm: React.FC<Props> = ({
             />
           </Tooltip>
           {errors?.branches?.[i]?.addressLine1 && (
-            <p className='text-red-500'>
+            <p className="text-red-500">
               {errors.branches[i].addressLine1.message}
             </p>
           )}
@@ -228,9 +264,9 @@ const ProfileBranchForm: React.FC<Props> = ({
         <div>
           <label
             htmlFor={`addressLine2-${i}`}
-            className='text-base font-normal'
+            className="text-base font-normal"
           >
-            Address line 2 <span className='text-red-500'>*</span>
+            Address line 2{/* <span className="text-red-500">*</span> */}
           </label>
           <Tooltip
             title={
@@ -238,32 +274,32 @@ const ProfileBranchForm: React.FC<Props> = ({
                 ? "Edit Address Line 2"
                 : "Enter Address Line 2"
             }
-            placement='bottom'
+            placement="bottom"
             arrow
             PopperProps={{
               modifiers: popperModifiers,
             }}
           >
             <TextArea
-              placeholder='Enter address line 2'
+              placeholder="Enter address line 2"
               disabled={disableFieldStatus}
               {...register(`branches[${i}].addressLine2`, {
-                required: "Address Line 2 is required",
-                pattern: {
-                  value: /^[a-zA-Z0-9\s,.-]*$/,
-                  message: "Address Line 2 contains invalid characters",
-                },
+                // required: "Address Line 2 is required",
+                // pattern: {
+                //   value: /^[a-zA-Z0-9\s,.-]*$/,
+                //   message: "Address Line 2 contains invalid characters",
+                // },
               })}
             />
           </Tooltip>
           {errors?.branches?.[i]?.addressLine2 && (
-            <p className='text-red-500'>
+            <p className="text-red-500">
               {errors.branches[i].addressLine2.message}
             </p>
           )}
         </div>
         <div>
-          <label htmlFor={`pinCode-${i}`} className='text-base font-normal'>
+          <label htmlFor={`pinCode-${i}`} className="text-base font-normal">
             Pin Code
           </label>
           <Tooltip
@@ -272,15 +308,15 @@ const ProfileBranchForm: React.FC<Props> = ({
                 ? "Edit PinCode"
                 : "Enter PinCode"
             }
-            placement='bottom'
+            placement="bottom"
             arrow
             PopperProps={{
               modifiers: popperModifiers,
             }}
           >
             <InputFieldsV2
-              type='number'
-              placeholder='Enter pin code'
+              type="number"
+              placeholder="Enter pin code"
               disabled={disableFieldStatus}
               {...register(`branches[${i}].pinCode`, {
                 required: "Pin code is required",
@@ -298,14 +334,14 @@ const ProfileBranchForm: React.FC<Props> = ({
             />
           </Tooltip>
           {errors?.branches?.[i]?.pinCode && (
-            <p className='text-red-500'>{errors.branches[i].pinCode.message}</p>
+            <p className="text-red-500">{errors.branches[i].pinCode.message}</p>
           )}
-          {pinCodeError && <p className='text-red-500'>{pinCodeError}</p>}
+          {pinCodeError && <p className="text-red-500">{pinCodeError}</p>}
         </div>
 
         <div>
-          <label htmlFor={`state-${i}`} className='text-base font-normal'>
-            State <span className='text-red-500'>*</span>
+          <label htmlFor={`state-${i}`} className="text-base font-normal">
+            State <span className="text-red-500">*</span>
           </label>
           {/* <SelectButton
             options={Stateoptions}
@@ -327,16 +363,16 @@ const ProfileBranchForm: React.FC<Props> = ({
             title={
               getValues(`branches[${i}].state`) ? "Edit State" : "Enter State"
             }
-            placement='bottom'
+            placement="bottom"
             arrow
             PopperProps={{
               modifiers: popperModifiers,
             }}
           >
             <InputFieldsV2
-              type='text'
+              type="text"
               disabled={true}
-              placeholder='type here'
+              placeholder="type here"
               {...register(`branches[${i}].state`, {
                 required: " state is required",
               })}
@@ -345,8 +381,8 @@ const ProfileBranchForm: React.FC<Props> = ({
         </div>
 
         <div>
-          <label htmlFor={`district-${i}`} className='text-base font-normal'>
-            District <span className='text-red-500'>*</span>
+          <label htmlFor={`district-${i}`} className="text-base font-normal">
+            District <span className="text-red-500">*</span>
           </label>
           <Tooltip
             title={
@@ -354,7 +390,7 @@ const ProfileBranchForm: React.FC<Props> = ({
                 ? "Edit District"
                 : "Enter District"
             }
-            placement='bottom'
+            placement="bottom"
             arrow
             PopperProps={{
               modifiers: popperModifiers,
@@ -362,8 +398,8 @@ const ProfileBranchForm: React.FC<Props> = ({
           >
             <InputFieldsV2
               disabled={true}
-              type='text'
-              placeholder='type here'
+              type="text"
+              placeholder="type here"
               {...register(`branches[${i}].district`, {
                 required: " district is required",
               })}
