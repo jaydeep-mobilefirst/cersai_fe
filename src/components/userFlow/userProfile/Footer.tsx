@@ -19,8 +19,10 @@ const Footer: React.FC<FooterProps> = ({ onSubmit, loader, disabled }) => {
         return true;
       case "MOD_TRANSIT":
         return true;
-      // case "PENDING":
-      //   return true;
+      case "PENDING":
+        return true;
+      case "MOD_PENDING":
+        return true;
       default:
         return false;
     }
@@ -35,7 +37,7 @@ const Footer: React.FC<FooterProps> = ({ onSubmit, loader, disabled }) => {
       {" "}
       <div className='flex flex-col sm:flex-row justify-end sm:justify-end items-center space-y-4 sm:space-y-0 pt-4 pb-4'>
         <div className='flex items-center'>
-          {disableFieldStatus && currentPath === '/dt/profile' ? (
+          {disableFieldStatus && currentPath === "/dt/profile" ? (
             <></>
           ) : (
             <>
