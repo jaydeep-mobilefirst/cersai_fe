@@ -260,7 +260,7 @@ const ReviewDetailsDesignated = () => {
           </div>
           {!isPdfMode && (
             <div className="flex flex-shrink-0 mt-5">
-              <div className="justify-center align-center">
+              <div className="mt-0.5">
                 <input
                   type="checkbox"
                   checked={isChecked}
@@ -270,13 +270,13 @@ const ReviewDetailsDesignated = () => {
                 />
               </div>
               <div className="leading-6 ml-4 text-gilroy-medium">
-              I hereby declare that all information provided by me is correct and &nbsp;
+              I hereby declare that all information provided by me is correct and I agree to the &nbsp;
                 <Link
                   className="text-[#1c468e] underline cursor-pointer"
                   target={"_blank"}
                   to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
                 >
-                  I agree to the Terms and Conditions
+                  Terms and Conditions
                 </Link>
               </div>
             </div>
