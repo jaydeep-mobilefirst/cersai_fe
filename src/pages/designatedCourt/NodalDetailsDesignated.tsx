@@ -182,6 +182,7 @@ const NodalDetailsDesignated = () => {
           }}
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+          {formFields?.length > 0 ? (
           <div className="bg-white p-6 w-full">
             <h1 className="text-2xl font-bold mb-6 text-gilroy-medium">
               Nodal Officer Details
@@ -193,7 +194,7 @@ const NodalDetailsDesignated = () => {
               documentFields={documentData}
               onFileChange={onFileChange}
             />
-          </div>
+          </div>):<LoaderSpin/>}
         </div>
         {showOTPModel && (
           <OtpPage

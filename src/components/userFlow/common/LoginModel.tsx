@@ -54,12 +54,13 @@ const LoginModel: React.FC<LoginModelProps> = ({
     watch,
     getValues,
     formState: { errors },
+    trigger
   } = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
-    mode: "onChange",
+    mode: "onSubmit",
   });
 
   // Effect to detect autofill
@@ -308,7 +309,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
                         },
                       })}
                       placeholder="Email id / Mobile no."
-                      onChange={handleEmailChange}
+                      // onChange={handleEmailChange}
+                      
                       error={error}
                     />
                     {errors.email && (
@@ -329,7 +331,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                         required: "Password is required",
                       })}
                       placeholder="Password"
-                      onChange={handlePasswordChange}
+                      // onChange={handlePasswordChange}
                       error={error}
                     />
                     {errors.password && (
