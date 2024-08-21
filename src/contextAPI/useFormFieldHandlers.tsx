@@ -226,33 +226,33 @@ const FormHandlerProviders = ({ children }: Props) => {
                 ) {
                   return {
                     ...field,
-                    userInput: fieldName !== 'regulatorNameRG' ? data?.address1 : "",
+                    userInput: "",
                     disabled: true,
                   };
                 } else if (
                   /\bpin code\b/i.test(field?.label) ||
                   /\bpincode\b/i.test(field?.label)
                 ) {
-                  return { ...field, userInput: fieldName !== 'regulatorNameRG' ? data?.pincode : "", disabled: true };
+                  return { ...field, userInput: "", disabled: true };
                 } else if (
                   /\baddress line 2\b/i.test(field?.label) ||
                   /\baddress 2\b/i.test(field?.label)
                 ) {
                   return {
                     ...field,
-                    userInput: fieldName !== 'regulatorNameRG' ? data?.address2 : "",
+                    userInput: "",
                     disabled: true,
                   };
                 } else if (/\bDistrict\b/i.test(field?.label)) {
                   return {
                     ...field,
-                    userInput: fieldName !== 'regulatorNameRG' ? data?.districtId : "",
+                    userInput: "",
                     disabled: true,
                   };
                 } else if (/\bState\b/i.test(field?.label)) {
-                  return { ...field, userInput: fieldName !== 'regulatorNameRG' ? data?.stateId : "", disabled: true };
+                  return { ...field, userInput: "", disabled: true };
                 } else if (/\bJurisdiction\b/i.test(field?.label)) {
-                  return { ...field, userInput: data?.stateId, disabled: true };
+                  return { ...field, userInput: "", disabled: true };
                 } else if (fieldData?.id === field?.id) {
                   return { ...field, userInput: event?.value, disabled: false };
                 } else {

@@ -41,18 +41,18 @@ const DesignatedCourtDetails: React.FC = () => {
       .map((field: any) => {
         const disableLabels = [
           "State",
-          "Jurisdiction",
-          "Address Line 1",
-          "Address Line 2",
-          "Pin Code",
+          // "Jurisdiction",
+          // "Address Line 1",
+          // "Address Line 2",
+          // "Pin Code",
         ];
 
         const disableKeys = [
           "stateKey",
-          "Jurisdiction",
-          "addressLine1",
-          "addressLine2",
-          "pincode",
+          // "Jurisdiction",
+          // "addressLine1",
+          // "addressLine2",
+          // "pincode",
         ];
 
         return {
