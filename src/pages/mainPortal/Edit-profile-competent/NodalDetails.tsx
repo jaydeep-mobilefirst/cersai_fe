@@ -16,6 +16,7 @@ import { axiosTokenInstance } from "../../../utils/axios";
 type Props = {};
 
 const NodalDetails = (props: Props) => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
