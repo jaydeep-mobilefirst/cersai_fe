@@ -64,6 +64,7 @@ const UploadDocumentsRegulator = (props: Props) => {
             }}
           >
             <div className="border-[#E6E6E6] border-[1px] lg:mt-20 w-full"></div>
+            {documentData?.length > 0 ? (
             <div className=" p-4 lg:p-[48px]">
               <h1 className="text-2xl font-bold mb-6">Upload Documents</h1>
               <DynamicFields
@@ -75,7 +76,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                 <span className="text-red-500">*</span>Office Order / any other
                 supporting document for appointment of Nodal Officer
               </h1>
-            </div>
+            </div>):<LoaderSpin/>}
           </div>
 
           <div>

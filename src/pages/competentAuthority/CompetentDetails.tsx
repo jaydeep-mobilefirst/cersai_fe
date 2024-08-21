@@ -101,6 +101,7 @@ const ComponentDetails: React.FC = () => {
           }}
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+          {formFields?.length > 0 ? (
           <div className="flex flex-col p-6 w-full">
             <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
               Competent Details
@@ -112,7 +113,7 @@ const ComponentDetails: React.FC = () => {
               documentFields={documentData}
               onFileChange={onFileChange}
             />
-          </div>
+          </div>):<LoaderSpin/>}
         </div>
 
         {/* <div className="mt-auto">
