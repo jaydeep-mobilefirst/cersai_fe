@@ -61,14 +61,16 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
         return true;
       case "MOD_TRANSIT":
         return true;
-      // case "PENDING":
-      //   return true;
+      case "PENDING":
+        return true;
+      case "MOD_PENDING":
+        return true;
       default:
         return false;
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField)
+  const disableFieldStatus = checkStatus(disabledField);
 
   return (
     <>
@@ -104,7 +106,13 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                       </label>
 
                       <InputFields
-                        disabled={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
+                        disabled={
+                          disableFieldStatus
+                            ? disableFieldStatus
+                            : field?.disabled
+                            ? field?.disabled
+                            : false
+                        }
                         // disabled={(field?.label === "PAN NUMBER" || field?.label ==="Company Name (As per Pan)")}
                         value={field?.userInput}
                         onChange={(e) =>
@@ -142,7 +150,13 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
 
                       <TextArea
                         value={field?.userInput}
-                        disabled={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
+                        disabled={
+                          disableFieldStatus
+                            ? disableFieldStatus
+                            : field?.disabled
+                            ? field?.disabled
+                            : false
+                        }
                         onChange={(e) =>
                           onChange && onChange(e, field, fieldType)
                         }
@@ -185,7 +199,11 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         )}
                         selectedOption={field?.userInput}
                         placeholder={field?.placeholder}
-                        disabled={disableFieldStatus ? disableFieldStatus : field?.disabled}
+                        disabled={
+                          disableFieldStatus
+                            ? disableFieldStatus
+                            : field?.disabled
+                        }
                         //  searchInputOnchange={handleSearchInputChange3}
                         //  searchInputValue={searchInputValue3}
                         showSearchInput={true}
@@ -214,7 +232,13 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                       </label>
                       <DatePicker
                         maxDate={field?.key || field?.label}
-                        disabled={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
+                        disabled={
+                          disableFieldStatus
+                            ? disableFieldStatus
+                            : field?.disabled
+                            ? field?.disabled
+                            : false
+                        }
                         onChange={(e) =>
                           onChange && onChange(e, field, fieldType)
                         }
@@ -251,7 +275,13 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         type={"number"}
                         id={field?.label}
                         placeholder={field?.placeholder}
-                        disabled={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
+                        disabled={
+                          disableFieldStatus
+                            ? disableFieldStatus
+                            : field?.disabled
+                            ? field?.disabled
+                            : false
+                        }
                       />
                       <span className='text-red-500'>{field?.error}</span>
                     </div>
@@ -278,7 +308,13 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
 
                       {isDscKeyAvbl === "true" ? (
                         <DscKeyRegister
-                          disable={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
+                          disable={
+                            disableFieldStatus
+                              ? disableFieldStatus
+                              : field?.disabled
+                              ? field?.disabled
+                              : false
+                          }
                           onFileUpload={(file: any) =>
                             onChange && onChange(file, field, fieldType)
                           }
@@ -292,7 +328,13 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                             onChange && onChange(file, field, fieldType)
                           }
                           fname={field?.dscFileNAme}
-                          disabled={disableFieldStatus ? disableFieldStatus : field?.disabled ? field?.disabled : false}
+                          disabled={
+                            disableFieldStatus
+                              ? disableFieldStatus
+                              : field?.disabled
+                              ? field?.disabled
+                              : false
+                          }
                         />
                       )}
                       <span className='text-red-500'>{field?.error}</span>

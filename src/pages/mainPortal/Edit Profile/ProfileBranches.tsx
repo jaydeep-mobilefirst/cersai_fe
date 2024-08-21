@@ -242,8 +242,10 @@ const ProfileBranches = () => {
         return true;
       case "MOD_TRANSIT":
         return true;
-      // case "PENDING":
-      //   return true;
+      case "PENDING":
+        return true;
+      case "MOD_PENDING":
+        return true;
       default:
         return false;
     }
