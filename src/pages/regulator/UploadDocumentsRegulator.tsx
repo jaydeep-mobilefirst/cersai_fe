@@ -4,6 +4,7 @@ import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-regis
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FormHandlerContext } from "../../contextAPI/useFormFieldHandlers";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
+import LoaderSpin from "../../components/LoaderSpin";
 
 type Props = {};
 
@@ -55,6 +56,7 @@ const UploadDocumentsRegulator = (props: Props) => {
             }}
           >
             <div className="border-[#E6E6E6] border-[1px] lg:mt-20 w-full"></div>
+            {documentData?.length > 0 ? (
             <div className=" p-4 lg:p-[48px]">
               <h1 className="text-2xl font-bold mb-6">Upload Documents</h1>
               <DynamicFields
@@ -62,7 +64,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                 sectionId={sectionId}
                 onFileChange={onFileChange}
               />
-            </div>
+            </div>):<LoaderSpin/>}
           </div>
 
           <div>

@@ -196,24 +196,24 @@ const ReviewDetailsRegulator = () => {
             />
 
             {!isPdfMode && (
-              <div className="flex flex-shrink-0 mt-[20px] items-center">
-                <div className="">
+              <div className="flex flex-shrink-0 mt-[20px] items-start">
+                <div className="mt-1">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 accent-[#1c468e] flex items-center"
+                    className="h-4 w-4 accent-[#1c468e] "
                     checked={isChecked}
                     onChange={handleCheckboxChange}
                     placeholder="ischecked"
                   />
                 </div>
                 <div className="leading-[24px] ml-4">
-                I hereby declare that all information provided by me is correct and &nbsp;
+                I hereby declare that all information provided by me is correct and I agree to the &nbsp;
                   <Link
                     className="text-[#1c468e] underline cursor-pointer"
                     to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
                     target="_blank"
                   >
-                    I agree to the Terms and Conditions
+                    Terms and Conditions
                   </Link>
                 </div>
               </div>

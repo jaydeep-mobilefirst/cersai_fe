@@ -133,18 +133,25 @@ const VerificationForm = (props: Props) => {
             }}
           >
             <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
-            <h1 className="text-xl md:text-2xl font-bold mx-10 ">
-              Verification
-            </h1>
-            <div className="bg-white p-4 lg:p-[48px] text-gilroy-medium">
-              <DynamicFields
-                allFormData={allFormData}
-                formFields={formFields}
-                onChange={onChange}
-                documentFields={documentData}
-                onFileChange={onFileChange}
-              />
-            </div>
+            {formFields?.length > 0 ? (
+              <>
+                <h1 className="text-xl md:text-2xl font-bold mx-10 ">
+                  Verification
+                </h1>
+
+                <div className="bg-white p-4 lg:p-[48px] text-gilroy-medium">
+                  <DynamicFields
+                    allFormData={allFormData}
+                    formFields={formFields}
+                    onChange={onChange}
+                    documentFields={documentData}
+                    onFileChange={onFileChange}
+                  />
+                </div>
+              </>
+            ) : (
+              <LoaderSpin />
+            )}
           </div>
           <div>
             <div
