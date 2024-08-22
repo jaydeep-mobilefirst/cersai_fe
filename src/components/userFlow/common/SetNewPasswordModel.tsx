@@ -154,9 +154,11 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
 
   const verifyDscWithNodalOfficer = () => {
     // Extract names from the data array
-    const firstName = decodedToken?.firstName;
-    const middleName = decodedToken?.middleName;
-    const lastName = decodedToken?.lastName;
+    const firstName = decodedToken?.firstName?.toUpperCase();
+    const middleName = decodedToken?.middleName?.toUpperCase();
+    const lastName = decodedToken?.lastName.toUpperCase();
+
+    console.log(firstName, middleName, lastName, "all namess");
 
     // Check if required names are provided
     if (firstName.length === 0 || lastName.length === 0) {
@@ -174,8 +176,16 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
       .filter(Boolean);
 
     // Combine names into a single array
-    const combinedNames = [firstName, middleName, lastName].sort();
+    // const combinedNames = [firstName, middleName, lastName].sort();
+    const combinedNames = [firstName, middleName, lastName]
+      .filter((name) => name)
+      .sort();
+
+    console.log(combinedNames, "combinedNames");
+
     const certNameSorted = certNameParts.sort();
+
+    console.log(certNameSorted, "certNameSorted");
     // Check if all parts of combined names are present in the certificate name
     const isMatch =
       combinedNames.length === certNameSorted.length &&
@@ -184,16 +194,18 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   };
 
   const handleFormSubmit = async (data: any) => {
-    if (verifyDscWithNodalOfficer()) {
-      console.log("name checked");
-    } else {
-      setLoader(false);
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Name",
-        text: "Name should match with DSC3",
-      });
-      return;
+    if (isDscKeyAvbl === "true") {
+      if (verifyDscWithNodalOfficer()) {
+        console.log("name checked");
+      } else {
+        setLoader(false);
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Name",
+          text: "Name should match with DSC3",
+        });
+        return;
+      }
     }
 
     try {
