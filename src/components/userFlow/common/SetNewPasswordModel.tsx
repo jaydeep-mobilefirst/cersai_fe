@@ -194,16 +194,18 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   };
 
   const handleFormSubmit = async (data: any) => {
-    if (verifyDscWithNodalOfficer()) {
-      console.log("name checked");
-    } else {
-      setLoader(false);
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Name",
-        text: "Name should match with DSC3",
-      });
-      return;
+    if (isDscKeyAvbl === "true") {
+      if (verifyDscWithNodalOfficer()) {
+        console.log("name checked");
+      } else {
+        setLoader(false);
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Name",
+          text: "Name should match with DSC3",
+        });
+        return;
+      }
     }
 
     try {
