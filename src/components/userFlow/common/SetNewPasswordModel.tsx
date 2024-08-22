@@ -194,7 +194,7 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   };
 
   const handleFormSubmit = async (data: any) => {
-    if (isDscKeyAvbl === "true") {
+    if (isDscKeyAvbl === "true" && decodedToken?.isDsc) {
       if (verifyDscWithNodalOfficer()) {
         console.log("name checked");
       } else {
