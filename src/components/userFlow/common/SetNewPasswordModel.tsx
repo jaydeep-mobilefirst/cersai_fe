@@ -153,48 +153,59 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   };
 
   const verifyDscWithNodalOfficer = () => {
-    return true
-    // // Extract names from the data array
-    // const firstName = decodedToken?.firstName;
-    // const middleName = decodedToken?.middleName;
-    // const lastName = decodedToken?.lastName;
+    // Extract names from the data array
+    const firstName = decodedToken?.firstName?.toUpperCase();
+    const middleName = decodedToken?.middleName?.toUpperCase();
+    const lastName = decodedToken?.lastName.toUpperCase();
 
-    // // Check if required names are provided
-    // if (firstName.length === 0 || lastName.length === 0) {
-    //   return false;
-    // }
+    console.log(firstName, middleName, lastName, "all namess");
 
-    // const dscCertName =
-    //   dscCertificate?.SelCertSubject?.split(",")[0]?.toUpperCase();
+    // Check if required names are provided
+    if (firstName.length === 0 || lastName.length === 0) {
+      return false;
+    }
 
-    // // Extract and normalize names from the certificate name
-    // const certNameParts = dscCertName
-    //   .replace("CN=", "")
-    //   .toUpperCase()
-    //   .split(" ")
-    //   .filter(Boolean);
+    const dscCertName =
+      dscCertificate?.SelCertSubject?.split(",")[0]?.toUpperCase();
 
-    // // Combine names into a single array
+    // Extract and normalize names from the certificate name
+    const certNameParts = dscCertName
+      .replace("CN=", "")
+      .toUpperCase()
+      .split(" ")
+      .filter(Boolean);
+
+    // Combine names into a single array
     // const combinedNames = [firstName, middleName, lastName].sort();
-    // const certNameSorted = certNameParts.sort();
-    // // Check if all parts of combined names are present in the certificate name
-    // const isMatch =
-    //   combinedNames.length === certNameSorted.length &&
-    //   combinedNames.every((part, index) => part === certNameSorted[index]);
-    // return isMatch;
+    const combinedNames = [firstName, middleName, lastName]
+      .filter((name) => name)
+      .sort();
+
+    console.log(combinedNames, "combinedNames");
+
+    const certNameSorted = certNameParts.sort();
+
+    console.log(certNameSorted, "certNameSorted");
+    // Check if all parts of combined names are present in the certificate name
+    const isMatch =
+      combinedNames.length === certNameSorted.length &&
+      combinedNames.every((part, index) => part === certNameSorted[index]);
+    return isMatch;
   };
 
   const handleFormSubmit = async (data: any) => {
-    if (verifyDscWithNodalOfficer()) {
-      console.log("name checked");
-    } else {
-      setLoader(false);
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Name",
-        text: "Name should match with DSC3",
-      });
-      return;
+    if (isDscKeyAvbl === "true" && decodedToken?.isDsc) {
+      if (verifyDscWithNodalOfficer()) {
+        console.log("name checked");
+      } else {
+        setLoader(false);
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Name",
+          text: "Name should match with DSC3",
+        });
+        return;
+      }
     }
 
     try {
