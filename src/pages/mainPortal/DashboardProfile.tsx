@@ -10,14 +10,14 @@ import ProfileUploadDocuments from "./Edit Profile/ProfileUploadDocuments";
 import ProfileBranches from "./Edit Profile/ProfileBranches";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { axiosTokenInstance } from "../../utils/axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const DashboardProfile = (props: Props) => {
   const [loader, setLoader] = useState(false);
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { setAllFormData, setAllDocumentData } =
@@ -34,12 +34,11 @@ const DashboardProfile = (props: Props) => {
             );
             dtData =
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
-          } catch (error:any) {
+          } catch (error: any) {
             if (error.response.status === 401) {
-              navigate('/'); // Navigate to home page
-            }
-            else if (error.response.status === 403){
-              alert('You do not have permission to access this resource.');
+              navigate("/"); // Navigate to home page
+            } else if (error.response.status === 403) {
+              alert("You do not have permission to access this resource.");
             }
 
             console.log("Error");
@@ -100,7 +99,7 @@ const DashboardProfile = (props: Props) => {
       </div>
       <div className="flex flex-row">
         <div className="hidden lg:block">
-          <DashboardProfileSidebar />
+          <DashboardProfileSidebar fetchFormFields={fetchFormFields} />
         </div>
         {current === "entity" && <ProfileEntityDetails />}
         {current === "nodal" && <ProfileNodalDetails />}

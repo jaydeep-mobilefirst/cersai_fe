@@ -16,6 +16,7 @@ import Dscbutton from "../form/Dscbutton";
 import { convertFileToBase64 } from "../../../utils/fileConversion";
 import DscKeyLogin from "../form/DscKeyLogin";
 import { axiosTraceIdInstance } from "../../../utils/axios";
+import Swal from "sweetalert2";
 
 interface LoginModelProps {
   closeModal: () => void;
@@ -41,7 +42,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
   const [dscApiInProgress, setDscApiInProgress] = useState(false);
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
   const [dscCertificate, setDscCertificate] = useState<any>();
-  const [responseData, setResponseDate] = useState<any>()
+  const [responseData, setResponseDate] = useState<any>();
 
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
 
@@ -53,12 +54,13 @@ const LoginModel: React.FC<LoginModelProps> = ({
     watch,
     getValues,
     formState: { errors },
+    trigger
   } = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
-    mode: "onChange",
+    mode: "onSubmit",
   });
 
   // Effect to detect autofill
@@ -99,8 +101,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
         password: watch("password"),
         entityType: selected,
       });
-      setResponseDate(response)
-    
+      setResponseDate(response);
+
       sessionStorage.setItem("firstName", response?.data?.user?.firstName);
       sessionStorage.setItem("masterId", response?.data?.entityDetais.masterId);
       sessionStorage.setItem("lastName", response?.data?.user?.lastName);
@@ -121,7 +123,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
 
       setError(false);
     } catch (error: any) {
-      console.log("error",error?.error_description)
+      console.log("error", error?.error_description);
       setError(true);
       const errorMessage =
         error?.response?.data?.error ||
@@ -134,6 +136,10 @@ const LoginModel: React.FC<LoginModelProps> = ({
       // } else {
       //   setFormError("An error occurred. Please try again.");
       // }
+      Swal.fire({
+        icon: "error",
+        text: errorMessage,
+      });
     } finally {
       setLoader(false);
       // setError(false);
@@ -157,7 +163,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
           "access_token",
           responseData?.data?.response?.access_token
         );
-  
+
         sessionStorage.setItem(
           "user_status",
           responseData?.data?.entityDetais?.status
@@ -175,11 +181,14 @@ const LoginModel: React.FC<LoginModelProps> = ({
         } else {
           navigate("/ca/dashboard");
         }
-        handleClose()
+        handleClose();
       })
       .catch((error) => {
-        
         setFormError(error?.response?.data?.message);
+        Swal.fire({
+          icon: "error",
+          text: error?.response?.data?.message,
+        });
         setLoader(false);
       });
   };
@@ -260,6 +269,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                     >
                       Select Entity
                     </label>
+
                     <SelectButton
                       disabled={dscApiInProgress}
                       setOption={handleSelectOption}
@@ -293,12 +303,14 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       {...register("email", {
                         required: "Email address or Mobile number is required",
                         pattern: {
-                          value: /^(\+?\d{1,4}[\s-]?)?(\d{10})|([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})$/i,
+                          value:
+                            /^(\+?\d{1,4}[\s-]?)?(\d{10})|([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})$/i,
                           message: "Invalid email address or mobile number",
                         },
                       })}
                       placeholder="Email id / Mobile no."
-                      onChange={handleEmailChange}
+                      // onChange={handleEmailChange}
+                      
                       error={error}
                     />
                     {errors.email && (
@@ -319,7 +331,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                         required: "Password is required",
                       })}
                       placeholder="Password"
-                      onChange={handlePasswordChange}
+                      // onChange={handlePasswordChange}
                       error={error}
                     />
                     {errors.password && (
@@ -362,9 +374,9 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       </>
                     )}
                   </div>
-                  <div className="mt-4 lg:mt-8 text-red-500 text-center">
+                  {/* <div className="mt-4 lg:mt-8 text-red-500 text-center">
                     {formError}
-                  </div>
+                  </div> */}
                   <div className="flex justify-center items-center mt-12 ">
                     <Button
                       type="submit"

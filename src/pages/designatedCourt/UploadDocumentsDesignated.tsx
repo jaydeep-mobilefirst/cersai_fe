@@ -64,6 +64,7 @@ const UploadDocumentsRegulator = (props: Props) => {
             }}
           >
             <div className="border-[#E6E6E6] border-[1px] lg:mt-20 w-full"></div>
+            {documentData?.length > 0 ? (
             <div className=" p-4 lg:p-[48px]">
               <h1 className="text-2xl font-bold mb-6">Upload Documents</h1>
               <DynamicFields
@@ -75,10 +76,11 @@ const UploadDocumentsRegulator = (props: Props) => {
                 <span className="text-red-500">*</span>Office Order / any other
                 supporting document for appointment of Nodal Officer
               </h1>
-            </div>
+            </div>):<LoaderSpin/>}
           </div>
 
           <div>
+            {documentData?.length>0 &&
             <div
               className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
               style={{
@@ -123,7 +125,7 @@ const UploadDocumentsRegulator = (props: Props) => {
                   {loader ? <LoaderSpin /> : "Save & Continue"}
                 </button>
               </div>
-            </div>
+            </div>}
             <div>
               <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
               <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">

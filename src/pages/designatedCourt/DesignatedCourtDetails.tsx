@@ -41,18 +41,18 @@ const DesignatedCourtDetails: React.FC = () => {
       .map((field: any) => {
         const disableLabels = [
           "State",
-          "Jurisdiction",
-          "Address Line 1",
-          "Address Line 2",
-          "Pin Code",
+          // "Jurisdiction",
+          // "Address Line 1",
+          // "Address Line 2",
+          // "Pin Code",
         ];
 
         const disableKeys = [
           "stateKey",
-          "Jurisdiction",
-          "addressLine1",
-          "addressLine2",
-          "pincode",
+          // "Jurisdiction",
+          // "addressLine1",
+          // "addressLine2",
+          // "pincode",
         ];
 
         return {
@@ -91,6 +91,7 @@ const DesignatedCourtDetails: React.FC = () => {
           }}
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+          {formFields?.length > 0 ? (
           <div className="flex flex-col p-6 w-full">
             <h1 className="text-2xl font-bold mb-6 text-gilroy-medium">
               Court Details
@@ -102,10 +103,11 @@ const DesignatedCourtDetails: React.FC = () => {
               documentFields={documentData}
               onFileChange={onFileChange}
             />
-          </div>
+          </div>):<LoaderSpin/>}
         </div>
 
         <div>
+          {formFields?.length>0 &&
           <div
             className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
             style={{
@@ -129,7 +131,7 @@ const DesignatedCourtDetails: React.FC = () => {
                 {loader ? <LoaderSpin /> : "Save & Continue"}
               </button>
             </div>
-          </div>
+          </div>}
           <div>
             <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 

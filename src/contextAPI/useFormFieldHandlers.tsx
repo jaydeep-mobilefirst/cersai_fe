@@ -209,6 +209,7 @@ const FormHandlerProviders = ({ children }: Props) => {
         case "Designated Court Details":
           let fieldName = fieldData?.key;
           switch (fieldName) {
+            case "regulatorName":
             case "regulatorNameRG":
             case "competentAuthorityName":
             case "designatedCourtName":
@@ -225,33 +226,33 @@ const FormHandlerProviders = ({ children }: Props) => {
                 ) {
                   return {
                     ...field,
-                    userInput: data?.address1,
+                    userInput: "",
                     disabled: true,
                   };
                 } else if (
                   /\bpin code\b/i.test(field?.label) ||
                   /\bpincode\b/i.test(field?.label)
                 ) {
-                  return { ...field, userInput: data?.pincode, disabled: true };
+                  return { ...field, userInput: "", disabled: true };
                 } else if (
                   /\baddress line 2\b/i.test(field?.label) ||
                   /\baddress 2\b/i.test(field?.label)
                 ) {
                   return {
                     ...field,
-                    userInput: data?.address2,
+                    userInput: "",
                     disabled: true,
                   };
                 } else if (/\bDistrict\b/i.test(field?.label)) {
                   return {
                     ...field,
-                    userInput: data?.districtId,
+                    userInput: "",
                     disabled: true,
                   };
                 } else if (/\bState\b/i.test(field?.label)) {
-                  return { ...field, userInput: data?.stateId, disabled: true };
+                  return { ...field, userInput: "", disabled: true };
                 } else if (/\bJurisdiction\b/i.test(field?.label)) {
-                  return { ...field, userInput: data?.stateId, disabled: true };
+                  return { ...field, userInput: "", disabled: true };
                 } else if (fieldData?.id === field?.id) {
                   return { ...field, userInput: event?.value, disabled: false };
                 } else {

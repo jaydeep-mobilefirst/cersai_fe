@@ -271,17 +271,18 @@ const ReviewMainListing = ({
 }: Props) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check if any field's userInput is empty
-    const hasEmptyUserInput = allFormData?.formFields?.form_fields?.some(
-      (field: any) => field.key === "dsc3" && !field.userInput
-    );
+  // useEffect(() => {
+  //   // Check if any field's userInput is empty
+  //   const hasEmptyUserInput = allFormData?.formFields?.form_fields?.some(
+  //     (field: any) => field.key === "dsc3" && !field.userInput
+  //   );
 
-    // Navigate if the condition is met
-    if (hasEmptyUserInput) {
-      navigate(-1);
-    }
-  }, [allFormData, navigate]);
+  //   // Navigate if the condition is met
+  //   if (hasEmptyUserInput) {
+  //     navigate(-1);
+  //   }
+  // }, [allFormData, navigate]);
+  // console.log("alformdataa---",allFormData)
 
   return (
     <>
@@ -293,15 +294,15 @@ const ReviewMainListing = ({
             <div className="mb-4" key={index}>
               <div
                 className={`rounded-t-lg bg-blue-100 flex justify-between h-14 ${
-                  isPdfMode ? "flex-col" : ""
+                  isPdfMode ? "flex-col h-20" : ""
                 }`}
               >
                 <p
                   className={`lg:w-40 ml-4 mt-4 text-xl lg:text-xl pb-2 text-nowrap font-bold ${
-                    isPdfMode ? "mb-2" : ""
+                    isPdfMode ? "mb-2 " : ""
                   }`}
                 >
-                  {section?.sectionName}
+                  {section?.sectionName ==="Nodal Details"?"Nodal Officer Details":section?.sectionName}
                 </p>
                 {!isPdfMode && (
                   <button className="text-blue-700 text-lg lg:text-xl mr-3 font-bold">

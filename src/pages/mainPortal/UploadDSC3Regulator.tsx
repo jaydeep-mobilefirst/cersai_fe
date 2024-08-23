@@ -9,8 +9,11 @@ import { useNavigate } from "react-router-dom";
 import DscKeyLogin from "../../components/userFlow/form/DscKeyLogin";
 import { axiosTokenInstance } from "../../utils/axios";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import TaskTabsRegulator from "../../components/userFlow/mainPortal-Regulator/TaskTabsRegulator";
 
 const UploadDSC3Regulator = () => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
+
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
   const [dscCertificate, setDscCertificate] = useState<any>();
   const [isError, setError] = useState(false);
@@ -31,6 +34,8 @@ const UploadDSC3Regulator = () => {
       })
     : [];
 
+  console.log(formFields, "upload dscc owais");
+
   const dsc3UserInput = formFields.find(
     (field: any) => field.key === "dsc3"
   )?.userInput;
@@ -42,10 +47,87 @@ const UploadDSC3Regulator = () => {
     }
   }, [isDscSelected]);
 
+  const verifyDscWithNodalOfficer = (data: any) => {
+    const firstNameObj = data.find(
+      (item: { key: string }) => item.key === "nodalFirstname"
+    );
+    const middleNameObj = data.find(
+      (item: { key: string }) => item.key === "nodalMiddlename"
+    );
+    const lastNameObj = data.find(
+      (item: { key: string }) => item.key === "nodalLastname"
+    );
+
+    const firstName = firstNameObj
+      ? firstNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+
+    const middleName = middleNameObj
+      ? middleNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+
+    const lastName = lastNameObj
+      ? lastNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+
+    // const firstName = sessionStorage.getItem("firstName")?.toUpperCase();
+    // const lastName = sessionStorage.getItem("lastName")?.toUpperCase();
+    // const mName = sessionStorage.getItem("middleName")?.toUpperCase();
+
+    // console.log(firstName, lastName);
+    // const middleName = mName ? mName : "";
+
+    if (!firstName || !lastName) {
+      return false;
+    }
+
+    const dscCertName =
+      dscCertificate?.SelCertSubject?.split(",")[0]?.toUpperCase();
+    // console.log(dscCertName, "dsc update name");
+
+    if (!dscCertName) {
+      return false;
+    }
+
+    // Extract and normalize names from the certificate name
+    const certNameParts = dscCertName
+      .replace("CN=", "")
+      .toUpperCase()
+      .split(" ")
+      .filter(Boolean);
+
+    // Combine names into a single array
+    const combinedNames = [...firstName, ...middleName, ...lastName].sort();
+    const certNameSorted = certNameParts.sort();
+    // Check if all parts of combined names are present in the certificate name
+    const isMatch =
+      combinedNames.length === certNameSorted.length &&
+      combinedNames.every((part, index) => part === certNameSorted[index]);
+    return isMatch;
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!isDscSelected) {
       setError(true);
+      return;
+    }
+
+    if (!verifyDscWithNodalOfficer(formFields) && isDscKeyAvbl === "true") {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Name",
+        text: "Nodal Officer name should match with DSC3",
+      });
       return;
     }
 
@@ -86,7 +168,8 @@ const UploadDSC3Regulator = () => {
   return (
     <>
       <div className="mt-6 mx-6">
-        <TaskTabs />
+        {/* <TaskTabs /> */}
+        <TaskTabsRegulator />
       </div>
       <form
         onSubmit={handleSubmit}

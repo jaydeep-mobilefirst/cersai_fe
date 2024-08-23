@@ -8,6 +8,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { axiosTokenInstance } from "../../utils/axios";
+import Tooltip from "@mui/material/Tooltip";
+import InputFieldPassword from "../../components/userFlow/common/InputFieldPassword";
 
 const ResetPassword = () => {
   const screenWidth = useScreenWidth();
@@ -39,18 +41,24 @@ const ResetPassword = () => {
       Swal.fire({
         icon: "success",
         // text: " Reset password is update  successfully ",
-        text: response.data.message || "Reset password is updated successfully",
+        text:
+          response.data.message ||
+          "Password changed successfully. Please login again using the new password",
         confirmButtonText: "Ok",
+      }).then(() => {
+        navigate("/");
+        sessionStorage.clear();
       });
-      navigate("/");
-      sessionStorage.clear();
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
           setLoader(false);
           Swal.fire({
             icon: "error",
-            text: error?.response?.data?.message || "Please try again later",
+            text:
+              error?.response?.data?.error ||
+              error?.response?.data?.message ||
+              "Please try again later",
             confirmButtonText: "Ok",
           });
         }
@@ -66,10 +74,15 @@ const ResetPassword = () => {
     if (newPassword === oldPassword && newPassword) {
       setError("oldPassword", {
         type: "manual",
-        message: "New password must be different from old password",
+        message: "Old and New Password could not be same",
+      });
+      setError("newPassword", {
+        type: "manual",
+        message: "Old and New Password could not be same",
       });
     } else {
       clearErrors("oldPassword");
+      clearErrors("newPassword");
     }
   }, [newPassword, oldPassword, setError, clearErrors]);
 
@@ -94,6 +107,14 @@ const ResetPassword = () => {
         "Password must contain at least one special character",
     },
   };
+  const popperModifiers = [
+    {
+      name: "offset",
+      options: {
+        offset: [0, -8], // Adjust the vertical offset value (second value) to 0 or a negative number
+      },
+    },
+  ];
 
   return (
     <>
@@ -116,14 +137,22 @@ const ResetPassword = () => {
               >
                 Old Password<span className="text-red-500">*</span>
               </label>
-              <InputFields
-                {...register("oldPassword", {
-                  required: "Old password is required",
-                })}
-                type="password"
-                id="oldPassword"
-                placeholder="Type Old Password"
-              />
+              <Tooltip
+                title="Enter your current password"
+                placement="bottom"
+                arrow
+                PopperProps={{
+                  modifiers: popperModifiers,
+                }}
+              >
+                <InputFieldPassword
+                  {...register("oldPassword", {
+                    required: "Old password is required",
+                  })}
+                  id="oldPassword"
+                  placeholder="Type Old Password"
+                />
+              </Tooltip>
               {errors.oldPassword && (
                 <p className="text-red-500">
                   {errors.oldPassword.message as string}
@@ -137,12 +166,20 @@ const ResetPassword = () => {
               >
                 New Password<span className="text-red-500">*</span>
               </label>
-              <InputFields
-                {...register("newPassword", passwordValidation)}
-                type="password"
-                id="newPassword"
-                placeholder="Type New Password"
-              />
+              <Tooltip
+                title="Enter your new password"
+                placement="bottom"
+                arrow
+                PopperProps={{
+                  modifiers: popperModifiers,
+                }}
+              >
+                <InputFieldPassword
+                  {...register("newPassword", passwordValidation)}
+                  id="newPassword"
+                  placeholder="Type New Password"
+                />
+              </Tooltip>
               {errors.newPassword && (
                 <p className="text-red-500">
                   {errors.newPassword.message as string}
@@ -156,15 +193,23 @@ const ResetPassword = () => {
               >
                 Confirm Password<span className="text-red-500">*</span>
               </label>
-              <InputFields
-                {...register("confirmPassword", {
-                  validate: (value) =>
-                    (value === newPassword  ) || "The passwords do not match",
-                })}
-                type="password"
-                id="confirmPassword"
-                placeholder="Type Confirm Password"
-              />
+              <Tooltip
+                title="Re-enter your new password to confirm"
+                placement="bottom"
+                arrow
+                PopperProps={{
+                  modifiers: popperModifiers,
+                }}
+              >
+                <InputFieldPassword
+                  {...register("confirmPassword", {
+                    validate: (value) =>
+                      value === newPassword || "The passwords do not match",
+                  })}
+                  id="confirmPassword"
+                  placeholder="Type Confirm Password"
+                />
+              </Tooltip>
               {errors.confirmPassword && (
                 <p className="text-red-500">
                   {errors.confirmPassword.message as string}
@@ -173,7 +218,7 @@ const ResetPassword = () => {
             </div>
           </div>
           <div>
-            <Footer loader={loader} />
+            <Footer loader={loader} disabled={Object.keys(errors).length > 0} />
           </div>
           {/* <button
             type="submit"

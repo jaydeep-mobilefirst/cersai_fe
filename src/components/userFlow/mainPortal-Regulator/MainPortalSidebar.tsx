@@ -156,6 +156,8 @@ const MainPortalSidebar = ({ layout }: Props) => {
     }
   });
 
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
+
   return (
     <>
       <button
@@ -206,7 +208,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
             {portalSideBarListRegulator?.map((data, idx) => {
               return (
                 <li
-                  className={`${collapse ? "px-2 py-1" : "px-4 py-2"}`}
+                  className={`${collapse ? "px-2 py-1" : "px-4 py-2"} ${isDscKeyAvbl == 'true' && data?.title == 'Scheme Management' ? 'hidden' : "block"}`}
                   key={idx}
                 >
                   <Link to={data.url}>

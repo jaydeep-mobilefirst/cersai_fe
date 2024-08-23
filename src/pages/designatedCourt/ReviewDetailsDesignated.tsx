@@ -31,11 +31,23 @@ const useDownloadPDF = () => {
     //     orientation: "portrait",
     //   },
     // };
+    const getCurrentDateTime = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+    
+      return `${day}-${month}-${year}-${hours}-${minutes}-${seconds}-${milliseconds}`;
+    };
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: 0.4,
       // filename: "Reviewdetails.pdf",
-      filename: "DesignatedCourt.pdf",
+      filename: `DesignatedCourt_${getCurrentDateTime()}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 2 : 4 },
       jsPDF: {
@@ -208,7 +220,7 @@ const ReviewDetailsDesignated = () => {
         <header className="lg:p-[38px] border-b border-gray-200"></header>
         <main className="flex-grow p-6 overflow-auto custom-scrollbar">
           <div id="reviewContent">
-            {isPdfMode && (
+            {/* {isPdfMode && (
               <div>
                 <img
                   src={Logo}
@@ -217,7 +229,28 @@ const ReviewDetailsDesignated = () => {
                 />
               </div>
             )}
-            <h1 className="text-2xl font-bold mb-6">Review Details</h1>
+            <h1 className="text-2xl font-bold mb-6">Review Details</h1> */}
+            {isPdfMode && (
+              <div className="flex items-center">
+                <img src={Logo} alt="logo" className="rounded-full h-28 w-28" />
+                <div className=" w-auto  mx-auto">
+                  <p className="text-xl text-gilroy-bold font-bold">
+                    Central Registry of Securitization Asset
+                  </p>
+                  <p className="text-xl text-gilroy-bold font-bold">
+                    Reconstruction and Security Interest of India
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <h1
+              className={`text-2xl font-bold mb-6 ${
+                isPdfMode ? "flex justify-center items-center" : ""
+              }`}
+            >
+              Review Details
+            </h1>
             <ReviewMainListing
               allFormData={allFormData}
               documentData={documentData}
@@ -227,7 +260,7 @@ const ReviewDetailsDesignated = () => {
           </div>
           {!isPdfMode && (
             <div className="flex flex-shrink-0 mt-5">
-              <div className="justify-center align-center">
+              <div className="mt-0.5">
                 <input
                   type="checkbox"
                   checked={isChecked}
@@ -237,10 +270,14 @@ const ReviewDetailsDesignated = () => {
                 />
               </div>
               <div className="leading-6 ml-4 text-gilroy-medium">
-                I hereby declare that all information provided is best of my
-                knowledge&nbsp;
-                  <Link className="text-[#1c468e] underline cursor-pointer" target={"_blank"} to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"> Terms and Conditions</Link>
-
+              I hereby declare that all information provided by me is correct and I agree to the &nbsp;
+                <Link
+                  className="text-[#1c468e] underline cursor-pointer"
+                  target={"_blank"}
+                  to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
+                >
+                  Terms and Conditions
+                </Link>
               </div>
             </div>
           )}
@@ -262,7 +299,9 @@ const ReviewDetailsDesignated = () => {
               <button
                 onClick={downloadPDF}
                 disabled={!isChecked}
-                className={`w-auto md:w-[208px] md:h-[48px] gap-2 text-gilroy-semibold flex rounded-xl text-blue-700 border border-blue-700 p-3 md:pt-3 md:pr-6 md:pb-3 md:pl-6  ${ isChecked ? "" : "opacity-50"}`}
+                className={`w-auto md:w-[208px] md:h-[48px] gap-2 text-gilroy-semibold flex rounded-xl text-blue-700 border border-blue-700 p-3 md:pt-3 md:pr-6 md:pb-3 md:pl-6  ${
+                  isChecked ? "" : "opacity-50"
+                }`}
               >
                 <img src={download} alt="download" className="mr-2" />
                 {isDownloading ? "Downloading..." : "Download PDF"}

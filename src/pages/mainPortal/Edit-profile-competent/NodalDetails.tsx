@@ -16,12 +16,14 @@ import { axiosTokenInstance } from "../../../utils/axios";
 type Props = {};
 
 const NodalDetails = (props: Props) => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
+  console.log({ allFormData }, "allform data");
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Nodal Details"
@@ -85,9 +87,7 @@ const NodalDetails = (props: Props) => {
     if (noError) {
       axiosTokenInstance
         .patch(
-          `/competent-authority/${sessionStorage.getItem(
-            "entityUniqueId"
-          )}`,
+          `/competent-authority/${sessionStorage.getItem("entityUniqueId")}`,
           {
             formData: formData,
           }

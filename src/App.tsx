@@ -105,7 +105,6 @@ function App() {
     <div>
       <Router>
         <Routes>
-
           {/* restricted routes */}
           <Route element={<PrivateRoutes />}>
             <Route element={<MainPortalLayout />} path="/dt">
@@ -177,7 +176,7 @@ function App() {
               />
               <Route element={<UploadDSC3Regulator />} path="uploaddsc3" />
             </Route>
-            
+
             <Route element={<MainPortalLayoutCompetent />} path="/ca">
               <Route element={<DashboardCompetent />} path="dashboard" />
               <Route element={<SchemaCreationCa />} path="my-task" />
@@ -269,64 +268,52 @@ function App() {
               />
               <Route element={<UploadDSC3Designated />} path="uploaddsc3" />
             </Route>
-
-            
           </Route>
-
 
           {/* public routes */}
           <Route
-              element={<DepositTakerRegisterFlow />}
-              path="/depositetaker/signup"
-            >
-              <Route element={<NodalDetails />} path="nodaldetails" />
-              <Route element={<VarificationForm />} path="verification" />
-              <Route element={<EntityDetails />} path="entitydetails" />
-              <Route element={<RegularDetailsForm />} path="regulatordetails" />
-              <Route element={<ReviewMain />} path="reviewdetails" />
-            </Route>
+            element={<DepositTakerRegisterFlow />}
+            path="/depositetaker/signup"
+          >
+            <Route element={<NodalDetails />} path="nodaldetails" />
+            <Route element={<VarificationForm />} path="verification" />
+            <Route element={<EntityDetails />} path="entitydetails" />
+            <Route element={<RegularDetailsForm />} path="regulatordetails" />
+            <Route element={<ReviewMain />} path="reviewdetails" />
+          </Route>
 
-            <Route element={<RegulatorRegister />} path="/regulator/court">
-              <Route element={<RegulatorDetails />} path="regulatordetails" />
-              <Route
-                element={<UploadDocumentsRegulator />}
-                path="uploaddocuments"
-              />
-              <Route element={<NodalDetailsRegulator />} path="nodaldetails" />
-              <Route
-                element={<ReviewDetailsRegulator />}
-                path="reviewdetails"
-              />
-            </Route>
-
+          <Route element={<RegulatorRegister />} path="/regulator">
+            <Route element={<RegulatorDetails />} path="regulatordetails" />
             <Route
-              element={<DesignatedCourtRegister />}
-              path="/designated/court"
-            >
-              <Route
-                element={<DesignatedCourtDetails />}
-                path="designateddetails"
-              />
-              <Route
-                element={<UploloadDocumentsDesignated />}
-                path="uploaddocuments"
-              />
-              <Route element={<NodalDetailsDesignated />} path="nodaldetails" />
-              <Route
-                element={<ReviewDetailsDesignated />}
-                path="reviewdetails"
-              />
-            </Route>
+              element={<UploadDocumentsRegulator />}
+              path="uploaddocuments"
+            />
+            <Route element={<NodalDetailsRegulator />} path="nodaldetails" />
+            <Route element={<ReviewDetailsRegulator />} path="reviewdetails" />
+          </Route>
 
+          <Route element={<DesignatedCourtRegister />} path="/designated/court">
             <Route
-              element={<CompetentAuthorityRegister />}
-              path="/competent/authority"
-            >
-              <Route element={<ComponentDetails />} path="competentdetails" />
-              <Route element={<UploadDocuments />} path="uploaddocuments" />
-              <Route element={<NodalDetailsCompetent />} path="nodaldetails" />
-              <Route element={<ReviewDetails />} path="reviewdetails" />
-            </Route>
+              element={<DesignatedCourtDetails />}
+              path="designateddetails"
+            />
+            <Route
+              element={<UploloadDocumentsDesignated />}
+              path="uploaddocuments"
+            />
+            <Route element={<NodalDetailsDesignated />} path="nodaldetails" />
+            <Route element={<ReviewDetailsDesignated />} path="reviewdetails" />
+          </Route>
+
+          <Route
+            element={<CompetentAuthorityRegister />}
+            path="/competent/authority"
+          >
+            <Route element={<ComponentDetails />} path="competentdetails" />
+            <Route element={<UploadDocuments />} path="uploaddocuments" />
+            <Route element={<NodalDetailsCompetent />} path="nodaldetails" />
+            <Route element={<ReviewDetails />} path="reviewdetails" />
+          </Route>
           <Route element={<Landing />} path="/" />
           <Route element={<ReturnJourney />} path="/return-journey" />
           <Route element={<SchemeSearch />} path="/scheme-search" />

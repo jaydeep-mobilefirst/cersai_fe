@@ -16,9 +16,11 @@ import { axiosTokenInstance } from "../../../utils/axios";
 type Props = {};
 
 const ProfileNodalDetails = (props: Props) => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
+
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
-  const status = sessionStorage.getItem('user_status')
+  const status = sessionStorage.getItem("user_status");
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
@@ -54,11 +56,16 @@ const ProfileNodalDetails = (props: Props) => {
         })
         .map((field: any) => {
           // Adding a 'disabled' property based on specific field labels
-          const isDisabled = field.required === true ? status === 'RETURNED' ? 
-          [
-            "companyName",
-            "panNumber",
-          ].includes(field.key) ? true :  false : true : ["nodalMobile", "nodalEmail"].includes(field.key) ? true :  false;
+          const isDisabled =
+            field.required === true
+              ? status === "RETURNED"
+                ? ["companyName", "panNumber"].includes(field.key)
+                  ? true
+                  : false
+                : true
+              : ["nodalMobile", "nodalEmail"].includes(field.key)
+              ? true
+              : false;
           return {
             ...field,
             disabled: isDisabled,
@@ -79,14 +86,12 @@ const ProfileNodalDetails = (props: Props) => {
     event?.preventDefault();
     setLoader(true);
     const noError = await handleValidationChecks(formFields, false);
+
     if (noError) {
       axiosTokenInstance
-        .patch(
-          `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
-          {
-            formData: formData,
-          }
-        )
+        .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
+          formData: formData,
+        })
         .then((response) => {
           Swal.fire({
             icon: "success",

@@ -15,6 +15,7 @@ import { axiosTokenInstance } from "../../../utils/axios";
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
+
   // const { branches, addBranch, removeBranch, setBranches } = useBranchStore(
   //   (state) => ({
   //     branches: state.branches,
@@ -90,6 +91,7 @@ const ProfileBranches = () => {
   }, [reset, setBranches, uploadInputKey]);
 
   const onSubmit = async (data: any) => {
+    setLoader(true);
     try {
       const branchesToSubmit = data.branches.map((branch: any) => {
         const { id, ...branchData } = branch;
@@ -101,7 +103,9 @@ const ProfileBranches = () => {
           branches: branchesToSubmit,
         }
       );
+
       await fetchBranches();
+      setLoader(false);
 
       Swal.fire({
         icon: "success",
@@ -115,48 +119,104 @@ const ProfileBranches = () => {
         text: "Failed to update Entity Details",
         confirmButtonText: "Ok",
       });
+      setLoader(false);
     }
   };
 
   // const handleCheckboxChange = () => setChecked(!isChecked);
   const handleCheckboxChange = () => toggleChecked();
 
-  const handleFileUpload = (event: any) => {
+  // const handleFileUpload = (event: any) => {
+  //   setLoader(true);
+  //   const file = event.target.files[0];
+  //   console.log(file, "file");
+  //   const formData = new FormData();
+  //   formData.set("file", file);
+  //   const entityId = sessionStorage.getItem("entityUniqueId");
+  //   axiosTokenInstance
+  //     .post(`/deposit-taker/bulk-upload/${entityId}`, formData)
+  //     .then((res) => {
+  //       let data = res.data;
+
+  //       if (data.success) {
+  //         Swal.fire({
+  //           icon: "success",
+  //           text: data?.message,
+  //           title: "Successful",
+  //         });
+  //       } else {
+  //         Swal.fire({
+  //           icon: "error",
+  //           text: data?.message,
+  //           title: "Error",
+  //         });
+  //       }
+  //     })
+  //     .catch((e) => {
+  //       Swal.fire({
+  //         title: "Unable upload file",
+  //         text: e?.response?.data?.detail?.message,
+  //         icon: "error",
+  //       });
+  //     })
+  //     .finally(() => {
+  //       setLoader(false);
+  //       setUploadKey(uploadInputKey + 1);
+  //     });
+  // };
+  const handleFileUpload = async (event: any) => {
     setLoader(true);
     const file = event.target.files[0];
-    const formData = new FormData();
-    formData.set("file", file);
-    const entityId = sessionStorage.getItem("entityUniqueId");
-    axiosTokenInstance
-      .post(`/deposit-taker/bulk-upload/${entityId}`, formData)
-      .then((res) => {
-        let data = res.data;
 
-        if (data.success) {
-          Swal.fire({
-            icon: "success",
-            text: data?.message,
-            title: "Successful",
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            text: data?.message,
-            title: "Error",
-          });
-        }
-      })
-      .catch((e) => {
-        Swal.fire({
-          title: "Unable upload file",
-          text: e?.response?.data?.detail?.message,
-          icon: "error",
-        });
-      })
-      .finally(() => {
-        setLoader(false);
-        setUploadKey(uploadInputKey + 1);
+    if (!file) {
+      Swal.fire({
+        icon: "error",
+        text: "No file selected for upload",
+        title: "Error",
       });
+      setLoader(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const entityId = sessionStorage.getItem("entityUniqueId");
+
+    try {
+      const response = await axiosTokenInstance.post(
+        `/deposit-taker/bulk-upload/${entityId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.success) {
+        Swal.fire({
+          icon: "success",
+          text: response.data.message,
+          title: "Successful",
+        });
+        setUploadKey(uploadInputKey + 1); // Reset the file input
+      } else {
+        Swal.fire({
+          icon: "error",
+          text: response.data.message,
+          title: "Error",
+        });
+      }
+    } catch (error: any) {
+      Swal.fire({
+        title: "Unable to upload file",
+        text: error?.response?.data?.detail?.message || "An error occurred",
+        icon: "error",
+      });
+    } finally {
+      setLoader(false);
+    }
   };
 
   const handleDownloadTemplate = () => {
@@ -174,6 +234,30 @@ const ProfileBranches = () => {
         link.click();
       });
   };
+
+  const disabledField = sessionStorage.getItem("user_status");
+
+  const checkStatus = (status: any): any => {
+    switch (disabledField) {
+      case "TRANSIT":
+        return true;
+      case "MOD_REFER_TO_REGULATOR":
+        return true;
+      case "REFER_TO_REGULATOR":
+        return true;
+      case "MOD_TRANSIT":
+        return true;
+      case "PENDING":
+        return true;
+      case "MOD_PENDING":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const disableFieldStatus = checkStatus(disabledField);
+
   return (
     <div className="bg-white p-7 w-full h-full ">
       <h1 className="font-semibold text-2xl mb-3">Upload Branches</h1>
@@ -213,6 +297,7 @@ const ProfileBranches = () => {
             accept=".xls, .xlsx"
             ref={uploadButtonRef}
             key={uploadInputKey}
+            disabled={disableFieldStatus}
           />
           <div className="justify-start items-center gap-1.5 inline-flex">
             <div className="w-6 h-6 justify-center items-center flex">
@@ -244,22 +329,33 @@ const ProfileBranches = () => {
             />
           ))
         )}
-        <div className="mt-4">
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={handleCheckboxChange}
-              className="h-4 w-4 mr-2 rounded-lg accent-[#1c468e]"
-            />
-            I declare all the information provided is correct as per my
-            knowledge.
-          </label>
-        </div>
+        {disableFieldStatus ? (
+          <></>
+        ) : (
+          <>
+            {" "}
+            <div className="mt-4">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                  className="h-4 w-4 mr-2 rounded-lg accent-[#1c468e]"
+                />
+                I declare all the information provided is correct as per my
+                knowledge.
+              </label>
+            </div>
+          </>
+        )}
 
         <div>
-          <Footer disabled={!isChecked} />
-          <button type="submit" className="mt-4 btn-primary"></button>
+          <Footer disabled={!isChecked} loader={loader} />
+          <button
+            onSubmit={onSubmit}
+            type="submit"
+            className="mt-4 btn-primary"
+          ></button>
         </div>
       </form>
     </div>

@@ -42,19 +42,11 @@ const RegulatorDetails = (props: Props) => {
         const disableLabels = [
           "State",
           "District",
-          "Address Line 1",
-          "Address Line 2",
-          "Pin Code",
         ];
-
         const disableKeys = [
           "state",
-          "district",
-          "addressLine1",
-          "addressLine2",
-          "pincode",
+          "district"
         ];
-
         return {
           ...field,
           disabled:
@@ -62,8 +54,10 @@ const RegulatorDetails = (props: Props) => {
             disableKeys.includes(field.key),
         };
       }) || [];
-  // console.log({ formFields }, "formfiled");
-
+  
+  const formFieldss = allFormData?.formFields?.form_fields?.filter(
+    (f: any) => f?.sectionId === sectionId?.id
+  );
   const screenWidth = useScreenWidth();
 
   const onSubmit = async (event: any) => {
@@ -75,9 +69,9 @@ const RegulatorDetails = (props: Props) => {
     if (noError) {
       const edit = params.get("edit");
       if (edit !== undefined && edit !== null && edit !== "") {
-        Navigate("/regulator/court/reviewdetails");
+        Navigate("/regulator/reviewdetails");
       } else {
-        Navigate("/regulator/court/uploaddocuments");
+        Navigate("/regulator/uploaddocuments");
       }
     }
   };
@@ -92,6 +86,8 @@ const RegulatorDetails = (props: Props) => {
             }}
           >
             <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+            {formFields?.length > 0 ? (
+              <>
             <h1 className="text-xl md:text-2xl mx-10 font-bold ">
               Regulator Details
             </h1>
@@ -102,8 +98,10 @@ const RegulatorDetails = (props: Props) => {
                 onChange={onChange}
               />
             </div>
+            </>):<LoaderSpin/>}
           </div>
           <div>
+            {formFields?.length>0 &&
             <div
               className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
               style={{
@@ -132,7 +130,7 @@ const RegulatorDetails = (props: Props) => {
                   {loader ? <LoaderSpin /> : "Save & Continue"}
                 </button>
               </div>
-            </div>
+            </div>}
             <div>
               <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 

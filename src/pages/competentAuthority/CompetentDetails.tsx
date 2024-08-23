@@ -47,18 +47,18 @@ const ComponentDetails: React.FC = () => {
       .map((field: any) => {
         const disableLabels = [
           "State",
-          "Jurisdiction",
-          "Address Line 1",
-          "Address Line 2",
-          "Pin Code",
+          // "Jurisdiction",
+          // "Address Line 1",
+          // "Address Line 2",
+          // "Pin Code",
         ];
 
         const disableKeys = [
           "state",
-          "Jurisdiction",
-          "addressLine1",
-          "addressLine2",
-          "pincode",
+          // "Jurisdiction",
+          // "addressLine1",
+          // "addressLine2",
+          // "pincode",
         ];
 
         return {
@@ -101,6 +101,7 @@ const ComponentDetails: React.FC = () => {
           }}
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
+          {formFields?.length > 0 ? (
           <div className="flex flex-col p-6 w-full">
             <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
               Competent Details
@@ -112,7 +113,7 @@ const ComponentDetails: React.FC = () => {
               documentFields={documentData}
               onFileChange={onFileChange}
             />
-          </div>
+          </div>):<LoaderSpin/>}
         </div>
 
         {/* <div className="mt-auto">
@@ -132,6 +133,7 @@ const ComponentDetails: React.FC = () => {
           </p>
         </div> */}
         <div>
+          {formFields?.length>0 &&
           <div
             className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
             style={{
@@ -179,7 +181,7 @@ const ComponentDetails: React.FC = () => {
                 {loader ? <LoaderSpin /> : "Save & Continue"}
               </button>
             </div>
-          </div>
+          </div>}
           <div>
             <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 

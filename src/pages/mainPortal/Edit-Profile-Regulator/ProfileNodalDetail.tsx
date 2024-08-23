@@ -16,6 +16,7 @@ import { axiosTokenInstance } from "../../../utils/axios";
 type Props = {};
 
 const ProfileNodalDetails = (props: Props) => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const Navigate = useNavigate();
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
@@ -78,18 +79,19 @@ const ProfileNodalDetails = (props: Props) => {
       value: field.userInput,
     }));
 
+  console.log(formFields, "form dataa owais");
+
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     setLoader(true);
+
     const noError = await handleValidationChecks(formFields, false);
+
     if (noError) {
       axiosTokenInstance
-        .patch(
-          `/regulator/${sessionStorage.getItem("entityUniqueId")}`,
-          {
-            formData: formData,
-          }
-        )
+        .patch(`/regulator/${sessionStorage.getItem("entityUniqueId")}`, {
+          formData: formData,
+        })
         .then((response) => {
           Swal.fire({
             icon: "success",

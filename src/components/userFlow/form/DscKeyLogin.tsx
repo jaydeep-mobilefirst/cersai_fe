@@ -54,6 +54,23 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
       );
       if (certificate) {
         const strCert = JSON.parse(certificate);
+        const expiryDate = new Date(strCert?.ExpDate);
+        // const expiryDate = new Date("2023-06-22T13:37:00+05:30");
+        // const currentDate = new Date("2026-06-23T13:37:00+05:30");
+        const currentDate = new Date();
+
+        if (expiryDate < currentDate) {
+          Swal.fire({
+            icon: "error",
+            title: "Invalid Certificate",
+            text: "Your DSC Certificate is expired. Please use the valid DSC3 Certificate",
+            customClass: {
+              container: "my-swal",
+            },
+          });
+          return;
+        }
+
         setDscCertificate(strCert);
         setDscSelected(true);
         setCertName(strCert?.SelCertSubject?.split(",")[0]);
@@ -76,6 +93,10 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
     setIsModalOpen(false);
   };
 
+  // const dscName = JSON.parse(dsc3UserInput)?.SelCertSubject?.split(",")[0];
+
+  // console.log(dsc3UserInput, "dsc inputtt vivvvv");
+
   return (
     <>
       <div
@@ -90,12 +111,12 @@ const DscKeyLogin: React.FC<DscKeyLoginProps> = ({
           />
         </div>
         <p className=" text-[black] ">
-          {/* {isDscSelected ? certName : "DSC Certificate"} */}
-          {isDscSelected
+          {isDscSelected ? certName : "DSC Certificate"}
+          {/* {isDscSelected
             ? certName
             : dsc3UserInput && dsc3UserInput.length
-            ? dsc3UserInput.replace(/^"|"$/g, "").slice(0, 9)
-            : "DSC Certificate"}
+            ? dsc3UserInput.replace(/^"|"$/g, "").slice(19, 35)
+            : "DSC Certificate"} */}
         </p>
         <button
           type="button"

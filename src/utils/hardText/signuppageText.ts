@@ -11,11 +11,11 @@ import buildings from "../../assets/images/buildings.svg";
 import documentTest from "../../assets/images/documentText.svg";
 import tickCircleWhite from "../../assets/images/tickCircleWhite.svg";
 import clipboardText from "../../assets/images/clipboardText.svg";
-import typeVerification from '../../assets/images/typeVerification.svg';
-import profileCircleHighlighted from '../../assets/images/profileCircleHighlighted.svg';
-import clickboardTextHigh from '../../assets/images/clickboardTextHigh.svg';
-import buildingsHigh from '../../assets/images/buildingsHigh.svg';
-import documentTestHigh from '../../assets/images/documentTestHigh.svg';
+import typeVerification from "../../assets/images/typeVerification.svg";
+import profileCircleHighlighted from "../../assets/images/profileCircleHighlighted.svg";
+import clickboardTextHigh from "../../assets/images/clickboardTextHigh.svg";
+import buildingsHigh from "../../assets/images/buildingsHigh.svg";
+import documentTestHigh from "../../assets/images/documentTestHigh.svg";
 
 //RegisterModel Component
 export const registrationFirstPage = [
@@ -30,20 +30,40 @@ export const registrationFirstPage = [
 // ];
 
 export const radioButtons = [
-  { id: 1, text: "Deposit Taker",path: "/depositetaker/signup/verification", entityCode : "DT" },
-  { id: 2, text: "Regulator",path:"/regulator/court/regulatordetails", entityCode : "RG"},
-  { id: 3, text: "Designated Court",path:"/designated/court/designateddetails", entityCode : "DC" },
-  { id: 4, text: "Competent Authority",path:"/competent/authority/competentdetails", entityCode : "CA" },
+  {
+    id: 1,
+    text: "Deposit Taker",
+    path: "/depositetaker/signup/verification",
+    entityCode: "DT",
+  },
+  {
+    id: 2,
+    text: "Regulator",
+    path: "/regulator/regulatordetails",
+    entityCode: "RG",
+  },
+  {
+    id: 3,
+    text: "Designated Court",
+    path: "/designated/court/designateddetails",
+    entityCode: "DC",
+  },
+  {
+    id: 4,
+    text: "Competent Authority",
+    path: "/competent/authority/competentdetails",
+    entityCode: "CA",
+  },
 ];
 //UploadDocumentComp Component
-export const uploadModal=[
-  {heading:"Upload DSC"},
-  {cancelImgSrc:add},
-  {uploadImgSrc:directboxSend},
-  {formats:"Supported formates: .cer, .txt"},
-  {size:"File size : Less than 500kb"},
-  {buttonText:"Browse files"}
-]
+export const uploadModal = [
+  { heading: "Upload DSC" },
+  { cancelImgSrc: add },
+  { uploadImgSrc: directboxSend },
+  { formats: "Supported formates: .cer, .txt" },
+  { size: "File size : Less than 500kb" },
+  { buttonText: "Browse files" },
+];
 //DocumentDeleteComp Component
 export const documentDeleteModal = [
   { cancelImgSrc: add },
@@ -84,45 +104,45 @@ export const registrationSuccessModal = [
 export const signupSideBar = [
   {
     id: 1,
-    path:"/depositetaker/signup/verification",
+    path: "/depositetaker/signup/verification",
     imgSrc: typeVerification,
-    imgSrcHighlighted:shieldTick,
+    imgSrcHighlighted: shieldTick,
     description: "Verification",
     tickImgSrc: tickCircleWhite,
     percentage: 0,
   },
   {
     id: 2,
-    path:"/depositetaker/signup/entitydetails",
+    path: "/depositetaker/signup/entitydetails",
     imgSrc: profieCircle,
-    imgSrcHighlighted:profileCircleHighlighted,
+    imgSrcHighlighted: profileCircleHighlighted,
     description: "Entity Details",
     tickImgSrc: tickCircleWhite,
     percentage: 25,
   },
   {
     id: 3,
-    path:"/depositetaker/signup/regulatordetails",
+    path: "/depositetaker/signup/regulatordetails",
     imgSrc: clipboardText,
-    imgSrcHighlighted:clickboardTextHigh,
+    imgSrcHighlighted: clickboardTextHigh,
     description: "Regulators Details",
     tickImgSrc: tickCircleWhite,
     percentage: 50,
   },
   {
     id: 4,
-    path:"/depositetaker/signup/nodaldetails",
+    path: "/depositetaker/signup/nodaldetails",
     imgSrc: buildings,
-    imgSrcHighlighted:buildingsHigh,
+    imgSrcHighlighted: buildingsHigh,
     description: "Nodal Details",
     tickImgSrc: tickCircleWhite,
     percentage: 75,
   },
   {
     id: 5,
-    path:"/depositetaker/signup/reviewdetails",
+    path: "/depositetaker/signup/reviewdetails",
     imgSrc: documentTest,
-    imgSrcHighlighted:documentTestHigh,
+    imgSrcHighlighted: documentTestHigh,
     description: "Review Details",
     tickImgSrc: tickCircleWhite,
     percentage: 100,
@@ -130,43 +150,40 @@ export const signupSideBar = [
 ];
 
 export const regulatorSignupSideBar = [
-  
- 
   {
     id: 1,
-    path:"/regulator/court/regulatordetails",
+    path: "/regulator/regulatordetails",
     imgSrc: clipboardText,
-    imgSrcHighlighted:clickboardTextHigh,
+    imgSrcHighlighted: clickboardTextHigh,
     description: "Regulators Details",
     tickImgSrc: tickCircleWhite,
     percentage: 0,
   },
   {
     id: 2,
-    path:"/regulator/court/uploaddocuments",
+    path: "/regulator/uploaddocuments",
     imgSrc: buildings,
-    imgSrcHighlighted:buildingsHigh,
+    imgSrcHighlighted: buildingsHigh,
     description: "Upload Documents",
     tickImgSrc: tickCircleWhite,
     percentage: 75,
   },
   {
     id: 3,
-    path:"/regulator/court/nodaldetails",
+    path: "/regulator/nodaldetails",
     imgSrc: buildings,
-    imgSrcHighlighted:buildingsHigh,
+    imgSrcHighlighted: buildingsHigh,
     description: "Nodal Details",
     tickImgSrc: tickCircleWhite,
     percentage: 75,
   },
   {
     id: 4,
-    path:"/regulator/court/reviewdetails",
+    path: "/regulator/reviewdetails",
     imgSrc: documentTest,
-    imgSrcHighlighted:documentTestHigh,
+    imgSrcHighlighted: documentTestHigh,
     description: "Review Details",
     tickImgSrc: tickCircleWhite,
     percentage: 100,
   },
 ];
-

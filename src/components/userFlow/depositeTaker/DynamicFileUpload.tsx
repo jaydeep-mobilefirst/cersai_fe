@@ -110,6 +110,31 @@ const DynamicFileUpload = ({ data }: Props) => {
     }
   };
 
+  const disabledField = sessionStorage.getItem("user_status");
+
+  const checkStatus = (status: any): any => {
+    switch (disabledField) {
+      case "TRANSIT":
+        return true;
+      case "MOD_REFER_TO_REGULATOR":
+        return true;
+      case "REFER_TO_REGULATOR":
+        return true;
+      case "MOD_TRANSIT":
+        return true;
+      case "PENDING":
+        return true;
+      case "MOD_PENDING":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const disableFieldStatus = checkStatus(disabledField);
+
+  console.log(disableFieldStatus);
+
   return (
     <div key={data?.id}>
       {showUploadPopup && (
@@ -131,13 +156,13 @@ const DynamicFileUpload = ({ data }: Props) => {
           showDeletePopup={showDeletePopup}
         />
       )}
-      <div className="rounded-xl bg-[#E7F0FF] flex flex-col md:flex-row justify-between items-center p-4  text-gilroy-bold mb-4">
-        <div className="flex flex-row items-center space-x-2 w-full">
-          <div className="mt-2">
+      <div className='rounded-xl bg-[#E7F0FF] flex flex-col md:flex-row justify-between items-center p-4  text-gilroy-bold mb-4'>
+        <div className='flex flex-row items-center space-x-2 w-full'>
+          <div className='mt-2'>
             <img
               src={folderOpen}
-              alt="Folder Open Icon"
-              className="bg-white rounded p-1 text-white cursor-pointer"
+              alt='Folder Open Icon'
+              className='bg-white rounded p-1 text-white cursor-pointer'
               onClick={() => {
                 if (toggleUploadPopup) {
                   toggleUploadPopup();
@@ -148,49 +173,84 @@ const DynamicFileUpload = ({ data }: Props) => {
               }}
             />
           </div>
-          <div className="flex flex-col">
-            <h1 className="text-xs md:text-sm font-normal text-gilroy-medium text-gray-900">
+          <div className='flex flex-col'>
+            <h1 className='text-xs md:text-sm font-normal text-gilroy-medium text-gray-900'>
               {data?.documentName}
-              {data?.required && <span className="text-red-500">*</span>}
+              {data?.required && <span className='text-red-500'>*</span>}
             </h1>
-            <p className="text-xs md:text-base font-normal text-gilroy-medium text-gray-400">
+            <p className='text-xs md:text-base font-normal text-gilroy-medium text-gray-400'>
               {data?.fileName !== "" && data?.fileName !== undefined
                 ? data?.fileName
                 : "No Document uploaded"}
             </p>
           </div>
         </div>
-        <div className="flex flex-row mt-1 justify-end w-full md:w-auto">
-          {data?.uploadFileId && (
-            <DeleteFileButton
-              fieldData={data}
-              fieldType={fieldType}
-              onFileChange={onFileChange}
-            />
-          )}
-          <div className="mt-1">
-            <button
-              type="button"
-              className="bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]"
-              onClick={() => {
-                if (toggleUploadPopup && !data?.uploadFileId) {
-                  toggleUploadPopup();
-                }
-                if (setFieldData && !data?.uploadFileId) {
-                  setFieldData(data);
-                }
-              }}
-            >
-              {data?.uploadFileId ? (
-                <ViewFile uploadFileId={data?.uploadFileId} />
-              ) : (
-                <img src={UploadIcon} alt="Upload" className="w-5" />
+        <div className='flex flex-row mt-1 justify-end w-full md:w-auto'>
+          {disableFieldStatus ? (
+            <></>
+          ) : (
+            <>
+              {data?.uploadFileId && (
+                <DeleteFileButton
+                  fieldData={data}
+                  fieldType={fieldType}
+                  onFileChange={onFileChange}
+                />
               )}
-            </button>
+            </>
+          )}
+
+          <div className='mt-1'>
+            {data?.uploadFileId ? (
+              <>
+                {" "}
+                <button
+                  type='button'
+                  className='bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]'
+                  onClick={() => {
+                    if (toggleUploadPopup && !data?.uploadFileId) {
+                      toggleUploadPopup();
+                    }
+                    if (setFieldData && !data?.uploadFileId) {
+                      setFieldData(data);
+                    }
+                  }}
+                >
+                  {data?.uploadFileId ? (
+                    <ViewFile uploadFileId={data?.uploadFileId} />
+                  ) : (
+                    <img src={UploadIcon} alt='Upload' className='w-5' />
+                  )}
+                </button>
+              </>
+            ) : (
+              <>
+                {" "}
+                <button
+                  type='button'
+                  className='bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]'
+                  disabled={disableFieldStatus}
+                  onClick={() => {
+                    if (toggleUploadPopup && !data?.uploadFileId) {
+                      toggleUploadPopup();
+                    }
+                    if (setFieldData && !data?.uploadFileId) {
+                      setFieldData(data);
+                    }
+                  }}
+                >
+                  {data?.uploadFileId ? (
+                    <ViewFile uploadFileId={data?.uploadFileId} />
+                  ) : (
+                    <img src={UploadIcon} alt='Upload' className='w-5' />
+                  )}
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
-      <span className="text-red-500">{data?.error}</span>
+      <span className='text-red-500'>{data?.error}</span>
     </div>
   );
 };

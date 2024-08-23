@@ -37,16 +37,15 @@ const DashboardProfileRegulator = (props: Props) => {
           } catch (error) {
             console.log("Error");
           }
-          let modifiedFormFields = response.data.data?.formFields?.map(
-            (o: any) => ({
+          let modifiedFormFields = response.data.data?.formFields
+            ?.map((o: any) => ({
               ...o,
               userInput: dtData
                 ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
                 : "",
               error: "",
-            })
-          )?.sort((a  :any, b : any) => a.sortOrder - b.sortOrder)
-
+            }))
+            ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
@@ -94,7 +93,7 @@ const DashboardProfileRegulator = (props: Props) => {
       </div>
       <div className="flex flex-row">
         <div className="hidden lg:block">
-          <DashboardProfileSidebarRegulator />
+          <DashboardProfileSidebarRegulator fetchFormFields={fetchFormFields} />
         </div>
 
         {current === "regulator" && <ProfileRegulatorDetails />}

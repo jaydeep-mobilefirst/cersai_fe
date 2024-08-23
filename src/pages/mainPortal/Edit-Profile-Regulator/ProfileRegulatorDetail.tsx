@@ -46,6 +46,7 @@ const ProfileRegulatorDetails = (props: Props) => {
       label: field.label,
       value: field.userInput,
     }));
+  console.log({ formData }, "formData");
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -53,12 +54,9 @@ const ProfileRegulatorDetails = (props: Props) => {
     const noError = await handleValidationChecks(formFields);
     if (noError) {
       axiosTokenInstance
-        .patch(
-          `/regulator/${sessionStorage.getItem("entityUniqueId")}`,
-          {
-            formData: formData,
-          }
-        )
+        .patch(`/regulator/${sessionStorage.getItem("entityUniqueId")}`, {
+          formData: formData,
+        })
         .then((response) => {
           Swal.fire({
             icon: "success",
@@ -70,7 +68,7 @@ const ProfileRegulatorDetails = (props: Props) => {
         .catch((err) => {
           Swal.fire({
             icon: "error",
-            text: "Failed to Regulator Nodal Details",
+            text: "Failed to Update Regulator Details",
             confirmButtonText: "Ok",
           });
         });

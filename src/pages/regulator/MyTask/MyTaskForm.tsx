@@ -189,7 +189,9 @@ const MyTaskForm = () => {
   const handleOnClikcView = async (uploadFileId: any) => {
     try {
       setLoader(true);
-      const response = await axiosTokenInstance.get(`/openkm/get/${uploadFileId}`);
+      const response = await axiosTokenInstance.get(
+        `/openkm/get/${uploadFileId}`
+      );
       const data = await response.data;
       if (data?.status === "INTERNAL_SERVER_ERROR") {
         Swal.fire({
@@ -203,10 +205,11 @@ const MyTaskForm = () => {
       const arrayBuffer = data?.data?.data;
 
       await getFileDatafromBuffer(arrayBuffer);
-      // setViewLoader(false);
+      await fetchFormFields();
+      setLoader(false);
     } catch (error) {
       console.log({ error });
-      // setViewLoader(false);
+      setLoader(false);
     }
   };
 
@@ -458,7 +461,7 @@ const MyTaskForm = () => {
                             key={index}
                             className="rounded-t-lg rounded-b-lg bg-[#e7f0ff] flex justify-between items-center h-16 text-gilroy-bold mb-4"
                           >
-                            <div className="flex p-7 space-x-2 ">
+                            <div className="flex p-7 space-x-2 items-center">
                               <div className="">
                                 <img
                                   src={FolderIcon}
@@ -470,9 +473,9 @@ const MyTaskForm = () => {
                                 <h1 className="text-sm font-normal text-gilroy-medium text-[#1D1D1B]">
                                   {uploadItem?.documentName}
                                 </h1>
-                                <p className="text-base font-normal text-gilroy-medium text-gray-400">
+                                {/* <p className="text-base font-normal text-gilroy-medium text-gray-400">
                                   Document.pdf
-                                </p>
+                                </p> */}
                               </div>
                             </div>
                             <div className="mr-3">

@@ -62,6 +62,7 @@ export const portalSideBarListRegulator = [
     selectlogo: entityMasterWhiteIcon,
   },
 ];
+
 export const portalSideBarListCompetent = [
   {
     title: "Dashboard",
@@ -85,6 +86,7 @@ export const portalSideBarListCompetent = [
     selectlogo: entityMasterWhiteIcon,
   },
 ];
+
 export const portalSideBarListDesignated = [
   {
     title: "Dashboard",
@@ -108,6 +110,7 @@ export const portalSideBarListDesignated = [
     selectlogo: entityMasterWhiteIcon,
   },
 ];
+
 export const profileSideBarList = [
   {
     title: "Entity Details",
@@ -143,6 +146,7 @@ export const profileSideBarList = [
     percentage: 100,
   },
 ];
+
 export const profileSideBarListRegulator = [
   {
     title: "Regulator Details",
@@ -165,6 +169,7 @@ export const profileSideBarListRegulator = [
     percentage: 100,
   },
 ];
+
 export const profileSideBarListCompetent = [
   {
     title: "Competent Details",
@@ -186,6 +191,7 @@ export const profileSideBarListCompetent = [
     percentage: 100,
   },
 ];
+
 export const profileSideBarListDesignated = [
   {
     title: "Court Details",

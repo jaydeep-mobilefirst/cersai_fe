@@ -84,12 +84,12 @@ const DashboardProfileCompetent = (props: Props) => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await     axiosTokenInstance
-            .get(
+            let depositTakerData = await axiosTokenInstance.get(
               `/competent-authority/${entityUniqueId}`
             );
             dtData =
-              depositTakerData?.data?.data?.competentAuthority?.competentAuthorityData;
+              depositTakerData?.data?.data?.competentAuthority
+                ?.competentAuthorityData;
           } catch (error) {
             console.log("Error");
           }
@@ -104,20 +104,21 @@ const DashboardProfileCompetent = (props: Props) => {
           );
 
           let modifiedFileFields =
-            response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
-              ...o,
-              file: dtData
-                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-                : "",
-              error: "",
-              fileName: dtData
-                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-                : "",
-              uploadFileId: dtData
-                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-                : "",
-            }))?.sort((a  :any, b : any) => a.sortOrder - b.sortOrder)
-
+            response?.data?.data?.registrationDocumentFields
+              ?.map((o: any) => ({
+                ...o,
+                file: dtData
+                  ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                  : "",
+                error: "",
+                fileName: dtData
+                  ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                  : "",
+                uploadFileId: dtData
+                  ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                  : "",
+              }))
+              ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
           let obj = {
             ...response?.data?.data,
@@ -150,7 +151,7 @@ const DashboardProfileCompetent = (props: Props) => {
       </div>
       <div className="flex flex-row">
         <div className="hidden lg:block">
-          <DashboardProfileSidebar />
+          <DashboardProfileSidebar fetchFormFields={fetchFormFields} />
         </div>
 
         {current === "competent" && <CompetentDetails />}
