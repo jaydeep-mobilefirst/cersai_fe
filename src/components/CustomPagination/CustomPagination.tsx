@@ -229,7 +229,8 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
         <div className="mb-3 sm:mb-0">
           <p className="text-sm text-black font-normal text-gilroy-regular">
             Showing data &nbsp;
-            {Math.min(indexOfLastItem, totalItems)} of {totalItems}
+            {/* {Math.min(indexOfLastItem, totalItems)} of {totalItems} */}
+            {currentPage} of {totalPages}
           </p>
         </div>
         <div className="flex flex-row md:flex-row items-center mt-3">

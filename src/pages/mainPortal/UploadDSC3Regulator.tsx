@@ -141,7 +141,11 @@ const UploadDSC3Regulator = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (!isDscSelected) {
+    // if (!isDscSelected) {
+    //   setError(true);
+    //   return;
+    // }
+    if (!isDscSelected && !base64Data) {
       setError(true);
       return;
     }

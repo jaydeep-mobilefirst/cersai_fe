@@ -13,14 +13,19 @@ import SelectButton from "../../../components/userFlow/form/SelectButton";
 import Swal from "sweetalert2";
 import uamStore from "../../../store/uamStore";
 import AdditionSuccessfulModalOne from "../../../components/UserManagement/AdditonSuccessfulModalOne";
-import failedLogo from "../../../assets/images/FailedIcon.svg"
+import failedLogo from "../../../assets/images/FailedIcon.svg";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
+import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
 
 const AddUserForm = () => {
-  const [successData, setSuccessData] = useState<{heading : string, paragraph : string, logo : any}>({heading : "", paragraph : "", logo : undefined})
-  const [loader, setLoader] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [successData, setSuccessData] = useState<{
+    heading: string;
+    paragraph: string;
+    logo: any;
+  }>({ heading: "", paragraph: "", logo: undefined });
+  const [loader, setLoader] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const editUserData = sessionStorage.getItem("editUserData");
   const operation = sessionStorage.getItem("operation");
   const parsedEditUSerData = JSON.parse(editUserData ?? "{}");
@@ -57,7 +62,7 @@ const AddUserForm = () => {
   });
 
   const onSubmit = (data: any) => {
-    setLoader(true)
+    setLoader(true);
     let finalResult = {
       entityUniqueId: sessionStorage.getItem("entityUniqueId"),
       entityType: sessionStorage.getItem("entityType"),
@@ -67,55 +72,61 @@ const AddUserForm = () => {
       role_id: parseInt(data?.role),
       email_id: data?.email,
       mobile: data?.mobileNumber,
-      nodalOfficerId: operation === 'edit' ? parsedEditUSerData?.id : undefined
+      nodalOfficerId: operation === "edit" ? parsedEditUSerData?.id : undefined,
     };
 
-    axiosTokenInstance
-    [operation === 'edit' ? "put" : "post"](`/user/${operation === 'edit' ? 'update' : 'add'}`, finalResult)
+    axiosTokenInstance[operation === "edit" ? "put" : "post"](
+      `/user/${operation === "edit" ? "update" : "add"}`,
+      finalResult
+    )
       .then((res: any) => {
         let data = res?.data;
         if (data?.success) {
           handleRefreshUAM();
-          setSubmitted(true)
+          setSubmitted(true);
           setSuccessData({
-            heading : `User ${operation === 'edit' ? 'updated ' : "added"} Successfully`,
-            paragraph : `User has been ${operation === 'edit' ? 'updated ' : "added"} successfully`,
-            logo : undefined
-          })
+            heading: `User ${
+              operation === "edit" ? "updated " : "added"
+            } Successfully`,
+            paragraph: `User has been ${
+              operation === "edit" ? "updated " : "added"
+            } successfully`,
+            logo: undefined,
+          });
           setShowPopup(true);
-        }
-        else{
+        } else {
           setSuccessData({
-            heading : "Error",
-            paragraph : "Unable to add user, Please try again later!",
-            logo : failedLogo
-          })
+            heading: "Error",
+            paragraph: "Unable to add user, Please try again later!",
+            logo: failedLogo,
+          });
           setShowPopup(true);
         }
       })
       .catch((err: any) => {
         let data = err?.response?.data;
         setSuccessData({
-          heading : "Error",
-          paragraph : data?.message,
-          logo : failedLogo
-        })
+          heading: "Error",
+          paragraph: data?.message,
+          logo: failedLogo,
+        });
         setShowPopup(true);
       })
-      .finally(() => { setLoader(false) })
+      .finally(() => {
+        setLoader(false);
+      });
   };
 
   const handleBackButtonClick = () => {
     if (submitted) {
-      setShowPopup(false)
+      setShowPopup(false);
       reset();
       navigate(
         userCreationURL ??
-        `/${sessionStorage.getItem("entityType")?.toLocaleLowerCase()}`
+          `/${sessionStorage.getItem("entityType")?.toLocaleLowerCase()}`
       );
-    }
-    else{
-      setShowPopup(false)
+    } else {
+      setShowPopup(false);
     }
   };
 
@@ -131,7 +142,6 @@ const AddUserForm = () => {
   };
 
   useEffect(() => {
-
     if (
       operation === "edit" &&
       editUserData !== "" &&
@@ -139,9 +149,10 @@ const AddUserForm = () => {
       editUserData !== null
     ) {
       const data = JSON.parse(editUserData);
+      console.log(data.firstName, "data");
 
       setValue("email", data?.emailId);
-      setValue("firstName", data?.firstName);
+      setValue("firstName", data.firstName);
       setValue("lastName", data?.lastName);
       setValue("middleName", data?.middleName);
       setValue("mobileNumber", data?.mobile);
@@ -162,13 +173,13 @@ const AddUserForm = () => {
         >
           <div
             className="w-full"
-          // style={{
-          //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-          //   width: `${screenWidth > 1024
-          //       ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
-          //       : "100vw"
-          //     }`,
-          // }}
+            // style={{
+            //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
+            //   width: `${screenWidth > 1024
+            //       ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
+            //       : "100vw"
+            //     }`,
+            // }}
           >
             <div className="flex flex-col p-6 w-full ">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -179,7 +190,7 @@ const AddUserForm = () => {
                   >
                     First name <span className="text-red-500">*</span>
                   </label>
-                  <InputFields
+                  <InputFieldsV2
                     placeholder="Type here"
                     {...register("firstName")}
                   />
@@ -195,7 +206,7 @@ const AddUserForm = () => {
                   >
                     Middle name
                   </label>
-                  <InputFields
+                  <InputFieldsV2
                     placeholder="Type here"
                     {...register("middleName")}
                   />
@@ -213,7 +224,7 @@ const AddUserForm = () => {
                   >
                     Last name <span className="text-red-500">*</span>
                   </label>
-                  <InputFields
+                  <InputFieldsV2
                     placeholder="Type here"
                     {...register("lastName")}
                   />
@@ -259,7 +270,10 @@ const AddUserForm = () => {
                   >
                     Email Id <span className="text-red-500">*</span>
                   </label>
-                  <InputFields placeholder="Type here" {...register("email")} />
+                  <InputFieldsV2
+                    placeholder="Type here"
+                    {...register("email")}
+                  />
                   {errors?.email && (
                     <p className="text-red-500">{errors?.email?.message}</p>
                   )}
@@ -279,7 +293,7 @@ const AddUserForm = () => {
                     <span className="border flex  items-center border-gray-300 rounded-lg px-2 text-base font-normal text-gilroy-medium h-14 border-r-0 rounded-tr-none rounded-br-none">
                       +91
                     </span>
-                    <InputFields
+                    <InputFieldsV2
                       placeholder="1234567890"
                       {...register("mobileNumber")}
                       className="border-l-0 rounded-tl-none rounded-bl-none"
@@ -299,8 +313,9 @@ const AddUserForm = () => {
             <div
               className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center "
               style={{
-                width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
-                  }`,
+                width: `${
+                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                }`,
               }}
             >
               <div className="flex flex-row items-center space-x-2">
@@ -324,7 +339,9 @@ const AddUserForm = () => {
                   onClick={() => {
                     navigate(
                       userCreationURL ??
-                      `/${sessionStorage.getItem("entityType")?.toLocaleLowerCase()}`
+                        `/${sessionStorage
+                          .getItem("entityType")
+                          ?.toLocaleLowerCase()}`
                     );
                   }}
                   role="button"
@@ -339,10 +356,7 @@ const AddUserForm = () => {
                   type="submit"
                   className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
                 >
-                  {
-                    loader ? <LoaderSpin/> : "Submit"
-                  }
-                  
+                  {loader ? <LoaderSpin /> : "Submit"}
                 </button>
               </div>
             </div>
@@ -357,13 +371,15 @@ const AddUserForm = () => {
         </form>
       </div>
       {showPopup && (
-       <AdditionSuccessfulModalOne
-       heading={successData.heading}
-       paragraph={successData.paragraph}
-       onClose={() => {setShowPopup(false)}}
-       onSave={handleBackButtonClick}
-       logo={successData.logo}
-     />
+        <AdditionSuccessfulModalOne
+          heading={successData.heading}
+          paragraph={successData.paragraph}
+          onClose={() => {
+            setShowPopup(false);
+          }}
+          onSave={handleBackButtonClick}
+          logo={successData.logo}
+        />
       )}
     </div>
   );

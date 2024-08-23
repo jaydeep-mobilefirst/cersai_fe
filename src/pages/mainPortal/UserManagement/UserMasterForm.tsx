@@ -12,16 +12,18 @@ const UserMasterForm = () => {
       content: <AddUserForm />,
     },
   ];
+  const operation = sessionStorage.getItem("operation");
+  console.log({ operation });
   return (
     <div>
       <div className="relative mx-2 xl:ml-[40px] mt-4">
         <div>
           <h1 className="font-gilroy-bold text-[20px] font-medium text-[#1C468E]">
-            Add user{" "}
+            {operation === "edit" ? "Edit user" : "Add user"}{" "}
           </h1>
         </div>
         <div className="mt-5">
-          <Accordion items={accordionItems} showEdit={true} />
+          <Accordion items={accordionItems} showEdit={false} />
         </div>
       </div>
     </div>
