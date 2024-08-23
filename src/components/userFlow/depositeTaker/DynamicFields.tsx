@@ -9,6 +9,7 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import DscKeyRegister from "../form/DscKeyRegister";
 import { useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
+import { useLocation } from "react-router-dom";
 
 type Props = {
   toggleUploadPopup?: () => void;
@@ -34,11 +35,14 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
 
+
+  const location = useLocation();
+  const { pathname } = location;
+
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
   const today = new Date();
-  console.log({ allFormData }, "all form data");
 
   const popperModifiers = [
     {
@@ -70,7 +74,22 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const disableFieldStatus = checkPathName(pathname) ? checkStatus(disabledField) : false
 
   return (
     <>

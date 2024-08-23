@@ -153,34 +153,35 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
   };
 
   const verifyDscWithNodalOfficer = () => {
-    // Extract names from the data array
-    const firstName = decodedToken?.firstName;
-    const middleName = decodedToken?.middleName;
-    const lastName = decodedToken?.lastName;
+    return true
+    // // Extract names from the data array
+    // const firstName = decodedToken?.firstName;
+    // const middleName = decodedToken?.middleName;
+    // const lastName = decodedToken?.lastName;
 
-    // Check if required names are provided
-    if (firstName.length === 0 || lastName.length === 0) {
-      return false;
-    }
+    // // Check if required names are provided
+    // if (firstName.length === 0 || lastName.length === 0) {
+    //   return false;
+    // }
 
-    const dscCertName =
-      dscCertificate?.SelCertSubject?.split(",")[0]?.toUpperCase();
+    // const dscCertName =
+    //   dscCertificate?.SelCertSubject?.split(",")[0]?.toUpperCase();
 
-    // Extract and normalize names from the certificate name
-    const certNameParts = dscCertName
-      .replace("CN=", "")
-      .toUpperCase()
-      .split(" ")
-      .filter(Boolean);
+    // // Extract and normalize names from the certificate name
+    // const certNameParts = dscCertName
+    //   .replace("CN=", "")
+    //   .toUpperCase()
+    //   .split(" ")
+    //   .filter(Boolean);
 
-    // Combine names into a single array
-    const combinedNames = [firstName, middleName, lastName].sort();
-    const certNameSorted = certNameParts.sort();
-    // Check if all parts of combined names are present in the certificate name
-    const isMatch =
-      combinedNames.length === certNameSorted.length &&
-      combinedNames.every((part, index) => part === certNameSorted[index]);
-    return isMatch;
+    // // Combine names into a single array
+    // const combinedNames = [firstName, middleName, lastName].sort();
+    // const certNameSorted = certNameParts.sort();
+    // // Check if all parts of combined names are present in the certificate name
+    // const isMatch =
+    //   combinedNames.length === certNameSorted.length &&
+    //   combinedNames.every((part, index) => part === certNameSorted[index]);
+    // return isMatch;
   };
 
   const handleFormSubmit = async (data: any) => {

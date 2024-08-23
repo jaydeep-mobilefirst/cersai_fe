@@ -1,5 +1,7 @@
 import React from "react";
 import LoaderSpin from "../../LoaderSpin";
+import { useLocation } from "react-router-dom";
+
 interface FooterProps {
   onSubmit?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   loader?: boolean;
@@ -8,6 +10,9 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ onSubmit, loader, disabled }) => {
   const disabledField = sessionStorage.getItem("user_status");
+
+  const location = useLocation();
+  const { pathname } = location;
 
   const checkStatus = (status: any): any => {
     switch (disabledField) {
@@ -28,16 +33,29 @@ const Footer: React.FC<FooterProps> = ({ onSubmit, loader, disabled }) => {
     }
   };
 
-  const currentPath = window.location.pathname;
+  const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const disableFieldStatus = checkPathName(pathname) ? checkStatus(disabledField) : false
 
   return (
     <div>
       {" "}
       <div className='flex flex-col sm:flex-row justify-end sm:justify-end items-center space-y-4 sm:space-y-0 pt-4 pb-4'>
         <div className='flex items-center'>
-          {disableFieldStatus && currentPath === "/dt/profile" ? (
+          {disableFieldStatus ? (
             <></>
           ) : (
             <>
