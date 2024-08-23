@@ -60,16 +60,15 @@ const ProfileRegulatorDetails = (props: Props) => {
     const noError = await handleValidationChecks(formFields);
     if (noError) {
       axiosTokenInstance
-        .patch(
-          `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
-          {
-            formData: formData,
-          }
-        )
+        .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
+          formData: formData,
+        })
         .then((response) => {
           Swal.fire({
             icon: "success",
-            text: "Regulator Details updated successfully",
+            text:
+              response?.data?.message ||
+              "Regulator Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/dt/profile?current=documents");

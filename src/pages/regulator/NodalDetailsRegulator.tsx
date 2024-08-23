@@ -200,26 +200,31 @@ const NodalDetailsRegulator = () => {
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           {formFields?.length > 0 ? (
-          <div className="bg-white p-0 w-full">
-            <h1 className="text-xl md:text-2xl font-bold mx-10">
-              Nodal Officer Details
-            </h1>
+            <div className="bg-white p-0 w-full">
+              <h1 className="text-xl md:text-2xl font-bold mx-10">
+                Nodal Officer Details
+              </h1>
 
-            <div className="bg-white p-4 lg:p-[48px]">
-              <DynamicFields
-                allFormData={allFormData}
-                formFields={formFields}
-                onChange={onChange}
-              />
-
-              {showOTPModel && (
-                <OtpPage
-                  redirectLink="/regulator/reviewdetails"
-                  closeShowOtpModel={() => setShowOTPModel(false)}
+              <div className="bg-white p-4 lg:p-[48px]">
+                <DynamicFields
+                  allFormData={allFormData}
+                  formFields={formFields}
+                  onChange={onChange}
                 />
-              )}
+
+                {showOTPModel && (
+                  <OtpPage
+                    redirectLink="/regulator/reviewdetails"
+                    closeShowOtpModel={() => setShowOTPModel(false)}
+                  />
+                )}
+              </div>
             </div>
-          </div>):<LoaderSpin/>}
+          ) : (
+            <div className="flex justify-center items-center h-[calc(100vh-300px)]">
+              <LoaderSpin />
+            </div>
+          )}
         </div>
 
         <div>

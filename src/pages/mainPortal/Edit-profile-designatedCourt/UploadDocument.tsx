@@ -68,11 +68,9 @@ const UploadDocument = (props: Props) => {
         value: field.uploadFileId,
       }));
 
-      axiosTokenInstance
+    axiosTokenInstance
       .patch(
-        `/competent-authority/${sessionStorage?.getItem(
-          "entityUniqueId"
-        )}`,
+        `/competent-authority/${sessionStorage?.getItem("entityUniqueId")}`,
         {
           formData: formData,
         }
@@ -80,7 +78,7 @@ const UploadDocument = (props: Props) => {
       .then((response) => {
         Swal.fire({
           icon: "success",
-          text: "Documents uploaded successfully",
+          text: response?.data?.message || "Documents uploaded successfully",
           confirmButtonText: "Ok",
         });
         setLoader(false);

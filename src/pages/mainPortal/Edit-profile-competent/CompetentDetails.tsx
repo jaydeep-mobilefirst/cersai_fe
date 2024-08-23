@@ -91,9 +91,12 @@ const CompetentDetails = (props: Props) => {
           }
         )
         .then((response) => {
+          console.log(response?.data?.message, "response");
           Swal.fire({
             icon: "success",
-            text: "Competent Details updated successfully",
+            text:
+              response?.data?.message ||
+              "Competent Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/ca/profile?current=document");

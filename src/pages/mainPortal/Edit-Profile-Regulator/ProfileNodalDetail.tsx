@@ -93,9 +93,12 @@ const ProfileNodalDetails = (props: Props) => {
           formData: formData,
         })
         .then((response) => {
+          console.log(response?.data?.message, "response");
           Swal.fire({
             icon: "success",
-            text: "Nodal Officer details updated successfully",
+            text:
+              response?.data?.message ||
+              "Nodal Officer details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/rg/profile?current=document");

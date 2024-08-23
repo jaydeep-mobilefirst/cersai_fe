@@ -95,7 +95,9 @@ const NodalDetails = (props: Props) => {
         .then((response) => {
           Swal.fire({
             icon: "success",
-            text: "Nodal Officer details updated successfully",
+            text:
+              response?.data?.message ||
+              "Nodal Officer details updated successfully",
             confirmButtonText: "Ok",
           });
         })

@@ -17,6 +17,7 @@ import { getMimeTypeFromArrayBuffer } from "../../../utils/commonFunction";
 import Swal from "sweetalert2";
 import moment from "moment";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
+import { set } from "react-hook-form";
 
 const TableType = {
   sno: number,
@@ -40,6 +41,7 @@ const MyTaskForm = () => {
   const approveTimeStamp = location?.state?.approveTimeStamp;
   const [loader, setLoader] = useState<boolean>(false);
   const [loader1, setLoader1] = useState<boolean>(false);
+  const [viewLoaders, setViewLoaders] = useState<Record<number, boolean>>({});
   const [dataBranch, setDataBranch] = useState([]);
   const { setAllFormData, allFormData, documentData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
@@ -145,20 +147,46 @@ const MyTaskForm = () => {
 
   const columnHelper = createColumnHelper<typeof TableType>();
 
+  // const columns = [
+  //   columnHelper.accessor("sno", {
+  //     cell: () => {
+  //       while (count <= total) {
+  //         count++;
+  //         return count;
+  //       }
+  //     },
+  //     header: () => <span>Sr. No.</span>,
+  //   }),
+
+  //   columnHelper.accessor("depositTakerId", {
+  //     cell: (info) => info.renderValue(),
+  //     header: () => <span>Deposit Taker Id</span>,
+  //   }),
+  //   columnHelper.accessor("addressLine1", {
+  //     cell: (info) => info.renderValue(),
+  //     header: () => <span>Address Line 1</span>,
+  //   }),
+  //   columnHelper.accessor("addressLine2", {
+  //     cell: (info) => info.renderValue(),
+  //     header: () => <span>Address Line 2</span>,
+  //   }),
+  //   columnHelper.accessor("state", {
+  //     cell: (info) => info.renderValue(),
+  //     header: () => <span>State</span>,
+  //   }),
+  //   columnHelper.accessor("district", {
+  //     cell: (info) => info.renderValue(),
+  //     header: () => <span>District</span>,
+  //   }),
+  // ];
   const columns = [
     columnHelper.accessor("sno", {
-      cell: () => {
-        while (count <= total) {
-          count++;
-          return count;
-        }
-      },
       header: () => <span>Sr. No.</span>,
-    }),
-
-    columnHelper.accessor("depositTakerId", {
-      cell: (info) => info.renderValue(),
-      header: () => <span>Deposit Taker Id</span>,
+      cell: (info) => {
+        // Calculate serial number based on current page and index of the row
+        const serialNumber = (page - 1) * pageSize + (info.row.index + 1);
+        return <span>{serialNumber}</span>;
+      },
     }),
     columnHelper.accessor("addressLine1", {
       cell: (info) => info.renderValue(),
@@ -186,9 +214,10 @@ const MyTaskForm = () => {
     window.open(imageUrl, "_blank", "noopener");
   };
 
-  const handleOnClikcView = async (uploadFileId: any) => {
+  const handleOnClikcView = async (uploadFileId: any, index: number) => {
     try {
-      setLoader(true);
+      // setLoader(true);
+      setViewLoaders((prev) => ({ ...prev, [index]: true }));
       const response = await axiosTokenInstance.get(
         `/openkm/get/${uploadFileId}`
       );
@@ -199,17 +228,20 @@ const MyTaskForm = () => {
           title: "Internal Server Error",
           text: "Unable to Open File",
         });
-        setLoader(false);
+        // setLoader(false);
+        setViewLoaders((prev) => ({ ...prev, [index]: false }));
         return;
       }
       const arrayBuffer = data?.data?.data;
 
       await getFileDatafromBuffer(arrayBuffer);
-      await fetchFormFields();
-      setLoader(false);
+      // await fetchFormFields();
+      // setLoader(false);
+      setViewLoaders((prev) => ({ ...prev, [index]: false }));
     } catch (error) {
       console.log({ error });
-      setLoader(false);
+      // setLoader(false);
+      setViewLoaders((prev) => ({ ...prev, [index]: false }));
     }
   };
 
@@ -313,9 +345,21 @@ const MyTaskForm = () => {
                                               *
                                             </span> */}
                                       </div>
+                                      {/* <div className="break-all">
+                                        {field.label === "DSC3 Certificate"
+                                          ? "DSC Certification "
+                                          : field.userInput}
+                                      </div> */}
                                       <div className="break-all">
                                         {field.label === "DSC3 Certificate"
                                           ? "DSC Certification "
+                                          : field?.label ===
+                                              "Regulator approval Date" ||
+                                            field?.label ===
+                                              "Date of In-corporation"
+                                          ? moment(field.userInput).format(
+                                              "DD/MM/YYYY"
+                                            )
                                           : field.userInput}
                                       </div>
                                     </div>
@@ -323,104 +367,6 @@ const MyTaskForm = () => {
                               </div>
                             </div>
                           </div>
-
-                          {/* <div className="shadow-sm p-5 rounded-md">
-                                <div className="flex flex-col justify-between w-full sm:flex-row gap-y-4">
-                                  {allFormData?.formFields?.form_fields?.filter(
-                                    (f: any) => f?.sectionId === section?.id
-                                  ).length > 2 ? (
-                                    <>
-                                      <div className="w-full sm:w-1/2 sm:border-r-2 border-r-[#385723] border-opacity-20 grid gap-y-4 pr-12">
-                                        {allFormData?.formFields?.form_fields
-                                          ?.filter(
-                                            (f: any, idx: number) =>
-                                              f?.sectionId === section?.id &&
-                                              idx % 2 === 0
-                                          )
-                                          .map((field: any, idx: number) => (
-                                            <div
-                                              className="flex justify-between"
-                                              key={idx}
-                                            >
-                                              <div className="opacity-60">
-                                                {field.label}
-                                                {field.required && (
-                                                  <span className="text-red-500">
-                                                    *
-                                                  </span>
-                                                )}
-                                              </div>
-                                              <div className="break-all">
-                                                {field.label ===
-                                                "DSC3 Certificate"
-                                                  ? "DSC Certification"
-                                                  : field.userInput}
-                                              </div>
-                                            </div>
-                                          ))}
-                                      </div>
-                                      <div className="w-full sm:w-1/2 grid gap-y-4 pl-12">
-                                        {allFormData?.formFields?.form_fields
-                                          ?.filter(
-                                            (f: any, idx: number) =>
-                                              f?.sectionId === section?.id &&
-                                              idx % 2 !== 0
-                                          )
-                                          .map((field: any, idx: number) => (
-                                            <div
-                                              className="flex justify-between"
-                                              key={idx}
-                                            >
-                                              <div className="opacity-60">
-                                                {field.label}
-                                                {field.required && (
-                                                  <span className="text-red-500">
-                                                    *
-                                                  </span>
-                                                )}
-                                              </div>
-                                              <div className="break-all">
-                                                {field.label ===
-                                                "DSC3 Certificate"
-                                                  ? "DSC Certification"
-                                                  : field.userInput}
-                                              </div>
-                                            </div>
-                                          ))}
-                                      </div>
-                                    </>
-                                  ) : (
-                                    <div className="w-full grid gap-y-4">
-                                      {allFormData?.formFields?.form_fields
-                                        ?.filter(
-                                          (f: any) =>
-                                            f?.sectionId === section?.id
-                                        )
-                                        .map((field: any, idx: any) => (
-                                          <div
-                                            className="flex justify-between"
-                                            key={idx}
-                                          >
-                                            <div className="opacity-60">
-                                              {field.label}
-                                              {field.required && (
-                                                <span className="text-red-500">
-                                                  *
-                                                </span>
-                                              )}
-                                            </div>
-                                            <div className="break-all">
-                                              {field.label ===
-                                              "DSC3 Certificate"
-                                                ? "DSC Certification"
-                                                : field.userInput}
-                                            </div>
-                                          </div>
-                                        ))}
-                                    </div>
-                                  )}
-                                </div>
-                              </div> */}
                         </div>
                       ))}
                   </div>
@@ -487,8 +433,12 @@ const MyTaskForm = () => {
                                 label="View"
                                 type="button"
                                 width="100px"
+                                loader={viewLoaders[index]}
                                 onClick={() =>
-                                  handleOnClikcView(uploadItem?.uploadFileId)
+                                  handleOnClikcView(
+                                    uploadItem?.uploadFileId,
+                                    index
+                                  )
                                 }
                               />
                             </div>

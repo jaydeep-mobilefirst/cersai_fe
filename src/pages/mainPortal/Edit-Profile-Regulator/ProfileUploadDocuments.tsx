@@ -68,17 +68,15 @@ const ProfileUploadDocuments = (props: Props) => {
         value: field.uploadFileId,
       }));
 
-      axiosTokenInstance
-      .patch(
-        `/regulator/${sessionStorage?.getItem("entityUniqueId")}`,
-        {
-          formData: formData,
-        }
-      )
+    axiosTokenInstance
+      .patch(`/regulator/${sessionStorage?.getItem("entityUniqueId")}`, {
+        formData: formData,
+      })
       .then((response) => {
+        console.log(response?.data?.message, "response");
         Swal.fire({
           icon: "success",
-          text: "Documents uploaded successfully",
+          text: response?.data?.message || "Documents uploaded successfully",
           confirmButtonText: "Ok",
         });
       })

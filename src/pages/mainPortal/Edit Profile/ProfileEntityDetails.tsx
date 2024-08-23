@@ -18,7 +18,7 @@ type Props = {};
 
 const ProfileEntityDetails = (props: Props) => {
   const Navigate = useNavigate();
-  const status = sessionStorage.getItem('user_status')
+  const status = sessionStorage.getItem("user_status");
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
@@ -58,32 +58,80 @@ const ProfileEntityDetails = (props: Props) => {
   //         };
   //       })
   //   : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       .filter((field: any) => {
+  //         // Filtering fields based on sectionId
+  //         return (
+  //           field?.sectionId === entityDetailsSectionId?.id ||
+  //           field?.sectionId === verificationSectionId?.id
+  //         );
+  //       })
+  //       .map((field: any) => {
+  //         // Setting the 'disabled' property based on the 'canEditable' property
+  //         const isDisabled =
+  //           field.required === true
+  //             ? status === "RETURNED"
+  //               ? ["companyName", "panNumber", "dateOfIncorporation"].includes(
+  //                   field.key
+  //                 )
+  //                 ? true
+  //                 : false
+  //               : true
+  //             : ["companyName", "panNumber", "dateOfIncorporation"].includes(
+  //                 field.key
+  //               )
+  //             ? true
+  //             : false;
+
+  //         return {
+  //           ...field,
+  //           disabled: isDisabled,
+  //         };
+  //       })
+  //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
-      .filter((field: any) => {
-        // Filtering fields based on sectionId
-        return (
-          field?.sectionId === entityDetailsSectionId?.id ||
-          field?.sectionId === verificationSectionId?.id
-        );
-      })
-      .map((field: any) => {
-        // Setting the 'disabled' property based on the 'canEditable' property
-        const isDisabled = field.required === true ? status === 'RETURNED' ? [
-          "companyName",
-          "panNumber",
-          'dateOfIncorporation'
-        ].includes(field.key) ? true :  false : true  : [
-          "companyName",
-          "panNumber",
-          'dateOfIncorporation'
-        ].includes(field.key) ? true : false;
+        .filter((field: any) => {
+          // Filtering fields based on sectionId
+          return (
+            field?.sectionId === entityDetailsSectionId?.id ||
+            field?.sectionId === verificationSectionId?.id
+          );
+        })
+        .map((field: any) => {
+          // Setting the 'disabled' property based on the 'canEditable' property
+          const isDisabled =
+            field.required === true
+              ? status === "RETURNED"
+                ? ["companyName", "panNumber", "dateOfIncorporation"].includes(
+                    field.key
+                  )
+                  ? true
+                  : false
+                : true
+              : ["companyName", "panNumber", "dateOfIncorporation"].includes(
+                  field.key
+                )
+              ? true
+              : false;
 
-        return {
-          ...field,
-          disabled: isDisabled,
-        };
-      })
+          return {
+            ...field,
+            disabled: isDisabled,
+          };
+        })
+        .sort((a: any, b: any) => {
+          // Sort by companyName, panNumber, and dateOfIncorporation
+          const sortOrder = ["companyName", "panNumber", "dateOfIncorporation"];
+          const aIndex = sortOrder.indexOf(a.key);
+          const bIndex = sortOrder.indexOf(b.key);
+
+          if (aIndex === -1 && bIndex === -1) return 0; // No sorting for non-prioritized fields
+          if (aIndex === -1) return 1; // a comes after b
+          if (bIndex === -1) return -1; // a comes before b
+          return aIndex - bIndex; // Sort based on index in sortOrder
+        })
     : [];
 
   const formData =
@@ -105,18 +153,16 @@ const ProfileEntityDetails = (props: Props) => {
     if (noError) {
       if (noError) {
         axiosTokenInstance
-          .patch(
-            `/deposit-taker/${sessionStorage.getItem(
-              "entityUniqueId"
-            )}`,
-            {
-              formData: formData,
-            }
-          )
+          .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
+            formData: formData,
+          })
           .then((response) => {
+            console.log(response?.data?.message, "response");
             Swal.fire({
               icon: "success",
-              text: "Entity Details updated successfully",
+              text:
+                response?.data?.message ||
+                "Entity Details updated successfully",
               confirmButtonText: "Ok",
             });
             Navigate("/dt/profile?current=nodal");

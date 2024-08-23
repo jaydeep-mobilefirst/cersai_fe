@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import DscKeyLogin from "../../components/userFlow/form/DscKeyLogin";
 import { axiosTokenInstance } from "../../utils/axios";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import DscButton from "../../components/userFlow/form/Dscbutton";
+import { convertFileToBase64 } from "../../utils/fileConversion";
 
 const UploadDSC3 = () => {
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
@@ -17,6 +19,9 @@ const UploadDSC3 = () => {
   const [isError, setError] = useState(false);
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  const [base64Data, setBase64Data] = useState<string>("");
+  const [hexData, setHexData] = useState("");
+  const [isFileUploaded, setIsFileUploaded] = useState(false);
 
   const screenWidth = useScreenWidth();
   const customClass = "flex flex-col w-full mt-4 justify-between w-full";
@@ -112,6 +117,25 @@ const UploadDSC3 = () => {
       combinedNames.every((part, index) => part === certNameSorted[index]);
     return isMatch;
   };
+  const handleFileUpload = (file: File | null) => {
+    if (file) {
+      setIsFileUploaded(true);
+
+      convertFileToBase64(
+        file,
+        (hex) => {
+          setHexData(hex);
+        },
+        (base64) => {
+          setBase64Data(base64);
+        }
+      );
+    } else {
+      setIsFileUploaded(false);
+      setBase64Data(""); // Clear the base64 data if no file is uploaded
+      setHexData(""); // Clear the hex data as well
+    }
+  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -120,7 +144,7 @@ const UploadDSC3 = () => {
       return;
     }
 
-    if (!verifyDscWithNodalOfficer(formFields) && isDscKeyAvbl === "true") {
+    if (isDscKeyAvbl === "true" && !verifyDscWithNodalOfficer(formFields)) {
       Swal.fire({
         icon: "error",
         title: "Invalid Name",
@@ -135,7 +159,8 @@ const UploadDSC3 = () => {
       setLoader(true);
       const response = await axiosTokenInstance.put(`/user/updatedsc`, {
         id: Number(userId),
-        dscCertificate: dscCertificate,
+        // dscCertificate: dscCertificate,
+        dscCertificate: isDscKeyAvbl === "true" ? dscCertificate : base64Data,
         // dscCertificate: btoa(dscCertificate?.Cert),
       });
       setLoader(false);
@@ -176,13 +201,23 @@ const UploadDSC3 = () => {
         }}
       >
         <div className="w-[100%] md:w-[35%]">
-          <DscKeyLogin
-            isDscSelected={isDscSelected}
-            setDscSelected={setDscSelected}
-            setDscCertificate={setDscCertificate}
-            dsc3UserInput={dsc3UserInput}
-          />
-          {isError && <p className="text-red-500">select DSC3 certificate</p>}
+          {isDscKeyAvbl === "false" ? (
+            <DscButton onFileUpload={handleFileUpload} disabled={false}>
+              Upload Document
+            </DscButton>
+          ) : (
+            <>
+              <DscKeyLogin
+                isDscSelected={isDscSelected}
+                setDscSelected={setDscSelected}
+                setDscCertificate={setDscCertificate}
+                dsc3UserInput={dsc3UserInput}
+              />
+              {isError && (
+                <p className="text-red-500">select DSC3 certificate</p>
+              )}
+            </>
+          )}
         </div>
         <div>
           <Footer loader={loader} />
