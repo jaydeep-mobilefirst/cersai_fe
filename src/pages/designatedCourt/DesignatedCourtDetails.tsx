@@ -92,29 +92,36 @@ const DesignatedCourtDetails: React.FC = () => {
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           {formFields?.length > 0 ? (
-          <div className="flex flex-col p-6 w-full">
-            <h1 className="text-2xl font-bold mb-6 text-gilroy-medium">
-              Court Details
-            </h1>
-            <DynamicFields
-              allFormData={allFormData}
-              formFields={formFields}
-              onChange={onChange}
-              documentFields={documentData}
-              onFileChange={onFileChange}
-            />
-          </div>):<LoaderSpin/>}
+            <div className="flex flex-col p-6 w-full">
+              <h1 className="text-2xl font-bold mb-6 text-gilroy-medium">
+                Court Details
+              </h1>
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+                documentFields={documentData}
+                onFileChange={onFileChange}
+              />
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-[calc(100vh-300px)]">
+              <LoaderSpin />
+            </div>
+          )}
         </div>
 
         <div>
-          {formFields?.length>0 &&
-          <div
-            className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
-            style={{
-              width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-            }}
-          >
-            {/* <div className="flex items-center ml-auto">
+          {formFields?.length > 0 && (
+            <div
+              className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
+              style={{
+                width: `${
+                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                }`,
+              }}
+            >
+              {/* <div className="flex items-center ml-auto">
               <button
                 type="submit"
                 className="bg-[#1c468e] rounded-xl p-3 text-white text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold"
@@ -122,16 +129,17 @@ const DesignatedCourtDetails: React.FC = () => {
                 {loader ? <LoaderSpin /> : "Save & Continue"}
               </button>
             </div> */}
-            <div className="flex items-center ml-auto">
-              <button
-                type="submit"
-                className="bg-[#1c468e] rounded-xl p-3 text-white text-sm text-gilroy-semibold"
-                style={{ width: "150px" }}
-              >
-                {loader ? <LoaderSpin /> : "Save & Continue"}
-              </button>
+              <div className="flex items-center ml-auto">
+                <button
+                  type="submit"
+                  className="bg-[#1c468e] rounded-xl p-3 text-white text-sm text-gilroy-semibold"
+                  style={{ width: "150px" }}
+                >
+                  {loader ? <LoaderSpin /> : "Save & Continue"}
+                </button>
+              </div>
             </div>
-          </div>}
+          )}
           <div>
             <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 

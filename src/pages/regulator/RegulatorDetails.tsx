@@ -39,14 +39,8 @@ const RegulatorDetails = (props: Props) => {
     allFormData?.formFields?.form_fields
       ?.filter((f: any) => f?.sectionId === sectionId?.id)
       .map((field: any) => {
-        const disableLabels = [
-          "State",
-          "District",
-        ];
-        const disableKeys = [
-          "state",
-          "district"
-        ];
+        const disableLabels = ["State", "District"];
+        const disableKeys = ["state", "district"];
         return {
           ...field,
           disabled:
@@ -54,7 +48,7 @@ const RegulatorDetails = (props: Props) => {
             disableKeys.includes(field.key),
         };
       }) || [];
-  
+
   const formFieldss = allFormData?.formFields?.form_fields?.filter(
     (f: any) => f?.sectionId === sectionId?.id
   );
@@ -88,29 +82,34 @@ const RegulatorDetails = (props: Props) => {
             <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
             {formFields?.length > 0 ? (
               <>
-            <h1 className="text-xl md:text-2xl mx-10 font-bold ">
-              Regulator Details
-            </h1>
-            <div className="bg-white p-4 lg:p-[48px]">
-              <DynamicFields
-                allFormData={allFormData}
-                formFields={formFields}
-                onChange={onChange}
-              />
-            </div>
-            </>):<LoaderSpin/>}
+                <h1 className="text-xl md:text-2xl mx-10 font-bold ">
+                  Regulator Details
+                </h1>
+                <div className="bg-white p-4 lg:p-[48px]">
+                  <DynamicFields
+                    allFormData={allFormData}
+                    formFields={formFields}
+                    onChange={onChange}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="flex justify-center items-center h-[calc(100vh-300px)]">
+                <LoaderSpin />
+              </div>
+            )}
           </div>
           <div>
-            {formFields?.length>0 &&
-            <div
-              className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
-              style={{
-                width: `${
-                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
-                }`,
-              }}
-            >
-              {/* <div className="flex items-center ml-auto">
+            {formFields?.length > 0 && (
+              <div
+                className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
+                style={{
+                  width: `${
+                    screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                  }`,
+                }}
+              >
+                {/* <div className="flex items-center ml-auto">
                 <button
                   type="submit"
                   disabled={loader}
@@ -120,17 +119,18 @@ const RegulatorDetails = (props: Props) => {
                   {loader ? <LoaderSpin /> : "Save & Continue"}
                 </button>
               </div> */}
-              <div className="flex items-center ml-auto">
-                <button
-                  type="submit"
-                  disabled={loader}
-                  onClick={onSubmit}
-                  className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
-                >
-                  {loader ? <LoaderSpin /> : "Save & Continue"}
-                </button>
+                <div className="flex items-center ml-auto">
+                  <button
+                    type="submit"
+                    disabled={loader}
+                    onClick={onSubmit}
+                    className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+                  >
+                    {loader ? <LoaderSpin /> : "Save & Continue"}
+                  </button>
+                </div>
               </div>
-            </div>}
+            )}
             <div>
               <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 

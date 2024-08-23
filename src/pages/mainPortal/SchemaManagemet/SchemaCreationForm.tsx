@@ -7,7 +7,7 @@ import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFie
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../../components/LoaderSpin";
-import SuccessPopup from "../../../components/userFlow/depositeTaker/SuccessPopUp"
+import SuccessPopup from "../../../components/userFlow/depositeTaker/SuccessPopUp";
 import { axiosTokenInstance } from "../../../utils/axios";
 
 const SchemaCreationForm = () => {
@@ -63,7 +63,9 @@ const SchemaCreationForm = () => {
               };
             } else if (field?.key === "branch") {
               try {
-                const res = await axiosTokenInstance.get('/deposit-taker/branch/' + entityType)
+                const res = await axiosTokenInstance.get(
+                  "/deposit-taker/branch/" + entityType
+                );
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
                   return {
@@ -144,7 +146,7 @@ const SchemaCreationForm = () => {
         fieldId: field.id,
         value: field.userInput,
         key: field.key,
-        label : field?.label
+        label: field?.label,
       }));
 
       // Creating the payload object that includes both formData and depositTakerId
@@ -156,7 +158,7 @@ const SchemaCreationForm = () => {
             fieldId: "55883089-b29c-4b73-ab17-45d6e062d6d4",
             key: "depositTakerId",
             value: entityType,
-            label : "Deposit taker"
+            label: "Deposit taker",
           },
         ],
       };
@@ -198,99 +200,96 @@ const SchemaCreationForm = () => {
         <TaskTabs />
       </div>
       <div className="-ml-7">
-        <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
-          <div className="w-full mb-40">
-            <div className="mt-10">
-              <DynamicFields
-                formFields={allFormData?.formFields?.form_fields}
-                allFormData={allFormData}
-                onChange={onChange}
+        {allFormData?.formFields?.form_fields?.length > 0 ? (
+          <>
+            <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
+              <div className="w-full mb-40">
+                <div className="mt-10">
+                  <DynamicFields
+                    formFields={allFormData?.formFields?.form_fields}
+                    allFormData={allFormData}
+                    onChange={onChange}
+                  />
+                </div>
+
+                <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
+                  <div className="">
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 accent-[#1c648e]"
+                      checked={isChecked}
+                      onChange={handleCheckboxChange}
+                      placeholder="ischecked"
+                    />
+                  </div>
+                  <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
+                    I declare all the Information provided is correct as per my
+                    knowledge.
+                  </div>
+                </div>
+              </div>
+              <SuccessPopup
+                closePopup={() => {
+                  setPopData({ ...popupData, show: false });
+                  if (submitted) {
+                    navigate("/dt/scheme");
+                  }
+                }}
+                showPopup={() => {}}
+                toggle={popupData.show}
+                para1={popupData.para1}
+                para2={popupData.para2}
+                success={submitted}
               />
-            </div>
-            {/* <div className="flex flex-shrink-0 mt-[20px]">
-              <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  placeholder="ischecked"
-                />
-              </div>
-              <div className="leading-[24px]">
-                I declare all the Information provided is correct as per my
-                knowledge.
-              </div>
-            </div> */}
-            <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
-              <div className="">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 accent-[#1c648e]"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  placeholder="ischecked"
-                />
-              </div>
-              <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
-                I declare all the Information provided is correct as per my
-                knowledge.
-              </div>
-            </div>
-          </div>
-          <SuccessPopup
-            closePopup={() => {
-              setPopData({ ...popupData, show: false });
-              if (submitted) {
-                navigate("/dt/scheme");
-              }
-            }}
-            showPopup={() => {}}
-            toggle={popupData.show}
-            para1={popupData.para1}
-            para2={popupData.para2}
-            success={submitted}
-          />
 
-          <div className="absolute bottom-0">
-            <div
-              className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
-              style={{
-                width: `${
-                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
-                }`,
-              }}
-            >
-              <div className="flex items-center space-x-6">
-                <p
-                  onClick={handleBackButtonClick}
-                  className="text-[#1c468e] text-gilroy-medium cursor-pointer"
+              <div className="absolute bottom-0">
+                <div
+                  className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
+                  style={{
+                    width: `${
+                      screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                    }`,
+                  }}
                 >
-                  Discard
-                </p>
+                  <div className="flex items-center space-x-6">
+                    <p
+                      onClick={handleBackButtonClick}
+                      className="text-[#1c468e] text-gilroy-medium cursor-pointer"
+                    >
+                      Discard
+                    </p>
 
-                <button
-                  onClick={onSubmit}
-                  type="submit"
-                  className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold ${
-                    !isChecked
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-[#163a7a]"
-                  }`}
-                  disabled={!isChecked}
-                >
-                  {loader ? <LoaderSpin /> : "Create Scheme"}
-                </button>
+                    <button
+                      onClick={onSubmit}
+                      type="submit"
+                      className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold ${
+                        !isChecked
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-[#163a7a]"
+                      }`}
+                      disabled={!isChecked}
+                    >
+                      {loader ? <LoaderSpin /> : "Create Scheme"}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <div className="border-[#E6E6E6] border-[1px] lg:mt-4 "></div>
+
+                  <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+                    © 2024 Protean BUDs, All Rights Reserved.
+                  </p>
+                </div>
               </div>
             </div>
-            <div>
-              <div className="border-[#E6E6E6] border-[1px] lg:mt-4 "></div>
-
-              <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
-                © 2024 Protean BUDs, All Rights Reserved.
-              </p>
+          </>
+        ) : (
+          <>
+            <div className="flex justify-center items-center h-[calc(100vh-300px)]">
+              <LoaderSpin />
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
