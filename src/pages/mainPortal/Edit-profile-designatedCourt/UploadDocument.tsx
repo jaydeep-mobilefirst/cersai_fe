@@ -78,7 +78,7 @@ const UploadDocument = (props: Props) => {
       .then((response) => {
         Swal.fire({
           icon: "success",
-          text: "Documents uploaded successfully",
+          text: response?.data?.message || "Documents uploaded successfully",
           confirmButtonText: "Ok",
         });
         setLoader(false);

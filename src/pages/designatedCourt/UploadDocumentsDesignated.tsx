@@ -65,67 +65,75 @@ const UploadDocumentsRegulator = (props: Props) => {
           >
             <div className="border-[#E6E6E6] border-[1px] lg:mt-20 w-full"></div>
             {documentData?.length > 0 ? (
-            <div className=" p-4 lg:p-[48px]">
-              <h1 className="text-2xl font-bold mb-6">Upload Documents</h1>
-              <DynamicFields
-                documentFields={documentData}
-                sectionId={sectionId}
-                onFileChange={onFileChange}
-              />
-              <h1 className="text-[14px] md:text-sm font-normal text-gilroy-medium text-[#666666]">
-                <span className="text-red-500">*</span>Office Order / any other
-                supporting document for appointment of Nodal Officer
-              </h1>
-            </div>):<LoaderSpin/>}
+              <div className=" p-4 lg:p-[48px]">
+                <h1 className="text-2xl font-bold mb-6">Upload Documents</h1>
+                <DynamicFields
+                  documentFields={documentData}
+                  sectionId={sectionId}
+                  onFileChange={onFileChange}
+                />
+                <h1 className="text-[14px] md:text-sm font-normal text-gilroy-medium text-[#666666]">
+                  <span className="text-red-500">*</span>Office Order / any
+                  other supporting document for appointment of Nodal Officer
+                </h1>
+              </div>
+            ) : (
+              <div className="flex justify-center items-center h-[calc(100vh-300px)]">
+                <LoaderSpin />
+              </div>
+            )}
           </div>
 
           <div>
-            {documentData?.length>0 &&
-            <div
-              className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
-              style={{
-                width: `${
-                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
-                }`,
-              }}
-            >
+            {documentData?.length > 0 && (
               <div
-                className="flex flex-row items-center space-x-2"
-                onClick={() => Navigate("/designated/court/designateddetails")}
+                className="flex w-full p-4 lg:px-[48px] flex-row justify-between items-center"
+                style={{
+                  width: `${
+                    screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                  }`,
+                }}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="shrink-0"
+                <div
+                  className="flex flex-row items-center space-x-2"
+                  onClick={() =>
+                    Navigate("/designated/court/designateddetails")
+                  }
                 >
-                  <path
-                    d="M15 6L9 12L15 18"
-                    stroke="#1D1D1B"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <button
-                  role="button"
-                  className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
-                >
-                  Back
-                </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    className="shrink-0"
+                  >
+                    <path
+                      d="M15 6L9 12L15 18"
+                      stroke="#1D1D1B"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <button
+                    role="button"
+                    className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
+                  >
+                    Back
+                  </button>
+                </div>
+                <div className="flex items-center">
+                  <button
+                    type="submit"
+                    onClick={submit}
+                    className="bg-[#1c468e] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
+                  >
+                    {loader ? <LoaderSpin /> : "Save & Continue"}
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center">
-                <button
-                  type="submit"
-                  onClick={submit}
-                  className="bg-[#1c468e] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
-                >
-                  {loader ? <LoaderSpin /> : "Save & Continue"}
-                </button>
-              </div>
-            </div>}
+            )}
             <div>
               <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
               <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">

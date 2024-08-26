@@ -214,7 +214,9 @@ const NodalDetails = (props: Props) => {
               />
             </div>
           ) : (
-            <LoaderSpin />
+            <div className="flex justify-center items-center h-[calc(100vh-300px)]">
+              <LoaderSpin />
+            </div>
           )}
         </div>
         {showOTPModel && (

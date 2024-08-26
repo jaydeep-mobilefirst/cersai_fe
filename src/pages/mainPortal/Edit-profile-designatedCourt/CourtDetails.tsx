@@ -85,9 +85,7 @@ const CourtDetails = (props: Props) => {
     if (noError) {
       axiosTokenInstance
         .patch(
-          `/designated-court/${sessionStorage.getItem(
-            "entityUniqueId"
-          )}`,
+          `/designated-court/${sessionStorage.getItem("entityUniqueId")}`,
           {
             formData: formData,
           }
@@ -95,7 +93,8 @@ const CourtDetails = (props: Props) => {
         .then((response) => {
           Swal.fire({
             icon: "success",
-            text: "Court Details updated successfully",
+            text:
+              response?.data?.message || "Court Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/dc/profile?current=document");

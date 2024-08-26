@@ -14,6 +14,8 @@ import LoaderSpin from "../../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../../utils/axios";
 import Button from "../../../../components/form/Button";
 import FolderIcon from "../../../../assets/images/new_images/FolderOpen.png";
+import { set } from "react-hook-form";
+import moment from "moment";
 
 const DepositTakerForm = () => {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ const DepositTakerForm = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const depositTakerId = location.state?.depositTakerId;
   const [dataBranch, setDataBranch] = useState([]);
+  const [viewLoaders, setViewLoaders] = useState<Record<number, boolean>>({});
   const { setAllFormData, setAllDocumentData, allFormData, documentData } =
     useDepositTakerRegistrationStore((state) => state);
   const [page, setPage] = useState<number>(1);
@@ -135,21 +138,14 @@ const DepositTakerForm = () => {
   serialNoGen(page);
 
   const columnHelper = createColumnHelper<typeof TableType>();
-
   const columns = [
     columnHelper.accessor("sno", {
-      cell: () => {
-        while (count <= total) {
-          count++;
-          return count;
-        }
-      },
       header: () => <span>Sr. No.</span>,
-    }),
-
-    columnHelper.accessor("depositTakerId", {
-      cell: (info) => info.renderValue(),
-      header: () => <span>Deposit Taker Id</span>,
+      cell: (info) => {
+        // Calculate serial number based on current page and index of the row
+        const serialNumber = (page - 1) * pageSize + (info.row.index + 1);
+        return <span>{serialNumber}</span>;
+      },
     }),
     columnHelper.accessor("addressLine1", {
       cell: (info) => info.renderValue(),
@@ -169,10 +165,47 @@ const DepositTakerForm = () => {
     }),
   ];
 
-  const handleOnClikcView = async (uploadFileId: any) => {
+  // const columns = [
+  //   columnHelper.accessor("sno", {
+  //     cell: () => {
+  //       while (count <= total) {
+  //         count++;
+  //         return count;
+  //       }
+  //     },
+  //     header: () => <span>Sr. No.</span>,
+  //   }),
+
+  //   columnHelper.accessor("depositTakerId", {
+  //     cell: (info) => info.renderValue(),
+  //     header: () => <span>Deposit Taker Id</span>,
+  //   }),
+  //   columnHelper.accessor("addressLine1", {
+  //     cell: (info) => info.renderValue(),
+  //     header: () => <span>Address Line 1</span>,
+  //   }),
+  //   columnHelper.accessor("addressLine2", {
+  //     cell: (info) => info.renderValue(),
+  //     header: () => <span>Address Line 2</span>,
+  //   }),
+  //   columnHelper.accessor("state", {
+  //     cell: (info) => info.renderValue(),
+  //     header: () => <span>State</span>,
+  //   }),
+  //   columnHelper.accessor("district", {
+  //     cell: (info) => info.renderValue(),
+  //     header: () => <span>District</span>,
+  //   }),
+  // ];
+
+  const handleOnClikcView = async (uploadFileId: any, index: number) => {
     try {
-      setLoader(true);
-      const response = await axiosTokenInstance.get(`/openkm/get/${uploadFileId}`);
+      // setLoader(true);
+      setViewLoaders((prev) => ({ ...prev, [index]: true }));
+
+      const response = await axiosTokenInstance.get(
+        `/openkm/get/${uploadFileId}`
+      );
       const data = await response.data;
       if (data?.status === "INTERNAL_SERVER_ERROR") {
         Swal.fire({
@@ -180,18 +213,21 @@ const DepositTakerForm = () => {
           title: "Internal Server Error",
           text: "Unable to Open File",
         });
-        setLoader(false);
+        // setLoader(false);
+        setViewLoaders((prev) => ({ ...prev, [index]: false }));
         return;
       }
       const arrayBuffer = data?.data?.data;
 
       await getFileDatafromBuffer(arrayBuffer);
       // setViewLoader(false);
-      fetchFormFields();
+      // fetchFormFields();
       // window.location.reload();
+      setViewLoaders((prev) => ({ ...prev, [index]: false }));
     } catch (error) {
       console.log({ error });
       // setViewLoader(false);
+      setViewLoaders((prev) => ({ ...prev, [index]: false }));
     }
   };
 
@@ -320,9 +356,21 @@ const DepositTakerForm = () => {
                                               *
                                             </span> */}
                                       </div>
+                                      {/* <div className="break-all">
+                                        {field.label === "DSC3 Certificate"
+                                          ? "DSC Certification "
+                                          : field.userInput}
+                                      </div> */}
                                       <div className="break-all">
                                         {field.label === "DSC3 Certificate"
                                           ? "DSC Certification "
+                                          : field?.label ===
+                                              "Regulator approval Date" ||
+                                            field?.label ===
+                                              "Date of In-corporation"
+                                          ? moment(field.userInput).format(
+                                              "DD/MM/YYYY"
+                                            )
                                           : field.userInput}
                                       </div>
                                     </div>
@@ -395,8 +443,12 @@ const DepositTakerForm = () => {
                                   label="View"
                                   type="button"
                                   width="100px"
+                                  loader={viewLoaders[index]}
                                   onClick={() =>
-                                    handleOnClikcView(uploadItem?.uploadFileId)
+                                    handleOnClikcView(
+                                      uploadItem?.uploadFileId,
+                                      index
+                                    )
                                   }
                                 />
                               </div>

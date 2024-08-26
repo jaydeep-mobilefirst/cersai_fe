@@ -12,6 +12,7 @@ import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { axiosTokenInstance } from "../../../utils/axios";
+import LoaderSpin from "../../../components/LoaderSpin";
 
 type Props = {};
 
@@ -60,16 +61,15 @@ const ProfileRegulatorDetails = (props: Props) => {
     const noError = await handleValidationChecks(formFields);
     if (noError) {
       axiosTokenInstance
-        .patch(
-          `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
-          {
-            formData: formData,
-          }
-        )
+        .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
+          formData: formData,
+        })
         .then((response) => {
           Swal.fire({
             icon: "success",
-            text: "Regulator Details updated successfully",
+            text:
+              response?.data?.message ||
+              "Regulator Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/dt/profile?current=documents");
@@ -104,14 +104,24 @@ const ProfileRegulatorDetails = (props: Props) => {
             height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
           }}
         >
-          <DynamicFields
-            allFormData={allFormData}
-            formFields={formFields}
-            onChange={onChange}
-          />
-          <div>
-            <Footer onSubmit={onSubmit} loader={loader} />
-          </div>
+          {formFields.length > 0 ? (
+            <>
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+              />
+              <div>
+                <Footer onSubmit={onSubmit} loader={loader} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex justify-center items-center">
+                <LoaderSpin />
+              </div>
+            </>
+          )}
         </form>
       </div>
     </>

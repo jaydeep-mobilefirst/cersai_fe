@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 import ReactTable from "../../../../components/userFlow/common/ReactTable";
 import { createColumnHelper } from "@tanstack/table-core";
 import { axiosTokenInstance } from "../../../../utils/axios";
+import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -297,7 +298,8 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   return (
     <div className="flex flex-col justify-between h-screen">
       <div className="mt-6 mx-2">
-        <TaskTabsCa />
+        {/* <TaskTabsCa /> */}
+        <TaskTabsRg />
       </div>
 
       <div className="mx-8 mt-4 mb-1">

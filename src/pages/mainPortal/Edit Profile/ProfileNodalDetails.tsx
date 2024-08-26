@@ -12,6 +12,7 @@ import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFie
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { axiosTokenInstance } from "../../../utils/axios";
+import LoaderSpin from "../../../components/LoaderSpin";
 
 type Props = {};
 
@@ -215,16 +216,25 @@ const ProfileNodalDetails = (props: Props) => {
               </div>
             </div>
           </div> */}
-          <DynamicFields
-            allFormData={allFormData}
-            formFields={formFields}
-            onChange={onChange}
-            disable={true}
-          />
 
-          <div>
-            <Footer onSubmit={onSubmit} loader={loader} />
-          </div>
+          {formFields.length > 0 ? (
+            <>
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+                disable={true}
+              />
+
+              <div>
+                <Footer onSubmit={onSubmit} loader={loader} />
+              </div>
+            </>
+          ) : (
+            <div className="flex justify-center items-center mt-5">
+              <LoaderSpin />
+            </div>
+          )}
         </form>
       </div>
     </>
