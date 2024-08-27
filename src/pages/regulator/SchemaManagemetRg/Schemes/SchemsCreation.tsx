@@ -253,7 +253,7 @@ const NewSchemaCreation = () => {
                 </span>
               </button>
             </div>
-            {/* <div className=" flex items-center mt-7">
+            <div className=" flex items-center mt-7">
               <Link to="/rg/my-task/new-scheme-creation">
                 <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
@@ -262,7 +262,7 @@ const NewSchemaCreation = () => {
                   </span>
                 </div>
               </Link>
-            </div> */}
+            </div>
           </div>
         </div>
         <div>
