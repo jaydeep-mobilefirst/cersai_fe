@@ -288,7 +288,7 @@ const ReviewDetailsDesignated = () => {
             <button
               className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0"
               role="button"
-              onClick={() => Navigate("/depositetaker/signup/nodaldetails")}
+              onClick={() => Navigate("/designated/court/nodaldetails")}
             >
               <img src={Arrow} alt="back Arrow" className="mr-2" />
               Back
