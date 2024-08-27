@@ -29,6 +29,7 @@ interface AccordionItem {
 }
 
 const DepositeTakerSearchDetailsSM: React.FC = () => {
+  const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const navigate = useNavigate();
   const [uploadPopupOpen, setUploadPopupOpen] = useState(false);
   const [successUploadPopupOpen, setSuccessUploadPopupOpen] = useState(false);
@@ -41,6 +42,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   const [uploadInputKey, setUploadKey] = useState<number>(0);
   const uploadButtonRef = useRef<HTMLInputElement>(null);
   const screenWidth = useScreenWidth();
+  const [accordionLoading, setAccordionLoading] = useState(true);
 
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
@@ -103,9 +105,11 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
           dropdownData,
         });
         setAllDocumentData(modifiedFileFields);
+        setAccordionLoading(false);
       }
     } catch (error) {
       console.error("Error fetching form data:", error);
+      setAccordionLoading(false);
     }
   };
 
@@ -175,6 +179,64 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       return false;
     }
   };
+  const verifyDscWithNodalOfficer = (data: any) => {
+    // Extract names from the data array
+    const firstNameObj = data.find(
+      (item: { key: string }) => item.key === "nodalFirstname"
+    );
+    const middleNameObj = data.find(
+      (item: { key: string }) => item.key === "nodalMiddlename"
+    );
+    const lastNameObj = data.find(
+      (item: { key: string }) => item.key === "nodalLastname"
+    );
+    const firstName = firstNameObj
+      ? firstNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+    const middleName = middleNameObj
+      ? middleNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+    const lastName = lastNameObj
+      ? lastNameObj.userInput
+          .toUpperCase()
+          .split(" ")
+          .filter((part: string | any[]) => part.length > 0)
+      : [];
+
+    // Check if required names are provided
+    if (firstName.length === 0 || lastName.length === 0) {
+      return false;
+    }
+
+    const dscObj = data.find(
+      (item: { label: string }) => item.label === "DSC3 Certificate"
+    );
+
+    const dscCertName =
+      dscObj?.userInput?.SelCertSubject?.split(",")[0]?.toUpperCase();
+
+    // Extract and normalize names from the certificate name
+    const certNameParts = dscCertName
+      .replace("CN=", "")
+      .toUpperCase()
+      .split(" ")
+      .filter(Boolean);
+
+    // Combine names into a single array
+    const combinedNames = [...firstName, ...middleName, ...lastName].sort();
+    const certNameSorted = certNameParts.sort();
+    // Check if all parts of combined names are present in the certificate name
+    const isMatch =
+      combinedNames.length === certNameSorted.length &&
+      combinedNames.every((part, index) => part === certNameSorted[index]);
+    return isMatch;
+  };
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -186,6 +248,19 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       setLoader(false);
       return;
     }
+    if (isDscKeyAvbl === "true" && !isFormValid) {
+      if (verifyDscWithNodalOfficer(allFormData?.formFields?.form_fields)) {
+        console.log("name checked");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Name",
+          text: "Nodal Officer name should match with DSC3",
+        });
+        return;
+      }
+    }
+
     const panVerified = await verifyPan();
     if (panVerified) {
       // Process submission if PAN is verified
@@ -200,7 +275,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
           key: field.key,
         }));
         const response = await axiosTokenInstance.post(
-           "/deposit-taker/add-form-fields",
+          "/deposit-taker/add-form-fields",
           { formData, regulatorId: masterEntityId }
         );
         if (response.data.success) {
@@ -296,94 +371,116 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       <div className="mt-6 mx-2">
         <TaskTabsCa />
       </div>
-
-      <div className="mx-8 mt-4 mb-1">
-        <div className="flex flex-col xl:flex-row md:flex-row lg:flex-row items-center justify-between">
-          <div className="flex flex-row">
-            <img
-              src={InfoIcon}
-              alt="InfoIcon"
-              className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
-            />
-            <p className="text-[#808080]">
-              You can Upload Deposit Takers data in bulk. Please use this given
-              <span
-                onClick={handleDownloadTemplate}
-                className="text-blue-400 hover:cursor-pointer"
-              >
-                &nbsp;Template.
-              </span>
-            </p>
+      {accordionLoading ? (
+        <>
+          <div className="flex justify-center items-center">
+            <LoaderSpin />
           </div>
-          <div
-            onClick={() => {
-              uploadButtonRef.current?.click();
-            }}
-            className="w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer"
-          >
-            <input
-              onChange={handleFileUpload}
-              type="file"
-              name=""
-              id=""
-              className="hidden"
-              accept=".xls, .xlsx"
-              ref={uploadButtonRef}
-              key={uploadInputKey}
-              disabled={loader}
-            />
-            <div className="justify-start items-center gap-1.5 inline-flex">
-              <div className="w-6 h-6 justify-center items-center flex">
-                <div className="w-6 h-6 relative">
-                  <img src={UploadIcon} alt="" />
+        </>
+      ) : (
+        <>
+          <div className="mx-8 mt-4 mb-1">
+            <div className="flex flex-col xl:flex-row md:flex-row lg:flex-row items-center justify-between">
+              <div className="flex flex-row">
+                <img
+                  src={InfoIcon}
+                  alt="InfoIcon"
+                  className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
+                />
+                <p className="text-[#808080]">
+                  You can Upload Deposit Takers data in bulk. Please use this
+                  given
+                  <span
+                    onClick={handleDownloadTemplate}
+                    className="text-blue-400 hover:cursor-pointer"
+                  >
+                    &nbsp;Template.
+                  </span>
+                </p>
+              </div>
+              <div
+                onClick={() => {
+                  uploadButtonRef.current?.click();
+                }}
+                className="w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer"
+              >
+                <input
+                  onChange={handleFileUpload}
+                  type="file"
+                  name=""
+                  id=""
+                  className="hidden"
+                  accept=".xls, .xlsx"
+                  ref={uploadButtonRef}
+                  key={uploadInputKey}
+                  disabled={loader}
+                />
+                <div className="justify-start items-center gap-1.5 inline-flex">
+                  <div className="w-6 h-6 justify-center items-center flex">
+                    <div className="w-6 h-6 relative">
+                      <img src={UploadIcon} alt="" />
+                    </div>
+                  </div>
+                  <div className="text-white text-base font-normal">
+                    {" "}
+                    {loader ? <LoaderSpin /> : "Upload"}
+                  </div>
                 </div>
               </div>
-              <div className="text-white text-base font-normal">
-                {" "}
-                {loader ? <LoaderSpin /> : "Upload"}
+            </div>
+          </div>
+        </>
+      )}
+      {accordionLoading ? (
+        <>
+          <div className="flex justify-center items-center">
+            <LoaderSpin />
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="mt-8 mb-8 mx-8">
+            <Accordion items={accordionItems} />
+          </div>
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between ">
+            <div>
+              <div
+                className="flex w-full flex-row justify-end items-center"
+                style={{
+                  width: `${
+                    screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                  }`,
+                }}
+              >
+                <div className="flex items-center space-x-6 mb-4 pr-4">
+                  <p
+                    onClick={handleCancelClick}
+                    className="text-[#1c468e]  rounded-xl p-3 border border-[#1c468e] text-gilroy-medium cursor-pointer text-sm w-full sm:w-auto sm:max-w-xs "
+                  >
+                    Cancel
+                  </p>
+
+                  <button
+                    onClick={onSubmit}
+                    type="submit"
+                    className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+                  >
+                    {loader ? <LoaderSpin /> : " Submit"}
+                  </button>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <div className="border-[#E6E6E6] border-[1px]"></div>
+
+                <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer py-4">
+                  © 2024 Protean BUDs, All Rights Reserved.
+                </p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
 
-      <div className="mt-8 mb-8 mx-8">
-        <Accordion items={accordionItems} />
-      </div>
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between ">
-        <div>
-          <div
-            className="flex w-full flex-row justify-end items-center"
-            style={{
-              width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-            }}
-          >
-            <div className="flex items-center space-x-6 mb-4 pr-4">
-              <p
-                onClick={handleCancelClick}
-                className="text-[#1c468e]  rounded-xl p-3 border border-[#1c468e] text-gilroy-medium cursor-pointer text-sm w-full sm:w-auto sm:max-w-xs "
-              >
-                Cancel
-              </p>
-
-              <button
-                onClick={onSubmit}
-                type="submit"
-                className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
-              >
-                {loader ? <LoaderSpin /> : " Submit"}
-              </button>
-            </div>
-          </div>
-          <div className="mt-auto">
-            <div className="border-[#E6E6E6] border-[1px]"></div>
-
-            <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer py-4">
-              © 2024 Protean BUDs, All Rights Reserved.
-            </p>
-          </div>
-        </div>
-      </div>
       {uploadPopupOpen && (
         <UploadPopUp closePopup={handleClosePopup} SuccessPopup={() => {}} />
       )}
