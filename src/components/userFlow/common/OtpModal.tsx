@@ -20,8 +20,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
   const link = sessionStorage.getItem("link");
-  console.log("link", link);
-  const decoded = jwtDecode(token ?? "");
+
+  const decoded = jwtDecode<any>(token ?? "");
   const [loader, setLoader] = useState(false);
   const [button, setButton] = useState("Submit");
   const [startTimer, setStartTimer] = useState(false);
@@ -114,7 +114,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
         email: decodedToken?.email,
         mobile: decodedToken?.mobile,
         emailotp: emailOtp,
-        mobileotp: "000000",
+        mobileotp: mobileOtp,
       })
       .then((response: any) => {
         let data = response.data;
@@ -145,6 +145,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
         .post(`/dual-otp/sendotp`, {
           email: decodedToken?.email,
           mobile: decodedToken?.mobile,
+          verificationType: decoded?.verificationType || "",
+          entityName: decoded?.entityName || "",
         })
         .then((response: any) => {
           if (response.data.success) {

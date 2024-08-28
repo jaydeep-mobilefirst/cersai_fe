@@ -423,6 +423,8 @@ const OtpPage: React.FC<OtpPageProps> = ({
       await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
+        verificationType: "nodal_officer",
+        entityName: "",
       });
       localStorage.setItem("mobileTimer", "60");
     } catch (error) {
@@ -436,6 +438,8 @@ const OtpPage: React.FC<OtpPageProps> = ({
       await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
+        verificationType: "nodal_officer",
+        entityName: "",
       });
       localStorage.setItem("emailTimer", "60");
     } catch (error) {
