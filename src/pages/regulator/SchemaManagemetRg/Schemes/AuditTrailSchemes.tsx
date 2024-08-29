@@ -80,9 +80,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
             } else if (field?.key === "branch") {
               try {
                 const res = await axiosTokenInstance.get(
-                  
-                    "/deposit-taker/branch/" +
-                    location.state.depositTakerId
+                  "/deposit-taker/branch/" + location.state.depositTakerId
                 );
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
@@ -323,6 +321,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
             text: data?.message,
             icon: "success",
           });
+          fetchSchema();
         } else {
           Swal.fire({
             title: "Something went wrong",

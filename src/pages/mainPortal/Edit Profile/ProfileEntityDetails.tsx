@@ -25,6 +25,7 @@ const ProfileEntityDetails = (props: Props) => {
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
+  const navigate = useNavigate();
 
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
@@ -134,6 +135,7 @@ const ProfileEntityDetails = (props: Props) => {
           return aIndex - bIndex; // Sort based on index in sortOrder
         })
     : [];
+  console.log({ formFields });
 
   const formData =
     formFields &&
@@ -166,6 +168,7 @@ const ProfileEntityDetails = (props: Props) => {
                 "Entity Details updated successfully",
               confirmButtonText: "Ok",
             });
+
             Navigate("/dt/profile?current=nodal");
           })
           .catch((err) => {
@@ -178,6 +181,11 @@ const ProfileEntityDetails = (props: Props) => {
       }
     }
     setLoader(false);
+  };
+  const onClick = (event: any) => {
+    // setLoader(true);
+    navigate("/dt/profile?current=nodal");
+    // setLoader(false);
   };
   return (
     <>
@@ -197,7 +205,7 @@ const ProfileEntityDetails = (props: Props) => {
                 onChange={onChange}
               />
               <div>
-                <Footer onSubmit={onSubmit} loader={loader} />
+                <Footer onSubmit={onSubmit} loader={loader} onClick={onClick} />
               </div>
             </>
           ) : (

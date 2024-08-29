@@ -11,6 +11,7 @@ import ProfileBranches from "./Edit Profile/ProfileBranches";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { axiosTokenInstance } from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
+import ProfileManagement from "./Edit Profile/ProfileManagement";
 
 type Props = {};
 
@@ -22,6 +23,10 @@ const DashboardProfile = (props: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
+  const [refreshShow, setRefreshShow] = useState(
+    sessionStorage.getItem("refreshShow")
+  );
+
   const fetchFormFields = () => {
     axiosTokenInstance
       .get(`/registration/field-data/1?status=addToProfile`)
@@ -88,6 +93,7 @@ const DashboardProfile = (props: Props) => {
   useEffect(() => {
     fetchFormFields();
   }, []);
+
   const current = searchParams.get("current");
   return (
     <>
@@ -106,6 +112,7 @@ const DashboardProfile = (props: Props) => {
         {current === "regulator" && <ProfileRegulatorDetails />}
         {current === "documents" && <ProfileUploadDocuments />}
         {current === "branches" && <ProfileBranches />}
+        {current === "management" && <ProfileManagement />}
       </div>
     </>
   );

@@ -131,12 +131,18 @@ export const profileSideBarList = [
     rurl: "/dt/profile?current=regulator",
     percentage: 50,
   },
+  {
+    title: "Management Details",
+    url: "management",
+    rurl: "/dt/profile?current=management",
+    percentage: 75,
+  },
 
   {
     title: "Upload Documents",
     url: "documents",
     rurl: "/dt/profile?current=documents",
-    percentage: 75,
+    percentage: 85,
   },
 
   {
