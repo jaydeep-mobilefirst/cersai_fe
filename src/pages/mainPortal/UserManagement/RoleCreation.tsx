@@ -274,7 +274,7 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
             <CustomPagination
               currentPage={page}
               setCurrentPage={setPage}
-              totalItems={totalPages}
+              totalItems={total}
               itemsPerPage={pageSize}
               maxPageNumbersToShow={5}
             />
