@@ -175,6 +175,8 @@ const NodalDetails = (props: Props) => {
       const response = await axiosTraceIdInstance.post(`/dual-otp/sendotp`, {
         email: email,
         mobile: mobile,
+        verificationType: "nodal_officer",
+        entityName: "",
       });
       if (response.data.statusCode === 201) {
         setShowOTPModel(true);
