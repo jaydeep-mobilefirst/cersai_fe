@@ -26,15 +26,15 @@ const options2 = [
 ];
 const SchemesSearchDetailsSM: React.FC = () => {
   const [errors, setErrors] = useState({
-    statusError : "",
-  })
+    statusError: "",
+  });
   const [selectedOption2, setSelectedOption2] = useState<string | null>(null);
 
   const [rawSchemes, setRawSchemes] = useState([]);
 
   const [schemes, setSchemes] = useState<any[]>([]);
 
-  const [selectedSchemes, setSelectedSchems] = useState<any[]>([])
+  const [selectedSchemes, setSelectedSchems] = useState<any[]>([]);
 
   const [loader, setLoader] = useState(true);
   const screenWidth = useScreenWidth();
@@ -43,7 +43,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
     useDepositTakerRegistrationStore((state) => state);
   const navigate = useNavigate();
   const location = useLocation();
-  const createdBy = location.state?.createdBy?.substring(0,2)  
+  const createdBy = location.state?.createdBy?.substring(0, 2);
   const uniqueId = location.state?.uniqueId;
   const depositTakerId = location.state?.depositTakerId;
   const [page, setPage] = useState<number>(1);
@@ -54,8 +54,10 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axiosTokenInstance.get(`/scheme/field-data/${createdBy === 'DT' ? 1 : 2}`);
-      
+      const response = await axiosTokenInstance.get(
+        `/scheme/field-data/${createdBy === "DT" ? 1 : 2}`
+      );
+
       if (response.data.success) {
         const portalResponse = await axiosTokenInstance.get(
           `/scheme-portal/${uniqueId}`
@@ -64,48 +66,53 @@ const SchemesSearchDetailsSM: React.FC = () => {
         const userData = portalResponse.data?.data?.schemes[0];
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
-            if (field?.key === 'depositTakerId') {
+            if (field?.key === "depositTakerId") {
               return {
                 ...field,
                 userInput: userData?.schemeFormData?.find(
                   (f: any) => f?.fieldId === field?.id
                 )?.value,
                 error: "",
-                disabled : true,
+                disabled: true,
                 typeId: field?.fieldTypeId,
                 dropdown_options: {
-                  ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                  ...field?.dropdown_options,
+                  options: field?.dropdown_options?.options?.map((o: any) => ({
                     name: o?.uniqueId,
                     id: o?.companyName,
-                  }))
-                }
-              }
-            }
-            else if (field?.key === 'branch') {
+                  })),
+                },
+              };
+            } else if (field?.key === "branch") {
               try {
-                const res = await axiosTokenInstance.get('/deposit-taker/branch/' + location.state.depositTakerId)
+                const res = await axiosTokenInstance.get(
+                  "/deposit-taker/branch/" + location.state.depositTakerId
+                );
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
                   return {
                     name: b?.pinCode + " " + b?.district + " " + b?.state,
-                    id: b?.id
-                  }
-                })
+                    id: b?.id,
+                  };
+                });
 
                 return {
                   ...field,
                   userInput: userData?.schemeFormData?.find(
                     (f: any) => f?.fieldId === field?.id
                   )?.value,
-                  disabled : true,
+                  disabled: true,
                   error: "",
                   typeId: field?.fieldTypeId,
-                  dropdown_options: { ...field?.dropdown_options, options: branches }
+                  dropdown_options: {
+                    ...field?.dropdown_options,
+                    options: branches,
+                  },
                 };
               } catch (error) {
                 return {
                   ...field,
-                  disabled : true,
+                  disabled: true,
                   userInput: userData?.schemeFormData?.find(
                     (f: any) => f?.fieldId === field?.id
                   )?.value,
@@ -113,11 +120,10 @@ const SchemesSearchDetailsSM: React.FC = () => {
                   typeId: field?.fieldTypeId,
                 };
               }
-            }
-            else {
+            } else {
               return {
                 ...field,
-                disabled : true,
+                disabled: true,
                 userInput: userData?.schemeFormData?.find(
                   (f: any) => f?.fieldId === field?.id
                 )?.value,
@@ -126,9 +132,9 @@ const SchemesSearchDetailsSM: React.FC = () => {
               };
             }
           }
-        )
+        );
 
-        formFields = await Promise.all(formFields)
+        formFields = await Promise.all(formFields);
 
         setAllFormData({
           ...response?.data?.data,
@@ -212,22 +218,29 @@ const SchemesSearchDetailsSM: React.FC = () => {
 
   useEffect(() => {
     if (allFormData?.other?.depositTakerId) {
-      axiosTokenInstance.get(`/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000&status=ALL`)
-      .then((res) => {
-        let data = res?.data?.data;
-        setRawSchemes(data);
-        setSchemes(data?.map((d : any) => {
-          return {
-            label : d?.name,
-            value : d?.uniqueId,
-            status : d?.status
-          }
-        }))
-      })
-      .catch((e) => {alert("Error fetching Schemes"); setSchemes([])})
+      axiosTokenInstance
+        .get(
+          `/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000&status=ALL`
+        )
+        .then((res) => {
+          let data = res?.data?.data;
+          setRawSchemes(data);
+          setSchemes(
+            data?.map((d: any) => {
+              return {
+                label: d?.name,
+                value: d?.uniqueId,
+                status: d?.status,
+              };
+            })
+          );
+        })
+        .catch((e) => {
+          alert("Error fetching Schemes");
+          setSchemes([]);
+        });
     }
-  }, [allFormData])
-
+  }, [allFormData]);
 
   useEffect(() => {
     fetchFormFields();
@@ -264,69 +277,67 @@ const SchemesSearchDetailsSM: React.FC = () => {
     navigate("/ca/my-task");
   };
 
-  const handleStatusChange = (e : any) => {
+  const handleStatusChange = (e: any) => {
     e?.preventDefault();
     if (!selectedOption2) {
-      setErrors({...errors,statusError : "Please select status"});
+      setErrors({ ...errors, statusError: "Please select status" });
       return;
-    }
-    else{
-      setErrors({...errors,statusError : ""});
+    } else {
+      setErrors({ ...errors, statusError: "" });
     }
 
-    let schemesToChangeStatus = selectedSchemes?.filter((s : any) => s?.status !== selectedOption2)?.map((d : any) => d?.value);
+    let schemesToChangeStatus = selectedSchemes
+      ?.filter((s: any) => s?.status !== selectedOption2)
+      ?.map((d: any) => d?.value);
     if (allFormData?.other?.status !== selectedOption2) {
-        schemesToChangeStatus = [...schemesToChangeStatus, uniqueId];
+      schemesToChangeStatus = [...schemesToChangeStatus, uniqueId];
     }
     let payload = {
       status: selectedOption2,
-      schemeIds:schemesToChangeStatus
-    }
-    
-    setLoader(true)
-    axiosTokenInstance.patch( '/scheme-portal/status', payload)
-    .then(res => {
-      let data = res.data;
-      if (data?.success) {
-        Swal.fire({
-          title : "Success",
-          text : data?.message,
-          icon: "success"
-        })
-      }
-      else{
-        Swal.fire({
-          title : "Something went wrong",
-          text : data?.message,
-          icon: "error"
-        })
-      }
-    })
-    .catch((e) => {
-      Swal.fire({
-        title : "Something went wrong",
-        text : e?.message,
-        icon: "error"
+      schemeIds: schemesToChangeStatus,
+    };
+
+    setLoader(true);
+    axiosTokenInstance
+      .patch("/scheme-portal/status", payload)
+      .then((res) => {
+        let data = res.data;
+        if (data?.success) {
+          Swal.fire({
+            title: "Success",
+            text: data?.message,
+            icon: "success",
+          });
+          fetchSchema();
+        } else {
+          Swal.fire({
+            title: "Something went wrong",
+            text: data?.message,
+            icon: "error",
+          });
+        }
       })
-    })
-    .finally(() => setLoader(false))
-    
-  }
+      .catch((e) => {
+        Swal.fire({
+          title: "Something went wrong",
+          text: e?.message,
+          icon: "error",
+        });
+      })
+      .finally(() => setLoader(false));
+  };
 
   const handleSetOption2 = (value: string) => {
     if (value !== "") {
-      setErrors({statusError : ""})
+      setErrors({ statusError: "" });
     }
     setSelectedOption2(value);
   };
 
   const remove = (data: any) => {
-    const filtered = selectedSchemes.filter(
-      (f) => f.value !== data.value
-    );
+    const filtered = selectedSchemes.filter((f) => f.value !== data.value);
     setSelectedSchems(filtered);
   };
-
 
   const handleSetOption1 = (value: any) => {
     if (
@@ -385,14 +396,14 @@ const SchemesSearchDetailsSM: React.FC = () => {
               Select Other Schemes
             </label>
             <SelectButtonMultiselect
-                  setOption={handleSetOption1}
-                  options={schemes}
-                  placeholder="Select"
-                  multiselect={true}
-                  allSelectedOptions={selectedSchemes}
-                  remove={remove}
-                  className="relative"
-                />
+              setOption={handleSetOption1}
+              options={schemes}
+              placeholder="Select"
+              multiselect={true}
+              allSelectedOptions={selectedSchemes}
+              remove={remove}
+              className="relative"
+            />
           </div>
         </div>
       </div>
@@ -433,7 +444,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
               onClick={handleStatusChange}
               className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
             >
-              {loader ? <LoaderSpin/> : "Submit"}
+              {loader ? <LoaderSpin /> : "Submit"}
             </button>
           </div>
         </div>

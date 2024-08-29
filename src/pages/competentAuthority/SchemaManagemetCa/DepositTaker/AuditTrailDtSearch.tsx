@@ -153,14 +153,11 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         /Date of In-corporation/i.test(field?.label)
       );
       const formattedDob = formatDate(dob?.userInput);
-      const response = await axios.post(
-        "http://34.149.91.231/cms/pandirectory/api",
-        {
-          name: company?.userInput?.toUpperCase(),
-          pan_no: pan?.userInput,
-          dob: formattedDob,
-        }
-      );
+      const response = await axiosTokenInstance.post("/pandirectory/api", {
+        name: company?.userInput?.toUpperCase(),
+        pan_no: pan?.userInput,
+        dob: formattedDob,
+      });
       const data = response.data;
       if (data?.status !== "success") {
         setPara1("Verification Failed");
@@ -171,10 +168,13 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       }
       updatePanFormField(data, pan);
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error while verifying PAN:", error);
       setPara1("Verification Error");
-      setPara2("There was an error verifying the PAN. Please try again later.");
+      setPara2(
+        error?.response?.data?.message ||
+          "There was an error verifying the PAN. Please try again later."
+      );
       setPanSuccessModal(true);
       return false;
     }
@@ -237,6 +237,22 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       combinedNames.every((part, index) => part === certNameSorted[index]);
     return isMatch;
   };
+  const verifyPanWithGST = () => {
+    const details = allFormData?.formFields?.form_fields;
+
+    const panObj = details.find(
+      (item: { label: string }) => item.label === "PAN Number"
+    );
+    const gstObj = details.find(
+      (item: { label: string }) => item.label === "GST Number"
+    );
+
+    const panNum = panObj?.userInput?.toUpperCase();
+    const gstNum = gstObj?.userInput?.toUpperCase();
+
+    const isMatch = gstNum.slice(2, 12) === panNum;
+    return isMatch;
+  };
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -248,6 +264,15 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       setLoader(false);
       return;
     }
+    if (!verifyPanWithGST()) {
+      setLoader(false);
+      Swal.fire({
+        icon: "error",
+        title: "Invalid GST",
+        text: "GST Number should be aligned with PAN ",
+      });
+      return;
+    }
     if (isDscKeyAvbl === "true" && !isFormValid) {
       if (verifyDscWithNodalOfficer(allFormData?.formFields?.form_fields)) {
         console.log("name checked");
@@ -257,6 +282,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
           title: "Invalid Name",
           text: "Nodal Officer name should match with DSC3",
         });
+        setLoader(false);
         return;
       }
     }
@@ -289,11 +315,12 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         } else {
           throw new Error("Submission failed");
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error during form submission:", error);
         setPara1("Submission Error");
         setPara2(
-          "There was an error during the submission process. Please try again later."
+          error?.response?.data?.message ||
+            "There was an error during the submission process. Please try again later."
         );
       } finally {
         setSubmitModal(true);
@@ -501,9 +528,15 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         success={submitted}
       />
       <SuccessPopup
+        // closePopup={() => {
+        //   setSubmitModal(false);
+        //
+        // }}
         closePopup={() => {
           setSubmitModal(false);
-          navigate("/ca/deposit-taker");
+          if (submitted) {
+            navigate("/ca/deposit-taker");
+          }
         }}
         showPopup={() => setSubmitModal(true)}
         toggle={submitModal}

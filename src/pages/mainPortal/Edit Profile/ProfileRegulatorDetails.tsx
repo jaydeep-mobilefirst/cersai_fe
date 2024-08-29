@@ -72,7 +72,7 @@ const ProfileRegulatorDetails = (props: Props) => {
               "Regulator Details updated successfully",
             confirmButtonText: "Ok",
           });
-          Navigate("/dt/profile?current=documents");
+          Navigate("/dt/profile?current=management");
         })
         .catch((err) => {
           Swal.fire({
