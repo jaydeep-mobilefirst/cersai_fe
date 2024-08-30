@@ -118,7 +118,7 @@ const UserCreation: React.FC<Props> = ({ entityType }: Props) => {
 
         return (
           <div
-            className='flex flex-col md:flex-row justify-center gap-3'
+            className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
             <span>{value ? "Active" : "InActive"}</span>
@@ -133,7 +133,7 @@ const UserCreation: React.FC<Props> = ({ entityType }: Props) => {
       cell: (info) => {
         const value: any = info.getValue();
         return (
-          <div className='flex justify-center'>
+          <div className="flex justify-center">
             {value?.emailId && <SendActivationLink email={value?.emailId} />}
           </div>
         );
@@ -145,13 +145,13 @@ const UserCreation: React.FC<Props> = ({ entityType }: Props) => {
       cell: (info) => {
         const value: any = info.getValue();
         return (
-          <div className='flex justify-center items-center flex-row w-full'>
+          <div className="flex justify-center items-center flex-row w-full">
             <div>
               <img
                 src={edit}
-                title='Edit User'
-                alt='Edit'
-                className='cursor-pointer'
+                title="Edit User"
+                alt="Edit"
+                className="cursor-pointer"
                 onClick={() => handleEditClick(value)}
               />
             </div>
@@ -174,49 +174,52 @@ const UserCreation: React.FC<Props> = ({ entityType }: Props) => {
   };
 
   return (
-    <div className='relative xl:ml-[20px] pr-3'>
-      <div className='mt-6'>
+    <div
+      className="relative xl:ml-[20px] pr-3"
+      style={{ minHeight: "calc(100vh - 110px)" }}
+    >
+      <div className="mt-6">
         <UmTabs entityType={entityType} />
       </div>
       <div>
-        <div className='mt-5 mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3  '>
-          <div className='flex-grow mt-[11px] mb-[35px] flex items-center flex-wrap gap-4'>
+        <div className="mt-5 mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3  ">
+          <div className="flex-grow mt-[11px] mb-[35px] flex items-center flex-wrap gap-4">
             <InputFields
-              height='45px'
-              width='500px'
-              padding='10px'
-              placeholder='Search by Name/Role'
+              height="45px"
+              width="500px"
+              padding="10px"
+              placeholder="Search by Name/Role"
               onChange={onSearchStringChange}
             />
           </div>
-          <div className='flex-grow'>
+          <div className="flex-grow">
             <SelectButtonTask
               setOption={handleSetOption2}
               options={[{ label: "All", value: "" }, ...customRoles]}
               selectedOption={selectedOption2}
-              placeholder='Role'
-              mdWidth='w-full'
-              borderColor='#E7F0FF'
+              placeholder="Role"
+              mdWidth="w-full"
+              borderColor="#E7F0FF"
             />
           </div>
-          <div className='flex-grow mt-2'>
+          <div className="flex-grow mt-2">
             <button
               onClick={handleSearch}
-              className='w-full h-[52px] border-2 rounded-md  px-2 lg:px-[16px] flex justify-center items-center bg-[#1C468E] cursor-pointer'
+              className="w-full h-[52px] border-2 rounded-md  px-2 lg:px-[16px] flex justify-center items-center bg-[#1C468E] cursor-pointer"
             >
-              <img src={searchButton} alt='Search Button' className='mr-1' />
-              <span className='text-sm md:text-base font-normal text-white lg:text-[16px]'>
+              <img src={searchButton} alt="Search Button" className="mr-1" />
+              <span className="text-sm md:text-base font-normal text-white lg:text-[16px]">
                 Search
               </span>
             </button>
           </div>
-          <div className='flex-grow mt-2'>
+          <div className="flex-grow mt-2">
             <button
               onClick={handleAddUserClick}
-              className='w-full h-[52px] border-2 rounded-md  px-1 lg:px-[16px] border-[#1C468E] flex justify-center items-center bg-white cursor-pointer'
+              className="w-full h-[52px] border-2 rounded-md  px-1 lg:px-[16px] border-[#1C468E] flex justify-center items-center bg-white cursor-pointer"
             >
-              <img src={addCircle} alt='Add Role Icon' className='mr-1' />
-              <span className='text-sm md:text-base font-normal text-[#1C468E] lg:text-[16px]'>
+              <img src={addCircle} alt="Add Role Icon" className="mr-1" />
+              <span className="text-sm md:text-base font-normal text-[#1C468E] lg:text-[16px]">
                 Add User
               </span>
             </button>
@@ -224,17 +227,17 @@ const UserCreation: React.FC<Props> = ({ entityType }: Props) => {
         </div>
       </div>
 
-      <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
-        <div className='max-w-full overflow-x-auto'>
+      <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
+        <div className="max-w-full overflow-x-auto mb-20">
           {loading ? (
             <LoaderSpin />
           ) : users?.length > 0 ? (
             <ReactTable defaultData={users} columns={columns} />
           ) : (
-            <div className='text-center w-full'>No Data Available</div>
+            <div className="text-center w-full">No Data Available</div>
           )}
         </div>
-        <div className='mt-10 flex justify-center'>
+        <div className="mt-10 absolute bottom-0">
           {users?.length > 0 && (
             <CustomPagination
               currentPage={page}

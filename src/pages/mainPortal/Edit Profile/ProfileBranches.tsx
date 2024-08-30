@@ -12,9 +12,28 @@ import Button from "../../../components/userFlow/common/Button";
 import uploadIcon from "../../../assets/images/directbox-send.svg";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
+import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
+import useProfileEntityStore from "../../../zust/useProfileEntityStore";
+import useProfileNodalStore from "../../../zust/useProfileNodalStore";
+import userProfileUploadStore from "../../../zust/userProfileUploadStore";
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
+  const regulatorStore = useProfileRegulatorStore(
+    (state) => state.regulatorStore
+  );
+  const regulatorData = useProfileRegulatorStore((state) => state.formData);
+
+  const nodaldetailsStore = useProfileNodalStore(
+    (state) => state.nodaldetailsStore
+  );
+  const nodalDetailData = useProfileNodalStore((state) => state.formData);
+  const entitydetails = useProfileEntityStore((state) => state.entitydetails);
+  const entityData = useProfileEntityStore((state) => state.formData);
+  const uploadDocument = userProfileUploadStore(
+    (state) => state.uploadDocument
+  );
+  const uploadData = userProfileUploadStore((state) => state.formData);
 
   // const { branches, addBranch, removeBranch, setBranches } = useBranchStore(
   //   (state) => ({
@@ -69,6 +88,7 @@ const ProfileBranches = () => {
           pinCode: "",
           state: "",
           district: "",
+          place: "",
         });
       }
       setBranches(fetchedBranches);
@@ -103,6 +123,18 @@ const ProfileBranches = () => {
           branches: branchesToSubmit,
         }
       );
+      if (regulatorData.length > 0) {
+        regulatorStore();
+      }
+      if (nodalDetailData.length > 0) {
+        nodaldetailsStore();
+      }
+      if (entityData.length > 0) {
+        entitydetails();
+      }
+      if (uploadData.length > 0) {
+        uploadDocument();
+      }
 
       await fetchBranches();
       setLoader(false);
@@ -350,7 +382,7 @@ const ProfileBranches = () => {
         )}
 
         <div>
-          <Footer disabled={!isChecked} loader={loader} />
+          <Footer disabled={!isChecked} loader={loader} hidecontiuebtn={true} />
           <button
             onSubmit={onSubmit}
             type="submit"

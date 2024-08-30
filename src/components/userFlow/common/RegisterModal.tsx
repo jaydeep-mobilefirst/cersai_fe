@@ -215,7 +215,9 @@ const RegisterModel: React.FC<ModelDivProps> = ({ closeModal }) => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     fetchFormFields();
-    Navigate(selectedRadio?.path);
+
+    const finalPath = selectedRadio?.path.startsWith('/') ? selectedRadio?.path : `/${selectedRadio?.path}`;
+    Navigate(finalPath);
   };
 
   return (

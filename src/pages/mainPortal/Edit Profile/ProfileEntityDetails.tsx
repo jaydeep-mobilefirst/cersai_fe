@@ -13,17 +13,22 @@ import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { axiosTokenInstance } from "../../../utils/axios";
+import LoaderSpin from "../../../components/LoaderSpin";
+import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
+import useProfileEntityStore from "../../../zust/useProfileEntityStore";
 
 type Props = {};
 
 const ProfileEntityDetails = (props: Props) => {
   const Navigate = useNavigate();
-  const status = sessionStorage.getItem('user_status')
+  const status = sessionStorage.getItem("user_status");
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
+  const navigate = useNavigate();
+  const setFormData = useProfileEntityStore((state) => state.setFormData);
 
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
@@ -58,33 +63,82 @@ const ProfileEntityDetails = (props: Props) => {
   //         };
   //       })
   //   : [];
+  // const formFields = Array.isArray(allFormData?.formFields?.form_fields)
+  //   ? allFormData?.formFields?.form_fields
+  //       .filter((field: any) => {
+  //         // Filtering fields based on sectionId
+  //         return (
+  //           field?.sectionId === entityDetailsSectionId?.id ||
+  //           field?.sectionId === verificationSectionId?.id
+  //         );
+  //       })
+  //       .map((field: any) => {
+  //         // Setting the 'disabled' property based on the 'canEditable' property
+  //         const isDisabled =
+  //           field.required === true
+  //             ? status === "RETURNED"
+  //               ? ["companyName", "panNumber", "dateOfIncorporation"].includes(
+  //                   field.key
+  //                 )
+  //                 ? true
+  //                 : false
+  //               : true
+  //             : ["companyName", "panNumber", "dateOfIncorporation"].includes(
+  //                 field.key
+  //               )
+  //             ? true
+  //             : false;
+
+  //         return {
+  //           ...field,
+  //           disabled: isDisabled,
+  //         };
+  //       })
+  //   : [];
   const formFields = Array.isArray(allFormData?.formFields?.form_fields)
     ? allFormData?.formFields?.form_fields
-      .filter((field: any) => {
-        // Filtering fields based on sectionId
-        return (
-          field?.sectionId === entityDetailsSectionId?.id ||
-          field?.sectionId === verificationSectionId?.id
-        );
-      })
-      .map((field: any) => {
-        // Setting the 'disabled' property based on the 'canEditable' property
-        const isDisabled = field.required === true ? status === 'RETURNED' ? [
-          "companyName",
-          "panNumber",
-          'dateOfIncorporation'
-        ].includes(field.key) ? true :  false : true  : [
-          "companyName",
-          "panNumber",
-          'dateOfIncorporation'
-        ].includes(field.key) ? true : false;
+        .filter((field: any) => {
+          // Filtering fields based on sectionId
+          return (
+            field?.sectionId === entityDetailsSectionId?.id ||
+            field?.sectionId === verificationSectionId?.id
+          );
+        })
+        .map((field: any) => {
+          // Setting the 'disabled' property based on the 'canEditable' property
+          const isDisabled =
+            field.required === true
+              ? status === "RETURNED"
+                ? ["companyName", "panNumber", "dateOfIncorporation"].includes(
+                    field.key
+                  )
+                  ? true
+                  : false
+                : true
+              : ["companyName", "panNumber", "dateOfIncorporation"].includes(
+                  field.key
+                )
+              ? true
+              : false;
 
-        return {
-          ...field,
-          disabled: isDisabled,
-        };
-      })
+          return {
+            ...field,
+            disabled: isDisabled,
+          };
+        })
+        .sort((a: any, b: any) => {
+          // Sort by companyName, panNumber, and dateOfIncorporation
+          const sortOrder = ["companyName", "panNumber", "dateOfIncorporation"];
+          const aIndex = sortOrder.indexOf(a.key);
+          const bIndex = sortOrder.indexOf(b.key);
+
+          if (aIndex === -1 && bIndex === -1) return 0; // No sorting for non-prioritized fields
+          if (aIndex === -1) return 1; // a comes after b
+          if (bIndex === -1) return -1; // a comes before b
+          return aIndex - bIndex; // Sort based on index in sortOrder
+        })
     : [];
+  console.log({ formFields });
 
   const formData =
     formFields &&
@@ -105,20 +159,19 @@ const ProfileEntityDetails = (props: Props) => {
     if (noError) {
       if (noError) {
         axiosTokenInstance
-          .patch(
-            `/deposit-taker/${sessionStorage.getItem(
-              "entityUniqueId"
-            )}`,
-            {
-              formData: formData,
-            }
-          )
+          .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
+            formData: formData,
+          })
           .then((response) => {
+            console.log(response?.data?.message, "response");
             Swal.fire({
               icon: "success",
-              text: "Entity Details updated successfully",
+              text:
+                response?.data?.message ||
+                "Entity Details updated successfully",
               confirmButtonText: "Ok",
             });
+
             Navigate("/dt/profile?current=nodal");
           })
           .catch((err) => {
@@ -132,6 +185,18 @@ const ProfileEntityDetails = (props: Props) => {
     }
     setLoader(false);
   };
+  const onClick = async (event: any) => {
+    // setLoader(true);
+    event?.preventDefault();
+    const noError = await handleValidationChecks(
+      formFields?.filter((field: any) => field?.disabled === false)
+    );
+    if (noError) {
+      setFormData(formData);
+      navigate("/dt/profile?current=nodal");
+      // setLoader(false);
+    }
+  };
   return (
     <>
       <div className="flex flex-col w-full h-full">
@@ -142,14 +207,22 @@ const ProfileEntityDetails = (props: Props) => {
             height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
           }}
         >
-          <DynamicFields
-            allFormData={allFormData}
-            formFields={formFields}
-            onChange={onChange}
-          />
-          <div>
-            <Footer onSubmit={onSubmit} loader={loader} />
-          </div>
+          {formFields.length > 0 ? (
+            <>
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+              />
+              <div>
+                <Footer onSubmit={onSubmit} loader={loader} onClick={onClick} />
+              </div>
+            </>
+          ) : (
+            <div className="flex justify-center items-center">
+              <LoaderSpin />
+            </div>
+          )}
         </form>
       </div>
     </>

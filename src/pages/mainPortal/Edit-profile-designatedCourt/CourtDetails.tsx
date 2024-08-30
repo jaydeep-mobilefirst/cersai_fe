@@ -12,6 +12,7 @@ import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFie
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { axiosTokenInstance } from "../../../utils/axios";
+import LoaderSpin from "../../../components/LoaderSpin";
 
 type Props = {};
 
@@ -85,9 +86,7 @@ const CourtDetails = (props: Props) => {
     if (noError) {
       axiosTokenInstance
         .patch(
-          `/designated-court/${sessionStorage.getItem(
-            "entityUniqueId"
-          )}`,
+          `/designated-court/${sessionStorage.getItem("entityUniqueId")}`,
           {
             formData: formData,
           }
@@ -95,7 +94,8 @@ const CourtDetails = (props: Props) => {
         .then((response) => {
           Swal.fire({
             icon: "success",
-            text: "Court Details updated successfully",
+            text:
+              response?.data?.message || "Court Details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/dc/profile?current=document");
@@ -215,15 +215,29 @@ const CourtDetails = (props: Props) => {
               </div>
             </div>
           </div> */}
-          <DynamicFields
-            allFormData={allFormData}
-            formFields={formFields}
-            onChange={onChange}
-          />
+          {formFields.length > 0 ? (
+            <>
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+              />
 
-          <div>
-            <Footer onSubmit={onSubmit} loader={loader} />
-          </div>
+              <div>
+                <Footer
+                  onSubmit={onSubmit}
+                  loader={loader}
+                  hidecontiuebtn={true}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex justify-center items-center">
+                <LoaderSpin />
+              </div>
+            </>
+          )}
         </form>
       </div>
     </>

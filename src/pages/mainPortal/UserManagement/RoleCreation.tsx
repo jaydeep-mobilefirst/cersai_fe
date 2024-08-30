@@ -185,7 +185,10 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
   // };
 
   return (
-    <div className="relative xl:ml-[20px] pr-3">
+    <div
+      className="relative xl:ml-[20px] pr-3"
+      style={{ minHeight: "calc(100vh - 110px)" }}
+    >
       <div className="mt-6">
         <UmTabs entityType={entityType} />
       </div>
@@ -257,7 +260,7 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
       </div>
 
       <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-        <div className="max-w-full overflow-x-auto">
+        <div className="max-w-full overflow-x-auto mb-20">
           {loading ? (
             <LoaderSpin />
           ) : roles?.length > 0 ? (
@@ -266,12 +269,12 @@ const RoleCreation: React.FC<Props> = ({ entityType }: Props) => {
             <div className="text-center w-full">No Data Available</div>
           )}
         </div>
-        <div className="mt-10">
+        <div className="mt-10 absolute bottom-0">
           {roles?.length > 0 && (
             <CustomPagination
               currentPage={page}
               setCurrentPage={setPage}
-              totalItems={totalPages}
+              totalItems={total}
               itemsPerPage={pageSize}
               maxPageNumbersToShow={5}
             />

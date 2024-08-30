@@ -20,8 +20,8 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
   const link = sessionStorage.getItem("link");
-  console.log("link", link);
-  const decoded = jwtDecode(token ?? "");
+
+  const decoded = jwtDecode<any>(token ?? "");
   const [loader, setLoader] = useState(false);
   const [button, setButton] = useState("Submit");
   const [startTimer, setStartTimer] = useState(false);
@@ -31,6 +31,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
   const [otp, setOtp] = useState<any>("");
   const [disabled, setDisabled] = useState(true);
   const [showError, setShowError] = useState("");
+  const [resending, setResending] = useState(false);
   const [isValid, setIsValid] = useState<{ email: string; mobile: string }>({
     email: "",
     mobile: "",
@@ -113,7 +114,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
         email: decodedToken?.email,
         mobile: decodedToken?.mobile,
         emailotp: emailOtp,
-        mobileotp: "000000",
+        mobileotp: mobileOtp,
       })
       .then((response: any) => {
         let data = response.data;
@@ -134,12 +135,18 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
 
   const sendOtp = (event: any) => {
     event.preventDefault();
+    if (resending) {
+      return; // Prevents further action if already processing a resend
+    }
+    setResending(true);
     if (Object.keys(decodedToken).length > 0) {
       setLoader(true);
       axiosTraceIdInstance
         .post(`/dual-otp/sendotp`, {
           email: decodedToken?.email,
           mobile: decodedToken?.mobile,
+          verificationType: decoded?.verificationType || "",
+          entityName: decoded?.entityName || "",
         })
         .then((response: any) => {
           if (response.data.success) {
@@ -156,7 +163,11 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
             text: "Unable to Send OTP, Please try again later!",
           });
         })
-        .finally(() => setLoader(false));
+        .finally(() => {
+          setLoader(false);
+
+          setResending(false);
+        });
     }
   };
 
@@ -293,7 +304,7 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                   <div className="flex flex-col items-center">
                     <span className="flex flex-row justify-center items-center  mt-10">
                       You didn’t receive a code?
-                      <span
+                      {/* <span
                         className={`${
                           timeLeft > 0
                             ? "text-blue-400"
@@ -301,6 +312,20 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                         } font-semibold ml-1 `}
                         onClick={(event) => {
                           if (timeLeft === 0) {
+                            sendOtp(event);
+                          }
+                        }}
+                      >
+                        Resend
+                      </span> */}
+                      <span
+                        className={`${
+                          timeLeft > 0 || resending
+                            ? "text-gray-500 cur"
+                            : "text-blue-600 hover:cursor-pointer"
+                        } font-semibold ml-1 `}
+                        onClick={(event) => {
+                          if (timeLeft === 0 && !resending) {
                             sendOtp(event);
                           }
                         }}

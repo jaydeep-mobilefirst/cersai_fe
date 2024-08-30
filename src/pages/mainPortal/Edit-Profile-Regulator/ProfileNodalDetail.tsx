@@ -12,6 +12,7 @@ import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFie
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { axiosTokenInstance } from "../../../utils/axios";
+import LoaderSpin from "../../../components/LoaderSpin";
 
 type Props = {};
 
@@ -93,9 +94,12 @@ const ProfileNodalDetails = (props: Props) => {
           formData: formData,
         })
         .then((response) => {
+          console.log(response?.data?.message, "response");
           Swal.fire({
             icon: "success",
-            text: "Nodal Officer details updated successfully",
+            text:
+              response?.data?.message ||
+              "Nodal Officer details updated successfully",
             confirmButtonText: "Ok",
           });
           Navigate("/rg/profile?current=document");
@@ -215,16 +219,30 @@ const ProfileNodalDetails = (props: Props) => {
               </div>
             </div>
           </div> */}
-          <DynamicFields
-            allFormData={allFormData}
-            formFields={formFields}
-            onChange={onChange}
-            disable={true}
-          />
+          {formFields.length > 0 ? (
+            <>
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+                disable={true}
+              />
 
-          <div>
-            <Footer onSubmit={onSubmit} loader={loader} />
-          </div>
+              <div>
+                <Footer
+                  onSubmit={onSubmit}
+                  loader={loader}
+                  hidecontiuebtn={true}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex justify-center items-center">
+                <LoaderSpin />
+              </div>
+            </>
+          )}
         </form>
       </div>
     </>

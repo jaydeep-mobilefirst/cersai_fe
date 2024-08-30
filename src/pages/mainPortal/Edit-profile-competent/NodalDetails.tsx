@@ -95,7 +95,9 @@ const NodalDetails = (props: Props) => {
         .then((response) => {
           Swal.fire({
             icon: "success",
-            text: "Nodal Officer details updated successfully",
+            text:
+              response?.data?.message ||
+              "Nodal Officer details updated successfully",
             confirmButtonText: "Ok",
           });
         })
@@ -222,7 +224,7 @@ const NodalDetails = (props: Props) => {
           />
 
           <div>
-            <Footer onSubmit={onSubmit} loader={loader} />
+            <Footer onSubmit={onSubmit} loader={loader} hidecontiuebtn={true} />
           </div>
         </form>
       </div>

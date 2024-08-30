@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import InputFields from "../../../components/userFlow/form/InputField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -12,12 +12,16 @@ import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { axiosTokenInstance } from "../../../utils/axios";
+import LoaderSpin from "../../../components/LoaderSpin";
+import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
 
 type Props = {};
 
 const ProfileRegulatorDetails = (props: Props) => {
   const [loader, setLoader] = useState(false);
   const Navigate = useNavigate();
+
+  const setFormData = useProfileRegulatorStore((state) => state.setFormData);
 
   const screenWidth = useScreenWidth();
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
@@ -53,6 +57,7 @@ const ProfileRegulatorDetails = (props: Props) => {
       label: field.label,
       value: field.userInput,
     }));
+  console.log({ formData });
 
   const onSubmit = async (event: any) => {
     event?.preventDefault();
@@ -60,19 +65,18 @@ const ProfileRegulatorDetails = (props: Props) => {
     const noError = await handleValidationChecks(formFields);
     if (noError) {
       axiosTokenInstance
-        .patch(
-          `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
-          {
-            formData: formData,
-          }
-        )
+        .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
+          formData: formData,
+        })
         .then((response) => {
           Swal.fire({
             icon: "success",
-            text: "Regulator Details updated successfully",
+            text:
+              response?.data?.message ||
+              "Regulator Details updated successfully",
             confirmButtonText: "Ok",
           });
-          Navigate("/dt/profile?current=documents");
+          Navigate("/dt/profile?current=management");
         })
         .catch((err) => {
           Swal.fire({
@@ -94,6 +98,18 @@ const ProfileRegulatorDetails = (props: Props) => {
     setLoader(false);
   };
 
+  const onClick = async (event: any) => {
+    // setLoader(true);
+    event?.preventDefault();
+    const noError = await handleValidationChecks(formFields);
+    if (noError) {
+      setFormData(formData);
+      Navigate("/dt/profile?current=management");
+    }
+
+    // setLoader(false);
+  };
+
   return (
     <>
       <div className="flex flex-col w-full">
@@ -104,14 +120,24 @@ const ProfileRegulatorDetails = (props: Props) => {
             height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
           }}
         >
-          <DynamicFields
-            allFormData={allFormData}
-            formFields={formFields}
-            onChange={onChange}
-          />
-          <div>
-            <Footer onSubmit={onSubmit} loader={loader} />
-          </div>
+          {formFields.length > 0 ? (
+            <>
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+              />
+              <div>
+                <Footer onSubmit={onSubmit} loader={loader} onClick={onClick} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex justify-center items-center">
+                <LoaderSpin />
+              </div>
+            </>
+          )}
         </form>
       </div>
     </>

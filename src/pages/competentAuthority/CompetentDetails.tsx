@@ -102,18 +102,23 @@ const ComponentDetails: React.FC = () => {
         >
           <div className="border-[#E6E6E6] border-[1px] lg:mt-[76px] w-full"></div>
           {formFields?.length > 0 ? (
-          <div className="flex flex-col p-6 w-full">
-            <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
-              Competent Details
-            </h1>
-            <DynamicFields
-              allFormData={allFormData}
-              formFields={formFields}
-              onChange={onChange}
-              documentFields={documentData}
-              onFileChange={onFileChange}
-            />
-          </div>):<LoaderSpin/>}
+            <div className="flex flex-col p-6 w-full">
+              <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
+                Competent Details
+              </h1>
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+                documentFields={documentData}
+                onFileChange={onFileChange}
+              />
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-[calc(100vh-300px)]">
+              <LoaderSpin />
+            </div>
+          )}
         </div>
 
         {/* <div className="mt-auto">
@@ -133,14 +138,16 @@ const ComponentDetails: React.FC = () => {
           </p>
         </div> */}
         <div>
-          {formFields?.length>0 &&
-          <div
-            className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
-            style={{
-              width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-            }}
-          >
-            {/* <div className="flex flex-row items-center space-x-2">
+          {formFields?.length > 0 && (
+            <div
+              className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
+              style={{
+                width: `${
+                  screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                }`,
+              }}
+            >
+              {/* <div className="flex flex-row items-center space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -161,7 +168,7 @@ const ComponentDetails: React.FC = () => {
                 Back
               </button>
             </div> */}
-            {/* <div className="flex items-center ml-auto">
+              {/* <div className="flex items-center ml-auto">
               <button
                 type="submit"
                 disabled={loader}
@@ -171,17 +178,18 @@ const ComponentDetails: React.FC = () => {
                 {loader ? <LoaderSpin /> : "Save & Continue"}
               </button>
             </div> */}
-            <div className="flex items-center ml-auto">
-              <button
-                type="submit"
-                disabled={loader}
-                onClick={onSubmit}
-                className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
-              >
-                {loader ? <LoaderSpin /> : "Save & Continue"}
-              </button>
+              <div className="flex items-center ml-auto">
+                <button
+                  type="submit"
+                  disabled={loader}
+                  onClick={onSubmit}
+                  className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+                >
+                  {loader ? <LoaderSpin /> : "Save & Continue"}
+                </button>
+              </div>
             </div>
-          </div>}
+          )}
           <div>
             <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 

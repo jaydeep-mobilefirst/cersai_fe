@@ -288,49 +288,107 @@ const FormHandlerProviders = ({ children }: Props) => {
       if (value?.length <= 6) {
         updateValue(value, fieldData?.id);
       }
-
       if (value.length === 6) {
-        const response = await axiosTraceIdInstance.get(
-          `${pincodeValidationUrl}/${value}`
-        );
-        const data = response?.data;
-        let stateFormField = allFormData?.formFields?.form_fields?.find(
-          (o: any) =>
-            o?.label?.toLowerCase() === "state" &&
-            fieldData?.sectionId === o?.sectionId
-        );
-        let districtFormField = allFormData?.formFields?.form_fields?.find(
-          (o: any) =>
-            o?.label?.toLowerCase() === "district" &&
-            fieldData?.sectionId === o?.sectionId
-        );
-        if (data[0]?.Status === "Success") {
-          let locationData = data[0]?.PostOffice[0];
-          handlePincodeSucess(
-            {
-              districtField: districtFormField,
-              stateField: stateFormField,
-              stateValue: locationData?.State,
-              districtValue: locationData?.District,
-              pinCodeField: fieldData,
-              pinCodeValue: value,
-            },
-            true
+        try {
+          const response = await axiosTraceIdInstance.get(
+            `${pincodeValidationUrl}/${value}`
           );
-        } else {
-          handlePincodeSucess(
-            {
-              districtField: districtFormField,
-              stateField: stateFormField,
-              stateValue: "",
-              districtValue: "",
-              pinCodeField: fieldData,
-              pinCodeValue: value,
-            },
-            false
+          const data = response?.data;
+          let stateFormField = allFormData?.formFields?.form_fields?.find(
+            (o: any) =>
+              o?.label?.toLowerCase() === "state" &&
+              fieldData?.sectionId === o?.sectionId
           );
+          let districtFormField = allFormData?.formFields?.form_fields?.find(
+            (o: any) =>
+              o?.label?.toLowerCase() === "district" &&
+              fieldData?.sectionId === o?.sectionId
+          );
+          if (data[0]?.Status === "Success") {
+            let locationData = data[0]?.PostOffice[0];
+            handlePincodeSucess(
+              {
+                districtField: districtFormField,
+                stateField: stateFormField,
+                stateValue: locationData?.State,
+                districtValue: locationData?.District,
+                pinCodeField: fieldData,
+                pinCodeValue: value,
+              },
+              true
+            );
+          } else {
+            // Handling the error or no records found
+            Swal.fire({
+              icon: "error",
+              title: "Invalid Pincode",
+              text:
+                data[0]?.Message ||
+                "No records found for the provided pincode.",
+            });
+            handlePincodeSucess(
+              {
+                districtField: districtFormField,
+                stateField: stateFormField,
+                stateValue: "",
+                districtValue: "",
+                pinCodeField: fieldData,
+                pinCodeValue: value,
+              },
+              false
+            );
+          }
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Failed to validate pincode, please try again later.",
+          });
         }
       }
+
+      // if (value.length === 6) {
+      //   const response = await axiosTraceIdInstance.get(
+      //     `${pincodeValidationUrl}/${value}`
+      //   );
+      //   const data = response?.data;
+      //   let stateFormField = allFormData?.formFields?.form_fields?.find(
+      //     (o: any) =>
+      //       o?.label?.toLowerCase() === "state" &&
+      //       fieldData?.sectionId === o?.sectionId
+      //   );
+      //   let districtFormField = allFormData?.formFields?.form_fields?.find(
+      //     (o: any) =>
+      //       o?.label?.toLowerCase() === "district" &&
+      //       fieldData?.sectionId === o?.sectionId
+      //   );
+      //   if (data[0]?.Status === "Success") {
+      //     let locationData = data[0]?.PostOffice[0];
+      //     handlePincodeSucess(
+      //       {
+      //         districtField: districtFormField,
+      //         stateField: stateFormField,
+      //         stateValue: locationData?.State,
+      //         districtValue: locationData?.District,
+      //         pinCodeField: fieldData,
+      //         pinCodeValue: value,
+      //       },
+      //       true
+      //     );
+      //   } else {
+      //     handlePincodeSucess(
+      //       {
+      //         districtField: districtFormField,
+      //         stateField: stateFormField,
+      //         stateValue: "",
+      //         districtValue: "",
+      //         pinCodeField: fieldData,
+      //         pinCodeValue: value,
+      //       },
+      //       false
+      //     );
+      //   }
+      // }
     } else if (fieldType === "DSC") {
       const file = event;
       const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;

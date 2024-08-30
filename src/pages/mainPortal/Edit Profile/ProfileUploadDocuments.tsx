@@ -10,6 +10,8 @@ import UploadFile from "../../designatedCourt/UploadFile";
 import DeleteUpload from "../../designatedCourt/DeleteUpload";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { axiosTokenInstance } from "../../../utils/axios";
+import Footer from "../../../components/userFlow/userProfile/Footer";
+import userProfileUploadStore from "../../../zust/userProfileUploadStore";
 
 type Props = {};
 
@@ -24,6 +26,7 @@ const ProfileUploadDocuments = (props: Props) => {
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
+  const setFormData = userProfileUploadStore((state) => state.setFormData);
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Upload Documents"
@@ -48,6 +51,14 @@ const ProfileUploadDocuments = (props: Props) => {
   //   )?.name;
   //   onFileChange("", field, fieldType);
   // };
+  const formData =
+    documentData &&
+    documentData?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: "Upload Documents",
+      label: field.documentName,
+      value: field.uploadFileId,
+    }));
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
@@ -60,15 +71,6 @@ const ProfileUploadDocuments = (props: Props) => {
       return;
     }
 
-    const formData =
-      documentData &&
-      documentData?.map((field: any) => ({
-        fieldId: field.id,
-        sectionCode: "Upload Documents",
-        label: field.documentName,
-        value: field.uploadFileId,
-      }));
-
     axiosTokenInstance
       .patch(`/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`, {
         formData: formData,
@@ -76,7 +78,7 @@ const ProfileUploadDocuments = (props: Props) => {
       .then((response) => {
         Swal.fire({
           icon: "success",
-          text: "Documents uploaded successfully",
+          text: response?.data?.message || "Documents uploaded successfully",
           confirmButtonText: "Ok",
         });
         setLoader(false);
@@ -150,11 +152,22 @@ const ProfileUploadDocuments = (props: Props) => {
   };
 
   const disableFieldStatus = checkStatus(disabledField);
+  const onClick = async (event: any) => {
+    // setLoader(true);
+    const goodToGo = await handleDocumentValidations(
+      documentData.map((d: { sectionId: number }) => d?.sectionId)
+    );
+    if (goodToGo) {
+      setFormData(formData);
+      Navigate("/dt/profile?current=branches");
+    }
+    // setLoader(false);
+  };
 
   return (
     <>
       <div
-        className='bg-white w-full flex flex-col justify-between'
+        className="bg-white w-full flex flex-col justify-between"
         style={{
           height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
         }}
@@ -175,48 +188,64 @@ const ProfileUploadDocuments = (props: Props) => {
             showDeletePopup={showDeletePopup}
           />
         )}
-        <div className='p-4 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-5 space-y-0'>
-          <h1 className='text-xl text-gilroy-bold'>Upload Documents</h1>
-          <DynamicFields
-            allFormData={allFormData}
-            documentFields={documentData}
-            toggleUploadPopup={toggleUploadPopup}
-            setFieldData={setFieldData}
-            sectionId={sectionId}
-            onFileChange={onFileChange}
-          />
-        </div>
-        <div className='p-4'>
-          <div>
-            {" "}
-            {disableFieldStatus ? (
-              <></>
-            ) : (
-              <>
-                <div className='flex flex-col sm:flex-row justify-end sm:justify-end items-center space-y-4 sm:space-y-0 pt-4 pb-4'>
-                  <div className='flex items-center'>
-                    <button
-                      disabled={loader}
-                      onClick={onSubmit}
-                      type='submit'
-                      className={`${
-                        loader ? "bg-gray-500" : "bg-[#1C468E]"
-                      } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
-                    >
-                      {loader ? <LoaderSpin /> : " Save and Continue"}
-                    </button>
+
+        {documentData.length > 0 ? (
+          <>
+            <div className="p-4 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-5 space-y-0">
+              <h1 className="text-xl text-gilroy-bold">Upload Documents</h1>
+              <DynamicFields
+                allFormData={allFormData}
+                documentFields={documentData}
+                toggleUploadPopup={toggleUploadPopup}
+                setFieldData={setFieldData}
+                sectionId={sectionId}
+                onFileChange={onFileChange}
+              />
+            </div>
+            <div className="p-4">
+              <div>
+                {" "}
+                {disableFieldStatus ? (
+                  <></>
+                ) : (
+                  <>
+                    {/* <div className="flex flex-col sm:flex-row justify-end sm:justify-end items-center space-y-4 sm:space-y-0 pt-4 pb-4">
+                      <div className="flex items-center">
+                        <button
+                          disabled={loader}
+                          onClick={onSubmit}
+                          type="submit"
+                          className={`${
+                            loader ? "bg-gray-500" : "bg-[#1C468E]"
+                          } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
+                        >
+                          {loader ? <LoaderSpin /> : " Save and Continue"}
+                        </button>
+                      </div>
+                    </div> */}
+                    <Footer
+                      onSubmit={onSubmit}
+                      loader={loader}
+                      onClick={onClick}
+                    />
+                  </>
+                )}
+                {/* <div>
+                  <div className="border-[#E6E6E6] border-[1px] w-full"></div>
+                  <div className="text-gilroy-light text-[#24222B] text-xs cursor-pointer h-16 flex items justify-center items-center">
+                    <div>© 2024 Protean BUDs, All Rights Reserved.</div>
                   </div>
-                </div>
-              </>
-            )}
-            <div>
-              <div className='border-[#E6E6E6] border-[1px] w-full'></div>
-              <div className='text-gilroy-light text-[#24222B] text-xs cursor-pointer h-16 flex items justify-center items-center'>
-                <div>© 2024 Protean BUDs, All Rights Reserved.</div>
+                </div> */}
               </div>
             </div>
-          </div>
-        </div>
+          </>
+        ) : (
+          <>
+            <div className="flex justify-center items-center">
+              <LoaderSpin />
+            </div>
+          </>
+        )}
       </div>
     </>
   );
