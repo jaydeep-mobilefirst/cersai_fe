@@ -13,9 +13,11 @@ import uploadIcon from "../../../assets/images/directbox-send.svg";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
 import ProfileManagementForm from "./ProfileManagementForm";
+import { useNavigate } from "react-router-dom";
 const ProfileManagement = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
+  const Navigate = useNavigate();
 
   const {
     branches,
@@ -59,6 +61,7 @@ const ProfileManagement = () => {
         fetchedBranches.push({
           firstName: "",
           middleName: "",
+          lastName: "",
           designation: "",
           landlineNumber: "",
           emailId: "",
@@ -143,6 +146,11 @@ const ProfileManagement = () => {
   };
 
   const disableFieldStatus = checkStatus(disabledField);
+  const onClick = (event: any) => {
+    // setLoader(true);
+    Navigate("/dt/profile?current=documents");
+    // setLoader(false);
+  };
 
   return (
     <div className="bg-white p-7 w-full h-full ">
@@ -170,7 +178,7 @@ const ProfileManagement = () => {
         )}
 
         <div>
-          <Footer loader={loader} />
+          <Footer loader={loader} onClick={onClick} />
           <button
             onSubmit={onSubmit}
             type="submit"

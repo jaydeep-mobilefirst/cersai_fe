@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import InputFields from "../common/InputField";
 import TextArea from "../form/TextArea";
 import SelectButton from "../form/SelectButton";
@@ -10,6 +11,7 @@ import DscKeyRegister from "../form/DscKeyRegister";
 import { useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import { useLocation } from "react-router-dom";
+import useStore from "../../../store/statusStore";
 
 type Props = {
   toggleUploadPopup?: () => void;
@@ -35,7 +37,6 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
 
-
   const location = useLocation();
   const { pathname } = location;
 
@@ -52,6 +53,12 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
       },
     },
   ];
+
+  const { data, loading, error, fetchData } = useStore();
+
+  useEffect(() => {
+    fetchData(); // Trigger the API call when the component mounts
+  }, [fetchData]);
 
   const disabledField = sessionStorage.getItem("user_status");
 
@@ -89,7 +96,17 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
     }
   };
 
-  const disableFieldStatus = checkPathName(pathname) ? checkStatus(disabledField) : false
+  if (pathname == "/dt/profile") {
+    var disableFieldStatus = checkPathName(pathname)
+      ? disabledField == "RETURN"
+        ? false
+        : !data?.profileUpdate
+      : false;
+  } else {
+    disableFieldStatus = checkPathName(pathname)
+      ? checkStatus(disabledField)
+      : false;
+  }
 
   return (
     <>

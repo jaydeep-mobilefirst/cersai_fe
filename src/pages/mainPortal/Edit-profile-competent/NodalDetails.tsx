@@ -224,7 +224,7 @@ const NodalDetails = (props: Props) => {
           />
 
           <div>
-            <Footer onSubmit={onSubmit} loader={loader} />
+            <Footer onSubmit={onSubmit} loader={loader} hidecontiuebtn={true} />
           </div>
         </form>
       </div>

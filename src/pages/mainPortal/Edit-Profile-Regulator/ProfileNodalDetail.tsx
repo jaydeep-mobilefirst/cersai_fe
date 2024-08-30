@@ -229,7 +229,11 @@ const ProfileNodalDetails = (props: Props) => {
               />
 
               <div>
-                <Footer onSubmit={onSubmit} loader={loader} />
+                <Footer
+                  onSubmit={onSubmit}
+                  loader={loader}
+                  hidecontiuebtn={true}
+                />
               </div>
             </>
           ) : (
