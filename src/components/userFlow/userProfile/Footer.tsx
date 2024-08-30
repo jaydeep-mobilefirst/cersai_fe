@@ -7,6 +7,7 @@ interface FooterProps {
   loader?: boolean;
   disabled?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  hidecontiuebtn?: boolean;
 }
 
 const Footer: React.FC<FooterProps> = ({
@@ -14,6 +15,7 @@ const Footer: React.FC<FooterProps> = ({
   loader,
   disabled,
   onClick,
+  hidecontiuebtn,
 }) => {
   const disabledField = sessionStorage.getItem("user_status");
 
@@ -53,6 +55,7 @@ const Footer: React.FC<FooterProps> = ({
         return false;
     }
   };
+  const showbtn = checkPathName(pathname);
 
   const disableFieldStatus = checkPathName(pathname)
     ? checkStatus(disabledField)
@@ -68,26 +71,34 @@ const Footer: React.FC<FooterProps> = ({
           ) : (
             <>
               {" "}
-              <button
-                disabled={disabled}
-                onClick={onClick}
-                type="submit"
-                className={`${
-                  disabled ? "bg-gray-500" : "bg-[#1C468E] mx-3"
-                } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
-              >
-                {loader ? <LoaderSpin /> : " Save and continue"}
-              </button>
-              <button
-                disabled={disabled}
-                onClick={onSubmit}
-                type="submit"
-                className={`${
-                  disabled ? "bg-gray-500" : "bg-[#1C468E]"
-                } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
-              >
-                {loader ? <LoaderSpin /> : " Save and Submit"}
-              </button>
+              {hidecontiuebtn ? (
+                <></>
+              ) : (
+                <>
+                  <button
+                    disabled={disabled}
+                    onClick={onClick}
+                    type="submit"
+                    className={`${
+                      disabled ? "bg-gray-500" : "bg-[#1C468E] mx-3"
+                    } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
+                  >
+                    Save and continue
+                  </button>
+                </>
+              )}
+              {showbtn && (
+                <button
+                  disabled={disabled}
+                  onClick={onSubmit}
+                  type="submit"
+                  className={`${
+                    disabled ? "bg-gray-500" : "bg-[#1C468E]"
+                  } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
+                >
+                  {loader ? <LoaderSpin /> : " Save and Submit"}
+                </button>
+              )}
             </>
           )}
         </div>

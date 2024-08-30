@@ -10,6 +10,8 @@ import UploadFile from "../../designatedCourt/UploadFile";
 import DeleteUpload from "../../designatedCourt/DeleteUpload";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { axiosTokenInstance } from "../../../utils/axios";
+import Footer from "../../../components/userFlow/userProfile/Footer";
+import userProfileUploadStore from "../../../zust/userProfileUploadStore";
 
 type Props = {};
 
@@ -24,6 +26,7 @@ const ProfileUploadDocuments = (props: Props) => {
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
+  const setFormData = userProfileUploadStore((state) => state.setFormData);
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Upload Documents"
@@ -48,6 +51,14 @@ const ProfileUploadDocuments = (props: Props) => {
   //   )?.name;
   //   onFileChange("", field, fieldType);
   // };
+  const formData =
+    documentData &&
+    documentData?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: "Upload Documents",
+      label: field.documentName,
+      value: field.uploadFileId,
+    }));
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
@@ -59,15 +70,6 @@ const ProfileUploadDocuments = (props: Props) => {
       setLoader(false);
       return;
     }
-
-    const formData =
-      documentData &&
-      documentData?.map((field: any) => ({
-        fieldId: field.id,
-        sectionCode: "Upload Documents",
-        label: field.documentName,
-        value: field.uploadFileId,
-      }));
 
     axiosTokenInstance
       .patch(`/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`, {
@@ -150,6 +152,17 @@ const ProfileUploadDocuments = (props: Props) => {
   };
 
   const disableFieldStatus = checkStatus(disabledField);
+  const onClick = async (event: any) => {
+    // setLoader(true);
+    const goodToGo = await handleDocumentValidations(
+      documentData.map((d: { sectionId: number }) => d?.sectionId)
+    );
+    if (goodToGo) {
+      setFormData(formData);
+      Navigate("/dt/profile?current=branches");
+    }
+    // setLoader(false);
+  };
 
   return (
     <>
@@ -196,7 +209,7 @@ const ProfileUploadDocuments = (props: Props) => {
                   <></>
                 ) : (
                   <>
-                    <div className="flex flex-col sm:flex-row justify-end sm:justify-end items-center space-y-4 sm:space-y-0 pt-4 pb-4">
+                    {/* <div className="flex flex-col sm:flex-row justify-end sm:justify-end items-center space-y-4 sm:space-y-0 pt-4 pb-4">
                       <div className="flex items-center">
                         <button
                           disabled={loader}
@@ -209,15 +222,20 @@ const ProfileUploadDocuments = (props: Props) => {
                           {loader ? <LoaderSpin /> : " Save and Continue"}
                         </button>
                       </div>
-                    </div>
+                    </div> */}
+                    <Footer
+                      onSubmit={onSubmit}
+                      loader={loader}
+                      onClick={onClick}
+                    />
                   </>
                 )}
-                <div>
+                {/* <div>
                   <div className="border-[#E6E6E6] border-[1px] w-full"></div>
                   <div className="text-gilroy-light text-[#24222B] text-xs cursor-pointer h-16 flex items justify-center items-center">
                     <div>© 2024 Protean BUDs, All Rights Reserved.</div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </>

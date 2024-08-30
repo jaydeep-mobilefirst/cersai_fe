@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { axiosTokenInstance } from "../../../utils/axios";
 import LoaderSpin from "../../../components/LoaderSpin";
+import useProfileNodalStore from "../../../zust/useProfileNodalStore";
 
 type Props = {};
 
@@ -26,6 +27,8 @@ const ProfileNodalDetails = (props: Props) => {
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
+  const navigate = useNavigate();
+  const setFormData = useProfileNodalStore((state) => state.setFormData);
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Nodal Details"
@@ -110,6 +113,17 @@ const ProfileNodalDetails = (props: Props) => {
         });
     }
     setLoader(false);
+  };
+  const onClick = async (event: any) => {
+    // setLoader(true);
+    event?.preventDefault();
+    const noError = await handleValidationChecks(formFields, false);
+    if (noError) {
+      setFormData(formData);
+      navigate("/dt/profile?current=regulator");
+    }
+
+    // setLoader(false);
   };
 
   return (
@@ -227,7 +241,7 @@ const ProfileNodalDetails = (props: Props) => {
               />
 
               <div>
-                <Footer onSubmit={onSubmit} loader={loader} />
+                <Footer onSubmit={onSubmit} loader={loader} onClick={onClick} />
               </div>
             </>
           ) : (

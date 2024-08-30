@@ -14,6 +14,8 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { axiosTokenInstance } from "../../../utils/axios";
 import LoaderSpin from "../../../components/LoaderSpin";
+import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
+import useProfileEntityStore from "../../../zust/useProfileEntityStore";
 
 type Props = {};
 
@@ -26,6 +28,7 @@ const ProfileEntityDetails = (props: Props) => {
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
   const navigate = useNavigate();
+  const setFormData = useProfileEntityStore((state) => state.setFormData);
 
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
@@ -182,10 +185,17 @@ const ProfileEntityDetails = (props: Props) => {
     }
     setLoader(false);
   };
-  const onClick = (event: any) => {
+  const onClick = async (event: any) => {
     // setLoader(true);
-    navigate("/dt/profile?current=nodal");
-    // setLoader(false);
+    event?.preventDefault();
+    const noError = await handleValidationChecks(
+      formFields?.filter((field: any) => field?.disabled === false)
+    );
+    if (noError) {
+      setFormData(formData);
+      navigate("/dt/profile?current=nodal");
+      // setLoader(false);
+    }
   };
   return (
     <>

@@ -9,6 +9,7 @@ import { pincodeValidationUrl } from "../../../utils/api";
 import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
 import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 interface Branch {
   firstName: string;
@@ -32,6 +33,7 @@ interface Props {
   branch: {
     firstName: string;
     middleName: string;
+    lastName: string;
     designation: string;
     landlineNumber: string;
     emailId: string;
@@ -55,6 +57,20 @@ const ProfileManagementForm: React.FC<Props> = ({
   branch,
 }) => {
   const [pinCodeError, setPinCodeError] = useState("");
+  const [selectedState, setSelectedState] = useState<string | null>(
+    branch.designation
+  );
+  const Stateoptions = [
+    { value: "xyz", label: "xyz" },
+    { value: "abc", label: "abc" },
+    { value: "def", label: "def" },
+    { value: "jjjjj", label: "jjjj" },
+  ];
+  const handleSetState = (value: string) => {
+    setSelectedState(value);
+    setValue(`branches[${i}].designation`, value); // Set state value
+  };
+  const Navigate = useNavigate();
   const debounce = (
     func: (...args: any[]) => void,
     delay: number
@@ -228,8 +244,43 @@ const ProfileManagementForm: React.FC<Props> = ({
           </Tooltip>
         </div>
         <div>
+          <label htmlFor={`lastName-${i}`} className="text-base font-normal">
+            last Name <span className="text-red-500">*</span>
+          </label>
+          <Tooltip
+            title={
+              getValues(`branches[${i}].lastName`)
+                ? "Edit last Name"
+                : "Enter last Name"
+            }
+            placement="bottom"
+            arrow
+            PopperProps={{
+              modifiers: popperModifiers,
+            }}
+          >
+            <InputFieldsV2
+              type="text"
+              placeholder="Enter middle name"
+              disabled={disableFieldStatus}
+              {...register(`branches[${i}].lastName`, {
+                required: "last name is required",
+                pattern: {
+                  value: /^[a-zA-Z\s'-]+$/,
+                  message: "last name contains invalid characters",
+                },
+              })}
+            />
+          </Tooltip>
+          {errors?.branches?.[i]?.lastName && (
+            <p className="text-red-500">
+              {errors.branches[i].lastName.message}
+            </p>
+          )}
+        </div>
+        <div>
           <label htmlFor={`designation-${i}`} className="text-base font-normal">
-            Designation
+            Designation <span className="text-red-500">*</span>
           </label>
           <Tooltip
             title={
@@ -243,20 +294,54 @@ const ProfileManagementForm: React.FC<Props> = ({
               modifiers: popperModifiers,
             }}
           >
-            <InputFieldsV2
+            {/* <InputFieldsV2
               type="text"
               placeholder="Enter designation"
               disabled={disableFieldStatus}
-              {...register(`branches[${i}].designation`, {})}
+              {...register(`branches[${i}].designation`, {
+                required: "Designation is required",
+                pattern: {
+                  value: /^[a-zA-Z\s'-]+$/, // Only allows letters, spaces, apostrophes, and hyphens
+                  message: "Designation contains invalid characters",
+                },
+                minLength: {
+                  value: 2,
+                  message: "Designation must be at least 2 characters long",
+                },
+                maxLength: {
+                  value: 50,
+                  message: "Designation must be less than 50 characters long",
+                },
+              })}
+            /> */}
+            <SelectButton
+              options={Stateoptions}
+              setOption={(value) => {
+                handleSetState(value);
+                setValue(`branches[${i}].designation`, value, {
+                  shouldValidate: true,
+                }); // Trigger validation when setting value
+              }}
+              selectedOption={selectedState}
+              placeholder="Select"
+              showSearchInput={true}
+              {...register(`branches[${i}].designation`, {
+                required: "State is required",
+              })}
             />
           </Tooltip>
+          {errors?.branches?.[i]?.designation && (
+            <p className="text-red-500">
+              {errors.branches[i].designation.message}
+            </p>
+          )}
         </div>
         <div>
           <label
             htmlFor={`landlineNumber-${i}`}
             className="text-base font-normal"
           >
-            Landline Number
+            Landline Number <span className="text-red-500">*</span>
           </label>
           <Tooltip
             title={
@@ -274,13 +359,25 @@ const ProfileManagementForm: React.FC<Props> = ({
               type="text"
               placeholder="Enter landline number"
               disabled={disableFieldStatus}
-              {...register(`branches[${i}].landlineNumber`, {})}
+              {...register(`branches[${i}].landlineNumber`, {
+                required: "Landline number is required",
+                pattern: {
+                  value: /^[0-9]{6,15}$/, // Adjust the regex to fit your landline number format
+                  message:
+                    "Invalid landline number format. It should be between 6 to 15 digits.",
+                },
+              })}
             />
           </Tooltip>
+          {errors?.branches?.[i]?.landlineNumber && (
+            <p className="text-red-500">
+              {errors.branches[i].landlineNumber.message}
+            </p>
+          )}
         </div>
         <div>
           <label htmlFor={`emailId-${i}`} className="text-base font-normal">
-            Email Id
+            Email Id <span className="text-red-500">*</span>
           </label>
           <Tooltip
             title={
