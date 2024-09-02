@@ -36,10 +36,13 @@ const ProfileManagement = () => {
     setChecked: state.setChecked,
     toggleChecked: state.toggleChecked,
   }));
+  console.log({ branches }, "branches");
   // const [isChecked, setChecked] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [uploadInputKey, setUploadKey] = useState<number>(0);
   const uploadButtonRef = useRef<HTMLInputElement>(null);
+  const [managementData, setManagementData] = useState<any>([]);
+
   const {
     register,
     handleSubmit,
@@ -54,9 +57,10 @@ const ProfileManagement = () => {
     try {
       setLoader(true);
       const response = await axiosTokenInstance.get(
-        `/deposit-taker/branch/${entityUniqueId}`
+        `/deposit-taker/management-team/${entityUniqueId}`
       );
-      const fetchedBranches = response.data.data.branches;
+      console.log({ response }, "response");
+      const fetchedBranches = response.data.data;
       if (fetchedBranches.length === 0) {
         fetchedBranches.push({
           firstName: "",
@@ -64,10 +68,10 @@ const ProfileManagement = () => {
           lastName: "",
           designation: "",
           landlineNumber: "",
-          emailId: "",
+          email: "",
           addressLine1: "",
           addressLine2: "",
-          pinCode: "",
+          pincode: "",
           state: "",
           district: "",
         });
@@ -89,19 +93,24 @@ const ProfileManagement = () => {
 
   useEffect(() => {
     fetchBranches();
+    setManagementData(branches);
   }, [reset, setBranches, uploadInputKey]);
 
+  console.log({ branches }, "branches");
+
   const onSubmit = async (data: any) => {
+    console.log("Data", data);
     setLoader(true);
     try {
-      const branchesToSubmit = data.branches.map((branch: any) => {
-        const { id, ...branchData } = branch;
-        return branch.id ? { id, ...branchData } : branchData;
+      const membersToSubmit = data?.branches?.map((member: any) => {
+        const { id, ...memberData } = member;
+        return member.id ? { id, ...memberData } : memberData;
       });
+
       const response = await axiosTokenInstance.post(
-        `/deposit-taker/branch/${entityUniqueId}`,
+        `/deposit-taker/management-team/${entityUniqueId}`,
         {
-          branches: branchesToSubmit,
+          members: membersToSubmit, // Changed from branches to members
         }
       );
 
@@ -112,9 +121,11 @@ const ProfileManagement = () => {
         icon: "success",
         text: response?.data?.message,
         confirmButtonText: "Ok",
+      }).then(() => {
+        Navigate("/dt/profile?current=documents");
       });
     } catch (error) {
-      console.error("Failed to submit branches:", error);
+      console.error("Failed to submit members:", error);
       Swal.fire({
         icon: "error",
         text: "Failed to update Entity Details",
@@ -146,9 +157,14 @@ const ProfileManagement = () => {
   };
 
   const disableFieldStatus = checkStatus(disabledField);
-  const onClick = (event: any) => {
+  const onClick = async (data: any) => {
+    console.log("Data form onClick", data);
     // setLoader(true);
-    Navigate("/dt/profile?current=documents");
+    Navigate("/dt/profile?current=documents", {
+      state: {
+        managementData: data,
+      },
+    });
     // setLoader(false);
   };
 
@@ -178,7 +194,12 @@ const ProfileManagement = () => {
         )}
 
         <div>
-          <Footer loader={loader} onClick={onClick} />
+          <Footer
+            loader={loader}
+            onClick={handleSubmit(onClick)}
+            showbackbtn={true}
+            path={"/dt/profile?current=regulator"}
+          />
           <button
             onSubmit={onSubmit}
             type="submit"

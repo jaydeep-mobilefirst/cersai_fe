@@ -16,9 +16,20 @@ import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
 import useProfileEntityStore from "../../../zust/useProfileEntityStore";
 import useProfileNodalStore from "../../../zust/useProfileNodalStore";
 import userProfileUploadStore from "../../../zust/userProfileUploadStore";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import { useLocation } from "react-router-dom";
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
+  const location = useLocation();
+  const callapi = location.state?.callSaveandcontinue;
+  const managementData = location.state?.managementData;
+
+  console.log({ callapi, managementData }, "callapi");
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
+  console.log({ allFormData, documentData }, "allFormData");
   const regulatorStore = useProfileRegulatorStore(
     (state) => state.regulatorStore
   );
@@ -73,6 +84,25 @@ const ProfileBranches = () => {
     getValues,
     reset,
   } = useForm();
+  const formData =
+    allFormData?.formFields?.form_fields &&
+    allFormData?.formFields?.form_fields?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: field.entityRegSection?.sectionName,
+      label: field.label,
+      value: field.userInput,
+    }));
+
+  const formDataDocument =
+    documentData &&
+    documentData?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: "Upload Documents",
+      label: field.documentName,
+      value: field.uploadFileId,
+    }));
+
+  const combinedFormData = [...formData, ...formDataDocument];
 
   const fetchBranches = async () => {
     try {
@@ -123,27 +153,56 @@ const ProfileBranches = () => {
           branches: branchesToSubmit,
         }
       );
-      if (regulatorData.length > 0) {
-        regulatorStore();
+
+      if (callapi) {
+        const membersToSubmit = managementData?.branches?.map((member: any) => {
+          const { id, ...memberData } = member;
+          return member.id ? { id, ...memberData } : memberData;
+        });
+        await axiosTokenInstance.post(
+          `/deposit-taker/management-team/${entityUniqueId}`,
+          {
+            members: membersToSubmit, // Changed from branches to members
+          }
+        );
+        axiosTokenInstance
+          .patch(
+            `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+            {
+              formData: combinedFormData,
+            }
+          )
+          .then((response) => {
+            Swal.fire({
+              icon: "success",
+              text: response?.data?.message || "",
+              confirmButtonText: "Ok",
+            });
+            setLoader(false);
+          });
+      } else {
+        Swal.fire({
+          icon: "success",
+          text: response?.data?.message,
+          confirmButtonText: "Ok",
+        });
       }
-      if (nodalDetailData.length > 0) {
-        nodaldetailsStore();
-      }
-      if (entityData.length > 0) {
-        entitydetails();
-      }
-      if (uploadData.length > 0) {
-        uploadDocument();
-      }
+
+      // if (regulatorData.length > 0) {
+      //   regulatorStore();
+      // }
+      // if (nodalDetailData.length > 0) {
+      //   nodaldetailsStore();
+      // }
+      // if (entityData.length > 0) {
+      //   entitydetails();
+      // }
+      // if (uploadData.length > 0) {
+      //   uploadDocument();
+      // }
 
       await fetchBranches();
       setLoader(false);
-
-      Swal.fire({
-        icon: "success",
-        text: response?.data?.message,
-        confirmButtonText: "Ok",
-      });
     } catch (error) {
       console.error("Failed to submit branches:", error);
       Swal.fire({
@@ -382,7 +441,13 @@ const ProfileBranches = () => {
         )}
 
         <div>
-          <Footer disabled={!isChecked} loader={loader} hidecontiuebtn={true} />
+          <Footer
+            disabled={!isChecked}
+            loader={loader}
+            hidecontiuebtn={true}
+            showbackbtn={true}
+            path={"/dt/profile?current=documents"}
+          />
           <button
             onSubmit={onSubmit}
             type="submit"

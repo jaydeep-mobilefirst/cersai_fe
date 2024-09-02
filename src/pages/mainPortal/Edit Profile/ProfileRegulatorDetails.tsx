@@ -128,7 +128,13 @@ const ProfileRegulatorDetails = (props: Props) => {
                 onChange={onChange}
               />
               <div>
-                <Footer onSubmit={onSubmit} loader={loader} onClick={onClick} />
+                <Footer
+                  onSubmit={onSubmit}
+                  loader={loader}
+                  onClick={onClick}
+                  showbackbtn={true}
+                  path={"/dt/profile?current=nodal"}
+                />
               </div>
             </>
           ) : (

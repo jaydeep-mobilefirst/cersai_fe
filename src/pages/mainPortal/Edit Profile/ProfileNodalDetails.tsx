@@ -241,7 +241,13 @@ const ProfileNodalDetails = (props: Props) => {
               />
 
               <div>
-                <Footer onSubmit={onSubmit} loader={loader} onClick={onClick} />
+                <Footer
+                  onSubmit={onSubmit}
+                  loader={loader}
+                  onClick={onClick}
+                  showbackbtn={true}
+                  path={"/dt/profile?current=entity"}
+                />
               </div>
             </>
           ) : (

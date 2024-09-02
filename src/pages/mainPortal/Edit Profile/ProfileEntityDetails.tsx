@@ -215,7 +215,12 @@ const ProfileEntityDetails = (props: Props) => {
                 onChange={onChange}
               />
               <div>
-                <Footer onSubmit={onSubmit} loader={loader} onClick={onClick} />
+                <Footer
+                  onSubmit={onSubmit}
+                  loader={loader}
+                  onClick={onClick}
+                  showbackbtn={false}
+                />
               </div>
             </>
           ) : (

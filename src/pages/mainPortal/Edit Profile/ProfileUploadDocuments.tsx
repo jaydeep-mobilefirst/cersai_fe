@@ -5,7 +5,7 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../../components/LoaderSpin";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import UploadFile from "../../designatedCourt/UploadFile";
 import DeleteUpload from "../../designatedCourt/DeleteUpload";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
@@ -17,6 +17,7 @@ type Props = {};
 
 const ProfileUploadDocuments = (props: Props) => {
   const Navigate = useNavigate();
+  const location = useLocation();
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState<boolean>(false);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
@@ -26,6 +27,7 @@ const ProfileUploadDocuments = (props: Props) => {
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
+
   const setFormData = userProfileUploadStore((state) => state.setFormData);
 
   const sectionId = allFormData?.entitySections?.find(
@@ -34,6 +36,8 @@ const ProfileUploadDocuments = (props: Props) => {
 
   const { onFileChange, handleDocumentValidations } =
     useContext(FormHandlerContext);
+  const managementData = location.state?.managementData;
+  console.log(managementData, "profileUploadDocuments");
 
   // const handleFileChange = (file: File | null, field: any) => {
   //   setFileLoader(field?.id);
@@ -159,7 +163,12 @@ const ProfileUploadDocuments = (props: Props) => {
     );
     if (goodToGo) {
       setFormData(formData);
-      Navigate("/dt/profile?current=branches");
+      Navigate("/dt/profile?current=branches", {
+        state: {
+          callSaveandcontinue: true,
+          managementData: managementData,
+        },
+      });
     }
     // setLoader(false);
   };
@@ -227,6 +236,8 @@ const ProfileUploadDocuments = (props: Props) => {
                       onSubmit={onSubmit}
                       loader={loader}
                       onClick={onClick}
+                      showbackbtn={true}
+                      path={"/dt/profile?current=management"}
                     />
                   </>
                 )}

@@ -1,36 +1,3 @@
-// import { create } from "zustand";
-// import produce from "immer";
-
-// type EntityType = {
-//   id: number;
-//   entityName: string;
-//   registrationAllowed: boolean;
-//   autoApproval: boolean;
-// };
-// interface Types {
-//   entities: EntityType[];
-//   setEntities: any;
-//   setAllFormData: any;
-//   allFormData: any;
-//   documentData: any[];
-//   setAllDocumentData: any;
-//   sections: any[];
-//   setSections: any;
-// }
-
-// // Create your store, which includes both state and (optionally) actions
-// export const useDepositTakerRegistrationStore = create<Types>((set: any) => ({
-//   entities: [],
-//   allFormData: undefined,
-//   documentData: [],
-//   sections: [],
-//   // Reducers
-//   setEntities: (data: EntityType[]) => set(() => ({ entities: data })),
-//   setAllFormData: (data: any) => set(() => ({ allFormData: data })),
-//   setAllDocumentData: (data: any) => set(() => ({ documentData: data })),
-//   setSections: (data: any[]) => set(() => ({ sections: data })),
-// }));
-
 import { create } from "zustand";
 import { persist, PersistOptions } from "zustand/middleware";
 
@@ -51,7 +18,7 @@ interface Types {
   sections: any[];
   setSections: (data: any[]) => void;
   setMasterEntityId: (data: string | number | undefined) => void;
-  masterEntityId : string | number | undefined
+  masterEntityId: string | number | undefined;
 }
 
 export const useDepositTakerRegistrationStore = create<Types>()(
@@ -61,12 +28,13 @@ export const useDepositTakerRegistrationStore = create<Types>()(
       allFormData: undefined,
       documentData: [],
       sections: [],
-      masterEntityId : undefined,
+      masterEntityId: undefined,
       setEntities: (data: EntityType[]) => set({ entities: data }),
       setAllFormData: (data: any) => set({ allFormData: data }),
       setAllDocumentData: (data: any[]) => set({ documentData: data }),
       setSections: (data: any[]) => set({ sections: data }),
-      setMasterEntityId: (data: string | number | undefined) => set({ masterEntityId: data }),
+      setMasterEntityId: (data: string | number | undefined) =>
+        set({ masterEntityId: data }),
     }),
     {
       name: "deposit-taker-registration-store",
