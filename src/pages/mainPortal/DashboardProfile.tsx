@@ -41,7 +41,7 @@ const DashboardProfile = (props: Props) => {
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
           } catch (error: any) {
             if (error.response.status === 401) {
-              navigate("/"); // Navigate to home page
+              navigate("/"); // Navigate to home
             } else if (error.response.status === 403) {
               alert("You do not have permission to access this resource.");
             }
