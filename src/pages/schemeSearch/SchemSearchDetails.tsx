@@ -32,7 +32,8 @@ const SchemeSearchDetails: React.FC = () => {
 
   const uniqueId = location.state?.uniqueId;
 
-  const depositTakerId = location.state?.depositTakerId;
+  const depositTakerId = location.state?.createdBy;
+  console.log("---id---",location)
 
   const { setAllFormData, setAllDocumentData, allFormData } =
   useDepositTakerRegistrationStore((state) => state);
@@ -73,7 +74,8 @@ const SchemeSearchDetails: React.FC = () => {
             }
             else if (field?.key === 'branch') {
               try {
-                const res = await axiosTraceIdInstance.get('/deposit-taker/branch/' + location.state.depositTakerId)
+                const res = await axiosTraceIdInstance.get('/deposit-taker/branch/' + location.state.createdBy)
+                
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
                   return {

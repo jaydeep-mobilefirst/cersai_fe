@@ -11,6 +11,8 @@ type Props = {};
 
 const Dashboard = (props: Props) => {
   const [loader, setLoader] = useState(false);
+  const [timeframe, setTimeframe] = useState('annually'); // Default to 'annually'
+  const timeframes = ['annually', 'quarterly', 'monthly']; // List of timeframes
   // const getAllValues = () => {
   //   setLoader(true);
   //   // setHomePageData(data.data.content)
@@ -93,19 +95,37 @@ const Dashboard = (props: Props) => {
     getAllValues();
   }, []);
 
+  const handleRadioChange = (event:any) => {
+    setTimeframe(event.target.value);
+  };
+
   return (
     <div className="relative xl:ml-[20px]">
       <h1 className="text-[25px] font-[400] mb-3">Business Statistics</h1>
       <div className="mb-[20px]">
         <DashboardTabsContainer tabsData={tabsData} />
       </div>
+            <div className="mb-[20px] flex gap-[15px]">
+              {timeframes.map((time) => (
+                <label key={time} className="flex items-center">
+                  <input
+                    type="radio"
+                    name="timeframe"
+                    value={time}
+                    checked={timeframe === time}
+                    onChange={handleRadioChange}
+                  />
+                  <span className="ml-[8px] capitalize">{time}</span>
+                </label>
+              ))}
+            </div>
 
       <div className="w-[100%] gap-[20px]  flex justify-between flex-wrap">
         {/* <div className="w-[100%] sm:w-[48%] xl:w-[31.5%]">
           <DoubleBarChart />
         </div> */}
-        <div className="w-[100%] sm:w-[48%] xl:w-[31.5%]">
-          <TotalFoundationLineChart />
+        <div className="w-[100%] sm:w-[50%]  md:w-[100%]">
+          <TotalFoundationLineChart intervalType={timeframe}/>
         </div>
         {/* <div className="w-[100%] sm:w-[48%] xl:w-[31.5%]">
           <DoubleBarChart />
