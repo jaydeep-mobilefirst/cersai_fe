@@ -23,6 +23,7 @@ const DepositTakerForm = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const depositTakerId = location.state?.depositTakerId;
   const [dataBranch, setDataBranch] = useState([]);
+  const [dataManagementTeam, setDataManagementTeam] = useState([]);
   const { setAllFormData, setAllDocumentData, allFormData, documentData } =
     useDepositTakerRegistrationStore((state) => state);
   const [page, setPage] = useState<number>(1);
@@ -44,9 +45,28 @@ const DepositTakerForm = () => {
         setLoader(false);
       });
   };
+  
+  
+
+  const getManagementDetails = () => {
+    setLoader(true);
+    axiosTokenInstance
+      .get(`deposit-taker/management-team/${"DT1720268137702"}`)
+      .then((res) => {
+        setDataManagementTeam(res?.data?.data);
+        console.log(res.data)
+
+        setLoader(false);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setLoader(false);
+      });
+  };
 
   useEffect(() => {
     getBranches();
+    getManagementDetails()
   }, []);
   const fetchFormFields = () => {
     setLoader(true);
@@ -122,10 +142,17 @@ const DepositTakerForm = () => {
     sno: Number,
     id: Number,
     depositTakerId: String,
+    firstName: String,
+    middleName: String,
+    lastName: String,
     addressLine1: String,
     addressLine2: String,
+    pincode: String,
     state: String,
     district: String,
+    landlineNumber: String,
+    email: String,
+    designation: String,
   };
 
   let count: number;
@@ -138,13 +165,12 @@ const DepositTakerForm = () => {
 
   const columns = [
     columnHelper.accessor("sno", {
-      cell: () => {
-        while (count <= total) {
-          count++;
-          return count;
-        }
-      },
       header: () => <span>Sr. No.</span>,
+      cell: (info) => {
+        // Calculate serial number based on current page and index of the row
+        const serialNumber = (page - 1) * pageSize + (info.row.index + 1);
+        return <span>{serialNumber}</span>;
+      },
     }),
 
     columnHelper.accessor("depositTakerId", {
@@ -166,6 +192,59 @@ const DepositTakerForm = () => {
     columnHelper.accessor("district", {
       cell: (info) => info.renderValue(),
       header: () => <span>District</span>,
+    }),
+  ];
+  const columnsMangement = [
+    columnHelper.accessor("sno", {
+      header: () => <span>Sr. No.</span>,
+      cell: (info) => {
+        const serialNumber = (page - 1) * pageSize + (info.row.index + 1);
+        return <span>{serialNumber}</span>;
+      },
+    }),
+    columnHelper.accessor("firstName", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>First Name</span>,
+    }),
+    columnHelper.accessor("middleName", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Middle Name</span>,
+    }),
+    columnHelper.accessor("lastName", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Last Name</span>,
+    }),
+    columnHelper.accessor("addressLine1", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Address Line 1</span>,
+    }),
+    columnHelper.accessor("addressLine2", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Address Line 2</span>,
+    }),
+    columnHelper.accessor("pincode", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Pincode</span>,
+    }),
+    columnHelper.accessor("state", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>State</span>,
+    }),
+    columnHelper.accessor("district", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>District</span>,
+    }),
+    columnHelper.accessor("landlineNumber", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Landline Number</span>,
+    }),
+    columnHelper.accessor("email", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Email</span>,
+    }),
+    columnHelper.accessor("designation", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Designation</span>,
     }),
   ];
 
@@ -238,7 +317,7 @@ const DepositTakerForm = () => {
                         <div className="mb-[16px] " key={index}>
                           <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold">
                             <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                              {section?.sectionName}
+                            {section?.sectionName === "Nodal Details"?"Nodal Officer Details":section?.sectionName}
                             </p>
                             <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
                               {/* {section.buttonText} */}
@@ -302,6 +381,31 @@ const DepositTakerForm = () => {
                         )}
                       </div>
                     </div>
+                      
+                      <div className="w-full overflow-x-auto mt-4 mb-3">
+                        <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
+                          <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                            Management Details
+                          </p>
+                        </div>
+                        <div
+                          className="custom-scrollbar"
+                          style={{ maxHeight: "200px", overflowY: "auto" }}
+                        >
+                          {loader ? (
+                            <LoaderSpin />
+                          ) : dataManagementTeam.length > 0 ? (
+                            <ReactTable
+                              defaultData={dataManagementTeam}
+                              columns={columnsMangement}
+                            />
+                          ) : (
+                            <div className=" flex justify-center items-center">
+                              <p>No data available</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     <div>
                       <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
                         <p className="lg:w-[152px] ml-[16px] mt-[16px] text-xl lg:text-[20px] pb-2 text-nowrap">

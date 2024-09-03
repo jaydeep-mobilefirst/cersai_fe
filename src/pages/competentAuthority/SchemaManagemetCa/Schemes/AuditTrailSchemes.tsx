@@ -225,8 +225,14 @@ const SchemesSearchDetailsSM: React.FC = () => {
         .then((res) => {
           let data = res?.data?.data;
           setRawSchemes(data);
+
+        
+          // Update the schemes list to exclude the selected scheme
+          const filteredSchemes = data?.filter(
+            (d: any) => d?.name !== allFormData?.formFields?.form_fields?.[0]?.userInput
+          );
           setSchemes(
-            data?.map((d: any) => {
+            filteredSchemes?.map((d: any) => {
               return {
                 label: d?.name,
                 value: d?.uniqueId,
