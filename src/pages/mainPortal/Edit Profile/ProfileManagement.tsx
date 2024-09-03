@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import infoIcon from "../../../assets/images/info-circle.svg";
 
 import Swal from "sweetalert2";
-import { useBranchStore } from "../../../store/upate-profile/branch";
+// import { useBranchStore } from "../../../store/upate-profile/branch";
 import { useScreenWidth } from "../../../utils/screenSize";
 import Button from "../../../components/userFlow/common/Button";
 import uploadIcon from "../../../assets/images/directbox-send.svg";
@@ -14,6 +14,7 @@ import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
 import ProfileManagementForm from "./ProfileManagementForm";
 import { useNavigate } from "react-router-dom";
+import { useBranchStore } from "../../../store/upate-profile/managementStore";
 const ProfileManagement = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
@@ -39,6 +40,7 @@ const ProfileManagement = () => {
   console.log({ branches }, "branches");
   // const [isChecked, setChecked] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
+  const [loader1, setLoader1] = useState(false);
   const [uploadInputKey, setUploadKey] = useState<number>(0);
   const uploadButtonRef = useRef<HTMLInputElement>(null);
   const [managementData, setManagementData] = useState<any>([]);
@@ -98,41 +100,88 @@ const ProfileManagement = () => {
 
   console.log({ branches }, "branches");
 
+  // const onSubmit = async (data: any) => {
+  //   console.log("Data", data);
+  //   setLoader(true);
+  //   try {
+  //     const membersToSubmit = data?.branches?.map((member: any) => {
+  //       const { id, ...memberData } = member;
+  //       return member.id ? { id, ...memberData } : memberData;
+  //     });
+
+  //     const response = await axiosTokenInstance.post(
+  //       `/deposit-taker/management-team/${entityUniqueId}`,
+  //       {
+  //         members: membersToSubmit, // Changed from branches to members
+  //       }
+  //     );
+
+  //     await fetchBranches();
+  //     setLoader(false);
+
+  //     Swal.fire({
+  //       icon: "success",
+  //       text: response?.data?.message,
+  //       confirmButtonText: "Ok",
+  //     }).then(() => {
+  //       Navigate("/dt/profile?current=documents");
+  //     });
+  //   } catch (error) {
+  //     console.error("Failed to submit members:", error);
+  //     Swal.fire({
+  //       icon: "error",
+  //       text: "Failed to update Entity Details",
+  //       confirmButtonText: "Ok",
+  //     });
+  //     setLoader(false);
+  //   }
+  // };
   const onSubmit = async (data: any) => {
     console.log("Data", data);
-    setLoader(true);
-    try {
-      const membersToSubmit = data?.branches?.map((member: any) => {
-        const { id, ...memberData } = member;
-        return member.id ? { id, ...memberData } : memberData;
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to update the Management Details?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, update it!",
+      cancelButtonText: "No, cancel!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setLoader(true);
+        try {
+          const membersToSubmit = data?.branches?.map((member: any) => {
+            const { id, ...memberData } = member;
+            return member.id ? { id, ...memberData } : memberData;
+          });
 
-      const response = await axiosTokenInstance.post(
-        `/deposit-taker/management-team/${entityUniqueId}`,
-        {
-          members: membersToSubmit, // Changed from branches to members
+          const response = await axiosTokenInstance.post(
+            `/deposit-taker/management-team/${entityUniqueId}`,
+            {
+              members: membersToSubmit,
+            }
+          );
+
+          await fetchBranches();
+          setLoader(false);
+
+          Swal.fire({
+            icon: "success",
+            text: response?.data?.message,
+            confirmButtonText: "Ok",
+          }).then(() => {
+            Navigate("/dt/profile?current=documents");
+          });
+        } catch (error) {
+          console.error("Failed to submit members:", error);
+          Swal.fire({
+            icon: "error",
+            text: "Failed to update Entity Details",
+            confirmButtonText: "Ok",
+          });
+          setLoader(false);
         }
-      );
-
-      await fetchBranches();
-      setLoader(false);
-
-      Swal.fire({
-        icon: "success",
-        text: response?.data?.message,
-        confirmButtonText: "Ok",
-      }).then(() => {
-        Navigate("/dt/profile?current=documents");
-      });
-    } catch (error) {
-      console.error("Failed to submit members:", error);
-      Swal.fire({
-        icon: "error",
-        text: "Failed to update Entity Details",
-        confirmButtonText: "Ok",
-      });
-      setLoader(false);
-    }
+      }
+    });
   };
 
   const disabledField = sessionStorage.getItem("user_status");
@@ -159,13 +208,13 @@ const ProfileManagement = () => {
   const disableFieldStatus = checkStatus(disabledField);
   const onClick = async (data: any) => {
     console.log("Data form onClick", data);
-    // setLoader(true);
+
+    setBranches(data?.branches ?? []);
     Navigate("/dt/profile?current=documents", {
       state: {
         managementData: data,
       },
     });
-    // setLoader(false);
   };
 
   return (
@@ -187,7 +236,9 @@ const ProfileManagement = () => {
               errors={errors}
               setValue={setValue}
               getValues={getValues}
-              removeBranch={() => removeBranch(branch.id || index)}
+              removeBranch={() =>
+                removeBranch(branch.id || index, fetchBranches)
+              }
               addBranch={addBranch}
             />
           ))

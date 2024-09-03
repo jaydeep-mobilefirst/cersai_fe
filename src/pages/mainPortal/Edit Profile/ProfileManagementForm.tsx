@@ -365,12 +365,14 @@ const ProfileManagementForm: React.FC<Props> = ({
             </p>
           )}
         </div>
+
         <div>
           <label
             htmlFor={`landlineNumber-${i}`}
             className="text-base font-normal"
           >
-            Landline Number <span className="text-red-500">*</span>
+            Landline Number
+            {/* <span className="text-red-500">*</span> */}
           </label>
           <Tooltip
             title={
@@ -389,11 +391,11 @@ const ProfileManagementForm: React.FC<Props> = ({
               placeholder="Enter landline number"
               disabled={disableFieldStatus}
               {...register(`branches[${i}].landlineNumber`, {
-                required: "Landline number is required",
+                // required: "Landline number is required",
                 pattern: {
-                  value: /^[0-9]{6,15}$/, // Adjust the regex to fit your landline number format
+                  value: /^\+?[0-9-]{6,15}$/, // Regex for landline number: allows optional '+' and digits with hyphens
                   message:
-                    "Invalid landline number format. It should be between 6 to 15 digits.",
+                    "Invalid landline number format. It should be between 6 to 15 digits, and may include hyphens.",
                 },
               })}
             />
@@ -404,9 +406,11 @@ const ProfileManagementForm: React.FC<Props> = ({
             </p>
           )}
         </div>
+
         <div>
           <label htmlFor={`email-${i}`} className="text-base font-normal">
-            Email Id <span className="text-red-500">*</span>
+            Email Id
+            {/* <span className="text-red-500">*</span> */}
           </label>
           <Tooltip
             title={
@@ -425,7 +429,7 @@ const ProfileManagementForm: React.FC<Props> = ({
               placeholder="Enter email Id"
               disabled={disableFieldStatus}
               {...register(`branches[${i}].email`, {
-                required: "Email Id is required",
+                // required: "Email Id is required",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                   message: "Invalid email format",

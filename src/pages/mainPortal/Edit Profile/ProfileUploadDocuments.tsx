@@ -20,6 +20,7 @@ const ProfileUploadDocuments = (props: Props) => {
   const location = useLocation();
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState<boolean>(false);
+  const [loader1, setLoader1] = useState(false);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -63,41 +64,92 @@ const ProfileUploadDocuments = (props: Props) => {
       label: field.documentName,
       value: field.uploadFileId,
     }));
-
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    setLoader(true);
-    const goodToGo = await handleDocumentValidations(
-      documentData.map((d: { sectionId: number }) => d?.sectionId)
-    );
-    if (!goodToGo) {
-      setLoader(false);
-      return;
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to Updated the Documents?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, upload!",
+      cancelButtonText: "No, cancel!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setLoader(true);
+        const goodToGo = await handleDocumentValidations(
+          documentData.map((d: { sectionId: number }) => d?.sectionId)
+        );
+        if (!goodToGo) {
+          setLoader(false);
+          return;
+        }
 
-    axiosTokenInstance
-      .patch(`/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`, {
-        formData: formData,
-      })
-      .then((response) => {
-        Swal.fire({
-          icon: "success",
-          text: response?.data?.message || "Documents uploaded successfully",
-          confirmButtonText: "Ok",
-        });
+        axiosTokenInstance
+          .patch(
+            `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+            {
+              formData: formData,
+            }
+          )
+          .then((response) => {
+            Swal.fire({
+              icon: "success",
+              text:
+                response?.data?.message || "Documents uploaded successfully",
+              confirmButtonText: "Ok",
+            });
+            setLoader(false);
+            Navigate("/dt/profile?current=branches");
+          })
+          .catch((err) => {
+            setLoader(false);
+            Swal.fire({
+              icon: "error",
+              text:
+                err?.response?.data?.detail?.message ||
+                "Failed to upload documents",
+              confirmButtonText: "Ok",
+            });
+          });
         setLoader(false);
-        Navigate("/dt/profile?current=branches");
-      })
-      .catch((err) => {
-        setLoader(false);
-        Swal.fire({
-          icon: "error",
-          text: err?.response?.data?.detail?.message,
-          confirmButtonText: "Ok",
-        });
-      });
-    setLoader(false);
+      }
+    });
   };
+
+  // const onSubmit = async (e: any) => {
+  //   e.preventDefault();
+  //   setLoader(true);
+  //   const goodToGo = await handleDocumentValidations(
+  //     documentData.map((d: { sectionId: number }) => d?.sectionId)
+  //   );
+  //   if (!goodToGo) {
+  //     setLoader(false);
+  //     return;
+  //   }
+
+  //   axiosTokenInstance
+  //     .patch(`/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`, {
+  //       formData: formData,
+  //     })
+  //     .then((response) => {
+  //       Swal.fire({
+  //         icon: "success",
+  //         text: response?.data?.message || "Documents uploaded successfully",
+  //         confirmButtonText: "Ok",
+  //       });
+  //       setLoader(false);
+  //       Navigate("/dt/profile?current=branches");
+  //     })
+  //     .catch((err) => {
+  //       setLoader(false);
+  //       Swal.fire({
+  //         icon: "error",
+  //         text: err?.response?.data?.detail?.message,
+  //         confirmButtonText: "Ok",
+  //       });
+  //     });
+  //   setLoader(false);
+  // };
 
   // ---------------------------------------------------------------------------------------
 
@@ -157,7 +209,7 @@ const ProfileUploadDocuments = (props: Props) => {
 
   const disableFieldStatus = checkStatus(disabledField);
   const onClick = async (event: any) => {
-    // setLoader(true);
+    setLoader1(true);
     const goodToGo = await handleDocumentValidations(
       documentData.map((d: { sectionId: number }) => d?.sectionId)
     );
@@ -170,7 +222,7 @@ const ProfileUploadDocuments = (props: Props) => {
         },
       });
     }
-    // setLoader(false);
+    setLoader1(false);
   };
 
   return (
@@ -236,6 +288,7 @@ const ProfileUploadDocuments = (props: Props) => {
                       onSubmit={onSubmit}
                       loader={loader}
                       onClick={onClick}
+                      loader1={loader1}
                       showbackbtn={true}
                       path={"/dt/profile?current=management"}
                     />

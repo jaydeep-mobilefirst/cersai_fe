@@ -29,6 +29,7 @@ const ProfileEntityDetails = (props: Props) => {
     useContext(FormHandlerContext);
   const navigate = useNavigate();
   const setFormData = useProfileEntityStore((state) => state.setFormData);
+  const [loader1, setLoader1] = useState(false);
 
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
@@ -149,44 +150,95 @@ const ProfileEntityDetails = (props: Props) => {
       value: field.userInput,
     }));
 
+  // const onSubmit = async (event: any) => {
+  //   event?.preventDefault();
+  //   setLoader(true);
+  //   const noError = await handleValidationChecks(
+  //     formFields?.filter((field: any) => field?.disabled === false)
+  //   );
+
+  //   if (noError) {
+  //     if (noError) {
+  //       axiosTokenInstance
+  //         .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
+  //           formData: formData,
+  //         })
+  //         .then((response) => {
+  //           console.log(response?.data?.message, "response");
+  //           Swal.fire({
+  //             icon: "success",
+  //             text:
+  //               response?.data?.message ||
+  //               "Entity Details updated successfully",
+  //             confirmButtonText: "Ok",
+  //           });
+
+  //           Navigate("/dt/profile?current=nodal");
+  //         })
+  //         .catch((err) => {
+  //           Swal.fire({
+  //             icon: "error",
+  //             text: "Failed to update Entity Details",
+  //             confirmButtonText: "Ok",
+  //           });
+  //         });
+  //     }
+  //   }
+  //   setLoader(false);
+  // };
   const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true);
-    const noError = await handleValidationChecks(
-      formFields?.filter((field: any) => field?.disabled === false)
-    );
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to update the Entity Details?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, update it!",
+      cancelButtonText: "No, cancel!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setLoader(true);
+        const noError = await handleValidationChecks(
+          formFields?.filter((field: any) => field?.disabled === false)
+        );
 
-    if (noError) {
-      if (noError) {
-        axiosTokenInstance
-          .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
-            formData: formData,
-          })
-          .then((response) => {
-            console.log(response?.data?.message, "response");
-            Swal.fire({
-              icon: "success",
-              text:
-                response?.data?.message ||
-                "Entity Details updated successfully",
-              confirmButtonText: "Ok",
-            });
+        if (noError) {
+          axiosTokenInstance
+            .patch(
+              `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+              {
+                formData: formData,
+              }
+            )
+            .then((response) => {
+              Swal.fire({
+                icon: "success",
+                text:
+                  response?.data?.message ||
+                  "Entity Details updated successfully",
+                confirmButtonText: "Ok",
+              });
 
-            Navigate("/dt/profile?current=nodal");
-          })
-          .catch((err) => {
-            Swal.fire({
-              icon: "error",
-              text: "Failed to update Entity Details",
-              confirmButtonText: "Ok",
+              Navigate("/dt/profile?current=nodal");
+            })
+            .catch((err) => {
+              Swal.fire({
+                icon: "error",
+                text: "Failed to update Entity Details",
+                confirmButtonText: "Ok",
+              });
+            })
+            .finally(() => {
+              setLoader(false);
             });
-          });
+        } else {
+          setLoader(false);
+        }
       }
-    }
-    setLoader(false);
+    });
   };
   const onClick = async (event: any) => {
-    // setLoader(true);
+    setLoader1(true);
     event?.preventDefault();
     const noError = await handleValidationChecks(
       formFields?.filter((field: any) => field?.disabled === false)
@@ -194,8 +246,8 @@ const ProfileEntityDetails = (props: Props) => {
     if (noError) {
       setFormData(formData);
       navigate("/dt/profile?current=nodal");
-      // setLoader(false);
     }
+    setLoader1(false);
   };
   return (
     <>
@@ -218,6 +270,7 @@ const ProfileEntityDetails = (props: Props) => {
                 <Footer
                   onSubmit={onSubmit}
                   loader={loader}
+                  loader1={loader1}
                   onClick={onClick}
                   showbackbtn={false}
                 />
