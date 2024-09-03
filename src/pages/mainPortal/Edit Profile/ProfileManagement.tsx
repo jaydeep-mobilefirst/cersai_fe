@@ -55,6 +55,10 @@ const ProfileManagement = () => {
     reset,
   } = useForm();
 
+  const profile_management_api = sessionStorage.getItem(
+    "profile_management_api"
+  );
+
   const fetchBranches = async () => {
     try {
       setLoader(true);
@@ -78,12 +82,25 @@ const ProfileManagement = () => {
           district: "",
         });
       }
-      setBranches(fetchedBranches);
-      reset({
-        branches: fetchedBranches?.map((branch: any) => ({
-          ...branch, // Spread the entire branch object
-        })),
-      }); // Properly initializing form with fetched data including IDs
+      if (profile_management_api === "true") {
+        setBranches(fetchedBranches);
+        reset({
+          branches: fetchedBranches?.map((branch: any) => ({
+            ...branch, // Spread the entire branch object
+          })),
+        }); // Properly initializing form with fetched data including IDs
+        setTimeout(() => {
+          sessionStorage.setItem("profile_management_api", "false");
+        }, 1000);
+      }else{
+        reset({
+          branches: branches?.map((branch: any) => ({
+            ...branch, // Spread the entire branch object
+          })),
+        }); // Properly initializing form with fetched data including IDs
+      }
+     
+   
       setLoader(false);
     } catch (error) {
       console.error("Failed to fetch branches:", error);
@@ -209,7 +226,7 @@ const ProfileManagement = () => {
   const onClick = async (data: any) => {
     console.log("Data form onClick", data);
 
-    setBranches(data?.branches ?? []);
+    setBranches(data?.branches);
     Navigate("/dt/profile?current=documents", {
       state: {
         managementData: data,
@@ -218,9 +235,9 @@ const ProfileManagement = () => {
   };
 
   return (
-    <div className="bg-white p-7 w-full h-full ">
-      <h1 className="font-semibold text-2xl mb-3 text-[#1C468E]">Add User</h1>
-      <div className="flex-row align-middle text-gray-400 flex justify-between"></div>
+    <div className='bg-white p-7 w-full h-full '>
+      <h1 className='font-semibold text-2xl mb-3 text-[#1C468E]'>Add User</h1>
+      <div className='flex-row align-middle text-gray-400 flex justify-between'></div>
       <form onSubmit={handleSubmit(onSubmit)}>
         {loader ? (
           <LoaderSpin />
@@ -253,8 +270,8 @@ const ProfileManagement = () => {
           />
           <button
             onSubmit={onSubmit}
-            type="submit"
-            className="mt-4 btn-primary"
+            type='submit'
+            className='mt-4 btn-primary'
           ></button>
         </div>
       </form>
