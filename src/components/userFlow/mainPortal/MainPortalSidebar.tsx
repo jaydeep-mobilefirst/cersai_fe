@@ -116,7 +116,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
     // Set a timeout to mark the user as inactive after 10 minutes (600000 ms)
     const newTimeoutId = setTimeout(() => {
       setIsActive(false);
-    }, 1800000);
+    }, 600000);
     setTimeoutId(newTimeoutId);
   };
 

@@ -27,13 +27,10 @@ const DashboardProfile = (props: Props) => {
     sessionStorage.getItem("refreshShow")
   );
 
-  const entity_details_data = sessionStorage.getItem('entity_details_data')
-
   const fetchFormFields = () => {
     axiosTokenInstance
       .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
-        if(entity_details_data === 'true'){
         if (response?.data?.success) {
           let dtData: any = [];
           try {
@@ -42,7 +39,6 @@ const DashboardProfile = (props: Props) => {
             );
             dtData =
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
-              sessionStorage.setItem("entity_details_data", "false")
           } catch (error: any) {
             if (error.response.status === 401) {
               navigate("/"); // Navigate to home
@@ -85,7 +81,7 @@ const DashboardProfile = (props: Props) => {
           setAllDocumentData(modifiedFileFields);
         } else {
           throw new Error("Error getting data, Please try later!");
-        }}
+        }
         setLoader(false);
       })
       .catch((error: any) => {
