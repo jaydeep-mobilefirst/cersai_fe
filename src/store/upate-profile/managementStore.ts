@@ -1,66 +1,103 @@
 import { create, StateCreator } from "zustand";
 import { persist } from "zustand/middleware";
+import { axiosTokenInstance } from "../../utils/axios";
+import Swal from "sweetalert2";
 
-interface Management {
+interface Branch {
   id: number;
 }
 
-interface ManagementState {
-  managements: Management[];
+interface BranchState {
+  branches: Branch[];
   isChecked: boolean;
-  addManagement: () => void;
-  removeManagement: (managementId: number) => void;
-  setManagements: (newManagements: Management[]) => void;
+  addBranch: () => void;
+  // removeBranch: (branchId: number) => void;
+  removeBranch: (branchId: number, afterRemove?: () => void) => void;
+  setBranches: (newBranches: Branch[]) => void;
   setChecked: (value: boolean) => void;
   toggleChecked: () => void;
 }
 
-type ManagementStoreCreator = StateCreator<ManagementState>;
+type BranchStoreCreator = StateCreator<BranchState>;
 
-const initialManagementState: ManagementState = {
-  managements: [{ id: 1 }],
+const initialBranchState: BranchState = {
+  branches: [{ id: 1 }],
   isChecked: false,
-  addManagement: () => {},
-  removeManagement: () => {},
-  setManagements: () => {},
+  addBranch: () => {},
+  removeBranch: () => {},
+  setBranches: () => {},
   setChecked: () => {},
   toggleChecked: () => {},
 };
 
-export const useManagementStore = create<ManagementState>(
-  persist<ManagementState>(
+export const useBranchStore = create<BranchState>(
+  persist<BranchState>(
     (set) => ({
-      ...initialManagementState,
+      ...initialBranchState,
 
-      addManagement: () => {
+      addBranch: () => {
         set((state) => {
           // Check if all IDs are valid numbers; otherwise, default them to 0
           const newId =
-            state.managements.reduce(
-              (maxId, management) =>
-                Math.max(
-                  Number.isFinite(management.id) ? management.id : 0,
-                  maxId
-                ),
+            state.branches.reduce(
+              (maxId, branch) =>
+                Math.max(Number.isFinite(branch.id) ? branch.id : 0, maxId),
               0 // Ensure the initial value is 0
             ) + 1;
 
-          // console.log(`Adding management with ID: ${newId}`);
+          // console.log(`Adding branch with ID: ${newId}`);
           return {
-            managements: [...state.managements, { id: newId }],
+            branches: [...state.branches, { id: newId }],
           };
         });
       },
 
-      removeManagement: (managementId: number) => {
-        set((state) => ({
-          managements: state.managements.filter(
-            (management) => management.id !== managementId
-          ),
-        }));
+      // removeBranch: (branchId: number) => {
+      //   set((state) => ({
+      //     branches: state.branches.filter((branch) => branch.id !== branchId),
+      //   }));
+      // },
+      removeBranch: (branchId, afterRemove) => {
+        set((state) => {
+          const branch: any = state.branches.find(
+            (branch: any) => branch.id === branchId
+          );
+
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to remove this user?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, remove it!",
+            cancelButtonText: "No, cancel!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              if (branch && branch.firstName) {
+                axiosTokenInstance
+                  .delete(`deposit-taker/management-team/${branchId}`)
+                  .then(() => {
+                    console.log(`Branch ${branchId} removed from API`);
+                    if (afterRemove) {
+                      afterRemove(); // Call the callback function after removal
+                    }
+                  });
+              }
+            }
+          });
+          if (branch && branch.firstName) {
+            // axiosTokenInstance
+            //   .delete(`deposit-taker/management-team/${branchId}`)
+            //   .then(() => {
+            //     console.log(`Branch ${branchId} removed from API`);
+            //   });
+          }
+          return {
+            // branches: state.branches.filter((branch) => branch.id !== branchId),
+          };
+        });
       },
-      setManagements: (newManagements: Management[]) => {
-        set({ managements: newManagements });
+      setBranches: (newBranches: Branch[]) => {
+        set({ branches: newBranches });
       },
       setChecked: (value: boolean) => {
         set({ isChecked: value });
@@ -70,8 +107,8 @@ export const useManagementStore = create<ManagementState>(
       },
     }),
     {
-      name: "management-storage",
+      name: "management-store",
       getStorage: () => sessionStorage,
     }
-  ) as ManagementStoreCreator
+  ) as BranchStoreCreator
 );

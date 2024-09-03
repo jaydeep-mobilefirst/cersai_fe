@@ -155,31 +155,44 @@ const ProfileBranches = () => {
       );
 
       if (callapi) {
-        const membersToSubmit = managementData?.branches?.map((member: any) => {
-          const { id, ...memberData } = member;
-          return member.id ? { id, ...memberData } : memberData;
-        });
-        await axiosTokenInstance.post(
-          `/deposit-taker/management-team/${entityUniqueId}`,
-          {
-            members: membersToSubmit, // Changed from branches to members
+        Swal.fire({
+          title: "Are you sure?",
+          text: "Do you want to proceed with updating the details?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, upload!",
+          cancelButtonText: "No, cancel!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const membersToSubmit = managementData?.branches?.map(
+              (member: any) => {
+                const { id, ...memberData } = member;
+                return member.id ? { id, ...memberData } : memberData;
+              }
+            );
+            axiosTokenInstance.post(
+              `/deposit-taker/management-team/${entityUniqueId}`,
+              {
+                members: membersToSubmit, // Changed from branches to members
+              }
+            );
           }
-        );
-        axiosTokenInstance
-          .patch(
-            `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
-            {
-              formData: combinedFormData,
-            }
-          )
-          .then((response) => {
-            Swal.fire({
-              icon: "success",
-              text: response?.data?.message || "",
-              confirmButtonText: "Ok",
+          axiosTokenInstance
+            .patch(
+              `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+              {
+                formData: combinedFormData,
+              }
+            )
+            .then((response) => {
+              Swal.fire({
+                icon: "success",
+                text: response?.data?.message || "",
+                confirmButtonText: "Ok",
+              });
+              setLoader(false);
             });
-            setLoader(false);
-          });
+        });
       } else {
         Swal.fire({
           icon: "success",

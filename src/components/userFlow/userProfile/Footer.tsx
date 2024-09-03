@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 interface FooterProps {
   onSubmit?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   loader?: boolean;
+  loader1?: boolean;
   disabled?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   hidecontiuebtn?: boolean;
@@ -15,6 +16,7 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = ({
   onSubmit,
   loader,
+  loader1,
   disabled,
   onClick,
   hidecontiuebtn,
@@ -121,7 +123,7 @@ const Footer: React.FC<FooterProps> = ({
                       disabled ? "bg-gray-500" : "bg-[#1C468E] mx-3"
                     } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
                   >
-                    Save and continue
+                    {loader1 ? <LoaderSpin /> : " Save and continue"}
                   </button>
                 </>
               )}
