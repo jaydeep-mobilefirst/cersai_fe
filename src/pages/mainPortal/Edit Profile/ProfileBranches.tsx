@@ -121,7 +121,7 @@ const ProfileBranches = () => {
           pinCode: "",
           state: "",
           district: "",
-          place: "",
+          // place: "",
         });
       }
       setBranches(fetchedBranches);
