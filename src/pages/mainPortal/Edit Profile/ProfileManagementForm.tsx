@@ -10,6 +10,7 @@ import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
 import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 interface Branch {
   firstName: string;
@@ -36,10 +37,10 @@ interface Props {
     lastName: string;
     designation: string;
     landlineNumber: string;
-    emailId: string;
+    email: string;
     addressLine1: string;
     addressLine2: string;
-    pinCode: string;
+    pincode: string;
     state: string;
     district: string;
   };
@@ -56,10 +57,14 @@ const ProfileManagementForm: React.FC<Props> = ({
   addBranch,
   branch,
 }) => {
+  console.log(branch, "branch");
   const [pinCodeError, setPinCodeError] = useState("");
+  const [designationOptions, setDesignationOptions] = useState([]);
   const [selectedState, setSelectedState] = useState<string | null>(
     branch.designation
   );
+
+  console.log({ selectedState }, "selectedState");
   const Stateoptions = [
     { value: "xyz", label: "xyz" },
     { value: "abc", label: "abc" },
@@ -118,6 +123,30 @@ const ProfileManagementForm: React.FC<Props> = ({
       }
     }
   };
+  useEffect(() => {
+    const fetchDesignations = async () => {
+      try {
+        const response = await axiosTokenInstance.get(
+          "/deposit-taker/management-team/designation"
+        );
+        console.log({ response }, "response");
+        setDesignationOptions(
+          response.data?.data.map((item: any) => ({
+            value: item.name,
+            label: item.name,
+          }))
+        );
+      } catch (error) {
+        console.error("Failed to fetch designations:", error);
+        Swal.fire({
+          icon: "error",
+          text: "Failed to fetch designations",
+          confirmButtonText: "Ok",
+        });
+      }
+    };
+    fetchDesignations();
+  }, []);
 
   const debouncedFetchLocation = useCallback(
     debounce(fetchLocationData, 500),
@@ -158,7 +187,7 @@ const ProfileManagementForm: React.FC<Props> = ({
   return (
     <div className="my-3">
       <div className="flex flex-row justify-between bg-[#E7F0FF] p-2 rounded-md">
-        <span>User {i + 1}</span>
+        <span>Management Personnel {i + 1}</span>
         {disableFieldStatus ? (
           <></>
         ) : (
@@ -245,7 +274,7 @@ const ProfileManagementForm: React.FC<Props> = ({
         </div>
         <div>
           <label htmlFor={`lastName-${i}`} className="text-base font-normal">
-            last Name <span className="text-red-500">*</span>
+            Last Name <span className="text-red-500">*</span>
           </label>
           <Tooltip
             title={
@@ -315,11 +344,11 @@ const ProfileManagementForm: React.FC<Props> = ({
               })}
             /> */}
             <SelectButton
-              options={Stateoptions}
+              options={designationOptions}
               setOption={(value) => {
                 handleSetState(value);
                 setValue(`branches[${i}].designation`, value, {
-                  shouldValidate: true,
+                  // shouldValidate: true,
                 }); // Trigger validation when setting value
               }}
               selectedOption={selectedState}
@@ -336,12 +365,14 @@ const ProfileManagementForm: React.FC<Props> = ({
             </p>
           )}
         </div>
+
         <div>
           <label
             htmlFor={`landlineNumber-${i}`}
             className="text-base font-normal"
           >
-            Landline Number <span className="text-red-500">*</span>
+            Landline Number
+            {/* <span className="text-red-500">*</span> */}
           </label>
           <Tooltip
             title={
@@ -360,11 +391,11 @@ const ProfileManagementForm: React.FC<Props> = ({
               placeholder="Enter landline number"
               disabled={disableFieldStatus}
               {...register(`branches[${i}].landlineNumber`, {
-                required: "Landline number is required",
+                // required: "Landline number is required",
                 pattern: {
-                  value: /^[0-9]{6,15}$/, // Adjust the regex to fit your landline number format
+                  value: /^\+?[0-9-]{6,15}$/, // Regex for landline number: allows optional '+' and digits with hyphens
                   message:
-                    "Invalid landline number format. It should be between 6 to 15 digits.",
+                    "Invalid landline number format. It should be between 6 to 15 digits, and may include hyphens.",
                 },
               })}
             />
@@ -375,13 +406,15 @@ const ProfileManagementForm: React.FC<Props> = ({
             </p>
           )}
         </div>
+
         <div>
-          <label htmlFor={`emailId-${i}`} className="text-base font-normal">
-            Email Id <span className="text-red-500">*</span>
+          <label htmlFor={`email-${i}`} className="text-base font-normal">
+            Email Id
+            {/* <span className="text-red-500">*</span> */}
           </label>
           <Tooltip
             title={
-              getValues(`branches[${i}].emailId`)
+              getValues(`branches[${i}].email`)
                 ? "Edit email Id"
                 : "Enter email Id"
             }
@@ -395,8 +428,8 @@ const ProfileManagementForm: React.FC<Props> = ({
               type="text"
               placeholder="Enter email Id"
               disabled={disableFieldStatus}
-              {...register(`branches[${i}].emailId`, {
-                required: "Email Id is required",
+              {...register(`branches[${i}].email`, {
+                // required: "Email Id is required",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                   message: "Invalid email format",
@@ -404,8 +437,8 @@ const ProfileManagementForm: React.FC<Props> = ({
               })}
             />
           </Tooltip>
-          {errors?.branches?.[i]?.emailId && (
-            <p className="text-red-500">{errors.branches[i].emailId.message}</p>
+          {errors?.branches?.[i]?.email && (
+            <p className="text-red-500">{errors.branches[i].email.message}</p>
           )}
         </div>
 
@@ -484,12 +517,12 @@ const ProfileManagementForm: React.FC<Props> = ({
           )}
         </div>
         <div>
-          <label htmlFor={`pinCode-${i}`} className="text-base font-normal">
-            Pin Code
+          <label htmlFor={`pincode-${i}`} className="text-base font-normal">
+            Pin Code <span className="text-red-500">*</span>
           </label>
           <Tooltip
             title={
-              getValues(`branches[${i}].pinCode`)
+              getValues(`branches[${i}].pincode`)
                 ? "Edit PinCode"
                 : "Enter PinCode"
             }
@@ -503,7 +536,7 @@ const ProfileManagementForm: React.FC<Props> = ({
               type="number"
               placeholder="Enter pin code"
               disabled={disableFieldStatus}
-              {...register(`branches[${i}].pinCode`, {
+              {...register(`branches[${i}].pincode`, {
                 required: "Pin code is required",
                 minLength: {
                   value: 6,
@@ -518,8 +551,8 @@ const ProfileManagementForm: React.FC<Props> = ({
               })}
             />
           </Tooltip>
-          {errors?.branches?.[i]?.pinCode && (
-            <p className="text-red-500">{errors.branches[i].pinCode.message}</p>
+          {errors?.branches?.[i]?.pincode && (
+            <p className="text-red-500">{errors.branches[i].pincode.message}</p>
           )}
           {pinCodeError && <p className="text-red-500">{pinCodeError}</p>}
         </div>

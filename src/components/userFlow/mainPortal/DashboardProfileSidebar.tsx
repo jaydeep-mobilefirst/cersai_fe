@@ -117,25 +117,23 @@ const DashboardProfileSidebar = ({ fetchFormFields }: Props) => {
                 <li
                   className="px-4 py-2 relative"
                   key={idx}
-                  onClick={() => optionOnclick(data.url, data.percentage)}
+                  // onClick={() => optionOnclick(data.url, data.percentage)}
                 >
-                  <Link to={data?.rurl}>
+                  {/* <Link to={data?.rurl}> */}
+                  <div
+                    className={`w-[190px] md:w-[290px] h-auto md:h-14 ${
+                      current === data?.url ? "bg-[#1C468E]" : "bg-[#FFFFFF]"
+                    }  rounded-lg flex items-center justify-start `}
+                  >
                     <div
-                      className={`w-[190px] md:w-[290px] h-auto md:h-14 ${
-                        current === data?.url ? "bg-[#1C468E]" : "bg-[#FFFFFF]"
-                      }  rounded-lg flex items-center justify-start cursor-pointer`}
+                      className={`${
+                        current === data?.url ? "text-white" : "text-[#666666]"
+                      }  text-base font-normal text-gilroy-medium leading-normal pl-2`}
                     >
-                      <div
-                        className={`${
-                          current === data?.url
-                            ? "text-white"
-                            : "text-[#666666]"
-                        }  text-base font-normal text-gilroy-medium leading-normal pl-2`}
-                      >
-                        {data?.title}
-                      </div>
+                      {data?.title}
                     </div>
-                  </Link>
+                  </div>
+                  {/* </Link> */}
                   <span className="absolute right-6 top-7">
                     <img
                       src={current === data.url ? whiteRightArrow : rightArrow}

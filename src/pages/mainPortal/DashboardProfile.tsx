@@ -26,61 +26,70 @@ const DashboardProfile = (props: Props) => {
   const [refreshShow, setRefreshShow] = useState(
     sessionStorage.getItem("refreshShow")
   );
-
+  const entitiy_details_api = sessionStorage.getItem("entitiy_details_api");
   const fetchFormFields = () => {
     axiosTokenInstance
       .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
-        if (response?.data?.success) {
-          let dtData: any = [];
-          try {
-            let depositTakerData = await axiosTokenInstance.get(
-              `/deposit-taker/${entityUniqueId}`
-            );
-            dtData =
-              depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
-          } catch (error: any) {
-            if (error.response.status === 401) {
-              navigate("/"); // Navigate to home
-            } else if (error.response.status === 403) {
-              alert("You do not have permission to access this resource.");
+        if (entitiy_details_api === "true") {
+          if (response?.data?.success) {
+            let dtData: any = [];
+            try {
+              let depositTakerData = await axiosTokenInstance.get(
+                `/deposit-taker/${entityUniqueId}`
+              );
+              dtData =
+                depositTakerData?.data?.data?.depositTaker
+                  ?.depositTakerFormData;
+                sessionStorage.setItem('entitiy_details_api', 'false')
+            } catch (error: any) {
+              if (error.response.status === 401) {
+                navigate("/"); // Navigate to home
+              } else if (error.response.status === 403) {
+                alert("You do not have permission to access this resource.");
+              }
+
+              console.log("Error");
             }
+            let modifiedFormFields = response.data.data?.formFields
+              ?.map((o: any) => ({
+                ...o,
+                userInput: dtData
+                  ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                  : "",
+                error: "",
+              }))
+              ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
-            console.log("Error");
+            let modifiedFileFields =
+              response?.data?.data?.registrationDocumentFields?.map(
+                (o: any) => ({
+                  ...o,
+                  file: dtData
+                    ? dtData?.find((data: any) => data?.fieldId === o?.id)
+                        ?.value
+                    : "",
+                  error: "",
+                  fileName: dtData
+                    ? dtData?.find((data: any) => data?.fieldId === o?.id)
+                        ?.value
+                    : "",
+                  uploadFileId: dtData
+                    ? dtData?.find((data: any) => data?.fieldId === o?.id)
+                        ?.value
+                    : "",
+                })
+              );
+
+            let obj = {
+              ...response?.data?.data,
+              formFields: { form_fields: modifiedFormFields },
+            };
+            setAllFormData(obj);
+            setAllDocumentData(modifiedFileFields);
+          } else {
+            throw new Error("Error getting data, Please try later!");
           }
-          let modifiedFormFields = response.data.data?.formFields
-            ?.map((o: any) => ({
-              ...o,
-              userInput: dtData
-                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-                : "",
-              error: "",
-            }))
-            ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
-
-          let modifiedFileFields =
-            response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
-              ...o,
-              file: dtData
-                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-                : "",
-              error: "",
-              fileName: dtData
-                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-                : "",
-              uploadFileId: dtData
-                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-                : "",
-            }));
-
-          let obj = {
-            ...response?.data?.data,
-            formFields: { form_fields: modifiedFormFields },
-          };
-          setAllFormData(obj);
-          setAllDocumentData(modifiedFileFields);
-        } else {
-          throw new Error("Error getting data, Please try later!");
         }
         setLoader(false);
       })
@@ -97,14 +106,14 @@ const DashboardProfile = (props: Props) => {
   const current = searchParams.get("current");
   return (
     <>
-      <div className="lg:hidden mt-4">
+      <div className='lg:hidden mt-4'>
         <ProfileResponsiveTabs />
       </div>
-      <div className="mt-6 mx-6">
+      <div className='mt-6 mx-6'>
         <TaskTabs />
       </div>
-      <div className="flex flex-row">
-        <div className="hidden lg:block">
+      <div className='flex flex-row'>
+        <div className='hidden lg:block'>
           <DashboardProfileSidebar fetchFormFields={fetchFormFields} />
         </div>
         {current === "entity" && <ProfileEntityDetails />}

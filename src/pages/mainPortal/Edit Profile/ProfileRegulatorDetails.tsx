@@ -19,6 +19,7 @@ type Props = {};
 
 const ProfileRegulatorDetails = (props: Props) => {
   const [loader, setLoader] = useState(false);
+  const [loader1, setLoader1] = useState(false);
   const Navigate = useNavigate();
 
   const setFormData = useProfileRegulatorStore((state) => state.setFormData);
@@ -59,47 +60,94 @@ const ProfileRegulatorDetails = (props: Props) => {
     }));
   console.log({ formData });
 
+  // const onSubmit = async (event: any) => {
+  //   event?.preventDefault();
+  //   setLoader(true);
+  //   const noError = await handleValidationChecks(formFields);
+  //   if (noError) {
+  //     axiosTokenInstance
+  //       .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
+  //         formData: formData,
+  //       })
+  //       .then((response) => {
+  //         Swal.fire({
+  //           icon: "success",
+  //           text:
+  //             response?.data?.message ||
+  //             "Regulator Details updated successfully",
+  //           confirmButtonText: "Ok",
+  //         });
+  //         Navigate("/dt/profile?current=management");
+  //       })
+  //       .catch((err) => {
+  //         Swal.fire({
+  //           icon: "error",
+  //           text: "Failed to Regulator Nodal Details",
+  //           confirmButtonText: "Ok",
+  //         });
+  //       });
+  //   }
+  //   // if (noError) {
+  //   //   Swal.fire({
+  //   //     icon: "success",
+  //   //     text: "Regulator Detail  update  successfully ",
+  //   //     confirmButtonText: "Ok",
+  //   //   }).then((confirm: any) => {
+  //   //     Navigate("/dt/profile?current=documents");
+  //   //   });
+  //   // }
+  //   setLoader(false);
+  // };
   const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true);
-    const noError = await handleValidationChecks(formFields);
-    if (noError) {
-      axiosTokenInstance
-        .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
-          formData: formData,
-        })
-        .then((response) => {
-          Swal.fire({
-            icon: "success",
-            text:
-              response?.data?.message ||
-              "Regulator Details updated successfully",
-            confirmButtonText: "Ok",
-          });
-          Navigate("/dt/profile?current=management");
-        })
-        .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            text: "Failed to Regulator Nodal Details",
-            confirmButtonText: "Ok",
-          });
-        });
-    }
-    // if (noError) {
-    //   Swal.fire({
-    //     icon: "success",
-    //     text: "Regulator Detail  update  successfully ",
-    //     confirmButtonText: "Ok",
-    //   }).then((confirm: any) => {
-    //     Navigate("/dt/profile?current=documents");
-    //   });
-    // }
-    setLoader(false);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to update the Regulator Details?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, update it!",
+      cancelButtonText: "No, cancel!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setLoader(true);
+        const noError = await handleValidationChecks(formFields);
+        if (noError) {
+          axiosTokenInstance
+            .patch(
+              `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+              {
+                formData: formData,
+              }
+            )
+            .then((response) => {
+              Swal.fire({
+                icon: "success",
+                text:
+                  response?.data?.message ||
+                  "Regulator Details updated successfully",
+                confirmButtonText: "Ok",
+              });
+              Navigate("/dt/profile?current=management");
+            })
+            .catch((err) => {
+              Swal.fire({
+                icon: "error",
+                text: "Failed to update Regulator Details",
+                confirmButtonText: "Ok",
+              });
+            })
+            .finally(() => {
+              setLoader(false);
+            });
+        } else {
+          setLoader(false);
+        }
+      }
+    });
   };
 
   const onClick = async (event: any) => {
-    // setLoader(true);
+    setLoader1(true);
     event?.preventDefault();
     const noError = await handleValidationChecks(formFields);
     if (noError) {
@@ -107,7 +155,7 @@ const ProfileRegulatorDetails = (props: Props) => {
       Navigate("/dt/profile?current=management");
     }
 
-    // setLoader(false);
+    setLoader1(false);
   };
 
   return (
@@ -128,7 +176,14 @@ const ProfileRegulatorDetails = (props: Props) => {
                 onChange={onChange}
               />
               <div>
-                <Footer onSubmit={onSubmit} loader={loader} onClick={onClick} />
+                <Footer
+                  onSubmit={onSubmit}
+                  loader={loader}
+                  loader1={loader1}
+                  onClick={onClick}
+                  showbackbtn={true}
+                  path={"/dt/profile?current=nodal"}
+                />
               </div>
             </>
           ) : (

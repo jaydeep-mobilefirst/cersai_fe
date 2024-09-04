@@ -16,9 +16,21 @@ import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
 import useProfileEntityStore from "../../../zust/useProfileEntityStore";
 import useProfileNodalStore from "../../../zust/useProfileNodalStore";
 import userProfileUploadStore from "../../../zust/userProfileUploadStore";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import { useLocation } from "react-router-dom";
+import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
+  const location = useLocation();
+  const callapi = location.state?.callSaveandcontinue;
+  const managementData = location.state?.managementData;
+
+  console.log({ callapi, managementData }, "callapi");
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
+  console.log({ allFormData, documentData }, "allFormData");
   const regulatorStore = useProfileRegulatorStore(
     (state) => state.regulatorStore
   );
@@ -64,6 +76,8 @@ const ProfileBranches = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [uploadInputKey, setUploadKey] = useState<number>(0);
   const uploadButtonRef = useRef<HTMLInputElement>(null);
+  const [place, setPlace] = useState("");
+  const [placeError, setPlaceError] = useState("");
   const {
     register,
     handleSubmit,
@@ -73,6 +87,25 @@ const ProfileBranches = () => {
     getValues,
     reset,
   } = useForm();
+  const formData =
+    allFormData?.formFields?.form_fields &&
+    allFormData?.formFields?.form_fields?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: field.entityRegSection?.sectionName,
+      label: field.label,
+      value: field.userInput,
+    }));
+
+  const formDataDocument =
+    documentData &&
+    documentData?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: "Upload Documents",
+      label: field.documentName,
+      value: field.uploadFileId,
+    }));
+
+  const combinedFormData = [...formData, ...formDataDocument];
 
   const fetchBranches = async () => {
     try {
@@ -109,41 +142,110 @@ const ProfileBranches = () => {
   useEffect(() => {
     fetchBranches();
   }, [reset, setBranches, uploadInputKey]);
+  const handlePlaceChange = (event: any) => {
+    const { value } = event.target;
+    // Check if the input is empty
+    if (!value.trim()) {
+      setPlaceError("Place cannot be empty");
+    } else if (value.length > 10) {
+      setPlaceError("Place cannot be longer than 10 characters");
+    } else {
+      setPlaceError(""); // Clear error if input is valid
+    }
+    setPlace(value);
+  };
 
   const onSubmit = async (data: any) => {
+    if (!place.trim()) {
+      setPlaceError("Place cannot be empty");
+      return; // Prevent form submission if the place is empty
+    }
+
+    if (placeError) {
+      return; // Prevent form submission if there is a place error
+    }
     setLoader(true);
     try {
       const branchesToSubmit = data.branches.map((branch: any) => {
         const { id, ...branchData } = branch;
         return branch.id ? { id, ...branchData } : branchData;
       });
+      // const response = await axiosTokenInstance.post(
+      //   `/deposit-taker/branch/${entityUniqueId}`,
+      //   {
+      //     branches: branchesToSubmit,
+      //   }
+      // );
       const response = await axiosTokenInstance.post(
         `/deposit-taker/branch/${entityUniqueId}`,
         {
           branches: branchesToSubmit,
+          place: place, // assuming you want to send place as part of the request
         }
       );
-      if (regulatorData.length > 0) {
-        regulatorStore();
+
+      if (callapi) {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "Do you want to proceed with updating the details?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, upload!",
+          cancelButtonText: "No, cancel!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const membersToSubmit = managementData?.branches?.map(
+              (member: any) => {
+                const { id, ...memberData } = member;
+                return member.id ? { id, ...memberData } : memberData;
+              }
+            );
+            axiosTokenInstance.post(
+              `/deposit-taker/management-team/${entityUniqueId}`,
+              {
+                members: membersToSubmit, // Changed from branches to members
+              }
+            );
+          }
+          axiosTokenInstance
+            .patch(
+              `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+              {
+                formData: combinedFormData,
+              }
+            )
+            .then((response) => {
+              Swal.fire({
+                icon: "success",
+                text: response?.data?.message || "",
+                confirmButtonText: "Ok",
+              });
+              setLoader(false);
+            });
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          text: response?.data?.message,
+          confirmButtonText: "Ok",
+        });
       }
-      if (nodalDetailData.length > 0) {
-        nodaldetailsStore();
-      }
-      if (entityData.length > 0) {
-        entitydetails();
-      }
-      if (uploadData.length > 0) {
-        uploadDocument();
-      }
+
+      // if (regulatorData.length > 0) {
+      //   regulatorStore();
+      // }
+      // if (nodalDetailData.length > 0) {
+      //   nodaldetailsStore();
+      // }
+      // if (entityData.length > 0) {
+      //   entitydetails();
+      // }
+      // if (uploadData.length > 0) {
+      //   uploadDocument();
+      // }
 
       await fetchBranches();
       setLoader(false);
-
-      Swal.fire({
-        icon: "success",
-        text: response?.data?.message,
-        confirmButtonText: "Ok",
-      });
     } catch (error) {
       console.error("Failed to submit branches:", error);
       Swal.fire({
@@ -361,6 +463,16 @@ const ProfileBranches = () => {
             />
           ))
         )}
+        <div className="mt-4">
+          <label className="flex items-center">Place</label>
+          <InputFieldsV2
+            type="text"
+            placeholder="enter place"
+            value={place}
+            onChange={handlePlaceChange}
+          />
+          {placeError && <p className="text-red-500">{placeError}</p>}
+        </div>
         {disableFieldStatus ? (
           <></>
         ) : (
@@ -382,7 +494,13 @@ const ProfileBranches = () => {
         )}
 
         <div>
-          <Footer disabled={!isChecked} loader={loader} hidecontiuebtn={true} />
+          <Footer
+            disabled={!isChecked}
+            loader={loader}
+            hidecontiuebtn={true}
+            showbackbtn={true}
+            path={"/dt/profile?current=documents"}
+          />
           <button
             onSubmit={onSubmit}
             type="submit"
