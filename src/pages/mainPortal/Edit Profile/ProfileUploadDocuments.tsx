@@ -12,6 +12,7 @@ import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFie
 import { axiosTokenInstance } from "../../../utils/axios";
 import Footer from "../../../components/userFlow/userProfile/Footer";
 import userProfileUploadStore from "../../../zust/userProfileUploadStore";
+import FooterDT from "./FooterDT";
 
 type Props = {};
 
@@ -28,6 +29,7 @@ const ProfileUploadDocuments = (props: Props) => {
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
+  const status = sessionStorage.getItem("user_status");
 
   const setFormData = userProfileUploadStore((state) => state.setFormData);
 
@@ -284,14 +286,27 @@ const ProfileUploadDocuments = (props: Props) => {
                         </button>
                       </div>
                     </div> */}
-                    <Footer
-                      onSubmit={onSubmit}
-                      loader={loader}
-                      onClick={onClick}
-                      loader1={loader1}
-                      showbackbtn={true}
-                      path={"/dt/profile?current=management"}
-                    />
+                    {status === "INCOMPLETE" ? (
+                      <div>
+                        <FooterDT
+                          onSubmit={onClick}
+                          loader={loader}
+                          showbackbtn={true}
+                          path={"/dt/profile?current=management"}
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <Footer
+                          onSubmit={onSubmit}
+                          loader={loader}
+                          onClick={onClick}
+                          loader1={loader1}
+                          showbackbtn={true}
+                          path={"/dt/profile?current=management"}
+                        />
+                      </div>
+                    )}
                   </>
                 )}
                 {/* <div>

@@ -183,6 +183,10 @@ const ProfileManagementForm: React.FC<Props> = ({
   };
 
   const disableFieldStatus = checkStatus(disabledField);
+  const maxBranches = parseInt(
+    process.env.REACT_APP_MAX_MANAGEMENT || "10",
+    10
+  );
 
   return (
     <div className="my-3">
@@ -203,7 +207,8 @@ const ProfileManagementForm: React.FC<Props> = ({
                   onClick={() => removeBranch(i)}
                 />
               )} */}
-              {i < 9 && (
+
+              {i < maxBranches - 1 && (
                 <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
               )}
               {i > 0 && (
@@ -367,7 +372,7 @@ const ProfileManagementForm: React.FC<Props> = ({
               placeholder="Select"
               showSearchInput={true}
               {...register(`branches[${i}].designation`, {
-                required: "State is required",
+                required: "Designation is required",
               })}
             />
           </Tooltip>

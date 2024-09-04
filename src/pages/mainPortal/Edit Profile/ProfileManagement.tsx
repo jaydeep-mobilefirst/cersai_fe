@@ -15,9 +15,11 @@ import { axiosTokenInstance } from "../../../utils/axios";
 import ProfileManagementForm from "./ProfileManagementForm";
 import { useNavigate } from "react-router-dom";
 import { useBranchStore } from "../../../store/upate-profile/managementStore";
+import FooterDT from "./FooterDT";
 const ProfileManagement = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
+  const status = sessionStorage.getItem("user_status");
   const Navigate = useNavigate();
 
   const {
@@ -264,25 +266,37 @@ const ProfileManagement = () => {
             />
           ))
         )}
-
-        <div>
-          <Footer
-            loader={loader}
-            onClick={handleSubmit(onClick)}
-            showbackbtn={true}
-            path={"/dt/profile?current=regulator"}
-          />
-          <button
-            onSubmit={onSubmit}
-            type="submit"
-            className="mt-4 btn-primary"
-          ></button>
-          <button
-            onSubmit={handleSubmit(onClick)}
-            type="submit"
-            className="mt-4 btn-primary"
-          ></button>
-        </div>
+        {status === "INCOMPLETE" ? (
+          <div>
+            <FooterDT
+              onSubmit={handleSubmit(onClick)}
+              loader={loader}
+              showbackbtn={true}
+              path={"/dt/profile?current=regulator"}
+            />
+          </div>
+        ) : (
+          <div>
+            <div>
+              <Footer
+                loader={loader}
+                onClick={handleSubmit(onClick)}
+                showbackbtn={true}
+                path={"/dt/profile?current=regulator"}
+              />
+              <button
+                onSubmit={onSubmit}
+                type="submit"
+                className="mt-4 btn-primary"
+              ></button>
+              <button
+                onSubmit={handleSubmit(onClick)}
+                type="submit"
+                className="mt-4 btn-primary"
+              ></button>
+            </div>
+          </div>
+        )}
       </form>
     </div>
   );
