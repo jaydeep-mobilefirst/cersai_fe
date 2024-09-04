@@ -97,7 +97,7 @@ const DashboardDesignated = (props: Props) => {
   const handleRadioChange = (event:any) => {
     setTimeframe(event.target.value);
   };
-  const monthlyChartData = [
+  const chartData = [
     { name: "Reg 08", clean: 70, others: 30 },
     { name: "Reg 03", clean: 60, others: 40 },
     { name: "Reg 06", clean: 40, others: 60 },
@@ -108,7 +108,7 @@ const DashboardDesignated = (props: Props) => {
     { name: "Reg 05", clean: 20, others: 80 },
     { name: "Reg 04", clean: 10, others: 90 },
   ];
-  const quarterlyChartData = [
+  const chartDataquaterly = [
     { name: "Q1", clean: 85, others: 15 },
     { name: "Q2", clean: 78, others: 22 },
     { name: "Q3", clean: 89, others: 11 },
@@ -121,21 +121,6 @@ const DashboardDesignated = (props: Props) => {
     { name: "2020", clean: 86, others: 14 },
     { name: "2019", clean: 81, others: 19 },
   ];
-  let chartData;
-
-  switch (timeframe) {
-    case 'annually':
-      chartData = annualChartData;
-      break;
-    case 'quarterly':
-      chartData = quarterlyChartData;
-      break;
-    case 'monthly':
-      chartData = monthlyChartData;
-      break;
-    default:
-      chartData = annualChartData;
-  }
 
   return (
     <div className="relative xl:ml-[20px]">
@@ -143,7 +128,18 @@ const DashboardDesignated = (props: Props) => {
       <div className="mb-[20px]">
         <DashboardTabsContainer tabsData={tabsData} />
       </div>
-      <div className="mb-[20px] flex gap-[15px]">
+
+      <div className="w-[100%] gap-[20px]  flex justify-between flex-wrap">
+        <div className="w-[100%] sm:w-[48%] ">
+          <DoubleBarChart chartData={chartData.slice(0,5)}title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
+        </div>
+        <div className="w-[100%] sm:w-[48%] ">
+          <DoubleBarChart chartData={chartData.slice(-5)} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
+        </div>
+      </div>
+      <div>
+        
+      <div className="mb-[20px] flex gap-[15px] mt-4">
         {timeframes.map((time) => (
           <label key={time} className="flex items-center">
             <input
@@ -157,16 +153,8 @@ const DashboardDesignated = (props: Props) => {
           </label>
         ))}
       </div>
-
-      <div className="w-[100%] gap-[20px]  flex justify-between flex-wrap">
-        <div className="w-[100%] sm:w-[48%] xl:w-[31.5%]">
-          <DoubleBarChart chartData={chartData.slice(0,5)}title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
-        </div>
-        <div className="w-[100%] sm:w-[48%] xl:w-[31.5%]">
+        <div className="w-[100%] sm:w-[48%] md:w-[100%] md:order-2">
           <TotalFoundationLineChart intervalType={timeframe}/>
-        </div>
-        <div className="w-[100%] sm:w-[48%] xl:w-[31.5%]">
-          <DoubleBarChart chartData={chartData.slice(-5)} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
         </div>
       </div>
     </div>
