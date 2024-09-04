@@ -92,15 +92,15 @@ const ProfileManagement = () => {
         setTimeout(() => {
           sessionStorage.setItem("profile_management_api", "false");
         }, 1000);
-      }else{
+      } else {
         reset({
           branches: branches?.map((branch: any) => ({
             ...branch, // Spread the entire branch object
           })),
         }); // Properly initializing form with fetched data including IDs
+        // setBranches(fetchedBranches);
       }
-     
-   
+
       setLoader(false);
     } catch (error) {
       console.error("Failed to fetch branches:", error);
@@ -235,9 +235,9 @@ const ProfileManagement = () => {
   };
 
   return (
-    <div className='bg-white p-7 w-full h-full '>
-      <h1 className='font-semibold text-2xl mb-3 text-[#1C468E]'>Add User</h1>
-      <div className='flex-row align-middle text-gray-400 flex justify-between'></div>
+    <div className="bg-white p-7 w-full h-full ">
+      <h1 className="font-semibold text-2xl mb-3 text-[#1C468E]">Add User</h1>
+      <div className="flex-row align-middle text-gray-400 flex justify-between"></div>
       <form onSubmit={handleSubmit(onSubmit)}>
         {loader ? (
           <LoaderSpin />
@@ -270,8 +270,8 @@ const ProfileManagement = () => {
           />
           <button
             onSubmit={onSubmit}
-            type='submit'
-            className='mt-4 btn-primary'
+            type="submit"
+            className="mt-4 btn-primary"
           ></button>
         </div>
       </form>
