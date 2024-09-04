@@ -36,7 +36,6 @@ interface Props {
     pinCode: string;
     state: string;
     district: string;
-    place: string;
   };
 }
 
@@ -428,36 +427,6 @@ const ProfileBranchForm: React.FC<Props> = ({
             </p>
           )} */}
         </div>
-        {/* <div>
-          <label htmlFor={`place-${i}`} className="text-base font-normal">
-            Place <span className="text-red-500">*</span>
-          </label>
-          <Tooltip
-            title={
-              getValues(`branches[${i}].place`) ? "Edit Place" : "Enter place"
-            }
-            PopperProps={{
-              modifiers: popperModifiers,
-            }}
-            placement="bottom"
-            arrow
-          >
-            <InputFieldsV2
-              placeholder="Enter place"
-              disabled={disableFieldStatus}
-              {...register(`branches[${i}].place`, {
-                required: "place is required",
-                pattern: {
-                  value: /^[a-zA-Z0-9\s,.-]*$/,
-                  message: "place contains invalid characters",
-                },
-              })}
-            />
-          </Tooltip>
-          {errors?.branches?.[i]?.place && (
-            <p className="text-red-500">{errors.branches[i].place.message}</p>
-          )}
-        </div> */}
       </div>
     </div>
   );

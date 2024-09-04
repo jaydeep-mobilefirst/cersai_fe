@@ -18,6 +18,7 @@ import useProfileNodalStore from "../../../zust/useProfileNodalStore";
 import userProfileUploadStore from "../../../zust/userProfileUploadStore";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { useLocation } from "react-router-dom";
+import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
@@ -433,6 +434,10 @@ const ProfileBranches = () => {
             />
           ))
         )}
+        <div className="mt-4">
+          <label className="flex items-center">Place</label>
+          <InputFieldsV2 type="text" placeholder="enter place" />
+        </div>
         {disableFieldStatus ? (
           <></>
         ) : (
