@@ -24,6 +24,7 @@ const ProfileNodalDetails = (props: Props) => {
   const screenWidth = useScreenWidth();
   const status = sessionStorage.getItem("user_status");
   const [loader, setLoader] = useState(false);
+  const [loader1, setLoader1] = useState(false);
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
@@ -86,36 +87,83 @@ const ProfileNodalDetails = (props: Props) => {
       value: field.userInput,
     }));
 
+  // const onSubmit = async (event: any) => {
+  //   event?.preventDefault();
+  //   setLoader(true);
+  //   const noError = await handleValidationChecks(formFields, false);
+
+  //   if (noError) {
+  //     axiosTokenInstance
+  //       .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
+  //         formData: formData,
+  //       })
+  //       .then((response) => {
+  //         Swal.fire({
+  //           icon: "success",
+  //           text: "Nodal Officer details updated successfully",
+  //           confirmButtonText: "Ok",
+  //         });
+  //         Navigate("/dt/profile?current=regulator");
+  //       })
+  //       .catch((err) => {
+  //         Swal.fire({
+  //           icon: "error",
+  //           text: "Failed to update Nodal Details",
+  //           confirmButtonText: "Ok",
+  //         });
+  //       });
+  //   }
+  //   setLoader(false);
+  // };
   const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true);
-    const noError = await handleValidationChecks(formFields, false);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to update the Nodal Officer details?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, update it!",
+      cancelButtonText: "No, cancel!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setLoader(true);
+        const noError = await handleValidationChecks(formFields, false);
 
-    if (noError) {
-      axiosTokenInstance
-        .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
-          formData: formData,
-        })
-        .then((response) => {
-          Swal.fire({
-            icon: "success",
-            text: "Nodal Officer details updated successfully",
-            confirmButtonText: "Ok",
-          });
-          Navigate("/dt/profile?current=regulator");
-        })
-        .catch((err) => {
-          Swal.fire({
-            icon: "error",
-            text: "Failed to update Nodal Details",
-            confirmButtonText: "Ok",
-          });
-        });
-    }
-    setLoader(false);
+        if (noError) {
+          axiosTokenInstance
+            .patch(
+              `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+              {
+                formData: formData,
+              }
+            )
+            .then((response) => {
+              Swal.fire({
+                icon: "success",
+                text: "Nodal Officer details updated successfully",
+                confirmButtonText: "Ok",
+              });
+              Navigate("/dt/profile?current=regulator");
+            })
+            .catch((err) => {
+              Swal.fire({
+                icon: "error",
+                text: "Failed to update Nodal Details",
+                confirmButtonText: "Ok",
+              });
+            })
+            .finally(() => {
+              setLoader(false);
+            });
+        } else {
+          setLoader(false);
+        }
+      }
+    });
   };
+
   const onClick = async (event: any) => {
-    // setLoader(true);
+    setLoader1(true);
     event?.preventDefault();
     const noError = await handleValidationChecks(formFields, false);
     if (noError) {
@@ -123,7 +171,7 @@ const ProfileNodalDetails = (props: Props) => {
       navigate("/dt/profile?current=regulator");
     }
 
-    // setLoader(false);
+    setLoader1(false);
   };
 
   return (
@@ -241,7 +289,14 @@ const ProfileNodalDetails = (props: Props) => {
               />
 
               <div>
-                <Footer onSubmit={onSubmit} loader={loader} onClick={onClick} />
+                <Footer
+                  onSubmit={onSubmit}
+                  loader={loader}
+                  loader1={loader1}
+                  onClick={onClick}
+                  showbackbtn={true}
+                  path={"/dt/profile?current=entity"}
+                />
               </div>
             </>
           ) : (

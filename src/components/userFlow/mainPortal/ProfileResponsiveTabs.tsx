@@ -34,14 +34,17 @@ const ProfileResponsiveTabs = (props: Props) => {
     <div className="flex-col justify-center items-center inline-flex border-b w-full">
       <ul className="justify-start items-center inline-flex flex-wrap">
         {profileSideBarList.map((menuItem, index) => (
-          <Link to={menuItem.rurl} key={index} className="mx-3">
+          // <Link to={menuItem.rurl} key={index} className="mx-3">
+          <div className="mx-3">
             <TaskTabsItem
               key={index}
               text={menuItem.title}
               isActive={menuItem.url === current}
               onClick={() => handleTabClick(menuItem.title)}
             />
-          </Link>
+          </div>
+
+          // </Link>
         ))}
       </ul>
     </div>

@@ -54,7 +54,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
     watch,
     getValues,
     formState: { errors },
-    trigger
+    trigger,
   } = useForm({
     defaultValues: {
       email: "",
@@ -173,6 +173,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
           responseData?.data?.response?.refresh_token
         );
         if (selected === "DT") {
+          sessionStorage.setItem("entitiy_details_api", "true");
+          sessionStorage.setItem("profile_management_api", "true");
           navigate("/dt/dashboard");
         } else if (selected === "RG") {
           navigate("/rg/dashboard");
@@ -226,24 +228,24 @@ const LoginModel: React.FC<LoginModelProps> = ({
   return (
     <Modal
       open={true}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      aria-labelledby='modal-modal-title'
+      aria-describedby='modal-modal-description'
     >
       <Box>
-        <div className="bg-black bg-opacity-30 absolute inset-0 flex justify-center items-center shadow-lg">
-          <div className="bg-white p-3 rounded-lg md:w-[946px] w-full grid grid-cols-1 md:grid-cols-2 gap-4 shadow-lg m-4 ">
-            <div className="order-1 md:order-2 mt-3 ">
-              <div className="flex justify-between mt-[4px]">
-                <div className="w-full text-center">
-                  <h1 className="text-[24px] font-bold text-black text-gilroy-medium">
+        <div className='bg-black bg-opacity-30 absolute inset-0 flex justify-center items-center shadow-lg'>
+          <div className='bg-white p-3 rounded-lg md:w-[946px] w-full grid grid-cols-1 md:grid-cols-2 gap-4 shadow-lg m-4 '>
+            <div className='order-1 md:order-2 mt-3 '>
+              <div className='flex justify-between mt-[4px]'>
+                <div className='w-full text-center'>
+                  <h1 className='text-[24px] font-bold text-black text-gilroy-medium'>
                     Login
                   </h1>
                 </div>
-                <div className="lg:top-2 lg:right-10 relative md:top-2 md:right-10 top-[-6rem]">
+                <div className='lg:top-2 lg:right-10 relative md:top-2 md:right-10 top-[-6rem]'>
                   <img
                     src={CrossIcon}
-                    alt="CrossIcon"
-                    className="cursor-pointer"
+                    alt='CrossIcon'
+                    className='cursor-pointer'
                     onClick={handleClose}
                   />
                 </div>
@@ -255,7 +257,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                 })}
               >
                 <div
-                  className="mt-5 md:mt-[36px] px-4 md:px-[40px] custom-scrollbar"
+                  className='mt-5 md:mt-[36px] px-4 md:px-[40px] custom-scrollbar'
                   style={{
                     maxHeight: "500px",
                     overflowY: "auto",
@@ -264,8 +266,8 @@ const LoginModel: React.FC<LoginModelProps> = ({
                 >
                   <div>
                     <label
-                      htmlFor="entity"
-                      className="text-base font-normal text-gilroy-medium my-3"
+                      htmlFor='entity'
+                      className='text-base font-normal text-gilroy-medium my-3'
                     >
                       Select Entity
                     </label>
@@ -286,15 +288,15 @@ const LoginModel: React.FC<LoginModelProps> = ({
                         },
                       ]}
                       selectedOption={selected}
-                      placeholder="Select an option"
+                      placeholder='Select an option'
                       showSearchInput={false}
                     />
                   </div>
 
-                  <div className="mt-5">
+                  <div className='mt-5'>
                     <label
-                      htmlFor="email"
-                      className="text-base font-normal text-gilroy-medium my-3"
+                      htmlFor='email'
+                      className='text-base font-normal text-gilroy-medium my-3'
                     >
                       Email id / Mobile no.
                     </label>
@@ -308,20 +310,20 @@ const LoginModel: React.FC<LoginModelProps> = ({
                           message: "Invalid email address or mobile number",
                         },
                       })}
-                      placeholder="Email id / Mobile no."
+                      placeholder='Email id / Mobile no.'
                       // onChange={handleEmailChange}
-                      
+
                       error={error}
                     />
                     {errors.email && (
-                      <p className="text-red-500">{errors.email.message}</p>
+                      <p className='text-red-500'>{errors.email.message}</p>
                     )}
                   </div>
 
-                  <div className="mt-5">
+                  <div className='mt-5'>
                     <label
-                      htmlFor="password"
-                      className="text-base font-normal text-gilroy-medium my-3"
+                      htmlFor='password'
+                      className='text-base font-normal text-gilroy-medium my-3'
                     >
                       Password
                     </label>
@@ -330,22 +332,22 @@ const LoginModel: React.FC<LoginModelProps> = ({
                       {...register("password", {
                         required: "Password is required",
                       })}
-                      placeholder="Password"
+                      placeholder='Password'
                       // onChange={handlePasswordChange}
                       error={error}
                     />
                     {errors.password && (
-                      <p className="text-red-500">{errors.password.message}</p>
+                      <p className='text-red-500'>{errors.password.message}</p>
                     )}
                     <p
-                      className="text-xs font-normal text-gilroy-medium text-end text-[#1C468E] cursor-pointer "
+                      className='text-xs font-normal text-gilroy-medium text-end text-[#1C468E] cursor-pointer '
                       onClick={ShowForgetModel}
                     >
                       Forgot password?
                     </p>
                   </div>
 
-                  <div className="mt-4 lg:mt-8">
+                  <div className='mt-4 lg:mt-8'>
                     {/* {watch("email") && watch("password") && (
                       <Dscbutton
                         onFileUpload={handleFileUpload}
@@ -377,23 +379,23 @@ const LoginModel: React.FC<LoginModelProps> = ({
                   {/* <div className="mt-4 lg:mt-8 text-red-500 text-center">
                     {formError}
                   </div> */}
-                  <div className="flex justify-center items-center mt-12 ">
+                  <div className='flex justify-center items-center mt-12 '>
                     <Button
-                      type="submit"
+                      type='submit'
                       loader={loader}
                       label={!loader ? "Login" : "Loading..."}
                       disabled={!canSubmit || loader}
                     />
                   </div>
-                  <div className="mt-14">
-                    <p className="text-base font-normal text-gilroy-regular">
+                  <div className='mt-14'>
+                    <p className='text-base font-normal text-gilroy-regular'>
                       {/* {formError && (
                         <span className="text-red-500">{formError}</span>
                       )} */}
                       <br />
                       Not registered with CERSAI account?{" "}
                       <span
-                        className="text-[#1C468E] cursor-pointer"
+                        className='text-[#1C468E] cursor-pointer'
                         onClick={handleNavigateRegistration}
                       >
                         Register Now
@@ -403,18 +405,18 @@ const LoginModel: React.FC<LoginModelProps> = ({
                 </div>
               </form>
             </div>
-            <div className="md:order-1 hidden md:flex justify-center items-center">
+            <div className='md:order-1 hidden md:flex justify-center items-center'>
               <img
                 src={LoginPageIcon}
-                alt="LoginPageIcon"
-                className="w-[200px] h-auto md:w-full"
+                alt='LoginPageIcon'
+                className='w-[200px] h-auto md:w-full'
               />
             </div>
-            <div className="md:order-1 flex justify-center items-center md:hidden ">
+            <div className='md:order-1 flex justify-center items-center md:hidden '>
               <img
                 src={MobileIcon}
-                alt="MobileIcon"
-                className="w-[200px] h-auto md:w-full"
+                alt='MobileIcon'
+                className='w-[200px] h-auto md:w-full'
               />
             </div>
           </div>

@@ -1,5 +1,7 @@
 import { create, StateCreator } from "zustand";
 import { persist } from "zustand/middleware";
+import { axiosTokenInstance } from "../../utils/axios";
+import Swal from "sweetalert2";
 
 interface Branch {
   id: number;
@@ -9,7 +11,8 @@ interface BranchState {
   branches: Branch[];
   isChecked: boolean;
   addBranch: () => void;
-  removeBranch: (branchId: number) => void;
+  // removeBranch: (branchId: number) => void;
+  removeBranch: (branchId: number, afterRemove?: () => void) => void;
   setBranches: (newBranches: Branch[]) => void;
   setChecked: (value: boolean) => void;
   toggleChecked: () => void;
@@ -54,6 +57,7 @@ export const useBranchStore = create<BranchState>(
           branches: state.branches.filter((branch) => branch.id !== branchId),
         }));
       },
+
       setBranches: (newBranches: Branch[]) => {
         set({ branches: newBranches });
       },
@@ -65,7 +69,7 @@ export const useBranchStore = create<BranchState>(
       },
     }),
     {
-      name: "branch-storage",
+      name: "management-store",
       getStorage: () => sessionStorage,
     }
   ) as BranchStoreCreator

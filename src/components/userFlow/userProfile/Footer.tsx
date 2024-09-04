@@ -1,23 +1,30 @@
 import React from "react";
 import LoaderSpin from "../../LoaderSpin";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface FooterProps {
   onSubmit?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   loader?: boolean;
+  loader1?: boolean;
   disabled?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   hidecontiuebtn?: boolean;
+  showbackbtn?: boolean;
+  path?: any;
 }
 
 const Footer: React.FC<FooterProps> = ({
   onSubmit,
   loader,
+  loader1,
   disabled,
   onClick,
   hidecontiuebtn,
+  showbackbtn,
+  path,
 }) => {
   const disabledField = sessionStorage.getItem("user_status");
+  const Navigate = useNavigate();
 
   const location = useLocation();
   const { pathname } = location;
@@ -64,7 +71,40 @@ const Footer: React.FC<FooterProps> = ({
   return (
     <div>
       {" "}
-      <div className="flex flex-col sm:flex-row justify-end sm:justify-end items-center space-y-4 sm:space-y-0 pt-4 pb-4">
+      <div
+        className={`flex flex-col sm:flex-row ${
+          showbackbtn ? "justify-between" : "justify-end"
+        } items-center space-y-4 sm:space-y-0 pt-4 pb-4`}
+      >
+        {showbackbtn && (
+          <>
+            <div
+              className="flex flex-row items-center space-x-2"
+              onClick={() => Navigate(path)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="shrink-0"
+              >
+                <path
+                  d="M15 6L9 12L15 18"
+                  stroke="#1D1D1B"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <button className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular">
+                Back
+              </button>
+            </div>
+          </>
+        )}
+
         <div className="flex items-center">
           {disableFieldStatus ? (
             <></>
@@ -83,7 +123,7 @@ const Footer: React.FC<FooterProps> = ({
                       disabled ? "bg-gray-500" : "bg-[#1C468E] mx-3"
                     } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
                   >
-                    Save and continue
+                    {loader1 ? <LoaderSpin /> : " Save and continue"}
                   </button>
                 </>
               )}

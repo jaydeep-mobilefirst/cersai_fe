@@ -9,7 +9,7 @@ interface MenuItemProps {
 const TaskTabsItem: React.FC<MenuItemProps> = ({ text, isActive, onClick }) => {
   return (
     <li
-      className={`parentLi flex-col text-[20px] text-[#666666] justify-start items-start gap-3.5 inline-flex text-nowrap cursor-pointer
+      className={`parentLi flex-col text-[20px] text-[#666666] justify-start items-start gap-3.5 inline-flex text-nowrap cursor-pointer 
       `}
       onClick={onClick}
     >
