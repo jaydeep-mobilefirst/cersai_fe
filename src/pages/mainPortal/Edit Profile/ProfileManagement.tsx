@@ -176,8 +176,8 @@ const ProfileManagement = () => {
             }
           );
 
-          await fetchBranches();
-          // setBranches(data?.branches);
+          // await fetchBranches();
+          setBranches(data?.branches);
           setLoader(false);
 
           Swal.fire({
