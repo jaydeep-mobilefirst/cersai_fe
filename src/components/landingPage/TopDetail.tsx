@@ -128,7 +128,7 @@ const TopDetail = () => {
         ></div>
       )}
       <div className="flex items-start justify-start flex-col">
-        {homePageData?.homePageData?.contactDetails?.map((data:any, idx:any) => {
+        {homePageData?.homePageData?.contactDetails?.slice(1)?.map((data:any, idx:any) => {
           return (
             <div className="flex items-center justify-center mb-2" key={idx}>
               <div>
@@ -145,6 +145,7 @@ const TopDetail = () => {
                   </div>
                 </>
               ) : (
+                
                 <>
                   <div className="ml-4 text-[#797979] text-gilroy-regular">
                     {data?.text}
