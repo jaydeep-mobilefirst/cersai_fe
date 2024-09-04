@@ -193,8 +193,20 @@ const ProfileManagementForm: React.FC<Props> = ({
         ) : (
           <>
             <div className="flex flex-row cursor-pointer">
-              <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
+              {/* <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
+
               {i + 1 > 1 && (
+                <img
+                  src={minusCircle}
+                  alt="Remove"
+                  className="ml-2"
+                  onClick={() => removeBranch(i)}
+                />
+              )} */}
+              {i < 9 && (
+                <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
+              )}
+              {i > 0 && (
                 <img
                   src={minusCircle}
                   alt="Remove"
