@@ -187,7 +187,7 @@ const ProfileManagementForm: React.FC<Props> = ({
   return (
     <div className="my-3">
       <div className="flex flex-row justify-between bg-[#E7F0FF] p-2 rounded-md">
-        <span>User {i + 1}</span>
+        <span>Management Personnel {i + 1}</span>
         {disableFieldStatus ? (
           <></>
         ) : (

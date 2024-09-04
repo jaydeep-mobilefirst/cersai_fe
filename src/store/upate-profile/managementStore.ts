@@ -98,6 +98,7 @@ export const useBranchStore = create<BranchState>(
       // },
       removeBranch: (branchId: number, afterRemove?: () => void) => {
         // Find the branch that matches the given branchId
+        console.log("branchId", branchId);
         set((state) => {
           const branchToRemove: any = state.branches.find(
             (branch: any) => branch.id === branchId
@@ -126,9 +127,9 @@ export const useBranchStore = create<BranchState>(
                         ),
                       }));
 
-                      if (afterRemove) {
-                        afterRemove(); // Call the callback function after removal
-                      }
+                      // if (afterRemove) {
+                      //   afterRemove(); // Call the callback function after removal
+                      // }
 
                       Swal.fire({
                         icon: "success",

@@ -43,7 +43,6 @@ const ProfileManagement = () => {
   const [loader1, setLoader1] = useState(false);
   const [uploadInputKey, setUploadKey] = useState<number>(0);
   const uploadButtonRef = useRef<HTMLInputElement>(null);
-  const [managementData, setManagementData] = useState<any>([]);
 
   const {
     register,
@@ -112,8 +111,7 @@ const ProfileManagement = () => {
 
   useEffect(() => {
     fetchBranches();
-    setManagementData(branches);
-  }, [reset, setBranches, uploadInputKey]);
+  }, [reset, setBranches]);
 
   console.log({ branches }, "branches");
 
@@ -179,6 +177,7 @@ const ProfileManagement = () => {
           );
 
           await fetchBranches();
+          // setBranches(data?.branches);
           setLoader(false);
 
           Swal.fire({
@@ -200,6 +199,8 @@ const ProfileManagement = () => {
       }
     });
   };
+
+  console.log({ branches }, "mangement detail data");
 
   const disabledField = sessionStorage.getItem("user_status");
 
@@ -236,7 +237,10 @@ const ProfileManagement = () => {
 
   return (
     <div className="bg-white p-7 w-full h-full ">
-      <h1 className="font-semibold text-2xl mb-3 text-[#1C468E]">Add User</h1>
+      <h1 className="font-semibold text-2xl mb-3 text-[#1C468E]">
+        {" "}
+        Add management personnel{" "}
+      </h1>
       <div className="flex-row align-middle text-gray-400 flex justify-between"></div>
       <form onSubmit={handleSubmit(onSubmit)}>
         {loader ? (
@@ -270,6 +274,11 @@ const ProfileManagement = () => {
           />
           <button
             onSubmit={onSubmit}
+            type="submit"
+            className="mt-4 btn-primary"
+          ></button>
+          <button
+            onSubmit={handleSubmit(onClick)}
             type="submit"
             className="mt-4 btn-primary"
           ></button>
