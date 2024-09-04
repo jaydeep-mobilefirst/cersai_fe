@@ -121,7 +121,7 @@ const DashboardCompetent = (props: Props) => {
   //     amt: 2181,
   //   },
   // ];
-  const monthlyChartData = [
+  const chartData = [
     { name: "Reg 08", clean: 70, others: 30 },
     { name: "Reg 03", clean: 60, others: 40 },
     { name: "Reg 06", clean: 40, others: 60 },
@@ -145,21 +145,6 @@ const DashboardCompetent = (props: Props) => {
     { name: "2020", clean: 86, others: 14 },
     { name: "2019", clean: 81, others: 19 },
   ];
-  let chartData;
-
-  switch (timeframe) {
-    case 'annually':
-      chartData = annualChartData;
-      break;
-    case 'quarterly':
-      chartData = quarterlyChartData;
-      break;
-    case 'monthly':
-      chartData = monthlyChartData;
-      break;
-    default:
-      chartData = annualChartData;
-  }
 
   return (
     <div className="relative xl:ml-[20px]">
@@ -167,7 +152,18 @@ const DashboardCompetent = (props: Props) => {
       <div className="mb-[20px]">
         <DashboardTabsContainer tabsData={tabsData} />
       </div>
-      <div className="mb-[20px] flex gap-[15px]">
+
+      <div className="w-[100%] gap-[20px]  flex justify-between flex-wrap">
+        <div className="w-[100%] sm:w-[48%] md:order-1">
+          <DoubleBarChart chartData={chartData.slice(0,5)} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
+        </div>
+        <div className="w-[100%] sm:w-[48%] md:order-1">
+          <DoubleBarChart chartData={chartData.slice(-5)} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
+        </div>
+      </div>
+      <div>
+        
+      <div className="mb-[20px] flex gap-[15px] mt-4">
         {timeframes.map((time) => (
           <label key={time} className="flex items-center">
             <input
@@ -181,16 +177,8 @@ const DashboardCompetent = (props: Props) => {
           </label>
         ))}
       </div>
-
-      <div className="w-[100%] gap-[20px]  flex justify-between flex-wrap">
-        <div className="w-[100%] sm:w-[48%] md:order-1">
-          <DoubleBarChart chartData={chartData.slice(0,5)} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
-        </div>
         <div className="w-[100%] sm:w-[48%]  md:w-[100%] md:order-2">
           <TotalFoundationLineChart intervalType={timeframe} />
-        </div>
-        <div className="w-[100%] sm:w-[48%] md:order-1">
-          <DoubleBarChart chartData={chartData.slice(-5)} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
         </div>
       </div>
     </div>

@@ -127,7 +127,7 @@ const ProfileBranches = () => {
       setBranches(fetchedBranches);
       reset({
         branches: fetchedBranches?.map((branch: any) => ({
-          ...branch, // Spread the entire branch object
+          ...branch, // Spread the entire branch objects
         })),
       }); // Properly initializing form with fetched data including IDs
       setLoader(false);
