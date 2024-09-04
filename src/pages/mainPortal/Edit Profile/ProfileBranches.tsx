@@ -76,6 +76,8 @@ const ProfileBranches = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [uploadInputKey, setUploadKey] = useState<number>(0);
   const uploadButtonRef = useRef<HTMLInputElement>(null);
+  const [place, setPlace] = useState("");
+  const [placeError, setPlaceError] = useState("");
   const {
     register,
     handleSubmit,
@@ -140,18 +142,45 @@ const ProfileBranches = () => {
   useEffect(() => {
     fetchBranches();
   }, [reset, setBranches, uploadInputKey]);
+  const handlePlaceChange = (event: any) => {
+    const { value } = event.target;
+    // Check if the input is empty
+    if (!value.trim()) {
+      setPlaceError("Place cannot be empty");
+    } else if (value.length > 10) {
+      setPlaceError("Place cannot be longer than 10 characters");
+    } else {
+      setPlaceError(""); // Clear error if input is valid
+    }
+    setPlace(value);
+  };
 
   const onSubmit = async (data: any) => {
+    if (!place.trim()) {
+      setPlaceError("Place cannot be empty");
+      return; // Prevent form submission if the place is empty
+    }
+
+    if (placeError) {
+      return; // Prevent form submission if there is a place error
+    }
     setLoader(true);
     try {
       const branchesToSubmit = data.branches.map((branch: any) => {
         const { id, ...branchData } = branch;
         return branch.id ? { id, ...branchData } : branchData;
       });
+      // const response = await axiosTokenInstance.post(
+      //   `/deposit-taker/branch/${entityUniqueId}`,
+      //   {
+      //     branches: branchesToSubmit,
+      //   }
+      // );
       const response = await axiosTokenInstance.post(
         `/deposit-taker/branch/${entityUniqueId}`,
         {
           branches: branchesToSubmit,
+          place: place, // assuming you want to send place as part of the request
         }
       );
 
@@ -436,7 +465,13 @@ const ProfileBranches = () => {
         )}
         <div className="mt-4">
           <label className="flex items-center">Place</label>
-          <InputFieldsV2 type="text" placeholder="enter place" />
+          <InputFieldsV2
+            type="text"
+            placeholder="enter place"
+            value={place}
+            onChange={handlePlaceChange}
+          />
+          {placeError && <p className="text-red-500">{placeError}</p>}
         </div>
         {disableFieldStatus ? (
           <></>
