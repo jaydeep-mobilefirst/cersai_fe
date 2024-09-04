@@ -38,6 +38,15 @@ export const useBranchStore = create<BranchState>(
       addBranch: () => {
         set((state) => {
           // Check if all IDs are valid numbers; otherwise, default them to 0
+          if (state.branches.length >= 10) {
+            // Optionally alert the user that no more branches can be added
+            Swal.fire({
+              icon: "error",
+              title: "Limit reached",
+              text: "You cannot add more than 10 branches.",
+            });
+            return { ...state }; // Return the current state without changes
+          }
           const newId =
             state.branches.reduce(
               (maxId, branch) =>
