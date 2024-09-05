@@ -57,7 +57,9 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const { data, loading, error, fetchData } = useStore();
 
   useEffect(() => {
+    if(checkPathName(pathname)){
     fetchData(); // Trigger the API call when the component mounts
+    }
   }, [fetchData]);
 
   const disabledField = sessionStorage.getItem("user_status");
@@ -101,7 +103,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
       ? disabledField == "RETURN"
         ? false
         : !data?.profileUpdate
-      : false;
+      : !data?.profileUpdate;
   } else {
     disableFieldStatus = checkPathName(pathname)
       ? checkStatus(disabledField)
