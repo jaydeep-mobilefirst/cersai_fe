@@ -29,6 +29,8 @@ interface Props {
   errors: any; // Update with proper types
   setValue: any; // Update with proper types
   getValues: any; // Update with proper types
+  clearErrors: any;
+  unregister: any;
   removeBranch: (index: number) => void;
   addBranch: (index: number) => void;
   branch: {
@@ -53,6 +55,8 @@ const ProfileManagementForm: React.FC<Props> = ({
   errors,
   setValue,
   getValues,
+  clearErrors,
+  unregister,
   removeBranch,
   addBranch,
   branch,
@@ -73,7 +77,8 @@ const ProfileManagementForm: React.FC<Props> = ({
   ];
   const handleSetState = (value: string) => {
     setSelectedState(value);
-    setValue(`branches[${i}].designation`, value); // Set state value
+    // setValue(`branches[${i}].designation`, value); // Set state value
+    setValue(`branches[${i}].designation`, value, { shouldValidate: true });
   };
   const Navigate = useNavigate();
   const debounce = (
@@ -187,6 +192,11 @@ const ProfileManagementForm: React.FC<Props> = ({
     process.env.REACT_APP_MAX_MANAGEMENT || "10",
     10
   );
+  const handleRemoveBranch = (index: any) => {
+    unregister(`branches[${index}]`);
+    clearErrors(`branches[${index}]`); // Clear errors when removing a branch
+    removeBranch(index);
+  };
 
   return (
     <div className="my-3">
@@ -205,7 +215,8 @@ const ProfileManagementForm: React.FC<Props> = ({
                   src={minusCircle}
                   alt="Remove"
                   className="ml-2"
-                  onClick={() => removeBranch(i)}
+                  // onClick={() => removeBranch(i)}
+                  onClick={() => handleRemoveBranch(i)}
                 />
               )}
             </div>

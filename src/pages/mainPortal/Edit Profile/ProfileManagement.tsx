@@ -102,6 +102,8 @@ const ProfileManagement = () => {
     setValue,
     getValues,
     reset,
+    clearErrors,
+    unregister,
   } = useForm();
 
   const profile_management_api = sessionStorage.getItem(
@@ -321,23 +323,6 @@ const ProfileManagement = () => {
         {loader ? (
           <LoaderSpin />
         ) : (
-          // branches?.map((branch: any, index: any) => (
-          //   <ProfileManagementForm
-          //     key={branch.id || index}
-          //     branch={branch}
-          //     branchId={branch.id}
-          //     i={index}
-          //     control={control}
-          //     register={register}
-          //     errors={errors}
-          //     setValue={setValue}
-          //     getValues={getValues}
-          //     removeBranch={() =>
-          //       removeBranch(branch.id || index, fetchBranches)
-          //     }
-          //     addBranch={addBranchRef}
-          //   />
-          // ))
           branches?.map((branch: any, index: any) => (
             <div ref={index === branches.length - 1 ? newBranchRef : null}>
               {" "}
@@ -354,6 +339,8 @@ const ProfileManagement = () => {
                 getValues={getValues}
                 removeBranch={() => removeBranch(branch.id || index)}
                 addBranch={addBranchRef}
+                clearErrors={clearErrors}
+                unregister={unregister}
               />
             </div>
           ))
