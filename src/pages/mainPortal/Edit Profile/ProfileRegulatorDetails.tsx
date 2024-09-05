@@ -14,6 +14,8 @@ import Swal from "sweetalert2";
 import { axiosTokenInstance } from "../../../utils/axios";
 import LoaderSpin from "../../../components/LoaderSpin";
 import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
+import { stat } from "fs";
+import FooterDT from "./FooterDT";
 
 type Props = {};
 
@@ -23,6 +25,7 @@ const ProfileRegulatorDetails = (props: Props) => {
   const Navigate = useNavigate();
 
   const setFormData = useProfileRegulatorStore((state) => state.setFormData);
+  const status = sessionStorage.getItem("user_status");
 
   const screenWidth = useScreenWidth();
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
@@ -175,7 +178,8 @@ const ProfileRegulatorDetails = (props: Props) => {
                 formFields={formFields}
                 onChange={onChange}
               />
-              <div>
+
+              {/* <div>
                 <Footer
                   onSubmit={onSubmit}
                   loader={loader}
@@ -184,7 +188,27 @@ const ProfileRegulatorDetails = (props: Props) => {
                   showbackbtn={true}
                   path={"/dt/profile?current=nodal"}
                 />
-              </div>
+              </div> */}
+              {status === "INCOMPLETE" ? (
+                <div>
+                  <FooterDT
+                    onSubmit={onClick}
+                    loader={loader}
+                    showbackbtn={true}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <Footer
+                    onSubmit={onSubmit}
+                    loader={loader}
+                    loader1={loader1}
+                    onClick={onClick}
+                    showbackbtn={true}
+                    path={"/dt/profile?current=nodal"}
+                  />
+                </div>
+              )}
             </>
           ) : (
             <>

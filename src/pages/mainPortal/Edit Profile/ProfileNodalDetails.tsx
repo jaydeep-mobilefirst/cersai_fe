@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import { axiosTokenInstance } from "../../../utils/axios";
 import LoaderSpin from "../../../components/LoaderSpin";
 import useProfileNodalStore from "../../../zust/useProfileNodalStore";
+import FooterDT from "./FooterDT";
 
 type Props = {};
 
@@ -288,7 +289,7 @@ const ProfileNodalDetails = (props: Props) => {
                 disable={true}
               />
 
-              <div>
+              {/* <div>
                 <Footer
                   onSubmit={onSubmit}
                   loader={loader}
@@ -297,7 +298,27 @@ const ProfileNodalDetails = (props: Props) => {
                   showbackbtn={true}
                   path={"/dt/profile?current=entity"}
                 />
-              </div>
+              </div> */}
+              {status === "INCOMPLETE" ? (
+                <div>
+                  <FooterDT
+                    onSubmit={onClick}
+                    loader={loader}
+                    showbackbtn={true}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <Footer
+                    onSubmit={onSubmit}
+                    loader={loader}
+                    loader1={loader1}
+                    onClick={onClick}
+                    showbackbtn={true}
+                    path={"/dt/profile?current=entity"}
+                  />
+                </div>
+              )}
             </>
           ) : (
             <div className="flex justify-center items-center mt-5">
