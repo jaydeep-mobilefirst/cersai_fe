@@ -21,6 +21,7 @@ const ProfileManagement = () => {
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
   const status = sessionStorage.getItem("user_status");
   const Navigate = useNavigate();
+  const newBranchRef = useRef<HTMLDivElement | null>(null);
 
   const {
     branches,
@@ -30,6 +31,7 @@ const ProfileManagement = () => {
     isChecked,
     setChecked,
     toggleChecked,
+    removedBranches,
   } = useBranchStore((state) => ({
     branches: state.branches,
     addBranch: state.addBranch,
@@ -38,6 +40,7 @@ const ProfileManagement = () => {
     isChecked: state.isChecked,
     setChecked: state.setChecked,
     toggleChecked: state.toggleChecked,
+    removedBranches: state.removedBranches,
   }));
   console.log({ branches }, "branches");
   // const [isChecked, setChecked] = useState(false);
@@ -45,6 +48,51 @@ const ProfileManagement = () => {
   const [loader1, setLoader1] = useState(false);
   const [uploadInputKey, setUploadKey] = useState<number>(0);
   const uploadButtonRef = useRef<HTMLInputElement>(null);
+  console.log(removedBranches, "removedBranches");
+
+  const filterManagement: any = removedBranches?.map(
+    ({ id, firstName }: any) => ({
+      id,
+      firstName,
+    })
+  );
+
+  const filterManagementID: any = removedBranches?.map(({ id }: any) => id);
+  console.log(
+    { filterManagement, filterManagementID },
+    "filterManagement",
+    "filtermangementID"
+  );
+
+  const removeManagement = async (id: any) => {
+    console.log(id, "id");
+    try {
+      const response = await axiosTokenInstance.delete(
+        `/deposit-taker/management-team/${entityUniqueId}`,
+        { data: { id } } // Passing the ID in the body of the DELETE request
+      );
+      console.log({ response }, "response");
+      if (response.data.status === "success") {
+        setLoader(true);
+        // Swal.fire({
+        //   icon: "success",
+        //   text: response?.data?.message,
+        //   confirmButtonText: "Ok",
+        // }).then(() => {
+        //   // Additional actions after confirmation if needed
+        // });
+      }
+    } catch (error) {
+      console.error("Failed to remove management:", error);
+      // Swal.fire({
+      //   icon: "error",
+      //   text: "Failed to remove management",
+      //   confirmButtonText: "Ok",
+      // });
+    } finally {
+      setLoader(false); // Ensure loader is turned off regardless of success or failure
+    }
+  };
 
   const {
     register,
@@ -177,6 +225,24 @@ const ProfileManagement = () => {
               members: membersToSubmit,
             }
           );
+          if (
+            Array.isArray(filterManagement) &&
+            filterManagement.some(
+              (management: any) => management.id && management.firstName
+            )
+          ) {
+            // Collect all ids in an array format like [10, 5, 8]
+            const idsToRemove = filterManagement
+              .filter(
+                (management: any) => management.id && management.firstName
+              )
+              .map((management: any) => management.id);
+
+            // Pass the collected ids to your removal function
+            if (idsToRemove.length > 0) {
+              removeManagement(idsToRemove); // Adjust according to your actual removal logic
+            }
+          }
 
           // await fetchBranches();
           setBranches(data?.branches);
@@ -225,6 +291,14 @@ const ProfileManagement = () => {
     }
   };
 
+  const addBranchRef = () => {
+    addBranch();
+    setTimeout(() => {
+      // Scroll into view of the last added branch
+      newBranchRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
   const disableFieldStatus = checkStatus(disabledField);
   const onClick = async (data: any) => {
     console.log("Data form onClick", data);
@@ -240,30 +314,48 @@ const ProfileManagement = () => {
   return (
     <div className="bg-white p-7 w-full h-full ">
       <h1 className="font-semibold text-2xl mb-3 text-[#1C468E]">
-        {" "}
-        Add management personnel{" "}
+        Add management personnel
       </h1>
       <div className="flex-row align-middle text-gray-400 flex justify-between"></div>
       <form onSubmit={handleSubmit(onSubmit)}>
         {loader ? (
           <LoaderSpin />
         ) : (
+          // branches?.map((branch: any, index: any) => (
+          //   <ProfileManagementForm
+          //     key={branch.id || index}
+          //     branch={branch}
+          //     branchId={branch.id}
+          //     i={index}
+          //     control={control}
+          //     register={register}
+          //     errors={errors}
+          //     setValue={setValue}
+          //     getValues={getValues}
+          //     removeBranch={() =>
+          //       removeBranch(branch.id || index, fetchBranches)
+          //     }
+          //     addBranch={addBranchRef}
+          //   />
+          // ))
           branches?.map((branch: any, index: any) => (
-            <ProfileManagementForm
-              key={branch.id || index}
-              branch={branch}
-              branchId={branch.id}
-              i={index}
-              control={control}
-              register={register}
-              errors={errors}
-              setValue={setValue}
-              getValues={getValues}
-              removeBranch={() =>
-                removeBranch(branch.id || index, fetchBranches)
-              }
-              addBranch={addBranch}
-            />
+            <div ref={index === branches.length - 1 ? newBranchRef : null}>
+              {" "}
+              {/* You can add a class for styling */}
+              <ProfileManagementForm
+                key={branch.id || index}
+                branch={branch}
+                branchId={branch.id}
+                i={index}
+                control={control}
+                register={register}
+                errors={errors}
+                setValue={setValue}
+                getValues={getValues}
+                removeBranch={() => removeBranch(branch.id || index)}
+                addBranch={addBranchRef}
+              />
+            </div>
           ))
         )}
         {status === "INCOMPLETE" ? (

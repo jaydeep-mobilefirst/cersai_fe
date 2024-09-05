@@ -72,6 +72,7 @@ const ProfileBranches = () => {
     setChecked: state.setChecked,
     toggleChecked: state.toggleChecked,
   }));
+
   // const [isChecked, setChecked] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [uploadInputKey, setUploadKey] = useState<number>(0);
@@ -146,7 +147,7 @@ const ProfileBranches = () => {
     const { value } = event.target;
     // Check if the input is empty
     if (!value.trim()) {
-      setPlaceError("Place cannot be empty");
+      setPlaceError("Place is required");
     } else if (value.length > 10) {
       setPlaceError("Place cannot be longer than 10 characters");
     } else {
@@ -157,7 +158,7 @@ const ProfileBranches = () => {
 
   const onSubmit = async (data: any) => {
     if (!place.trim()) {
-      setPlaceError("Place cannot be empty");
+      setPlaceError("Place is required");
       return; // Prevent form submission if the place is empty
     }
 
@@ -464,7 +465,9 @@ const ProfileBranches = () => {
           ))
         )}
         <div className="mt-4">
-          <label className="flex items-center">Place</label>
+          <label className="flex items-center">
+            Place <span className="text-red-500">*</span>
+          </label>
           <InputFieldsV2
             type="text"
             placeholder="enter place"

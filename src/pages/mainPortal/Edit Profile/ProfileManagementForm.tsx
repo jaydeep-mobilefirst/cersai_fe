@@ -197,17 +197,6 @@ const ProfileManagementForm: React.FC<Props> = ({
         ) : (
           <>
             <div className="flex flex-row cursor-pointer">
-              {/* <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
-
-              {i + 1 > 1 && (
-                <img
-                  src={minusCircle}
-                  alt="Remove"
-                  className="ml-2"
-                  onClick={() => removeBranch(i)}
-                />
-              )} */}
-
               {i < maxBranches - 1 && (
                 <img src={addCircle} alt="Add" onClick={() => addBranch(i)} />
               )}
@@ -281,10 +270,10 @@ const ProfileManagementForm: React.FC<Props> = ({
               disabled={disableFieldStatus}
               {...register(`branches[${i}].middleName`, {
                 // required: "First name is required",
-                // pattern: {
-                //   value: /^[a-zA-Z\s'-]+$/,
-                //   message: "First name contains invalid characters",
-                // },
+                pattern: {
+                  value: /^[a-zA-Z\s'-]+$/,
+                  message: "First name contains invalid characters",
+                },
               })}
             />
           </Tooltip>
