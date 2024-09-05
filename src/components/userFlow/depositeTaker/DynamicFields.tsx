@@ -103,7 +103,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
       ? disabledField == "RETURN"
         ? false
         : !data?.profileUpdate
-      : false;
+      : !data?.profileUpdate;
   } else {
     disableFieldStatus = checkPathName(pathname)
       ? checkStatus(disabledField)

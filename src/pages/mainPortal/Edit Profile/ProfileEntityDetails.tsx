@@ -16,6 +16,7 @@ import { axiosTokenInstance } from "../../../utils/axios";
 import LoaderSpin from "../../../components/LoaderSpin";
 import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
 import useProfileEntityStore from "../../../zust/useProfileEntityStore";
+import FooterDT from "./FooterDT";
 
 type Props = {};
 
@@ -30,6 +31,7 @@ const ProfileEntityDetails = (props: Props) => {
   const navigate = useNavigate();
   const setFormData = useProfileEntityStore((state) => state.setFormData);
   const [loader1, setLoader1] = useState(false);
+  const disabledField = sessionStorage.getItem("user_status");
 
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
@@ -259,22 +261,33 @@ const ProfileEntityDetails = (props: Props) => {
             height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
           }}
         >
-          {formFields.length > 0 ? (
+          {formFields?.length > 0 ? (
             <>
               <DynamicFields
                 allFormData={allFormData}
                 formFields={formFields}
                 onChange={onChange}
               />
-              <div>
-                <Footer
-                  onSubmit={onSubmit}
-                  loader={loader}
-                  loader1={loader1}
-                  onClick={onClick}
-                  showbackbtn={false}
-                />
-              </div>
+
+              {disabledField === "INCOMPLETE" ? (
+                <div>
+                  <FooterDT
+                    onSubmit={onClick}
+                    loader={loader}
+                    showbackbtn={false}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <Footer
+                    onSubmit={onSubmit}
+                    loader={loader}
+                    loader1={loader1}
+                    onClick={onClick}
+                    showbackbtn={false}
+                  />
+                </div>
+              )}
             </>
           ) : (
             <div className="flex justify-center items-center">
