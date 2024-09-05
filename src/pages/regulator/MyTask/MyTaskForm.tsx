@@ -71,7 +71,7 @@ const MyTaskForm = () => {
   const getManagementDetails = () => {
     setLoader(true);
     axiosTokenInstance
-      .get(`deposit-taker/management-team/${"DT1720268137702"}`)
+      .get(`deposit-taker/management-team/${depositTakerId}`)
       .then((res) => {
         setDataManagementTeam(res?.data?.data);
         console.log(res.data)
@@ -388,7 +388,7 @@ const MyTaskForm = () => {
                       </p>
                     )}
 
-                    <h1 className=" text-gilroy-bold text-[#24222B] text-2xl font-bold  my-7"></h1>
+                    <h1 className=" text-gilroy-bold text-[#24222B] text-2xl font-bold  my-2"></h1>
                     {allFormData?.entitySections
                       ?.filter(
                         (s: any) => s?.sectionName !== "Upload Documents"
