@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* body {
+  overflow-y: hidden;
+} */
+
+.font-Gilroy-Regular {
+  font-family: Gilroy-Regular;
+}
+.video-border {
+  border-radius: 5px;
+}
+@font-face {
+  font-family: "Gilroy-Regular";
+  src: url("./assets/font/Gilroy-Regular.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Gilroy-Medium";
+  src: url("./assets/font/Gilroy-Medium.ttf") format("ttf");
+}
+
+.text-gilroy-regular {
+  font-family: "Gilroy-Regular", sans-serif;
+}
+
+.text-gilroy-medium {
+  font-family: "Gilroy-medium", sans-serif;
+}
+.text-gilroy-light {
+  font-family: "Gilroy-Light", sans-serif;
+}
+.text-gilroy-semibold {
+  font-family: "Gilroy-Semibold", sans-serif;
+}
+.text-gilroy-mediumItalic {
+  font-family: "Gilroy-MediumItalic", sans-serif;
+}
+.text-gilroy-bold {
+  font-family: "Gilroy-Bold", sans-serif;
+}
+
+.buds-background-image {
+  background-image: url("./assets/images/new_images/bg.svg"),
+    url("./assets/images/new_images/Vector.svg");
+  background-size: auto, auto;
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, center;
+  background-position: right bottom, left bottom;
+}
+.buds-faq-background-image {
+  background-image: url("./assets/images/Vector.png");
+  background-size: auto, auto;
+  background-repeat: no-repeat, no-repeat;
+  background-position: right top;
+}
+
+.query-bg-image {
+  background-image: url("./assets/images/new_images/footer_vector.png");
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position: right bottom;
+}
+
+.about-buds-background {
+  background-image: url("./assets/images/new_images/About_Buds_Vector.png");
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position: right bottom;
+}
+
+.shadow-custom {
+  box-shadow: 0px 24.102px 96.407px 0px rgba(0, 0, 0, 0.05);
+}
+
+.landing-hero-bg-image {
+  background-image: url("./assets/images/herobg.svg");
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position: right bottom;
+}
+.form-container {
+  max-height: 600px; /* Adjust the height as needed */
+  overflow-y: auto;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 39px;
+  flex-shrink: 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #385723;
+  border-radius: 16px;
+}
+
+.inputStyle {
+  width: 3rem !important;
+  height: 3rem !important;
+  border-radius: 7px;
+  background: #e7e7e7;
+  margin: 12px;
+}
+
+.swal2-container {
+  z-index: X;
+}
+/* Example CSS for PDF Mode */
+.pdf-mode #reviewContent {
+  width: 100%;
+  height: auto;
+}
