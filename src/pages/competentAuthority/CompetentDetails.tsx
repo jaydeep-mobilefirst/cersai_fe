@@ -47,6 +47,7 @@ const ComponentDetails: React.FC = () => {
       .map((field: any) => {
         const disableLabels = [
           "State",
+          "District"
           // "Jurisdiction",
           // "Address Line 1",
           // "Address Line 2",
@@ -55,6 +56,7 @@ const ComponentDetails: React.FC = () => {
 
         const disableKeys = [
           "state",
+          "district"
           // "Jurisdiction",
           // "addressLine1",
           // "addressLine2",
