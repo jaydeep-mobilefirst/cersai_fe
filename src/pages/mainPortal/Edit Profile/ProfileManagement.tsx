@@ -32,6 +32,7 @@ const ProfileManagement = () => {
     setChecked,
     toggleChecked,
     removedBranches,
+    clearRemovedBranches,
   } = useBranchStore((state) => ({
     branches: state.branches,
     addBranch: state.addBranch,
@@ -41,6 +42,7 @@ const ProfileManagement = () => {
     setChecked: state.setChecked,
     toggleChecked: state.toggleChecked,
     removedBranches: state.removedBranches,
+    clearRemovedBranches: state.clearRemovedBranches,
   }));
   console.log({ branches }, "branches");
   // const [isChecked, setChecked] = useState(false);
@@ -64,12 +66,12 @@ const ProfileManagement = () => {
     "filtermangementID"
   );
 
-  const removeManagement = async (id: any) => {
-    console.log(id, "id");
+  const removeManagement = async (ids: any) => {
+    console.log(ids, "id");
     try {
       const response = await axiosTokenInstance.delete(
         `/deposit-taker/management-team/${entityUniqueId}`,
-        { data: { id } } // Passing the ID in the body of the DELETE request
+        { data: { ids } } // Passing the ID in the body of the DELETE request
       );
       console.log({ response }, "response");
       if (response.data.status === "success") {
@@ -243,6 +245,7 @@ const ProfileManagement = () => {
             // Pass the collected ids to your removal function
             if (idsToRemove.length > 0) {
               removeManagement(idsToRemove); // Adjust according to your actual removal logic
+              clearRemovedBranches();
             }
           }
 
