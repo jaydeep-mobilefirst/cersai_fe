@@ -207,14 +207,7 @@ const ReviewDetailsRegulator = () => {
                   />
                 </div>
                 <div className="leading-[24px] ml-4">
-                I solemnly affirm to the best of my knowledge and belief, that the information given in the Form is correct, and the nothing material has been concealed therefrom and I agree to the&nbsp;
-                  <Link
-                    className="text-[#1c468e] underline cursor-pointer"
-                    to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
-                    target="_blank"
-                  >
-                    Terms and Conditions
-                  </Link>
+                I hereby declare that all information provided by me is correct.
                 </div>
               </div>
             )}

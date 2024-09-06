@@ -51,7 +51,7 @@ const DepositTakerForm = () => {
   const getManagementDetails = () => {
     setLoader(true);
     axiosTokenInstance
-      .get(`deposit-taker/management-team/${"DT1720268137702"}`)
+      .get(`deposit-taker/management-team/${depositTakerId}`)
       .then((res) => {
         setDataManagementTeam(res?.data?.data);
         console.log(res.data)

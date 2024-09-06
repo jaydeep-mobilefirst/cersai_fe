@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import AuditTrail from "../../components/ScehmaManagement/AuditTrail";
 import LoaderSpin from "../../components/LoaderSpin";
 import { axiosTraceIdInstance } from "../../utils/axios";
+import MangementDetails from "../../components/ScehmaManagement/ManagementDetails";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -31,6 +32,7 @@ const SchemeSearchDetails: React.FC = () => {
   const createdBy = location.state?.createdBy?.substring(0,2)  
 
   const uniqueId = location.state?.uniqueId;
+
 
   const depositTakerId = location.state?.createdBy;
   console.log("---id---",location)
@@ -256,6 +258,10 @@ const SchemeSearchDetails: React.FC = () => {
     {
       header: "Audit Trail",
       content: <AuditTrail />,
+    },
+    {
+      header: "Management Details",
+      content: <MangementDetails />,
     },
   ];
 

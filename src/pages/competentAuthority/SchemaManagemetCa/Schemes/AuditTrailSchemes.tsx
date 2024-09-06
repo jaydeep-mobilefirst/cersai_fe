@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import SelectButton from "../../../../components/userFlow/form/SelectButton";
 import SelectButtonMultiselect from "../../../../components/UserManagement/SelectButtonMultiselect";
 import { axiosTokenInstance } from "../../../../utils/axios";
+import MangementDetails from "./ManagementDetails";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
@@ -276,6 +277,10 @@ const SchemesSearchDetailsSM: React.FC = () => {
     {
       header: "Audit Trail",
       content: <AuditTrail />,
+    },
+    {
+      header: "Management Details",
+      content: <MangementDetails />,
     },
   ];
 
