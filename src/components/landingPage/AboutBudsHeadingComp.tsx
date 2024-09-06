@@ -19,16 +19,25 @@ const AboutBudsHeadingComp = () => {
       </div>
       <>
         {homePageData?.homePageData?.aboutBudsHeadingComp1.map((item:any, idx:any) => {
-          if (item.text !== "To know more login to ") {
+          if (idx !== 3) {
             return (
               <>
                 <div className=" flex flex-col items-center md:flex-row justify-start md:items-center" key={idx}>
+                  <div className="flex flex-col">
                   <div className="mr-4 md:mr-6 mb-0 w-14 h-14 rounded-full bg-[#1C468E] flex justify-center items-center">
+                    
                     <img src={item.img} alt="icon" className={`${item.text==="Ask for your CKYC Identifier now and open account faster with reduced paper-work"? "w-[16px] h-[20px]":"w-[24px] h-[24px]" }`} />
+                    
                   </div>
-                  <p className="mt-2 md:mt-0 text-base text-gilroy-medium text-black font-normal leading-6">
-                    {item.text}
-                  </p>
+                  <div className="md:ml-[24px] w-[8px] h-[18px] bg-[#1C468E] hidden md:block" />
+                  </div>
+                  
+                  <p className="mt-2 md:-mt-4 text-base text-gilroy-medium text-black font-normal leading-6 whitespace-normal">
+            
+                    <div dangerouslySetInnerHTML={{ __html: item.text }} />
+
+                    </p>
+                    
                 </div>
                 <div className="md:ml-[24px] w-[8px] h-[27px] bg-[#1C468E] hidden md:block" />
               </>
@@ -36,15 +45,20 @@ const AboutBudsHeadingComp = () => {
           }
           return (
             <div className=" flex flex-col items-center md:flex-row justify-start md:items-center" key={idx}>
+              <div className="flex flex-col">
               <div className="mr-4 md:mr-6 mb-0 w-14 h-14 rounded-full bg-[#1C468E] flex justify-center items-center">
                 <img src={item.img} alt="icon" className="w-[24px] h-[24px]" />
               </div>
+              </div>
               <p className="mt-2 md:mt-0 text-base text-gilroy-medium text-black font-normal leading-6">
-                {item.text}
-                <span className="text-[#1C468E] text-gilroy-medium underline cursor-pointer">
-                  {" "}
+                {/* {item.text} */}
+                <div className="flex flex-wrap ">
+                    <div dangerouslySetInnerHTML={{ __html: item.text }} />
+                      &nbsp;
+                <p className="text-[#1C468E] text-gilroy-medium underline cursor-pointer">
+                  {"  "}
                   <Link target={"_blank"} to={item?.link}> {item?.link}</Link>
-                </span>
+                </p></div>
                 
               </p>
             </div>

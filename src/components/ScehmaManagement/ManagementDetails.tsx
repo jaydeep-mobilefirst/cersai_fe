@@ -4,6 +4,7 @@ import DirectBox from "../../assets/images/send.png";
 import { useEffect, useState } from "react";
 import { axiosTraceIdInstance } from "../../utils/axios";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import { useLocation } from "react-router-dom";
 
 
 // interface TableType {
@@ -53,10 +54,13 @@ const MangementDetails = () => {
     allFormData?.other?.schemeAuditTrail
   );
   const columnHelper = createColumnHelper<TableType>();
+  
+  const location = useLocation();
+  const depositTakerId = location.state?.createdBy;
   const getManagementDetails = () => {
     setLoader(true);
     axiosTraceIdInstance
-      .get(`deposit-taker/management-team/${allFormData?.other?.depositTakerId}`)
+      .get(`deposit-taker/management-team/${depositTakerId}`)
       .then((res) => {
         setDataManagementTeam(res?.data?.data);
         console.log(res.data)
@@ -72,7 +76,7 @@ const MangementDetails = () => {
 
   useEffect(() => {
     getManagementDetails()
-  }, [allFormData?.other?.depositTakerId]);
+  }, [depositTakerId]);
 
 //   const columns = [
 //     columnHelper.accessor("id", {
