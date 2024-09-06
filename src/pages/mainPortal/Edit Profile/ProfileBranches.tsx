@@ -7,6 +7,7 @@ import infoIcon from "../../../assets/images/info-circle.svg";
 
 import Swal from "sweetalert2";
 import { useBranchStore } from "../../../store/upate-profile/branch";
+import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
 import { useScreenWidth } from "../../../utils/screenSize";
 import Button from "../../../components/userFlow/common/Button";
 import uploadIcon from "../../../assets/images/directbox-send.svg";
@@ -19,12 +20,14 @@ import userProfileUploadStore from "../../../zust/userProfileUploadStore";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { useLocation } from "react-router-dom";
 import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
+import FooterDT from "./FooterDT";
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
   const location = useLocation();
   const callapi = location.state?.callSaveandcontinue;
   const managementData = location.state?.managementData;
+  const status = sessionStorage.getItem("user_status");
 
   console.log({ callapi, managementData }, "callapi");
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
@@ -55,6 +58,7 @@ const ProfileBranches = () => {
   //     setBranches: state.setBranches,
   //   })
   // );
+
   const {
     branches,
     addBranch,
@@ -72,6 +76,27 @@ const ProfileBranches = () => {
     setChecked: state.setChecked,
     toggleChecked: state.toggleChecked,
   }));
+  const { removedBranches: removedBranchesData, clearRemovedBranches } =
+    useManagementStore((state) => ({
+      removedBranches: state.removedBranches,
+      clearRemovedBranches: state.clearRemovedBranches,
+    }));
+
+  console.log({ removedBranchesData }, "removedBranchesData");
+
+  const filterManagement: any = removedBranchesData?.map(
+    ({ id, firstName }: any) => ({
+      id,
+      firstName,
+    })
+  );
+
+  const filterManagementID: any = removedBranchesData?.map(({ id }: any) => id);
+  console.log(
+    { filterManagement, filterManagementID },
+    "filterManagement",
+    "filtermangementID"
+  );
 
   // const [isChecked, setChecked] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
@@ -155,6 +180,35 @@ const ProfileBranches = () => {
     }
     setPlace(value);
   };
+  const removeManagement = async (ids: any) => {
+    console.log(ids, "id");
+    try {
+      const response = await axiosTokenInstance.delete(
+        `/deposit-taker/management-team/${entityUniqueId}`,
+        { data: { ids } } // Passing the ID in the body of the DELETE request
+      );
+      console.log({ response }, "response");
+      if (response.data.status === "success") {
+        setLoader(true);
+        // Swal.fire({
+        //   icon: "success",
+        //   text: response?.data?.message,
+        //   confirmButtonText: "Ok",
+        // }).then(() => {
+        //   // Additional actions after confirmation if needed
+        // });
+      }
+    } catch (error) {
+      console.error("Failed to remove management:", error);
+      // Swal.fire({
+      //   icon: "error",
+      //   text: "Failed to remove management",
+      //   confirmButtonText: "Ok",
+      // });
+    } finally {
+      setLoader(false); // Ensure loader is turned off regardless of success or failure
+    }
+  };
 
   const onSubmit = async (data: any) => {
     if (!place.trim()) {
@@ -223,6 +277,25 @@ const ProfileBranches = () => {
               });
               setLoader(false);
             });
+          if (
+            Array.isArray(filterManagement) &&
+            filterManagement.some(
+              (management: any) => management.id && management.firstName
+            )
+          ) {
+            // Collect all ids in an array format like [10, 5, 8]
+            const idsToRemove = filterManagement
+              .filter(
+                (management: any) => management.id && management.firstName
+              )
+              .map((management: any) => management.id);
+
+            // Pass the collected ids to your removal function
+            if (idsToRemove.length > 0) {
+              removeManagement(idsToRemove); // Adjust according to your actual removal logic
+              clearRemovedBranches();
+            }
+          }
         });
       } else {
         Swal.fire({
@@ -496,20 +569,37 @@ const ProfileBranches = () => {
           </>
         )}
 
-        <div>
-          <Footer
-            disabled={!isChecked}
-            loader={loader}
-            hidecontiuebtn={true}
-            showbackbtn={true}
-            path={"/dt/profile?current=documents"}
-          />
-          <button
-            onSubmit={onSubmit}
-            type="submit"
-            className="mt-4 btn-primary"
-          ></button>
-        </div>
+        {status === "INCOMPLETE" ? (
+          <div>
+            <FooterDT
+              disabled={!isChecked}
+              loader={loader}
+              hidecontiuebtn={true}
+              showbackbtn={true}
+              path={"/dt/profile?current=documents"}
+            />
+            <button
+              onSubmit={onSubmit}
+              type="submit"
+              className="mt-4 btn-primary"
+            ></button>
+          </div>
+        ) : (
+          <div>
+            <Footer
+              disabled={!isChecked}
+              loader={loader}
+              hidecontiuebtn={true}
+              showbackbtn={true}
+              path={"/dt/profile?current=documents"}
+            />
+            <button
+              onSubmit={onSubmit}
+              type="submit"
+              className="mt-4 btn-primary"
+            ></button>
+          </div>
+        )}
       </form>
     </div>
   );
