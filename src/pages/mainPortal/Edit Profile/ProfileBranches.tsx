@@ -539,21 +539,18 @@ const ProfileBranches = () => {
             />
           ))
         )}
-        {disabledField === "INCOMPLETE" && (
-          <div className='mt-4'>
-            <label className='flex items-center'>
-              Place <span className='text-red-500'>*</span>
-            </label>
-            <InputFieldsV2
-              type='text'
-              placeholder='enter place'
-              value={place}
-              onChange={handlePlaceChange}
-            />
-            {placeError && <p className='text-red-500'>{placeError}</p>}
-          </div>
-        )}
-
+        <div className='mt-4'>
+          <label className='flex items-center'>
+            Place <span className='text-red-500'>*</span>
+          </label>
+          <InputFieldsV2
+            type='text'
+            placeholder='enter place'
+            value={place}
+            onChange={handlePlaceChange}
+          />
+          {placeError && <p className='text-red-500'>{placeError}</p>}
+        </div>
         {disableFieldStatus ? (
           <></>
         ) : (
@@ -567,11 +564,14 @@ const ProfileBranches = () => {
                   onChange={handleCheckboxChange}
                   className='h-4 w-4 mr-2 rounded-lg accent-[#1c468e]'
                 />
-               <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">I solemnly affirm to the best of my knowledge and belief, that the information given in the Form is correct, and the nothing material has been concealed therefrom and I agree to the&nbsp;
+                <div className='leading-[24px] ml-4 text-gilroy-medium text-[14px]'>
+                  I solemnly affirm to the best of my knowledge and belief, that
+                  the information given in the Form is correct, and the nothing
+                  material has been concealed therefrom and I agree to the&nbsp;
                   <Link
-                    className="text-[#1c468e] underline cursor-pointer"
+                    className='text-[#1c468e] underline cursor-pointer'
                     target={"_blank"}
-                    to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
+                    to='https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf'
                   >
                     Terms and Conditions
                   </Link>
@@ -581,7 +581,7 @@ const ProfileBranches = () => {
           </>
         )}
 
-        {/* {status === "INCOMPLETE" ? (
+        {status === "INCOMPLETE" ? (
           <div>
             <FooterDT
               disabled={!isChecked}
@@ -596,7 +596,7 @@ const ProfileBranches = () => {
               className='mt-4 btn-primary'
             ></button>
           </div>
-        ) : ( */}
+        ) : (
           <div>
             <Footer
               disabled={!isChecked}
@@ -611,7 +611,7 @@ const ProfileBranches = () => {
               className='mt-4 btn-primary'
             ></button>
           </div>
-        {/* )} */}
+        )}
       </form>
     </div>
   );
