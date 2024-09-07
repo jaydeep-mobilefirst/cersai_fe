@@ -12,6 +12,7 @@ import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-regis
 import { axiosTokenInstance } from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
 import ProfileManagement from "./Edit Profile/ProfileManagement";
+import useStore from "../../store/statusStore";
 
 type Props = {};
 
@@ -21,12 +22,22 @@ const DashboardProfile = (props: Props) => {
   const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
+
   const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
+
   const [refreshShow, setRefreshShow] = useState(
     sessionStorage.getItem("refreshShow")
   );
+
   const entitiy_details_api = sessionStorage.getItem("entitiy_details_api");
+
+  const { data, loading, error, fetchData } = useStore();
+
+  useEffect(() => {
+    fetchData(); // Trigger the API call when the component mounts
+  }, [fetchData]);
+
   const fetchFormFields = () => {
     axiosTokenInstance
       .get(`/registration/field-data/1?status=addToProfile`)
@@ -41,7 +52,7 @@ const DashboardProfile = (props: Props) => {
               dtData =
                 depositTakerData?.data?.data?.depositTaker
                   ?.depositTakerFormData;
-                sessionStorage.setItem('entitiy_details_api', 'false')
+              sessionStorage.setItem("entitiy_details_api", "false");
             } catch (error: any) {
               if (error.response.status === 401) {
                 navigate("/"); // Navigate to home
@@ -103,18 +114,22 @@ const DashboardProfile = (props: Props) => {
     fetchFormFields();
   }, []);
 
+  const userStatus = sessionStorage.getItem("user_status");
+  const clickableSidebarStatus =
+    userStatus === "RETURN" ? false : !data?.profileUpdate;
+
   const current = searchParams.get("current");
   return (
     <>
       <div className='lg:hidden mt-4'>
-        <ProfileResponsiveTabs />
+        <ProfileResponsiveTabs clickableSidebarStatus={clickableSidebarStatus} />
       </div>
       <div className='mt-6 mx-6'>
         <TaskTabs />
       </div>
       <div className='flex flex-row'>
         <div className='hidden lg:block'>
-          <DashboardProfileSidebar fetchFormFields={fetchFormFields} />
+          <DashboardProfileSidebar fetchFormFields={fetchFormFields} clickableSidebarStatus={clickableSidebarStatus} />
         </div>
         {current === "entity" && <ProfileEntityDetails />}
         {current === "nodal" && <ProfileNodalDetails />}
