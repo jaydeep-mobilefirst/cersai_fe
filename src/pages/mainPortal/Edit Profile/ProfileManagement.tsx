@@ -248,11 +248,10 @@ const ProfileManagement = () => {
               clearRemovedBranches();
             }
           }
-
+          sessionStorage.setItem('user_status', 'PENDING')
           // await fetchBranches();
           setBranches(data?.branches);
           setLoader(false);
-
           Swal.fire({
             icon: "success",
             text: response?.data?.message,

@@ -116,7 +116,7 @@ const DashboardProfile = (props: Props) => {
 
   const userStatus = sessionStorage.getItem("user_status");
   const clickableSidebarStatus =
-    userStatus === "RETURN" ? false : !data?.profileUpdate;
+    userStatus === "RETURNED" ? false : !data?.profileUpdate;
 
   const current = searchParams.get("current");
   return (

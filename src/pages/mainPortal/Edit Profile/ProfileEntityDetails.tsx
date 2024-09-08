@@ -220,7 +220,7 @@ const ProfileEntityDetails = (props: Props) => {
                   "Entity Details updated successfully",
                 confirmButtonText: "Ok",
               });
-
+              sessionStorage.setItem('user_status', 'PENDING')
               Navigate("/dt/profile?current=nodal");
             })
             .catch((err) => {

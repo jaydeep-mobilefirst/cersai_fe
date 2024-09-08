@@ -20,8 +20,8 @@ import userProfileUploadStore from "../../../zust/userProfileUploadStore";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { useLocation } from "react-router-dom";
 import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
-import FooterDT from "./FooterDT";
-import { Link } from "react-router-dom";
+import FooterDT2 from "./FooterDT2";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
@@ -30,6 +30,7 @@ const ProfileBranches = () => {
   const callapi = location.state?.callSaveandcontinue;
   const managementData = location.state?.managementData;
   const status = sessionStorage.getItem("user_status");
+  const Navigate = useNavigate()
 
   console.log({ callapi, managementData }, "callapi");
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
@@ -278,6 +279,8 @@ const ProfileBranches = () => {
                 confirmButtonText: "Ok",
               });
               setLoader(false);
+              sessionStorage.setItem('user_status', 'PENDING')
+              Navigate("/dt/dashboard");
             });
           if (
             Array.isArray(filterManagement) &&
@@ -583,7 +586,7 @@ const ProfileBranches = () => {
 
         {status === "INCOMPLETE" ? (
           <div>
-            <FooterDT
+            <FooterDT2
               disabled={!isChecked}
               loader={loader}
               hidecontiuebtn={true}

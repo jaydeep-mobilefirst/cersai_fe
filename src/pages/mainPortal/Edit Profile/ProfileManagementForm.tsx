@@ -362,6 +362,7 @@ const ProfileManagementForm: React.FC<Props> = ({
             /> */}
             <SelectButton
               options={designationOptions}
+              disabled={disableFieldStatus}
               setOption={(value) => {
                 handleSetState(value);
                 setValue(`branches[${i}].designation`, value, {

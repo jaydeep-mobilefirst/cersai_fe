@@ -144,6 +144,7 @@ const ProfileNodalDetails = (props: Props) => {
                 text: "Nodal Officer details updated successfully",
                 confirmButtonText: "Ok",
               });
+              sessionStorage.setItem('user_status', 'PENDING')
               Navigate("/dt/profile?current=regulator");
             })
             .catch((err) => {
