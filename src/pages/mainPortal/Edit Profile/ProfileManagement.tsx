@@ -16,12 +16,16 @@ import ProfileManagementForm from "./ProfileManagementForm";
 import { useNavigate } from "react-router-dom";
 import { useBranchStore } from "../../../store/upate-profile/managementStore";
 import FooterDT from "./FooterDT";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 const ProfileManagement = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
   const status = sessionStorage.getItem("user_status");
   const Navigate = useNavigate();
   const newBranchRef = useRef<HTMLDivElement | null>(null);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
 
   const {
     branches,
@@ -95,6 +99,18 @@ const ProfileManagement = () => {
       setLoader(false); // Ensure loader is turned off regardless of success or failure
     }
   };
+
+  console.log({ allFormData }, "formData");
+
+  const panData = allFormData?.formFields?.form_fields
+    ?.filter((field: any) => field.key === "panNumber")
+    .map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: field.entityRegSection?.sectionName,
+      label: field.label,
+      value: field.userInput,
+    }));
+  console.log(panData, "panData");
 
   const {
     register,
@@ -248,7 +264,13 @@ const ProfileManagement = () => {
               clearRemovedBranches();
             }
           }
-          sessionStorage.setItem('user_status', 'PENDING')
+          axiosTokenInstance.patch(
+            `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+            {
+              formData: panData,
+            }
+          );
+          sessionStorage.setItem("user_status", "PENDING");
           // await fetchBranches();
           setBranches(data?.branches);
           setLoader(false);
