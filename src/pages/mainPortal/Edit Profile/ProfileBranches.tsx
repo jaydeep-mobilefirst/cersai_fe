@@ -153,8 +153,9 @@ const ProfileBranches = () => {
           // place: "",
         });
       }
+      // console.log(response.data?.branchCreatePlace, "response.data.data");
       setBranches(fetchedBranches);
-      setPlace(response.data.data?.branchCreatePlace);
+      setPlace(response.data?.branchCreatePlace);
       reset({
         branches: fetchedBranches?.map((branch: any) => ({
           ...branch, // Spread the entire branch objects
