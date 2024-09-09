@@ -134,7 +134,7 @@ const TopDetail = () => {
               <div>
                 <img src={data?.img} alt="icon" className="w-[24px] h-[24px]" />
               </div>
-              {idx === 2 ? (
+              {idx === 1 ? (
                 <>
                   <div
                     className="ml-4 text-[#797979] text-gilroy-regular cursor-pointer underline"

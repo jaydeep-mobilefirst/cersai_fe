@@ -173,3 +173,6 @@ swal2-popup {
 .swal2-backdrop-show {
   z-index: 9997 !important; /* Backdrop slightly lower than container and popup */
 }
+.control-arrow control-prev{
+  display: hidden;
+}
