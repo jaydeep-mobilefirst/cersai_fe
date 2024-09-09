@@ -30,7 +30,7 @@ const ProfileBranches = () => {
   const callapi = location.state?.callSaveandcontinue;
   const managementData = location.state?.managementData;
   const status = sessionStorage.getItem("user_status");
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
 
   console.log({ callapi, managementData }, "callapi");
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
@@ -155,7 +155,9 @@ const ProfileBranches = () => {
           // place: "",
         });
       }
+      // console.log(response.data?.branchCreatePlace, "response.data.data");
       setBranches(fetchedBranches);
+      setPlace(response.data?.branchCreatePlace);
       reset({
         branches: fetchedBranches?.map((branch: any) => ({
           ...branch, // Spread the entire branch objects
@@ -173,18 +175,29 @@ const ProfileBranches = () => {
   useEffect(() => {
     fetchBranches();
   }, [reset, setBranches, uploadInputKey]);
+  // const handlePlaceChange = (event: any) => {
+  //   const { value } = event.target;
+  //   // Check if the input is empty
+  //   if (!value.trim()) {
+  //     setPlaceError("Place is required");
+  //   } else if (value.length > 10) {
+  //     setPlaceError("Place cannot be longer than 10 characters");
+  //   } else {
+  //     setPlaceError(""); // Clear error if input is valid
+  //   }
+  //   setPlace(value);
+  // };
   const handlePlaceChange = (event: any) => {
     const { value } = event.target;
-    // Check if the input is empty
-    if (!value.trim()) {
-      setPlaceError("Place is required");
-    } else if (value.length > 10) {
-      setPlaceError("Place cannot be longer than 10 characters");
+    // Check if the input length is greater than 3
+    if (value.length <= 3) {
+      setPlaceError("Place must be longer than 3 characters");
     } else {
       setPlaceError(""); // Clear error if input is valid
     }
     setPlace(value);
   };
+
   const removeManagement = async (ids: any) => {
     console.log(ids, "id");
     try {
@@ -281,7 +294,7 @@ const ProfileBranches = () => {
                 confirmButtonText: "Ok",
               });
               setLoader(false);
-              sessionStorage.setItem('user_status', 'PENDING')
+              sessionStorage.setItem("user_status", "PENDING");
               Navigate("/dt/dashboard");
             });
           if (
@@ -474,22 +487,22 @@ const ProfileBranches = () => {
   const disableFieldStatus = checkStatus(disabledField);
 
   return (
-    <div className='bg-white p-7 w-full h-full '>
-      <h1 className='font-semibold text-2xl mb-3'>Upload Branches</h1>
-      <div className='flex-row align-middle text-gray-400 flex justify-between'>
-        <div className='flex flex-row align-middle justify-start'>
+    <div className="bg-white p-7 w-full h-full ">
+      <h1 className="font-semibold text-2xl mb-3">Upload Branches</h1>
+      <div className="flex-row align-middle text-gray-400 flex justify-between">
+        <div className="flex flex-row align-middle justify-start">
           <img
             src={infoIcon}
-            alt='info'
-            className='mr-2'
+            alt="info"
+            className="mr-2"
             height={25}
             width={25}
           />
-          <div className='my-auto'>
+          <div className="my-auto">
             You can upload branches in bulk. Please use this given{" "}
             <span
               onClick={handleDownloadTemplate}
-              className='text-blue-400 hover:cursor-pointer'
+              className="text-blue-400 hover:cursor-pointer"
             >
               Template
             </span>
@@ -501,26 +514,26 @@ const ProfileBranches = () => {
           onClick={() => {
             uploadButtonRef.current?.click();
           }}
-          className='w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer'
+          className="w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer"
         >
           <input
             onChange={handleFileUpload}
-            type='file'
-            name=''
-            id=''
-            className='hidden'
-            accept='.xls, .xlsx'
+            type="file"
+            name=""
+            id=""
+            className="hidden"
+            accept=".xls, .xlsx"
             ref={uploadButtonRef}
             key={uploadInputKey}
             disabled={disableFieldStatus}
           />
-          <div className='justify-start items-center gap-1.5 inline-flex'>
-            <div className='w-6 h-6 justify-center items-center flex'>
-              <div className='w-6 h-6 relative'>
-                <img src={uploadIcon} alt='' />
+          <div className="justify-start items-center gap-1.5 inline-flex">
+            <div className="w-6 h-6 justify-center items-center flex">
+              <div className="w-6 h-6 relative">
+                <img src={uploadIcon} alt="" />
               </div>
             </div>
-            <div className='text-white text-base font-normal'>Upload</div>
+            <div className="text-white text-base font-normal">Upload</div>
           </div>
         </div>
       </div>
@@ -544,39 +557,40 @@ const ProfileBranches = () => {
             />
           ))
         )}
-        <div className='mt-4'>
-          <label className='flex items-center'>
-            Place <span className='text-red-500'>*</span>
+        <div className="mt-4">
+          <label className="flex items-center">
+            Place <span className="text-red-500">*</span>
           </label>
           <InputFieldsV2
-            type='text'
-            placeholder='enter place'
+            type="text"
+            placeholder="enter place"
             value={place}
+            disabled={status === "INCOMPLETE" ? false : true}
             onChange={handlePlaceChange}
           />
-          {placeError && <p className='text-red-500'>{placeError}</p>}
+          {placeError && <p className="text-red-500">{placeError}</p>}
         </div>
         {disableFieldStatus ? (
           <></>
         ) : (
           <>
             {" "}
-            <div className='mt-4'>
-              <label className='flex items-center'>
+            <div className="mt-4">
+              <label className="flex items-center">
                 <input
-                  type='checkbox'
+                  type="checkbox"
                   checked={isChecked}
                   onChange={handleCheckboxChange}
-                  className='h-4 w-4 mr-2 rounded-lg accent-[#1c468e]'
+                  className="h-4 w-4 mr-2 rounded-lg accent-[#1c468e]"
                 />
-                <div className='leading-[24px] ml-4 text-gilroy-medium text-[14px]'>
+                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
                   I solemnly affirm to the best of my knowledge and belief, that
                   the information given in the Form is correct, and the nothing
                   material has been concealed therefrom and I agree to the&nbsp;
                   <Link
-                    className='text-[#1c468e] underline cursor-pointer'
+                    className="text-[#1c468e] underline cursor-pointer"
                     target={"_blank"}
-                    to='https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf'
+                    to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
                   >
                     Terms and Conditions
                   </Link>
@@ -597,8 +611,8 @@ const ProfileBranches = () => {
             />
             <button
               onSubmit={onSubmit}
-              type='submit'
-              className='mt-4 btn-primary'
+              type="submit"
+              className="mt-4 btn-primary"
             ></button>
           </div>
         ) : (
@@ -612,8 +626,8 @@ const ProfileBranches = () => {
             />
             <button
               onSubmit={onSubmit}
-              type='submit'
-              className='mt-4 btn-primary'
+              type="submit"
+              className="mt-4 btn-primary"
             ></button>
           </div>
         )}
