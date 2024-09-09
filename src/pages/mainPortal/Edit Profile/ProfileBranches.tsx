@@ -116,6 +116,7 @@ const ProfileBranches = () => {
     getValues,
     reset,
   } = useForm();
+
   const formData =
     allFormData?.formFields?.form_fields &&
     allFormData?.formFields?.form_fields?.map((field: any) => ({
@@ -123,6 +124,7 @@ const ProfileBranches = () => {
       sectionCode: field.entityRegSection?.sectionName,
       label: field.label,
       value: field.userInput,
+      key: field?.key
     }));
 
   const formDataDocument =
