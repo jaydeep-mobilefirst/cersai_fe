@@ -85,6 +85,8 @@ const ReviewDetails = () => {
   const { allFormData, documentData, masterEntityId } =
     useDepositTakerRegistrationStore((state) => state);
 
+  console.log({ allFormData }, "allFormData");
+
   const submit = async (e: any) => {
     e.preventDefault();
     setLoader(true);
@@ -295,7 +297,8 @@ const ReviewDetails = () => {
                   />
                 </div>
                 <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
-                I hereby declare that all information provided by me is correct.
+                  I hereby declare that all information provided by me is
+                  correct.
                 </div>
               </div>
             )}
