@@ -109,6 +109,9 @@ const ReviewDetails = () => {
 
   const submit = async (e: any) => {
     e.preventDefault();
+    if (!isChecked) {
+      return;
+    }
     setLoader(true);
     let finalResult =
       allFormData &&
@@ -329,7 +332,7 @@ const ReviewDetails = () => {
           <div className=" ml-5">
             <button
               className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0"
-              onClick={() => Navigate(-1)}
+              onClick={() => Navigate("/competent/authority/nodaldetails")}
             >
               <img src={Arrow} alt="back Arrow" className="mr-2" />
               Back
@@ -338,6 +341,7 @@ const ReviewDetails = () => {
           <div className="flex mr-7">
             <div>
               <button
+                disabled={!isChecked}
                 onClick={downloadPDF}
                 className={`w-auto md:w-[208px] md:h-[48px] text-gilroy-semibold gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]   ${
                   isChecked ? "" : "opacity-50"
@@ -349,6 +353,7 @@ const ReviewDetails = () => {
             </div>
             <div>
               <button
+                disabled={!isChecked}
                 type="submit"
                 onClick={submit} // Assuming this action should be tied to the Submit button
                 className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] text-gilroy-semibold rounded-[12px] bg-[#1c468e] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px] ${
