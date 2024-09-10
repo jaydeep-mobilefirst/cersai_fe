@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/new_images/arrowDown.png";
@@ -84,8 +84,28 @@ const ReviewDetails = () => {
   const [submitted, setSubmitted] = useState(false);
   const { allFormData, documentData, masterEntityId } =
     useDepositTakerRegistrationStore((state) => state);
+  const [caMasterEntityId, setCaMasterEntityId] = useState(null);
 
   console.log({ allFormData }, "allFormData");
+  useEffect(() => {
+    const masterEntityValue =
+      allFormData &&
+      allFormData?.formFields?.form_fields?.find(
+        (field) => field?.key === "competentAuthorityName"
+      );
+
+    if (masterEntityValue && masterEntityValue.userInput) {
+      const matchingOption = masterEntityValue.dropdown_options.options.find(
+        (option) => option.name === masterEntityValue.userInput
+      );
+
+      if (matchingOption) {
+        // Set the masterEntityId in the state
+        setCaMasterEntityId(matchingOption.masterEntityId);
+        console.log(matchingOption.masterEntityId, "matchingOption");
+      }
+    }
+  }, [allFormData]);
 
   const submit = async (e: any) => {
     e.preventDefault();
@@ -128,7 +148,7 @@ const ReviewDetails = () => {
       {
         identity: allFormData?.uniqueId,
         formData: finalResult,
-        masterId: masterEntityId,
+        masterId: masterEntityId || caMasterEntityId,
       }
     )
       .then((response: any) => {
