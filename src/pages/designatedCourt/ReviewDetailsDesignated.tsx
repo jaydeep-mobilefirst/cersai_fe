@@ -158,7 +158,11 @@ const ReviewDetailsDesignated = () => {
 
   const submit = async (e) => {
     e.preventDefault();
+    if (!isChecked) {
+      return;
+    }
     setLoader(true);
+
     let finalResult = allFormData?.formFields?.form_fields?.map((field) => {
       let sectionCode = allFormData.entitySections?.find(
         (section) => section?.id === field?.sectionId

@@ -22,16 +22,16 @@ const useDownloadPDF = () => {
     const getCurrentDateTimeee = () => {
       const now = new Date();
       const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
-    
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+      const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
+
       return `${day}-${month}-${year}-${hours}-${minutes}-${seconds}`;
     };
-    console.log("------",getCurrentDateTimeee())
+    console.log("------", getCurrentDateTimeee());
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: [0.4, 0.4, 0.4, 0.4], // Adjusting the margins
@@ -82,7 +82,11 @@ const ReviewMain = () => {
 
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();
+    if (!isChecked) {
+      return;
+    }
     setLoader(true);
+
     let finalResult =
       allFormData &&
       allFormData?.formFields?.form_fields?.map((field: any) => {
@@ -194,7 +198,10 @@ const ReviewMain = () => {
                     placeholder="ischecked"
                   />
                 </div>
-                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">I solemnly affirm to the best of my knowledge and belief, that the information given in the Form is correct, and the nothing material has been concealed therefrom and I agree to the&nbsp;
+                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
+                  I solemnly affirm to the best of my knowledge and belief, that
+                  the information given in the Form is correct, and the nothing
+                  material has been concealed therefrom and I agree to the&nbsp;
                   <Link
                     className="text-[#1c468e] underline cursor-pointer"
                     target={"_blank"}
