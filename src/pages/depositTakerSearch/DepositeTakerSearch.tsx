@@ -311,9 +311,10 @@ const DepositeTakerSearch: React.FC = () => {
             ) : taskData?.length > 0 ? (
               <ReactTable defaultData={taskData} columns={columns} />
             ) : (
-              <div className=' flex justify-center items-center'>
-                <h1>No data available</h1>
-              </div>
+              // <div className=' flex justify-center items-center'>
+              //   <h1>No data available</h1>
+              // </div>
+              <LoaderSpin />
             )}
           </div>
           <div className='mt-10'>
