@@ -13,6 +13,8 @@ import PasswordUpdateModel from "../userFlow/common/PasswordUpdateModel";
 import useTopDetailStore from "../../store/TopDetailStore";
 import { useLandingStore } from "../../zust/useLandingStore";
 import { Link } from "react-router-dom";
+import azad from '../../assets/images/azadi_ka_amrit_mahotsav_logo.png';
+import z20logo from '../../assets/images/G20_India_2023_logo.png';
 
 interface AuthButtonProps {
   buttontext: string;
@@ -117,9 +119,28 @@ const TopDetail = () => {
   const downloadReport = () => {};
 
   return (
-    <div className="relative flex items-center justify-between flex-col md:flex-row my-[19px] mx-[16px] lg:mx-[169px]">
-      <div className="m-4 md:m-0">
+    <div className="relative flex items-center justify-around flex-row my-[19px] mx-[16px] flex-wrap md:gap-4 gap-2" >
+      <div className="m-2 md:m-0">
+        
         <img src={homePageData?.homePageData?.logo[0]?.img} alt="logo" className="w-[88px] h-[88px]" />
+        
+      </div>
+      
+      <div className="text-center sm:text-left">
+          <h1 className="text-[#047A45] text-[20px] font-bold text-gilroy-regular leading-[24px]">CERSAI</h1>
+          <p className="text-gilroy-regular font-bold leading-[17px] text-[#474747] text-[14px]">Central Registry of Securitisation Asset</p>
+          <p className="text-gilroy-regular font-bold leading-[17px] text-[#474747] text-[14px]">Reconstruction and Security Interest of India</p>
+          <p className="text-gilroy-regular font-bold leading-[17px] text-[#474747] text-[14px]">BUDS Registry </p>
+        </div>
+        <div className="m-2 md:m-0">
+        
+        <img src={azad} alt="logo" className="w-[150px]" />
+        
+      </div>
+        <div className="m-2 md:m-0">
+        
+        <img src={z20logo} alt="logo" className="w-[150px]" />
+        
       </div>
       {isOpen && (
         <div
