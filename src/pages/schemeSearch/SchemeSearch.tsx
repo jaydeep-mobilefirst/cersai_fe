@@ -28,6 +28,7 @@ type SchemeType = {
   id: string;
   name: string;
   depositTakerId: string;
+  depositTakerName: string;
   // createdBy: string;
   createdBy: string | null;
   status: string;
@@ -60,6 +61,8 @@ const SchemeSearch: React.FC = () => {
   
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const {language} = useLangugaeStore((state) => state);
+
+  console.log("data-scheme",schemaData)
 
   useEffect(() => {
     homePageCmsApi();
@@ -144,9 +147,9 @@ const SchemeSearch: React.FC = () => {
       },
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor("depositTakerId", {
+    columnHelper.accessor("depositTakerName", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
-      header: () => <span>Deposit Taker</span>,
+      header: () => <span>Deposit Taker Name</span>,
     }),
 
     columnHelper.accessor("createdBy", {
@@ -157,6 +160,8 @@ const SchemeSearch: React.FC = () => {
       id: "action",
       cell: (info) => {
         let createdBy = info?.cell?.row?.original?.createdBy;
+        const uniqueId = info?.row?.original?.id;
+        const depositTakerId = info?.row?.original?.depositTakerId;
         const NavigateScheme = (uniqueId: any, depositTakerId: any) => {
           navigate("/scheme-search-details", {
             state: {
@@ -166,8 +171,6 @@ const SchemeSearch: React.FC = () => {
             },
           });
         };
-        const uniqueId = info?.row?.original?.id;
-        const depositTakerId = info?.row?.original?.depositTakerId;
         return (
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}

@@ -119,28 +119,30 @@ const TopDetail = () => {
   const downloadReport = () => {};
 
   return (
-    <div className="relative flex items-center justify-around flex-row my-[19px] mx-[16px] flex-wrap md:gap-4 gap-2" >
+    <div className="relative flex items-center justify-around flex-row my-[19px] mx-[16px] md:mx-0 flex-wrap gap-2" >
+      <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
       <div className="m-2 md:m-0">
         
         <img src={homePageData?.homePageData?.logo[0]?.img} alt="logo" className="w-[88px] h-[88px]" />
         
       </div>
       
-      <div className="text-center sm:text-left">
+      <div className="text-center sm:text-left ml-4">
           <h1 className="text-[#047A45] text-[20px] font-bold text-gilroy-regular leading-[24px]">CERSAI</h1>
           <p className="text-gilroy-regular font-bold leading-[17px] text-[#474747] text-[14px]">Central Registry of Securitisation Asset</p>
           <p className="text-gilroy-regular font-bold leading-[17px] text-[#474747] text-[14px]">Reconstruction and Security Interest of India</p>
           <p className="text-gilroy-regular font-bold leading-[17px] text-[#474747] text-[14px]">BUDS Registry </p>
         </div>
-        <div className="m-2 md:m-0">
+        <div className="ml-4 ">
         
         <img src={azad} alt="logo" className="w-[150px]" />
         
       </div>
-        <div className="m-2 md:m-0">
+        <div className="ml-4">
         
         <img src={z20logo} alt="logo" className="w-[150px]" />
         
+      </div>
       </div>
       {isOpen && (
         <div
@@ -148,6 +150,7 @@ const TopDetail = () => {
           onClick={closeModal}
         ></div>
       )}
+      <div className="flex flex-wrap justify-around items-center  gap-2">
       <div className="flex items-start justify-start flex-col">
         {homePageData?.homePageData?.contactDetails?.slice(1)?.map((data:any, idx:any) => {
           return (
@@ -177,9 +180,10 @@ const TopDetail = () => {
           );
         })}
       </div>
-      <div className="flex items-center m-4 md:m-0">
+      <div className="flex items-center md:ml-24">
         <AuthButton buttontext={homePageData?.homePageData?.authlable[1].text} onClick={openModal} />
         <AuthButton buttontext={homePageData?.homePageData?.authlable[0].text} onClick={openLoginModel} />
+      </div>
       </div>
       {/* Conditionally render ModelDiv based on isOpen state */}
       {isOpen && (
