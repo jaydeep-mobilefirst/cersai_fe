@@ -16,6 +16,7 @@ import AuditTrail from "../../components/ScehmaManagement/AuditTrail";
 import LoaderSpin from "../../components/LoaderSpin";
 import { axiosTraceIdInstance } from "../../utils/axios";
 import MangementDetails from "../../components/ScehmaManagement/ManagementDetails";
+import BranchDetails from "./BranchDetails";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -34,7 +35,7 @@ const SchemeSearchDetails: React.FC = () => {
   const uniqueId = location.state?.uniqueId;
 
 
-  const depositTakerId = location.state?.createdBy;
+  const depositTakerId = location.state?.depositTakerId;
   console.log("---id---",location)
 
   const { setAllFormData, setAllDocumentData, allFormData } =
@@ -76,7 +77,7 @@ const SchemeSearchDetails: React.FC = () => {
             }
             else if (field?.key === 'branch') {
               try {
-                const res = await axiosTraceIdInstance.get('/deposit-taker/branch/' + location.state.createdBy)
+                const res = await axiosTraceIdInstance.get('/deposit-taker/branch/' + depositTakerId)
                 
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
@@ -238,9 +239,13 @@ const SchemeSearchDetails: React.FC = () => {
       content: (
         <>
       {loader ? <LoaderSpin/> :   <DynamicFields
-          formFields={allFormData?.formFields?.form_fields}
+          formFields={allFormData?.formFields?.form_fields
+            ?.filter((field: any) => field.key !== "branch")}
           allFormData={allFormData}
-          />}
+
+          />
+          }
+          <BranchDetails/>
           </>
       ),
     },

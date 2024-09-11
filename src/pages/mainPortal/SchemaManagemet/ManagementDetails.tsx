@@ -1,20 +1,13 @@
 import { createColumnHelper } from "@tanstack/table-core";
-import ReactTable from "../userFlow/common/ReactTable";
+import ReactTable from "../../../components/userFlow/common/ReactTable";
 import DirectBox from "../../assets/images/send.png";
 import { useEffect, useState } from "react";
-import { axiosTraceIdInstance } from "../../utils/axios";
-import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
+import { axiosTokenInstance } from "../../../utils/axios";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 import { useLocation } from "react-router-dom";
 
 
-// interface TableType {
-//   sno: string;
-//   statusChangeBy: string;
-//   from: string;
-//   to: string;
-//   remarks?: string;
-//   date: string;
-// }
+
 interface TableType {
     sno: number,
     id: number,
@@ -32,15 +25,6 @@ interface TableType {
     designation: String,
 }
 
-const convertToDate = (isoString: string) => {
-  const date = new Date(isoString);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-  const year = date.getFullYear();
-
-  return `${day}-${month}-${year}`;
-};
-
 const MangementDetails = () => {
   const { setAllFormData, setAllDocumentData, allFormData } =
   useDepositTakerRegistrationStore((state) => state);
@@ -50,17 +34,16 @@ const MangementDetails = () => {
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
+  const location = useLocation();
   const [auditTrail, setAuditTrail] = useState(
     allFormData?.other?.schemeAuditTrail
   );
   const columnHelper = createColumnHelper<TableType>();
-  
-  const location = useLocation();
-  const depositTakerId = location.state?.depositTakerId;
+  const entityType = sessionStorage.getItem("entityUniqueId");
   const getManagementDetails = () => {
     setLoader(true);
-    axiosTraceIdInstance
-      .get(`deposit-taker/management-team/${depositTakerId}`)
+    axiosTokenInstance
+      .get(`deposit-taker/management-team/${entityType}`)
       .then((res) => {
         setDataManagementTeam(res?.data?.data);
         console.log(res.data)
@@ -76,9 +59,8 @@ const MangementDetails = () => {
 
   useEffect(() => {
     getManagementDetails()
-  }, [depositTakerId]);
+  }, [allFormData?.other?.depositTakerId]);
 
-//   const columns = [
 //     columnHelper.accessor("id", {
 //       cell: (info: any) => info.renderValue(),
 //       header: () => <span>S.No.</span>,

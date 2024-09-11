@@ -16,6 +16,7 @@ import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 import { axiosTokenInstance } from "../../../../utils/axios";
 import MangementDetails from "./ManagementDetails";
+import BranchDetails from "./BranchDetails";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -258,6 +259,8 @@ const SchemesSearchDetailsSM: React.FC = () => {
               <FileUploadOpenKm setFileData={setFileData} fileData={fileData} />
             </div>
           </div>
+          
+          <BranchDetails/>
         </>
       ),
     },

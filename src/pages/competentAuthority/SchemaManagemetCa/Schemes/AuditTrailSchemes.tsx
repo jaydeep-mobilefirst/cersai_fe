@@ -14,6 +14,7 @@ import SelectButton from "../../../../components/userFlow/form/SelectButton";
 import SelectButtonMultiselect from "../../../../components/UserManagement/SelectButtonMultiselect";
 import { axiosTokenInstance } from "../../../../utils/axios";
 import MangementDetails from "./ManagementDetails";
+import BranchDetails from "./BranchDetails";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
@@ -257,11 +258,14 @@ const SchemesSearchDetailsSM: React.FC = () => {
     {
       header: "Scheme Details",
       content: (
+        <>
         <DynamicFields
           formFields={allFormData?.formFields?.form_fields}
           allFormData={allFormData}
           onChange={onChange}
         />
+        <BranchDetails/>
+        </>
       ),
     },
     {
