@@ -12,6 +12,7 @@ import { useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import { useLocation } from "react-router-dom";
 import useStore from "../../../store/statusStore";
+import SelectButtonMultiselect from "../../UserManagement/SelectButtonMultiselectV2";
 
 type Props = {
   toggleUploadPopup?: () => void;
@@ -36,6 +37,7 @@ type Props = {
 const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
+  const [searchBranch, setSearchBranch] = useState("");
 
   const location = useLocation();
   const { pathname } = location;
@@ -109,16 +111,24 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
       ? checkStatus(disabledField)
       : false;
   }
+  const handleSearchBranchChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchBranch(event.target.value);
+  };
+
+  console.log(allFormData, "allFormData");
 
   return (
     <>
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         {formFields &&
           formFields?.length > 0 &&
           formFields?.map((field: any) => {
             const fieldType = allFormData?.fieldTypes?.find(
               (type: any) => type?.id === field?.typeId
             )?.name;
+            console.log(fieldType, "fieldType");
 
             switch (fieldType) {
               case "text":
@@ -137,7 +147,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     <div>
                       <label
                         htmlFor={field?.label}
-                        className='block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
+                        className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                       >
                         {field?.label}
                         <RequiredStar allFormData={allFormData} field={field} />
@@ -160,7 +170,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         id={field?.label}
                         placeholder={field?.placeholder}
                       />
-                      <span className='text-red-500'>{field?.error}</span>
+                      <span className="text-red-500">{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
@@ -173,10 +183,10 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                       modifiers: popperModifiers,
                     }}
                   >
-                    <div className=''>
+                    <div className="">
                       <label
                         htmlFor={field?.label}
-                        className='text-base font-normal text-text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
+                        className="text-base font-normal text-text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                       >
                         {field?.label}{" "}
                         <RequiredStar allFormData={allFormData} field={field} />
@@ -201,7 +211,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         id={field?.label}
                         placeholder={field?.placeholder}
                       />
-                      <span className='text-red-500'>{field?.error}</span>
+                      <span className="text-red-500">{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
@@ -217,40 +227,76 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                   >
                     <div>
                       <label
-                        htmlFor='district'
-                        className='text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
+                        htmlFor="district"
+                        className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                       >
                         {field?.label}{" "}
                         <RequiredStar allFormData={allFormData} field={field} />
                       </label>
-                      <SelectButton
-                        data={field}
-                        onSelect={(data) =>
-                          onChange && onChange(data, field, fieldType)
-                        }
-                        options={field?.dropdown_options?.options?.map(
-                          (d: any) => ({
-                            value: d?.name,
-                            label: d?.name,
-                            id: d?.id,
-                          })
-                        )}
-                        selectedOption={field?.userInput}
-                        placeholder={field?.placeholder}
-                        disabled={
-                          disableFieldStatus
-                            ? disableFieldStatus
-                            : field?.disabled
-                        }
-                        //  searchInputOnchange={handleSearchInputChange3}
-                        //  searchInputValue={searchInputValue3}
-                        showSearchInput={true}
-                        enableSearch={fieldType === "select_with_search"}
-                      />
-                      <span className='text-red-500'>{field?.error}</span>
+                      {field?.key === "branch" ? (
+                        <>
+                          <SelectButtonMultiselect
+                            options={field?.dropdown_options?.options?.map(
+                              (d: any) => ({
+                                value: d?.name,
+                                label: d?.name,
+                                id: d?.id,
+                              })
+                            )}
+                            setOption={(selectedOptions) =>
+                              onChange &&
+                              onChange(selectedOptions, field, "multi_select")
+                            }
+                            placeholder="Select options"
+                            multiselect={true}
+                            allSelectedOptions={
+                              Array.isArray(field?.userInput)
+                                ? field?.userInput.map((value: string) => ({
+                                    value,
+                                    label: value,
+                                  }))
+                                : [] // Fallback in case userInput is not an array
+                            }
+                            className="relative"
+                            searchInputOnchange={handleSearchBranchChange}
+                            searchInputValue={searchBranch}
+                            showSearchInput={true}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <SelectButton
+                            data={field}
+                            onSelect={(data) =>
+                              onChange && onChange(data, field, fieldType)
+                            }
+                            options={field?.dropdown_options?.options?.map(
+                              (d: any) => ({
+                                value: d?.name,
+                                label: d?.name,
+                                id: d?.id,
+                              })
+                            )}
+                            selectedOption={field?.userInput}
+                            placeholder={field?.placeholder}
+                            disabled={
+                              disableFieldStatus
+                                ? disableFieldStatus
+                                : field?.disabled
+                            }
+                            //  searchInputOnchange={handleSearchInputChange3}
+                            //  searchInputValue={searchInputValue3}
+                            showSearchInput={true}
+                            enableSearch={fieldType === "select_with_search"}
+                          />
+                        </>
+                      )}
+
+                      <span className="text-red-500">{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
+
               case "date_picker":
                 return (
                   <Tooltip
@@ -262,8 +308,8 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                   >
                     <div>
                       <label
-                        htmlFor='district'
-                        className='text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
+                        htmlFor="district"
+                        className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                       >
                         {field?.label}{" "}
                         <RequiredStar allFormData={allFormData} field={field} />
@@ -282,7 +328,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         }
                         userValue={field?.userInput}
                       />
-                      <span className='text-red-500'>{field?.error}</span>
+                      <span className="text-red-500">{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
@@ -298,7 +344,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     <div>
                       <label
                         htmlFor={field?.label}
-                        className='block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
+                        className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                       >
                         {field?.label}
                         <RequiredStar allFormData={allFormData} field={field} />
@@ -321,7 +367,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                             : false
                         }
                       />
-                      <span className='text-red-500'>{field?.error}</span>
+                      <span className="text-red-500">{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
@@ -335,10 +381,10 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                       modifiers: popperModifiers,
                     }}
                   >
-                    <div className='flex flex-col'>
+                    <div className="flex flex-col">
                       <label
                         htmlFor={field?.label}
-                        className='block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1'
+                        className="block text-[#000000] text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
                       >
                         {field?.label}
                         <RequiredStar allFormData={allFormData} field={field} />
@@ -375,7 +421,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                           }
                         />
                       )}
-                      <span className='text-red-500'>{field?.error}</span>
+                      <span className="text-red-500">{field?.error}</span>
                     </div>
                   </Tooltip>
                 );
