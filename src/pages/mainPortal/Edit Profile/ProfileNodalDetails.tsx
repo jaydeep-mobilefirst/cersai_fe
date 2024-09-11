@@ -180,13 +180,13 @@ const ProfileNodalDetails = (props: Props) => {
               .patch(
                 `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
                 {
-                  formData: formData,
+                  formData: combinedFormData,
                 }
               )
               .then((response) => {
                 Swal.fire({
                   icon: "success",
-                  text: "Nodal Officer details updated successfully",
+                  text: "Profile details updated successfully",
                   confirmButtonText: "Ok",
                 });
 
@@ -204,22 +204,22 @@ const ProfileNodalDetails = (props: Props) => {
               );
             }
 
-            await axiosTokenInstance
-              .patch(
-                `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
-                { formData: combinedFormData }
-              )
-
-              .catch((err) => {
-                Swal.fire({
-                  icon: "error",
-                  text: "Failed to update Nodal Details",
-                  confirmButtonText: "Ok",
-                });
-              })
-              .finally(() => {
-                setLoader(false);
-              });
+            // await axiosTokenInstance
+            //  .patch(
+            //     `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+            //     { formData: combinedFormData }
+            //   )
+ 
+              // .catch((err) => {
+              //   Swal.fire({
+              //     icon: "error",
+              //     text: "Failed to update Nodal Details",
+              //     confirmButtonText: "Ok",
+              //   });
+              // })
+              // .finally(() => {
+              //   setLoader(false);
+              // });
           } catch (error) {
             Swal.fire({
               icon: "error",

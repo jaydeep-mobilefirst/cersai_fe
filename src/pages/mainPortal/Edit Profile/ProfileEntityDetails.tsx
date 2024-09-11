@@ -254,10 +254,10 @@ const ProfileEntityDetails = (props: Props) => {
         if (noError) {
           try {
             // First two API calls remain as is
-            await axiosTokenInstance.patch(
-              `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
-              { formData: formData }
-            );
+            // await axiosTokenInstance.patch(
+            //   `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+            //   { formData: formData }
+            // );
 
             await axiosTokenInstance.patch(
               `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
@@ -278,7 +278,7 @@ const ProfileEntityDetails = (props: Props) => {
 
             Swal.fire({
               icon: "success",
-              text: "Entity Details updated successfully",
+              text: "Profile Details updated successfully",
               confirmButtonText: "Ok",
             });
             sessionStorage.setItem("user_status", "PENDING");

@@ -221,6 +221,28 @@ const ProfileManagement = () => {
   //     setLoader(false);
   //   }
   // };
+
+  const formData1 = Array.isArray(allFormData?.formFields?.form_fields) // Ensure it's an array
+    ? allFormData?.formFields?.form_fields.map((field: any) => ({
+        fieldId: field.id,
+        sectionCode: field.entityRegSection?.sectionName,
+        label: field.label,
+        value: field.userInput,
+        key: field?.key,
+      }))
+    : []; // Fallback to an empty array if not iterable
+
+  const formDataDocument1 = Array.isArray(documentData) // Ensure documentData is an array
+    ? documentData.map((field: any) => ({
+        fieldId: field.id,
+        sectionCode: "Upload Documents",
+        label: field.documentName,
+        value: field.uploadFileId,
+      }))
+    : []; // Fallback to an empty array if not iterable
+
+  // Combine both arrays safely
+  const combinedFormData = [...formData1, ...formDataDocument1];
   const onSubmit = async (data: any) => {
     console.log("Data", data);
     Swal.fire({
@@ -245,6 +267,10 @@ const ProfileManagement = () => {
               members: membersToSubmit,
             }
           );
+          await axiosTokenInstance.patch(
+            `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+            { formData: combinedFormData }
+          );
           if (
             Array.isArray(filterManagement) &&
             filterManagement.some(
@@ -264,12 +290,12 @@ const ProfileManagement = () => {
               clearRemovedBranches();
             }
           }
-          axiosTokenInstance.patch(
-            `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
-            {
-              formData: panData,
-            }
-          );
+          // axiosTokenInstance.patch(
+          //   `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+          //   {
+          //     formData: panData,
+          //   }
+          // );
           sessionStorage.setItem("user_status", "PENDING");
           // await fetchBranches();
           setBranches(data?.branches);
