@@ -14,6 +14,7 @@ import Footer from "../../../components/userFlow/userProfile/Footer";
 import userProfileUploadStore from "../../../zust/userProfileUploadStore";
 import FooterDT from "./FooterDT";
 import useStore from "../../../store/statusStore";
+import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
 
 type Props = {};
 
@@ -30,6 +31,16 @@ const ProfileUploadDocuments = (props: Props) => {
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
+
+  const {
+    removedBranches: removedBranchesData,
+    clearRemovedBranches,
+    branches: managementData1,
+  } = useManagementStore((state) => ({
+    removedBranches: state.removedBranches,
+    clearRemovedBranches: state.clearRemovedBranches,
+    branches: state.branches,
+  }));
   const status = sessionStorage.getItem("user_status");
 
   const setFormData = userProfileUploadStore((state) => state.setFormData);
@@ -41,8 +52,8 @@ const ProfileUploadDocuments = (props: Props) => {
   const { onFileChange, handleDocumentValidations } =
     useContext(FormHandlerContext);
   const managementData = location.state?.managementData;
-  
-  const { pathname } = location
+
+  const { pathname } = location;
 
   const { data, loading, error, fetchData } = useStore();
 
@@ -70,6 +81,27 @@ const ProfileUploadDocuments = (props: Props) => {
       label: field.documentName,
       value: field.uploadFileId,
     }));
+  const formData1 = Array.isArray(allFormData?.formFields?.form_fields) // Ensure it's an array
+    ? allFormData?.formFields?.form_fields.map((field: any) => ({
+        fieldId: field.id,
+        sectionCode: field.entityRegSection?.sectionName,
+        label: field.label,
+        value: field.userInput,
+        key: field?.key,
+      }))
+    : []; // Fallback to an empty array if not iterable
+
+  const formDataDocument1 = Array.isArray(documentData) // Ensure documentData is an array
+    ? documentData.map((field: any) => ({
+        fieldId: field.id,
+        sectionCode: "Upload Documents",
+        label: field.documentName,
+        value: field.uploadFileId,
+      }))
+    : []; // Fallback to an empty array if not iterable
+
+  // Combine both arrays safely
+  const combinedFormData = [...formData1, ...formDataDocument1];
   const onSubmit = async (e: any) => {
     e.preventDefault();
     Swal.fire({
@@ -89,6 +121,31 @@ const ProfileUploadDocuments = (props: Props) => {
           setLoader(false);
           return;
         }
+        const hasOnlyId = managementData1?.some(
+          (member: any) => member.id && Object.keys(member).length === 1
+        );
+
+        // If any member contains only id, set membersToSubmit to null; otherwise, map the data
+        const membersToSubmit = hasOnlyId
+          ? null
+          : managementData1?.map((member: any) => {
+              const { id, ...memberData } = member;
+              return member.id ? { id, ...memberData } : memberData;
+            });
+        if (membersToSubmit !== null) {
+          await axiosTokenInstance.post(
+            `/deposit-taker/management-team/${sessionStorage?.getItem(
+              "entityUniqueId"
+            )}`,
+            {
+              members: membersToSubmit, // Changed from branches to members
+            }
+          );
+        }
+        await axiosTokenInstance.patch(
+          `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+          { formData: combinedFormData }
+        );
 
         axiosTokenInstance
           .patch(
@@ -240,7 +297,6 @@ const ProfileUploadDocuments = (props: Props) => {
       ? checkStatus(disabledField)
       : false;
   }
-
 
   const onClick = async (event: any) => {
     setLoader1(true);
