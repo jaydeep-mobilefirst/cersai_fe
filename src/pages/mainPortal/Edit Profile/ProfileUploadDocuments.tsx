@@ -142,16 +142,16 @@ const ProfileUploadDocuments = (props: Props) => {
             }
           );
         }
-        await axiosTokenInstance.patch(
-          `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
-          { formData: combinedFormData }
-        );
+        // await axiosTokenInstance.patch(
+        //   `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+        //   { formData: combinedFormData }
+        // );
 
-        axiosTokenInstance
+       await axiosTokenInstance
           .patch(
             `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
             {
-              formData: formData,
+              formData: combinedFormData,
             }
           )
           .then((response) => {

@@ -160,12 +160,12 @@ const ProfileRegulatorDetails = (props: Props) => {
                   const { id, ...memberData } = member;
                   return member.id ? { id, ...memberData } : memberData;
                 });
-            axiosTokenInstance.patch(
-              `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
-              {
-                formData: formData,
-              }
-            );
+            // axiosTokenInstance.patch(
+            //   `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+            //   {
+            //     formData: combinedFormData,
+            //   }
+            // );
             if (membersToSubmit !== null) {
               await axiosTokenInstance.post(
                 `/deposit-taker/management-team/${sessionStorage?.getItem(
@@ -187,7 +187,7 @@ const ProfileRegulatorDetails = (props: Props) => {
                   icon: "success",
                   text:
                     response?.data?.message ||
-                    "Regulator Details updated successfully",
+                    "Profile Details updated successfully",
                   confirmButtonText: "Ok",
                 });
 

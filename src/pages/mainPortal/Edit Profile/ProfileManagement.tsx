@@ -290,12 +290,12 @@ const ProfileManagement = () => {
               clearRemovedBranches();
             }
           }
-          axiosTokenInstance.patch(
-            `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
-            {
-              formData: panData,
-            }
-          );
+          // axiosTokenInstance.patch(
+          //   `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+          //   {
+          //     formData: panData,
+          //   }
+          // );
           sessionStorage.setItem("user_status", "PENDING");
           // await fetchBranches();
           setBranches(data?.branches);
