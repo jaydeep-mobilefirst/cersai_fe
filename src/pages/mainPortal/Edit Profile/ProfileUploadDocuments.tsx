@@ -13,6 +13,7 @@ import { axiosTokenInstance } from "../../../utils/axios";
 import Footer from "../../../components/userFlow/userProfile/Footer";
 import userProfileUploadStore from "../../../zust/userProfileUploadStore";
 import FooterDT from "./FooterDT";
+import useStore from "../../../store/statusStore";
 
 type Props = {};
 
@@ -40,7 +41,10 @@ const ProfileUploadDocuments = (props: Props) => {
   const { onFileChange, handleDocumentValidations } =
     useContext(FormHandlerContext);
   const managementData = location.state?.managementData;
-  console.log(managementData, "profileUploadDocuments");
+  
+  const { pathname } = location
+
+  const { data, loading, error, fetchData } = useStore();
 
   // const handleFileChange = (file: File | null, field: any) => {
   //   setFileLoader(field?.id);
@@ -101,7 +105,7 @@ const ProfileUploadDocuments = (props: Props) => {
               confirmButtonText: "Ok",
             });
             setLoader(false);
-            sessionStorage.setItem('user_status', 'PENDING')
+            sessionStorage.setItem("user_status", "PENDING");
             Navigate("/dt/profile?current=branches");
           })
           .catch((err) => {
@@ -210,7 +214,34 @@ const ProfileUploadDocuments = (props: Props) => {
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  if (pathname == "/dt/profile") {
+    var disableFieldStatus = checkPathName(pathname)
+      ? disabledField == "RETURNED"
+        ? false
+        : !data?.profileUpdate
+      : !data?.profileUpdate;
+  } else {
+    disableFieldStatus = checkPathName(pathname)
+      ? checkStatus(disabledField)
+      : false;
+  }
+
+
   const onClick = async (event: any) => {
     setLoader1(true);
     const goodToGo = await handleDocumentValidations(

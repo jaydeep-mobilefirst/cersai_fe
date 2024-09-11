@@ -1,3 +1,4 @@
+import React, {useEffect} from "react";
 import folderOpen from "../../../assets/images/folder-open.svg";
 import UploadIcon from "../../../assets/images/UploadIcon.png";
 import ViewFile from "./ViewFile";
@@ -9,6 +10,8 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import Swal from "sweetalert2";
 import LoaderSpin from "../../LoaderSpin";
+import { useLocation } from "react-router-dom";
+import useStore2 from "../../../store/statusStore2";
 
 type Props = {
   data: any;
@@ -25,6 +28,19 @@ const DynamicFileUpload = ({ data }: Props) => {
   const [showUploadPopup, setShowUploadPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+
+  const location = useLocation();
+  const { pathname } = location;
+
+  const { dataAccess, loading, error, fetchData } = useStore2();
+
+  useEffect(() => {
+    if (checkPathName(pathname)) {
+      fetchData(); // Trigger the API call when the component mounts
+    }
+  }, [fetchData]);
+
+
   const toggleUploadPopup = () => {
     setShowUploadPopup(true);
   };
@@ -131,10 +147,34 @@ const DynamicFileUpload = ({ data }: Props) => {
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
 
-  console.log(disableFieldStatus);
+  if (pathname == "/dt/profile") {
+    var disableFieldStatus = checkPathName(pathname)
+      ? disabledField == "RETURNED"
+        ? false
+        : !dataAccess?.profileUpdate
+      : !dataAccess?.profileUpdate;
+  } else {
+    disableFieldStatus = checkPathName(pathname)
+      ? checkStatus(disabledField)
+      : false;
+  }
 
+  console.log(dataAccess, 'disableFieldStatus')
   return (
     <div key={data?.id}>
       {showUploadPopup && (

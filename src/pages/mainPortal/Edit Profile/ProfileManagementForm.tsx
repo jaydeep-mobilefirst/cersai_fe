@@ -11,6 +11,8 @@ import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { axiosTokenInstance } from "../../../utils/axios";
+import useStore from "../../../store/statusStore";
+import { useLocation } from "react-router-dom";
 
 interface Branch {
   firstName: string;
@@ -68,7 +70,11 @@ const ProfileManagementForm: React.FC<Props> = ({
     branch.designation
   );
 
-  console.log({ selectedState }, "selectedState");
+  const location = useLocation();
+  const { pathname } = location;
+
+  const { data, loading, error, fetchData } = useStore();
+ 
   const Stateoptions = [
     { value: "xyz", label: "xyz" },
     { value: "abc", label: "abc" },
@@ -187,7 +193,36 @@ const ProfileManagementForm: React.FC<Props> = ({
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+ 
+
+ const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  if (pathname == "/dt/profile") {
+    var disableFieldStatus = checkPathName(pathname)
+      ? disabledField == "RETURNED"
+        ? false
+        : !data?.profileUpdate
+      : !data?.profileUpdate;
+  } else {
+    disableFieldStatus = checkPathName(pathname)
+      ? checkStatus(disabledField)
+      : false;
+  }
+
+
   const maxBranches = parseInt(
     process.env.REACT_APP_MAX_MANAGEMENT || "10",
     10

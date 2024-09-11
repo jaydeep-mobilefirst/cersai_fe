@@ -22,6 +22,7 @@ import { useLocation } from "react-router-dom";
 import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
 import FooterDT2 from "./FooterDT2";
 import { Link, useNavigate } from "react-router-dom";
+import useStore from "../../../store/statusStore";
 
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
@@ -31,6 +32,17 @@ const ProfileBranches = () => {
   const managementData = location.state?.managementData;
   const status = sessionStorage.getItem("user_status");
   const Navigate = useNavigate();
+
+  const { pathname } = location;
+
+  const { data, loading, error, fetchData } = useStore();
+
+  useEffect(() => {
+    if (checkPathName(pathname)) {
+      fetchData(); // Trigger the API call when the component mounts
+    }
+  }, [fetchData]);
+
 
   console.log({ callapi, managementData }, "callapi");
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
@@ -484,7 +496,32 @@ const ProfileBranches = () => {
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+if (pathname == "/dt/profile") {
+  var disableFieldStatus = checkPathName(pathname)
+    ? disabledField == "RETURNED"
+      ? false
+      : !data?.profileUpdate
+    : !data?.profileUpdate;
+} else {
+  disableFieldStatus = checkPathName(pathname)
+    ? checkStatus(disabledField)
+    : false;
+}
 
   return (
     <div className="bg-white p-7 w-full h-full ">
