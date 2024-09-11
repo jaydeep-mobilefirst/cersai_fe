@@ -10,6 +10,8 @@ import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFie
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
+import BranchDetails from "./BranchDetails";
+import MangementDetails from "./ManagementDetails";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -25,6 +27,7 @@ const SchemeMasterForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const uniqueId = location.state?.uniqueId;
+  console.log("location",entityType)
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
 
@@ -141,16 +144,24 @@ const SchemeMasterForm = () => {
     {
       header: "Scheme Details",
       content: (
+        <>
         <DynamicFields
-          formFields={allFormData?.formFields?.form_fields}
+          formFields={ allFormData?.formFields?.form_fields
+            ?.filter((field: any) => field.key !== "branch")}
           allFormData={allFormData}
           onChange={onChange}
         />
+        <BranchDetails/>
+        </>
       ),
     },
     {
       header: "Audit Trail",
       content: <AuditTrail />,
+    },
+    {
+      header: "Management Details",
+      content: <MangementDetails />,
     },
   ];
   const handleBackButtonClick = () => {

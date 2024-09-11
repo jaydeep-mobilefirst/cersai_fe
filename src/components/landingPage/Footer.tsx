@@ -113,10 +113,8 @@ export const Footer = (props: Props) => {
           </p> */}
           <p>
             {
-              homePageData?.homePageData?.footerDescription[1]?.text.split(
-                "Protean eGov Technologies"
-              )[0]
-            }
+              homePageData?.homePageData?.footerDescription[1]?.text
+            } &nbsp;
             <a
               href={homePageData?.homePageData?.footerDescription[1]?.link}
               className="underline text-gilroy-regular font-bold"
@@ -124,9 +122,7 @@ export const Footer = (props: Props) => {
               rel="noopener noreferrer"
             >
               {
-                homePageData?.homePageData?.footerDescription[1]?.text.split(
-                  "Powered and managed by"
-                )[1]
+                homePageData?.homePageData?.footerDescription[1]?.img
               }
             </a>
           </p>
