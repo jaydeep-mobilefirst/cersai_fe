@@ -57,8 +57,8 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const { data, loading, error, fetchData } = useStore();
 
   useEffect(() => {
-    if(checkPathName(pathname)){
-    fetchData(); // Trigger the API call when the component mounts
+    if (checkPathName(pathname)) {
+      fetchData(); // Trigger the API call when the component mounts
     }
   }, [fetchData]);
 

@@ -11,6 +11,8 @@ import { pincodeValidationUrl } from "../../../utils/api";
 import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
 import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
+import { useLocation } from "react-router-dom";
+import useStore from "../../../store/statusStore";
 
 interface Branch {
   addressLine1: string;
@@ -87,6 +89,20 @@ const ProfileBranchForm: React.FC<Props> = ({
   //   { value: "Telangana", label: "Telangana" },
   // ];
   const [pinCodeError, setPinCodeError] = useState("");
+
+
+  const { data, loading, error, fetchData } = useStore();
+
+  const location = useLocation();
+  const { pathname } = location;
+
+  useEffect(() => {
+    if (checkPathName(pathname)) {
+      fetchData(); // Trigger the API call when the component mounts
+    }
+  }, [fetchData]);
+
+
   const debounce = (
     func: (...args: any[]) => void,
     delay: number
@@ -199,7 +215,32 @@ const ProfileBranchForm: React.FC<Props> = ({
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  if (pathname == "/dt/profile") {
+    var disableFieldStatus = checkPathName(pathname)
+      ? disabledField == "RETURNED"
+        ? false
+        : !data?.profileUpdate
+      : !data?.profileUpdate;
+  } else {
+    disableFieldStatus = checkPathName(pathname)
+      ? checkStatus(disabledField)
+      : false;
+  }
 
   return (
     <div className="my-3">
