@@ -101,7 +101,7 @@ const ProfileUploadDocuments = (props: Props) => {
               confirmButtonText: "Ok",
             });
             setLoader(false);
-            sessionStorage.setItem('user_status', 'PENDING')
+            sessionStorage.setItem("user_status", "PENDING");
             Navigate("/dt/profile?current=branches");
           })
           .catch((err) => {

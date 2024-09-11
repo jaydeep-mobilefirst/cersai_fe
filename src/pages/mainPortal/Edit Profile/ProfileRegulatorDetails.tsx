@@ -16,6 +16,7 @@ import LoaderSpin from "../../../components/LoaderSpin";
 import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
 import { stat } from "fs";
 import FooterDT from "./FooterDT";
+import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
 
 type Props = {};
 
@@ -28,7 +29,18 @@ const ProfileRegulatorDetails = (props: Props) => {
   const status = sessionStorage.getItem("user_status");
 
   const screenWidth = useScreenWidth();
-  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
+  const {
+    removedBranches: removedBranchesData,
+    clearRemovedBranches,
+    branches: managementData,
+  } = useManagementStore((state) => ({
+    removedBranches: state.removedBranches,
+    clearRemovedBranches: state.clearRemovedBranches,
+    branches: state.branches,
+  }));
   const { onChange, handleValidationChecks } = useContext(FormHandlerContext);
 
   const sectionId = allFormData?.entitySections?.find(
@@ -101,6 +113,27 @@ const ProfileRegulatorDetails = (props: Props) => {
   //   // }
   //   setLoader(false);
   // };
+  const formData1 = Array.isArray(allFormData?.formFields?.form_fields) // Ensure it's an array
+    ? allFormData?.formFields?.form_fields.map((field: any) => ({
+        fieldId: field.id,
+        sectionCode: field.entityRegSection?.sectionName,
+        label: field.label,
+        value: field.userInput,
+        key: field?.key,
+      }))
+    : []; // Fallback to an empty array if not iterable
+
+  const formDataDocument1 = Array.isArray(documentData) // Ensure documentData is an array
+    ? documentData.map((field: any) => ({
+        fieldId: field.id,
+        sectionCode: "Upload Documents",
+        label: field.documentName,
+        value: field.uploadFileId,
+      }))
+    : []; // Fallback to an empty array if not iterable
+
+  // Combine both arrays safely
+  const combinedFormData = [...formData1, ...formDataDocument1];
   const onSubmit = async (event: any) => {
     event?.preventDefault();
     Swal.fire({
@@ -115,34 +148,69 @@ const ProfileRegulatorDetails = (props: Props) => {
         setLoader(true);
         const noError = await handleValidationChecks(formFields);
         if (noError) {
-          axiosTokenInstance
-            .patch(
+          try {
+            const hasOnlyId = managementData?.some(
+              (member: any) => member.id && Object.keys(member).length === 1
+            );
+
+            // If any member contains only id, set membersToSubmit to null; otherwise, map the data
+            const membersToSubmit = hasOnlyId
+              ? null
+              : managementData?.map((member: any) => {
+                  const { id, ...memberData } = member;
+                  return member.id ? { id, ...memberData } : memberData;
+                });
+            axiosTokenInstance.patch(
               `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
               {
                 formData: formData,
               }
-            )
-            .then((response) => {
-              Swal.fire({
-                icon: "success",
-                text:
-                  response?.data?.message ||
-                  "Regulator Details updated successfully",
-                confirmButtonText: "Ok",
+            );
+            if (membersToSubmit !== null) {
+              await axiosTokenInstance.post(
+                `/deposit-taker/management-team/${sessionStorage?.getItem(
+                  "entityUniqueId"
+                )}`,
+                {
+                  members: membersToSubmit, // Changed from branches to members
+                }
+              );
+            }
+            await axiosTokenInstance
+              .patch(
+                `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+                { formData: combinedFormData }
+              )
+
+              .then((response) => {
+                Swal.fire({
+                  icon: "success",
+                  text:
+                    response?.data?.message ||
+                    "Regulator Details updated successfully",
+                  confirmButtonText: "Ok",
+                });
+
+                sessionStorage.setItem("user_status", "PENDING");
+                Navigate("/dt/profile?current=management");
+              })
+              .catch((err) => {
+                Swal.fire({
+                  icon: "error",
+                  text: "Failed to update Regulator Details",
+                  confirmButtonText: "Ok",
+                });
+              })
+              .finally(() => {
+                setLoader(false);
               });
-              sessionStorage.setItem('user_status', 'PENDING')
-              Navigate("/dt/profile?current=management");
-            })
-            .catch((err) => {
-              Swal.fire({
-                icon: "error",
-                text: "Failed to update Regulator Details",
-                confirmButtonText: "Ok",
-              });
-            })
-            .finally(() => {
-              setLoader(false);
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              text: "Failed to update Regulator Details",
+              confirmButtonText: "Ok",
             });
+          }
         } else {
           setLoader(false);
         }

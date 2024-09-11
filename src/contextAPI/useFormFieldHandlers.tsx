@@ -199,8 +199,13 @@ const FormHandlerProviders = ({ children }: Props) => {
     } else if (fieldType === "date_picker") {
       const { value } = event.target;
       updateValue(value, fieldData?.id);
+    } else if (fieldType === "multi_select") {
+      const selectedValues = event?.map((option: any) => option.value);
+      updateValue(selectedValues, fieldData.id);
     } else if (fieldType === "select" || fieldType === "select_with_search") {
+      console.log(event, "event");
       updateValue(event?.value, fieldData?.id);
+
       let sectionName = fieldData?.entityRegSection?.sectionName;
 
       switch (sectionName) {
