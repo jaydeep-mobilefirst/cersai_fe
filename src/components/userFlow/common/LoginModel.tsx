@@ -102,12 +102,13 @@ const LoginModel: React.FC<LoginModelProps> = ({
         entityType: selected,
       });
       setResponseDate(response);
-
+ 
       sessionStorage.setItem("firstName", response?.data?.user?.firstName);
       sessionStorage.setItem("masterId", response?.data?.entityDetais.masterId);
       sessionStorage.setItem("lastName", response?.data?.user?.lastName);
       sessionStorage.setItem("emailId", response.data.user?.emailId);
       sessionStorage.setItem("entityType", response.data.user?.entityType);
+      sessionStorage.setItem("roles", response.data?.response?.role);
       sessionStorage.setItem(
         "entityUniqueId",
         response.data.user?.entityUniqueId
