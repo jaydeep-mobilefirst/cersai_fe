@@ -231,7 +231,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
         
           // Update the schemes list to exclude the selected scheme
           const filteredSchemes = data?.filter(
-            (d: any) => d?.name !== allFormData?.formFields?.form_fields?.[0]?.userInput
+            (d: any) => d?.name !== allFormData?.formFields?.form_fields?.find((field: any) => field.key === "schemeName")?.userInput
           );
           setSchemes(
             filteredSchemes?.map((d: any) => {
@@ -260,7 +260,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
       content: (
         <>
         <DynamicFields
-          formFields={allFormData?.formFields?.form_fields}
+          formFields={allFormData?.formFields?.form_fields?.filter((field: any) => field.key !== "branch")}
           allFormData={allFormData}
           onChange={onChange}
         />

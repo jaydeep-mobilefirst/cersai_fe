@@ -30,7 +30,8 @@ const SchemeSearchDetails: React.FC = () => {
   const [loader2, setLoader2] = useState(true);
   const [schemes, setSchemes] = useState<any[]>([]);
 
-  const createdBy = location.state?.createdBy?.substring(0,2)  
+  const createdBy = location.state?.depositTakerId?.substring(0,2)  
+  
 
   const uniqueId = location.state?.uniqueId;
 
@@ -55,7 +56,8 @@ const SchemeSearchDetails: React.FC = () => {
           `/scheme-portal/${uniqueId}`
         );
 
-        const userData = portalResponse.data?.data?.schemes[0];
+        const userData = portalResponse.data?.data?.schemes?.[0];
+        console.log("form_fields------",response?.data?.data?.formFields?.allFormFields)
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
             if (field?.key === 'depositTakerId') {
@@ -232,15 +234,13 @@ const SchemeSearchDetails: React.FC = () => {
     fetchFormFields();
   }, [depositTakerId]);
 
-
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
       content: (
         <>
       {loader ? <LoaderSpin/> :   <DynamicFields
-          formFields={allFormData?.formFields?.form_fields
-            ?.filter((field: any) => field.key !== "branch")}
+          formFields={allFormData?.formFields?.form_fields?.filter((field: any) => field.key !== "branch")}
           allFormData={allFormData}
 
           />
@@ -274,6 +274,7 @@ const SchemeSearchDetails: React.FC = () => {
   const onNavigateToBack = () => {
     navigate("/scheme-search");
   };
+  console.log("scheme-data",allFormData?.other?.schemeFormData)
   return (
     <div className="flex flex-col min-h-screen">
       <LanguageBar />
