@@ -22,7 +22,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
   const [state, setState] = useState<boolean>(true);
   const [isActive, setIsActive] = useState<boolean>(true);
   const [timeoutId, setTimeoutId] = useState<any>(null);
-
+  const [fetchedRoles, setFetchedRoles] = useState<any>(false);
   const location = useLocation();
   const { pathname } = location;
   const navigate = useNavigate();
@@ -55,11 +55,27 @@ const MainPortalSidebar = ({ layout }: Props) => {
       case "Scheme Management":
         return data?.schemeManagement;
       case "User Management":
-        return data?.uam;
+        return data?.uam ? fetchedRoles : data?.uam;
       default:
         return true;
     }
   };
+
+  useEffect(()=>{
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+     
+      const filteredRoles = rolesArray.filter(role =>
+        role === "role-creation-access-deposit-taker"
+      );
+      if(filteredRoles?.length > 0){
+      setFetchedRoles(true);
+      }
+    }
+
+    
+  }, [])
 
   useEffect(() => {
     setState(!state)

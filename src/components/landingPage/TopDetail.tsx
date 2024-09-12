@@ -129,8 +129,8 @@ const TopDetail = () => {
       
       <div className="text-center sm:text-left ml-4">
           <h1 className="text-[#047A45] text-[20px] font-bold text-gilroy-regular leading-[24px]">CERSAI</h1>
-          <p className="text-gilroy-regular font-bold leading-[17px] text-[#474747] text-[14px]">Central Registry of Securitisation Asset</p>
-          <p className="text-gilroy-regular font-bold leading-[17px] text-[#474747] text-[14px]">Reconstruction and Security Interest of India</p>
+          <p className="text-gilroy-regular leading-[17px] text-[#474747] text-[14px]">Central Registry of Securitisation Asset</p>
+          <p className="text-gilroy-regular leading-[17px] text-[#474747] text-[14px]">Reconstruction and Security Interest of India</p>
           <p className="text-gilroy-regular font-bold leading-[17px] text-[#474747] text-[14px]">BUDS Registry </p>
         </div>
         <div className="ml-4 ">

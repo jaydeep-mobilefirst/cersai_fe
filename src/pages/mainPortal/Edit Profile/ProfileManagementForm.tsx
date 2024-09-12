@@ -74,7 +74,7 @@ const ProfileManagementForm: React.FC<Props> = ({
   const { pathname } = location;
 
   const { data, loading, error, fetchData } = useStore();
- 
+
   const Stateoptions = [
     { value: "xyz", label: "xyz" },
     { value: "abc", label: "abc" },
@@ -193,9 +193,7 @@ const ProfileManagementForm: React.FC<Props> = ({
     }
   };
 
- 
-
- const checkPathName = (status: any): any => {
+  const checkPathName = (status: any): any => {
     switch (pathname) {
       case "/dt/profile":
         return true;
@@ -221,7 +219,6 @@ const ProfileManagementForm: React.FC<Props> = ({
       ? checkStatus(disabledField)
       : false;
   }
-
 
   const maxBranches = parseInt(
     process.env.REACT_APP_MAX_MANAGEMENT || "10",
@@ -520,7 +517,8 @@ const ProfileManagementForm: React.FC<Props> = ({
               {...register(`branches[${i}].addressLine1`, {
                 required: "Address Line 1 is required",
                 pattern: {
-                  value: /^[a-zA-Z0-9\s,.-]*$/,
+                  // value: /^[a-zA-Z0-9\s,.-]*$/,
+                  value: /^[a-zA-Z0-9\s,./-]*$/,
                   message: "Address Line 1 contains invalid characters",
                 },
               })}
