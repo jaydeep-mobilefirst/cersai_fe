@@ -209,17 +209,17 @@ const ProfileNodalDetails = (props: Props) => {
             //     `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
             //     { formData: combinedFormData }
             //   )
- 
-              // .catch((err) => {
-              //   Swal.fire({
-              //     icon: "error",
-              //     text: "Failed to update Nodal Details",
-              //     confirmButtonText: "Ok",
-              //   });
-              // })
-              // .finally(() => {
-              //   setLoader(false);
-              // });
+
+            // .catch((err) => {
+            //   Swal.fire({
+            //     icon: "error",
+            //     text: "Failed to update Nodal Details",
+            //     confirmButtonText: "Ok",
+            //   });
+            // })
+            // .finally(() => {
+            //   setLoader(false);
+            // });
           } catch (error) {
             Swal.fire({
               icon: "error",
@@ -244,6 +244,13 @@ const ProfileNodalDetails = (props: Props) => {
     }
 
     setLoader1(false);
+  };
+  const backNavigation = async (event: any) => {
+    event?.preventDefault();
+    const noError = await handleValidationChecks(formFields, false);
+    if (noError) {
+      navigate("/dt/profile?current=entity");
+    }
   };
 
   return (
@@ -376,6 +383,7 @@ const ProfileNodalDetails = (props: Props) => {
                     onSubmit={onClick}
                     loader={loader}
                     showbackbtn={true}
+                    backNavigation={backNavigation}
                   />
                 </div>
               ) : (
@@ -387,6 +395,7 @@ const ProfileNodalDetails = (props: Props) => {
                     onClick={onClick}
                     showbackbtn={true}
                     path={"/dt/profile?current=entity"}
+                    backNavigation={backNavigation}
                   />
                 </div>
               )}

@@ -90,7 +90,6 @@ const ProfileBranchForm: React.FC<Props> = ({
   // ];
   const [pinCodeError, setPinCodeError] = useState("");
 
-
   const { data, loading, error, fetchData } = useStore();
 
   const location = useLocation();
@@ -101,7 +100,6 @@ const ProfileBranchForm: React.FC<Props> = ({
       fetchData(); // Trigger the API call when the component mounts
     }
   }, [fetchData]);
-
 
   const debounce = (
     func: (...args: any[]) => void,
@@ -290,7 +288,8 @@ const ProfileBranchForm: React.FC<Props> = ({
               {...register(`branches[${i}].addressLine1`, {
                 required: "Address Line 1 is required",
                 pattern: {
-                  value: /^[a-zA-Z0-9\s,.-]*$/,
+                  // value: /^[a-zA-Z0-9\s,.-]*$/,
+                  value: /^[a-zA-Z0-9\s,./-]*$/,
                   message: "Address Line 1 contains invalid characters",
                 },
               })}

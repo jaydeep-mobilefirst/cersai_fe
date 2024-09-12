@@ -147,7 +147,7 @@ const ProfileUploadDocuments = (props: Props) => {
         //   { formData: combinedFormData }
         // );
 
-       await axiosTokenInstance
+        await axiosTokenInstance
           .patch(
             `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
             {
@@ -314,6 +314,14 @@ const ProfileUploadDocuments = (props: Props) => {
     }
     setLoader1(false);
   };
+  const backNavigation = async (event: any) => {
+    const goodToGo = await handleDocumentValidations(
+      documentData.map((d: { sectionId: number }) => d?.sectionId)
+    );
+    if (goodToGo) {
+      Navigate("/dt/profile?current=management");
+    }
+  };
 
   return (
     <>
@@ -381,6 +389,7 @@ const ProfileUploadDocuments = (props: Props) => {
                           loader={loader}
                           showbackbtn={true}
                           path={"/dt/profile?current=management"}
+                          backNavigation={backNavigation}
                         />
                       </div>
                     ) : (
@@ -392,6 +401,7 @@ const ProfileUploadDocuments = (props: Props) => {
                           loader1={loader1}
                           showbackbtn={true}
                           path={"/dt/profile?current=management"}
+                          backNavigation={backNavigation}
                         />
                       </div>
                     )}

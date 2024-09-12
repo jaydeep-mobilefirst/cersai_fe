@@ -229,6 +229,14 @@ const ProfileRegulatorDetails = (props: Props) => {
 
     setLoader1(false);
   };
+  const backNavigation = async (event: any) => {
+    event?.preventDefault();
+    const noError = await handleValidationChecks(formFields);
+    if (noError) {
+      setFormData(formData);
+      Navigate("/dt/profile?current=nodal");
+    }
+  };
 
   return (
     <>
@@ -264,6 +272,7 @@ const ProfileRegulatorDetails = (props: Props) => {
                     onSubmit={onClick}
                     loader={loader}
                     showbackbtn={true}
+                    backNavigation={backNavigation}
                   />
                 </div>
               ) : (
@@ -275,6 +284,7 @@ const ProfileRegulatorDetails = (props: Props) => {
                     onClick={onClick}
                     showbackbtn={true}
                     path={"/dt/profile?current=nodal"}
+                    backNavigation={backNavigation}
                   />
                 </div>
               )}

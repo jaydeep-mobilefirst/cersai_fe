@@ -11,6 +11,7 @@ interface FooterProps {
   hidecontiuebtn?: boolean;
   showbackbtn?: boolean;
   path?: any;
+  backNavigation?: any;
 }
 
 const FooterDT: React.FC<FooterProps> = ({
@@ -20,6 +21,7 @@ const FooterDT: React.FC<FooterProps> = ({
 
   showbackbtn,
   path,
+  backNavigation,
 }) => {
   const Navigate = useNavigate();
   return (
@@ -34,7 +36,8 @@ const FooterDT: React.FC<FooterProps> = ({
           <>
             <div
               className="flex flex-row items-center space-x-2"
-              onClick={() => Navigate(path)}
+              // onClick={() => Navigate(path)}
+              onClick={backNavigation}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
