@@ -44,6 +44,7 @@ const SchemaCreationForm = () => {
     try {
       const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
       // console.log(response, "response");
+      sessionStorage.setItem("entitiy_details_api", "true");
       if (response.data.success) {
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {

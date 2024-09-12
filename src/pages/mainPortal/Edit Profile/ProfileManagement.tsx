@@ -362,6 +362,11 @@ const ProfileManagement = () => {
       },
     });
   };
+  const backNavigation = async (data: any) => {
+    console.log("Data form onClick", data);
+
+    Navigate("/dt/profile?current=regulator");
+  };
 
   return (
     <div className="bg-white p-7 w-full h-full ">
@@ -402,6 +407,8 @@ const ProfileManagement = () => {
               loader={loader}
               showbackbtn={true}
               path={"/dt/profile?current=regulator"}
+              // backNavigation={backNavigation}
+              backNavigation={handleSubmit(backNavigation)}
             />
           </div>
         ) : (
@@ -412,6 +419,8 @@ const ProfileManagement = () => {
                 onClick={handleSubmit(onClick)}
                 showbackbtn={true}
                 path={"/dt/profile?current=regulator"}
+                // backNavigation={backNavigation}
+                backNavigation={handleSubmit(backNavigation)}
               />
               <button
                 onSubmit={onSubmit}
