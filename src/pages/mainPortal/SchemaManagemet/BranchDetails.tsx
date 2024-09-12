@@ -57,7 +57,7 @@ const BranchDetails = () => {
             return JSON.parse(filterB);
           } catch (e) {
             // If parsing fails, treat it as a comma-separated string
-            return filterB ? filterB.split(',') : [];
+            return filterB ? filterB?.split(',') : [];
           }
         })(),
       })

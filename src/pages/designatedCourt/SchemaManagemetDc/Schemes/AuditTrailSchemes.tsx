@@ -224,7 +224,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
       content: (
         <>
           <DynamicFields
-            formFields={allFormData?.formFields?.form_fields}
+            formFields={allFormData?.formFields?.form_fields?.filter((field: any) => field.key !== "branch")}
             allFormData={allFormData}
             onChange={onChange}
           />
