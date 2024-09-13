@@ -7,30 +7,26 @@ import LoaderSpin from "../../components/LoaderSpin";
 import ReactTable from "../../components/userFlow/common/ReactTable";
 import { useLocation } from "react-router-dom";
 
-
 interface TableType {
-    sno: number,
-    id: number,
-    depositTakerId: String,
-    firstName: String,
-    middleName: String,
-    lastName: String,
-    addressLine1: String,
-    addressLine2: String,
-    pincode: String,
-    state: String,
-    district: String,
-    landlineNumber: String,
-    email: String,
-    designation: String,
+  sno: number;
+  id: number;
+  depositTakerId: String;
+  firstName: String;
+  middleName: String;
+  lastName: String;
+  addressLine1: String;
+  addressLine2: String;
+  pincode: String;
+  state: String;
+  district: String;
+  landlineNumber: String;
+  email: String;
+  designation: String;
 }
 
-
-
 const BranchDetails = () => {
-
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
-  console.log("allformdata----",allFormData)
+  console.log("allformdata----", allFormData);
   const location = useLocation();
   const [loader, setLoader] = useState<boolean>(false);
   const [dataManagementTeam, setDataManagementTeam] = useState([]);
@@ -43,11 +39,12 @@ const BranchDetails = () => {
   );
   const columnHelper = createColumnHelper<TableType>();
 
-
   const depositTakerId = location.state?.depositTakerId;
-  const filterB = allFormData?.formFields?.form_fields?.find((branch:any)=>branch?.key ==="branch")?.userInput
-  console.log("filered",filterB)
-  
+  const filterB = allFormData?.formFields?.form_fields?.find(
+    (branch: any) => branch?.key === "branch"
+  )?.userInput;
+  console.log("filered", typeof filterB);
+
   const fetchBranchDetails = () => {
     axiosTraceIdInstance
       .post(`/deposit-taker/fetch-branches`, {
@@ -57,32 +54,35 @@ const BranchDetails = () => {
             return JSON.parse(filterB);
           } catch (e) {
             // If parsing fails, treat it as a comma-separated string
-            return filterB ? filterB.split(',') : [];
+            return filterB ? filterB.split(",") : [];
           }
         })(),
       })
-      
+
       .then(async (response) => {
-        setLoader(true)
+        setLoader(true);
         if (response?.data?.success) {
           setDataBranches(response?.data?.data?.branches);
-          setLoader(false)
-
+          setLoader(false);
         } else {
           alert("Error getting data, Please try later!");
-          setLoader(false)
+          setLoader(false);
         }
       })
       .catch((error: any) => {
         console.log("Error fetching branches:", error);
-        setLoader(false)
+        setLoader(false);
       });
   };
-  
 
+  // useEffect(() => {
+  //   fetchBranchDetails();
+  // }, []);
   useEffect(() => {
-    fetchBranchDetails()
-  }, []);
+    if (filterB !== undefined && filterB !== null) {
+      fetchBranchDetails();
+    }
+  }, [filterB]);
 
   const columns = [
     columnHelper.accessor("sno", {
@@ -120,13 +120,13 @@ const BranchDetails = () => {
         style={{ maxHeight: "300px", overflowY: "auto" }}
       >
         <h1 className="font-bold mb-1 text-[18px] text-center">Branches</h1>
-      {loader ? (
-        <LoaderSpin /> // Show loader when loading is true
-      ) : dataBranches?.length > 0 ? (
-        <ReactTable defaultData={dataBranches} columns={columns} />
-      ) : (
-        <span>No data available</span>
-      )}
+        {loader ? (
+          <LoaderSpin /> // Show loader when loading is true
+        ) : dataBranches?.length > 0 ? (
+          <ReactTable defaultData={dataBranches} columns={columns} />
+        ) : (
+          <span>No data available</span>
+        )}
       </div>
     </div>
   );
