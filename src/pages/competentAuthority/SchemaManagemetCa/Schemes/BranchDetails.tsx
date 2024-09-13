@@ -18,6 +18,7 @@ interface TableType {
     addressLine1: String,
     addressLine2: String,
     pincode: String,
+    pinCode: String,
     state: String,
     district: String,
     landlineNumber: String,
@@ -54,7 +55,7 @@ const BranchDetails = () => {
         branchIds: (() => {
           try {
             // Try parsing as JSON
-            return JSON.parse(filterB);
+            return JSON?.parse(filterB);
           } catch (e) {
             // If parsing fails, treat it as a comma-separated string
             return filterB ? filterB?.split(',') : [];
@@ -81,8 +82,10 @@ const BranchDetails = () => {
   
 
   useEffect(() => {
-    fetchBranchDetails()
-  }, []);
+    if (filterB !== undefined && filterB !== null) {
+      fetchBranchDetails();
+    }
+  }, [filterB]);
 
   const columns = [
     columnHelper.accessor("sno", {
@@ -100,6 +103,10 @@ const BranchDetails = () => {
     columnHelper.accessor("addressLine2", {
       cell: (info) => info.renderValue(),
       header: () => <span>Address Line 2</span>,
+    }),
+    columnHelper.accessor("pinCode", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Pincode</span>,
     }),
     columnHelper.accessor("state", {
       cell: (info) => info.renderValue(),
@@ -123,7 +130,8 @@ const BranchDetails = () => {
       {loader ? (
         <LoaderSpin /> // Show loader when loading is true
       ) : dataBranches?.length > 0 ? (
-        <ReactTable defaultData={dataBranches} columns={columns} />
+        <ReactTable defaultData={dataBranches} columns={columns} 
+        lineHeight={true}/>
       ) : (
         <span>No data available</span>
       )}
