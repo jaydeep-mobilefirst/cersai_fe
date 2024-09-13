@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import LoaderSpin from "../../../../components/LoaderSpin";
 import ReactTable from "../../../../components/userFlow/common/ReactTable";
 import { axiosTraceIdInstance } from "../../../../utils/axios";
+import { useLocation } from "react-router-dom";
 
 
 interface TableType {
@@ -17,6 +18,7 @@ interface TableType {
     addressLine1: String,
     addressLine2: String,
     pincode: String,
+    pinCode: String,
     state: String,
     district: String,
     landlineNumber: String,
@@ -40,12 +42,24 @@ const BranchDetails = () => {
     allFormData?.other?.schemeAuditTrail
   );
   const columnHelper = createColumnHelper<TableType>();
+  const location = useLocation()
+  const depositTakerId = location.state?.depositTakerId;
+  const filterB = allFormData?.formFields?.form_fields?.find((branch:any)=>branch?.key ==="branch")?.userInput
+  console.log("filered",filterB)
   
   const fetchBranchDetails = () => {
     axiosTraceIdInstance
       .post(`/deposit-taker/fetch-branches`, {
-        depositTakerId: "DT1720420940278", // you can replace it with the actual ID
-        branchIds: [1, 21, 22, 23], // you can make these dynamic or leave as default
+        depositTakerId: depositTakerId, // you can replace it with the actual ID
+        branchIds: (() => {
+          try {
+            // Try parsing as JSON
+            return JSON?.parse(filterB);
+          } catch (e) {
+            // If parsing fails, treat it as a comma-separated string
+            return filterB ? filterB?.split(',') : [];
+          }
+        })(),// you can make these dynamic or leave as default
       })
       
       .then(async (response) => {
@@ -67,8 +81,10 @@ const BranchDetails = () => {
   
 
   useEffect(() => {
-    fetchBranchDetails()
-  }, []);
+    if (filterB !== undefined && filterB !== null) {
+      fetchBranchDetails();
+    }
+  }, [filterB]);
 
   const columns = [
     columnHelper.accessor("sno", {
@@ -86,6 +102,10 @@ const BranchDetails = () => {
     columnHelper.accessor("addressLine2", {
       cell: (info) => info.renderValue(),
       header: () => <span>Address Line 2</span>,
+    }),
+    columnHelper.accessor("pinCode", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Pincode</span>,
     }),
     columnHelper.accessor("state", {
       cell: (info) => info.renderValue(),
@@ -105,10 +125,11 @@ const BranchDetails = () => {
         className="custom-scrollbar mt-2"
         style={{ maxHeight: "300px", overflowY: "auto" }}
       >
+        <h1 className="font-bold mb-1 text-[18px] text-center">Branches</h1>
       {loader ? (
         <LoaderSpin /> // Show loader when loading is true
       ) : dataBranches?.length > 0 ? (
-        <ReactTable defaultData={dataBranches} columns={columns} />
+        <ReactTable defaultData={dataBranches} columns={columns} lineHeight={true}/>
       ) : (
         <span>No data available</span>
       )}

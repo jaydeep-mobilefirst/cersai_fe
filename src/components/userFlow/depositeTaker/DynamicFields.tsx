@@ -272,8 +272,8 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                             }
                             options={field?.dropdown_options?.options?.map(
                               (d: any) => ({
-                                value: d?.name,
-                                label: d?.name,
+                                value: d?.name || d?.uniqueId,
+                                label: d?.name || d?.companyName,
                                 id: d?.id,
                               })
                             )}

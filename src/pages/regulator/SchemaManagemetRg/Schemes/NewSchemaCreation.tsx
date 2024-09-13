@@ -34,6 +34,7 @@ const SchemeDetails = () => {
   const fetchSchema = async () => {
     try {
       const response = await axiosTokenInstance.get(`/scheme/field-data/2`);
+      
       if (response.data.success) {
         const formFields = response?.data?.data?.formFields?.allFormFields.map(
           (field: any) => ({
@@ -96,12 +97,41 @@ const SchemeDetails = () => {
     }
     try {
       // Mapping over the form fields to prepare the formData
-      let formData = allFormData.formFields.form_fields.map((field: any) => ({
-        fieldId: field.id,
-        value: field.userInput,
-        key: field.key,
-        label : field?.label
-      }));
+      // let formData = allFormData.formFields.form_fields.map((field: any) => ({
+      //   fieldId: field.id,
+      //   value: field.userInput,
+      //   key: field.key,
+      //   label : field?.label
+      // }));
+      
+      let formData = allFormData.formFields.form_fields.map((field: any) => {
+        // Initialize the base object to be returned for each field
+        let fieldData = {
+          fieldId: field.id,
+          value: field.userInput,
+          key: field.key,
+          label: field.label,
+        };
+
+        // Special handling for the "Branch" field to match userInput with options
+        if (field.label === "Branch" && Array.isArray(field.userInput)) {
+          // Map user inputs to their corresponding IDs from the options
+          let branchIds = field.userInput
+            .map((userInputValue: any) => {
+              // Find the option that matches the userInputValue
+              const matchingOption = field.dropdown_options.options.find(
+                (option: any) => option.name === userInputValue
+              );
+              return matchingOption ? matchingOption.id : null; // Return the ID if found, otherwise return null
+            })
+            .filter((id: any) => id !== null); // Filter out any null values if no match was found
+
+          fieldData.value = branchIds; // Set the value to the array of matched IDs
+          fieldData.value = JSON.stringify(branchIds);
+        }
+
+        return fieldData;
+      });
 
       // Creating the payload object that includes both formData and depositTakerId
       const payload = {
@@ -177,6 +207,7 @@ const SchemeDetails = () => {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
+  console.log("all-form-data------",allFormData)
   return (
     <div
       className='mt-6 mx-8 relative'

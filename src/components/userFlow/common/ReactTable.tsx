@@ -9,9 +9,10 @@ type Props = {
   defaultData: any;
   columns: any[];
   borderB?: boolean; // New prop to control the border-b class
+  lineHeight?:boolean;
 };
 
-const ReactTable = ({ columns, defaultData, borderB = true }: Props) => {
+const ReactTable = ({ columns, defaultData, borderB = true ,lineHeight = false}: Props) => {
   // Default value for borderB is true
   const [data, setData] = React.useState(() => [...defaultData]);
 
@@ -70,7 +71,7 @@ const ReactTable = ({ columns, defaultData, borderB = true }: Props) => {
                       )}
                     </div>
                     {index < row.getVisibleCells().length - 1 && (
-                      <div className="border right-0 absolute h-8 top-2 text-gilroy-medium"></div>
+                      <div className={`border right-0 absolute top-2 text-gilroy-medium ${lineHeight?"h-full":"h-8"}`}></div>
                     )}
                   </td>
                 ))}

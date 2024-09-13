@@ -291,6 +291,7 @@ const SchemeSearchDetails: React.FC = () => {
   const onNavigateToBack = () => {
     navigate("/scheme-search");
   };
+  console.log("scheme-data", allFormData?.other?.schemeFormData);
   return (
     <div className="flex flex-col min-h-screen">
       <LanguageBar />
