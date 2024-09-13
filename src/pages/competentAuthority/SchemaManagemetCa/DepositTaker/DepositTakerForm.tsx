@@ -148,6 +148,7 @@ const DepositTakerForm = () => {
     addressLine1: String,
     addressLine2: String,
     pincode: String,
+    pinCode: String,
     state: String,
     district: String,
     landlineNumber: String,
@@ -184,6 +185,10 @@ const DepositTakerForm = () => {
     columnHelper.accessor("addressLine2", {
       cell: (info) => info.renderValue(),
       header: () => <span>Address Line 2</span>,
+    }),
+    columnHelper.accessor("pinCode", {
+      cell: (info) => info.renderValue(),
+      header: () => <span>Pincode</span>,
     }),
     columnHelper.accessor("state", {
       cell: (info) => info.renderValue(),
@@ -372,7 +377,8 @@ const DepositTakerForm = () => {
                         ) : dataBranch?.length > 0 ? (
                           <ReactTable
                             defaultData={dataBranch}
-                            columns={columns}
+                            columns={columns} 
+                            lineHeight={true}
                           />
                         ) : (
                           <div className=" flex justify-center items-center">
@@ -398,6 +404,7 @@ const DepositTakerForm = () => {
                             <ReactTable
                               defaultData={dataManagementTeam}
                               columns={columnsMangement}
+                              lineHeight={true}
                             />
                           ) : (
                             <div className=" flex justify-center items-center">

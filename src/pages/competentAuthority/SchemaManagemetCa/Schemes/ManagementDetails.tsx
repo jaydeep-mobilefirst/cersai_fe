@@ -267,7 +267,8 @@ const MangementDetails = () => {
         style={{ maxHeight: "300px", overflowY: "auto" }}
       >
         {dataManagementTeam?.length > 0 ? (
-          <ReactTable defaultData={dataManagementTeam} columns={columnsMangement} />
+          <ReactTable defaultData={dataManagementTeam} columns={columnsMangement} 
+          lineHeight={true}/>
         ) : (
           <span className="flex justify-center">No data available</span>
         )}
