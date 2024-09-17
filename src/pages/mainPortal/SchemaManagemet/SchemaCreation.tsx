@@ -58,7 +58,7 @@ const SchemaCreation = () => {
       );
       console.log(data?.data?.limit, "data");
       setSchemaData(data?.data?.data);
-      setTotal(data?.data?.limit);
+      setTotal(data?.data?.totalCount);
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);

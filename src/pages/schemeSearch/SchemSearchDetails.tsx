@@ -281,7 +281,7 @@ const SchemeSearchDetails: React.FC = () => {
       <TopDetail />
       <Navbar />
       <div className="mt-8 mb-8 mx-8">
-        <Accordion items={accordionItems} />
+        <Accordion items={accordionItems} showAccordion={true}/>
       </div>
 
       {/* <div className="mb-8">

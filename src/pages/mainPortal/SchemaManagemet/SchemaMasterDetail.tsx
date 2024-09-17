@@ -169,36 +169,69 @@ const SchemeMasterForm = () => {
   };
 
   return (
-    <div>
-      <div
-        className="relative mx-2 xl:ml-[40px] mt-4"
-        style={{ minHeight: "calc(100vh - 110px)" }}
-      >
+    // <div className="min-h-screen flex flex-col justify-between">
+    //   <div
+    //     className="relative mx-2 xl:ml-[40px] mt-4"
+    //     style={{ minHeight: "calc(100vh - 110px)" }}
+    //   >
+    //     <div className="mt-6">
+    //       <TaskTabs />
+    //     </div>
+    //     <div className="mt-8">
+    //       {loader ? <LoaderSpin /> : <Accordion items={accordionItems} showAccordion={true}/>}
+    //     </div>
+    //     <div>
+    //     <div className="my-11 flex flex-col md:flex-row justify-between items-center">
+    //       <div className="flex items-center cursor-pointer space-x-2 mb-3 md:mb-0">
+    //         <img src={BackArrow} alt={BackArrow} />
+    //         <p
+    //           onClick={handleBackButtonClick}
+    //           className="text-sm font-normal text-gilroy-regular"
+    //         >
+    //           Back
+    //         </p>
+    //       </div>
+    //     </div>
+    //       <div className="border-b-2 border-[#E6E6E6]"></div>
+
+    //       <div className="text-center">
+    //         <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+    //           © 2024 Protean BUDs, All Rights Reserved.
+    //         </h1>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <div className="min-h-[100vh] flex flex-col justify-between">
+      <div className="relative mx-2 xl:ml-[40px] mt-4 flex-grow">
         <div className="mt-6">
           <TaskTabs />
         </div>
         <div className="mt-8">
-          {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
+          {loader ? <LoaderSpin /> : <Accordion items={accordionItems} showAccordion={true} />}
         </div>
-        <div className="my-11 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center cursor-pointer space-x-2 mb-3 md:mb-0">
-            <img src={BackArrow} alt={BackArrow} />
-            <p
-              onClick={handleBackButtonClick}
-              className="text-sm font-normal text-gilroy-regular"
-            >
-              Back
-            </p>
-          </div>
+      </div>
+
+      {/* Footer and Back button at the bottom */}
+      <div className="mb-4 flex flex-col md:flex-row justify-between items-center">
+        <div className="flex items-center cursor-pointer mb-3 md:mb-0 xl:ml-[40px] mx-2">
+          <img src={BackArrow} alt={BackArrow} />
+          <p
+            onClick={handleBackButtonClick}
+            className="text-sm font-normal text-gilroy-regular"
+          >
+            Back
+          </p>
         </div>
-        <div className="w-full absolute bottom-0">
-          <div className="border-b-2 border-[#E6E6E6]"></div>
-          <div className="text-center">
-            <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
-              © 2024 Protean BUDs, All Rights Reserved.
-            </h1>
-          </div>
-        </div>
+      </div>
+      
+      <div className="border-b-2 border-[#E6E6E6]"></div>
+
+      <div className="text-center mt-auto">
+        <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+          © 2024 Protean BUDs, All Rights Reserved.
+        </h1>
       </div>
     </div>
   );

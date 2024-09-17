@@ -356,7 +356,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
         </p>
       </div>
       <div className="mt-8 mb-8 mx-8">
-        {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
+        {loader ? <LoaderSpin /> : <Accordion items={accordionItems} showAccordion={true}/>}
 
       </div>
       <div>
