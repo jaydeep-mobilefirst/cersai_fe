@@ -319,7 +319,7 @@ const SchemaCreation = () => {
           </div>
         </div>
         <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
-          <div className=' mb-12'>
+          <div className=' mb-20'>
             {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
