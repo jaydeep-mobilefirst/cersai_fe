@@ -48,24 +48,26 @@ const SchemeDetails = () => {
         setAllFormData({
           ...response?.data?.data,
           formFields: {
-            form_fields: formFields?.map((field: any) => {
-              if (field?.key === "depositTakerId") {
-                return {
-                  ...field,
-                  dropdown_options: {
-                    ...field?.dropdown_options,
-                    options: field?.dropdown_options?.options?.map(
-                      (o: any) => ({
-                        name: o?.uniqueId,
-                        id: o?.companyName,
-                      })
-                    ),
-                  },
-                };
-              } else {
-                return field;
-              }
-            })?.sort((a : any, b : any) => a.sortOrder - b.sortOrder),
+            form_fields: formFields
+              ?.map((field: any) => {
+                if (field?.key === "depositTakerId") {
+                  return {
+                    ...field,
+                    dropdown_options: {
+                      ...field?.dropdown_options,
+                      options: field?.dropdown_options?.options?.map(
+                        (o: any) => ({
+                          name: o?.uniqueId,
+                          id: o?.companyName,
+                        })
+                      ),
+                    },
+                  };
+                } else {
+                  return field;
+                }
+              })
+              ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder),
           },
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
@@ -86,15 +88,14 @@ const SchemeDetails = () => {
     if (!isFormValid) {
       setLoader(false);
       return;
-    }
-    else{
-      // returns true if no error 
+    } else {
+      // returns true if no error
       const schemeValidations = await handleSchemeValidations();
       if (schemeValidations === false) {
         setLoader(false);
         return;
       }
-      }
+    }
     try {
       // Mapping over the form fields to prepare the formData
       // let formData = allFormData.formFields.form_fields.map((field: any) => ({
@@ -103,7 +104,7 @@ const SchemeDetails = () => {
       //   key: field.key,
       //   label : field?.label
       // }));
-      
+
       let formData = allFormData.formFields.form_fields.map((field: any) => {
         // Initialize the base object to be returned for each field
         let fieldData = {
@@ -149,7 +150,8 @@ const SchemeDetails = () => {
         setSubmitted(true);
         setPopData({
           para1: "Addition Successful",
-          para2: response.data?.message,
+          // para2: response.data?.message,
+          para2: `${response.data?.message} ID: ${response.data?.data?.newScheme?.uniqueId}`,
           show: true,
         });
       } else {
@@ -167,45 +169,44 @@ const SchemeDetails = () => {
     }
   };
 
-  
-  const handleOnchange = async ( event: any,
+  const handleOnchange = async (
+    event: any,
     fieldData: any,
-    fieldType: string) => {
-      if (fieldData?.key === "depositTakerId") {
-        const res = await axiosTokenInstance.get('/deposit-taker/branch/' + event?.value)
-        let data = res.data;
-        let branches = data?.data?.branches?.map((b: any) => {
-          return {
-            name: b?.pinCode + " " + b?.district + " " + b?.state,
-            id: b?.id
-          }
-        })
-        
-          setAllFormData({
-            ...allFormData,
-            formFields : {
-              form_fields : allFormData?.formFields?.form_fields?.map((f : any) => {
-                if (f?.key === 'branch') {                  
-                  return {
-                    ...f,
-                    dropdown_options : {...f?.dropdown_options, options : branches}
-                  }
-                }
-                else if (f?.key === "depositTakerId") {
-                  return {...f, userInput : event?.value}
-                }
-                else{
-                  return f;
-                }
-              })
+    fieldType: string
+  ) => {
+    if (fieldData?.key === "depositTakerId") {
+      const res = await axiosTokenInstance.get(
+        "/deposit-taker/branch/" + event?.value
+      );
+      let data = res.data;
+      let branches = data?.data?.branches?.map((b: any) => {
+        return {
+          name: b?.pinCode + " " + b?.district + " " + b?.state,
+          id: b?.id,
+        };
+      });
+
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (f?.key === "branch") {
+              return {
+                ...f,
+                dropdown_options: { ...f?.dropdown_options, options: branches },
+              };
+            } else if (f?.key === "depositTakerId") {
+              return { ...f, userInput: event?.value };
+            } else {
+              return f;
             }
-          })
-          
-      }
-      else{
-        onChange(event, fieldData, fieldType)
-      }
-  }
+          }),
+        },
+      });
+    } else {
+      onChange(event, fieldData, fieldType);
+    }
+  };
   return (
     <div
       className="mt-6 mx-8 relative"
