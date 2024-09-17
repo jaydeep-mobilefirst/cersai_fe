@@ -365,7 +365,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="min-h-screen flex flex-col">
       <div className="mt-6 mx-8">
         <TaskTabsCa />
       </div>
@@ -383,7 +383,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
         </p> */}
       </div>
       <div className="mt-8 mb-8 mx-8">
-        {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
+        {loader ? <LoaderSpin /> : <Accordion items={accordionItems} showAccordion={true}/>}
         <div className="grid grid-cols-2 space-x-3">
           <div>
             <label
@@ -422,7 +422,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="2xl:mt-32">
         <div
           className="flex w-full p-8 lg:px-[30px] flex-row justify-between items-center "
           style={{

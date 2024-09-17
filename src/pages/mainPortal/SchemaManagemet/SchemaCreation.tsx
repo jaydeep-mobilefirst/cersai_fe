@@ -58,7 +58,7 @@ const SchemaCreation = () => {
       );
       console.log(data?.data?.limit, "data");
       setSchemaData(data?.data?.data);
-      setTotal(data?.data?.limit);
+      setTotal(data?.data?.totalCount);
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
@@ -319,7 +319,7 @@ const SchemaCreation = () => {
           </div>
         </div>
         <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
-          <div className=' mb-12'>
+          <div className=' mb-20'>
             {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
