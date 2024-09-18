@@ -200,7 +200,7 @@ const SelectButtonMultiselect = ({
               />
             </div>
           )}
-          <div className="overflow-auto max-h-40 custom-scrollbar flex flex-col absolute bg-white w-full rounded-md">
+          <div className="overflow-auto max-h-40 custom-scrollbar flex flex-col absolute bg-white w-full rounded-md z-100">
             {filteredOptions.map((option, index) => (
               <a
                 key={index}
