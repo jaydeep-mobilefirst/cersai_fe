@@ -94,9 +94,9 @@ import {
 } from "recharts";
 
 interface ChartData {
-  name: string;
-  clean: number;
-  others: number;
+  regulatorId: string;
+  active_count: number;
+  non_active_count: number;
 }
 
 interface DoubleBarChartProps {
@@ -108,15 +108,16 @@ interface DoubleBarChartProps {
 const NewDoubleBarChart: React.FC<DoubleBarChartProps> = ({ chartData, title, description }) => {
 
   return (
-    <div className="p-3 bg-[#E7F0FF] rounded-[24px]">
+    <div className="p-3 bg-[#E7F0FF] rounded-[24px] overflow-x-auto">
       <h1 className="font-[700] text-[20px] ml-2">{title}</h1>
       <p className="mb-2 ml-2 min-h-[50px]">
        {description}
       </p>
+      <div className="min-w-[500px] md:w-[100%]">
       <ResponsiveContainer width="110%" height={300} className={`-ml-4`}>
         <BarChart
           //   height={300}
-          data={chartData}
+          data={chartData?.slice(0,5)}
           margin={{
             top: 5,
             right: 30,
@@ -125,22 +126,22 @@ const NewDoubleBarChart: React.FC<DoubleBarChartProps> = ({ chartData, title, de
           }}
         >
           <CartesianGrid strokeDasharray="1 1" vertical={false} />
-          <XAxis dataKey="name" axisLine={false} tickLine={false} 
+          <XAxis dataKey="regulatorId" axisLine={false} tickLine={false} 
             interval={0} // Show all labels
-            className="text-[11px] md:text-[14px]"
+            className="text-[11px] md:text-[12px]"
             />
           <YAxis axisLine={false} tickLine={false} />
           {/* <Tooltip shared={false} /> */}
           {/* <Legend /> */}
 
           <Bar
-            dataKey="clean"
+            dataKey="active_count"
             fill="#ffffff"
             radius={[10, 10, 10, 10]}
             barSize={18}
           />
           <Bar
-            dataKey="others"
+            dataKey="non_active_count"
             fill="#3E7AEA"
             radius={[10, 10, 10, 10]}
             barSize={18}
@@ -148,6 +149,7 @@ const NewDoubleBarChart: React.FC<DoubleBarChartProps> = ({ chartData, title, de
           <Line type="monotone" dataKey="amt" stroke="red" strokeWidth={20} />
         </BarChart>
       </ResponsiveContainer>
+      </div>
       <div className="flex items-center justify-center gap-6 px-5">
         <div className="flex gap-2 items-center">
           <div className=" w-[15px] h-[15px] bg-[#3E7AEA] rounded-[50%]"></div>

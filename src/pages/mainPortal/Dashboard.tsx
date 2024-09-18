@@ -98,6 +98,19 @@ const Dashboard = (props: Props) => {
   const handleRadioChange = (event:any) => {
     setTimeframe(event.target.value);
   };
+  // Mapping the selected timeframe to the correct interval type
+const getIntervalType = (timeframe: string) => {
+    switch (timeframe) {
+      case "annually":
+        return "year";
+      case "quarterly":
+        return "quarter";
+      case "monthly":
+        return "month";
+      default:
+        return "year";
+    }
+  };
 
   return (
     <div className="relative xl:ml-[20px]">
@@ -125,7 +138,7 @@ const Dashboard = (props: Props) => {
           <DoubleBarChart />
         </div> */}
         <div className="w-[100%] sm:w-[50%]  md:w-[100%]">
-          <TotalFoundationLineChart intervalType={timeframe}/>
+          <TotalFoundationLineChart intervalType={getIntervalType(timeframe)}/>
         </div>
         {/* <div className="w-[100%] sm:w-[48%] xl:w-[31.5%]">
           <DoubleBarChart />
