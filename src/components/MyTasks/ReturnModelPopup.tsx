@@ -43,9 +43,7 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
   const [isSelected, setSelected] = useState<boolean>(false);
   const [istextEntered, setTextEntered] = useState<boolean>(false);
   const [selectedFunc, setSelectedFunc] = useState<string | null>(null);
-  const [selectedRejectId, setSelectedRejectId] = useState<number[] | null>(
-    null
-  );
+  const [selectedRejectId, setSelectedRejectId] = useState<any[] | null>(null);
   const [loader, setLoader] = useState<boolean>(false);
   const depositTakerId = location.state?.depositTakerId;
   const [optionData, setOptionData] = useState([]);
@@ -104,9 +102,7 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
       setSelectedFunc(
         selectedOptions.map((option: any) => option.label).join(", ")
       );
-      setSelectedRejectId(
-        selectedOptions.map((option: any) => Number(option.value))
-      );
+      setSelectedRejectId(selectedOptions.map((option: any) => option.label));
     } else {
       setSelectedFunc(null);
       setSelectedRejectId(null);
@@ -134,7 +130,8 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
         {
           uniqueId: depositTakerId,
           status: "RETURNED",
-          reasonCodeId: JSON?.stringify(selectedRejectId),
+          // reasonCodeId: JSON?.stringify(selectedRejectId),
+          reasons: selectedRejectId,
           reason: text,
         }
       );
