@@ -40,6 +40,7 @@ const SelectButton = ({
   const [searchInputValue, setSearchInputValue] = useState("");
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
   const [optionsToShow, setOptionsToShow] = useState<any[]>(options);
+  console.log({ options }, "options");
   useEffect(() => {
     setArrowDirectionToggle(false);
   }, [selectedOption]);

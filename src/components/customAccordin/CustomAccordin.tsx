@@ -9,11 +9,13 @@ interface AccordionProps {
   items: AccordionItem[];
   showEdit?: boolean; // New prop to show/hide edit button
   hasError?: boolean;
+  showAccordion?: boolean,
 }
 
 const Accordion: React.FC<AccordionProps> = ({
   items,
   showEdit = false,
+  showAccordion = false,
   hasError,
 }) => {
   // const [activeIndex, setActiveIndex] = useState<number | null>(0);
@@ -21,7 +23,7 @@ const Accordion: React.FC<AccordionProps> = ({
   // const toggleAccordion = (index: number) => {
   //   setActiveIndex(activeIndex === index ? null : index);
   // };
-  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
     // Automatically open the first section with an error
@@ -34,6 +36,14 @@ const Accordion: React.FC<AccordionProps> = ({
   const toggleAccordion = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
+
+  useEffect(() => {
+    if (showAccordion) {
+      setActiveIndex(null); // Reset to null when showAccordion is true
+    } else {
+      setActiveIndex(0); // Set to 0 or any other initial value when showAccordion is false
+    }
+  }, [showAccordion]);
 
   const handleEditClick = (event: React.MouseEvent<HTMLParagraphElement>) => {
     event.stopPropagation(); // Prevent event propagation to the parent container

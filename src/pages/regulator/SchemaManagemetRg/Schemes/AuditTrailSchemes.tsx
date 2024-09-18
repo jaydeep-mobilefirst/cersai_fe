@@ -378,7 +378,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
         </p> */}
       </div>
       <div className="mt-8 mb-8 mx-8">
-        {loader ? <LoaderSpin /> : <Accordion items={accordionItems} />}
+        {loader ? <LoaderSpin /> : <Accordion items={accordionItems} showAccordion={true}/>}
         <div className="grid grid-cols-2 space-x-3">
           <div>
             <label
@@ -417,9 +417,9 @@ const SchemesSearchDetailsSM: React.FC = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="">
         <div
-          className="flex w-full p-8 lg:px-[30px] flex-row justify-between items-center "
+          className="flex w-full p-4 px-8 lg:px-[30px] flex-row justify-between items-center "
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
           }}

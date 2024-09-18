@@ -9,6 +9,7 @@ import ButtonComp from "./ButtonComp";
 import { axiosTokenInstance } from "../../utils/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import SelectButtonV3 from "../userFlow/form/SelectButtonV3";
+import SelectButtonMultiselect from "../UserManagement/SelectButtonMultiselectV2";
 
 interface ReturnModelPopupProps {
   onClose: () => void;
@@ -42,13 +43,16 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
   const [isSelected, setSelected] = useState<boolean>(false);
   const [istextEntered, setTextEntered] = useState<boolean>(false);
   const [selectedFunc, setSelectedFunc] = useState<string | null>(null);
-  const [selectedRejectId, setSelectedRejectId] = useState<number | null>(null);
+  const [selectedRejectId, setSelectedRejectId] = useState<number[] | null>(
+    null
+  );
   const [loader, setLoader] = useState<boolean>(false);
   const depositTakerId = location.state?.depositTakerId;
   const [optionData, setOptionData] = useState([]);
   const [isApiSucess, setApiSuccess] = useState<boolean>(false);
   const [isApiError, setApiError] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [selectedOptions, setSelectedOptions] = useState<any>([]);
   useEffect(() => {
     setSelected(false);
   }, [selectedFunc]);
@@ -92,6 +96,22 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
   const handleChange = (event: any) => {
     setText(event.target.value);
   };
+  const handleSetOption = (selectedOptions: any[]) => {
+    console.log(selectedOptions, "selectedOptions");
+    setSelectedOptions(selectedOptions);
+    if (selectedOptions.length > 0) {
+      // Map over the selectedOptions to set the corresponding state for each
+      setSelectedFunc(
+        selectedOptions.map((option: any) => option.label).join(", ")
+      );
+      setSelectedRejectId(
+        selectedOptions.map((option: any) => Number(option.value))
+      );
+    } else {
+      setSelectedFunc(null);
+      setSelectedRejectId(null);
+    }
+  };
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -114,7 +134,7 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
         {
           uniqueId: depositTakerId,
           status: "RETURNED",
-          reasonCodeId: selectedRejectId,
+          reasonCodeId: JSON?.stringify(selectedRejectId),
           reason: text,
         }
       );
@@ -298,7 +318,7 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
                     Return Reasons <span className="text-red-500">*</span>
                   </label>
                   <div className="mt-2 relative">
-                    <SelectButtonV3
+                    {/* <SelectButtonV3
                       setOption={handleSetFunc}
                       options={optionData}
                       selectedOption={selectedFunc}
@@ -306,6 +326,17 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
                       searchInputOnchange={handleSearchInputChange1}
                       searchInputValue={searchInputValue1}
                       showSearchInput={false}
+                    /> */}
+                    <SelectButtonMultiselect
+                      setOption={handleSetOption}
+                      options={optionData}
+                      selectedOption={selectedFunc}
+                      placeholder="Select"
+                      searchInputOnchange={handleSearchInputChange1}
+                      searchInputValue={searchInputValue1}
+                      showSearchInput={true}
+                      multiselect={true}
+                      allSelectedOptions={selectedOptions} // Pass the selected options to the component
                     />
                     {isSelected && (
                       <p className="text-red-500 absolute top-[55px]">

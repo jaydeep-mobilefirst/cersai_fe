@@ -205,7 +205,7 @@ const SchemaCreationForm = () => {
         setSubmitted(true);
         setPopData({
           para1: "Addition Successful",
-          para2: response.data?.message,
+          para2: `${response.data?.message} ID: ${response.data?.data?.newScheme?.uniqueId}`,
           show: true,
         });
       } else {

@@ -130,6 +130,11 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
             )?.name;
             console.log(fieldType, "fieldType");
 
+            const entityName = allFormData?.formFields?.form_fields?.find(
+              (f: any) => f?.key === "depositTakerId"
+            );
+            console.log({ entityName }, "entityName");
+
             switch (fieldType) {
               case "text":
               case "number":
@@ -265,30 +270,57 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         </>
                       ) : (
                         <>
-                          <SelectButton
-                            data={field}
-                            onSelect={(data) =>
-                              onChange && onChange(data, field, fieldType)
-                            }
-                            options={field?.dropdown_options?.options?.map(
-                              (d: any) => ({
-                                value: d?.name || d?.uniqueId,
-                                label: d?.name || d?.companyName,
-                                id: d?.id,
-                              })
-                            )}
-                            selectedOption={field?.userInput}
-                            placeholder={field?.placeholder}
-                            disabled={
-                              disableFieldStatus
-                                ? disableFieldStatus
-                                : field?.disabled
-                            }
-                            //  searchInputOnchange={handleSearchInputChange3}
-                            //  searchInputValue={searchInputValue3}
-                            showSearchInput={true}
-                            enableSearch={fieldType === "select_with_search"}
-                          />
+                          {field.key === "depositTakerId" ? (
+                            <SelectButton
+                              data={field}
+                              onSelect={(data) =>
+                                onChange && onChange(data, field, fieldType)
+                              }
+                              options={field?.dropdown_options?.options?.map(
+                                (d: any) => ({
+                                  value: d?.name,
+                                  label: d?.id,
+                                  id: d?.id,
+                                })
+                              )}
+                              selectedOption={field?.userInput}
+                              placeholder={field?.placeholder}
+                              disabled={
+                                disableFieldStatus
+                                  ? disableFieldStatus
+                                  : field?.disabled
+                              }
+                              //  searchInputOnchange={handleSearchInputChange3}
+                              //  searchInputValue={searchInputValue3}
+                              showSearchInput={true}
+                              enableSearch={fieldType === "select_with_search"}
+                            />
+                          ) : (
+                            <SelectButton
+                              data={field}
+                              onSelect={(data) =>
+                                onChange && onChange(data, field, fieldType)
+                              }
+                              options={field?.dropdown_options?.options?.map(
+                                (d: any) => ({
+                                  value: d?.name || d?.uniqueId,
+                                  label: d?.name || d?.companyName,
+                                  id: d?.id,
+                                })
+                              )}
+                              selectedOption={field?.userInput}
+                              placeholder={field?.placeholder}
+                              disabled={
+                                disableFieldStatus
+                                  ? disableFieldStatus
+                                  : field?.disabled
+                              }
+                              //  searchInputOnchange={handleSearchInputChange3}
+                              //  searchInputValue={searchInputValue3}
+                              showSearchInput={true}
+                              enableSearch={fieldType === "select_with_search"}
+                            />
+                          )}
                         </>
                       )}
 

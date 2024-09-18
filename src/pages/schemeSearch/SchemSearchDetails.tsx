@@ -30,79 +30,84 @@ const SchemeSearchDetails: React.FC = () => {
   const [loader2, setLoader2] = useState(true);
   const [schemes, setSchemes] = useState<any[]>([]);
 
-  const createdBy = location.state?.depositTakerId?.substring(0,2)  
-  
+  const createdBy = location.state?.createdBy?.substring(0, 2);
 
   const uniqueId = location.state?.uniqueId;
 
-
   const depositTakerId = location.state?.depositTakerId;
-  console.log("---id---",location)
+  console.log("---id---", location);
 
   const { setAllFormData, setAllDocumentData, allFormData } =
-  useDepositTakerRegistrationStore((state) => state);
+    useDepositTakerRegistrationStore((state) => state);
 
   const screenWidth = useScreenWidth();
   const navigate = useNavigate();
-  
 
   const fetchSchema = async () => {
     try {
+      const portalResponse = await axiosTraceIdInstance.get(
+        `/scheme-portal/${uniqueId}`
+      );
+      const userData = portalResponse.data?.data?.schemes[0];
+      const Id = portalResponse.data?.data?.schemes[0]?.createdBy;
+
       setLoader(true);
-      const response = await axiosTraceIdInstance.get(`/scheme/field-data/${createdBy === 'DT' ? 1 : 2}`);
-      // console.log(response, "response");
-      if (response.data.success) {
-        const portalResponse = await axiosTraceIdInstance.get(
-          `/scheme-portal/${uniqueId}`
+
+      if (portalResponse?.data?.success) {
+        const response = await axiosTraceIdInstance.get(
+          `/scheme/field-data/${Id?.substring(0, 2) === "DT" ? 1 : 2}`
         );
 
-        const userData = portalResponse.data?.data?.schemes?.[0];
-        console.log("form_fields------",response?.data?.data?.formFields?.allFormFields)
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
-            if (field?.key === 'depositTakerId') {
+            if (field?.key === "depositTakerId") {
               return {
                 ...field,
                 userInput: userData?.schemeFormData?.find(
                   (f: any) => f?.fieldId === field?.id
                 )?.value,
                 error: "",
-                disabled : true,
+                disabled: true,
                 typeId: field?.fieldTypeId,
                 dropdown_options: {
-                  ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                  ...field?.dropdown_options,
+                  options: field?.dropdown_options?.options?.map((o: any) => ({
                     name: o?.uniqueId,
                     id: o?.companyName,
-                  }))
-                }
-              }
-            }
-            else if (field?.key === 'branch') {
+                  })),
+                },
+              };
+            } else if (field?.key === "branch") {
               try {
-                const res = await axiosTraceIdInstance.get('/deposit-taker/branch/' + depositTakerId)
-                
+                const res = await axiosTraceIdInstance.get(
+                  "/deposit-taker/branch/" + depositTakerId
+                );
+
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
                   return {
                     name: b?.pinCode + " " + b?.district + " " + b?.state,
-                    id: b?.id
-                  }
-                })
+                    id: b?.id,
+                  };
+                });
 
                 return {
                   ...field,
                   userInput: userData?.schemeFormData?.find(
                     (f: any) => f?.fieldId === field?.id
                   )?.value,
-                  disabled : true,
+                  disabled: true,
                   error: "",
                   typeId: field?.fieldTypeId,
-                  dropdown_options: { ...field?.dropdown_options, options: branches }
+                  dropdown_options: {
+                    ...field?.dropdown_options,
+                    options: branches,
+                  },
                 };
               } catch (error) {
                 return {
                   ...field,
-                  disabled : true,
+                  disabled: true,
                   userInput: userData?.schemeFormData?.find(
                     (f: any) => f?.fieldId === field?.id
                   )?.value,
@@ -110,11 +115,10 @@ const SchemeSearchDetails: React.FC = () => {
                   typeId: field?.fieldTypeId,
                 };
               }
-            }
-            else {
+            } else {
               return {
                 ...field,
-                disabled : true,
+                disabled: true,
                 userInput: userData?.schemeFormData?.find(
                   (f: any) => f?.fieldId === field?.id
                 )?.value,
@@ -123,9 +127,9 @@ const SchemeSearchDetails: React.FC = () => {
               };
             }
           }
-        )
+        );
 
-        formFields = await Promise.all(formFields)
+        formFields = await Promise.all(formFields);
 
         setAllFormData({
           ...response?.data?.data,
@@ -149,7 +153,7 @@ const SchemeSearchDetails: React.FC = () => {
     }
   }, [uniqueId]);
   const fetchFormFields = () => {
-    setLoader2(true)
+    setLoader2(true);
     axiosTraceIdInstance
       .get(`/registration/field-data/1?status=addToProfile`)
       .then(async (response) => {
@@ -161,9 +165,8 @@ const SchemeSearchDetails: React.FC = () => {
             );
             dtData =
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
-              console.log("dtData", dtData);
+            console.log("dtData", dtData);
           } catch (error) {
-            
             console.log("Error");
           }
           let modifiedFormFields = response.data.data?.formFields
@@ -198,37 +201,44 @@ const SchemeSearchDetails: React.FC = () => {
           //   formFields: { form_fields: modifiedFormFields },
           // };
           setEntityDetailsFields(modifiedFormFields);
-          setLoader2(false)
+          setLoader2(false);
           // setAllDocumentData(modifiedFileFields);
         } else {
-          setLoader2(false)
+          setLoader2(false);
           alert("Error getting data, Please try later!");
         }
       })
       .catch((error: any) => {
         console.log(error);
-        setLoader2(true)
+        setLoader2(true);
       });
   };
 
   useEffect(() => {
     if (allFormData?.other?.depositTakerId) {
-      axiosTraceIdInstance.get(`/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000&status=ALL`)
-      .then((res) => {
-        let data = res?.data?.data;
-        console.log("Data", res);
-        setSchemes(data?.map((d : any) => {
-          return {
-            label : d?.name,
-            value : d?.uniqueId,
-            status : d?.status
-          }
-        }))
-      })
-      .catch((e) => {alert("Error fetching Schemes"); setSchemes([])})
+      axiosTraceIdInstance
+        .get(
+          `/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000&status=ALL`
+        )
+        .then((res) => {
+          let data = res?.data?.data;
+          console.log("Data", res);
+          setSchemes(
+            data?.map((d: any) => {
+              return {
+                label: d?.name,
+                value: d?.uniqueId,
+                status: d?.status,
+              };
+            })
+          );
+        })
+        .catch((e) => {
+          alert("Error fetching Schemes");
+          setSchemes([]);
+        });
     }
-  }, [allFormData])
-
+  }, [allFormData]);
 
   useEffect(() => {
     fetchFormFields();
@@ -239,25 +249,33 @@ const SchemeSearchDetails: React.FC = () => {
       header: "Scheme Details",
       content: (
         <>
-      {loader ? <LoaderSpin/> :   <DynamicFields
-          formFields={allFormData?.formFields?.form_fields?.filter((field: any) => field.key !== "branch")}
-          allFormData={allFormData}
-
-          />
-          }
-          <BranchDetails/>
-          </>
+          {loader ? (
+            <LoaderSpin />
+          ) : (
+            <DynamicFields
+              formFields={allFormData?.formFields?.form_fields?.filter(
+                (field: any) => field.key !== "branch"
+              )}
+              allFormData={allFormData}
+            />
+          )}
+          <BranchDetails />
+        </>
       ),
     },
     {
       header: "Entity Details",
       content: (
         <>
-        {loader2 ? <LoaderSpin/> : <DynamicFields
-          formFields={entityDetailsFields}
-          allFormData={entityDetailsFields}
-          />}
-          </>
+          {loader2 ? (
+            <LoaderSpin />
+          ) : (
+            <DynamicFields
+              formFields={entityDetailsFields}
+              allFormData={entityDetailsFields}
+            />
+          )}
+        </>
       ),
     },
     {
@@ -270,18 +288,17 @@ const SchemeSearchDetails: React.FC = () => {
     },
   ];
 
-
   const onNavigateToBack = () => {
     navigate("/scheme-search");
   };
-  console.log("scheme-data",allFormData?.other?.schemeFormData)
+  console.log("scheme-data", allFormData?.other?.schemeFormData);
   return (
     <div className="flex flex-col min-h-screen">
       <LanguageBar />
       <TopDetail />
       <Navbar />
       <div className="mt-8 mb-8 mx-8">
-        <Accordion items={accordionItems} />
+        <Accordion items={accordionItems} showAccordion={true}/>
       </div>
 
       {/* <div className="mb-8">
