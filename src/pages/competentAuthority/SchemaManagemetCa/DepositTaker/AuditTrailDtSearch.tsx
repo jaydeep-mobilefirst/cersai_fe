@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 import ReactTable from "../../../../components/userFlow/common/ReactTable";
 import { createColumnHelper } from "@tanstack/table-core";
 import { axiosTokenInstance } from "../../../../utils/axios";
+import { encryptPayload } from "../../../../utils/encryptionHelper";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -153,10 +154,19 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         /Date of In-corporation/i.test(field?.label)
       );
       const formattedDob = formatDate(dob?.userInput);
-      const response = await axiosTokenInstance.post("/pandirectory/api", {
+      const payload = {
         name: company?.userInput?.toUpperCase(),
         pan_no: pan?.userInput,
         dob: formattedDob,
+      };
+      const encryptedPayload = encryptPayload(payload);
+      // const response = await axiosTokenInstance.post("/pandirectory/api", {
+      //   name: company?.userInput?.toUpperCase(),
+      //   pan_no: pan?.userInput,
+      //   dob: formattedDob,
+      // });
+      const response = await axiosTokenInstance.post("/pandirectory/api", {
+        encryptedPayload,
       });
       const data = response.data;
       if (data?.status !== "success") {

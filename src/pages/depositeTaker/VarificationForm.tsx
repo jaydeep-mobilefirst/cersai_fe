@@ -10,6 +10,7 @@ import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields
 import SuccessPopup from "../../components/userFlow/depositeTaker/SuccessPopUp";
 import moment from "moment";
 import { axiosTraceIdInstance } from "../../utils/axios";
+import { encryptPayload } from "../../utils/encryptionHelper";
 
 type Props = {};
 
@@ -59,13 +60,24 @@ const VerificationForm = (props: Props) => {
         let dob = formFields?.find(
           (field: any, i: number) => field?.key === "dateOfIncorporation"
         );
-
-        let response = await axiosTraceIdInstance.post("/pandirectory/api", {
+        const payload = {
           name: company?.userInput?.toUpperCase(),
           pan_no: pan?.userInput,
-          // dob : dob[2]+"/"+dob[1]+"/"+dob[0]
           dob: moment(dob?.userInput).format("DD/MM/YYYY"),
+        };
+        const encryptedPayload = encryptPayload(payload);
+        console.log({ encryptedPayload }, "encryptedPayload");
+
+        // let response = await axiosTraceIdInstance.post("/pandirectory/api", {
+        //   name: company?.userInput?.toUpperCase(),
+        //   pan_no: pan?.userInput,
+        //   // dob : dob[2]+"/"+dob[1]+"/"+dob[0]
+        //   dob: moment(dob?.userInput).format("DD/MM/YYYY"),
+        // });
+        let response = await axiosTraceIdInstance.post("/pandirectory/api", {
+          encryptedPayload,
         });
+
         const data = response.data;
         if (data?.status !== "success") {
           setPara1(`Verification Failed`);
