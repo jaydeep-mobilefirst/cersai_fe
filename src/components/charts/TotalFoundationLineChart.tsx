@@ -281,6 +281,9 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
+import { getMonthAbbreviation } from "../../utils/commonFunction";
+import { axiosTokenInstance } from "../../utils/axios";
+import { useLocation } from "react-router-dom";
 
 const colors = {
   totalRegistered: "#6B3E96",
@@ -288,10 +291,21 @@ const colors = {
   banned: "#1C468E",
   underLitigation: "#FF5733",
 };
+// Define types for chart data based on the API response
+interface ChartData {
+  month: any;
+  year: number;
+  active_count: number;
+  banned_count: number;
+  under_litigation_count: number;
+  total_registered: number;
+  quarter?: any;
+}
 
 interface TotalFoundationLineChartProps {
   intervalType: string;
 }
+
 
 const yearlyData = [
   {
@@ -456,37 +470,134 @@ const quarterlyData = [
   },
 ];
 
-const getDataAndTicks = (intervalType: string) => {
+// const getDataAndTicks = (intervalType: string) => {
+
+//   switch (intervalType) {
+//     case "annually":
+//       return { data: yearlyData, ticks: [0, 50, 100, 150, 200] };
+//     case "quarterly":
+//       return { data: quarterlyData, ticks: [0, 100, 200, 300, 400] };
+//     case "monthly":
+//       return { data: monthlyData, ticks: [0, 20, 40, 60, 80, 100, 120, 140] };
+//     default:
+//       return { data: yearlyData, ticks: [0, 50, 100, 150, 200] };
+//   }
+// };
+
+const getDataAndTicks = (data: ChartData[], intervalType: string) => {
+  let chartData: ChartData[] = [];
+  let ticks: number[] = [];
+
   switch (intervalType) {
-    case "annually":
-      return { data: yearlyData, ticks: [0, 50, 100, 150, 200] };
-    case "quarterly":
-      return { data: quarterlyData, ticks: [0, 100, 200, 300, 400] };
-    case "monthly":
-      return { data: monthlyData, ticks: [0, 20, 40, 60, 80, 100, 120, 140] };
+    case "year":
+      chartData = data.map((item) => ({
+        month: item.month, // provide default values if necessary
+        year: item.year,
+        active_count: item.active_count,
+        banned_count: item.banned_count,
+        under_litigation_count: item.under_litigation_count,
+        total_registered: item.active_count+item.banned_count+item.under_litigation_count
+        // Add properties with default or computed values
+      }));
+      ticks = [0, 20, 40, 60, 80,100,120];
+      break;
+    case "quarter":
+      chartData = data.map((item) => ({
+        month: 0, // Default value or computation
+        year: item.year,
+        quarter: "Q"+item.quarter+`-${item.year.toString().slice(-2)}` ,
+        active_count: item.active_count,
+        banned_count: item.banned_count,
+        under_litigation_count: item.under_litigation_count,
+        total_registered: item.active_count+item.banned_count+item.under_litigation_count
+        // Add properties with default or computed values
+      }));
+      ticks = [0, 20, 40, 60, 80,100,120];
+      break;
+    case "month":
+      chartData = data.map((item) => ({
+        month: getMonthAbbreviation(item.month)+`-${item.year.toString().slice(-2)}`,
+        year: item.year,
+        active_count: item.active_count,
+        banned_count: item.banned_count,
+        under_litigation_count: item.under_litigation_count,
+        total_registered: item.active_count+item.banned_count+item.under_litigation_count
+        // Add properties with default or computed values
+      }));
+      ticks = [0, 20, 40, 60, 80,100,120];
+      break;
     default:
-      return { data: yearlyData, ticks: [0, 50, 100, 150, 200] };
+      chartData = [];
+      ticks = [];
+      break;
   }
+
+  return { data: chartData, ticks };
 };
+interface ChartDataItem {
+  year: number;
+  month?: number; // Optional for monthly intervals
+  quarter?: number; // Optional for quarterly intervals
+  value: number; // Replace with your actual fields
+}
 
 const TotalFoundationLineChart: React.FC<TotalFoundationLineChartProps> = ({
   intervalType,
 }) => {
   const [chartData, setChartData] = useState<typeof monthlyData>([]);
   const [yAxisTicks, setYAxisTicks] = useState<number[]>([]);
+  const [data, setData] = useState<ChartData[]>([]);
+  const location = useLocation(); // Get location from useLocation hook
+  const currentPath = location.pathname;
+  const sortData = (data: ChartDataItem[], intervalType: string): ChartDataItem[] => {
+    return data.sort((a, b) => {
+      switch (intervalType) {
+        case 'month':
+          if (a.year === b.year) {
+            return (a.month ?? 0) - (b.month ?? 0); // Ascending order
+          }
+          return a.year - b.year; // Ascending order
+        case 'quarter':
+          if (a.year === b.year) {
+            return (a.quarter ?? 0) - (b.quarter ?? 0); // Ascending order
+          }
+          return a.year - b.year; // Ascending order
+        case 'year':
+          return a.year - b.year; // Ascending order
+        default:
+          return 0; // No sorting if the interval type is unknown
+      }
+    });
+  };
+
+  
+
+  const dashboardLineGraphApi = () => {
+    const masterId = sessionStorage.getItem('masterId')
+    const apiUrl = currentPath.includes('rg/dashboard') ? `dashboard/regulatorscheme?filter=${intervalType}&regulatorId=${masterId}`:`dashboard/adminScheme?filter=${intervalType}`
+    
+    axiosTokenInstance
+      .get(apiUrl, {})
+      .then((response) => {
+        const sortedData = sortData(response?.data?.data, intervalType);
+        
+        const { data, ticks } = getDataAndTicks(response?.data?.data, intervalType);
+        setData(data);
+        setYAxisTicks(ticks);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
-    const { data, ticks } = getDataAndTicks(intervalType);
-    setChartData(data);
-    setYAxisTicks(ticks);
+    dashboardLineGraphApi();
   }, [intervalType]);
 
   return (
     <div className="w-[100%] bg-[#E7F0FF] rounded-[24px] justify-center overflow-x-auto p-3">
-      <h1 className="font-[700] text-[20px] ml-2">Lorem ipsum</h1>
-      <p className="mb-2 ml-2">
-        Lorem ipsum dolor sit amet, consectutor adipiscing elit.
-      </p>
+      <h1 className="font-[700] text-[20px] ml-2">Scheme Trends over {intervalType}s</h1>
+      <p className="mb-2 ml-2">&nbsp;</p>
       {/* <div className="min-w-[400px] md:w-[100%]">
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData} className="-ml-[30px]">
@@ -531,33 +642,33 @@ const TotalFoundationLineChart: React.FC<TotalFoundationLineChartProps> = ({
         </ResponsiveContainer>
       </div> */}
       
-      <div className="min-w-[400px] md:w-[100%]">
+      <div className="min-w-[600px] md:w-[100%]">
       <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={chartData} className="-ml-[30px]">
+        <LineChart data={data} className="-ml-[30px]">
           <Line
             type="monotone"
-            dataKey="totalRegistered"
+            dataKey="total_registered"
             stroke={colors.totalRegistered}
             strokeWidth={3}
             dot={false}
           />
           <Line
             type="monotone"
-            dataKey="active"
+            dataKey="active_count"
             stroke={colors.active}
             strokeWidth={3}
             dot={false}
           />
           <Line
             type="monotone"
-            dataKey="banned"
+            dataKey="banned_count"
             stroke={colors.banned}
             strokeWidth={3}
             dot={false}
           />
           <Line
             type="monotone"
-            dataKey="underLitigation"
+            dataKey="under_litigation_count"
             stroke={colors.underLitigation}
             strokeWidth={3}
             dot={false}
@@ -565,11 +676,11 @@ const TotalFoundationLineChart: React.FC<TotalFoundationLineChartProps> = ({
           <CartesianGrid strokeDasharray="0 0" vertical={false} />
           <Tooltip />
           <XAxis
-            dataKey="name"
+            dataKey={intervalType}
             tickLine={false}
             axisLine={false}
             tick={{ dy: 12 }}
-            className={`${intervalType==="monthly"?"text-[12px] md:text-[14px]":"md:text-[12px]"}`}
+            className={`${intervalType==="month"?"text-[12px] md:text-[14px]":"md:text-[12px]"}`}
             interval={0}
             padding={{ right: 15 }} 
           />

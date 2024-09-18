@@ -8,11 +8,24 @@ import DoubleBarChart from "../../components/charts/DoubleBarChart";
 import { axiosTokenInstance } from "../../utils/axios";
 
 type Props = {};
+type DashboardChartTab = {
+  top_5: {
+    regulatorId: string;
+    active_count: number;
+    non_active_count: number;
+  }[];
+  bottom_5: {
+    regulatorId: string;
+    active_count: number;
+    non_active_count: number;
+  }[];
+};
 
 const DashboardRegulator = (props: Props) => {
   const [loader, setLoader] = useState(false);
   const [timeframe, setTimeframe] = useState('annually'); // Default to 'annually'
   const timeframes = ['annually', 'quarterly', 'monthly']; // List of timeframes
+  const [dashBoardChartTabs, setDashboardChartData] = useState<DashboardChartTab | null>(null);
   // const tabsData = [
   //   { text: "Deposite Taker Registered", value: "1000k", bgColor: true },
   //   { text: "Total Deposite Taker Approved", value: "1000k", bgColor: false },
@@ -111,9 +124,28 @@ const DashboardRegulator = (props: Props) => {
       setLoading(false);
     }
   };
+  
+
+  const dashboardChartApi = () => {
+    
+    setLoading(true);
+
+    axiosTokenInstance
+      .get(`/dashboard/regulator?regulatorId=RG02ID2`, {})
+      .then((response) => {
+        setDashboardChartData(response?.data?.data);
+        console.log("response------", response?.data?.data);
+        setLoader(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
 
   useEffect(() => {
     getAllValues();
+    dashboardChartApi();
   }, []);
   
 
@@ -144,6 +176,19 @@ const DashboardRegulator = (props: Props) => {
     { name: "2020", clean: 86, others: 14 },
     { name: "2019", clean: 81, others: 19 },
   ];
+  // Mapping the selected timeframe to the correct interval type
+const getIntervalType = (timeframe: string) => {
+    switch (timeframe) {
+      case "annually":
+        return "year";
+      case "quarterly":
+        return "quarter";
+      case "monthly":
+        return "month";
+      default:
+        return "year";
+    }
+  };
 
   return (
     <div className="relative xl:ml-[20px]">
@@ -154,10 +199,10 @@ const DashboardRegulator = (props: Props) => {
 
       <div className="w-[100%] gap-[20px]  flex justify-between flex-wrap">
         <div className="w-[100%] sm:w-[48%] md:order-1">
-          <DoubleBarChart chartData={chartData.slice(0,5)} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
+          <DoubleBarChart chartData={dashBoardChartTabs?.top_5 ?? []} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
         </div>
         <div className="w-[100%] sm:w-[48%] md:order-1">
-          <DoubleBarChart chartData={chartData.slice(-5)} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
+          <DoubleBarChart chartData={dashBoardChartTabs?.bottom_5 ?? []} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
         </div>
       </div>
       <div>
@@ -178,7 +223,7 @@ const DashboardRegulator = (props: Props) => {
               ))}
             </div>
         <div className="w-[100%] sm:w-[48%]  md:w-[100%] md:order-2">
-          <TotalFoundationLineChart intervalType={timeframe}/>
+          <TotalFoundationLineChart intervalType={getIntervalType(timeframe)}/>
         </div>
       </div>
     </div>
