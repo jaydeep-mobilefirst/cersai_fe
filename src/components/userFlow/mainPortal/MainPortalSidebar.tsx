@@ -44,8 +44,13 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
   const { data, loading, error, fetchData } = useStore();
 
+  const entityUniqueId = sessionStorage.getItem('entityUniqueId')
+
   useEffect(() => {
-    fetchData(); // Trigger the API call when the component mounts
+    if(entityUniqueId){
+      fetchData();
+    }
+     // Trigger the API call when the component mounts
   }, []);
 
   const checkDislayStauts = (status: any): any => {
