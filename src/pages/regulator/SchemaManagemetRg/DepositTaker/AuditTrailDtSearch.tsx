@@ -305,7 +305,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         }));
         const response = await axiosTokenInstance.post(
           "/deposit-taker/add-form-fields",
-          { formData, regulatorId: masterEntityId }
+          { formData, regulatorId: masterEntityId, createdBy: 'RG' }
         );
         if (response.data.success) {
           setPara1(
