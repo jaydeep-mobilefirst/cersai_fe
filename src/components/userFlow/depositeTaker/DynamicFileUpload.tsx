@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import folderOpen from "../../../assets/images/folder-open.svg";
 import UploadIcon from "../../../assets/images/UploadIcon.png";
 import ViewFile from "./ViewFile";
@@ -49,7 +49,6 @@ const DynamicFileUpload = ({ data }: Props) => {
       fetchData(); // Trigger the API call when the component mounts
     }
   }, [fetchData]);
-
 
   const toggleUploadPopup = () => {
     setShowUploadPopup(true);
@@ -184,138 +183,147 @@ const DynamicFileUpload = ({ data }: Props) => {
       : false;
   }
 
-  console.log(dataAccess, 'disableFieldStatus')
+  console.log(dataAccess, "disableFieldStatus");
   return (
-      
-              
     <Tooltip
-            title={data?.documentName === "Certificate of Incorporation"?<p>The document to be uploaded in this section may vary according to the various constitution types. To know the document to upload for your constitution type, please 
-            <span className="underline text-blue-400"><Link target={"_blank"} to="https://www.google.com"> click here
-            </Link></span></p>:""}
-            arrow
-            PopperProps={{
-              modifiers: popperModifiers,
-            }}>
-    
-    <div key={data?.id}>
-      {showUploadPopup && (
-        
-        <UploadFile
-          fileSize={data?.fileSizeLimit}
-          fileTypes={fieldType}
-          showUploadPopup={showUploadPopup}
-          closePopup={closePopup}
-          file={file}
-          handleFileChange={handleFileChange}
-          toggleUploadPopup={toggleUploadPopup}
-        />
-      )}
-      {showDeletePopup && (
-        <DeleteUpload
-          file={file}
-          handleDeleteFile={handleDeleteFile}
-          toggleDeletePopup={toggleDeletePopup}
-          showDeletePopup={showDeletePopup}
-        />
-      )}
-      <div className='rounded-xl bg-[#E7F0FF] flex flex-col md:flex-row justify-between items-center p-4  text-gilroy-bold mb-4'>
-        <div className='flex flex-row items-center space-x-2 w-full'>
-          <div className='mt-2'>
-            <img
-              src={folderOpen}
-              alt='Folder Open Icon'
-              className='bg-white rounded p-1 text-white cursor-pointer'
-              onClick={() => {
-                if (toggleUploadPopup) {
-                  toggleUploadPopup();
-                }
-                if (setFieldData) {
-                  setFieldData(data);
-                }
-              }}
-            />
-          </div>
-          <div className='flex flex-col'>
-            <h1 className='text-xs md:text-sm font-normal text-gilroy-medium text-gray-900'>
-              {data?.documentName}
-              {data?.required && <span className='text-red-500'>*</span>}
-            </h1>
-            <p className='text-xs md:text-base font-normal text-gilroy-medium text-gray-400'>
-              {data?.fileName !== "" && data?.fileName !== undefined
-                ? data?.fileName
-                : "No Document uploaded"}
-            </p>
-          </div>
-        </div>
-        <div className='flex flex-row mt-1 justify-end w-full md:w-auto'>
-          {disableFieldStatus ? (
-            <></>
-          ) : (
-            <>
-              {data?.uploadFileId && (
-                <DeleteFileButton
-                  fieldData={data}
-                  fieldType={fieldType}
-                  onFileChange={onFileChange}
-                />
-              )}
-            </>
-          )}
-
-          <div className='mt-1'>
-            {data?.uploadFileId ? (
-              <>
+      title={
+        data?.documentName === "Certificate of Incorporation" ? (
+          <p>
+            The document to be uploaded in this section may vary according to
+            the various constitution types. To know the document to upload for
+            your constitution type, please
+            {/* <span className='underline text-blue-400'>
+              <Link target={"_blank"} to='https://www.google.com'>
                 {" "}
-                <button
-                  type='button'
-                  className='bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]'
-                  onClick={() => {
-                    if (toggleUploadPopup && !data?.uploadFileId) {
-                      toggleUploadPopup();
-                    }
-                    if (setFieldData && !data?.uploadFileId) {
-                      setFieldData(data);
-                    }
-                  }}
-                >
-                  {data?.uploadFileId ? (
-                    <ViewFile uploadFileId={data?.uploadFileId} />
-                  ) : (
-                    <img src={UploadIcon} alt='Upload' className='w-5' />
-                  )}
-                </button>
-              </>
+                click here
+              </Link>
+            </span> */}
+          </p>
+        ) : (
+          ""
+        )
+      }
+      arrow
+      PopperProps={{
+        modifiers: popperModifiers,
+      }}
+    >
+      <div key={data?.id}>
+        {showUploadPopup && (
+          <UploadFile
+            fileSize={data?.fileSizeLimit}
+            fileTypes={fieldType}
+            showUploadPopup={showUploadPopup}
+            closePopup={closePopup}
+            file={file}
+            handleFileChange={handleFileChange}
+            toggleUploadPopup={toggleUploadPopup}
+          />
+        )}
+        {showDeletePopup && (
+          <DeleteUpload
+            file={file}
+            handleDeleteFile={handleDeleteFile}
+            toggleDeletePopup={toggleDeletePopup}
+            showDeletePopup={showDeletePopup}
+          />
+        )}
+        <div className='rounded-xl bg-[#E7F0FF] flex flex-col md:flex-row justify-between items-center p-4  text-gilroy-bold mb-4'>
+          <div className='flex flex-row items-center space-x-2 w-full'>
+            <div className='mt-2'>
+              <img
+                src={folderOpen}
+                alt='Folder Open Icon'
+                className='bg-white rounded p-1 text-white cursor-pointer'
+                onClick={() => {
+                  if (toggleUploadPopup) {
+                    toggleUploadPopup();
+                  }
+                  if (setFieldData) {
+                    setFieldData(data);
+                  }
+                }}
+              />
+            </div>
+            <div className='flex flex-col'>
+              <h1 className='text-xs md:text-sm font-normal text-gilroy-medium text-gray-900'>
+                {data?.documentName}
+                {data?.required && <span className='text-red-500'>*</span>}
+              </h1>
+              <p className='text-xs md:text-base font-normal text-gilroy-medium text-gray-400'>
+                {data?.fileName !== "" && data?.fileName !== undefined
+                  ? data?.fileName
+                  : "No Document uploaded"}
+              </p>
+            </div>
+          </div>
+          <div className='flex flex-row mt-1 justify-end w-full md:w-auto'>
+            {disableFieldStatus ? (
+              <></>
             ) : (
               <>
-                {" "}
-                <button
-                  type='button'
-                  className='bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]'
-                  disabled={disableFieldStatus}
-                  onClick={() => {
-                    if (toggleUploadPopup && !data?.uploadFileId) {
-                      toggleUploadPopup();
-                    }
-                    if (setFieldData && !data?.uploadFileId) {
-                      setFieldData(data);
-                    }
-                  }}
-                >
-                  {data?.uploadFileId ? (
-                    <ViewFile uploadFileId={data?.uploadFileId} />
-                  ) : (
-                    <img src={UploadIcon} alt='Upload' className='w-5' />
-                  )}
-                </button>
+                {data?.uploadFileId && (
+                  <DeleteFileButton
+                    fieldData={data}
+                    fieldType={fieldType}
+                    onFileChange={onFileChange}
+                  />
+                )}
               </>
             )}
+
+            <div className='mt-1'>
+              {data?.uploadFileId ? (
+                <>
+                  {" "}
+                  <button
+                    type='button'
+                    className='bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]'
+                    onClick={() => {
+                      if (toggleUploadPopup && !data?.uploadFileId) {
+                        toggleUploadPopup();
+                      }
+                      if (setFieldData && !data?.uploadFileId) {
+                        setFieldData(data);
+                      }
+                    }}
+                  >
+                    {data?.uploadFileId ? (
+                      <ViewFile uploadFileId={data?.uploadFileId} />
+                    ) : (
+                      <img src={UploadIcon} alt='Upload' className='w-5' />
+                    )}
+                  </button>
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <button
+                    type='button'
+                    className='bg-[#1C468E] rounded-lg p-3 text-white flex justify-center items-center cursor-pointer ml-2 h-10 w-[70px]'
+                    disabled={disableFieldStatus}
+                    onClick={() => {
+                      if (toggleUploadPopup && !data?.uploadFileId) {
+                        toggleUploadPopup();
+                      }
+                      if (setFieldData && !data?.uploadFileId) {
+                        setFieldData(data);
+                      }
+                    }}
+                  >
+                    {data?.uploadFileId ? (
+                      <ViewFile uploadFileId={data?.uploadFileId} />
+                    ) : (
+                      <img src={UploadIcon} alt='Upload' className='w-5' />
+                    )}
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
+        <span className='text-red-500'>{data?.error}</span>
       </div>
-      <span className='text-red-500'>{data?.error}</span>
-      
-    </div>
-    
     </Tooltip>
   );
 };
