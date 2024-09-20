@@ -178,6 +178,7 @@ const DynamicFileUpload = ({ data }: Props) => {
   return (
     <div key={data?.id}>
       {showUploadPopup && (
+        
         <UploadFile
           fileSize={data?.fileSizeLimit}
           fileTypes={fieldType}
