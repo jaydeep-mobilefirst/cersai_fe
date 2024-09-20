@@ -574,7 +574,9 @@ const TotalFoundationLineChart: React.FC<TotalFoundationLineChartProps> = ({
 
   const dashboardLineGraphApi = () => {
     const masterId = sessionStorage.getItem('masterId')
-    const apiUrl = currentPath.includes('rg/dashboard') ? `dashboard/regulatorscheme?filter=${intervalType}&regulatorId=${masterId}`:`dashboard/adminScheme?filter=${intervalType}`
+    const entityUniqueId = sessionStorage.getItem('entityUniqueId')
+    const apiUrl = currentPath.includes('rg/dashboard') ? `dashboard/regulatorscheme?filter=${intervalType}&regulatorId=${masterId}`:currentPath.includes('dt/dashboard')
+  ? `dashboard/deposittakerscheme?filter=${intervalType}&depositTakerId=${entityUniqueId}`:`dashboard/adminScheme?filter=${intervalType}`
     
     axiosTokenInstance
       .get(apiUrl, {})

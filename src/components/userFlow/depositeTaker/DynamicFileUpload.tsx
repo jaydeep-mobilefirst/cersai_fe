@@ -10,12 +10,22 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import Swal from "sweetalert2";
 import LoaderSpin from "../../LoaderSpin";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useStore2 from "../../../store/statusStore2";
+import { Tooltip } from "@mui/material";
 
 type Props = {
   data: any;
 };
+
+const popperModifiers = [
+  {
+    name: "offset",
+    options: {
+      offset: [0, -30], // Adjust the vertical offset value (second value) to 0 or a negative number
+    },
+  },
+];
 
 const DynamicFileUpload = ({ data }: Props) => {
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
@@ -176,6 +186,17 @@ const DynamicFileUpload = ({ data }: Props) => {
 
   console.log(dataAccess, 'disableFieldStatus')
   return (
+      
+              
+    <Tooltip
+            title={data?.documentName === "Certificate of Incorporation"?<p>The document to be uploaded in this section may vary according to the various constitution types. To know the document to upload for your constitution type, please 
+            <span className="underline text-blue-400"><Link target={"_blank"} to="https://www.google.com"> click here
+            </Link></span></p>:""}
+            arrow
+            PopperProps={{
+              modifiers: popperModifiers,
+            }}>
+    
     <div key={data?.id}>
       {showUploadPopup && (
         
@@ -292,7 +313,10 @@ const DynamicFileUpload = ({ data }: Props) => {
         </div>
       </div>
       <span className='text-red-500'>{data?.error}</span>
+      
     </div>
+    
+    </Tooltip>
   );
 };
 
