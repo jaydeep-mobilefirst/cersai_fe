@@ -113,6 +113,11 @@ const SelectButton = ({
           }
         })
         .finally(() => setLoader(false));
+    } else {
+      const filteredOptions = options.filter((option) =>
+        option.label.toLowerCase().includes(value.toLowerCase())
+      );
+      setOptionsToShow(filteredOptions);
     }
   };
 
