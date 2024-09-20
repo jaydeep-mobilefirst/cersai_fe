@@ -199,10 +199,10 @@ const getIntervalType = (timeframe: string) => {
 
       <div className="w-[100%] gap-[20px]  flex justify-between flex-wrap">
         <div className="w-[100%] sm:w-[48%] md:order-1">
-          <DoubleBarChart chartData={dashBoardChartTabs?.top_5 ?? []} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
+          <DoubleBarChart chartData={dashBoardChartTabs?.top_5 ?? []} title="Top 5 Deposit Taker" description="represent % deposit taker with all banned and under litigation schemes"/>
         </div>
         <div className="w-[100%] sm:w-[48%] md:order-1">
-          <DoubleBarChart chartData={dashBoardChartTabs?.bottom_5 ?? []} title="Bottom 5 Regulator" description="represent % deposit taker with all banned and under litigation schemes"/>
+          <DoubleBarChart chartData={dashBoardChartTabs?.bottom_5 ?? []} title="Bottom 5 Deposit Taker" description="represent % deposit taker with all banned and under litigation schemes"/>
         </div>
       </div>
       <div>

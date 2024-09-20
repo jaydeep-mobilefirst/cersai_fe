@@ -81,6 +81,7 @@
 
 // export default DoubleBarChart;
 import React from "react";
+import { useLocation } from "react-router-dom";
 import {
   BarChart,
   Bar,
@@ -104,16 +105,55 @@ interface DoubleBarChartProps {
   title?: string;
   description?: string
 }
+const CustomTick = (props: any) => {
+  const { x, y, payload } = props;
+  const value = payload.value;
 
-const NewDoubleBarChart: React.FC<DoubleBarChartProps> = ({ chartData, title, description }) => {
+  // Function to split text into lines with a max of 10 characters per line
+  const splitTextToLines = (text: string, maxLineLength: number) => {
+    const words = text.split(' ');
+    let lines: string[] = ['', '', '', ''];
+    let currentLineIndex = 0;
+
+    words.forEach((word) => {
+      // Add words to the current line, if it exceeds maxLineLength move to the next line
+      if ((lines[currentLineIndex] + word).length <= maxLineLength) {
+        lines[currentLineIndex] += word + ' ';
+      } else {
+        currentLineIndex++;
+        if (currentLineIndex < 4) {
+          lines[currentLineIndex] = word + ' ';
+        }
+      }
+    });
+
+    // Trim spaces at the end of each line
+    return lines.map(line => line.trim());
+  };
+
+  // Split text into lines with each line having max 10 characters
+  const [firstLine, secondLine, thirdLine, fourthLine] = splitTextToLines(value, 10);
 
   return (
-    <div className="p-3 bg-[#E7F0FF] rounded-[24px] overflow-x-auto">
+    <text x={x} y={y} dy={16} textAnchor="middle" fill="#666">
+      {firstLine && <tspan x={x} dy="1em">{firstLine}</tspan>}
+      {secondLine && <tspan x={x} dy="1.2em">{secondLine}</tspan>}
+      {thirdLine && <tspan x={x} dy="1.2em">{thirdLine}</tspan>}
+      {fourthLine && <tspan x={x} dy="1.2em">{fourthLine}</tspan>}
+    </text>
+  );
+};
+
+const NewDoubleBarChart: React.FC<DoubleBarChartProps> = ({ chartData, title, description }) => {
+  const location = useLocation();
+  
+  return (
+    <div className="p-3 bg-[#E7F0FF] rounded-[24px] overflow-x-auto xl:overflow-x-hidden">
       <h1 className="font-[700] text-[20px] ml-2">{title}</h1>
       <p className="mb-2 ml-2 min-h-[50px]">
        {description}
       </p>
-      <div className="min-w-[500px] md:w-[100%]">
+      <div className="min-w-[500px] xl:min-w-full xl:overflow-x-auto">
       <ResponsiveContainer width="110%" height={300} className={`-ml-4`}>
         <BarChart
           //   height={300}
@@ -122,13 +162,14 @@ const NewDoubleBarChart: React.FC<DoubleBarChartProps> = ({ chartData, title, de
             top: 5,
             right: 30,
             left: 0,
-            bottom: 5,
+            bottom: 40, // Increase bottom margin for rotated labels
           }}
         >
           <CartesianGrid strokeDasharray="1 1" vertical={false} />
-          <XAxis dataKey="regulatorId" axisLine={false} tickLine={false} 
+          <XAxis dataKey={location.pathname.includes('/rg/dashboard')?"uniqueId":"regulatorId"} axisLine={false} tickLine={false} 
             interval={0} // Show all labels
             className="text-[11px] md:text-[12px]"
+            tick={<CustomTick />} 
             />
           <YAxis axisLine={false} tickLine={false} />
           {/* <Tooltip shared={false} /> */}

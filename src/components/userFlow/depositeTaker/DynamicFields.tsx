@@ -38,6 +38,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
   const [isDscSelected, setDscSelected] = useState<boolean>(false);
   const [searchBranch, setSearchBranch] = useState("");
+  console.log("shemefields",formFields)
 
   const location = useLocation();
   const { pathname } = location;
@@ -160,6 +161,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
 
                       <InputFields
                         disabled={
+                          field?.label === "Entity Unique ID"?true:
                           disableFieldStatus
                             ? disableFieldStatus
                             : field?.disabled
@@ -167,7 +169,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                             : false
                         }
                         // disabled={(field?.label === "PAN NUMBER" || field?.label ==="Company Name (As per Pan)")}
-                        value={field?.userInput}
+                        value={field?.label === "Entity Unique ID"?entityName?.userInput:field?.userInput}
                         onChange={(e) =>
                           onChange && onChange && onChange(e, field, fieldType)
                         }
