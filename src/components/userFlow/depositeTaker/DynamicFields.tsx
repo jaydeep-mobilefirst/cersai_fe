@@ -159,15 +159,29 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                       </label>
 
                       <InputFields
+                        // disabled={
+                        //   disableFieldStatus
+                        //     ? disableFieldStatus
+                        //     : field?.disabled
+                        //     ? field?.disabled
+                        //     : false
+                        // }
                         disabled={
-                          disableFieldStatus
+                          field?.label === "Entity Unique ID"
+                            ? true
+                            : disableFieldStatus
                             ? disableFieldStatus
                             : field?.disabled
                             ? field?.disabled
                             : false
                         }
                         // disabled={(field?.label === "PAN NUMBER" || field?.label ==="Company Name (As per Pan)")}
-                        value={field?.userInput}
+                        // value={field?.userInput}
+                        value={
+                          field?.label === "Entity Unique ID"
+                            ? entityName?.userInput
+                            : field?.userInput
+                        }
                         onChange={(e) =>
                           onChange && onChange && onChange(e, field, fieldType)
                         }

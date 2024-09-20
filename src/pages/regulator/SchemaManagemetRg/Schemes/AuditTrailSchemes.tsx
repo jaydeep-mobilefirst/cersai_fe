@@ -22,10 +22,10 @@ interface AccordionItem {
 }
 
 const options2 = [
-  { label: "Select Status", value: "" },
+  // { label: "Select Status", value: "" },
   { label: "Ban", value: "BANNED" },
   { label: "Active", value: "ACTIVE" },
-  { label: "Under Legislation", value: "UNDER_LETIGATION" },
+  // { label: "Under Legislation", value: "UNDER_LETIGATION" },
 ];
 const SchemesSearchDetailsSM: React.FC = () => {
   const [errors, setErrors] = useState({
@@ -151,7 +151,6 @@ const SchemesSearchDetailsSM: React.FC = () => {
     if (uniqueId) {
       fetchSchema();
     }
-
   }, [uniqueId]);
   const fetchFormFields = () => {
     axiosTokenInstance
@@ -223,14 +222,17 @@ const SchemesSearchDetailsSM: React.FC = () => {
         )
         .then((res) => {
           let data = res?.data?.data;
-          console.log("dfdhkfhdk-dfdhf",data)
+          console.log("dfdhkfhdk-dfdhf", data);
           setRawSchemes(data);
 
-        
-        // Update the schemes list to exclude the selected scheme
-        const filteredSchemes = data?.filter(
-          (d: any) => d?.name !== allFormData?.formFields?.form_fields?.find((field: any) => field.key === "schemeName")?.userInput
-        );
+          // Update the schemes list to exclude the selected scheme
+          const filteredSchemes = data?.filter(
+            (d: any) =>
+              d?.name !==
+              allFormData?.formFields?.form_fields?.find(
+                (field: any) => field.key === "schemeName"
+              )?.userInput
+          );
 
           setSchemes(
             filteredSchemes?.map((d: any) => {
@@ -253,12 +255,14 @@ const SchemesSearchDetailsSM: React.FC = () => {
       header: "Scheme Details",
       content: (
         <>
-        <DynamicFields
-          formFields={allFormData?.formFields?.form_fields?.filter((field: any) => field.key !== "branch")}
-          allFormData={allFormData}
-          onChange={onChange}
-        />
-        <BranchDetails/>
+          <DynamicFields
+            formFields={allFormData?.formFields?.form_fields?.filter(
+              (field: any) => field.key !== "branch"
+            )}
+            allFormData={allFormData}
+            onChange={onChange}
+          />
+          <BranchDetails />
         </>
       ),
     },
@@ -290,9 +294,6 @@ const SchemesSearchDetailsSM: React.FC = () => {
       const selected = schemes.find((f) => f.value === value.value);
       setSelectedSchems((prev) => [...prev, selected]);
     }
-
-    
-
   };
 
   const remove = (data: any) => {
@@ -378,7 +379,11 @@ const SchemesSearchDetailsSM: React.FC = () => {
         </p> */}
       </div>
       <div className="mt-8 mb-8 mx-8">
-        {loader ? <LoaderSpin /> : <Accordion items={accordionItems} showAccordion={true}/>}
+        {loader ? (
+          <LoaderSpin />
+        ) : (
+          <Accordion items={accordionItems} showAccordion={true} />
+        )}
         <div className="grid grid-cols-2 space-x-3">
           <div>
             <label
