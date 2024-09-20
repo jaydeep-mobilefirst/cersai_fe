@@ -331,8 +331,10 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                               }
                               //  searchInputOnchange={handleSearchInputChange3}
                               //  searchInputValue={searchInputValue3}
+                              // showSearchInput={true}
+                              // enableSearch={fieldType === "select_with_search"}
+                              enableSearch={true}
                               showSearchInput={true}
-                              enableSearch={fieldType === "select_with_search"}
                             />
                           )}
                         </>
