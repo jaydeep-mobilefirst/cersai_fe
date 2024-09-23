@@ -28,6 +28,7 @@ const SchemeDetails = () => {
     useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, handleSchemeValidations } =
     useContext(FormHandlerContext);
+
   useEffect(() => {
     fetchSchema();
   }, []);
@@ -150,7 +151,7 @@ const SchemeDetails = () => {
         setPopData({
           para1: "Addition Successful",
           // para2: response.data?.message,
-          para2: `${response.data?.message} ID: ${response.data?.data?.newScheme?.uniqueId}`,
+          para2: response.data?.message,
           show: true,
         });
       } else {

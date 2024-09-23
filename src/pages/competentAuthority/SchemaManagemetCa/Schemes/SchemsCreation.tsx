@@ -137,11 +137,13 @@ const NewSchemaCreation = () => {
               uniqueId: uniqueId,
               depositTakerId: depositTakerId,
               createdBy,
+              Status,
             },
           });
         };
         const uniqueId = info?.row?.original?.uniqueId;
         const depositTakerId = info?.row?.original?.depositTakerId;
+        const Status = info?.row?.original?.status;
         return (
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}
