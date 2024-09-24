@@ -13,6 +13,7 @@ import { axiosTokenInstance } from "../../../utils/axios";
 import BranchDetails from "./BranchDetails";
 import MangementDetails from "./ManagementDetails";
 import Button from "../../../components/form/Button";
+import Swal from "sweetalert2";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -22,12 +23,14 @@ interface AccordionItem {
 const SchemeMasterForm = () => {
   const entityType = sessionStorage.getItem("entityUniqueId");
   const [loader, setLoader] = useState(true);
-  const { onChange } = useContext(FormHandlerContext);
+  const { onChange, handleValidationChecks, handleSchemeValidations } =
+    useContext(FormHandlerContext);
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
   const navigate = useNavigate();
   const location = useLocation();
   const uniqueId = location.state?.uniqueId;
+  console.log({ uniqueId }, "uniqueId");
   console.log("location", entityType);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
@@ -156,14 +159,88 @@ const SchemeMasterForm = () => {
   };
 
   const handleSubmit = async (event: any) => {
-    event.preventDefault();
-    const updatedData = allFormData?.formFields?.form_fields.map(
-      (field: any) => ({
+    setLoader(true);
+    const isFormValid = await handleValidationChecks(
+      allFormData?.formFields?.form_fields
+    );
+    if (!isFormValid) {
+      setLoader(false);
+      return;
+    } else {
+      // returns true if no error
+      const schemeValidations = await handleSchemeValidations();
+      if (schemeValidations === false) {
+        setLoader(false);
+        return;
+      }
+    }
+    let formData = allFormData.formFields.form_fields.map((field: any) => {
+      // Initialize the base object to be returned for each field
+      let fieldData = {
         fieldId: field.id,
         value: field.userInput,
-      })
-    );
-    alert("Data submitted successfully");
+        key: field.key,
+        label: field.label,
+      };
+
+      // Special handling for the "Branch" field to match userInput with options
+      if (field.label === "Branch" && Array.isArray(field.userInput)) {
+        // Map user inputs to their corresponding IDs from the options
+        let branchIds = field.userInput
+          .map((userInputValue: any) => {
+            // Find the option that matches the userInputValue
+            const matchingOption = field.dropdown_options.options.find(
+              (option: any) => option.name === userInputValue
+            );
+            return matchingOption ? matchingOption.id : null; // Return the ID if found, otherwise return null
+          })
+          .filter((id: any) => id !== null); // Filter out any null values if no match was found
+
+        fieldData.value = branchIds; // Set the value to the array of matched IDs
+        fieldData.value = JSON.stringify(branchIds);
+      }
+
+      return fieldData;
+    });
+
+    const payload = {
+      depositTakerId: entityType, // Use depositTakerId from session storage
+      formData: formData,
+    };
+
+    try {
+      // Send the payload to the specified endpoint
+      const response = await axiosTokenInstance.put(
+        `/scheme-portal/${uniqueId}`, // Use uniqueId from the location state
+        payload
+      );
+
+      if (response.data.success) {
+        fetchSchema();
+        Swal.fire({
+          title: "Success!",
+          text: "Data submitted successfully",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      } else {
+        Swal.fire({
+          title: "Failed!",
+          text: "Submission failed, please check the inputs",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting data:", error);
+      Swal.fire({
+        title: "Error!",
+        text: "An error occurred while submitting the form",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+    fetchSchema();
   };
 
   const accordionItems: AccordionItem[] = [
@@ -173,13 +250,11 @@ const SchemeMasterForm = () => {
         <>
           <form onSubmit={handleSubmit}>
             <DynamicFields
-              formFields={allFormData?.formFields?.form_fields?.filter(
-                (field: any) => field.key !== "branch"
-              )}
+              formFields={allFormData?.formFields?.form_fields}
               allFormData={allFormData}
               onChange={onChange}
             />
-            {showSubmitButton && (
+            {true && (
               <div className="flex justify-end items-center mt-4">
                 <Button
                   label="Submit"
@@ -188,6 +263,7 @@ const SchemeMasterForm = () => {
                   textColor="white"
                   borderColor="#1C468E"
                   backgroundColor="#1C468E"
+                  loader={loader}
                 />
               </div>
             )}

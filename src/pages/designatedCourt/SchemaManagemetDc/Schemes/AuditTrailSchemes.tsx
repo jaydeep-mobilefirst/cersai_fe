@@ -308,9 +308,9 @@ const SchemesSearchDetailsSM: React.FC = () => {
 
       let user: any = jwtDecode(sessionStorage.getItem("access_token") ?? "");
       let payload = {
-        user: user?.name ?? "user not found",
-        from: allFormData?.other?.status,
-        to: allFormData?.other?.status,
+        // user: user?.name ?? "user not found",
+        // from: allFormData?.other?.status,
+        // to: allFormData?.other?.status,
         remark: comment,
         documentId: fileData,
       };
