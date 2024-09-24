@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Calender from "./svgs/Calender";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
 
 type Props = {
   disabled?: boolean;
@@ -27,10 +28,13 @@ const DatePicker = ({
   console.log({ maxDate }, "max date");
 
   const hiddenDateInput = useRef<HTMLInputElement>(null);
+  const { setAllFormData, setAllDocumentData, allFormData } =
+    useDepositTakerRegistrationStore((state) => state);
   const [dateSelected, setDateSelected] = useState<string | undefined>(
     userValue ? formatDate(userValue) : undefined
   );
-
+  const startDate = allFormData?.formFields?.form_fields?.find((item:any)=>item?.key ==="startDateByCARG" || item?.key ==="startDateByDT")?.userInput
+  
   useEffect(() => {
     if (userValue) {
       setDateSelected(formatDate(userValue));
@@ -76,6 +80,7 @@ const DatePicker = ({
     }
     return undefined; // No restriction if no condition is met
   };
+  console.log("startDATE",startDate)
 
   return (
     <div className="flex justify-start items-center h-14 w-full max-w-[35rem] sm:max-w-[100%] md:max-w-md lg:max-w-2xl border rounded-md">
@@ -98,6 +103,12 @@ const DatePicker = ({
         className="absolute opacity-0 -z-10"
         onChange={onChangeHandler}
         max={determineMaxDate()}
+        min={
+          maxDate === 'lastDate' && startDate 
+            ? new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 1))
+                ?.toISOString()?.split('T')[0] 
+            : undefined
+        }
       />
     </div>
   );
