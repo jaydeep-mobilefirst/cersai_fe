@@ -12,6 +12,7 @@ import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
 import BranchDetails from "./BranchDetails";
 import MangementDetails from "./ManagementDetails";
+import Button from "../../../components/form/Button";
 
 interface AccordionItem {
   header: React.ReactNode;
@@ -27,9 +28,10 @@ const SchemeMasterForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const uniqueId = location.state?.uniqueId;
-  console.log("location",entityType)
+  console.log("location", entityType);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
+  const [showSubmitButton, setShowSubmitButton] = useState(false);
 
   const fetchSchema = async () => {
     try {
@@ -42,57 +44,62 @@ const SchemeMasterForm = () => {
 
         const userData = portalResponse.data?.data?.schemes[0];
 
-        
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
             let userInput = userData?.schemeFormData?.find(
               (f: any) => f?.fieldId === field?.id
-            )?.value
+            )?.value;
 
-            console.log({userInput});
-            
-            if (field?.key === 'depositTakerId') {
+            console.log({ userInput }, "userInput");
+            let isDisabled = userInput ? true : false;
+
+            if (field?.key === "depositTakerId") {
               return {
                 ...field,
                 userInput: userData?.schemeFormData?.find(
                   (f: any) => f?.fieldId === field?.id
                 )?.value,
                 error: "",
-                disabled : true,
+                disabled: isDisabled,
                 typeId: field?.fieldTypeId,
                 dropdown_options: {
-                  ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                  ...field?.dropdown_options,
+                  options: field?.dropdown_options?.options?.map((o: any) => ({
                     name: o?.uniqueId,
                     id: o?.companyName,
-                  }))
-                }
-              }
-            }
-            else if (field?.key === 'branch') {
+                  })),
+                },
+              };
+            } else if (field?.key === "branch") {
               try {
-                const res = await axiosTokenInstance.get('/deposit-taker/branch/' + entityType)
+                const res = await axiosTokenInstance.get(
+                  "/deposit-taker/branch/" + entityType
+                );
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
                   return {
                     name: b?.pinCode + " " + b?.district + " " + b?.state,
-                    id: b?.id
-                  }
-                })
+                    id: b?.id,
+                  };
+                });
 
                 return {
                   ...field,
                   userInput: userData?.schemeFormData?.find(
                     (f: any) => f?.fieldId === field?.id
                   )?.value,
-                  disabled : true,
+                  disabled: isDisabled,
                   error: "",
                   typeId: field?.fieldTypeId,
-                  dropdown_options: { ...field?.dropdown_options, options: branches }
+                  dropdown_options: {
+                    ...field?.dropdown_options,
+                    options: branches,
+                  },
                 };
               } catch (error) {
                 return {
                   ...field,
-                  disabled : true,
+                  disabled: isDisabled,
                   userInput: userData?.schemeFormData?.find(
                     (f: any) => f?.fieldId === field?.id
                   )?.value,
@@ -100,11 +107,10 @@ const SchemeMasterForm = () => {
                   typeId: field?.fieldTypeId,
                 };
               }
-            }
-            else {
+            } else {
               return {
                 ...field,
-                disabled : true,
+                disabled: isDisabled,
                 userInput: userData?.schemeFormData?.find(
                   (f: any) => f?.fieldId === field?.id
                 )?.value,
@@ -113,11 +119,10 @@ const SchemeMasterForm = () => {
               };
             }
           }
-        )
+        );
 
-        
-        formFields = await Promise.all(formFields)
-        console.log({userData, formFields});
+        formFields = await Promise.all(formFields);
+        console.log({ userData, formFields });
 
         setAllFormData({
           ...response?.data?.data,
@@ -139,19 +144,55 @@ const SchemeMasterForm = () => {
       fetchSchema();
     }
   }, [uniqueId, page, pageSize]);
+  useEffect(() => {
+    checkForEmptyFields();
+  }, [allFormData]); // Add other dependencies as needed
+
+  const checkForEmptyFields = () => {
+    const hasEmptyFields = allFormData?.formFields?.form_fields.some(
+      (field: any) => !field.userInput
+    );
+    setShowSubmitButton(hasEmptyFields);
+  };
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    const updatedData = allFormData?.formFields?.form_fields.map(
+      (field: any) => ({
+        fieldId: field.id,
+        value: field.userInput,
+      })
+    );
+    alert("Data submitted successfully");
+  };
 
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
       content: (
         <>
-        <DynamicFields
-          formFields={ allFormData?.formFields?.form_fields
-            ?.filter((field: any) => field.key !== "branch")}
-          allFormData={allFormData}
-          onChange={onChange}
-        />
-        <BranchDetails/>
+          <form onSubmit={handleSubmit}>
+            <DynamicFields
+              formFields={allFormData?.formFields?.form_fields?.filter(
+                (field: any) => field.key !== "branch"
+              )}
+              allFormData={allFormData}
+              onChange={onChange}
+            />
+            {showSubmitButton && (
+              <div className="flex justify-end items-center mt-4">
+                <Button
+                  label="Submit"
+                  type="submit"
+                  width="250px"
+                  textColor="white"
+                  borderColor="#1C468E"
+                  backgroundColor="#1C468E"
+                />
+              </div>
+            )}
+          </form>
+          <BranchDetails />
         </>
       ),
     },
@@ -209,7 +250,11 @@ const SchemeMasterForm = () => {
           <TaskTabs />
         </div>
         <div className="mt-8">
-          {loader ? <LoaderSpin /> : <Accordion items={accordionItems} showAccordion={true} />}
+          {loader ? (
+            <LoaderSpin />
+          ) : (
+            <Accordion items={accordionItems} showAccordion={true} />
+          )}
         </div>
       </div>
 
@@ -225,7 +270,7 @@ const SchemeMasterForm = () => {
           </p>
         </div>
       </div>
-      
+
       <div className="border-b-2 border-[#E6E6E6]"></div>
 
       <div className="text-center mt-auto">

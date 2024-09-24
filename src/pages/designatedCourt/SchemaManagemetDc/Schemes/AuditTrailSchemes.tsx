@@ -23,94 +23,97 @@ interface AccordionItem {
   content: React.ReactNode;
 }
 const SchemesSearchDetailsSM: React.FC = () => {
-  const [error, setError] = useState<string>("")
-  const [comment, setComment] = useState<string>("")
-  const [fileData, setFileData] = useState<string | null>(null)
-  const [loader, setLoader] = useState(false );
-  const [loader2, setLoader2] = useState(false );
+  const [error, setError] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
+  const [fileData, setFileData] = useState<string | null>(null);
+  const [loader, setLoader] = useState(false);
+  const [loader2, setLoader2] = useState(false);
   const screenWidth = useScreenWidth();
   const { onChange } = useContext(FormHandlerContext);
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
   const navigate = useNavigate();
   const location = useLocation();
-  const createdBy = location.state?.createdBy?.substring(0,2)  
+  const createdBy = location.state?.createdBy?.substring(0, 2);
   const uniqueId = location.state?.uniqueId;
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
   const depositTakerId = location.state?.depositTakerId;
   const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
 
-  const handleChangeComment = (e : any) => {
-    const {value} = e?.target;
-    setComment(value)
-    setLoader2(false)
+  const handleChangeComment = (e: any) => {
+    const { value } = e?.target;
+    setComment(value);
+    setLoader2(false);
     if (comment == "") {
-      setError("Comment should not be empty")
-      return
+      setError("Comment should not be empty");
+      return;
+    } else {
+      setError("");
     }
-    else{
-      setError("")
-    }
-  }
+  };
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await     axiosTokenInstance
-      .get(`/scheme/field-data/${createdBy === 'DT' ? 1 : 2}`);
-      
-      if (response.data.success) {
-        const portalResponse = await     axiosTokenInstance
-        .get(
-          `/scheme-portal/${uniqueId}`
-        );
+      const portalResponse = await axiosTokenInstance.get(
+        `/scheme-portal/${uniqueId}`
+      );
+      const userData = portalResponse.data?.data?.schemes[0];
+      const createdById = portalResponse.data?.data?.schemes[0]?.createdBy;
+      const response = await axiosTokenInstance.get(
+        `/scheme/field-data/${createdById?.substring(0, 2) === "DT" ? 1 : 2}`
+      );
 
-        const userData = portalResponse.data?.data?.schemes[0];
+      if (response.data.success) {
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
-            if (field?.key === 'depositTakerId') {
+            if (field?.key === "depositTakerId") {
               return {
                 ...field,
                 userInput: userData?.schemeFormData?.find(
                   (f: any) => f?.fieldId === field?.id
                 )?.value,
                 error: "",
-                disabled : true,
+                disabled: true,
                 typeId: field?.fieldTypeId,
                 dropdown_options: {
-                  ...field?.dropdown_options, options: field?.dropdown_options?.options?.map((o: any) => ({
+                  ...field?.dropdown_options,
+                  options: field?.dropdown_options?.options?.map((o: any) => ({
                     name: o?.uniqueId,
                     id: o?.companyName,
-                  }))
-                }
-              }
-            }
-            else if (field?.key === 'branch') {
+                  })),
+                },
+              };
+            } else if (field?.key === "branch") {
               try {
-                const res = await     axiosTokenInstance
-                .get('/deposit-taker/branch/' + location.state.depositTakerId)
+                const res = await axiosTokenInstance.get(
+                  "/deposit-taker/branch/" + location.state.depositTakerId
+                );
                 let data = res.data;
                 let branches = data?.data?.branches?.map((b: any) => {
                   return {
                     name: b?.pinCode + " " + b?.district + " " + b?.state,
-                    id: b?.id
-                  }
-                })
+                    id: b?.id,
+                  };
+                });
 
                 return {
                   ...field,
                   userInput: userData?.schemeFormData?.find(
                     (f: any) => f?.fieldId === field?.id
                   )?.value,
-                  disabled : true,
+                  disabled: true,
                   error: "",
                   typeId: field?.fieldTypeId,
-                  dropdown_options: { ...field?.dropdown_options, options: branches }
+                  dropdown_options: {
+                    ...field?.dropdown_options,
+                    options: branches,
+                  },
                 };
               } catch (error) {
                 return {
                   ...field,
-                  disabled : true,
+                  disabled: true,
                   userInput: userData?.schemeFormData?.find(
                     (f: any) => f?.fieldId === field?.id
                   )?.value,
@@ -118,11 +121,10 @@ const SchemesSearchDetailsSM: React.FC = () => {
                   typeId: field?.fieldTypeId,
                 };
               }
-            }
-            else {
+            } else {
               return {
                 ...field,
-                disabled : true,
+                disabled: true,
                 userInput: userData?.schemeFormData?.find(
                   (f: any) => f?.fieldId === field?.id
                 )?.value,
@@ -131,9 +133,9 @@ const SchemesSearchDetailsSM: React.FC = () => {
               };
             }
           }
-        )
+        );
 
-        formFields = await Promise.all(formFields)
+        formFields = await Promise.all(formFields);
 
         setAllFormData({
           ...response?.data?.data,
@@ -163,7 +165,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
         if (response?.data?.success) {
           let dtData: any = [];
           try {
-            let depositTakerData = await     axiosTokenInstance.get(
+            let depositTakerData = await axiosTokenInstance.get(
               `/deposit-taker/${depositTakerId}`
             );
             dtData =
@@ -224,7 +226,9 @@ const SchemesSearchDetailsSM: React.FC = () => {
       content: (
         <>
           <DynamicFields
-            formFields={allFormData?.formFields?.form_fields?.filter((field: any) => field.key !== "branch")}
+            formFields={allFormData?.formFields?.form_fields?.filter(
+              (field: any) => field.key !== "branch"
+            )}
             allFormData={allFormData}
             onChange={onChange}
           />
@@ -236,7 +240,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
               >
                 Status <span className="text-red-500">*</span>
               </label>
-              <InputField value={allFormData?.other?.status} disabled/>
+              <InputField value={allFormData?.other?.status} disabled />
             </div>
             <div>
               <label
@@ -245,7 +249,11 @@ const SchemesSearchDetailsSM: React.FC = () => {
               >
                 Comment <span className="text-red-500">*</span>
               </label>
-              <TextArea id="Select Other Schemes" placeholder="type comment " onChange={handleChangeComment}/>
+              <TextArea
+                id="Select Other Schemes"
+                placeholder="type comment "
+                onChange={handleChangeComment}
+              />
               <span className="text-red-400">{error}</span>
             </div>
 
@@ -259,8 +267,8 @@ const SchemesSearchDetailsSM: React.FC = () => {
               <FileUploadOpenKm setFileData={setFileData} fileData={fileData} />
             </div>
           </div>
-          
-          <BranchDetails/>
+
+          <BranchDetails />
         </>
       ),
     },
@@ -284,62 +292,62 @@ const SchemesSearchDetailsSM: React.FC = () => {
     },
   ];
   const handleBackButtonClick = () => {
-    setAllFormData(null)
+    setAllFormData(null);
     navigate("/dc/my-task");
   };
 
   const handleAddCommnent = async () => {
     try {
-      setLoader2(true)
+      setLoader2(true);
       if (comment == "") {
-        setError("Comment should not be empty")
-        return
-      }
-      else{
-        setError("")
+        setError("Comment should not be empty");
+        return;
+      } else {
+        setError("");
       }
 
-      let user : any = jwtDecode(sessionStorage.getItem("access_token") ?? "");
+      let user: any = jwtDecode(sessionStorage.getItem("access_token") ?? "");
       let payload = {
-        user : user?.name ?? "user not found",
+        user: user?.name ?? "user not found",
         from: allFormData?.other?.status,
         to: allFormData?.other?.status,
-        remark : comment,
-        documentId : fileData
-      }
-      
+        remark: comment,
+        documentId: fileData,
+      };
+
       try {
-        const response = await axiosTokenInstance.patch(`/scheme-portal/${uniqueId}/audit`, payload)
+        const response = await axiosTokenInstance.patch(
+          `/scheme-portal/${uniqueId}/audit`,
+          payload
+        );
         const data = response.data;
         if (data?.success) {
           Swal.fire({
-            text : data?.message,
-            icon : "success",
-            title : "Success",
-          })
+            text: data?.message,
+            icon: "success",
+            title: "Success",
+          });
           fetchSchema();
-        }
-        else{
+        } else {
           Swal.fire({
-            text : data?.message,
-            icon : "error",
-            title : "Something went wrong",
-          })
+            text: data?.message,
+            icon: "error",
+            title: "Something went wrong",
+          });
         }
-        setLoader2(false)
-      } catch (error : any) {
+        setLoader2(false);
+      } catch (error: any) {
         Swal.fire({
-          text : error?.message,
-          icon : "error",
-          title : "Something went wrong",
-        })
-        setLoader2(false)
+          text: error?.message,
+          icon: "error",
+          title: "Something went wrong",
+        });
+        setLoader2(false);
       }
-      
-    } catch (error : any) {
-      setLoader2(false)
+    } catch (error: any) {
+      setLoader2(false);
     }
-  }
+  };
   return (
     <div className="flex flex-col min-h-screen ">
       <div className="mt-6 mx-8">
@@ -356,8 +364,11 @@ const SchemesSearchDetailsSM: React.FC = () => {
         </p>
       </div>
       <div className="mt-8 mb-8 mx-8">
-        {loader ? <LoaderSpin /> : <Accordion items={accordionItems} showAccordion={true}/>}
-
+        {loader ? (
+          <LoaderSpin />
+        ) : (
+          <Accordion items={accordionItems} showAccordion={true} />
+        )}
       </div>
       <div>
         <div

@@ -23,7 +23,7 @@ interface AccordionItem {
 
 const options2 = [
   // { label: "Select Status", value: "" },
-  { label: "Ban", value: "BANNED" },
+  { label: "Banned", value: "BANNED" },
   { label: "Active", value: "ACTIVE" },
   // { label: "Under Legislation", value: "UNDER_LETIGATION" },
 ];
@@ -44,21 +44,30 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const location = useLocation();
   const createdBy = location.state?.createdBy?.substring(0, 2);
   const uniqueId = location.state?.uniqueId;
+  const Status = location.state?.Status;
   const depositTakerId = location.state?.depositTakerId;
   const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
+  console.log({ Status }, "Status");
+  const filteredOptions =
+    Status === "ACTIVE"
+      ? options2.filter((option) => option.value === "BANNED")
+      : Status === "BANNED"
+      ? options2.filter((option) => option.value === "ACTIVE")
+      : options2;
   const fetchSchema = async () => {
     try {
       setLoader(true);
+      const portalResponse = await axiosTokenInstance.get(
+        `/scheme-portal/${uniqueId}`
+      );
+      const userData = portalResponse.data?.data?.schemes[0];
+      const createdById = portalResponse.data?.data?.schemes[0]?.createdBy;
+      console.log(portalResponse, "portalResponse");
       const response = await axiosTokenInstance.get(
-        `/scheme/field-data/${createdBy === "DT" ? 1 : 2}`
+        `/scheme/field-data/${createdById?.substring(0, 2) === "DT" ? 1 : 2}`
       );
 
-      if (response.data.success) {
-        const portalResponse = await axiosTokenInstance.get(
-          `/scheme-portal/${uniqueId}`
-        );
-
-        const userData = portalResponse.data?.data?.schemes[0];
+      if (portalResponse.data.success) {
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
             if (field?.key === "depositTakerId") {
@@ -395,7 +404,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
             <SelectButton
               // backgroundColor="#F2F2F2"
               setOption={handleSetOption2}
-              options={options2}
+              options={filteredOptions}
               selectedOption={selectedOption2}
               placeholder="Select"
               showSearchInput={true}

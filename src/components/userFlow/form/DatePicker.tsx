@@ -68,7 +68,9 @@ const DatePicker = ({
     if (
       maxDate === "dateOfIncorporation" ||
       maxDate === "Regulator approval Date" ||
-      maxDate === "startDate"
+      maxDate === "startDate" ||
+      maxDate === "startDateByCARG" ||
+      maxDate === "startDateByDT"
     ) {
       return getCurrentDate(); // Restrict to today's date if conditions are met
     }
