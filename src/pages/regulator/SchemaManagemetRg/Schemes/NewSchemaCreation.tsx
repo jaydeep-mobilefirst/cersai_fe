@@ -20,6 +20,7 @@ const SchemeDetails = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
+  const [fetchRegulatorData, setRegulatorData] = useState<any>();
 
   const handleBackButtonClick = () => {
     navigate("/rg/my-task");
@@ -28,10 +29,96 @@ const SchemeDetails = () => {
     useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, handleSchemeValidations } =
     useContext(FormHandlerContext);
+  console.log({ allFormData }, "allFormData");
+
+  const depositTakerId = allFormData?.formFields?.form_fields?.find(
+    (field: any) => field?.key === "depositTakerId"
+  )?.userInput;
+
+  useEffect(() => {
+    fetchFormFields(depositTakerId);
+  }, [depositTakerId]);
 
   useEffect(() => {
     fetchSchema();
   }, []);
+
+  useEffect(() => {
+    if (fetchRegulatorData) {
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (
+              f?.key === "regulator" ||
+              f?.key === "regulatorName" ||
+              f?.key === "regulatorNameRG"
+            ) {
+              return { ...f, userInput: fetchRegulatorData };
+            } else {
+              return f;
+            }
+          }),
+        },
+      });
+    }
+  }, [fetchRegulatorData]);
+
+  const fetchFormFields = (dtValue: any) => {
+    axiosTokenInstance
+      .get(`/registration/field-data/1?status=addToProfile`)
+      .then(async (response) => {
+        if (response?.data?.success) {
+          let dtData: any = [];
+          try {
+            let depositTakerData = await axiosTokenInstance.get(
+              `/deposit-taker/${dtValue}`
+            );
+
+            dtData =
+              depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
+          } catch (error) {
+            console.log("Error");
+          }
+          console.log({ dtData, response });
+
+          // console.log(dtData, "respnse--------------");
+          let modifiedFormFields = response.data.data?.formFields?.map(
+            (o: any) => ({
+              ...o,
+              userInput: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              error: "",
+            })
+          );
+
+          let obj = {
+            ...response?.data?.data,
+            formFields: { form_fields: modifiedFormFields },
+          };
+          console.log(obj, "obj-----");
+          setRegulatorData(
+            obj?.formFields?.form_fields?.find(
+              (item: any) =>
+                item.key === "regulatorName" ||
+                item.key === "regulator" ||
+                item.key === "regulatorNameRG"
+            )?.userInput
+          );
+
+          // setAllFormData(obj);
+          // setAllDocumentData(modifiedFileFields);
+        } else {
+          throw new Error("Error getting data, Please try later!");
+        }
+        setLoader(false);
+      })
+      .catch((error: any) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
   const fetchSchema = async () => {
     try {
       const response = await axiosTokenInstance.get(`/scheme/field-data/2`);
@@ -46,6 +133,7 @@ const SchemeDetails = () => {
             // id: field.fieldTypeId,
           })
         );
+        // await fetchFormFields();
 
         setAllFormData({
           ...response?.data?.data,
@@ -64,6 +152,23 @@ const SchemeDetails = () => {
                       ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder),
                   },
                 };
+              } else if (
+                field?.key === "regulator" ||
+                field?.key === "regulatorName" ||
+                field?.key === "regulatorNameRG"
+              ) {
+                console.log(field, "key");
+                // fetchFormFields();
+                // Ensure fetchRegulatorData is available
+                const regulatorValue = fetchRegulatorData; // Default to empty string if not fetched yet
+                console.log("regulatorValueregulatorValue", fetchRegulatorData);
+                return {
+                  ...field,
+                  userInput: fetchRegulatorData,
+                  disabled: true,
+                  error: "",
+                  typeId: field?.fieldTypeId,
+                };
               } else {
                 return field;
               }
@@ -78,6 +183,7 @@ const SchemeDetails = () => {
       console.error("Error fetching schema data:", error);
     }
   };
+
   const entityType = sessionStorage.getItem("entityUniqueId");
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -185,6 +291,8 @@ const SchemeDetails = () => {
           id: b?.id,
         };
       });
+
+      await fetchFormFields(event?.value);
       setAllFormData({
         ...allFormData,
         formFields: {
@@ -196,6 +304,12 @@ const SchemeDetails = () => {
               };
             } else if (f?.key === "depositTakerId") {
               return { ...f, userInput: event?.value };
+            } else if (
+              f?.key === "regulator" ||
+              f?.key === "regulatorName" ||
+              f?.key === "regulatorNameRG"
+            ) {
+              return { ...f, userInput: fetchRegulatorData };
             } else {
               return f;
             }
@@ -209,6 +323,7 @@ const SchemeDetails = () => {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
+
   console.log("all-form-data------", allFormData);
   return (
     <div
