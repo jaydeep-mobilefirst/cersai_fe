@@ -45,6 +45,27 @@ const SchemeDetails = () => {
     fetchSchema();
   }, []);
 
+  useEffect(() => {
+    if (fetchRegulatorData) {
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (
+              f?.key === "regulator" ||
+              f?.key === "regulatorName" ||
+              f?.key === "regulatorNameRG"
+            ) {
+              return { ...f, userInput: fetchRegulatorData };
+            } else {
+              return f;
+            }
+          }),
+        },
+      });
+    }
+  }, [fetchRegulatorData]);
+
   
   const fetchFormFields = () => {
     axiosTokenInstance
