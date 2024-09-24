@@ -92,11 +92,9 @@ const SchemaCreationForm = () => {
         } else {
           throw new Error("Error getting data, Please try later!");
         }
-        setLoader(false);
       })
       .catch((error: any) => {
         console.log(error);
-        setLoader(false);
       });
   };
 
@@ -199,12 +197,14 @@ const SchemaCreationForm = () => {
   //   }
   // };
   const fetchSchema = async () => {
+    setLoader(true)
     try {
       const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
       sessionStorage.setItem("entitiy_details_api", "true");
   
       if (response.data.success) {
         // Fetch regulator data before processing form fields
+        setLoader(false)
         await fetchFormFields();
   
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
@@ -275,6 +275,10 @@ const SchemaCreationForm = () => {
         );
   
         formFields = await Promise.all(formFields);
+
+
+      // Sort form fields based on the sortOrder
+      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
   
         setAllFormData({
           ...response?.data?.data,
@@ -289,6 +293,7 @@ const SchemaCreationForm = () => {
         });
       }
     } catch (error) {
+      setLoader(false)
       console.error("Error fetching schema data:", error);
     }
   };

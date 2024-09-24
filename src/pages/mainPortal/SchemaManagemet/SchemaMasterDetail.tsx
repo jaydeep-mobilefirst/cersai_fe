@@ -122,6 +122,10 @@ const SchemeMasterForm = () => {
         );
 
         formFields = await Promise.all(formFields);
+
+
+      // Sort form fields based on the sortOrder
+      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
         console.log({ userData, formFields });
 
         setAllFormData({

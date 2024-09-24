@@ -137,8 +137,10 @@ const SchemeDetails = () => {
   };
   const fetchSchema = async () => {
     try {
+      setLoader(true)
       const response = await axiosTokenInstance.get(`/scheme/field-data/2`);
       if (response.data.success) {
+        setLoader(false)
         const formFields = response?.data?.data?.formFields?.allFormFields.map(
           (field: any) => ({
             ...field,
@@ -150,6 +152,10 @@ const SchemeDetails = () => {
         );
         
         await fetchFormFields();
+
+
+      // Sort form fields based on the sortOrder
+      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
         setAllFormData({
           ...response?.data?.data,
@@ -319,6 +325,9 @@ const SchemeDetails = () => {
               return { ...f, userInput: event?.value };
             } else if (f?.key === "regulator") {
               return { ...f, userInput: fetchRegulatorData };
+            } else if (f?.key === "startDateByCARG" || f?.key === "startDateByDT") {
+              sessionStorage.setItem("startDate", event?.value);
+              return f;
             } else {
               return f;
             }
@@ -341,11 +350,12 @@ const SchemeDetails = () => {
         <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
           <div className="w-full mb-40">
             <div className="mt-10">
+              {loader?<LoaderSpin/>:
               <DynamicFields
                 formFields={allFormData?.formFields?.form_fields}
                 allFormData={allFormData}
                 onChange={handleOnchange}
-              />
+              />}
             </div>
             <div className="flex flex-shrink-0 mt-[20px]">
               <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
