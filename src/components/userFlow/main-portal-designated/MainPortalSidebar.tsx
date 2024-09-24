@@ -99,12 +99,12 @@ const MainPortalSidebar = ({ layout }: Props) => {
     // Set a timeout to mark the user as inactive after 10 minutes (600000 ms)
     const newTimeoutId = setTimeout(() => {
       setIsActive(false);
-    }, 600000);
+    }, 1800000);
     setTimeoutId(newTimeoutId);
   };
 
   useEffect(() => {
-    // Add event listeners for user activity
+    // Add event listeners for user   activity
     window.addEventListener("mousemove", handleUserActivity);
     window.addEventListener("keydown", handleUserActivity);
     window.addEventListener("focus", handleUserActivity);

@@ -22,6 +22,7 @@ import useFetchDistrict from "../../contextAPI/useFetchDistrict";
 import { useLandingStore } from "../../zust/useLandingStore";
 import { useLangugaeStore } from "../../zust/useLanguageUsStore";
 import { axiosTraceIdInstance } from "../../utils/axios";
+import moment from "moment";
 
 type SchemeType = {
   sn: number;
@@ -32,6 +33,7 @@ type SchemeType = {
   // createdBy: string;
   createdBy: string | null;
   status: string;
+  startDate: string;
   active: boolean;
 };
 
@@ -155,6 +157,15 @@ const SchemeSearch: React.FC = () => {
     columnHelper.accessor("createdBy", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
+    }),
+    columnHelper.accessor("startDate", {
+      cell: (info: any) => {
+        let modifiedDate = info?.getValue();
+        // Check if the date value exists before formatting
+        modifiedDate = modifiedDate ? moment(modifiedDate).format('DD-MM-YYYY HH:mm') : "N/A";
+        return modifiedDate;
+      },
+      header: () => <span>Start Date</span>,
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",

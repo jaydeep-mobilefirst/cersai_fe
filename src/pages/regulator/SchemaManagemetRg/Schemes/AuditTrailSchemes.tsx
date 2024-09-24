@@ -140,6 +140,10 @@ const SchemesSearchDetailsSM: React.FC = () => {
 
         formFields = await Promise.all(formFields);
 
+
+      // Sort form fields based on the sortOrder
+      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+
         setAllFormData({
           ...response?.data?.data,
           formFields: { form_fields: formFields },
