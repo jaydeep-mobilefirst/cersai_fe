@@ -30,16 +30,22 @@ const SchemeMasterForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const uniqueId = location.state?.uniqueId;
-  console.log({ uniqueId }, "uniqueId");
+  const createdBy = location.state?.createdBy;
+
+  console.log({ uniqueId, createdBy }, "uniqueId");
   console.log("location", entityType);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const branchDetails = allFormData?.formFields?.form_fields?.find((item:any)=>item.key==="branch")?.userInput
+  console.log("aaaalllllffff", allFormData);
 
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
+      const response = await axiosTokenInstance.get(
+        `/scheme/field-data/${createdBy.substring(0, 2) === "DT" ? 1 : 2}`
+      );
       if (response.data.success) {
         const portalResponse = await axiosTokenInstance.get(
           `/scheme-portal/${uniqueId}`
@@ -126,9 +132,8 @@ const SchemeMasterForm = () => {
 
         formFields = await Promise.all(formFields);
 
-
-      // Sort form fields based on the sortOrder
-      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+        // Sort form fields based on the sortOrder
+        formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
         console.log({ userData, formFields });
 
         setAllFormData({
@@ -151,16 +156,45 @@ const SchemeMasterForm = () => {
       fetchSchema();
     }
   }, [uniqueId, page, pageSize]);
-  useEffect(() => {
-    checkForEmptyFields();
-  }, [allFormData]); // Add other dependencies as needed
 
   const checkForEmptyFields = () => {
+    // Check if there are empty fields
     const hasEmptyFields = allFormData?.formFields?.form_fields.some(
-      (field: any) => !field.userInput
+      (field: any) =>
+        field.userInput === null ||
+        field.userInput === undefined ||
+        field.userInput === ""
     );
-    setShowSubmitButton(hasEmptyFields);
+
+    // Show the submit button if there are empty fields
+    if (hasEmptyFields) {
+      setShowSubmitButton(true);
+    }
   };
+
+  // Call checkForEmptyFields whenever form data changes
+  useEffect(() => {
+    checkForEmptyFields();
+  }, [allFormData]);
+  
+
+  // useEffect(() => {
+  //   if (branchDetails) {
+      
+  //     setAllFormData({
+  //       ...allFormData,
+  //       formFields: {
+  //         form_fields: allFormData?.formFields?.form_fields?.filter((f: any) => f.key !== "branch"),
+  //       },
+  //     });
+  //   }
+  // }, [branchDetails]);
+
+  const EntityName = allFormData?.formFields?.form_fields?.find(
+    (item: any) => item.key === "depositTakerId"
+  )?.userInput;
+
+  console.log(EntityName, "EntityName");
 
   const handleSubmit = async (event: any) => {
     setLoader(true);
@@ -178,6 +212,7 @@ const SchemeMasterForm = () => {
         return;
       }
     }
+
     let formData = allFormData.formFields.form_fields.map((field: any) => {
       // Initialize the base object to be returned for each field
       let fieldData = {
@@ -203,9 +238,16 @@ const SchemeMasterForm = () => {
         fieldData.value = branchIds; // Set the value to the array of matched IDs
         fieldData.value = JSON.stringify(branchIds);
       }
+      if (
+        field.key === "depositTakerId" ||
+        field.label === "Entity Unique ID"
+      ) {
+        fieldData.value = EntityName;
+      }
 
       return fieldData;
     });
+    console.log("payload", formData);
 
     const payload = {
       depositTakerId: entityType, // Use depositTakerId from session storage
@@ -221,6 +263,7 @@ const SchemeMasterForm = () => {
 
       if (response.data.success) {
         fetchSchema();
+        setShowSubmitButton(false);
         Swal.fire({
           title: "Success!",
           text: "Data submitted successfully",
@@ -258,7 +301,7 @@ const SchemeMasterForm = () => {
               allFormData={allFormData}
               onChange={onChange}
             />
-            {true && (
+            {showSubmitButton && (
               <div className="flex justify-end items-center mt-4">
                 <Button
                   label="Submit"
@@ -290,40 +333,6 @@ const SchemeMasterForm = () => {
   };
 
   return (
-    // <div className="min-h-screen flex flex-col justify-between">
-    //   <div
-    //     className="relative mx-2 xl:ml-[40px] mt-4"
-    //     style={{ minHeight: "calc(100vh - 110px)" }}
-    //   >
-    //     <div className="mt-6">
-    //       <TaskTabs />
-    //     </div>
-    //     <div className="mt-8">
-    //       {loader ? <LoaderSpin /> : <Accordion items={accordionItems} showAccordion={true}/>}
-    //     </div>
-    //     <div>
-    //     <div className="my-11 flex flex-col md:flex-row justify-between items-center">
-    //       <div className="flex items-center cursor-pointer space-x-2 mb-3 md:mb-0">
-    //         <img src={BackArrow} alt={BackArrow} />
-    //         <p
-    //           onClick={handleBackButtonClick}
-    //           className="text-sm font-normal text-gilroy-regular"
-    //         >
-    //           Back
-    //         </p>
-    //       </div>
-    //     </div>
-    //       <div className="border-b-2 border-[#E6E6E6]"></div>
-
-    //       <div className="text-center">
-    //         <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
-    //           © 2024 Protean BUDs, All Rights Reserved.
-    //         </h1>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-
     <div className="min-h-[100vh] flex flex-col justify-between">
       <div className="relative mx-2 xl:ml-[40px] mt-4 flex-grow">
         <div className="mt-6">

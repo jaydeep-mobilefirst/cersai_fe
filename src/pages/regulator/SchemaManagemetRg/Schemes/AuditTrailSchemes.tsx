@@ -54,12 +54,16 @@ const SchemesSearchDetailsSM: React.FC = () => {
       : Status === "BANNED"
       ? options2.filter((option) => option.value === "ACTIVE")
       : options2;
+
+  console.log({ selectedOption2 }, "selectedOption2");
+
   const fetchSchema = async () => {
     try {
       setLoader(true);
       const portalResponse = await axiosTokenInstance.get(
         `/scheme-portal/${uniqueId}`
       );
+
       const userData = portalResponse.data?.data?.schemes[0];
       const createdById = portalResponse.data?.data?.schemes[0]?.createdBy;
       console.log(portalResponse, "portalResponse");
@@ -140,9 +144,8 @@ const SchemesSearchDetailsSM: React.FC = () => {
 
         formFields = await Promise.all(formFields);
 
-
-      // Sort form fields based on the sortOrder
-      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+        // Sort form fields based on the sortOrder
+        formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
         setAllFormData({
           ...response?.data?.data,
@@ -231,7 +234,14 @@ const SchemesSearchDetailsSM: React.FC = () => {
     if (allFormData?.other?.depositTakerId) {
       axiosTokenInstance
         .get(
-          `/scheme-portal/scheme-by/${allFormData?.other?.depositTakerId}?page=1&limit=10000&status=ALL`
+          `/scheme-portal/scheme-by/${
+            allFormData?.other?.depositTakerId
+          }?page=1&limit=10000&status=${
+            Status === "ACTIVE" ||
+            (Status === "UNDER_LETIGATION" && selectedOption2 === "BANNED")
+              ? "ACTIVE"
+              : "ALL"
+          }`
         )
         .then((res) => {
           let data = res?.data?.data;
@@ -262,7 +272,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
           setSchemes([]);
         });
     }
-  }, [allFormData]);
+  }, [allFormData, Status, selectedOption2]);
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
@@ -412,6 +422,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
               selectedOption={selectedOption2}
               placeholder="Select"
               showSearchInput={true}
+              disabled={Status === "BANNED" ? true : false}
             />
             <span className="text-red-400">{errors?.statusError}</span>
           </div>
@@ -431,6 +442,12 @@ const SchemesSearchDetailsSM: React.FC = () => {
               allSelectedOptions={selectedSchemes}
               remove={remove}
               className="relative"
+              disabled={
+                Status === "BANNED" ||
+                (Status === "UNDER_LETIGATION" && selectedOption2 === "ACTIVE")
+                  ? true
+                  : false
+              }
             />
           </div>
         </div>

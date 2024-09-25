@@ -21,6 +21,7 @@ type SchemeType = {
   name: string;
   status: string;
   active: boolean;
+  createdBy:any;
 };
 
 const columnHelper = createColumnHelper<SchemeType>();
@@ -71,10 +72,11 @@ const SchemaCreation = () => {
     fetchSchemes();
   }, [page, pageSize]);
 
-  const NavigateScheme = (uniqueId: any) => {
+  const NavigateScheme = (uniqueId: any,createdBy:any) => {
     navigate("/dt/scheme/creation", {
       state: {
         uniqueId: uniqueId,
+        createdBy:createdBy
       },
     });
   };
@@ -140,10 +142,11 @@ const SchemaCreation = () => {
 
       cell: (info) => {
         const uniqueId = info?.row?.original?.uniqueId;
+        const createdBy = info?.row?.original?.createdBy;
         return (
           <div className='flex justify-center items-center '>
             {/* <Link to={"/dt/schema/creation"}> */}
-            <div onClick={() => NavigateScheme(uniqueId)}>
+            <div onClick={() => NavigateScheme(uniqueId,createdBy)}>
               <img src={Eye} alt='Eye ' className='cursor-pointer' />
             </div>
             {/* </Link> */}
