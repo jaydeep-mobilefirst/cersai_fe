@@ -26,7 +26,8 @@ interface TableType {
 }
 
 const BranchDetails = () => {
-  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  const { setAllFormData, setAllDocumentData, allFormData } =
+    useDepositTakerRegistrationStore((state) => state);
   const entityType = sessionStorage.getItem("entityUniqueId");
   console.log("allformdata----", allFormData?.other?.depositTakerId);
   const [loader, setLoader] = useState<boolean>(false);
@@ -56,7 +57,7 @@ const BranchDetails = () => {
           } catch (e) {
             // If parsing fails, treat it as a comma-separated string
             // return filterB ? filterB && filterB?.split(",") : [];
-            return typeof filterB === "string" ? filterB.split(",") : [];
+            return typeof filterB === "string" ? filterB?.split(",") : [];
           }
         })(),
       })
@@ -80,8 +81,18 @@ const BranchDetails = () => {
   useEffect(() => {
     if (filterB !== undefined && filterB !== null) {
       fetchBranchDetails();
+      
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.filter((f: any) => f.key !== "branch"),
+        },
+      });
     }
   }, [filterB]);
+
+
+
 
   const columns = [
     columnHelper.accessor("sno", {

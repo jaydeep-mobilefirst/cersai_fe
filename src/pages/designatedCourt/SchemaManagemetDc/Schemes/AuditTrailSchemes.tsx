@@ -256,6 +256,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
                 id="Select Other Schemes"
                 placeholder="type comment "
                 onChange={handleChangeComment}
+                disabled={allFormData?.other?.status === "BANNED"?false:true}
               />
               <span className="text-red-400">{error}</span>
             </div>
@@ -267,7 +268,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
               >
                 Upload File
               </label>
-              <FileUploadOpenKm setFileData={setFileData} fileData={fileData} />
+              <FileUploadOpenKm setFileData={setFileData} fileData={fileData} setDisable={allFormData?.other?.status === "BANNED"?false:true}/>
             </div>
           </div>
 
