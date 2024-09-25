@@ -8,17 +8,21 @@ import ViewFile from "../userFlow/depositeTaker/ViewFile";
 import LoaderSpin from "../LoaderSpin";
 import trashIcon from "../../assets/images/trash.svg";
 import { axiosTraceIdInstance } from "../../utils/axios";
+import { useLocation } from "react-router-dom";
 
 type Props = {
     setFileData : any
     fileData : string | null
+    setDisable ?:boolean
 }
 
-const FileUploadOpenKm = ({ setFileData, fileData}: Props) => { 
+const FileUploadOpenKm = ({ setFileData, fileData,setDisable}: Props) => { 
     const [file, setFile] = useState<File | null>(null)
     const [loader, setLoader] = useState(false);
     const [showUploadPopup, setShowUploadPopup] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const location = useLocation();
+    console.log("loc",location)
     const toggleUploadPopup = () => {
         setShowUploadPopup(true);
     };
@@ -119,7 +123,7 @@ const FileUploadOpenKm = ({ setFileData, fileData}: Props) => {
     
     return (
         <div>
-            {showUploadPopup && (
+            {(showUploadPopup && !setDisable) &&  (
                 <UploadFile
                     fileSize={5000}
                     fileTypes={"Jpg/Png, Docx/Xlx/Xlsx PDF"}
@@ -128,6 +132,7 @@ const FileUploadOpenKm = ({ setFileData, fileData}: Props) => {
                     file={file}
                     handleFileChange={handleFileChange}
                     toggleUploadPopup={toggleUploadPopup}
+                    
                 />
             )}
             {showDeletePopup && (
@@ -138,7 +143,7 @@ const FileUploadOpenKm = ({ setFileData, fileData}: Props) => {
                     showDeletePopup={showDeletePopup}
                 />
             )}
-            <div className="rounded-xl bg-[#E7F0FF] flex flex-col md:flex-row justify-between items-center p-1  text-gilroy-bold mb-4 mt-1">
+            <div className={`${setDisable?"bg-[#dfe0e1]":"bg-[#E7F0FF]"} rounded-xl   flex flex-col md:flex-row justify-between items-center p-1  text-gilroy-bold mb-4 mt-1`}>
                 <div className="flex flex-row items-center space-x-2 w-full">
                     <div className="my-auto ml-3">
                         <img

@@ -30,16 +30,18 @@ const SchemeMasterForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const uniqueId = location.state?.uniqueId;
-  console.log({ uniqueId }, "uniqueId");
+  const createdBy = location.state?.createdBy;
+
+  console.log({ uniqueId,createdBy }, "uniqueId");
   console.log("location", entityType);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
-
+  console.log("aaaalllllffff",allFormData)
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
+      const response = await axiosTokenInstance.get(`/scheme/field-data/${createdBy.substring(0,2)==="DT"?1:2}`);
       if (response.data.success) {
         const portalResponse = await axiosTokenInstance.get(
           `/scheme-portal/${uniqueId}`
@@ -218,6 +220,7 @@ const SchemeMasterForm = () => {
 
       return fieldData;
     });
+    console.log("payload",formData)
 
     const payload = {
       depositTakerId: entityType, // Use depositTakerId from session storage
