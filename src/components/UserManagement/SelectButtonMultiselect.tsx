@@ -19,6 +19,7 @@ type Props = {
   multiselect?: boolean;
   allSelectedOptions?: any[];
   remove?: (data: any) => void;
+  disabled?: boolean;
 };
 
 const SelectButtonMultiselect = ({
@@ -33,6 +34,7 @@ const SelectButtonMultiselect = ({
   variant,
   allSelectedOptions = [],
   multiselect,
+  disabled = false,
   remove = (data: any) => {},
 }: Props) => {
   const selectedOptionsArray = Array.isArray(allSelectedOptions)
@@ -95,6 +97,8 @@ const SelectButtonMultiselect = ({
             ? variantOptions["multiselect"]
             : variantOptions[variant ?? "basic"]
         }
+        disabled={disabled} // Apply the disabled prop here
+        style={disabled ? { cursor: "not-allowed", opacity: 0.6 } : {}}
         type="button"
         ref={buttonRef}
         onClick={() => setArrowDirectionToggle(!arrowDirectionToggle)}
