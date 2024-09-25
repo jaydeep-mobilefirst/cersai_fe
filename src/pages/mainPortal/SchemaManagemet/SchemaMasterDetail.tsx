@@ -37,7 +37,9 @@ const SchemeMasterForm = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const branchDetails = allFormData?.formFields?.form_fields?.find((item:any)=>item.key==="branch")?.userInput
   console.log("aaaalllllffff", allFormData);
+
   const fetchSchema = async () => {
     try {
       setLoader(true);
@@ -174,8 +176,21 @@ const SchemeMasterForm = () => {
   useEffect(() => {
     checkForEmptyFields();
   }, [allFormData]);
+  
 
-  const EntityName = allFormData.formFields.form_fields.find(
+  // useEffect(() => {
+  //   if (branchDetails) {
+      
+  //     setAllFormData({
+  //       ...allFormData,
+  //       formFields: {
+  //         form_fields: allFormData?.formFields?.form_fields?.filter((f: any) => f.key !== "branch"),
+  //       },
+  //     });
+  //   }
+  // }, [branchDetails]);
+
+  const EntityName = allFormData?.formFields?.form_fields?.find(
     (item: any) => item.key === "depositTakerId"
   )?.userInput;
 
