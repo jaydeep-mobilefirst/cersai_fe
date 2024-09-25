@@ -32,16 +32,18 @@ const SchemeMasterForm = () => {
   const uniqueId = location.state?.uniqueId;
   const createdBy = location.state?.createdBy;
 
-  console.log({ uniqueId,createdBy }, "uniqueId");
+  console.log({ uniqueId, createdBy }, "uniqueId");
   console.log("location", entityType);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
-  console.log("aaaalllllffff",allFormData)
+  console.log("aaaalllllffff", allFormData);
   const fetchSchema = async () => {
     try {
       setLoader(true);
-      const response = await axiosTokenInstance.get(`/scheme/field-data/${createdBy.substring(0,2)==="DT"?1:2}`);
+      const response = await axiosTokenInstance.get(
+        `/scheme/field-data/${createdBy.substring(0, 2) === "DT" ? 1 : 2}`
+      );
       if (response.data.success) {
         const portalResponse = await axiosTokenInstance.get(
           `/scheme-portal/${uniqueId}`
@@ -173,7 +175,11 @@ const SchemeMasterForm = () => {
     checkForEmptyFields();
   }, [allFormData]);
 
-  console.log({ showSubmitButton });
+  const EntityName = allFormData.formFields.form_fields.find(
+    (item: any) => item.key === "depositTakerId"
+  )?.userInput;
+
+  console.log(EntityName, "EntityName");
 
   const handleSubmit = async (event: any) => {
     setLoader(true);
@@ -217,10 +223,16 @@ const SchemeMasterForm = () => {
         fieldData.value = branchIds; // Set the value to the array of matched IDs
         fieldData.value = JSON.stringify(branchIds);
       }
+      if (
+        field.key === "depositTakerId" ||
+        field.label === "Entity Unique ID"
+      ) {
+        fieldData.value = EntityName;
+      }
 
       return fieldData;
     });
-    console.log("payload",formData)
+    console.log("payload", formData);
 
     const payload = {
       depositTakerId: entityType, // Use depositTakerId from session storage
