@@ -20,6 +20,7 @@ type SchemeType = {
   createdBy: string | null;
   status: string;
   active: boolean;
+  createdByName: string;
 };
 
 const columnHelper = createColumnHelper<SchemeType>();
@@ -102,11 +103,11 @@ const NewSchemaCreation = () => {
       cell: (info) => {
         const value = info.getValue();
         // Replace underscores with spaces if the value is "UNDER_LETIGATION"
-        return value === "UNDER_LETIGATION" ? value.replace(/_/g, " ") : value;
+        return value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value;
       },
     }),
 
-    columnHelper.accessor("createdBy", {
+    columnHelper.accessor("createdByName", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
     }),
