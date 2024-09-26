@@ -23,7 +23,7 @@ interface AccordionItem {
 
 const options2 = [
   // { label: "Select Status", value: "" },
-  { label: "Banned", value: "BANNED" },
+  { label: "Ban", value: "BANNED" },
   { label: "Active", value: "ACTIVE" },
   // { label: "Under Legislation", value: "UNDER_LETIGATION" },
 ];
@@ -192,7 +192,17 @@ const SchemesSearchDetailsSM: React.FC = () => {
               error: "",
               disabled: true,
             }))
-            ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+            ?.sort((a: any, b: any) => {
+              // Sort by companyName, panNumber, and dateOfIncorporation
+              const sortOrder = ["companyName", "panNumber", "dateOfIncorporation","Type of Entity", "Unique ID Number","GST Number","Registered Address Line 1","Registered Address Line 2","pincode","State","District","regulatorName","Regulator Number (Provided by Regulator)","Regulator approval Date","User Email","nodalFirstname","nodalMiddlename","nodalLastname","nodalMobile","nodalEmail",];
+              const aIndex = sortOrder.indexOf(a.key || a.label);
+              const bIndex = sortOrder.indexOf(b.key || b.label);
+    
+              if (aIndex === -1 && bIndex === -1) return 0; // No sorting for non-prioritized fields
+              if (aIndex === -1) return 1; // a comes after b
+              if (bIndex === -1) return -1; // a comes before b
+              return aIndex - bIndex; // Sort based on index in sortOrder
+            })
 
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
@@ -273,41 +283,6 @@ const SchemesSearchDetailsSM: React.FC = () => {
         });
     }
   }, [allFormData, Status, selectedOption2]);
-  const accordionItems: AccordionItem[] = [
-    {
-      header: "Scheme Details",
-      content: (
-        <>
-          <DynamicFields
-            formFields={allFormData?.formFields?.form_fields?.filter(
-              (field: any) => field.key !== "branch"
-            )}
-            allFormData={allFormData}
-            onChange={onChange}
-          />
-          <BranchDetails />
-        </>
-      ),
-    },
-    {
-      header: "Entity Details",
-      content: (
-        <DynamicFields
-          formFields={entityDetailsFields}
-          allFormData={entityDetailsFields}
-          onChange={onChange}
-        />
-      ),
-    },
-    {
-      header: "Audit Trail",
-      content: <AuditTrail />,
-    },
-    {
-      header: "Management Details",
-      content: <MangementDetails />,
-    },
-  ];
 
   const handleSetOption1 = (value: any) => {
     if (
@@ -323,11 +298,15 @@ const SchemesSearchDetailsSM: React.FC = () => {
     const filtered = selectedSchemes.filter((f) => f.value !== data.value);
     setSelectedSchems(filtered);
   };
+
   const handleSetOption2 = (value: string) => {
     if (value !== "") {
       setErrors({ statusError: "" });
     }
     setSelectedOption2(value);
+    if (value === "ACTIVE") {
+      setSelectedSchems([]);
+    }
   };
 
   const handleBackButtonClick = () => {
@@ -383,12 +362,94 @@ const SchemesSearchDetailsSM: React.FC = () => {
       })
       .finally(() => setLoader(false));
   };
+
+  const accordionItems: AccordionItem[] = [
+    {
+      header: "Scheme Details",
+      content: (
+        <>
+          <DynamicFields
+            formFields={allFormData?.formFields?.form_fields?.filter(
+              (field: any) => field.key !== "branch"
+            )}
+            allFormData={allFormData}
+            onChange={onChange}
+          />
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
+            <div>
+              <label
+                htmlFor='Select Other Schemes'
+                className='text-base font-normal text-gilroy-medium'
+              >
+                Status
+              </label>
+              <SelectButton
+                // backgroundColor="#F2F2F2"
+                setOption={handleSetOption2}
+                options={filteredOptions}
+                selectedOption={selectedOption2}
+                placeholder='Select'
+                showSearchInput={true}
+                disabled={Status === "BANNED" ? true : false}
+              />
+              <span className='text-red-400'>{errors?.statusError}</span>
+            </div>
+
+            <div>
+              <label
+                htmlFor='Select Other Schemes'
+                className='text-base font-normal text-gilroy-medium'
+              >
+                Select Other Schemes
+              </label>
+              <SelectButtonMultiselect
+                setOption={handleSetOption1}
+                options={schemes}
+                placeholder='Select'
+                multiselect={true}
+                allSelectedOptions={selectedSchemes}
+                remove={remove}
+                className='relative'
+                disabled={
+                  Status === "BANNED" ||
+                  (Status === "UNDER_LETIGATION" &&
+                    selectedOption2 === "ACTIVE")
+                    ? true
+                    : false
+                }
+              />
+            </div>
+          </div>
+          <BranchDetails />
+        </>
+      ),
+    },
+    {
+      header: "Entity Details",
+      content: (
+        <DynamicFields
+          formFields={entityDetailsFields}
+          allFormData={entityDetailsFields}
+          onChange={onChange}
+        />
+      ),
+    },
+    {
+      header: "Audit Trail",
+      content: <AuditTrail />,
+    },
+    {
+      header: "Management Details",
+      content: <MangementDetails />,
+    },
+  ];
+
   return (
-    <div className="flex flex-col min-h-screen ">
-      <div className="mt-6 mx-8">
+    <div className='flex flex-col min-h-screen '>
+      <div className='mt-6 mx-8'>
         <TaskTabsRg />
       </div>
-      <div className="flex  flex-row mt-3 mx-8">
+      <div className='flex  flex-row mt-3 mx-8'>
         {/* <img
           src={InfoIcon}
           alt="InfoIcon"
@@ -401,13 +462,13 @@ const SchemesSearchDetailsSM: React.FC = () => {
           </span>
         </p> */}
       </div>
-      <div className="mt-8 mb-8 mx-8">
+      <div className='mt-8 mb-8 mx-8'>
         {loader ? (
           <LoaderSpin />
         ) : (
           <Accordion items={accordionItems} showAccordion={true} />
         )}
-        <div className="grid grid-cols-2 space-x-3">
+        {/* <div className="grid grid-cols-2 space-x-3">
           <div>
             <label
               htmlFor="Select Other Schemes"
@@ -450,54 +511,54 @@ const SchemesSearchDetailsSM: React.FC = () => {
               }
             />
           </div>
-        </div>
+        </div> */}
       </div>
-      <div className="">
+      <div className=''>
         <div
-          className="flex w-full p-4 px-8 lg:px-[30px] flex-row justify-between items-center "
+          className='flex w-full p-4 px-8 lg:px-[30px] flex-row justify-between items-center '
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
           }}
         >
-          <div className="flex flex-row items-center space-x-2">
+          <div className='flex flex-row items-center space-x-2'>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              className="shrink-0"
+              xmlns='http://www.w3.org/2000/svg'
+              width='24'
+              height='24'
+              viewBox='0 0 24 24'
+              fill='none'
+              className='shrink-0'
             >
               <path
-                d="M15 6L9 12L15 18"
-                stroke="#1D1D1B"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                d='M15 6L9 12L15 18'
+                stroke='#1D1D1B'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
               />
             </svg>
             <button
               onClick={handleBackButtonClick}
-              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+              className='text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]'
             >
               Back
             </button>
           </div>
-          <div className="flex items-center">
+          <div className='flex items-center'>
             <button
               disabled={loader}
-              type="submit"
+              type='submit'
               onClick={handleStatusChange}
-              className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+              className='bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold '
             >
               {loader ? <LoaderSpin /> : "Submit"}
             </button>
           </div>
         </div>
         <div>
-          <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
+          <div className='border-[#E6E6E6] border-[1px] lg:mt-4'></div>
 
-          <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+          <p className='mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4'>
             © 2024 Protean BUDs, All Rights Reserved.
           </p>
         </div>

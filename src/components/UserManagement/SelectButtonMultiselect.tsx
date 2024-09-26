@@ -98,7 +98,15 @@ const SelectButtonMultiselect = ({
             : variantOptions[variant ?? "basic"]
         }
         disabled={disabled} // Apply the disabled prop here
-        style={disabled ? { cursor: "not-allowed", opacity: 0.6 } : {}}
+        style={
+          disabled
+            ? {
+                cursor: "not-allowed",
+                opacity: 0.6,
+                backgroundColor: "#E5E4E2",
+              }
+            : {}
+        }
         type="button"
         ref={buttonRef}
         onClick={() => setArrowDirectionToggle(!arrowDirectionToggle)}

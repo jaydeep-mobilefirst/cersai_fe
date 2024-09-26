@@ -97,17 +97,16 @@ const NewSchemaCreation = () => {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Scheme Name</span>,
     }),
-
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info.getValue();
-
+        const updatedValue = value ==="UNDER_LETIGATION"?value.replace(/_/g, " ") : value
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span> {value}</span>
+            <span> {updatedValue}</span>
           </div>
         );
       },
