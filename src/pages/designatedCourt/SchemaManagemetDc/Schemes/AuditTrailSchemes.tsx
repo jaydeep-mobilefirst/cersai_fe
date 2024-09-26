@@ -256,7 +256,9 @@ const SchemesSearchDetailsSM: React.FC = () => {
                 id="Select Other Schemes"
                 placeholder="type comment "
                 onChange={handleChangeComment}
-                disabled={allFormData?.other?.status === "BANNED"?false:true}
+                disabled={
+                  allFormData?.other?.status === "BANNED" ? false : true
+                }
               />
               <span className="text-red-400">{error}</span>
             </div>
@@ -268,7 +270,13 @@ const SchemesSearchDetailsSM: React.FC = () => {
               >
                 Upload File
               </label>
-              <FileUploadOpenKm setFileData={setFileData} fileData={fileData} setDisable={allFormData?.other?.status === "BANNED"?false:true}/>
+              <FileUploadOpenKm
+                setFileData={setFileData}
+                fileData={fileData}
+                setDisable={
+                  allFormData?.other?.status === "BANNED" ? false : true
+                }
+              />
             </div>
           </div>
 
@@ -405,6 +413,19 @@ const SchemesSearchDetailsSM: React.FC = () => {
               Back
             </button>
           </div>
+          {allFormData?.other?.status === "BANNED" ? (
+            <div className="flex items-center">
+              <button
+                onClick={handleAddCommnent}
+                disabled={loader2}
+                type="submit"
+                className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+              >
+                {loader2 ? <LoaderSpin /> : "Submit"}
+              </button>
+            </div>
+          ) : null}
+          {/* 
           <div className="flex items-center">
             <button
               onClick={handleAddCommnent}
@@ -414,7 +435,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
             >
               {loader2 ? <LoaderSpin /> : "Submit"}
             </button>
-          </div>
+          </div> */}
         </div>
         <div>
           <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>

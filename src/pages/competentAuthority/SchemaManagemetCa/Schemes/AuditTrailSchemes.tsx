@@ -22,7 +22,7 @@ interface AccordionItem {
 
 const options2 = [
   // { label: "Select Status", value: "" },
-  { label: "Banned", value: "BANNED" },
+  { label: "Ban", value: "BANNED" },
   { label: "Active", value: "ACTIVE" },
   // { label: "Under Legislation", value: "UNDER_LETIGATION" },
 ];
@@ -370,6 +370,9 @@ const SchemesSearchDetailsSM: React.FC = () => {
       setErrors({ statusError: "" });
     }
     setSelectedOption2(value);
+    if (value === "ACTIVE") {
+      setSelectedSchems([]);
+    }
   };
 
   const remove = (data: any) => {
