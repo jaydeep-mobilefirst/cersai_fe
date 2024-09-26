@@ -24,6 +24,8 @@ type SchemeType = {
   createdBy: string | null;
   status: string;
   active: boolean;
+  createdByName: string;
+  depositTakerName: string;
 };
 
 const columnHelper = createColumnHelper<SchemeType>();
@@ -100,7 +102,7 @@ const NewSchemaCreation = () => {
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info.getValue();
-        const updatedValue = value ==="UNDER_LETIGATION"?value.replace(/_/g, " ") : value
+        const updatedValue = value ==="UNDER_LETIGATION"?"UNDER LITIGATION" : value
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
@@ -112,12 +114,12 @@ const NewSchemaCreation = () => {
       },
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor("depositTakerId", {
-      cell: (info: any) => info.renderValue(),
+    columnHelper.accessor("depositTakerName", {
+      cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Deposit Taker</span>,
     }),
 
-    columnHelper.accessor("createdBy", {
+    columnHelper.accessor("createdByName", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
     }),

@@ -137,7 +137,7 @@ const SchemeSearch: React.FC = () => {
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info?.getValue();
-        const updatedValue = value ==="UNDER_LETIGATION"?value.replace(/_/g, " ") : value
+        const updatedValue = value ==="UNDER_LETIGATION"?"UNDER LITIGATION" : value
         
         return (
           <div

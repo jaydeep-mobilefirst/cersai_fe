@@ -110,7 +110,7 @@ const SchemaCreation = () => {
       cell: (info) => {
         const value = info.getValue();
         // Replace underscores with spaces if the value is "UNDER_LETIGATION"
-        return value === "UNDER_LETIGATION" ? value.replace(/_/g, " ") : value;
+        return value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value;
       },
     }),
     columnHelper.accessor("id", {

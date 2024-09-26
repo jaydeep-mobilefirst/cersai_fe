@@ -127,7 +127,7 @@ const DepositSchemaCreation = () => {
       header: () => <span>PAN</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info: any) => info.renderValue(),
+      cell: (info: any) => info.renderValue().replace(/_/g, " "),
 
       header: () => <span>Status</span>,
     }),
