@@ -78,44 +78,30 @@ const BranchDetails = () => {
       });
   };
 
-  // useEffect(() => {
-  //   if (filterB !== undefined && filterB !== null) {
-  //     fetchBranchDetails();
-      
-  //     setAllFormData({
-  //       ...allFormData,
-  //       formFields: {
-  //         form_fields: allFormData?.formFields?.form_fields?.filter((f: any) => f.key !== "branch"),
-  //       },
-  //     });
-  //   }
-  // }, [filterB]);
   useEffect(() => {
-    if (filterB !== null && filterB !== undefined && filterB !== '') {
+    if (filterB !== undefined && filterB !== null) {
       fetchBranchDetails();
-  
-      setAllFormData({
-        ...allFormData,
-        formFields: {
-          form_fields: allFormData?.formFields?.form_fields?.filter((f: any) => f.key !== "branch"),
-        },
-      });
-    }else{
-  
-      setAllFormData({
-        ...allFormData,
-        formFields: {
-          form_fields: allFormData?.formFields?.form_fields
-        },
-      });
-
+      // Filter branches only when dataBranches has data
+      if (dataBranches?.length > 0) {
+        setAllFormData({
+          ...allFormData,
+          formFields: {
+            form_fields: allFormData?.formFields?.form_fields?.filter(
+              (f: any) => f.key !== "branch"
+            ),
+          },
+        });
+      } else {
+        // Keep the form fields intact if dataBranches is empty
+        setAllFormData({
+          ...allFormData,
+          formFields: {
+            form_fields: allFormData?.formFields?.form_fields,
+          },
+        });
+      }
     }
-
-  }, [filterB]);
-  
-
-
-
+  }, [filterB, dataBranches]);
 
   const columns = [
     columnHelper.accessor("sno", {

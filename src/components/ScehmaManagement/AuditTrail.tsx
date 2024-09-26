@@ -3,7 +3,7 @@ import DirectBox from "../../assets/images/send.png";
 import ReactTable from "../userFlow/common/ReactTable";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import { useEffect, useState } from "react";
-import moment from 'moment';
+import moment from "moment";
 import {
   handleViewOpenkmFileWithDocumentId,
   isUUID,
@@ -32,6 +32,7 @@ const AuditTrail = () => {
   const { allFormData } = useDepositTakerRegistrationStore((state) => state);
   const [auditTrail, setAuditTrail] = useState([]);
   const columnHelper = createColumnHelper<TableType>();
+  console.log({ allFormData }, "audittrail data checking");
 
   useEffect(() => {
     setAuditTrail(allFormData?.other?.schemeAuditTrail);
@@ -91,7 +92,7 @@ const AuditTrail = () => {
     columnHelper.accessor("updatedAt", {
       cell: (info: any) => {
         let modifiedDate = info?.getValue();
-        modifiedDate = moment(modifiedDate).format('DD-MM-YYYY HH:mm');
+        modifiedDate = moment(modifiedDate).format("DD-MM-YYYY HH:mm");
         return modifiedDate;
       },
       header: () => <span>Date</span>,
