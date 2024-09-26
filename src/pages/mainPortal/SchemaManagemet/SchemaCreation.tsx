@@ -107,7 +107,11 @@ const SchemaCreation = () => {
     }),
     columnHelper.accessor("status", {
       header: () => "Status",
-      cell: (info) => info.getValue(),
+      cell: (info) => {
+        const value = info.getValue();
+        // Replace underscores with spaces if the value is "UNDER_LETIGATION"
+        return value === "UNDER_LETIGATION" ? value.replace(/_/g, " ") : value;
+      },
     }),
     columnHelper.accessor("id", {
       header: () => "Action",

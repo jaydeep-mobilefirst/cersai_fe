@@ -97,10 +97,13 @@ const NewSchemaCreation = () => {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Scheme Name</span>,
     }),
-
     columnHelper.accessor("status", {
-      cell: (info: any) => info.renderValue(),
-      header: () => <span>Status</span>,
+      header: () => "Status",
+      cell: (info) => {
+        const value = info.getValue();
+        // Replace underscores with spaces if the value is "UNDER_LETIGATION"
+        return value === "UNDER_LETIGATION" ? value.replace(/_/g, " ") : value;
+      },
     }),
 
     columnHelper.accessor("createdBy", {

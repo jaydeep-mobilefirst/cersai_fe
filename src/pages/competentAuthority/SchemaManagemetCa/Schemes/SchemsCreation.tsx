@@ -106,13 +106,13 @@ const NewSchemaCreation = () => {
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info?.getValue();
-
+        const updatedValue = value ==="UNDER_LETIGATION"?value.replace(/_/g, " ") : value
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span className="text-sm">{value}</span>
+            <span className="text-sm">{updatedValue}</span>
           </div>
         );
       },
