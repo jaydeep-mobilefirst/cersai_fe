@@ -250,7 +250,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
             Status === "ACTIVE" ||
             (Status === "UNDER_LETIGATION" && selectedOption2 === "BANNED")
               ? "ACTIVE"
-              : "ALL"
+              : "ACTIVE"
           }`
         )
         .then((res) => {
