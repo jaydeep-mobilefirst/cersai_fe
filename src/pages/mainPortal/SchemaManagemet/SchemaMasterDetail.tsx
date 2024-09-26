@@ -142,6 +142,7 @@ const SchemeMasterForm = () => {
           fieldTypes: response?.data?.data?.fieldTypes,
           validations: response?.data?.data?.validations,
           fileTypes: response?.data?.data?.fileTypes,
+          other: userData,
         });
       }
       setLoader(false);

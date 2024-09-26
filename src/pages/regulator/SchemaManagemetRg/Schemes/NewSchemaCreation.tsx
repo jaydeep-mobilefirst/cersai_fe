@@ -264,7 +264,7 @@ const SchemeDetails = () => {
       if (response.data?.success) {
         setSubmitted(true);
         setPopData({
-          para1: "Addition Successful",
+          para1: `Addition Successful ${response?.data?.data?.newScheme?.uniqueId}`,
           // para2: response.data?.message,
           para2: response.data?.message,
           show: true,
@@ -279,8 +279,13 @@ const SchemeDetails = () => {
       }
       setLoader(false);
       // SuccessPopup();
-    } catch (error) {
+    } catch (error:any) {
       setLoader(false);
+      setPopData({
+        para1: "Something went wrong",
+        para2: error?.message || "An unexpected error occurred.",
+        show: true,
+      });
     }
   };
 
