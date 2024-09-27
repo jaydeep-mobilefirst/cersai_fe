@@ -37,7 +37,9 @@ const SchemeMasterForm = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
-  const branchDetails = allFormData?.formFields?.form_fields?.find((item:any)=>item.key==="branch")?.userInput
+  const branchDetails = allFormData?.formFields?.form_fields?.find(
+    (item: any) => item.key === "branch"
+  )?.userInput;
   console.log("aaaalllllffff", allFormData);
 
   const fetchSchema = async () => {
@@ -177,11 +179,10 @@ const SchemeMasterForm = () => {
   useEffect(() => {
     checkForEmptyFields();
   }, [allFormData]);
-  
 
   // useEffect(() => {
   //   if (branchDetails) {
-      
+
   //     setAllFormData({
   //       ...allFormData,
   //       formFields: {
@@ -324,10 +325,10 @@ const SchemeMasterForm = () => {
       header: "Audit Trail",
       content: <AuditTrail />,
     },
-    {
-      header: "Management Details",
-      content: <MangementDetails />,
-    },
+    // {
+    //   header: "Management Details",
+    //   content: <MangementDetails />,
+    // },
   ];
   const handleBackButtonClick = () => {
     navigate("/dt/scheme");
