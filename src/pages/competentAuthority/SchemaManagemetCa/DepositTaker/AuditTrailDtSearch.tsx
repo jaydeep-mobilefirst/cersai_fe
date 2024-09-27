@@ -302,7 +302,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         }));
         const response = await axiosTokenInstance.post(
           "/deposit-taker/add-form-fields",
-          { formData, regulatorId: masterEntityId, createdBy: 'CA' }
+          { formData, regulatorId: masterEntityId, createdBy: "CA" }
         );
         if (response.data.success) {
           setPara1(
@@ -355,10 +355,13 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     setLoader(true);
     const file = event.target.files[0];
     const formData = new FormData();
-    formData.set("file", file);
-    const entityId = sessionStorage.getItem("entityUniqueId");
+    formData.append("file", file);
     axiosTokenInstance
-      .post(`/deposit-taker/bulk-upload`, formData)
+      .post(`/deposit-taker/bulk-upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
         let data = res.data;
         const total = data?.data?.created?.count + data?.data?.failed?.count;
@@ -499,23 +502,21 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
               <div className="mt-auto">
                 <div className="border-[#E6E6E6] border-[1px]"></div>
 
-                
-
-<div className="text-center mt-auto">
-  <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
-    COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
-  </h1>
-  <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
-    Powered and managed by{" "}
-    <a
-      href="https://www.proteantech.in/"
-      className="underline text-gilroy-regular font-bold"
-      target="_blank"
-    >
-      Protean eGov Technologies
-    </a>{" "}
-  </p>
-</div>
+                <div className="text-center mt-auto">
+                  <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+                    COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+                  </h1>
+                  <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+                    Powered and managed by{" "}
+                    <a
+                      href="https://www.proteantech.in/"
+                      className="underline text-gilroy-regular font-bold"
+                      target="_blank"
+                    >
+                      Protean eGov Technologies
+                    </a>{" "}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
