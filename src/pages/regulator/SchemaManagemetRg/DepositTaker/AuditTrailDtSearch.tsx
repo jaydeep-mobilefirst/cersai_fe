@@ -357,12 +357,32 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
 
   const handleFileUpload = (event: any) => {
     setLoader(true);
+    
+    // Capture file from event
     const file = event.target.files[0];
+    
+    // Check if file exists
+    if (!file) {
+      Swal.fire({
+        icon: "error",
+        text: "No file selected",
+        title: "Error",
+      });
+      setLoader(false);
+      return;
+    }
+    
     const formData = new FormData();
-    formData.set("file", file);
-    const entityId = sessionStorage.getItem("entityUniqueId");
+    formData.append("file", file);  // append the file instead of set
+  
+    console.log(formData, 'Formdata')
+  
     axiosTokenInstance
-      .post(`/deposit-taker/bulk-upload`, formData)
+      .post(`/deposit-taker/bulk-upload`, formData,         {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
         let data = res.data;
         const total = data?.data?.created?.count + data?.data?.failed?.count;
@@ -386,8 +406,8 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       })
       .catch((e) => {
         Swal.fire({
-          title: "Unable upload file",
-          text: e?.response?.data?.detail?.message,
+          title: "Unable to upload file",
+          text: e?.response?.data?.detail?.message || "An error occurred",
           icon: "error",
         });
       })
@@ -396,6 +416,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         setUploadKey(uploadInputKey + 1);
       });
   };
+  
 
   return (
     <div className='flex flex-col justify-between'  style={{ minHeight: "calc(100vh - 110px)" }}>

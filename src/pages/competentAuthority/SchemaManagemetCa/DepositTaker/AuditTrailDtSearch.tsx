@@ -302,7 +302,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         }));
         const response = await axiosTokenInstance.post(
           "/deposit-taker/add-form-fields",
-          { formData, regulatorId: masterEntityId, createdBy: 'CA' }
+          { formData, regulatorId: masterEntityId, createdBy: "CA" }
         );
         if (response.data.success) {
           setPara1(
@@ -355,10 +355,13 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     setLoader(true);
     const file = event.target.files[0];
     const formData = new FormData();
-    formData.set("file", file);
-    const entityId = sessionStorage.getItem("entityUniqueId");
+    formData.append("file", file);
     axiosTokenInstance
-      .post(`/deposit-taker/bulk-upload`, formData)
+      .post(`/deposit-taker/bulk-upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
         let data = res.data;
         const total = data?.data?.created?.count + data?.data?.failed?.count;
@@ -394,32 +397,32 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col justify-between h-screen">
-      <div className="mt-6 mx-2">
+    <div className='flex flex-col justify-between h-screen'>
+      <div className='mt-6 mx-2'>
         <TaskTabsCa />
       </div>
       {accordionLoading ? (
         <>
-          <div className="flex justify-center items-center">
+          <div className='flex justify-center items-center'>
             <LoaderSpin />
           </div>
         </>
       ) : (
         <>
-          <div className="mx-8 mt-4 mb-1">
-            <div className="flex flex-col xl:flex-row md:flex-row lg:flex-row items-center justify-between">
-              <div className="flex flex-row">
+          <div className='mx-8 mt-4 mb-1'>
+            <div className='flex flex-col xl:flex-row md:flex-row lg:flex-row items-center justify-between'>
+              <div className='flex flex-row'>
                 <img
                   src={InfoIcon}
-                  alt="InfoIcon"
-                  className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
+                  alt='InfoIcon'
+                  className='h-6 w-6 sm:h-8 sm:w-8 mr-2'
                 />
-                <p className="text-[#808080]">
+                <p className='text-[#808080]'>
                   You can Upload Deposit Takers data in bulk. Please use this
                   given
                   <span
                     onClick={handleDownloadTemplate}
-                    className="text-blue-400 hover:cursor-pointer"
+                    className='text-blue-400 hover:cursor-pointer'
                   >
                     &nbsp;Template.
                   </span>
@@ -429,26 +432,26 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
                 onClick={() => {
                   uploadButtonRef.current?.click();
                 }}
-                className="w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer"
+                className='w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer'
               >
                 <input
                   onChange={handleFileUpload}
-                  type="file"
-                  name=""
-                  id=""
-                  className="hidden"
-                  accept=".xls, .xlsx"
+                  type='file'
+                  name=''
+                  id=''
+                  className='hidden'
+                  accept='.xls, .xlsx'
                   ref={uploadButtonRef}
                   key={uploadInputKey}
                   disabled={loader}
                 />
-                <div className="justify-start items-center gap-1.5 inline-flex">
-                  <div className="w-6 h-6 justify-center items-center flex">
-                    <div className="w-6 h-6 relative">
-                      <img src={UploadIcon} alt="" />
+                <div className='justify-start items-center gap-1.5 inline-flex'>
+                  <div className='w-6 h-6 justify-center items-center flex'>
+                    <div className='w-6 h-6 relative'>
+                      <img src={UploadIcon} alt='' />
                     </div>
                   </div>
-                  <div className="text-white text-base font-normal">
+                  <div className='text-white text-base font-normal'>
                     {" "}
                     {loader ? <LoaderSpin /> : "Upload"}
                   </div>
@@ -460,46 +463,46 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       )}
       {accordionLoading ? (
         <>
-          <div className="flex justify-center items-center">
+          <div className='flex justify-center items-center'>
             <LoaderSpin />
           </div>
         </>
       ) : (
         <>
-          <div className="mt-8 mb-8 mx-8">
+          <div className='mt-8 mb-8 mx-8'>
             <Accordion items={accordionItems} />
           </div>
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between ">
+          <div className='flex flex-col lg:flex-row lg:items-center justify-between '>
             <div>
               <div
-                className="flex w-full flex-row justify-end items-center"
+                className='flex w-full flex-row justify-end items-center'
                 style={{
                   width: `${
                     screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
                   }`,
                 }}
               >
-                <div className="flex items-center space-x-6 mb-4 pr-4">
+                <div className='flex items-center space-x-6 mb-4 pr-4'>
                   <p
                     onClick={handleCancelClick}
-                    className="text-[#1c468e]  rounded-xl p-3 border border-[#1c468e] text-gilroy-medium cursor-pointer text-sm w-full sm:w-auto sm:max-w-xs "
+                    className='text-[#1c468e]  rounded-xl p-3 border border-[#1c468e] text-gilroy-medium cursor-pointer text-sm w-full sm:w-auto sm:max-w-xs '
                   >
                     Cancel
                   </p>
 
                   <button
                     onClick={onSubmit}
-                    type="submit"
-                    className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+                    type='submit'
+                    className='bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold '
                   >
                     {loader ? <LoaderSpin /> : " Submit"}
                   </button>
                 </div>
               </div>
-              <div className="mt-auto">
-                <div className="border-[#E6E6E6] border-[1px]"></div>
+              <div className='mt-auto'>
+                <div className='border-[#E6E6E6] border-[1px]'></div>
 
-                <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer py-4">
+                <p className='text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer py-4'>
                   © 2024 Protean BUDs, All Rights Reserved.
                 </p>
               </div>
