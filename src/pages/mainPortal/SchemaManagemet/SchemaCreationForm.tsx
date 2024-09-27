@@ -407,7 +407,7 @@ const SchemaCreationForm = () => {
   return (
     <div
       className='relative xl:ml-[40px]'
-      style={{ minHeight: "calc(100vh - 150px)" }}
+      style={{ minHeight: "calc(100vh - 140px)" }}
     >
       <div className='mt-6'>
         <TaskTabs />
