@@ -163,7 +163,7 @@ const SchemeSearch: React.FC = () => {
       cell: (info: any) => {
         let modifiedDate = info?.getValue();
         // Check if the date value exists before formatting
-        modifiedDate = modifiedDate ? moment(modifiedDate).format('DD-MM-YYYY HH:mm') : "N/A";
+        modifiedDate = modifiedDate ? moment(modifiedDate).format('DD-MM-YYYY') : "N/A";
         return modifiedDate;
       },
       header: () => <span>Start Date</span>,

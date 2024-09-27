@@ -33,9 +33,8 @@ const SchemeDetails = () => {
   const depositTakerId = allFormData?.formFields?.form_fields?.find(
     (field: any) => field?.key === "depositTakerId"
   )?.userInput;
-  
+
   useEffect(() => {
-    
     if (depositTakerId) {
       fetchFormFields();
     }
@@ -66,7 +65,6 @@ const SchemeDetails = () => {
     }
   }, [fetchRegulatorData]);
 
-  
   const fetchFormFields = () => {
     axiosTokenInstance
       .get(`/registration/field-data/1?status=addToProfile`)
@@ -120,7 +118,10 @@ const SchemeDetails = () => {
           console.log(obj, "obj-----");
           setRegulatorData(
             obj?.formFields?.form_fields?.find(
-              (item: any) => item.key === "regulatorName" || item.key ==="regulator" || item.key ==="regulatorNameRG"
+              (item: any) =>
+                item.key === "regulatorName" ||
+                item.key === "regulator" ||
+                item.key === "regulatorNameRG"
             )?.userInput
           );
           // setAllFormData(obj);
@@ -137,10 +138,10 @@ const SchemeDetails = () => {
   };
   const fetchSchema = async () => {
     try {
-      setLoader(true)
+      setLoader(true);
       const response = await axiosTokenInstance.get(`/scheme/field-data/2`);
       if (response.data.success) {
-        setLoader(false)
+        setLoader(false);
         const formFields = response?.data?.data?.formFields?.allFormFields.map(
           (field: any) => ({
             ...field,
@@ -150,12 +151,11 @@ const SchemeDetails = () => {
             // id: field.fieldTypeId,
           })
         );
-        
+
         await fetchFormFields();
 
-
-      // Sort form fields based on the sortOrder
-      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+        // Sort form fields based on the sortOrder
+        formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
         setAllFormData({
           ...response?.data?.data,
@@ -175,12 +175,19 @@ const SchemeDetails = () => {
                       ),
                     },
                   };
-                } else if (field?.key === "regulator" || field?.key === "regulatorName" || field?.key ==="regulatorNameRG") {
+                } else if (
+                  field?.key === "regulator" ||
+                  field?.key === "regulatorName" ||
+                  field?.key === "regulatorNameRG"
+                ) {
                   console.log(field, "key");
                   // fetchFormFields();
                   // Ensure fetchRegulatorData is available
                   const regulatorValue = fetchRegulatorData; // Default to empty string if not fetched yet
-                  console.log("regulatorValueregulatorValue", fetchRegulatorData);
+                  console.log(
+                    "regulatorValueregulatorValue",
+                    fetchRegulatorData
+                  );
                   return {
                     ...field,
                     userInput: fetchRegulatorData,
@@ -188,8 +195,7 @@ const SchemeDetails = () => {
                     error: "",
                     typeId: field?.fieldTypeId,
                   };
-                }
-                else {
+                } else {
                   return field;
                 }
               })
@@ -290,7 +296,7 @@ const SchemeDetails = () => {
       }
       setLoader(false);
       // SuccessPopup();
-    } catch (error:any) {
+    } catch (error: any) {
       setLoader(false);
       setPopData({
         para1: "Something went wrong",
@@ -330,7 +336,10 @@ const SchemeDetails = () => {
               return { ...f, userInput: event?.value };
             } else if (f?.key === "regulator") {
               return { ...f, userInput: fetchRegulatorData };
-            } else if (f?.key === "startDateByCARG" || f?.key === "startDateByDT") {
+            } else if (
+              f?.key === "startDateByCARG" ||
+              f?.key === "startDateByDT"
+            ) {
               sessionStorage.setItem("startDate", event?.value);
               return f;
             } else {
@@ -355,12 +364,15 @@ const SchemeDetails = () => {
         <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
           <div className="w-full mb-40">
             <div className="mt-10">
-              {loader?<LoaderSpin/>:
-              <DynamicFields
-                formFields={allFormData?.formFields?.form_fields}
-                allFormData={allFormData}
-                onChange={handleOnchange}
-              />}
+              {loader ? (
+                <LoaderSpin />
+              ) : (
+                <DynamicFields
+                  formFields={allFormData?.formFields?.form_fields}
+                  allFormData={allFormData}
+                  onChange={handleOnchange}
+                />
+              )}
             </div>
             <div className="flex flex-shrink-0 mt-[20px]">
               <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
@@ -438,9 +450,21 @@ const SchemeDetails = () => {
             <div>
               <div className="border-[#E6E6E6] border-[1px] lg:mt-4 "></div>
 
-              <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
-                © 2024 Protean BUDs, All Rights Reserved.
-              </p>
+              <div className="text-center mt-auto">
+                <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+                  COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+                </h1>
+                <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+                  Powered and managed by{" "}
+                  <a
+                    href="https://www.proteantech.in/"
+                    className="underline text-gilroy-regular font-bold"
+                    target="_blank"
+                  >
+                    Protean eGov Technologies
+                  </a>{" "}
+                </p>
+              </div>
             </div>
           </div>
         </div>

@@ -114,7 +114,7 @@ const MyTaskStatus = () => {
       header: () => <span>Deposit Taker Name</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info) => <span>{info.getValue()}</span>,
+      cell: (info) => <span>{info.getValue()?.replace(/_/g," ")}</span>,
       header: () => <span>Status</span>,
     }),
     columnHelper.accessor((row) => row, {

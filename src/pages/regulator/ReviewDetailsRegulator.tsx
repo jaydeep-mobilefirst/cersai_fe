@@ -15,6 +15,10 @@ import { axiosTraceIdInstance } from "../../utils/axios";
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isPdfMode, setIsPdfMode] = useState(false);
+  const { setAllFormData, setAllDocumentData, allFormData } =
+    useDepositTakerRegistrationStore((state) => state);
+  const entityName = allFormData?.formFields?.form_fields?.find((item)=>item.key==="regulatorNameRG")?.userInput
+  
   const downloadPDF = () => {
     setIsDownloading(true);
     setIsPdfMode(true);
@@ -36,7 +40,7 @@ const useDownloadPDF = () => {
     const options = {
       margin: 0.2,
       // filename: "Reviewdetails.pdf",
-      filename: `Regulator_${getCurrentDateTime()}.pdf`,
+      filename: `RG_${entityName}_${getCurrentDateTime()}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 2 : 4 },
       jsPDF: {
