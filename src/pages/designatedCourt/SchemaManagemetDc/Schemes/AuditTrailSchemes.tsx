@@ -392,7 +392,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
     }
   };
   return (
-    <div className="flex flex-col min-h-screen justify-between">
+    <div className="flex flex-col min-h-screen justify-between" style={{ minHeight: "calc(100vh - 110px)" }}>
       <div>
       <div className="mt-6 mx-8">
         <TaskTabsDc />
