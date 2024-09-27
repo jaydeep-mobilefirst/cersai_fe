@@ -531,8 +531,6 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
                 <div className="mt-auto">
                   <div className="border-[#E6E6E6] border-[1px]"></div>
 
-                  <div className="border-b-2 border-[#E6E6E6]"></div>
-
                   <div className="text-center mt-auto">
                     <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
                       COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
