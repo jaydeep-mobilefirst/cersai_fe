@@ -21,6 +21,7 @@ type SchemeType = {
   name: string;
   status: string;
   active: boolean;
+  createdBy:any;
 };
 
 const columnHelper = createColumnHelper<SchemeType>();
@@ -58,7 +59,7 @@ const SchemaCreation = () => {
       );
       console.log(data?.data?.limit, "data");
       setSchemaData(data?.data?.data);
-      setTotal(data?.data?.limit);
+      setTotal(data?.data?.totalCount);
       setLoader(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
@@ -71,10 +72,11 @@ const SchemaCreation = () => {
     fetchSchemes();
   }, [page, pageSize]);
 
-  const NavigateScheme = (uniqueId: any) => {
+  const NavigateScheme = (uniqueId: any,createdBy:any) => {
     navigate("/dt/scheme/creation", {
       state: {
         uniqueId: uniqueId,
+        createdBy:createdBy
       },
     });
   };
@@ -105,7 +107,11 @@ const SchemaCreation = () => {
     }),
     columnHelper.accessor("status", {
       header: () => "Status",
-      cell: (info) => info.getValue(),
+      cell: (info) => {
+        const value = info.getValue();
+        // Replace underscores with spaces if the value is "UNDER_LETIGATION"
+        return value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value;
+      },
     }),
     columnHelper.accessor("id", {
       header: () => "Action",
@@ -140,10 +146,11 @@ const SchemaCreation = () => {
 
       cell: (info) => {
         const uniqueId = info?.row?.original?.uniqueId;
+        const createdBy = info?.row?.original?.createdBy;
         return (
           <div className='flex justify-center items-center '>
             {/* <Link to={"/dt/schema/creation"}> */}
-            <div onClick={() => NavigateScheme(uniqueId)}>
+            <div onClick={() => NavigateScheme(uniqueId,createdBy)}>
               <img src={Eye} alt='Eye ' className='cursor-pointer' />
             </div>
             {/* </Link> */}
@@ -319,7 +326,7 @@ const SchemaCreation = () => {
           </div>
         </div>
         <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
-          <div className=' mb-12'>
+          <div className=' mb-20'>
             {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (

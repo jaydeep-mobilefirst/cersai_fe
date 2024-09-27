@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Arrow from "../../assets/images/Arrow.svg";
 import download from "../../assets/images/new_images/arrowDown.png";
@@ -84,9 +84,34 @@ const ReviewDetails = () => {
   const [submitted, setSubmitted] = useState(false);
   const { allFormData, documentData, masterEntityId } =
     useDepositTakerRegistrationStore((state) => state);
+  const [caMasterEntityId, setCaMasterEntityId] = useState(null);
+
+  console.log({ allFormData }, "allFormData");
+  useEffect(() => {
+    const masterEntityValue =
+      allFormData &&
+      allFormData?.formFields?.form_fields?.find(
+        (field) => field?.key === "competentAuthorityName"
+      );
+
+    if (masterEntityValue && masterEntityValue.userInput) {
+      const matchingOption = masterEntityValue.dropdown_options.options.find(
+        (option) => option.name === masterEntityValue.userInput
+      );
+
+      if (matchingOption) {
+        // Set the masterEntityId in the state
+        setCaMasterEntityId(matchingOption.masterEntityId);
+        console.log(matchingOption.masterEntityId, "matchingOption");
+      }
+    }
+  }, [allFormData]);
 
   const submit = async (e: any) => {
     e.preventDefault();
+    if (!isChecked) {
+      return;
+    }
     setLoader(true);
     let finalResult =
       allFormData &&
@@ -126,7 +151,7 @@ const ReviewDetails = () => {
       {
         identity: allFormData?.uniqueId,
         formData: finalResult,
-        masterId: masterEntityId,
+        masterId: masterEntityId || caMasterEntityId,
       }
     )
       .then((response: any) => {
@@ -296,14 +321,7 @@ const ReviewDetails = () => {
                 </div>
                 <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
                   I hereby declare that all information provided by me is
-                  correct and I agree to the &nbsp;
-                  <Link
-                    className="text-[#1c468e] underline cursor-pointer"
-                    target={"_blank"}
-                    to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
-                  >
-                    Terms and Conditions
-                  </Link>
+                  correct.
                 </div>
               </div>
             )}
@@ -314,7 +332,7 @@ const ReviewDetails = () => {
           <div className=" ml-5">
             <button
               className="text-gilroy-regular text-sm flex items-center p-4 sm:p-0"
-              onClick={() => Navigate(-1)}
+              onClick={() => Navigate("/competent/authority/nodaldetails")}
             >
               <img src={Arrow} alt="back Arrow" className="mr-2" />
               Back
@@ -323,6 +341,7 @@ const ReviewDetails = () => {
           <div className="flex mr-7">
             <div>
               <button
+                disabled={!isChecked}
                 onClick={downloadPDF}
                 className={`w-auto md:w-[208px] md:h-[48px] text-gilroy-semibold gap-[8px] flex rounded-[12px] text-[#1c468e] border border-[#1c468e] p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px]   ${
                   isChecked ? "" : "opacity-50"
@@ -334,6 +353,7 @@ const ReviewDetails = () => {
             </div>
             <div>
               <button
+                disabled={!isChecked}
                 type="submit"
                 onClick={submit} // Assuming this action should be tied to the Submit button
                 className={`ml-[16px] w-auto md:w-[109px] md:h-[48px] text-gilroy-semibold rounded-[12px] bg-[#1c468e] text-[#ffffff] border p-3 md:pt-[12px] md:pr-[22px] md:pb-[12px] md:pl-[22px] ${

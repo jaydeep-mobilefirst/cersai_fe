@@ -19,6 +19,7 @@ type Props = {
   multiselect?: boolean;
   allSelectedOptions?: any[];
   remove?: (data: any) => void;
+  disabled?: boolean;
 };
 
 const SelectButtonMultiselect = ({
@@ -31,10 +32,15 @@ const SelectButtonMultiselect = ({
   showSearchInput,
   className,
   variant,
-  allSelectedOptions,
+  allSelectedOptions = [],
   multiselect,
+  disabled = false,
   remove = (data: any) => {},
 }: Props) => {
+  const selectedOptionsArray = Array.isArray(allSelectedOptions)
+    ? allSelectedOptions
+    : [];
+  console.log(selectedOptionsArray, "selectedOptionsArray");
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -78,11 +84,11 @@ const SelectButtonMultiselect = ({
     };
   }, [arrowDirectionToggle]);
 
-  const handleMultiselect = (e : any, option : any) => {
-      e.preventDefault()
-      setOption(option);
-      setArrowDirectionToggle(false);
-  }
+  const handleMultiselect = (e: any, option: any) => {
+    e.preventDefault();
+    setOption(option);
+    setArrowDirectionToggle(false);
+  };
   return (
     <div className={className}>
       <button
@@ -90,6 +96,16 @@ const SelectButtonMultiselect = ({
           multiselect
             ? variantOptions["multiselect"]
             : variantOptions[variant ?? "basic"]
+        }
+        disabled={disabled} // Apply the disabled prop here
+        style={
+          disabled
+            ? {
+                cursor: "not-allowed",
+                opacity: 0.6,
+                backgroundColor: "#E5E4E2",
+              }
+            : {}
         }
         type="button"
         ref={buttonRef}

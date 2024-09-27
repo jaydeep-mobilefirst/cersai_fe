@@ -126,7 +126,7 @@ const DepositSchemaCreation = () => {
       header: () => <span>PAN</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info: any) => info.renderValue(),
+      cell: (info: any) => info.renderValue().replace(/_/g, " "),
 
       header: () => <span>Status</span>,
     }),
@@ -310,7 +310,7 @@ const DepositSchemaCreation = () => {
           </div>
         </div>
         <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-          <div className="mb-20">
+          <div className="mb-40">
             {loader ? (
               <LoaderSpin />
             ) : myTaskData?.length > 0 ? (

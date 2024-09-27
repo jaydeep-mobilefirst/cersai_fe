@@ -27,6 +27,7 @@ const DashboardProfileCompetent = (props: Props) => {
   const { setAllFormData, setAllDocumentData } =
     useDepositTakerRegistrationStore((state) => state);
   const fetchFormFields = () => {
+    setLoader(true)
     axiosTokenInstance
       .get(`/registration/field-data/3?status=addToProfile`)
       .then(async (response) => {
@@ -82,6 +83,7 @@ const DashboardProfileCompetent = (props: Props) => {
         //   throw new Error("Error getting data, Please try later!");
         // }
         if (response?.data?.success) {
+          setLoader(false)
           let dtData: any = [];
           try {
             let depositTakerData = await axiosTokenInstance.get(
@@ -91,6 +93,7 @@ const DashboardProfileCompetent = (props: Props) => {
               depositTakerData?.data?.data?.competentAuthority
                 ?.competentAuthorityData;
           } catch (error) {
+            setLoader(false)
             console.log("Error");
           }
           let modifiedFormFields = response.data.data?.formFields?.map(

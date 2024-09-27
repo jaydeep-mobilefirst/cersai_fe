@@ -22,15 +22,18 @@ import useFetchDistrict from "../../contextAPI/useFetchDistrict";
 import { useLandingStore } from "../../zust/useLandingStore";
 import { useLangugaeStore } from "../../zust/useLanguageUsStore";
 import { axiosTraceIdInstance } from "../../utils/axios";
+import moment from "moment";
 
 type SchemeType = {
   sn: number;
   id: string;
   name: string;
   depositTakerId: string;
+  depositTakerName: string;
   // createdBy: string;
   createdBy: string | null;
   status: string;
+  startDate: string;
   active: boolean;
 };
 
@@ -60,6 +63,8 @@ const SchemeSearch: React.FC = () => {
   
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const {language} = useLangugaeStore((state) => state);
+
+  console.log("data-scheme",schemaData)
 
   useEffect(() => {
     homePageCmsApi();
@@ -132,31 +137,43 @@ const SchemeSearch: React.FC = () => {
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info?.getValue();
-
+        const updatedValue = value ==="UNDER_LETIGATION"?"UNDER LITIGATION" : value
+        
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span className="text-sm">{value}</span>
+            <span className="text-sm">{updatedValue}</span>
           </div>
         );
       },
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor("depositTakerId", {
+    columnHelper.accessor("depositTakerName", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
-      header: () => <span>Deposit Taker</span>,
+      header: () => <span>Deposit Taker Name</span>,
     }),
 
     columnHelper.accessor("createdBy", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
     }),
+    columnHelper.accessor("startDate", {
+      cell: (info: any) => {
+        let modifiedDate = info?.getValue();
+        // Check if the date value exists before formatting
+        modifiedDate = modifiedDate ? moment(modifiedDate).format('DD-MM-YYYY HH:mm') : "N/A";
+        return modifiedDate;
+      },
+      header: () => <span>Start Date</span>,
+    }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
       cell: (info) => {
         let createdBy = info?.cell?.row?.original?.createdBy;
+        const uniqueId = info?.row?.original?.id;
+        const depositTakerId = info?.row?.original?.depositTakerId;
         const NavigateScheme = (uniqueId: any, depositTakerId: any) => {
           navigate("/scheme-search-details", {
             state: {
@@ -166,8 +183,6 @@ const SchemeSearch: React.FC = () => {
             },
           });
         };
-        const uniqueId = info?.row?.original?.id;
-        const depositTakerId = info?.row?.original?.depositTakerId;
         return (
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}
@@ -295,6 +310,7 @@ const SchemeSearch: React.FC = () => {
               <div className=" flex justify-center items-center">
                 <h1>No data available</h1>
               </div>
+              // <LoaderSpin />
             )}
           </div>
           <div className="mt-10">

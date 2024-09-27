@@ -1,26 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LoaderSpin from "../../LoaderSpin";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import useStore from "../../../store/statusStore";
 
 interface FooterProps {
   onSubmit?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   loader?: boolean;
+  loader1?: boolean;
   disabled?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   hidecontiuebtn?: boolean;
+  showbackbtn?: boolean;
+  path?: any;
+  backNavigation?: any;
 }
 
 const Footer: React.FC<FooterProps> = ({
   onSubmit,
   loader,
+  loader1,
   disabled,
   onClick,
   hidecontiuebtn,
+  showbackbtn,
+  path,
+  backNavigation,
 }) => {
   const disabledField = sessionStorage.getItem("user_status");
+  const Navigate = useNavigate();
 
   const location = useLocation();
   const { pathname } = location;
+
+  const { data, loading, error, fetchData } = useStore();
+
+  useEffect(() => {
+    if (checkPathName(pathname)) {
+      fetchData(); // Trigger the API call when the component mounts
+    }
+  }, [fetchData]);
 
   const checkStatus = (status: any): any => {
     switch (disabledField) {
@@ -57,14 +75,60 @@ const Footer: React.FC<FooterProps> = ({
   };
   const showbtn = checkPathName(pathname);
 
-  const disableFieldStatus = checkPathName(pathname)
-    ? checkStatus(disabledField)
-    : false;
+  if (pathname == "/dt/profile") {
+    var disableFieldStatus = checkPathName(pathname)
+      ? disabledField == "RETURNED"
+        ? false
+        : !data?.profileUpdate
+      : !data?.profileUpdate;
+  } else {
+    disableFieldStatus = checkPathName(pathname)
+      ? checkStatus(disabledField)
+      : false;
+  }
 
   return (
     <div>
       {" "}
-      <div className="flex flex-col sm:flex-row justify-end sm:justify-end items-center space-y-4 sm:space-y-0 pt-4 pb-4">
+      <div
+        className={`flex flex-col sm:flex-row ${
+          showbackbtn ? "justify-between" : "justify-end"
+        } items-center space-y-4 sm:space-y-0 pt-4 pb-4`}
+      >
+        {showbackbtn && (
+          <>
+            <div
+              className="flex flex-row items-center space-x-2"
+              // onClick={() => Navigate(path)}
+              onClick={backNavigation}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="shrink-0"
+              >
+                <path
+                  d="M15 6L9 12L15 18"
+                  stroke="#1D1D1B"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <button
+                type="submit"
+                className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723] text-gilroy-regular"
+                onClick={backNavigation}
+              >
+                Back
+              </button>
+            </div>
+          </>
+        )}
+
         <div className="flex items-center">
           {disableFieldStatus ? (
             <></>
@@ -83,7 +147,7 @@ const Footer: React.FC<FooterProps> = ({
                       disabled ? "bg-gray-500" : "bg-[#1C468E] mx-3"
                     } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
                   >
-                    Save and continue
+                    {loader1 ? <LoaderSpin /> : " Save and continue"}
                   </button>
                 </>
               )}

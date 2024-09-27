@@ -5,20 +5,25 @@ import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-re
 import { FormHandlerContext } from "../../../contextAPI/useFormFieldHandlers";
 import LoaderSpin from "../../../components/LoaderSpin";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import UploadFile from "../../designatedCourt/UploadFile";
 import DeleteUpload from "../../designatedCourt/DeleteUpload";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { axiosTokenInstance } from "../../../utils/axios";
 import Footer from "../../../components/userFlow/userProfile/Footer";
 import userProfileUploadStore from "../../../zust/userProfileUploadStore";
+import FooterDT from "./FooterDT";
+import useStore from "../../../store/statusStore";
+import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
 
 type Props = {};
 
 const ProfileUploadDocuments = (props: Props) => {
   const Navigate = useNavigate();
+  const location = useLocation();
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState<boolean>(false);
+  const [loader1, setLoader1] = useState(false);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -26,6 +31,18 @@ const ProfileUploadDocuments = (props: Props) => {
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
   );
+
+  const {
+    removedBranches: removedBranchesData,
+    clearRemovedBranches,
+    branches: managementData1,
+  } = useManagementStore((state) => ({
+    removedBranches: state.removedBranches,
+    clearRemovedBranches: state.clearRemovedBranches,
+    branches: state.branches,
+  }));
+  const status = sessionStorage.getItem("user_status");
+
   const setFormData = userProfileUploadStore((state) => state.setFormData);
 
   const sectionId = allFormData?.entitySections?.find(
@@ -34,6 +51,11 @@ const ProfileUploadDocuments = (props: Props) => {
 
   const { onFileChange, handleDocumentValidations } =
     useContext(FormHandlerContext);
+  const managementData = location.state?.managementData;
+
+  const { pathname } = location;
+
+  const { data, loading, error, fetchData } = useStore();
 
   // const handleFileChange = (file: File | null, field: any) => {
   //   setFileLoader(field?.id);
@@ -59,41 +81,139 @@ const ProfileUploadDocuments = (props: Props) => {
       label: field.documentName,
       value: field.uploadFileId,
     }));
+  const formData1 = Array.isArray(allFormData?.formFields?.form_fields) // Ensure it's an array
+    ? allFormData?.formFields?.form_fields.map((field: any) => ({
+        fieldId: field.id,
+        sectionCode: field.entityRegSection?.sectionName,
+        label: field.label,
+        value: field.userInput,
+        key: field?.key,
+      }))
+    : []; // Fallback to an empty array if not iterable
 
+  const formDataDocument1 = Array.isArray(documentData) // Ensure documentData is an array
+    ? documentData.map((field: any) => ({
+        fieldId: field.id,
+        sectionCode: "Upload Documents",
+        label: field.documentName,
+        value: field.uploadFileId,
+      }))
+    : []; // Fallback to an empty array if not iterable
+
+  // Combine both arrays safely
+  const combinedFormData = [...formData1, ...formDataDocument1];
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    setLoader(true);
-    const goodToGo = await handleDocumentValidations(
-      documentData.map((d: { sectionId: number }) => d?.sectionId)
-    );
-    if (!goodToGo) {
-      setLoader(false);
-      return;
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to Updated the Documents?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, upload!",
+      cancelButtonText: "No, cancel!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setLoader(true);
+        const goodToGo = await handleDocumentValidations(
+          documentData.map((d: { sectionId: number }) => d?.sectionId)
+        );
+        if (!goodToGo) {
+          setLoader(false);
+          return;
+        }
+        const hasOnlyId = managementData1?.some(
+          (member: any) => member.id && Object.keys(member).length === 1
+        );
 
-    axiosTokenInstance
-      .patch(`/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`, {
-        formData: formData,
-      })
-      .then((response) => {
-        Swal.fire({
-          icon: "success",
-          text: response?.data?.message || "Documents uploaded successfully",
-          confirmButtonText: "Ok",
-        });
+        // If any member contains only id, set membersToSubmit to null; otherwise, map the data
+        const membersToSubmit = hasOnlyId
+          ? null
+          : managementData1?.map((member: any) => {
+              const { id, ...memberData } = member;
+              return member.id ? { id, ...memberData } : memberData;
+            });
+        if (membersToSubmit !== null) {
+          await axiosTokenInstance.post(
+            `/deposit-taker/management-team/${sessionStorage?.getItem(
+              "entityUniqueId"
+            )}`,
+            {
+              members: membersToSubmit, // Changed from branches to members
+            }
+          );
+        }
+        // await axiosTokenInstance.patch(
+        //   `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+        //   { formData: combinedFormData }
+        // );
+
+        await axiosTokenInstance
+          .patch(
+            `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+            {
+              formData: combinedFormData,
+            }
+          )
+          .then((response) => {
+            Swal.fire({
+              icon: "success",
+              text:
+                response?.data?.message || "Documents uploaded successfully",
+              confirmButtonText: "Ok",
+            });
+            setLoader(false);
+            sessionStorage.setItem("user_status", "PENDING");
+            Navigate("/dt/profile?current=branches");
+          })
+          .catch((err) => {
+            setLoader(false);
+            Swal.fire({
+              icon: "error",
+              text:
+                err?.response?.data?.detail?.message ||
+                "Failed to upload documents",
+              confirmButtonText: "Ok",
+            });
+          });
         setLoader(false);
-        Navigate("/dt/profile?current=branches");
-      })
-      .catch((err) => {
-        setLoader(false);
-        Swal.fire({
-          icon: "error",
-          text: err?.response?.data?.detail?.message,
-          confirmButtonText: "Ok",
-        });
-      });
-    setLoader(false);
+      }
+    });
   };
+
+  // const onSubmit = async (e: any) => {
+  //   e.preventDefault();
+  //   setLoader(true);
+  //   const goodToGo = await handleDocumentValidations(
+  //     documentData.map((d: { sectionId: number }) => d?.sectionId)
+  //   );
+  //   if (!goodToGo) {
+  //     setLoader(false);
+  //     return;
+  //   }
+
+  //   axiosTokenInstance
+  //     .patch(`/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`, {
+  //       formData: formData,
+  //     })
+  //     .then((response) => {
+  //       Swal.fire({
+  //         icon: "success",
+  //         text: response?.data?.message || "Documents uploaded successfully",
+  //         confirmButtonText: "Ok",
+  //       });
+  //       setLoader(false);
+  //       Navigate("/dt/profile?current=branches");
+  //     })
+  //     .catch((err) => {
+  //       setLoader(false);
+  //       Swal.fire({
+  //         icon: "error",
+  //         text: err?.response?.data?.detail?.message,
+  //         confirmButtonText: "Ok",
+  //       });
+  //     });
+  //   setLoader(false);
+  // };
 
   // ---------------------------------------------------------------------------------------
 
@@ -151,17 +271,56 @@ const ProfileUploadDocuments = (props: Props) => {
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  if (pathname == "/dt/profile") {
+    var disableFieldStatus = checkPathName(pathname)
+      ? disabledField == "RETURNED"
+        ? false
+        : !data?.profileUpdate
+      : !data?.profileUpdate;
+  } else {
+    disableFieldStatus = checkPathName(pathname)
+      ? checkStatus(disabledField)
+      : false;
+  }
+
   const onClick = async (event: any) => {
-    // setLoader(true);
+    setLoader1(true);
     const goodToGo = await handleDocumentValidations(
       documentData.map((d: { sectionId: number }) => d?.sectionId)
     );
     if (goodToGo) {
       setFormData(formData);
-      Navigate("/dt/profile?current=branches");
+      Navigate("/dt/profile?current=branches", {
+        state: {
+          callSaveandcontinue: true,
+          managementData: managementData,
+        },
+      });
     }
-    // setLoader(false);
+    setLoader1(false);
+  };
+  const backNavigation = async (event: any) => {
+    const goodToGo = await handleDocumentValidations(
+      documentData.map((d: { sectionId: number }) => d?.sectionId)
+    );
+    if (goodToGo) {
+      Navigate("/dt/profile?current=management");
+    }
   };
 
   return (
@@ -223,11 +382,29 @@ const ProfileUploadDocuments = (props: Props) => {
                         </button>
                       </div>
                     </div> */}
-                    <Footer
-                      onSubmit={onSubmit}
-                      loader={loader}
-                      onClick={onClick}
-                    />
+                    {status === "INCOMPLETE" ? (
+                      <div>
+                        <FooterDT
+                          onSubmit={onClick}
+                          loader={loader}
+                          showbackbtn={true}
+                          path={"/dt/profile?current=management"}
+                          backNavigation={backNavigation}
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <Footer
+                          onSubmit={onSubmit}
+                          loader={loader}
+                          onClick={onClick}
+                          loader1={loader1}
+                          showbackbtn={true}
+                          path={"/dt/profile?current=management"}
+                          backNavigation={backNavigation}
+                        />
+                      </div>
+                    )}
                   </>
                 )}
                 {/* <div>

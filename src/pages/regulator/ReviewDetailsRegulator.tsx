@@ -19,17 +19,17 @@ const useDownloadPDF = () => {
     setIsDownloading(true);
     setIsPdfMode(true);
     const element = document.getElementById("reviewContent");
-    
+
     const getCurrentDateTime = () => {
       const now = new Date();
       const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
-    
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+      const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
+
       return `${day}-${month}-${year}-${hours}-${minutes}-${seconds}-${milliseconds}`;
     };
     const isMobile = window.innerWidth <= 768;
@@ -62,6 +62,7 @@ const ReviewDetailsRegulator = () => {
   const [para1, setPara1] = useState("");
   const [para2, setPara2] = useState("");
   const [submitModal, setSubmitModal] = useState(false);
+
   const [submitted, setSubmitted] = useState(false);
   const { allFormData, documentData, masterEntityId } =
     useDepositTakerRegistrationStore((state) => state);
@@ -69,6 +70,7 @@ const ReviewDetailsRegulator = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
   const { downloadPDF, isDownloading, isPdfMode } = useDownloadPDF();
+  const [regulatorMasterEntityId, setRegulatorMasterEntityId] = useState(null);
   useEffect(() => {
     if (isPdfMode) {
       document.body.classList.add("pdf-mode");
@@ -76,6 +78,26 @@ const ReviewDetailsRegulator = () => {
       document.body.classList.remove("pdf-mode");
     }
   }, [isPdfMode]);
+
+  useEffect(() => {
+    const masterEntityValue =
+      allFormData &&
+      allFormData?.formFields?.form_fields?.find(
+        (field) => field?.key === "regulatorNameRG"
+      );
+
+    if (masterEntityValue && masterEntityValue.userInput) {
+      const matchingOption = masterEntityValue.dropdown_options.options.find(
+        (option) => option.name === masterEntityValue.userInput
+      );
+
+      if (matchingOption) {
+        // Set the masterEntityId in the state
+        setRegulatorMasterEntityId(matchingOption.masterEntityId);
+        console.log(matchingOption.masterEntityId, "matchingOption");
+      }
+    }
+  }, [allFormData]);
 
   const handleFinalSubmit = async (e: any) => {
     e.preventDefault();
@@ -117,7 +139,7 @@ const ReviewDetailsRegulator = () => {
       }`,
       {
         formData: finalResult,
-        masterId: masterEntityId,
+        masterId: masterEntityId || regulatorMasterEntityId,
         identity: allFormData?.uniqueId,
       }
     )
@@ -207,14 +229,8 @@ const ReviewDetailsRegulator = () => {
                   />
                 </div>
                 <div className="leading-[24px] ml-4">
-                I hereby declare that all information provided by me is correct and I agree to the &nbsp;
-                  <Link
-                    className="text-[#1c468e] underline cursor-pointer"
-                    to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
-                    target="_blank"
-                  >
-                    Terms and Conditions
-                  </Link>
+                  I hereby declare that all information provided by me is
+                  correct.
                 </div>
               </div>
             )}

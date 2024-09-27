@@ -16,6 +16,9 @@ import { axiosTokenInstance } from "../../../utils/axios";
 import LoaderSpin from "../../../components/LoaderSpin";
 import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
 import useProfileEntityStore from "../../../zust/useProfileEntityStore";
+import FooterDT from "./FooterDT";
+import { useBranchStore } from "../../../store/upate-profile/branch";
+import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
 
 type Props = {};
 
@@ -24,11 +27,24 @@ const ProfileEntityDetails = (props: Props) => {
   const status = sessionStorage.getItem("user_status");
   const screenWidth = useScreenWidth();
   const [loader, setLoader] = useState(false);
-  const { allFormData } = useDepositTakerRegistrationStore((state) => state);
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
   const { onChange, handleValidationChecks, updatePanFormField } =
     useContext(FormHandlerContext);
   const navigate = useNavigate();
   const setFormData = useProfileEntityStore((state) => state.setFormData);
+  const [loader1, setLoader1] = useState(false);
+  const disabledField = sessionStorage.getItem("user_status");
+  const {
+    removedBranches: removedBranchesData,
+    clearRemovedBranches,
+    branches: managementData,
+  } = useManagementStore((state) => ({
+    removedBranches: state.removedBranches,
+    clearRemovedBranches: state.clearRemovedBranches,
+    branches: state.branches,
+  }));
 
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
@@ -149,44 +165,194 @@ const ProfileEntityDetails = (props: Props) => {
       value: field.userInput,
     }));
 
+  // const onSubmit = async (event: any) => {
+  //   event?.preventDefault();
+  //   setLoader(true);
+  //   const noError = await handleValidationChecks(
+  //     formFields?.filter((field: any) => field?.disabled === false)
+  //   );
+
+  //   if (noError) {
+  //     if (noError) {
+  //       axiosTokenInstance
+  //         .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
+  //           formData: formData,
+  //         })
+  //         .then((response) => {
+  //           console.log(response?.data?.message, "response");
+  //           Swal.fire({
+  //             icon: "success",
+  //             text:
+  //               response?.data?.message ||
+  //               "Entity Details updated successfully",
+  //             confirmButtonText: "Ok",
+  //           });
+
+  //           Navigate("/dt/profile?current=nodal");
+  //         })
+  //         .catch((err) => {
+  //           Swal.fire({
+  //             icon: "error",
+  //             text: "Failed to update Entity Details",
+  //             confirmButtonText: "Ok",
+  //           });
+  //         });
+  //     }
+  //   }
+  //   setLoader(false);
+  // };
+  const formData1 = Array.isArray(allFormData?.formFields?.form_fields) // Ensure it's an array
+    ? allFormData?.formFields?.form_fields.map((field: any) => ({
+        fieldId: field.id,
+        sectionCode: field.entityRegSection?.sectionName,
+        label: field.label,
+        value: field.userInput,
+        key: field?.key,
+      }))
+    : []; // Fallback to an empty array if not iterable
+
+  const formDataDocument1 = Array.isArray(documentData) // Ensure documentData is an array
+    ? documentData.map((field: any) => ({
+        fieldId: field.id,
+        sectionCode: "Upload Documents",
+        label: field.documentName,
+        value: field.uploadFileId,
+      }))
+    : []; // Fallback to an empty array if not iterable
+
+  // Combine both arrays safely
+  const combinedFormData = [...formData1, ...formDataDocument1];
   const onSubmit = async (event: any) => {
     event?.preventDefault();
-    setLoader(true);
-    const noError = await handleValidationChecks(
-      formFields?.filter((field: any) => field?.disabled === false)
-    );
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to update the Entity Details?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, update it!",
+      cancelButtonText: "No, cancel!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // Check if any member contains only the id and no other properties
+        const hasOnlyId = managementData?.some(
+          (member: any) => member.id && Object.keys(member).length === 1
+        );
 
-    if (noError) {
-      if (noError) {
-        axiosTokenInstance
-          .patch(`/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`, {
-            formData: formData,
-          })
-          .then((response) => {
-            console.log(response?.data?.message, "response");
-            Swal.fire({
-              icon: "success",
-              text:
-                response?.data?.message ||
-                "Entity Details updated successfully",
-              confirmButtonText: "Ok",
+        // If any member contains only id, set membersToSubmit to null; otherwise, map the data
+        const membersToSubmit = hasOnlyId
+          ? null
+          : managementData?.map((member: any) => {
+              const { id, ...memberData } = member;
+              return member.id ? { id, ...memberData } : memberData;
             });
 
+        setLoader(true);
+        const noError = await handleValidationChecks(
+          formFields?.filter((field: any) => field?.disabled === false)
+        );
+
+        if (noError) {
+          try {
+            // First two API calls remain as is
+            // await axiosTokenInstance.patch(
+            //   `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+            //   { formData: formData }
+            // );
+
+            await axiosTokenInstance.patch(
+              `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+              { formData: combinedFormData }
+            );
+
+            // Only call the management team API if membersToSubmit is not null
+            if (membersToSubmit !== null) {
+              await axiosTokenInstance.post(
+                `/deposit-taker/management-team/${sessionStorage?.getItem(
+                  "entityUniqueId"
+                )}`,
+                {
+                  members: membersToSubmit, // Changed from branches to members
+                }
+              );
+            }
+
+            Swal.fire({
+              icon: "success",
+              text: "Profile Details updated successfully",
+              confirmButtonText: "Ok",
+            });
+            sessionStorage.setItem("user_status", "PENDING");
             Navigate("/dt/profile?current=nodal");
-          })
-          .catch((err) => {
+          } catch (err) {
             Swal.fire({
               icon: "error",
               text: "Failed to update Entity Details",
               confirmButtonText: "Ok",
             });
-          });
+          } finally {
+            setLoader(false);
+          }
+        } else {
+          setLoader(false);
+        }
       }
-    }
-    setLoader(false);
+    });
   };
+
+  // const onSubmit = async (event: any) => {
+  //   event?.preventDefault();
+  //   Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "Do you want to update the Entity Details?",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Yes, update it!",
+  //     cancelButtonText: "No, cancel!",
+  //   }).then(async (result) => {
+  //     if (result.isConfirmed) {
+  //       setLoader(true);
+  //       const noError = await handleValidationChecks(
+  //         formFields?.filter((field: any) => field?.disabled === false)
+  //       );
+
+  //       if (noError) {
+  //         axiosTokenInstance
+  //           .patch(
+  //             `/deposit-taker/${sessionStorage.getItem("entityUniqueId")}`,
+  //             {
+  //               formData: formData,
+  //             }
+  //           )
+
+  //           .then((response) => {
+  //             Swal.fire({
+  //               icon: "success",
+  //               text:
+  //                 response?.data?.message ||
+  //                 "Entity Details updated successfully",
+  //               confirmButtonText: "Ok",
+  //             });
+  //             sessionStorage.setItem("user_status", "PENDING");
+  //             Navigate("/dt/profile?current=nodal");
+  //           })
+  //           .catch((err) => {
+  //             Swal.fire({
+  //               icon: "error",
+  //               text: "Failed to update Entity Details",
+  //               confirmButtonText: "Ok",
+  //             });
+  //           })
+  //           .finally(() => {
+  //             setLoader(false);
+  //           });
+  //       } else {
+  //         setLoader(false);
+  //       }
+  //     }
+  //   });
+  // };
   const onClick = async (event: any) => {
-    // setLoader(true);
+    setLoader1(true);
     event?.preventDefault();
     const noError = await handleValidationChecks(
       formFields?.filter((field: any) => field?.disabled === false)
@@ -194,8 +360,8 @@ const ProfileEntityDetails = (props: Props) => {
     if (noError) {
       setFormData(formData);
       navigate("/dt/profile?current=nodal");
-      // setLoader(false);
     }
+    setLoader1(false);
   };
   return (
     <>
@@ -207,16 +373,33 @@ const ProfileEntityDetails = (props: Props) => {
             height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
           }}
         >
-          {formFields.length > 0 ? (
+          {formFields?.length > 0 ? (
             <>
               <DynamicFields
                 allFormData={allFormData}
                 formFields={formFields}
                 onChange={onChange}
               />
-              <div>
-                <Footer onSubmit={onSubmit} loader={loader} onClick={onClick} />
-              </div>
+
+              {disabledField === "INCOMPLETE" ? (
+                <div>
+                  <FooterDT
+                    onSubmit={onClick}
+                    loader={loader}
+                    showbackbtn={false}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <Footer
+                    onSubmit={onSubmit}
+                    loader={loader}
+                    loader1={loader1}
+                    onClick={onClick}
+                    showbackbtn={false}
+                  />
+                </div>
+              )}
             </>
           ) : (
             <div className="flex justify-center items-center">

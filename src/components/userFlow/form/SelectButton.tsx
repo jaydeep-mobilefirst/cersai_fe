@@ -40,6 +40,7 @@ const SelectButton = ({
   const [searchInputValue, setSearchInputValue] = useState("");
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
   const [optionsToShow, setOptionsToShow] = useState<any[]>(options);
+  console.log({ options }, "options");
   useEffect(() => {
     setArrowDirectionToggle(false);
   }, [selectedOption]);
@@ -112,6 +113,11 @@ const SelectButton = ({
           }
         })
         .finally(() => setLoader(false));
+    } else {
+      const filteredOptions = options.filter((option) =>
+        option.label.toLowerCase().includes(value.toLowerCase())
+      );
+      setOptionsToShow(filteredOptions);
     }
   };
 

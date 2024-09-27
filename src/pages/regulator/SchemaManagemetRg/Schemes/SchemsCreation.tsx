@@ -24,6 +24,8 @@ type SchemeType = {
   createdBy: string | null;
   status: string;
   active: boolean;
+  createdByName: string;
+  depositTakerName: string;
 };
 
 const columnHelper = createColumnHelper<SchemeType>();
@@ -97,28 +99,27 @@ const NewSchemaCreation = () => {
       cell: (info: any) => info.renderValue(),
       header: () => <span>Scheme Name</span>,
     }),
-
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info.getValue();
-
+        const updatedValue = value ==="UNDER_LETIGATION"?"UNDER LITIGATION" : value
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span> {value}</span>
+            <span> {updatedValue}</span>
           </div>
         );
       },
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor("depositTakerId", {
-      cell: (info: any) => info.renderValue(),
+    columnHelper.accessor("depositTakerName", {
+      cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Deposit Taker</span>,
     }),
 
-    columnHelper.accessor("createdBy", {
+    columnHelper.accessor("createdByName", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
     }),
@@ -132,11 +133,14 @@ const NewSchemaCreation = () => {
               uniqueId: uniqueId,
               depositTakerId: depositTakerId,
               createdBy,
+              Status,
             },
           });
         };
         const uniqueId = info?.row?.original?.uniqueId;
         const depositTakerId = info?.row?.original?.depositTakerId;
+        const Status = info?.row?.original?.status;
+
         return (
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}

@@ -11,6 +11,8 @@ import { pincodeValidationUrl } from "../../../utils/api";
 import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
 import Tooltip from "@mui/material/Tooltip";
 import Swal from "sweetalert2";
+import { useLocation } from "react-router-dom";
+import useStore from "../../../store/statusStore";
 
 interface Branch {
   addressLine1: string;
@@ -36,7 +38,6 @@ interface Props {
     pinCode: string;
     state: string;
     district: string;
-    place: string;
   };
 }
 
@@ -88,6 +89,18 @@ const ProfileBranchForm: React.FC<Props> = ({
   //   { value: "Telangana", label: "Telangana" },
   // ];
   const [pinCodeError, setPinCodeError] = useState("");
+
+  const { data, loading, error, fetchData } = useStore();
+
+  const location = useLocation();
+  const { pathname } = location;
+
+  useEffect(() => {
+    if (checkPathName(pathname)) {
+      fetchData(); // Trigger the API call when the component mounts
+    }
+  }, [fetchData]);
+
   const debounce = (
     func: (...args: any[]) => void,
     delay: number
@@ -200,7 +213,32 @@ const ProfileBranchForm: React.FC<Props> = ({
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  if (pathname == "/dt/profile") {
+    var disableFieldStatus = checkPathName(pathname)
+      ? disabledField == "RETURNED"
+        ? false
+        : !data?.profileUpdate
+      : !data?.profileUpdate;
+  } else {
+    disableFieldStatus = checkPathName(pathname)
+      ? checkStatus(disabledField)
+      : false;
+  }
 
   return (
     <div className="my-3">
@@ -250,7 +288,8 @@ const ProfileBranchForm: React.FC<Props> = ({
               {...register(`branches[${i}].addressLine1`, {
                 required: "Address Line 1 is required",
                 pattern: {
-                  value: /^[a-zA-Z0-9\s,.-]*$/,
+                  // value: /^[a-zA-Z0-9\s,.-]*$/,
+                  value: /^[a-zA-Z0-9\s,./-]*$/,
                   message: "Address Line 1 contains invalid characters",
                 },
               })}
@@ -428,36 +467,6 @@ const ProfileBranchForm: React.FC<Props> = ({
             </p>
           )} */}
         </div>
-        {/* <div>
-          <label htmlFor={`place-${i}`} className="text-base font-normal">
-            Place <span className="text-red-500">*</span>
-          </label>
-          <Tooltip
-            title={
-              getValues(`branches[${i}].place`) ? "Edit Place" : "Enter place"
-            }
-            PopperProps={{
-              modifiers: popperModifiers,
-            }}
-            placement="bottom"
-            arrow
-          >
-            <InputFieldsV2
-              placeholder="Enter place"
-              disabled={disableFieldStatus}
-              {...register(`branches[${i}].place`, {
-                required: "place is required",
-                pattern: {
-                  value: /^[a-zA-Z0-9\s,.-]*$/,
-                  message: "place contains invalid characters",
-                },
-              })}
-            />
-          </Tooltip>
-          {errors?.branches?.[i]?.place && (
-            <p className="text-red-500">{errors.branches[i].place.message}</p>
-          )}
-        </div> */}
       </div>
     </div>
   );

@@ -15,13 +15,14 @@ const SchemaCreationForm = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [fetchRegulatorData, setRegulatorData] = useState<any>();
   const [popupData, setPopData] = useState({
     para1: "",
     para2: "",
     show: false,
   });
   const entityType = sessionStorage.getItem("entityUniqueId");
-
+  console.log("fetchRegulatorData",fetchRegulatorData)
   const navigate = useNavigate();
   const { collapsed } = useSidebarStore();
   const { setAllFormData, setAllDocumentData, allFormData } =
@@ -36,15 +37,176 @@ const SchemaCreationForm = () => {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
+  const fetchFormFields = () => {
+    axiosTokenInstance
+      .get(`/registration/field-data/1?status=addToProfile`)
+      .then(async (response) => {
+        if (response?.data?.success) {
+          let dtData: any = [];
+          try {
+            let depositTakerData = await axiosTokenInstance.get(
+              `/deposit-taker/${entityType}`
+            );
+
+            dtData =
+              depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
+          } catch (error) {
+            console.log("Error");
+          }
+          console.log({ dtData, response });
+
+          // console.log(dtData, "respnse--------------");
+          let modifiedFormFields = response.data.data?.formFields?.map(
+            (o: any) => ({
+              ...o,
+              userInput: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              error: "",
+            })
+          );
+
+          let modifiedFileFields =
+            response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
+              ...o,
+              file: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              error: "",
+              fileName: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              uploadFileId: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+            }));
+
+          let obj = {
+            ...response?.data?.data,
+            formFields: { form_fields: modifiedFormFields },
+          };
+          console.log(obj, "obj-----");
+          setRegulatorData(obj?.formFields?.form_fields?.find((item:any)=>item.key ==="regulatorName")?.userInput)
+          // setAllFormData(obj);
+          // setAllDocumentData(modifiedFileFields);
+        } else {
+          throw new Error("Error getting data, Please try later!");
+        }
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     fetchSchema();
-  }, []);
+  }, [fetchRegulatorData]);
+  // const fetchSchema = async () => {
+  //   try {
+  //     const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
+  //     // console.log(response, "response");
+  //     sessionStorage.setItem("entitiy_details_api", "true");
+  //     if (response.data.success) {
+  //       await fetchFormFields();
+
+  //       let formFields = response?.data?.data?.formFields?.allFormFields.map(
+  //         async (field: any) => {
+  //           if (field?.key === "depositTakerId") {
+  //             return {
+  //               ...field,
+  //               userInput: "",
+  //               error: "",
+  //               typeId: field?.fieldTypeId,
+  //               dropdown_options: {
+  //                 ...field?.dropdown_options,
+  //                 options: field?.dropdown_options?.options?.map((o: any) => ({
+  //                   name: o?.uniqueId,
+  //                   id: o?.companyName,
+  //                 })),
+  //               },
+  //             };
+  //           } else if (field?.key === "branch") {
+  //             try {
+  //               const res = await axiosTokenInstance.get(
+  //                 "/deposit-taker/branch/" + entityType
+  //               );
+  //               let data = res.data;
+  //               let branches = data?.data?.branches?.map((b: any) => {
+  //                 return {
+  //                   name: b?.pinCode + " " + b?.district + " " + b?.state,
+  //                   id: b?.id,
+  //                 };
+  //               });
+
+  //               return {
+  //                 ...field,
+  //                 userInput: "",
+  //                 error: "",
+  //                 typeId: field?.fieldTypeId,
+  //                 dropdown_options: {
+  //                   ...field?.dropdown_options,
+  //                   options: branches,
+  //                 },
+  //               };
+  //             } catch (error) {
+  //               return {
+  //                 ...field,
+  //                 userInput: "",
+  //                 error: "",
+  //                 typeId: field?.fieldTypeId,
+  //               };
+  //             }
+  //           } else if (field?.key === "regulator") {
+  //             const regulatorValue = fetchRegulatorData
+
+  //             return {
+  //               ...field,
+  //               userInput: regulatorValue,
+  //               disabled: true,
+  //               error: "",
+  //               typeId: field?.fieldTypeId,
+  //             };
+  //           } 
+  //           else {
+  //             return {
+  //               ...field,
+  //               userInput: "",
+  //               error: "",
+  //               typeId: field?.fieldTypeId,
+  //             };
+  //           }
+  //         }
+  //       );
+
+  //       formFields = await Promise.all(formFields);
+
+  //       setAllFormData({
+  //         ...response?.data?.data,
+  //         formFields: {
+  //           form_fields: formFields?.sort(
+  //             (a: any, b: any) => a.sortOrder - b.sortOrder
+  //           ),
+  //         },
+  //         fieldTypes: response?.data?.data?.fieldTypes,
+  //         validations: response?.data?.data?.validations,
+  //         fileTypes: response?.data?.data?.fileTypes,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching schema data:", error);
+  //   }
+  // };
   const fetchSchema = async () => {
+    setLoader(true)
     try {
       const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
-      // console.log(response, "response");
+      sessionStorage.setItem("entitiy_details_api", "true");
+  
       if (response.data.success) {
+        // Fetch regulator data before processing form fields
+        setLoader(false)
+        await fetchFormFields();
+  
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
             if (field?.key === "depositTakerId") {
@@ -67,13 +229,11 @@ const SchemaCreationForm = () => {
                   "/deposit-taker/branch/" + entityType
                 );
                 let data = res.data;
-                let branches = data?.data?.branches?.map((b: any) => {
-                  return {
-                    name: b?.pinCode + " " + b?.district + " " + b?.state,
-                    id: b?.id,
-                  };
-                });
-
+                let branches = data?.data?.branches?.map((b: any) => ({
+                  name: b?.pinCode + " " + b?.district + " " + b?.state,
+                  id: b?.id,
+                }));
+  
                 return {
                   ...field,
                   userInput: "",
@@ -92,6 +252,17 @@ const SchemaCreationForm = () => {
                   typeId: field?.fieldTypeId,
                 };
               }
+            } else if (field?.key === "regulator") {
+              // Ensure fetchRegulatorData is available
+              const regulatorValue = fetchRegulatorData // Default to empty string if not fetched yet
+              console.log("regulatorValueregulatorValue",regulatorValue)
+              return {
+                ...field,
+                userInput: fetchRegulatorData,
+                disabled: true,
+                error: "",
+                typeId: field?.fieldTypeId,
+              };
             } else {
               return {
                 ...field,
@@ -102,9 +273,13 @@ const SchemaCreationForm = () => {
             }
           }
         );
-
+  
         formFields = await Promise.all(formFields);
 
+
+      // Sort form fields based on the sortOrder
+      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+  
         setAllFormData({
           ...response?.data?.data,
           formFields: {
@@ -118,9 +293,12 @@ const SchemaCreationForm = () => {
         });
       }
     } catch (error) {
+      setLoader(false)
       console.error("Error fetching schema data:", error);
     }
   };
+  
+  console.log({ allFormData }, "scheme data ");
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -142,12 +320,41 @@ const SchemaCreationForm = () => {
 
     try {
       // Mapping over the form fields to prepare the formData
-      let formData = allFormData.formFields.form_fields.map((field: any) => ({
-        fieldId: field.id,
-        value: field.userInput,
-        key: field.key,
-        label: field?.label,
-      }));
+      // let formData = allFormData.formFields.form_fields.map((field: any) => ({
+      //   fieldId: field.id,
+      //   value: field.userInput,
+      //   key: field.key,
+      //   label: field?.label,
+      // }));
+      let formData = allFormData.formFields.form_fields.map((field: any) => {
+        // Initialize the base object to be returned for each field
+        let fieldData = {
+          fieldId: field.id,
+          value: field.userInput,
+          key: field.key,
+          label: field.label,
+        };
+
+        // Special handling for the "Branch" field to match userInput with options
+        if (field.label === "Branch" && Array.isArray(field.userInput)) {
+          // Map user inputs to their corresponding IDs from the options
+          let branchIds = field.userInput
+            .map((userInputValue: any) => {
+              // Find the option that matches the userInputValue
+              const matchingOption = field.dropdown_options.options.find(
+                (option: any) => option.name === userInputValue
+              );
+              return matchingOption ? matchingOption.id : null; // Return the ID if found, otherwise return null
+            })
+            .filter((id: any) => id !== null); // Filter out any null values if no match was found
+
+          fieldData.value = branchIds; // Set the value to the array of matched IDs
+          fieldData.value = JSON.stringify(branchIds);
+        }
+
+        return fieldData;
+      });
+      console.log({ formData }, "form data");
 
       // Creating the payload object that includes both formData and depositTakerId
       const payload = {
@@ -173,7 +380,7 @@ const SchemaCreationForm = () => {
         setSubmitted(true);
         setPopData({
           para1: "Addition Successful",
-          para2: response.data?.message,
+          para2: `${response.data?.message} ID: ${response.data?.data?.newScheme?.uniqueId}`,
           show: true,
         });
       } else {
@@ -190,7 +397,7 @@ const SchemaCreationForm = () => {
       setLoader(false);
     }
   };
-
+  console.log("alll----daaaa",allFormData)
   return (
     <div
       className="relative xl:ml-[40px]"

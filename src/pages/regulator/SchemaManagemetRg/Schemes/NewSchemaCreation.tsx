@@ -20,6 +20,7 @@ const SchemeDetails = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
+  const [fetchRegulatorData, setRegulatorData] = useState<any>();
 
   const handleBackButtonClick = () => {
     navigate("/rg/my-task");
@@ -28,13 +29,104 @@ const SchemeDetails = () => {
     useDepositTakerRegistrationStore((state) => state);
   const { onChange, handleValidationChecks, handleSchemeValidations } =
     useContext(FormHandlerContext);
+  console.log({ allFormData }, "allFormData");
+
+  const depositTakerId = allFormData?.formFields?.form_fields?.find(
+    (field: any) => field?.key === "depositTakerId"
+  )?.userInput;
+
+  useEffect(() => {
+    fetchFormFields(depositTakerId);
+  }, [depositTakerId]);
+
   useEffect(() => {
     fetchSchema();
   }, []);
+
+  useEffect(() => {
+    if (fetchRegulatorData) {
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (
+              f?.key === "regulator" ||
+              f?.key === "regulatorName" ||
+              f?.key === "regulatorNameRG"
+            ) {
+              return { ...f, userInput: fetchRegulatorData };
+            } else {
+              return f;
+            }
+          }),
+        },
+      });
+    }
+  }, [fetchRegulatorData]);
+
+  const fetchFormFields = (dtValue: any) => {
+    axiosTokenInstance
+      .get(`/registration/field-data/1?status=addToProfile`)
+      .then(async (response) => {
+        if (response?.data?.success) {
+          let dtData: any = [];
+          try {
+            let depositTakerData = await axiosTokenInstance.get(
+              `/deposit-taker/${dtValue}`
+            );
+
+            dtData =
+              depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
+          } catch (error) {
+            console.log("Error");
+          }
+          console.log({ dtData, response });
+
+          // console.log(dtData, "respnse--------------");
+          let modifiedFormFields = response.data.data?.formFields?.map(
+            (o: any) => ({
+              ...o,
+              userInput: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              error: "",
+            })
+          );
+
+          let obj = {
+            ...response?.data?.data,
+            formFields: { form_fields: modifiedFormFields },
+          };
+          console.log(obj, "obj-----");
+          setRegulatorData(
+            obj?.formFields?.form_fields?.find(
+              (item: any) =>
+                item.key === "regulatorName" ||
+                item.key === "regulator" ||
+                item.key === "regulatorNameRG"
+            )?.userInput
+          );
+
+          // setAllFormData(obj);
+          // setAllDocumentData(modifiedFileFields);
+        } else {
+          throw new Error("Error getting data, Please try later!");
+        }
+        setLoader(false);
+      })
+      .catch((error: any) => {
+        console.log(error);
+        setLoader(false);
+      });
+  };
   const fetchSchema = async () => {
     try {
+      setLoader(true)
+
       const response = await axiosTokenInstance.get(`/scheme/field-data/2`);
+
       if (response.data.success) {
+        setLoader(false)
         const formFields = response?.data?.data?.formFields?.allFormFields.map(
           (field: any) => ({
             ...field,
@@ -44,6 +136,12 @@ const SchemeDetails = () => {
             // id: field.fieldTypeId,
           })
         );
+
+        // await fetchFormFields();
+
+
+      // Sort form fields based on the sortOrder
+      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
         setAllFormData({
           ...response?.data?.data,
@@ -62,6 +160,23 @@ const SchemeDetails = () => {
                       ?.sort((a: any, b: any) => a.sortOrder - b.sortOrder),
                   },
                 };
+              } else if (
+                field?.key === "regulator" ||
+                field?.key === "regulatorName" ||
+                field?.key === "regulatorNameRG"
+              ) {
+                console.log(field, "key");
+                // fetchFormFields();
+                // Ensure fetchRegulatorData is available
+                const regulatorValue = fetchRegulatorData; // Default to empty string if not fetched yet
+                console.log("regulatorValueregulatorValue", fetchRegulatorData);
+                return {
+                  ...field,
+                  userInput: fetchRegulatorData,
+                  disabled: true,
+                  error: "",
+                  typeId: field?.fieldTypeId,
+                };
               } else {
                 return field;
               }
@@ -73,9 +188,11 @@ const SchemeDetails = () => {
         });
       }
     } catch (error) {
+      setLoader(false)
       console.error("Error fetching schema data:", error);
     }
   };
+
   const entityType = sessionStorage.getItem("entityUniqueId");
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -96,12 +213,41 @@ const SchemeDetails = () => {
     }
     try {
       // Mapping over the form fields to prepare the formData
-      let formData = allFormData.formFields.form_fields.map((field: any) => ({
-        fieldId: field.id,
-        value: field.userInput,
-        key: field.key,
-        label : field?.label
-      }));
+      // let formData = allFormData.formFields.form_fields.map((field: any) => ({
+      //   fieldId: field.id,
+      //   value: field.userInput,
+      //   key: field.key,
+      //   label : field?.label
+      // }));
+
+      let formData = allFormData.formFields.form_fields.map((field: any) => {
+        // Initialize the base object to be returned for each field
+        let fieldData = {
+          fieldId: field.id,
+          value: field.userInput,
+          key: field.key,
+          label: field.label,
+        };
+
+        // Special handling for the "Branch" field to match userInput with options
+        if (field.label === "Branch" && Array.isArray(field.userInput)) {
+          // Map user inputs to their corresponding IDs from the options
+          let branchIds = field.userInput
+            .map((userInputValue: any) => {
+              // Find the option that matches the userInputValue
+              const matchingOption = field.dropdown_options.options.find(
+                (option: any) => option.name === userInputValue
+              );
+              return matchingOption ? matchingOption.id : null; // Return the ID if found, otherwise return null
+            })
+            .filter((id: any) => id !== null); // Filter out any null values if no match was found
+
+          fieldData.value = branchIds; // Set the value to the array of matched IDs
+          fieldData.value = JSON.stringify(branchIds);
+        }
+
+        return fieldData;
+      });
 
       // Creating the payload object that includes both formData and depositTakerId
       const payload = {
@@ -118,7 +264,8 @@ const SchemeDetails = () => {
       if (response.data?.success) {
         setSubmitted(true);
         setPopData({
-          para1: "Addition Successful",
+          para1: `Addition Successful ${response?.data?.data?.newScheme?.uniqueId}`,
+          // para2: response.data?.message,
           para2: response.data?.message,
           show: true,
         });
@@ -132,8 +279,13 @@ const SchemeDetails = () => {
       }
       setLoader(false);
       // SuccessPopup();
-    } catch (error) {
+    } catch (error:any) {
       setLoader(false);
+      setPopData({
+        para1: "Something went wrong",
+        para2: error?.message || "An unexpected error occurred.",
+        show: true,
+      });
     }
   };
 
@@ -153,6 +305,8 @@ const SchemeDetails = () => {
           id: b?.id,
         };
       });
+
+      await fetchFormFields(event?.value);
       setAllFormData({
         ...allFormData,
         formFields: {
@@ -164,6 +318,12 @@ const SchemeDetails = () => {
               };
             } else if (f?.key === "depositTakerId") {
               return { ...f, userInput: event?.value };
+            } else if (
+              f?.key === "regulator" ||
+              f?.key === "regulatorName" ||
+              f?.key === "regulatorNameRG"
+            ) {
+              return { ...f, userInput: fetchRegulatorData };
             } else {
               return f;
             }
@@ -177,23 +337,26 @@ const SchemeDetails = () => {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
+
+  console.log("all-form-data------", allFormData);
   return (
     <div
-      className='mt-6 mx-8 relative'
+      className="mt-6 mx-8 relative"
       style={{ minHeight: "calc(100vh - 110px)" }}
     >
-      <div className='mt-2 '>
+      <div className="mt-2 ">
         <TaskTabsRg />
       </div>
-      <div className='-ml-7'>
-        <div className='flex items-center justify-between flex-col h-full mx-10 my-0  '>
-          <div className='w-full mb-40'>
-            <div className='mt-10'>
+      <div className="-ml-7">
+        <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
+          <div className="w-full mb-40">
+            <div className="mt-10">
+              {loader?<LoaderSpin/>:
               <DynamicFields
                 formFields={allFormData?.formFields?.form_fields}
                 allFormData={allFormData}
                 onChange={handleOnchange}
-              />
+              />}
             </div>
             {/* <div className="flex flex-shrink-0 mt-[20px]">
               <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
@@ -209,17 +372,17 @@ const SchemeDetails = () => {
                 knowledge.
               </div>
             </div> */}
-            <div className='flex flex-shrink-0 mt-[20px] justify-start items-center'>
-              <div className=''>
+            <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
+              <div className="">
                 <input
-                  type='checkbox'
-                  className='h-4 w-4 accent-[#1c648e]'
+                  type="checkbox"
+                  className="h-4 w-4 accent-[#1c648e]"
                   checked={isChecked}
                   onChange={handleCheckboxChange}
-                  placeholder='ischecked'
+                  placeholder="ischecked"
                 />
               </div>
-              <div className='leading-[24px] ml-4 text-gilroy-medium text-[14px]'>
+              <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
                 I declare all the Information provided is correct as per my
                 knowledge.
               </div>
@@ -239,26 +402,26 @@ const SchemeDetails = () => {
             success={submitted}
           />
 
-          <div className='w-full absolute bottom-0'>
+          <div className="w-full absolute bottom-0">
             <div
-              className='flex w-full p-4 lg:px-[30px] flex-row justify-end items-center'
+              className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
               style={{
                 width: `${
                   screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
                 }`,
               }}
             >
-              <div className='flex items-center space-x-6'>
+              <div className="flex items-center space-x-6">
                 <p
                   onClick={handleBackButtonClick}
-                  className='text-[#1c468e] text-gilroy-medium cursor-pointer'
+                  className="text-[#1c468e] text-gilroy-medium cursor-pointer"
                 >
                   Discard
                 </p>
 
                 <button
                   onClick={onSubmit}
-                  type='submit'
+                  type="submit"
                   className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm text-gilroy-semibold ${
                     !isChecked
                       ? "opacity-50 cursor-not-allowed"
@@ -272,9 +435,9 @@ const SchemeDetails = () => {
               </div>
             </div>
             <div>
-              <div className='border-[#E6E6E6] border-[1px] lg:mt-4 '></div>
+              <div className="border-[#E6E6E6] border-[1px] lg:mt-4 "></div>
 
-              <p className='mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4'>
+              <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
                 © 2024 Protean BUDs, All Rights Reserved.
               </p>
             </div>

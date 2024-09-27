@@ -10,8 +10,8 @@ interface UploadFileProps {
   handleFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
   toggleUploadPopup: () => void;
   closePopup: () => void;
-  fileTypes ?: string
-  fileSize ?: number
+  fileTypes ?: string;
+  fileSize ?: number;
 }
 
 const UploadFile: React.FC<UploadFileProps> = ({
@@ -19,7 +19,7 @@ const UploadFile: React.FC<UploadFileProps> = ({
   handleFileChange,
   closePopup,
   fileTypes,
-  fileSize
+  fileSize,
 }) => {
   return (
     <Modal

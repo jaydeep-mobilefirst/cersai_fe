@@ -8,7 +8,7 @@ import { axiosTraceIdInstance } from '../utils/axios';
 type Props = {}
 export const paths: any = {
   DT: "/depositetaker/signup/reviewdetails",
-  RG: "/regulator/court/reviewdetails",
+  RG: "/regulator/reviewdetails",
   DC: "/designated/court/reviewdetails",
   CA: "/competent/authority/reviewdetails",
 };

@@ -56,6 +56,7 @@ const DepositeTakerSearch: React.FC = () => {
   const navigate = useNavigate();
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const { language } = useLangugaeStore((state) => state);
+  console.log("totoal",total)
 
   useEffect(() => {
     homePageCmsApi();
@@ -110,7 +111,7 @@ const DepositeTakerSearch: React.FC = () => {
         if (res.status === 200) {
           let currentPage = (parseInt(res?.data?.data?.page) - 1) * pageSize;
           setTaskData(res?.data?.data);
-          setTotal(res?.data?.data?.total);
+          setTotal(res?.data?.total);
         }
         setLoader(false);
       })
@@ -121,9 +122,13 @@ const DepositeTakerSearch: React.FC = () => {
   };
 
   const columns = [
-    columnHelper.accessor("id", {
-      cell: (info) => (info.renderValue() ? info.renderValue() : "N/A"),
-      header: () => <span>S.No.</span>,
+    
+    columnHelper.accessor("sn", {
+      header: () => <span>Sr. No.</span>,
+      cell: (info) => {
+        const serialNumber = (page - 1) * pageSize + (info.row.index + 1);
+        return <span>{serialNumber}</span>;
+      },
     }),
     columnHelper.accessor("id", {
       cell: (info) => (info.renderValue() ? info.renderValue() : "N/A"),
@@ -306,9 +311,10 @@ const DepositeTakerSearch: React.FC = () => {
             ) : taskData?.length > 0 ? (
               <ReactTable defaultData={taskData} columns={columns} />
             ) : (
-              <div className=' flex justify-center items-center'>
-                <h1>No data available</h1>
-              </div>
+              // <div className=' flex justify-center items-center'>
+              //   <h1>No data available</h1>
+              // </div>
+              <LoaderSpin />
             )}
           </div>
           <div className='mt-10'>

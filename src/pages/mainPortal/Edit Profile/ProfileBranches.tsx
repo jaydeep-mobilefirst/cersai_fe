@@ -7,6 +7,7 @@ import infoIcon from "../../../assets/images/info-circle.svg";
 
 import Swal from "sweetalert2";
 import { useBranchStore } from "../../../store/upate-profile/branch";
+import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
 import { useScreenWidth } from "../../../utils/screenSize";
 import Button from "../../../components/userFlow/common/Button";
 import uploadIcon from "../../../assets/images/directbox-send.svg";
@@ -16,9 +17,37 @@ import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
 import useProfileEntityStore from "../../../zust/useProfileEntityStore";
 import useProfileNodalStore from "../../../zust/useProfileNodalStore";
 import userProfileUploadStore from "../../../zust/userProfileUploadStore";
+import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import { useLocation } from "react-router-dom";
+import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
+import FooterDT2 from "./FooterDT2";
+import { Link, useNavigate } from "react-router-dom";
+import useStore from "../../../store/statusStore";
+
 const ProfileBranches = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
+  const location = useLocation();
+  const callapi = location.state?.callSaveandcontinue;
+  const managementData = location.state?.managementData;
+  const status = sessionStorage.getItem("user_status");
+  const Navigate = useNavigate();
+
+  const { pathname } = location;
+
+  const { data, loading, error, fetchData } = useStore();
+
+  useEffect(() => {
+    if (checkPathName(pathname)) {
+      fetchData(); // Trigger the API call when the component mounts
+    }
+  }, [fetchData]);
+
+  console.log({ callapi, managementData }, "callapi");
+  const { allFormData, documentData } = useDepositTakerRegistrationStore(
+    (state) => state
+  );
+  console.log({ allFormData, documentData }, "allFormData");
   const regulatorStore = useProfileRegulatorStore(
     (state) => state.regulatorStore
   );
@@ -43,6 +72,7 @@ const ProfileBranches = () => {
   //     setBranches: state.setBranches,
   //   })
   // );
+
   const {
     branches,
     addBranch,
@@ -60,10 +90,34 @@ const ProfileBranches = () => {
     setChecked: state.setChecked,
     toggleChecked: state.toggleChecked,
   }));
+  const { removedBranches: removedBranchesData, clearRemovedBranches } =
+    useManagementStore((state) => ({
+      removedBranches: state.removedBranches,
+      clearRemovedBranches: state.clearRemovedBranches,
+    }));
+
+  console.log({ removedBranchesData }, "removedBranchesData");
+
+  const filterManagement: any = removedBranchesData?.map(
+    ({ id, firstName }: any) => ({
+      id,
+      firstName,
+    })
+  );
+
+  const filterManagementID: any = removedBranchesData?.map(({ id }: any) => id);
+  console.log(
+    { filterManagement, filterManagementID },
+    "filterManagement",
+    "filtermangementID"
+  );
+
   // const [isChecked, setChecked] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [uploadInputKey, setUploadKey] = useState<number>(0);
   const uploadButtonRef = useRef<HTMLInputElement>(null);
+  const [place, setPlace] = useState("");
+  const [placeError, setPlaceError] = useState("");
   const {
     register,
     handleSubmit,
@@ -73,6 +127,27 @@ const ProfileBranches = () => {
     getValues,
     reset,
   } = useForm();
+
+  const formData =
+    allFormData?.formFields?.form_fields &&
+    allFormData?.formFields?.form_fields?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: field.entityRegSection?.sectionName,
+      label: field.label,
+      value: field.userInput,
+      key: field?.key,
+    }));
+
+  const formDataDocument =
+    documentData &&
+    documentData?.map((field: any) => ({
+      fieldId: field.id,
+      sectionCode: "Upload Documents",
+      label: field.documentName,
+      value: field.uploadFileId,
+    }));
+
+  const combinedFormData = [...formData, ...formDataDocument];
 
   const fetchBranches = async () => {
     try {
@@ -88,13 +163,15 @@ const ProfileBranches = () => {
           pinCode: "",
           state: "",
           district: "",
-          place: "",
+          // place: "",
         });
       }
+      // console.log(response.data?.branchCreatePlace, "response.data.data");
       setBranches(fetchedBranches);
+      setPlace(response.data?.branchCreatePlace);
       reset({
         branches: fetchedBranches?.map((branch: any) => ({
-          ...branch, // Spread the entire branch object
+          ...branch, // Spread the entire branch objects
         })),
       }); // Properly initializing form with fetched data including IDs
       setLoader(false);
@@ -110,50 +187,281 @@ const ProfileBranches = () => {
     fetchBranches();
   }, [reset, setBranches, uploadInputKey]);
 
-  const onSubmit = async (data: any) => {
-    setLoader(true);
+  const handlePlaceChange = (event: any) => {
+    const { value } = event.target;
+    // Check if the input length is greater than 3
+    if (value.length <= 3) {
+      setPlaceError("Place must be longer than 3 characters");
+    } else {
+      setPlaceError(""); // Clear error if input is valid
+    }
+    setPlace(value);
+  };
+
+  const removeManagement = async (ids: any) => {
+    console.log(ids, "id");
     try {
-      const branchesToSubmit = data.branches.map((branch: any) => {
-        const { id, ...branchData } = branch;
-        return branch.id ? { id, ...branchData } : branchData;
-      });
-      const response = await axiosTokenInstance.post(
-        `/deposit-taker/branch/${entityUniqueId}`,
-        {
-          branches: branchesToSubmit,
-        }
+      const response = await axiosTokenInstance.delete(
+        `/deposit-taker/management-team/${entityUniqueId}`,
+        { data: { ids } } // Passing the ID in the body of the DELETE request
       );
-      if (regulatorData.length > 0) {
-        regulatorStore();
+      console.log({ response }, "response");
+      if (response.data.status === "success") {
+        setLoader(true);
+        // Swal.fire({
+        //   icon: "success",
+        //   text: response?.data?.message,
+        //   confirmButtonText: "Ok",
+        // }).then(() => {
+        //   // Additional actions after confirmation if needed
+        // });
       }
-      if (nodalDetailData.length > 0) {
-        nodaldetailsStore();
-      }
-      if (entityData.length > 0) {
-        entitydetails();
-      }
-      if (uploadData.length > 0) {
-        uploadDocument();
-      }
-
-      await fetchBranches();
-      setLoader(false);
-
-      Swal.fire({
-        icon: "success",
-        text: response?.data?.message,
-        confirmButtonText: "Ok",
-      });
     } catch (error) {
-      console.error("Failed to submit branches:", error);
-      Swal.fire({
-        icon: "error",
-        text: "Failed to update Entity Details",
-        confirmButtonText: "Ok",
-      });
-      setLoader(false);
+      console.error("Failed to remove management:", error);
+      // Swal.fire({
+      //   icon: "error",
+      //   text: "Failed to remove management",
+      //   confirmButtonText: "Ok",
+      // });
+    } finally {
+      setLoader(false); // Ensure loader is turned off regardless of success or failure
     }
   };
+  const onSubmit = async (data: any) => {
+    if (!place.trim()) {
+      setPlaceError("Place is required");
+      return; // Prevent form submission if the place is empty
+    }
+
+    if (placeError) {
+      return; // Prevent form submission if there is a place error
+    }
+
+    setLoader(true);
+
+    // Show confirmation dialog first
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to proceed with updating the details?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, upload!",
+      cancelButtonText: "No, cancel!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // Only proceed with the API call if the user confirms
+        try {
+          const branchesToSubmit = data.branches.map((branch: any) => {
+            const { id, ...branchData } = branch;
+            return branch.id ? { id, ...branchData } : branchData;
+          });
+
+          const response = await axiosTokenInstance.post(
+            `/deposit-taker/branch/${entityUniqueId}`,
+            {
+              branches: branchesToSubmit,
+              place: place, // assuming you want to send place as part of the request
+            }
+          );
+
+          if (callapi) {
+            const membersToSubmit = managementData?.branches?.map(
+              (member: any) => {
+                const { id, ...memberData } = member;
+                return member.id ? { id, ...memberData } : memberData;
+              }
+            );
+
+            await axiosTokenInstance.post(
+              `/deposit-taker/management-team/${entityUniqueId}`,
+              {
+                members: membersToSubmit, // Changed from branches to members
+              }
+            );
+
+            await axiosTokenInstance.patch(
+              `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+              {
+                formData: combinedFormData,
+              }
+            );
+
+            Swal.fire({
+              icon: "success",
+              text: response?.data?.message || "",
+              confirmButtonText: "Ok",
+            });
+
+            sessionStorage.setItem("user_status", "PENDING");
+            Navigate("/dt/dashboard");
+
+            if (
+              Array.isArray(filterManagement) &&
+              filterManagement.some(
+                (management: any) => management.id && management.firstName
+              )
+            ) {
+              // Collect all ids in an array format like [10, 5, 8]
+              const idsToRemove = filterManagement
+                .filter(
+                  (management: any) => management.id && management.firstName
+                )
+                .map((management: any) => management.id);
+
+              // Pass the collected ids to your removal function
+              if (idsToRemove.length > 0) {
+                removeManagement(idsToRemove); // Adjust according to your actual removal logic
+                clearRemovedBranches();
+              }
+            }
+          } else {
+            Swal.fire({
+              icon: "success",
+              text: response?.data?.message,
+              confirmButtonText: "Ok",
+            });
+          }
+
+          await fetchBranches();
+        } catch (error) {
+          console.error("Failed to submit branches:", error);
+          Swal.fire({
+            icon: "error",
+            text: "Failed to update Entity Details",
+            confirmButtonText: "Ok",
+          });
+        } finally {
+          setLoader(false);
+        }
+      } else {
+        // Cancel action: reset loader or handle cancel-specific logic if needed
+        setLoader(false);
+      }
+    });
+  };
+
+  // const onSubmit = async (data: any) => {
+  //   if (!place.trim()) {
+  //     setPlaceError("Place is required");
+  //     return; // Prevent form submission if the place is empty
+  //   }
+
+  //   if (placeError) {
+  //     return; // Prevent form submission if there is a place error
+  //   }
+  //   setLoader(true);
+  //   try {
+  //     const branchesToSubmit = data.branches.map((branch: any) => {
+  //       const { id, ...branchData } = branch;
+  //       return branch.id ? { id, ...branchData } : branchData;
+  //     });
+  //     // const response = await axiosTokenInstance.post(
+  //     //   `/deposit-taker/branch/${entityUniqueId}`,
+  //     //   {
+  //     //     branches: branchesToSubmit,
+  //     //   }
+  //     // );
+  //     const response = await axiosTokenInstance.post(
+  //       `/deposit-taker/branch/${entityUniqueId}`,
+  //       {
+  //         branches: branchesToSubmit,
+  //         place: place, // assuming you want to send place as part of the request
+  //       }
+  //     );
+
+  //     if (callapi) {
+  //       Swal.fire({
+  //         title: "Are you sure?",
+  //         text: "Do you want to proceed with updating the details?",
+  //         icon: "warning",
+  //         showCancelButton: true,
+  //         confirmButtonText: "Yes, upload!",
+  //         cancelButtonText: "No, cancel!",
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           const membersToSubmit = managementData?.branches?.map(
+  //             (member: any) => {
+  //               const { id, ...memberData } = member;
+  //               return member.id ? { id, ...memberData } : memberData;
+  //             }
+  //           );
+  //           axiosTokenInstance.post(
+  //             `/deposit-taker/management-team/${entityUniqueId}`,
+  //             {
+  //               members: membersToSubmit, // Changed from branches to members
+  //             }
+  //           );
+  //         }
+  //         axiosTokenInstance
+  //           .patch(
+  //             `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
+  //             {
+  //               formData: combinedFormData,
+  //             }
+  //           )
+  //           .then((response) => {
+  //             Swal.fire({
+  //               icon: "success",
+  //               text: response?.data?.message || "",
+  //               confirmButtonText: "Ok",
+  //             });
+  //             setLoader(false);
+  //             sessionStorage.setItem("user_status", "PENDING");
+  //             Navigate("/dt/dashboard");
+  //           });
+  //         if (
+  //           Array.isArray(filterManagement) &&
+  //           filterManagement.some(
+  //             (management: any) => management.id && management.firstName
+  //           )
+  //         ) {
+  //           // Collect all ids in an array format like [10, 5, 8]
+  //           const idsToRemove = filterManagement
+  //             .filter(
+  //               (management: any) => management.id && management.firstName
+  //             )
+  //             .map((management: any) => management.id);
+
+  //           // Pass the collected ids to your removal function
+  //           if (idsToRemove.length > 0) {
+  //             removeManagement(idsToRemove); // Adjust according to your actual removal logic
+  //             clearRemovedBranches();
+  //           }
+  //         }
+  //       });
+  //     } else {
+  //       Swal.fire({
+  //         icon: "success",
+  //         text: response?.data?.message,
+  //         confirmButtonText: "Ok",
+  //       });
+  //     }
+
+  //     // if (regulatorData.length > 0) {
+  //     //   regulatorStore();
+  //     // }
+  //     // if (nodalDetailData.length > 0) {
+  //     //   nodaldetailsStore();
+  //     // }
+  //     // if (entityData.length > 0) {
+  //     //   entitydetails();
+  //     // }
+  //     // if (uploadData.length > 0) {
+  //     //   uploadDocument();
+  //     // }
+
+  //     await fetchBranches();
+  //     setLoader(false);
+  //   } catch (error) {
+  //     console.error("Failed to submit branches:", error);
+  //     Swal.fire({
+  //       icon: "error",
+  //       text: "Failed to update Entity Details",
+  //       confirmButtonText: "Ok",
+  //     });
+  //     setLoader(false);
+  //   }
+  // };
 
   // const handleCheckboxChange = () => setChecked(!isChecked);
   const handleCheckboxChange = () => toggleChecked();
@@ -288,7 +596,36 @@ const ProfileBranches = () => {
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  if (pathname == "/dt/profile") {
+    var disableFieldStatus = checkPathName(pathname)
+      ? disabledField == "RETURNED"
+        ? false
+        : !data?.profileUpdate
+      : !data?.profileUpdate;
+  } else {
+    disableFieldStatus = checkPathName(pathname)
+      ? checkStatus(disabledField)
+      : false;
+  }
+
+  const backNavigation = () => {
+    Navigate("/dt/profile?current=documents");
+  };
 
   return (
     <div className="bg-white p-7 w-full h-full ">
@@ -361,6 +698,19 @@ const ProfileBranches = () => {
             />
           ))
         )}
+        <div className="mt-4">
+          <label className="flex items-center">
+            Place <span className="text-red-500">*</span>
+          </label>
+          <InputFieldsV2
+            type="text"
+            placeholder="enter place"
+            value={place}
+            disabled={status === "INCOMPLETE" ? false : true}
+            onChange={handlePlaceChange}
+          />
+          {placeError && <p className="text-red-500">{placeError}</p>}
+        </div>
         {disableFieldStatus ? (
           <></>
         ) : (
@@ -374,21 +724,56 @@ const ProfileBranches = () => {
                   onChange={handleCheckboxChange}
                   className="h-4 w-4 mr-2 rounded-lg accent-[#1c468e]"
                 />
-                I declare all the information provided is correct as per my
-                knowledge.
+                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
+                  I solemnly affirm to the best of my knowledge and belief, that
+                  the information given in the Form is correct, and the nothing
+                  material has been concealed therefrom and I agree to the&nbsp;
+                  <Link
+                    className="text-[#1c468e] underline cursor-pointer"
+                    target={"_blank"}
+                    to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
+                  >
+                    Terms and Conditions
+                  </Link>
+                </div>
               </label>
             </div>
           </>
         )}
 
-        <div>
-          <Footer disabled={!isChecked} loader={loader} hidecontiuebtn={true} />
-          <button
-            onSubmit={onSubmit}
-            type="submit"
-            className="mt-4 btn-primary"
-          ></button>
-        </div>
+        {status === "INCOMPLETE" ? (
+          <div>
+            <FooterDT2
+              disabled={!isChecked}
+              loader={loader}
+              hidecontiuebtn={true}
+              showbackbtn={true}
+              path={"/dt/profile?current=documents"}
+              backNavigation={handleSubmit(backNavigation)}
+            />
+            <button
+              onSubmit={onSubmit}
+              type="submit"
+              className="mt-4 btn-primary"
+            ></button>
+          </div>
+        ) : (
+          <div>
+            <Footer
+              disabled={!isChecked}
+              loader={loader}
+              hidecontiuebtn={true}
+              showbackbtn={true}
+              path={"/dt/profile?current=documents"}
+              backNavigation={handleSubmit(backNavigation)}
+            />
+            <button
+              onSubmit={onSubmit}
+              type="submit"
+              className="mt-4 btn-primary"
+            ></button>
+          </div>
+        )}
       </form>
     </div>
   );

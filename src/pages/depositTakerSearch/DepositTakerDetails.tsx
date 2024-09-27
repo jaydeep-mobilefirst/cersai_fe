@@ -19,6 +19,7 @@ import ReactTable from "../../components/userFlow/common/ReactTable";
 import { axiosTraceIdInstance } from "../../utils/axios";
 import { useLandingStore } from "../../zust/useLandingStore";
 import { useLangugaeStore } from "../../zust/useLanguageUsStore";
+import MangementDetails from "./ManagementDetails";
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
@@ -275,6 +276,11 @@ const DepositSearchDetails: React.FC = () => {
         </div>
       </>,
     },
+    {
+      header: "Management Details",
+      content: <MangementDetails />,
+    },
+
   ];
 
   const onNavigateToBack = () => {
