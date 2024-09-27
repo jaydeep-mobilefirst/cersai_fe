@@ -19,7 +19,9 @@ const useDownloadPDF = () => {
   const [isPdfMode, setIsPdfMode] = useState(false);
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
-  const entityName = allFormData?.formFields?.form_fields?.find((item)=>item.key==="competentAuthorityName")?.userInput
+  const entityName = allFormData?.formFields?.form_fields?.find(
+    (item) => item.key === "competentAuthorityName"
+  )?.userInput;
   const downloadPDF = () => {
     setIsDownloading(true);
     setIsPdfMode(true);
@@ -381,9 +383,24 @@ const ReviewDetails = () => {
           success={submitted}
         />
         <footer className="p-4 border-[#E6E6E6] border-[1px] ">
-          <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+          {/* <p className="text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
             © 2024 Protean BUDs, All Rights Reserved.
-          </p>
+          </p> */}
+          <div className="text-center mt-auto">
+            <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+              COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+            </h1>
+            <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+              Powered and managed by{" "}
+              <a
+                href="https://www.proteantech.in/"
+                className="underline text-gilroy-regular font-bold"
+                target="_blank"
+              >
+                Protean eGov Technologies
+              </a>{" "}
+            </p>
+          </div>
         </footer>
       </div>
     </>
