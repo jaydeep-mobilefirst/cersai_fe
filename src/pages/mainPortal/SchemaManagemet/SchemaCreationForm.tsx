@@ -105,7 +105,7 @@ const SchemaCreationForm = () => {
 
   useEffect(() => {
     fetchSchema();
-  }, [fetchRegulatorData, isInitialLoad]);
+  }, [fetchRegulatorData]);
   // const fetchSchema = async () => {
   //   try {
   //     const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
@@ -210,6 +210,7 @@ const SchemaCreationForm = () => {
       if (response.data.success) {
         // Fetch regulator data before processing form fields
         setLoader(false);
+        setIsInitialLoad(false);
         await fetchFormFields();
 
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
