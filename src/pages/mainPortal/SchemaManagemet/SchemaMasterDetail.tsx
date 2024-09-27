@@ -304,14 +304,14 @@ const SchemeMasterForm = () => {
               onChange={onChange}
             />
             {showSubmitButton && (
-              <div className="flex justify-end items-center mt-4">
+              <div className='flex justify-end items-center mt-4'>
                 <Button
-                  label="Submit"
-                  type="submit"
-                  width="250px"
-                  textColor="white"
-                  borderColor="#1C468E"
-                  backgroundColor="#1C468E"
+                  label='Submit'
+                  type='submit'
+                  width='250px'
+                  textColor='white'
+                  borderColor='#1C468E'
+                  backgroundColor='#1C468E'
                   loader={loader}
                 />
               </div>
@@ -335,12 +335,15 @@ const SchemeMasterForm = () => {
   };
 
   return (
-    <div className="min-h-[100vh] flex flex-col justify-between">
-      <div className="relative mx-2 xl:ml-[40px] mt-4 flex-grow">
-        <div className="mt-6">
+    <div
+      className='min-h-[100vh] flex flex-col justify-between'
+      style={{ minHeight: "calc(100vh - 120px)" }}
+    >
+      <div className='relative mx-2 xl:ml-[40px] mt-4 flex-grow'>
+        <div className='mt-6'>
           <TaskTabs />
         </div>
-        <div className="mt-8">
+        <div className='mt-8'>
           {loader ? (
             <LoaderSpin />
           ) : (
@@ -350,31 +353,30 @@ const SchemeMasterForm = () => {
       </div>
 
       {/* Footer and Back button at the bottom */}
-      <div className="mb-4 flex flex-col md:flex-row justify-between items-center">
-        <div className="flex items-center cursor-pointer mb-3 md:mb-0 xl:ml-[40px] mx-2">
+      <div className='mb-4 flex flex-col md:flex-row justify-between items-center'>
+        <div className='flex items-center cursor-pointer mb-3 md:mb-0 xl:ml-[40px] mx-2'>
           <img src={BackArrow} alt={BackArrow} />
           <p
             onClick={handleBackButtonClick}
-            className="text-sm font-normal text-gilroy-regular"
+            className='text-sm font-normal text-gilroy-regular'
           >
             Back
           </p>
         </div>
-        
       </div>
 
-      <div className="border-b-2 border-[#E6E6E6]"></div>
+      <div className='border-b-2 border-[#E6E6E6]'></div>
 
-      <div className="text-center mt-auto">
-        <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+      <div className='text-center mt-auto'>
+        <h1 className='text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal'>
           COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
         </h1>
-        <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+        <p className='text-[#24222B] text-xs text-wrap text-gilroy-light font-normal'>
           Powered and managed by{" "}
           <a
-            href="https://www.proteantech.in/"
-            className="underline text-gilroy-regular font-bold"
-            target="_blank"
+            href='https://www.proteantech.in/'
+            className='underline text-gilroy-regular font-bold'
+            target='_blank'
           >
             Protean eGov Technologies
           </a>{" "}
