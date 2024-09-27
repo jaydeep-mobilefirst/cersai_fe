@@ -397,7 +397,10 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col justify-between h-screen">
+    <div className="flex flex-col min-h-screen justify-between"
+    
+    style={{ minHeight: "calc(100vh - 140px)" }}>
+      <div>
       <div className="mt-6 mx-2">
         <TaskTabsCa />
       </div>
@@ -472,7 +475,11 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
           <div className="mt-8 mb-8 mx-8">
             <Accordion items={accordionItems} />
           </div>
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between ">
+        </>
+      )}
+      
+      </div>  
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between ">
             <div>
               <div
                 className="flex w-full flex-row justify-end items-center"
@@ -520,8 +527,6 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
               </div>
             </div>
           </div>
-        </>
-      )}
 
       {uploadPopupOpen && (
         <UploadPopUp closePopup={handleClosePopup} SuccessPopup={() => {}} />
