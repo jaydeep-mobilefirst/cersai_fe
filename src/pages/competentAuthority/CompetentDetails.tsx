@@ -47,7 +47,7 @@ const ComponentDetails: React.FC = () => {
       .map((field: any) => {
         const disableLabels = [
           "State",
-          "District"
+          "District",
           // "Jurisdiction",
           // "Address Line 1",
           // "Address Line 2",
@@ -56,7 +56,7 @@ const ComponentDetails: React.FC = () => {
 
         const disableKeys = [
           "state",
-          "district"
+          "district",
           // "Jurisdiction",
           // "addressLine1",
           // "addressLine2",
@@ -195,9 +195,24 @@ const ComponentDetails: React.FC = () => {
           <div>
             <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 
-            <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+            {/* <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
               © 2024 Protean BUDs, All Rights Reserved.
-            </p>
+            </p> */}
+            <div className="text-center mt-auto">
+              <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+                COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+              </h1>
+              <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+                Powered and managed by{" "}
+                <a
+                  href="https://www.proteantech.in/"
+                  className="underline text-gilroy-regular font-bold"
+                  target="_blank"
+                >
+                  Protean eGov Technologies
+                </a>{" "}
+              </p>
+            </div>
           </div>
         </div>
       </form>
