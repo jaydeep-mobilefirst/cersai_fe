@@ -169,7 +169,9 @@ const AddUserForm = () => {
       <div className="-ml-9 -mr-9">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center justify-between flex-col h-full lg:h-[75vh] "
+          className="flex items-center justify-between flex-col h-full lg:h-[75vh]"
+          
+      style={{ minHeight: "calc(100vh - 280px)" }}
         >
           <div
             className="w-full"

@@ -355,7 +355,7 @@ const SchemeDetails = () => {
   return (
     <div
       className="mt-6 mx-8 relative"
-      style={{ minHeight: "calc(100vh - 110px)" }}
+      style={{ minHeight: "calc(100vh - 140px)" }}
     >
       <div className="mt-2 ">
         <TaskTabsCa />
