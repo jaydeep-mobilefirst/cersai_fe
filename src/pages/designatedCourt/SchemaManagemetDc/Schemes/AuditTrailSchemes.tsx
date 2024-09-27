@@ -187,15 +187,36 @@ const SchemesSearchDetailsSM: React.FC = () => {
             }))
             ?.sort((a: any, b: any) => {
               // Sort by companyName, panNumber, and dateOfIncorporation
-              const sortOrder = ["companyName", "panNumber", "dateOfIncorporation","Type of Entity", "Unique ID Number","GST Number","Registered Address Line 1","Registered Address Line 2","pincode","State","District","regulatorName","Regulator Number (Provided by Regulator)","Regulator approval Date","User Email","nodalFirstname","nodalMiddlename","nodalLastname","nodalMobile","nodalEmail",];
+              const sortOrder = [
+                "companyName",
+                "panNumber",
+                "dateOfIncorporation",
+                "Type of Entity",
+                "Unique ID Number",
+                "GST Number",
+                "Registered Address Line 1",
+                "Registered Address Line 2",
+                "pincode",
+                "State",
+                "District",
+                "regulatorName",
+                "Regulator Number (Provided by Regulator)",
+                "Regulator approval Date",
+                "User Email",
+                "nodalFirstname",
+                "nodalMiddlename",
+                "nodalLastname",
+                "nodalMobile",
+                "nodalEmail",
+              ];
               const aIndex = sortOrder.indexOf(a.key || a.label);
               const bIndex = sortOrder.indexOf(b.key || b.label);
-    
+
               if (aIndex === -1 && bIndex === -1) return 0; // No sorting for non-prioritized fields
               if (aIndex === -1) return 1; // a comes after b
               if (bIndex === -1) return -1; // a comes before b
               return aIndex - bIndex; // Sort based on index in sortOrder
-            })
+            });
 
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
@@ -371,7 +392,8 @@ const SchemesSearchDetailsSM: React.FC = () => {
     }
   };
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="flex flex-col min-h-screen justify-between">
+      <div>
       <div className="mt-6 mx-8">
         <TaskTabsDc />
       </div>
@@ -391,6 +413,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
         ) : (
           <Accordion items={accordionItems} showAccordion={true} />
         )}
+      </div>
       </div>
       <div>
         <div
@@ -449,9 +472,22 @@ const SchemesSearchDetailsSM: React.FC = () => {
         </div>
         <div>
           <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
-          <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
-            © 2024 Protean BUDs, All Rights Reserved.
-          </p>
+
+          <div className="text-center mt-auto">
+            <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+              COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+            </h1>
+            <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+              Powered and managed by{" "}
+              <a
+                href="https://www.proteantech.in/"
+                className="underline text-gilroy-regular font-bold"
+                target="_blank"
+              >
+                Protean eGov Technologies
+              </a>{" "}
+            </p>
+          </div>
         </div>
       </div>
     </div>

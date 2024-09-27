@@ -22,7 +22,7 @@ const SchemaCreationForm = () => {
     show: false,
   });
   const entityType = sessionStorage.getItem("entityUniqueId");
-  console.log("fetchRegulatorData",fetchRegulatorData)
+  console.log("fetchRegulatorData", fetchRegulatorData);
   const navigate = useNavigate();
   const { collapsed } = useSidebarStore();
   const { setAllFormData, setAllDocumentData, allFormData } =
@@ -86,7 +86,11 @@ const SchemaCreationForm = () => {
             formFields: { form_fields: modifiedFormFields },
           };
           console.log(obj, "obj-----");
-          setRegulatorData(obj?.formFields?.form_fields?.find((item:any)=>item.key ==="regulatorName")?.userInput)
+          setRegulatorData(
+            obj?.formFields?.form_fields?.find(
+              (item: any) => item.key === "regulatorName"
+            )?.userInput
+          );
           // setAllFormData(obj);
           // setAllDocumentData(modifiedFileFields);
         } else {
@@ -166,7 +170,7 @@ const SchemaCreationForm = () => {
   //               error: "",
   //               typeId: field?.fieldTypeId,
   //             };
-  //           } 
+  //           }
   //           else {
   //             return {
   //               ...field,
@@ -197,16 +201,16 @@ const SchemaCreationForm = () => {
   //   }
   // };
   const fetchSchema = async () => {
-    setLoader(true)
+    setLoader(true);
     try {
       const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
       sessionStorage.setItem("entitiy_details_api", "true");
-  
+
       if (response.data.success) {
         // Fetch regulator data before processing form fields
-        setLoader(false)
+        setLoader(false);
         await fetchFormFields();
-  
+
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
             if (field?.key === "depositTakerId") {
@@ -233,7 +237,7 @@ const SchemaCreationForm = () => {
                   name: b?.pinCode + " " + b?.district + " " + b?.state,
                   id: b?.id,
                 }));
-  
+
                 return {
                   ...field,
                   userInput: "",
@@ -254,8 +258,8 @@ const SchemaCreationForm = () => {
               }
             } else if (field?.key === "regulator") {
               // Ensure fetchRegulatorData is available
-              const regulatorValue = fetchRegulatorData // Default to empty string if not fetched yet
-              console.log("regulatorValueregulatorValue",regulatorValue)
+              const regulatorValue = fetchRegulatorData; // Default to empty string if not fetched yet
+              console.log("regulatorValueregulatorValue", regulatorValue);
               return {
                 ...field,
                 userInput: fetchRegulatorData,
@@ -273,13 +277,12 @@ const SchemaCreationForm = () => {
             }
           }
         );
-  
+
         formFields = await Promise.all(formFields);
 
+        // Sort form fields based on the sortOrder
+        formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
-      // Sort form fields based on the sortOrder
-      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
-  
         setAllFormData({
           ...response?.data?.data,
           formFields: {
@@ -293,11 +296,11 @@ const SchemaCreationForm = () => {
         });
       }
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.error("Error fetching schema data:", error);
     }
   };
-  
+
   console.log({ allFormData }, "scheme data ");
 
   const onSubmit = async (event: any) => {
@@ -397,7 +400,7 @@ const SchemaCreationForm = () => {
       setLoader(false);
     }
   };
-  console.log("alll----daaaa",allFormData)
+  console.log("alll----daaaa", allFormData);
   return (
     <div
       className="relative xl:ml-[40px]"
@@ -483,9 +486,21 @@ const SchemaCreationForm = () => {
                 <div>
                   <div className="border-[#E6E6E6] border-[1px] lg:mt-4 "></div>
 
-                  <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
-                    © 2024 Protean BUDs, All Rights Reserved.
-                  </p>
+                  <div className="text-center mt-auto">
+                    <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+                      COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+                    </h1>
+                    <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+                      Powered and managed by{" "}
+                      <a
+                        href="https://www.proteantech.in/"
+                        className="underline text-gilroy-regular font-bold"
+                        target="_blank"
+                      >
+                        Protean eGov Technologies
+                      </a>{" "}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
