@@ -14,6 +14,7 @@ const SchemaCreationForm = () => {
   const screenWidth = useScreenWidth();
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [submitted, setSubmitted] = useState(false);
   const [fetchRegulatorData, setRegulatorData] = useState<any>();
   const [popupData, setPopData] = useState({
@@ -22,7 +23,7 @@ const SchemaCreationForm = () => {
     show: false,
   });
   const entityType = sessionStorage.getItem("entityUniqueId");
-  console.log("fetchRegulatorData",fetchRegulatorData)
+  console.log("fetchRegulatorData", fetchRegulatorData);
   const navigate = useNavigate();
   const { collapsed } = useSidebarStore();
   const { setAllFormData, setAllDocumentData, allFormData } =
@@ -86,7 +87,11 @@ const SchemaCreationForm = () => {
             formFields: { form_fields: modifiedFormFields },
           };
           console.log(obj, "obj-----");
-          setRegulatorData(obj?.formFields?.form_fields?.find((item:any)=>item.key ==="regulatorName")?.userInput)
+          setRegulatorData(
+            obj?.formFields?.form_fields?.find(
+              (item: any) => item.key === "regulatorName"
+            )?.userInput
+          );
           // setAllFormData(obj);
           // setAllDocumentData(modifiedFileFields);
         } else {
@@ -166,7 +171,7 @@ const SchemaCreationForm = () => {
   //               error: "",
   //               typeId: field?.fieldTypeId,
   //             };
-  //           } 
+  //           }
   //           else {
   //             return {
   //               ...field,
@@ -197,16 +202,17 @@ const SchemaCreationForm = () => {
   //   }
   // };
   const fetchSchema = async () => {
-    setLoader(true)
+    setLoader(true);
     try {
       const response = await axiosTokenInstance.get(`/scheme/field-data/1`);
       sessionStorage.setItem("entitiy_details_api", "true");
-  
+
       if (response.data.success) {
         // Fetch regulator data before processing form fields
-        setLoader(false)
+        setLoader(false);
+        setIsInitialLoad(false);
         await fetchFormFields();
-  
+
         let formFields = response?.data?.data?.formFields?.allFormFields.map(
           async (field: any) => {
             if (field?.key === "depositTakerId") {
@@ -233,7 +239,7 @@ const SchemaCreationForm = () => {
                   name: b?.pinCode + " " + b?.district + " " + b?.state,
                   id: b?.id,
                 }));
-  
+
                 return {
                   ...field,
                   userInput: "",
@@ -254,8 +260,8 @@ const SchemaCreationForm = () => {
               }
             } else if (field?.key === "regulator") {
               // Ensure fetchRegulatorData is available
-              const regulatorValue = fetchRegulatorData // Default to empty string if not fetched yet
-              console.log("regulatorValueregulatorValue",regulatorValue)
+              const regulatorValue = fetchRegulatorData; // Default to empty string if not fetched yet
+              console.log("regulatorValueregulatorValue", regulatorValue);
               return {
                 ...field,
                 userInput: fetchRegulatorData,
@@ -273,13 +279,12 @@ const SchemaCreationForm = () => {
             }
           }
         );
-  
+
         formFields = await Promise.all(formFields);
 
+        // Sort form fields based on the sortOrder
+        formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
-      // Sort form fields based on the sortOrder
-      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
-  
         setAllFormData({
           ...response?.data?.data,
           formFields: {
@@ -293,11 +298,12 @@ const SchemaCreationForm = () => {
         });
       }
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.error("Error fetching schema data:", error);
+      setIsInitialLoad(false);
     }
   };
-  
+
   console.log({ allFormData }, "scheme data ");
 
   const onSubmit = async (event: any) => {
@@ -397,7 +403,7 @@ const SchemaCreationForm = () => {
       setLoader(false);
     }
   };
-  console.log("alll----daaaa",allFormData)
+  console.log("alll----daaaa", allFormData);
   return (
     <div
       className="relative xl:ml-[40px]"
@@ -407,7 +413,93 @@ const SchemaCreationForm = () => {
         <TaskTabs />
       </div>
       <div className="-ml-7">
-        {allFormData?.formFields?.form_fields?.length > 0 ? (
+        {isInitialLoad ? (
+          <div className="flex justify-center items-center h-[calc(100vh-300px)]">
+            <LoaderSpin />
+          </div>
+        ) : (
+          <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
+            <div className="w-full mb-40">
+              <div className="mt-10">
+                <DynamicFields
+                  formFields={allFormData?.formFields?.form_fields}
+                  allFormData={allFormData}
+                  onChange={onChange}
+                />
+              </div>
+
+              <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
+                <div className="">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 accent-[#1c648e]"
+                    checked={isChecked}
+                    onChange={handleCheckboxChange}
+                    placeholder="ischecked"
+                  />
+                </div>
+                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
+                  I declare all the Information provided is correct as per my
+                  knowledge.
+                </div>
+              </div>
+            </div>
+            <SuccessPopup
+              closePopup={() => {
+                setPopData({ ...popupData, show: false });
+                if (submitted) {
+                  navigate("/dt/scheme");
+                }
+              }}
+              showPopup={() => {}}
+              toggle={popupData.show}
+              para1={popupData.para1}
+              para2={popupData.para2}
+              success={submitted}
+            />
+
+            <div className="absolute bottom-0">
+              <div
+                className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
+                style={{
+                  width: `${
+                    screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
+                  }`,
+                }}
+              >
+                <div className="flex items-center space-x-6">
+                  <p
+                    onClick={handleBackButtonClick}
+                    className="text-[#1c468e] text-gilroy-medium cursor-pointer"
+                  >
+                    Discard
+                  </p>
+
+                  <button
+                    onClick={onSubmit}
+                    type="submit"
+                    className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold ${
+                      !isChecked
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-[#163a7a]"
+                    }`}
+                    disabled={!isChecked}
+                  >
+                    {loader ? <LoaderSpin /> : "Create Scheme"}
+                  </button>
+                </div>
+              </div>
+              <div>
+                <div className="border-[#E6E6E6] border-[1px] lg:mt-4 "></div>
+
+                <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
+                  © 2024 Protean BUDs, All Rights Reserved.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* {allFormData?.formFields?.form_fields?.length > 0 ? (
           <>
             <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
               <div className="w-full mb-40">
@@ -483,9 +575,21 @@ const SchemaCreationForm = () => {
                 <div>
                   <div className="border-[#E6E6E6] border-[1px] lg:mt-4 "></div>
 
-                  <p className="mb-[24px] text-gilroy-light text-center text-[#24222B] text-xs cursor-pointer mt-4">
-                    © 2024 Protean BUDs, All Rights Reserved.
-                  </p>
+                  <div className="text-center mt-auto">
+                    <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+                      COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+                    </h1>
+                    <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+                      Powered and managed by{" "}
+                      <a
+                        href="https://www.proteantech.in/"
+                        className="underline text-gilroy-regular font-bold"
+                        target="_blank"
+                      >
+                        Protean eGov Technologies
+                      </a>{" "}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -496,7 +600,7 @@ const SchemaCreationForm = () => {
               <LoaderSpin />
             </div>
           </>
-        )}
+        )} */}
       </div>
     </div>
   );

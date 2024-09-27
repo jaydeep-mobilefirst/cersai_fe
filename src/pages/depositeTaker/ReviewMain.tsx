@@ -15,6 +15,10 @@ import Logo from "../../assets/images/logo.svg";
 const useDownloadPDF = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isPdfMode, setIsPdfMode] = useState(false);
+  const { setAllFormData, setAllDocumentData, allFormData } =
+    useDepositTakerRegistrationStore((state) => state);
+  const entityName = allFormData?.formFields?.form_fields?.find((item)=>item.key==="companyName")?.userInput
+  console.log("entity",entityName)
   const downloadPDF = () => {
     setIsDownloading(true);
     setIsPdfMode(true);
@@ -35,7 +39,7 @@ const useDownloadPDF = () => {
     const isMobile = window.innerWidth <= 768;
     const options = {
       margin: [0.4, 0.4, 0.4, 0.4], // Adjusting the margins
-      filename: `DepositTaker_${getCurrentDateTimeee()}.pdf`,
+      filename: `DT_${entityName}_${getCurrentDateTimeee()}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: isMobile ? 3 : 5 }, // Increasing the scale
       jsPDF: {
@@ -72,7 +76,7 @@ const ReviewMain = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [loader, setLoader] = useState(false);
   const { downloadPDF, isDownloading, isPdfMode } = useDownloadPDF();
-
+  console.log("all-data",allFormData)
   const sectionCodes: any = {
     1: "de_verification",
     2: "de_entity_details",

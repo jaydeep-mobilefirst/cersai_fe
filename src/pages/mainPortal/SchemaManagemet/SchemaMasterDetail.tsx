@@ -37,7 +37,9 @@ const SchemeMasterForm = () => {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
-  const branchDetails = allFormData?.formFields?.form_fields?.find((item:any)=>item.key==="branch")?.userInput
+  const branchDetails = allFormData?.formFields?.form_fields?.find(
+    (item: any) => item.key === "branch"
+  )?.userInput;
   console.log("aaaalllllffff", allFormData);
 
   const fetchSchema = async () => {
@@ -177,11 +179,10 @@ const SchemeMasterForm = () => {
   useEffect(() => {
     checkForEmptyFields();
   }, [allFormData]);
-  
 
   // useEffect(() => {
   //   if (branchDetails) {
-      
+
   //     setAllFormData({
   //       ...allFormData,
   //       formFields: {
@@ -324,10 +325,10 @@ const SchemeMasterForm = () => {
       header: "Audit Trail",
       content: <AuditTrail />,
     },
-    {
-      header: "Management Details",
-      content: <MangementDetails />,
-    },
+    // {
+    //   header: "Management Details",
+    //   content: <MangementDetails />,
+    // },
   ];
   const handleBackButtonClick = () => {
     navigate("/dt/scheme");
@@ -359,14 +360,25 @@ const SchemeMasterForm = () => {
             Back
           </p>
         </div>
+        
       </div>
 
       <div className="border-b-2 border-[#E6E6E6]"></div>
 
       <div className="text-center mt-auto">
         <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
-          © 2024 Protean BUDs, All Rights Reserved.
+          COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
         </h1>
+        <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+          Powered and managed by{" "}
+          <a
+            href="https://www.proteantech.in/"
+            className="underline text-gilroy-regular font-bold"
+            target="_blank"
+          >
+            Protean eGov Technologies
+          </a>{" "}
+        </p>
       </div>
     </div>
   );

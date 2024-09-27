@@ -37,11 +37,23 @@ const DepositSchemaMasterDetail = () => {
           </div>
         </div>
         <div className="border-b-2 border-[#E6E6E6]"></div>
-        <div className="text-center">
-          <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
-            © 2024 Protean BUDs, All Rights Reserved.
-          </h1>
-        </div>
+        
+
+<div className="text-center mt-auto">
+  <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+    COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+  </h1>
+  <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+    Powered and managed by{" "}
+    <a
+      href="https://www.proteantech.in/"
+      className="underline text-gilroy-regular font-bold"
+      target="_blank"
+    >
+      Protean eGov Technologies
+    </a>{" "}
+  </p>
+</div>
       </div>
     </div>
   );
