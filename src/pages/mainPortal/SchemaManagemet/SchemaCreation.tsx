@@ -211,7 +211,7 @@ const SchemaCreation = () => {
     { value: "", label: "All" },
     { value: "ACTIVE", label: "Active" },
     { value: "BANNED", label: "Banned" },
-    { value: "UNDER_LETIGATION", label: "Under litigation" },
+    { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];
   const handleSetStatus = (option: any) => {
     console.log(option, "option");

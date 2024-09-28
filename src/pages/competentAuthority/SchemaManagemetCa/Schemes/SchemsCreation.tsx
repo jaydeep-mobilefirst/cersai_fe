@@ -108,7 +108,8 @@ const NewSchemaCreation = () => {
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info?.getValue();
-        const updatedValue = value ==="UNDER_LETIGATION"?"UNDER LITIGATION" : value
+        const updatedValue =
+          value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value;
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
@@ -222,7 +223,7 @@ const NewSchemaCreation = () => {
     { value: "", label: "All" },
     { value: "ACTIVE", label: "Active" },
     { value: "BANNED", label: "Banned" },
-    { value: "UNDER_LETIGATION", label: "Under litigation" },
+    { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];
   const handleSetStatus = (option: any) => {
     console.log(option, "option");
