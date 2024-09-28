@@ -45,8 +45,7 @@ const NewSchemaCreation = () => {
     setLoader(true);
     try {
       // const uniqueId = sessionStorage.getItem("entityUniqueId");
-      const { data } = await     axiosTokenInstance
-      .get(`/scheme-portal/scheme`, {
+      const { data } = await axiosTokenInstance.get(`/scheme-portal/scheme`, {
         params: {
           page: page,
           limit: pageSize,
@@ -182,7 +181,7 @@ const NewSchemaCreation = () => {
     { value: "", label: "All" },
     { value: "ACTIVE", label: "Active" },
     { value: "BANNED", label: "Banned" },
-    { value: "UNDER_LETIGATION", label: "Under litigation" },
+    { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];
   const handleSetStatus = (option: any) => {
     console.log(option, "option");

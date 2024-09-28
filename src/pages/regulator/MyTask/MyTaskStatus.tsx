@@ -114,7 +114,7 @@ const MyTaskStatus = () => {
       header: () => <span>Deposit Taker Name</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info) => <span>{info.getValue()?.replace(/_/g," ")}</span>,
+      cell: (info) => <span>{info.getValue()?.replace(/_/g, " ")}</span>,
       header: () => <span>Status</span>,
     }),
     columnHelper.accessor((row) => row, {
@@ -199,7 +199,7 @@ const MyTaskStatus = () => {
     { value: "", label: "All" },
     { value: "ACTIVE", label: "Active" },
     { value: "BANNED", label: "Banned" },
-    { value: "UNDER_LETIGATION", label: "Under litigation" },
+    { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];
   const handleSetStatus = (option: any) => {
     console.log(option, "option");
