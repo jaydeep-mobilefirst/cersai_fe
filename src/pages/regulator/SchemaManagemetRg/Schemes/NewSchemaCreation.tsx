@@ -349,7 +349,7 @@ const SchemeDetails = () => {
       <div className="-ml-7">
         <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
           <div className="w-full mb-40">
-            <div className="mt-10 mb-20">
+            <div className="mt-10 mb-0">
               {loader ? (
                 <LoaderSpin />
               ) : (
@@ -360,20 +360,7 @@ const SchemeDetails = () => {
                 />
               )}
             </div>
-            {/* <div className="flex flex-shrink-0 mt-[20px]">
-              <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  placeholder="ischecked"
-                />
-              </div>
-              <div className="leading-[24px]">
-                I declare all the Information provided is correct as per my
-                knowledge.
-              </div>
-            </div> */}
+
             <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
               <div className="">
                 <input

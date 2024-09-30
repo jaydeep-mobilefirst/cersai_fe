@@ -274,7 +274,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
               >
                 Status <span className="text-red-500">*</span>
               </label>
-              <InputField value={allFormData?.other?.status} disabled />
+              <InputField value={allFormData?.other?.status==="UNDER_LETIGATION"?"UNDER LITIGATION":allFormData?.other?.status?.replace(/_/g," ")} disabled />
             </div>
             <div>
               <label
@@ -392,7 +392,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
     }
   };
   return (
-    <div className="flex flex-col min-h-screen justify-between">
+    <div className="flex flex-col min-h-screen justify-between" style={{ minHeight: "calc(100vh - 110px)" }}>
       <div>
       <div className="mt-6 mx-8">
         <TaskTabsDc />

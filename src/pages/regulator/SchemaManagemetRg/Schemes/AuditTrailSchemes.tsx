@@ -445,23 +445,12 @@ const SchemesSearchDetailsSM: React.FC = () => {
   ];
 
   return (
-    <div className='flex flex-col min-h-screen justify-between'>
+    <div className='flex flex-col min-h-screen justify-between' style={{ minHeight: "calc(100vh - 110px)" }}>
       <div className="">
       <div className='mt-6 mx-8'>
         <TaskTabsRg />
       </div>
       <div className='flex  flex-row mt-3 mx-8'>
-        {/* <img
-          src={InfoIcon}
-          alt="InfoIcon"
-          className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
-        /> */}
-        {/* <p className="text-[#808080]">
-          You can Upload Deposit Takers data in bulk. Please use this given
-          <span className="underline line-through:text-blue text-[#BFCFFF]">
-            Template
-          </span>
-        </p> */}
       </div>
       <div className='mt-8 mb-8 mx-8'>
         {loader ? (
@@ -469,50 +458,6 @@ const SchemesSearchDetailsSM: React.FC = () => {
         ) : (
           <Accordion items={accordionItems} showAccordion={true} />
         )}
-        {/* <div className="grid grid-cols-2 space-x-3">
-          <div>
-            <label
-              htmlFor="Select Other Schemes"
-              className="text-base font-normal text-gilroy-medium"
-            >
-              Status
-            </label>
-            <SelectButton
-              // backgroundColor="#F2F2F2"
-              setOption={handleSetOption2}
-              options={filteredOptions}
-              selectedOption={selectedOption2}
-              placeholder="Select"
-              showSearchInput={true}
-              disabled={Status === "BANNED" ? true : false}
-            />
-            <span className="text-red-400">{errors?.statusError}</span>
-          </div>
-
-          <div>
-            <label
-              htmlFor="Select Other Schemes"
-              className="text-base font-normal text-gilroy-medium"
-            >
-              Select Other Schemes
-            </label>
-            <SelectButtonMultiselect
-              setOption={handleSetOption1}
-              options={schemes}
-              placeholder="Select"
-              multiselect={true}
-              allSelectedOptions={selectedSchemes}
-              remove={remove}
-              className="relative"
-              disabled={
-                Status === "BANNED" ||
-                (Status === "UNDER_LETIGATION" && selectedOption2 === "ACTIVE")
-                  ? true
-                  : false
-              }
-            />
-          </div>
-        </div> */}
       </div>
       </div>
       <div className=''>
