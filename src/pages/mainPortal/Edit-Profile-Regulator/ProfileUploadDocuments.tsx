@@ -9,6 +9,7 @@ import UploadFile from "../../designatedCourt/UploadFile";
 import DeleteUpload from "../../designatedCourt/DeleteUpload";
 import DynamicFields from "../../../components/userFlow/depositeTaker/DynamicFields";
 import { axiosTokenInstance } from "../../../utils/axios";
+import FooterText from "../../../components/userFlow/common/FooterText";
 
 type Props = {};
 
@@ -207,9 +208,8 @@ const ProfileUploadDocuments = (props: Props) => {
                 </div>
                 <div>
                   <div className="border-[#E6E6E6] border-[1px] w-full"></div>
-                  <div className="text-gilroy-light text-[#24222B] text-xs cursor-pointer h-16 flex items justify-center items-center">
-                    <div>© 2024 Protean BUDs, All Rights Reserved.</div>
-                  </div>
+                  
+                  <FooterText/>
                 </div>
               </div>
             </div>

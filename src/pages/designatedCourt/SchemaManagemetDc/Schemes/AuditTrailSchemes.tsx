@@ -274,7 +274,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
               >
                 Status <span className="text-red-500">*</span>
               </label>
-              <InputField value={allFormData?.other?.status} disabled />
+              <InputField value={allFormData?.other?.status==="UNDER_LETIGATION"?"UNDER LITIGATION":allFormData?.other?.status?.replace(/_/g," ")} disabled />
             </div>
             <div>
               <label
