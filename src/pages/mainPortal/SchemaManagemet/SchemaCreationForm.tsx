@@ -28,6 +28,8 @@ const SchemaCreationForm = () => {
   const { collapsed } = useSidebarStore();
   const { setAllFormData, setAllDocumentData, allFormData } =
     useDepositTakerRegistrationStore((state) => state);
+
+  console.log({ allFormData }, "allFormData in scheme");
   const { onChange, handleValidationChecks, handleSchemeValidations } =
     useContext(FormHandlerContext);
 
@@ -406,21 +408,21 @@ const SchemaCreationForm = () => {
   console.log("alll----daaaa", allFormData);
   return (
     <div
-      className='relative xl:ml-[40px]'
+      className="relative xl:ml-[40px]"
       style={{ minHeight: "calc(100vh - 140px)" }}
     >
-      <div className='mt-6'>
+      <div className="mt-6">
         <TaskTabs />
       </div>
-      <div className='-ml-7'>
+      <div className="-ml-7">
         {isInitialLoad ? (
-          <div className='flex justify-center items-center h-[calc(100vh-300px)]'>
+          <div className="flex justify-center items-center h-[calc(100vh-300px)]">
             <LoaderSpin />
           </div>
         ) : (
-          <div className='flex items-center justify-between flex-col h-full mx-10 my-0  '>
-            <div className='w-full mb-40'>
-              <div className='mt-10'>
+          <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
+            <div className="w-full mb-40">
+              <div className="mt-10">
                 <DynamicFields
                   formFields={allFormData?.formFields?.form_fields}
                   allFormData={allFormData}
@@ -428,17 +430,17 @@ const SchemaCreationForm = () => {
                 />
               </div>
 
-              <div className='flex flex-shrink-0 mt-[20px] justify-start items-center'>
-                <div className=''>
+              <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
+                <div className="">
                   <input
-                    type='checkbox'
-                    className='h-4 w-4 accent-[#1c648e]'
+                    type="checkbox"
+                    className="h-4 w-4 accent-[#1c648e]"
                     checked={isChecked}
                     onChange={handleCheckboxChange}
-                    placeholder='ischecked'
+                    placeholder="ischecked"
                   />
                 </div>
-                <div className='leading-[24px] ml-4 text-gilroy-medium text-[14px]'>
+                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
                   I declare all the Information provided is correct as per my
                   knowledge.
                 </div>
@@ -458,26 +460,26 @@ const SchemaCreationForm = () => {
               success={submitted}
             />
 
-            <div className='absolute bottom-0'>
+            <div className="absolute bottom-0">
               <div
-                className='flex w-full p-4 lg:px-[30px] flex-row justify-end items-center'
+                className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
                 style={{
                   width: `${
                     screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
                   }`,
                 }}
               >
-                <div className='flex items-center space-x-6'>
+                <div className="flex items-center space-x-6">
                   <p
                     onClick={handleBackButtonClick}
-                    className='text-[#1c468e] text-gilroy-medium cursor-pointer'
+                    className="text-[#1c468e] text-gilroy-medium cursor-pointer"
                   >
                     Discard
                   </p>
 
                   <button
                     onClick={onSubmit}
-                    type='submit'
+                    type="submit"
                     className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold ${
                       !isChecked
                         ? "opacity-50 cursor-not-allowed"
@@ -490,18 +492,18 @@ const SchemaCreationForm = () => {
                 </div>
               </div>
               <div>
-                <div className='border-[#E6E6E6] border-[1px]'></div>
+                <div className="border-[#E6E6E6] border-[1px]"></div>
 
-                <div className='text-center mt-auto'>
-                  <h1 className='text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal'>
+                <div className="text-center mt-auto">
+                  <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
                     COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
                   </h1>
-                  <p className='text-[#24222B] text-xs text-wrap text-gilroy-light font-normal'>
+                  <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
                     Powered and managed by{" "}
                     <a
-                      href='https://www.proteantech.in/'
-                      className='underline text-gilroy-regular font-bold'
-                      target='_blank'
+                      href="https://www.proteantech.in/"
+                      className="underline text-gilroy-regular font-bold"
+                      target="_blank"
                     >
                       Protean eGov Technologies
                     </a>{" "}
