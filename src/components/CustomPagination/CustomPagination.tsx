@@ -226,14 +226,14 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
     <>
       {/* <div className="mb-3 border-b-2 border-[#0000001A]"></div> */}
       <div className="flex flex-col md:flex-row items-center justify-between xl:w-[1197px] p-3 bg-white">
-        <div className="mb-3 sm:mb-0">
+        <div className="sm:mb-0 item-center" >
           <p className="text-sm text-black font-normal text-gilroy-regular">
             Showing data &nbsp;
             {/* {Math.min(indexOfLastItem, totalItems)} of {totalItems} */}
             {currentPage} of {totalPages}
           </p>
         </div>
-        <div className="flex flex-row md:flex-row items-center mt-3">
+        <div className="flex flex-row md:flex-row items-center ">
           <button
             onClick={() =>
               handlePageChange(
