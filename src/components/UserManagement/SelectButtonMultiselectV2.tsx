@@ -47,8 +47,8 @@ const SelectButtonMultiselect = ({
 
   const variantOptions = {
     basic: `w-full h-[50px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
-    outline: `w-full h-[36px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-blue-600 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
-    multiselect: `w-full px-[8px] py-[16px] pr-[17px] flex flex-wrap gap-2 bg-white border border-blue-600 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
+    outline: `w-full h-[36px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
+    multiselect: `w-full px-[8px] py-[16px] pr-[17px] flex flex-wrap gap-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
   };
 
   const variantDropdown = {

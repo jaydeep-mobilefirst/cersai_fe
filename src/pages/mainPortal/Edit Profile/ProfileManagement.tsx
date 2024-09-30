@@ -185,43 +185,6 @@ const ProfileManagement = () => {
 
   console.log({ branches }, "branches");
 
-  // const onSubmit = async (data: any) => {
-  //   console.log("Data", data);
-  //   setLoader(true);
-  //   try {
-  //     const membersToSubmit = data?.branches?.map((member: any) => {
-  //       const { id, ...memberData } = member;
-  //       return member.id ? { id, ...memberData } : memberData;
-  //     });
-
-  //     const response = await axiosTokenInstance.post(
-  //       `/deposit-taker/management-team/${entityUniqueId}`,
-  //       {
-  //         members: membersToSubmit, // Changed from branches to members
-  //       }
-  //     );
-
-  //     await fetchBranches();
-  //     setLoader(false);
-
-  //     Swal.fire({
-  //       icon: "success",
-  //       text: response?.data?.message,
-  //       confirmButtonText: "Ok",
-  //     }).then(() => {
-  //       Navigate("/dt/profile?current=documents");
-  //     });
-  //   } catch (error) {
-  //     console.error("Failed to submit members:", error);
-  //     Swal.fire({
-  //       icon: "error",
-  //       text: "Failed to update Entity Details",
-  //       confirmButtonText: "Ok",
-  //     });
-  //     setLoader(false);
-  //   }
-  // };
-
   const formData1 = Array.isArray(allFormData?.formFields?.form_fields) // Ensure it's an array
     ? allFormData?.formFields?.form_fields.map((field: any) => ({
         fieldId: field.id,
@@ -378,62 +341,64 @@ const ProfileManagement = () => {
         {loader ? (
           <LoaderSpin />
         ) : (
-          branches?.map((branch: any, index: any) => (
-            <div ref={index === branches.length - 1 ? newBranchRef : null}>
-              {" "}
-              {/* You can add a class for styling */}
-              <ProfileManagementForm
-                key={branch.id || index}
-                branch={branch}
-                branchId={branch.id}
-                i={index}
-                control={control}
-                register={register}
-                errors={errors}
-                setValue={setValue}
-                getValues={getValues}
-                removeBranch={() => removeBranch(branch.id || index)}
-                addBranch={addBranchRef}
-                clearErrors={clearErrors}
-                unregister={unregister}
-              />
-            </div>
-          ))
-        )}
-        {status === "INCOMPLETE" ? (
-          <div>
-            <FooterDT
-              onSubmit={handleSubmit(onClick)}
-              loader={loader}
-              showbackbtn={true}
-              path={"/dt/profile?current=regulator"}
-              // backNavigation={backNavigation}
-              backNavigation={handleSubmit(backNavigation)}
-            />
-          </div>
-        ) : (
-          <div>
-            <div>
-              <Footer
-                loader={loader}
-                onClick={handleSubmit(onClick)}
-                showbackbtn={true}
-                path={"/dt/profile?current=regulator"}
-                // backNavigation={backNavigation}
-                backNavigation={handleSubmit(backNavigation)}
-              />
-              <button
-                onSubmit={onSubmit}
-                type="submit"
-                className="mt-4 btn-primary"
-              ></button>
-              <button
-                onSubmit={handleSubmit(onClick)}
-                type="submit"
-                className="mt-4 btn-primary"
-              ></button>
-            </div>
-          </div>
+          <>
+            {branches?.map((branch: any, index: any) => (
+              <div ref={index === branches.length - 1 ? newBranchRef : null}>
+                {" "}
+                {/* You can add a class for styling */}
+                <ProfileManagementForm
+                  key={branch.id || index}
+                  branch={branch}
+                  branchId={branch.id}
+                  i={index}
+                  control={control}
+                  register={register}
+                  errors={errors}
+                  setValue={setValue}
+                  getValues={getValues}
+                  removeBranch={() => removeBranch(branch.id || index)}
+                  addBranch={addBranchRef}
+                  clearErrors={clearErrors}
+                  unregister={unregister}
+                />
+              </div>
+            ))}
+            {status === "INCOMPLETE" ? (
+              <div>
+                <FooterDT
+                  onSubmit={handleSubmit(onClick)}
+                  loader={loader}
+                  showbackbtn={true}
+                  path={"/dt/profile?current=regulator"}
+                  // backNavigation={backNavigation}
+                  backNavigation={handleSubmit(backNavigation)}
+                />
+              </div>
+            ) : (
+              <div>
+                <div>
+                  <Footer
+                    loader={loader}
+                    onClick={handleSubmit(onClick)}
+                    showbackbtn={true}
+                    path={"/dt/profile?current=regulator"}
+                    // backNavigation={backNavigation}
+                    backNavigation={handleSubmit(backNavigation)}
+                  />
+                  <button
+                    onSubmit={onSubmit}
+                    type="submit"
+                    className="mt-4 btn-primary"
+                  ></button>
+                  <button
+                    onSubmit={handleSubmit(onClick)}
+                    type="submit"
+                    className="mt-4 btn-primary"
+                  ></button>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </form>
     </div>

@@ -201,8 +201,8 @@ const NewSchemaCreation = () => {
 
   const options = [
     { value: "", label: "All" },
-    { value: "ACTIVE", label: "Active" },
-    { value: "BANNED", label: "Banned" },
+    { value: "ACTIVE", label: "ACTIVE" },
+    { value: "BANNED", label: "BANNED" },
     { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];
   const handleSetStatus = (option: any) => {

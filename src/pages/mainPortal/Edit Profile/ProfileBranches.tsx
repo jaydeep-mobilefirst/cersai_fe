@@ -288,7 +288,9 @@ const ProfileBranches = () => {
 
             Swal.fire({
               icon: "success",
-              text: response?.data?.message || "",
+              text:
+                "Deposit Taker Updated Successfully " ||
+                response?.data?.message,
               confirmButtonText: "Ok",
             });
 
@@ -317,7 +319,9 @@ const ProfileBranches = () => {
           } else {
             Swal.fire({
               icon: "success",
-              text: response?.data?.message,
+              text:
+                "Deposit Taker Updated Successfully " ||
+                response?.data?.message,
               confirmButtonText: "Ok",
             });
           }
@@ -340,170 +344,8 @@ const ProfileBranches = () => {
     });
   };
 
-  // const onSubmit = async (data: any) => {
-  //   if (!place.trim()) {
-  //     setPlaceError("Place is required");
-  //     return; // Prevent form submission if the place is empty
-  //   }
-
-  //   if (placeError) {
-  //     return; // Prevent form submission if there is a place error
-  //   }
-  //   setLoader(true);
-  //   try {
-  //     const branchesToSubmit = data.branches.map((branch: any) => {
-  //       const { id, ...branchData } = branch;
-  //       return branch.id ? { id, ...branchData } : branchData;
-  //     });
-  //     // const response = await axiosTokenInstance.post(
-  //     //   `/deposit-taker/branch/${entityUniqueId}`,
-  //     //   {
-  //     //     branches: branchesToSubmit,
-  //     //   }
-  //     // );
-  //     const response = await axiosTokenInstance.post(
-  //       `/deposit-taker/branch/${entityUniqueId}`,
-  //       {
-  //         branches: branchesToSubmit,
-  //         place: place, // assuming you want to send place as part of the request
-  //       }
-  //     );
-
-  //     if (callapi) {
-  //       Swal.fire({
-  //         title: "Are you sure?",
-  //         text: "Do you want to proceed with updating the details?",
-  //         icon: "warning",
-  //         showCancelButton: true,
-  //         confirmButtonText: "Yes, upload!",
-  //         cancelButtonText: "No, cancel!",
-  //       }).then((result) => {
-  //         if (result.isConfirmed) {
-  //           const membersToSubmit = managementData?.branches?.map(
-  //             (member: any) => {
-  //               const { id, ...memberData } = member;
-  //               return member.id ? { id, ...memberData } : memberData;
-  //             }
-  //           );
-  //           axiosTokenInstance.post(
-  //             `/deposit-taker/management-team/${entityUniqueId}`,
-  //             {
-  //               members: membersToSubmit, // Changed from branches to members
-  //             }
-  //           );
-  //         }
-  //         axiosTokenInstance
-  //           .patch(
-  //             `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
-  //             {
-  //               formData: combinedFormData,
-  //             }
-  //           )
-  //           .then((response) => {
-  //             Swal.fire({
-  //               icon: "success",
-  //               text: response?.data?.message || "",
-  //               confirmButtonText: "Ok",
-  //             });
-  //             setLoader(false);
-  //             sessionStorage.setItem("user_status", "PENDING");
-  //             Navigate("/dt/dashboard");
-  //           });
-  //         if (
-  //           Array.isArray(filterManagement) &&
-  //           filterManagement.some(
-  //             (management: any) => management.id && management.firstName
-  //           )
-  //         ) {
-  //           // Collect all ids in an array format like [10, 5, 8]
-  //           const idsToRemove = filterManagement
-  //             .filter(
-  //               (management: any) => management.id && management.firstName
-  //             )
-  //             .map((management: any) => management.id);
-
-  //           // Pass the collected ids to your removal function
-  //           if (idsToRemove.length > 0) {
-  //             removeManagement(idsToRemove); // Adjust according to your actual removal logic
-  //             clearRemovedBranches();
-  //           }
-  //         }
-  //       });
-  //     } else {
-  //       Swal.fire({
-  //         icon: "success",
-  //         text: response?.data?.message,
-  //         confirmButtonText: "Ok",
-  //       });
-  //     }
-
-  //     // if (regulatorData.length > 0) {
-  //     //   regulatorStore();
-  //     // }
-  //     // if (nodalDetailData.length > 0) {
-  //     //   nodaldetailsStore();
-  //     // }
-  //     // if (entityData.length > 0) {
-  //     //   entitydetails();
-  //     // }
-  //     // if (uploadData.length > 0) {
-  //     //   uploadDocument();
-  //     // }
-
-  //     await fetchBranches();
-  //     setLoader(false);
-  //   } catch (error) {
-  //     console.error("Failed to submit branches:", error);
-  //     Swal.fire({
-  //       icon: "error",
-  //       text: "Failed to update Entity Details",
-  //       confirmButtonText: "Ok",
-  //     });
-  //     setLoader(false);
-  //   }
-  // };
-
-  // const handleCheckboxChange = () => setChecked(!isChecked);
   const handleCheckboxChange = () => toggleChecked();
 
-  // const handleFileUpload = (event: any) => {
-  //   setLoader(true);
-  //   const file = event.target.files[0];
-  //   console.log(file, "file");
-  //   const formData = new FormData();
-  //   formData.set("file", file);
-  //   const entityId = sessionStorage.getItem("entityUniqueId");
-  //   axiosTokenInstance
-  //     .post(`/deposit-taker/bulk-upload/${entityId}`, formData)
-  //     .then((res) => {
-  //       let data = res.data;
-
-  //       if (data.success) {
-  //         Swal.fire({
-  //           icon: "success",
-  //           text: data?.message,
-  //           title: "Successful",
-  //         });
-  //       } else {
-  //         Swal.fire({
-  //           icon: "error",
-  //           text: data?.message,
-  //           title: "Error",
-  //         });
-  //       }
-  //     })
-  //     .catch((e) => {
-  //       Swal.fire({
-  //         title: "Unable upload file",
-  //         text: e?.response?.data?.detail?.message,
-  //         icon: "error",
-  //       });
-  //     })
-  //     .finally(() => {
-  //       setLoader(false);
-  //       setUploadKey(uploadInputKey + 1);
-  //     });
-  // };
   const handleFileUpload = async (event: any) => {
     setLoader(true);
     const file = event.target.files[0];
@@ -682,97 +524,101 @@ const ProfileBranches = () => {
         {loader ? (
           <LoaderSpin />
         ) : (
-          branches?.map((branch: any, index: any) => (
-            <ProfileBranchForm
-              key={branch.id || index} // Use index as key if branch.id is undefined
-              branch={branch}
-              branchId={branch.id}
-              i={index}
-              control={control}
-              register={register}
-              errors={errors}
-              setValue={setValue}
-              getValues={getValues}
-              removeBranch={() => removeBranch(branch.id || index)}
-              addBranch={addBranch}
-            />
-          ))
-        )}
-        <div className="mt-4">
-          <label className="flex items-center">
-            Place <span className="text-red-500">*</span>
-          </label>
-          <InputFieldsV2
-            type="text"
-            placeholder="enter place"
-            value={place}
-            disabled={status === "INCOMPLETE" ? false : true}
-            onChange={handlePlaceChange}
-          />
-          {placeError && <p className="text-red-500">{placeError}</p>}
-        </div>
-        {disableFieldStatus ? (
-          <></>
-        ) : (
           <>
-            {" "}
+            {branches?.map((branch: any, index: any) => (
+              <ProfileBranchForm
+                key={branch.id || index} // Use index as key if branch.id is undefined
+                branch={branch}
+                branchId={branch.id}
+                i={index}
+                control={control}
+                register={register}
+                errors={errors}
+                setValue={setValue}
+                getValues={getValues}
+                removeBranch={() => removeBranch(branch.id || index)}
+                addBranch={addBranch}
+              />
+            ))}
+
             <div className="mt-4">
               <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  className="h-4 w-4 mr-2 rounded-lg accent-[#1c468e]"
-                />
-                <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
-                  I solemnly affirm to the best of my knowledge and belief, that
-                  the information given in the Form is correct, and the nothing
-                  material has been concealed therefrom and I agree to the&nbsp;
-                  <Link
-                    className="text-[#1c468e] underline cursor-pointer"
-                    target={"_blank"}
-                    to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
-                  >
-                    Terms and Conditions
-                  </Link>
-                </div>
+                Place <span className="text-red-500">*</span>
               </label>
+              <InputFieldsV2
+                type="text"
+                placeholder="enter place"
+                value={place}
+                disabled={status === "INCOMPLETE" ? false : true}
+                onChange={handlePlaceChange}
+              />
+              {placeError && <p className="text-red-500">{placeError}</p>}
             </div>
-          </>
-        )}
 
-        {status === "INCOMPLETE" ? (
-          <div>
-            <FooterDT2
-              disabled={!isChecked}
-              loader={loader}
-              hidecontiuebtn={true}
-              showbackbtn={true}
-              path={"/dt/profile?current=documents"}
-              backNavigation={handleSubmit(backNavigation)}
-            />
-            <button
-              onSubmit={onSubmit}
-              type="submit"
-              className="mt-4 btn-primary"
-            ></button>
-          </div>
-        ) : (
-          <div>
-            <Footer
-              disabled={!isChecked}
-              loader={loader}
-              hidecontiuebtn={true}
-              showbackbtn={true}
-              path={"/dt/profile?current=documents"}
-              backNavigation={handleSubmit(backNavigation)}
-            />
-            <button
-              onSubmit={onSubmit}
-              type="submit"
-              className="mt-4 btn-primary"
-            ></button>
-          </div>
+            {disableFieldStatus ? (
+              <></>
+            ) : (
+              <>
+                {" "}
+                <div className="mt-4">
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={handleCheckboxChange}
+                      className="h-4 w-4 mr-2 rounded-lg accent-[#1c468e]"
+                    />
+                    <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
+                      I solemnly affirm to the best of my knowledge and belief,
+                      that the information given in the Form is correct, and the
+                      nothing material has been concealed therefrom and I agree
+                      to the&nbsp;
+                      <Link
+                        className="text-[#1c468e] underline cursor-pointer"
+                        target={"_blank"}
+                        to="https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf"
+                      >
+                        Terms and Conditions
+                      </Link>
+                    </div>
+                  </label>
+                </div>
+              </>
+            )}
+            {status === "INCOMPLETE" ? (
+              <div>
+                <FooterDT2
+                  disabled={!isChecked}
+                  loader={loader}
+                  hidecontiuebtn={true}
+                  showbackbtn={true}
+                  path={"/dt/profile?current=documents"}
+                  backNavigation={handleSubmit(backNavigation)}
+                />
+                <button
+                  onSubmit={onSubmit}
+                  type="submit"
+                  className="mt-4 btn-primary"
+                ></button>
+              </div>
+            ) : (
+              <div>
+                <Footer
+                  disabled={!isChecked}
+                  loader={loader}
+                  hidecontiuebtn={true}
+                  showbackbtn={true}
+                  path={"/dt/profile?current=documents"}
+                  backNavigation={handleSubmit(backNavigation)}
+                />
+                <button
+                  onSubmit={onSubmit}
+                  type="submit"
+                  className="mt-4 btn-primary"
+                ></button>
+              </div>
+            )}
+          </>
         )}
       </form>
     </div>

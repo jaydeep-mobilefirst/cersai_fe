@@ -55,17 +55,19 @@ const AuditTrail = () => {
     }),
     columnHelper.accessor("from", {
       cell: (info: any) => {
-        const value = info.renderValue()
-        return value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value?.replace(/_/g, " ");
-        
+        const value = info.renderValue();
+        return value === "UNDER_LETIGATION"
+          ? "UNDER LITIGATION"
+          : value?.replace(/_/g, " ");
       },
       header: () => <span>From</span>,
     }),
     columnHelper.accessor("to", {
       cell: (info: any) => {
-        const value = info.renderValue()
-        return value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value?.replace(/_/g, " ");
-        
+        const value = info.renderValue();
+        return value === "UNDER_LETIGATION"
+          ? "UNDER LITIGATION"
+          : value?.replace(/_/g, " ");
       },
       header: () => <span>To</span>,
     }),
