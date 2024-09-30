@@ -40,6 +40,7 @@ const SelectButton = ({
   const [searchInputValue, setSearchInputValue] = useState("");
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
   const [optionsToShow, setOptionsToShow] = useState<any[]>(options);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
   console.log({ options }, "options");
   useEffect(() => {
     setArrowDirectionToggle(false);
@@ -48,6 +49,13 @@ const SelectButton = ({
   useEffect(() => {
     setOptionsToShow(options);
   }, [options]);
+
+  // Focus search input on component load
+  useEffect(() => {
+    if (enableSearch && searchInputRef.current) {
+      searchInputRef.current.focus(); // Focus on the input field
+    }
+  }, [enableSearch, arrowDirectionToggle]);
   // Find the label of the currently selected option
   const selectedLabel =
     options?.find((option: any) => option?.value === selectedOption)?.label ||
@@ -180,6 +188,7 @@ const SelectButton = ({
             <div className="relative p-2">
               <input
                 type="search"
+                ref={searchInputRef} // Attach the ref to the input
                 value={searchInputValue}
                 className={`w-full pl-10 pr-4 py-2 rounded-md border  focus:border-blue focus:ring-1 focus:ring-gray-100 focus:outline-none ${optionsToShow?"border-[blue]":"border-gray-300"}`}
                 placeholder="Search"
