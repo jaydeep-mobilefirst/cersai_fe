@@ -181,7 +181,7 @@ const SelectButton = ({
               <input
                 type="search"
                 value={searchInputValue}
-                className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-300 focus:border-gray-300 focus:ring-1 focus:ring-gray-100 focus:outline-none"
+                className={`w-full pl-10 pr-4 py-2 rounded-md border  focus:border-blue focus:ring-1 focus:ring-gray-100 focus:outline-none ${optionsToShow?"border-[blue]":"border-gray-300"}`}
                 placeholder="Search"
                 style={{ paddingLeft: "2.5rem" }}
                 onChange={handleSearch}
@@ -189,7 +189,7 @@ const SelectButton = ({
             </div>
           )}
           <div
-            className="overflow-auto max-h-40 custom-scrollbar"
+            className={`overflow-auto max-h-40 custom-scrollbar `}
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"

@@ -15,6 +15,7 @@ import userProfileUploadStore from "../../../zust/userProfileUploadStore";
 import FooterDT from "./FooterDT";
 import useStore from "../../../store/statusStore";
 import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
+import FooterText from "../../../components/userFlow/common/FooterText";
 
 type Props = {};
 
@@ -424,6 +425,7 @@ const ProfileUploadDocuments = (props: Props) => {
           </>
         )}
       </div>
+      <div></div>
     </>
   );
 };

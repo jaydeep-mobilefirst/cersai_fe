@@ -105,7 +105,7 @@ const ReviewMainListing = ({
                             isPdfMode
                               ? "flex-row"
                               : idx % 2 === 0
-                              ? "border-r border-r-green-800 border-opacity-20"
+                              ? "border-r border-r-green-800 border-opacity-20 "
                               : ""
                           }`}
                         >
@@ -117,7 +117,7 @@ const ReviewMainListing = ({
                               allFormData={allFormData}
                             />
                           </div>
-                          <div className="text-right w-1/2 overflow">
+                          <div className=" text-right  w-1/2 overflow-auto custom-scrollbar1">
                             {field?.dscFileNAme || field?.key === "dsc3"
                               ? "DSC Uploaded"
                               : field.userInput}
