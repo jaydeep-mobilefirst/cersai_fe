@@ -126,7 +126,7 @@ const ResetPassword = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col justify-between p-6"
           style={{
-            height: `${screenWidth > 1024 ? "calc(100vh - 170px)" : "100%"}`,
+            height: `${screenWidth > 1024 ? "calc(100vh - 200px)" : "100%"}`,
           }}
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">

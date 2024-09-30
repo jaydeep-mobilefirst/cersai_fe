@@ -370,7 +370,7 @@ const ProfileEntityDetails = (props: Props) => {
           // onSubmit={onSubmit}
           className="flex flex-col justify-between px-6 py-4"
           style={{
-            height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
+            height: `${screenWidth > 1024 ? "calc(100vh - 190px)" : "100%"}`,
           }}
         >
           {formFields?.length > 0 ? (
