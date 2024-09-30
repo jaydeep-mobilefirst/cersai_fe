@@ -17,6 +17,7 @@ import failedLogo from "../../../assets/images/FailedIcon.svg";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
 import InputFieldsV2 from "../../../components/userFlow/common/InputFiledV2";
+import FooterText from "../../../components/userFlow/common/FooterText";
 
 const AddUserForm = () => {
   const [successData, setSuccessData] = useState<{
@@ -165,51 +166,52 @@ const AddUserForm = () => {
   }, [editUserData]);
 
   return (
-    <div className="mt-2 ">
-      <div className="-ml-9 -mr-9">
+    <div className='mt-2 '>
+      <div className='-ml-9 -mr-9'>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center justify-between flex-col h-full lg:h-[75vh]"
-          
-      style={{ minHeight: "calc(100vh - 280px)" }}
+          className='flex items-center justify-between flex-col'
+          style={{
+            height: `${screenWidth > 1024 ? "calc(100vh - 270px)" : "100%"}`,
+          }}
         >
           <div
-            className="w-full"
-            // style={{
-            //   // width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
-            //   width: `${screenWidth > 1024
-            //       ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
-            //       : "100vw"
-            //     }`,
-            // }}
+            className='w-full'
+            style={{
+              width: `${
+                screenWidth > 1024
+                  ? `calc(100vw - ${collapsed ? "110px" : "349px"})`
+                  : "100vw"
+              }`,
+            }}
           >
-            <div className="flex flex-col p-6 w-full ">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className='flex flex-col p-6 w-full '>
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
                 <div>
                   <label
-                    htmlFor="firstname"
-                    className="text-base font-normal text-gilroy-medium"
+                    htmlFor='firstname'
+                    className='text-base font-normal text-gilroy-medium'
                   >
-                    First name <span className="text-red-500">*</span>
+                    First name <span className='text-red-500'>*</span>
                   </label>
                   <InputFieldsV2
-                    placeholder="Type here"
+                    placeholder='Type here'
                     {...register("firstName")}
                   />
                   {errors?.firstName && (
-                    <p className="text-red-500">{errors?.firstName?.message}</p>
+                    <p className='text-red-500'>{errors?.firstName?.message}</p>
                   )}
                 </div>
 
                 <div>
                   <label
-                    htmlFor="minInvestment"
-                    className="text-base font-normal text-gilroy-medium"
+                    htmlFor='minInvestment'
+                    className='text-base font-normal text-gilroy-medium'
                   >
                     Middle name
                   </label>
                   <InputFieldsV2
-                    placeholder="Type here"
+                    placeholder='Type here'
                     {...register("middleName")}
                   />
                   {/* {errors?.middleName && (
@@ -221,29 +223,29 @@ const AddUserForm = () => {
 
                 <div>
                   <label
-                    htmlFor="numberOfInvestors"
-                    className="text-base font-normal text-gilroy-medium"
+                    htmlFor='numberOfInvestors'
+                    className='text-base font-normal text-gilroy-medium'
                   >
-                    Last name <span className="text-red-500">*</span>
+                    Last name <span className='text-red-500'>*</span>
                   </label>
                   <InputFieldsV2
-                    placeholder="Type here"
+                    placeholder='Type here'
                     {...register("lastName")}
                   />
                   {errors?.lastName && (
-                    <p className="text-red-500">{errors?.lastName?.message}</p>
+                    <p className='text-red-500'>{errors?.lastName?.message}</p>
                   )}
                 </div>
-                <div className="mb-4">
+                <div className='mb-4'>
                   <label
-                    htmlFor="role-name"
-                    className="block text-sm font-medium text-gray-700"
+                    htmlFor='role-name'
+                    className='block text-sm font-medium text-gray-700'
                   >
-                    Role<span className="text-red-500">*</span>
+                    Role<span className='text-red-500'>*</span>
                   </label>
                   <SelectButton
                     options={roles}
-                    placeholder="Select Role"
+                    placeholder='Select Role'
                     selectedOption={selectedRole}
                     onSelect={handleSelectRole}
                   />
@@ -261,48 +263,48 @@ const AddUserForm = () => {
                     ))}
                   </select> */}
                   {errors?.role && (
-                    <p className="text-red-500">{errors?.role?.message}</p>
+                    <p className='text-red-500'>{errors?.role?.message}</p>
                   )}
                 </div>
 
                 <div>
                   <label
-                    htmlFor="minInvestment"
-                    className="text-base font-normal text-gilroy-medium"
+                    htmlFor='minInvestment'
+                    className='text-base font-normal text-gilroy-medium'
                   >
-                    Email Id <span className="text-red-500">*</span>
+                    Email Id <span className='text-red-500'>*</span>
                   </label>
                   <InputFieldsV2
-                    placeholder="Type here"
+                    placeholder='Type here'
                     {...register("email")}
                   />
                   {errors?.email && (
-                    <p className="text-red-500">{errors?.email?.message}</p>
+                    <p className='text-red-500'>{errors?.email?.message}</p>
                   )}
                 </div>
 
                 <div>
                   <label
-                    htmlFor="minInvestment"
-                    className="text-base font-normal text-gilroy-medium"
+                    htmlFor='minInvestment'
+                    className='text-base font-normal text-gilroy-medium'
                   >
-                    <div className="flex flex-row">
-                      Mobile no <span className="text-red-500 mr-2">*</span>
-                      <img src={infocircle} alt="inforcircle" />
+                    <div className='flex flex-row'>
+                      Mobile no <span className='text-red-500 mr-2'>*</span>
+                      <img src={infocircle} alt='inforcircle' />
                     </div>
                   </label>
-                  <div className="flex flex-row items-center">
-                    <span className="border flex  items-center border-gray-300 rounded-lg px-2 text-base font-normal text-gilroy-medium h-14 border-r-0 rounded-tr-none rounded-br-none">
+                  <div className='flex flex-row items-center'>
+                    <span className='border flex  items-center border-gray-300 rounded-lg px-2 text-base font-normal text-gilroy-medium h-14 border-r-0 rounded-tr-none rounded-br-none'>
                       +91
                     </span>
                     <InputFieldsV2
-                      placeholder="1234567890"
+                      placeholder='1234567890'
                       {...register("mobileNumber")}
-                      className="border-l-0 rounded-tl-none rounded-bl-none"
+                      className='border-l-0 rounded-tl-none rounded-bl-none'
                     />
                   </div>
                   {errors?.mobileNumber && (
-                    <p className="text-red-500">
+                    <p className='text-red-500'>
                       {errors?.mobileNumber?.message}
                     </p>
                   )}
@@ -313,28 +315,28 @@ const AddUserForm = () => {
 
           <div>
             <div
-              className="flex w-full p-4 lg:px-[30px] flex-row justify-between items-center"
+              className='flex w-full p-4 lg:px-[30px] flex-row justify-between items-center'
               style={{
                 width: `${
                   screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
                 }`,
               }}
             >
-              <div className="flex flex-row items-center space-x-2">
+              <div className='flex flex-row items-center space-x-2'>
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="shrink-0"
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  className='shrink-0'
                 >
                   <path
-                    d="M15 6L9 12L15 18"
-                    stroke="#1D1D1B"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    d='M15 6L9 12L15 18'
+                    stroke='#1D1D1B'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                   />
                 </svg>
                 <button
@@ -346,41 +348,26 @@ const AddUserForm = () => {
                           ?.toLocaleLowerCase()}`
                     );
                   }}
-                  role="button"
-                  type="button"
-                  className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+                  role='button'
+                  type='button'
+                  className='text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]'
                 >
                   Back
                 </button>
               </div>
-              <div className="flex items-center">
+              <div className='flex items-center'>
                 <button
-                  type="submit"
-                  className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+                  type='submit'
+                  className='bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold '
                 >
                   {loader ? <LoaderSpin /> : "Submit"}
                 </button>
               </div>
             </div>
             <div>
-              <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
-              
+              <div className='border-[#E6E6E6] border-[1px] lg:mt-4'></div>
 
-      <div className="text-center mt-auto">
-        <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
-          COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
-        </h1>
-        <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
-          Powered and managed by{" "}
-          <a
-            href="https://www.proteantech.in/"
-            className="underline text-gilroy-regular font-bold"
-            target="_blank"
-          >
-            Protean eGov Technologies
-          </a>{" "}
-        </p>
-      </div>
+              <FooterText />
             </div>
           </div>
         </form>
