@@ -13,7 +13,7 @@ const FailedRecords = () => {
   const location = useLocation();
   const data = location.state?.data;
   const navigate = useNavigate();
-
+  console.log(data, "dataqqqqqqqqqqqq")
   const TableType = {
     DepositeTakerName: String,
     PanNumber: String,
@@ -23,11 +23,13 @@ const FailedRecords = () => {
   const columnHelper = createColumnHelper<typeof TableType>();
 
   const failedRecords =
-    data?.data?.failed?.records.map((record: any, index: number) => ({
-      DepositeTakerName: record.companyName,
-      PanNumber: record.panNumber,
-      Errors: record.errors.join(", "),
-    })) || [];
+    data?.failedRecords.map((record: any, index: number) => ({
+      DepositeTakerName: record?.record?.["Company Name (as per PAN)*"],
+      PanNumber: record?.record?.["PAN Number*"],
+      Errors: record?.error + 'ksdjfbv',
+    }));
+  
+    console.log(failedRecords, 'failedRecords123')
 
   const columns = [
     {
@@ -71,16 +73,6 @@ const FailedRecords = () => {
             <div className="text-center p-5">No Data Available</div>
           )}
         </div>
-
-        {/* <div className=" lg:mt-56 flex flex-col lg:flex-row lg:items-center justify-between">
-          <div
-            className="flex items-center cursor-pointer space-x-2 mb-3 lg:mb-0 md:ml-[5rem]"
-            onClick={() => navigate(-1)}
-          >
-            <img src={BackArrow} alt="Back Arrow" />
-            <p className="text-sm font-normal text-gilroy-regular">Back</p>
-          </div>
-        </div> */}
         <div className="mt-72 flex flex-col lg:flex-row lg:items-center justify-between">
           <div
             className="flex items-center cursor-pointer space-x-2 mb-3 lg:mb-0 md:ml-[5rem]"
@@ -90,16 +82,6 @@ const FailedRecords = () => {
             <p className="text-sm font-normal text-gilroy-regular">Back</p>
           </div>
         </div>
-
-        {/* <div className="mt-10">
-          <CustomPagination
-            currentPage={page}
-            setCurrentPage={setPage}
-            totalItems={failedRecords.length}
-            itemsPerPage={pageSize}
-            maxPageNumbersToShow={5}
-          />
-        </div> */}
       </div>
     </>
   );
