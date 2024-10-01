@@ -263,22 +263,27 @@ const NodalDetailsRegulator = () => {
                   Back
                 </button>
               </div>
-              {/* <div className="flex items-center">
-              <button
-                type="submit"
-                disabled={loader}
-                onClick={onSubmit}
-                className="bg-[#1C468E] rounded-xl p-3 text-white text-gilroy-semibold text-sm w-full sm:w-auto sm:max-w-xs"
-              >
-                {loader ? <LoaderSpin /> : "Save & Review"}
-              </button>
-            </div> */}
+              {/*             
               <div className="flex items-center ml-auto">
                 <button
                   type="submit"
                   disabled={loader}
                   onClick={onSubmit}
                   className="bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm "
+                >
+                  {loader ? <LoaderSpin /> : "Save & Continue"}
+                </button>
+              </div> */}
+              <div className="flex items-center ml-auto">
+                <button
+                  type="submit"
+                  disabled={loader || showOTPModel} // Disable button if loader is active or OTP modal is shown
+                  onClick={onSubmit}
+                  className={`bg-[#1C468E] rounded-xl p-3 w-[160px] text-white text-gilroy-semibold text-sm ${
+                    loader || showOTPModel
+                      ? "cursor-not-allowed opacity-50"
+                      : ""
+                  }`}
                 >
                   {loader ? <LoaderSpin /> : "Save & Continue"}
                 </button>
@@ -289,20 +294,20 @@ const NodalDetailsRegulator = () => {
             <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 
             <div className="text-center mt-auto">
-        <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
-          COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
-        </h1>
-        <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
-          Powered and managed by{" "}
-          <a
-            href="https://www.proteantech.in/"
-            className="underline text-gilroy-regular font-bold"
-            target="_blank"
-          >
-            Protean eGov Technologies
-          </a>{" "}
-        </p>
-      </div>
+              <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+                COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+              </h1>
+              <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+                Powered and managed by{" "}
+                <a
+                  href="https://www.proteantech.in/"
+                  className="underline text-gilroy-regular font-bold"
+                  target="_blank"
+                >
+                  Protean eGov Technologies
+                </a>{" "}
+              </p>
+            </div>
           </div>
         </div>
       </form>
