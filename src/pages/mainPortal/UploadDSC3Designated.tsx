@@ -201,7 +201,7 @@ const UploadDSC3Designated = () => {
         onSubmit={handleSubmit}
         className="flex flex-col justify-between p-6"
         style={{
-          height: `${screenWidth > 1024 ? "calc(100vh - 170px)" : "100%"}`,
+          height: `${screenWidth > 1024 ? "calc(100vh - 190px)" : "100%"}`,
         }}
       >
         <div className="w-[100%] md:w-[35%]">
