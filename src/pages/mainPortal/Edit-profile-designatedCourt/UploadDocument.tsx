@@ -158,7 +158,7 @@ const UploadDocument = (props: Props) => {
       <div
         className="bg-white w-full flex flex-col justify-between"
         style={{
-          height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
+          height: `${screenWidth > 1024 ? "calc(100vh - 190px)" : "100%"}`,
         }}
       >
         {showUploadPopup && (
@@ -212,21 +212,21 @@ const UploadDocument = (props: Props) => {
                 <div>
                   <div className="border-[#E6E6E6] border-[1px] w-full"></div>
                   <div className="text-gilroy-light text-[#24222B] text-xs cursor-pointer h-16 flex items justify-center items-center">
-                  <div className="text-center mt-auto">
-        <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
-          COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
-        </h1>
-        <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
-          Powered and managed by{" "}
-          <a
-            href="https://www.proteantech.in/"
-            className="underline text-gilroy-regular font-bold"
-            target="_blank"
-          >
-            Protean eGov Technologies
-          </a>{" "}
-        </p>
-      </div>
+                    <div className="text-center mt-auto">
+                      <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+                        COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+                      </h1>
+                      <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+                        Powered and managed by{" "}
+                        <a
+                          href="https://www.proteantech.in/"
+                          className="underline text-gilroy-regular font-bold"
+                          target="_blank"
+                        >
+                          Protean eGov Technologies
+                        </a>{" "}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

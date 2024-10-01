@@ -467,31 +467,34 @@ const SchemesSearchDetailsSM: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col justify-between" style={{ minHeight: "calc(100vh - 110px)" }}>
+    <div
+      className="min-h-screen flex flex-col justify-between"
+      style={{ minHeight: "calc(100vh - 110px)" }}
+    >
       <div>
-      <div className="mt-6 mx-8">
-        <TaskTabsCa />
-      </div>
-      <div className="flex flex-row mt-3 mx-8">
-        {/* <img
+        <div className="mt-6 mx-8">
+          <TaskTabsCa />
+        </div>
+        <div className="flex flex-row mt-3 mx-8">
+          {/* <img
           src={InfoIcon}
           alt="InfoIcon"
           className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
         /> */}
-        {/* <p className="text-[#808080]">
+          {/* <p className="text-[#808080]">
           You can Upload Deposit Takers data in bulk. Please use this given
           <span className="underline line-through:text-blue text-[#BFCFFF]">
             Template
           </span>
         </p> */}
-      </div>
-      <div className="mt-8 mb-8 mx-8">
-        {loader ? (
-          <LoaderSpin />
-        ) : (
-          <Accordion items={accordionItems} showAccordion={true} />
-        )}
-        {/* <div className="grid grid-cols-2 space-x-3">
+        </div>
+        <div className="mt-8 mb-8 mx-8">
+          {loader ? (
+            <LoaderSpin />
+          ) : (
+            <Accordion items={accordionItems} showAccordion={true} />
+          )}
+          {/* <div className="grid grid-cols-2 space-x-3">
           <div>
             <label
               htmlFor="Select Other Schemes"
@@ -535,9 +538,8 @@ const SchemesSearchDetailsSM: React.FC = () => {
             />
           </div>
         </div> */}
-      </div>
-        
         </div>
+      </div>
       <div className="2xl:mt-32">
         <div
           className="flex w-full p-8 lg:px-[30px] flex-row justify-between items-center "

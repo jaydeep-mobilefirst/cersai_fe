@@ -6,6 +6,7 @@ import CustomPagination from "../../../../components/CustomPagination/CustomPagi
 import Button from "../../../../components/userFlow/common/Button";
 import BackArrow from "../../../../assets/images/BackArrow.svg";
 import { useLocation, useNavigate } from "react-router-dom";
+import TaskTabsRg from "../../../../components/ScehmaManagement/TaskTabsRg";
 
 const FailedRecords = () => {
   const [page, setPage] = useState<number>(1);
@@ -13,7 +14,7 @@ const FailedRecords = () => {
   const location = useLocation();
   const data = location.state?.data;
   const navigate = useNavigate();
-  console.log(data, "dataqqqqqqqqqqqq")
+  console.log(data, "dataqqqqqqqqqqqq");
   const TableType = {
     DepositeTakerName: String,
     PanNumber: String,
@@ -22,14 +23,15 @@ const FailedRecords = () => {
 
   const columnHelper = createColumnHelper<typeof TableType>();
 
-  const failedRecords =
-    data?.failedRecords.map((record: any, index: number) => ({
+  const failedRecords = data?.failedRecords.map(
+    (record: any, index: number) => ({
       DepositeTakerName: record?.record?.["Company Name (as per PAN)*"],
       PanNumber: record?.record?.["PAN Number*"],
-      Errors: record?.error + 'ksdjfbv',
-    }));
-  
-    console.log(failedRecords, 'failedRecords123')
+      Errors: record?.error,
+    })
+  );
+
+  console.log(failedRecords, "failedRecords123");
 
   const columns = [
     {
@@ -58,7 +60,7 @@ const FailedRecords = () => {
     <>
       <div className="p-3 ">
         <div className="mt-6">
-          <TaskTabsCa />
+          <TaskTabsRg />
         </div>
         <p className="font-bold font-gilroy-bold text-black mt-5 mb-5">
           Failed Records

@@ -118,7 +118,7 @@ const CourtDetails = (props: Props) => {
           // onSubmit={handleOnSubmit}
           className="p-4 flex flex-col w-full  justify-between"
           style={{
-            height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
+            height: `${screenWidth > 1024 ? "calc(100vh - 190px)" : "100%"}`,
           }}
         >
           {/* <div className="bg-white p-6 w-full">
