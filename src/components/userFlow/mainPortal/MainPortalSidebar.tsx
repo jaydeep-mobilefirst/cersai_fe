@@ -12,6 +12,7 @@ import useSidebarStore from "../../../store/SidebarStore";
 import { useCollapseStore } from "../../../store/SidebarStore";
 import Swal from "sweetalert2";
 import useStore from "../../../store/statusStore";
+import { axiosTokenInstance } from "../../../utils/axios";
 
 type Props = {
   layout: React.ReactElement | null;
@@ -202,6 +203,34 @@ const MainPortalSidebar = ({ layout }: Props) => {
       navigate("/");
     }
   });
+
+
+  const refreshToken = sessionStorage.getItem("refresh_token");
+
+    // Function to fetch data from the API
+    const fetchDataRefresh = async () => {
+      axiosTokenInstance
+        .post("/auth/refresh-token", {
+          refresh_token: refreshToken,
+        })
+        .then((responce) => {
+          sessionStorage.setItem("access_token", responce?.data?.access_token);
+          sessionStorage.setItem("refresh_token", responce?.data?.refresh_token);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+  
+    useEffect(() => {
+      // Fetch data on initial render
+      fetchDataRefresh();
+  
+      const intervalId = setInterval(fetchDataRefresh, 580000);
+  
+      // Clean up the interval on component unmount
+      return () => clearInterval(intervalId);
+    }, []);
 
   return (
     <>
