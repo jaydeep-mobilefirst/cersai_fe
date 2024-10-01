@@ -13,7 +13,7 @@ const TextArea: FC<InputProps> = forwardRef<HTMLTextAreaElement, InputProps>(
     return (
       <div className="relative w-full">
         <textarea
-          className={`form-textarea mt-1 block w-full border-gray-300 shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 textarea-component px-4 py-3.5 border min-h-[55px] sm:min-h-[55px] rounded-md ${className} `}
+          className={`form-textarea block w-full border-gray-300 shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-300 textarea-component px-4 py-3.5 border min-h-[55px] sm:min-h-[55px] rounded-md ${className} `}
           // style={{ backgroundColor }} // Apply the backgroundColor style
           style={{ backgroundColor: bgColor }}
           {...rest}

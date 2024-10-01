@@ -155,7 +155,7 @@ const ProfileUploadDocuments = (props: Props) => {
       <div
         className="bg-white w-full flex flex-col justify-between"
         style={{
-          height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
+          height: `${screenWidth > 1024 ? "calc(100vh - 190px)" : "100%"}`,
         }}
       >
         {showUploadPopup && (
@@ -208,8 +208,8 @@ const ProfileUploadDocuments = (props: Props) => {
                 </div>
                 <div>
                   <div className="border-[#E6E6E6] border-[1px] w-full"></div>
-                  
-                  <FooterText/>
+
+                  <FooterText />
                 </div>
               </div>
             </div>

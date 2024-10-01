@@ -120,7 +120,7 @@ const NodalDetails = (props: Props) => {
           // onSubmit={handleOnSubmit}
           className="p-4 flex flex-col w-full  justify-between"
           style={{
-            height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
+            height: `${screenWidth > 1024 ? "calc(100vh - 190px)" : "100%"}`,
           }}
         >
           {/* <div className="bg-white p-6 w-full">
@@ -217,23 +217,28 @@ const NodalDetails = (props: Props) => {
               </div>
             </div>
           </div> */}
-          {formFields?.length>0?
-          <>
-          <DynamicFields
-            allFormData={allFormData}
-            formFields={formFields}
-            onChange={onChange}
-            disable={true}
-          />
+          {formFields?.length > 0 ? (
+            <>
+              <DynamicFields
+                allFormData={allFormData}
+                formFields={formFields}
+                onChange={onChange}
+                disable={true}
+              />
 
-          <div>
-            <Footer onSubmit={onSubmit} loader={loader} hidecontiuebtn={true} />
-          </div>
-          </>
-          :
-          <div className="flex justify-center items-center">
-            <LoaderSpin />
-          </div> }
+              <div>
+                <Footer
+                  onSubmit={onSubmit}
+                  loader={loader}
+                  hidecontiuebtn={true}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="flex justify-center items-center">
+              <LoaderSpin />
+            </div>
+          )}
         </form>
       </div>
     </>

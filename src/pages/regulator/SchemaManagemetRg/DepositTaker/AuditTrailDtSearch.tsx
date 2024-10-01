@@ -375,8 +375,6 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     const formData = new FormData();
     formData.append("file", file);  // append the file instead of set
   
-    console.log(formData, 'Formdata')
-  
     axiosTokenInstance
       .post(`/deposit-taker/bulk-upload`, formData,         {
         headers: {
@@ -385,14 +383,14 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       })
       .then((res) => {
         let data = res.data;
-        const total = data?.data?.created?.count + data?.data?.failed?.count;
+        const total = data?.failedRecords?.length + data?.successfulRecords?.length
         if (data.success) {
           Swal.fire({
             icon: "success",
-            text: `Successfully uploaded ${data?.data?.created?.count}/${total} Failed to upload ${data?.data?.failed?.count}/${total}`,
+            text: `Successfully uploaded ${data?.successfulRecords?.length}/${total} Failed to upload ${data?.failedRecords?.length}/${total}`,
             title: "Successful",
           }).then(() => {
-            if (data?.data?.failed?.count > 0) {
+            if (data?.failedRecords?.length > 0) {
               navigate("/rg/deposit-taker/failed-records", { state: { data } });
             }
           });

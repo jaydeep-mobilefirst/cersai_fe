@@ -22,12 +22,19 @@ const FailedRecords = () => {
 
   const columnHelper = createColumnHelper<typeof TableType>();
 
-  const failedRecords =
-    data?.data?.failed?.records.map((record: any, index: number) => ({
-      DepositeTakerName: record.companyName,
-      PanNumber: record.panNumber,
-      Errors: record.errors.join(", "),
-    })) || [];
+  // const failedRecords =
+  //   data?.data?.failed?.records.map((record: any, index: number) => ({
+  //     DepositeTakerName: record.companyName,
+  //     PanNumber: record.panNumber,
+  //     Errors: record.errors.join(", "),
+  //   })) || [];
+  const failedRecords = data?.failedRecords.map(
+    (record: any, index: number) => ({
+      DepositeTakerName: record?.record?.["Company Name (as per PAN)*"],
+      PanNumber: record?.record?.["PAN Number*"],
+      Errors: record?.error,
+    })
+  );
 
   const columns = [
     {

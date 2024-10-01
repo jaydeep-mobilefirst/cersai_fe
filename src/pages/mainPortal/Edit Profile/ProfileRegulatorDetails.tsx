@@ -245,7 +245,7 @@ const ProfileRegulatorDetails = (props: Props) => {
           // onSubmit={onSubmitClick}
           className="p-4 flex flex-col w-full max-w-[100%] justify-between h-screen"
           style={{
-            height: `${screenWidth > 1024 ? "calc(100vh - 155px)" : "100%"}`,
+            height: `${screenWidth > 1024 ? "calc(100vh - 190px)" : "100%"}`,
           }}
         >
           {formFields.length > 0 ? (
