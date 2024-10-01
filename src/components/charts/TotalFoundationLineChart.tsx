@@ -595,6 +595,12 @@ const TotalFoundationLineChart: React.FC<TotalFoundationLineChartProps> = ({
   useEffect(() => {
     dashboardLineGraphApi();
   }, [intervalType]);
+  
+  const formatTooltipLabel = (value:any, name:any) => {
+    // Replace underscores with spaces and capitalize the first letter of each word
+    const formattedName = name.replace(/_/g, ' ').replace(/\b\w/g, (char:any) => char.toUpperCase());
+    return [value, formattedName];
+  };
 
   return (
     <div className="w-[100%] bg-[#E7F0FF] rounded-[24px] justify-center overflow-x-auto p-3">
@@ -676,7 +682,7 @@ const TotalFoundationLineChart: React.FC<TotalFoundationLineChartProps> = ({
             dot={false}
           />
           <CartesianGrid strokeDasharray="0 0" vertical={false} />
-          <Tooltip />
+          <Tooltip formatter={formatTooltipLabel}/>
           <XAxis
             dataKey={intervalType}
             tickLine={false}
