@@ -21,7 +21,7 @@ const PasswordUpdateModel: React.FC<PasswordUpdateModelProps> = ({
   };
 
   const handleNavigateLogin = () => {
-    navigate('/')
+    navigate("/");
   };
 
   return (
@@ -36,12 +36,12 @@ const PasswordUpdateModel: React.FC<PasswordUpdateModelProps> = ({
             <div className="order-1 md:order-2 mt-3">
               <div className="flex justify-end mt-[4px]">
                 <div className="lg:top-2 lg:right-10 relative md:top-2 md:right-10 top-[-6rem]">
-                  <img
+                  {/* <img
                     src={CrossIcon}
                     alt="CrossIcon"
                     className="cursor-pointer"
                     onClick={handleClose}
-                  />
+                  /> */}
                 </div>
               </div>
 

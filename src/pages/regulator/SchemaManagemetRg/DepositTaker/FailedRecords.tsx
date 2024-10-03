@@ -31,8 +31,6 @@ const FailedRecords = () => {
     })
   );
 
-  console.log(failedRecords, "failedRecords123");
-
   const columns = [
     {
       id: "sno",
