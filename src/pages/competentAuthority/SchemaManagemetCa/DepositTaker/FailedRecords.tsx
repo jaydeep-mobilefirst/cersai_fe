@@ -45,12 +45,12 @@ const FailedRecords = () => {
     columnHelper.accessor("DepositeTakerName", {
       id: "depositeTakerName",
       cell: (info: any) => info.renderValue(),
-      header: () => <span>Deposite Taker Name</span>,
+      header: () => <span>Deposit Taker Name</span>,
     }),
     columnHelper.accessor("PanNumber", {
       id: "panNumber",
       cell: (info: any) => info.renderValue(),
-      header: () => <span>Pan Number</span>,
+      header: () => <span>PAN Number</span>,
     }),
     columnHelper.accessor("Errors", {
       id: "errors",
