@@ -121,9 +121,9 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         (section: any) => !excludedSectionNames.includes(section.sectionName)
       )
       .map((section: any) => {
-        const formFields = allFormData?.formFields?.form_fields?.filter(
-          (f: any) => f.sectionId === section.id
-        );
+        const formFields = allFormData?.formFields?.form_fields
+          ?.filter((f: any) => f.sectionId === section.id)
+          .filter((f: any) => f.key !== "dsc3");
         const hasError = formFields.some((field: any) => field.error);
 
         return {

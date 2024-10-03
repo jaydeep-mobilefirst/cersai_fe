@@ -124,9 +124,9 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         (section: any) => !excludedSectionNames.includes(section.sectionName)
       )
       .map((section: any) => {
-        const formFields = allFormData?.formFields?.form_fields?.filter(
-          (f: any) => f.sectionId === section.id
-        );
+        const formFields = allFormData?.formFields?.form_fields
+          ?.filter((f: any) => f.sectionId === section.id)
+          .filter((f: any) => f.key !== "dsc3");
         const hasError = formFields.some((field: any) => field.error);
 
         return {
@@ -357,10 +357,10 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
 
   const handleFileUpload = (event: any) => {
     setLoader(true);
-    
+
     // Capture file from event
     const file = event.target.files[0];
-    
+
     // Check if file exists
     if (!file) {
       Swal.fire({
@@ -371,19 +371,20 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       setLoader(false);
       return;
     }
-    
+
     const formData = new FormData();
-    formData.append("file", file);  // append the file instead of set
-  
+    formData.append("file", file); // append the file instead of set
+
     axiosTokenInstance
-      .post(`/deposit-taker/bulk-upload`, formData,         {
+      .post(`/deposit-taker/bulk-upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
         let data = res.data;
-        const total = data?.failedRecords?.length + data?.successfulRecords?.length
+        const total =
+          data?.failedRecords?.length + data?.successfulRecords?.length;
         if (data.success) {
           Swal.fire({
             icon: "success",
@@ -414,7 +415,6 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         setUploadKey(uploadInputKey + 1);
       });
   };
-  
 
   return (
     <div
