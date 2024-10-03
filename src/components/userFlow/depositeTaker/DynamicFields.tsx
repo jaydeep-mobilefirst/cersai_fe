@@ -300,6 +300,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                               selectedOption={field?.userInput}
                               placeholder={field?.placeholder}
                               disabled={
+                                
                                 disableFieldStatus
                                   ? disableFieldStatus
                                   : field?.disabled
@@ -325,6 +326,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                               selectedOption={field?.userInput}
                               placeholder={field?.placeholder}
                               disabled={
+                                 field?.label === "State" || field?.label === "District"?true:
                                 disableFieldStatus
                                   ? disableFieldStatus
                                   : field?.disabled
@@ -357,7 +359,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                     <div>
                       <label
                         htmlFor="district"
-                        className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1"
+                        className="text-base font-normal text-gilroy-medium whitespace-nowrap overflow-x-auto custom-scrollbar1 "
                       >
                         {field?.label}{" "}
                         <RequiredStar allFormData={allFormData} field={field} />

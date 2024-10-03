@@ -128,6 +128,12 @@ const SelectButton = ({
       setOptionsToShow(filteredOptions);
     }
   };
+  // Prevent default behavior on Enter keypress in search input
+const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+  }
+};
 
   return (
     <div className="w-full relative" ref={buttonRef}>
@@ -194,6 +200,7 @@ const SelectButton = ({
                 placeholder="Search"
                 style={{ paddingLeft: "2.5rem" }}
                 onChange={handleSearch}
+                onKeyPress={handleKeyPress} // Handle Enter keypress
               />
             </div>
           )}
