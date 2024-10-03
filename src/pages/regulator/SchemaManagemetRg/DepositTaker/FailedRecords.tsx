@@ -47,7 +47,7 @@ const FailedRecords = () => {
     columnHelper.accessor("PanNumber", {
       id: "panNumber",
       cell: (info: any) => info.renderValue(),
-      header: () => <span>Pan Number</span>,
+      header: () => <span>PAN Number</span>,
     }),
     columnHelper.accessor("Errors", {
       id: "errors",
