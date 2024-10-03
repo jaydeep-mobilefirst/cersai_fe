@@ -265,14 +265,14 @@ const SetNewPasswordModel: React.FC<SetNewPasswordModelProps> = ({}) => {
                       </p>
                     </div>
 
-                    <div className="lg:top-2 lg:right-10 relative md:top-2 md:right-10 top-[-6rem]">
+                    {/* <div className="lg:top-2 lg:right-10 relative md:top-2 md:right-10 top-[-6rem]">
                       <img
                         src={CrossIcon}
                         alt="CrossIcon"
                         className="cursor-pointer"
                         onClick={handleClose}
                       />
-                    </div>
+                    </div> */}
                   </div>
                   <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <div className="mt-5 md:mt-[15px] px-4 md:px-[40px]">
