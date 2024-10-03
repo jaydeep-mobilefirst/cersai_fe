@@ -48,6 +48,9 @@ const NewSchemaCreation = () => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
+    if (value ===""){
+      fetchSchemes();
+    }
   };
   const navigate = useNavigate();
 
