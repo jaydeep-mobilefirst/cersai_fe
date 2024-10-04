@@ -117,7 +117,11 @@ const ReviewMainListing = ({
                               allFormData={allFormData}
                             />
                           </div>
-                          <div className=" text-right  w-1/2 overflow-auto custom-scrollbar1">
+                          <div
+                            className={`" text-right  w-1/2 overflow-auto custom-scrollbar1" ${
+                              isPdfMode ? " p-3" : ""
+                            }`}
+                          >
                             {field?.dscFileNAme || field?.key === "dsc3"
                               ? "DSC Uploaded"
                               : field.userInput}
