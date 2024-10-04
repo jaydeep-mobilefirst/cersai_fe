@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import Eye from "../../../../assets/images/eye2.svg";
 import addCircle from "../../../../assets/images/new_images/add-circle.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import InputFields from "../../../../components/ScehmaManagement/InputField";
 import searchButton from "../../../../assets/images/search-normal.svg";
 import ReactTable from "../../../../components/userFlow/common/ReactTable";
@@ -48,11 +48,12 @@ const DepositSchemaCreation = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const location = useLocation();
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
-    if (value===""){
+    if (value === "") {
       myTaskRg();
     }
   };
@@ -90,10 +91,11 @@ const DepositSchemaCreation = () => {
   useEffect(() => {
     myTaskRg();
   }, [page, pageSize]);
-  const NavigateDepositTaker = (id: string) => {
+  const NavigateDepositTaker = (id: string, page: any) => {
     navigate("/rg/deposit-taker/form", {
       state: {
         depositTakerId: id,
+        pages: page,
       },
     });
   };
@@ -141,7 +143,7 @@ const DepositSchemaCreation = () => {
         return (
           <div
             className="flex justify-center items-center "
-            onClick={() => NavigateDepositTaker(uniqueId)}
+            onClick={() => NavigateDepositTaker(uniqueId, page)}
           >
             <div>
               <img src={Eye} alt="Eye " className="cursor-pointer" />
@@ -210,6 +212,17 @@ const DepositSchemaCreation = () => {
     setPage(1);
     myTaskRg();
   };
+  useEffect(() => {
+    const currentPageFromState = location?.state?.currentPage;
+    console.log(currentPageFromState, "currentPageFromState");
+
+    if (currentPageFromState) {
+      myTaskRg();
+      setPage(currentPageFromState);
+    } else {
+      setPage(1); // default to the first page
+    }
+  }, [location.state?.currentPage]);
 
   return (
     <div
