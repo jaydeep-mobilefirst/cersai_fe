@@ -340,7 +340,7 @@ const ProfileBranchForm: React.FC<Props> = ({
         </div>
         <div>
           <label htmlFor={`pinCode-${i}`} className="text-base font-normal">
-            Pin Code
+            Pin Code <span className="text-red-500">*</span>
           </label>
           <Tooltip
             title={
