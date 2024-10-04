@@ -39,6 +39,7 @@ const MyTaskForm = () => {
   const status = location?.state?.status;
   const approvalDocuments = location?.state?.approvalDocuments?.name;
   const approveTimeStamp = location?.state?.approveTimeStamp;
+  const pages = location?.state?.pages;
   const [loader, setLoader] = useState<boolean>(false);
   const [loader1, setLoader1] = useState<boolean>(false);
   const [viewLoaders, setViewLoaders] = useState<Record<number, boolean>>({});
@@ -65,8 +66,6 @@ const MyTaskForm = () => {
         setLoader(false);
       });
   };
-  
-  
 
   const getManagementDetails = () => {
     setLoader(true);
@@ -74,7 +73,7 @@ const MyTaskForm = () => {
       .get(`deposit-taker/management-team/${depositTakerId}`)
       .then((res) => {
         setDataManagementTeam(res?.data?.data);
-        console.log(res.data)
+        console.log(res.data);
 
         setLoader(false);
       })
@@ -86,7 +85,7 @@ const MyTaskForm = () => {
 
   useEffect(() => {
     getBranches();
-    getManagementDetails()
+    getManagementDetails();
   }, [depositTakerId]);
   const fetchFormFields = () => {
     setLoader1(true);
@@ -367,6 +366,10 @@ const MyTaskForm = () => {
   };
 
   const navigate = useNavigate();
+  const handleBack = () => {
+    const currentPage = pages || 1;
+    navigate("/rg/mytask", { state: { currentPage } });
+  };
 
   return (
     <div>
@@ -397,7 +400,9 @@ const MyTaskForm = () => {
                         <div className="mb-[16px] " key={index}>
                           <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold">
                             <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                            {section?.sectionName === "Nodal Details"?"Nodal Officer Details":section?.sectionName}
+                              {section?.sectionName === "Nodal Details"
+                                ? "Nodal Officer Details"
+                                : section?.sectionName}
                             </p>
                             <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
                               {/* {section.buttonText} */}
@@ -474,31 +479,31 @@ const MyTaskForm = () => {
                       )}
                     </div>
                   </div>
-                      
-                      <div className="w-full overflow-x-auto mt-4 mb-3">
-                        <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
-                          <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                            Management Details
-                          </p>
+
+                  <div className="w-full overflow-x-auto mt-4 mb-3">
+                    <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
+                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                        Management Details
+                      </p>
+                    </div>
+                    <div
+                      className="custom-scrollbar"
+                      style={{ maxHeight: "200px", overflowY: "auto" }}
+                    >
+                      {loader ? (
+                        <LoaderSpin />
+                      ) : dataManagementTeam.length > 0 ? (
+                        <ReactTable
+                          defaultData={dataManagementTeam}
+                          columns={columnsMangement}
+                        />
+                      ) : (
+                        <div className=" flex justify-center items-center">
+                          <p>No data available</p>
                         </div>
-                        <div
-                          className="custom-scrollbar"
-                          style={{ maxHeight: "200px", overflowY: "auto" }}
-                        >
-                          {loader ? (
-                            <LoaderSpin />
-                          ) : dataManagementTeam.length > 0 ? (
-                            <ReactTable
-                              defaultData={dataManagementTeam}
-                              columns={columnsMangement}
-                            />
-                          ) : (
-                            <div className=" flex justify-center items-center">
-                              <p>No data available</p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      )}
+                    </div>
+                  </div>
                   <div>
                     <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
                       <p className="lg:w-[152px] ml-[16px] mt-[16px] text-xl lg:text-[20px] pb-2 text-nowrap">
@@ -558,7 +563,8 @@ const MyTaskForm = () => {
             <div className="my-11 flex flex-col lg:flex-row lg:items-center justify-between">
               <div
                 className="flex items-center cursor-pointer space-x-2 mb-3 lg:mb-0 md:ml-[5rem]"
-                onClick={() => navigate(-1)}
+                // onClick={() => navigate(-1)}
+                onClick={handleBack}
               >
                 <img src={BackArrow} alt="Back Arrow" />
                 <p className="text-sm font-normal text-gilroy-regular">Back</p>

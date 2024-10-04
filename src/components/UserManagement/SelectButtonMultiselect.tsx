@@ -228,7 +228,7 @@ const SelectButtonMultiselect = ({
                     setArrowDirectionToggle(false);
                   }}
                   href="#"
-                  className="px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-900"
+                  className="px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-gray-900 z-10"
                   role="menuitem"
                 >
                   {option.label}

@@ -24,6 +24,7 @@ const DepositTakerForm = () => {
   const location = useLocation();
   const [loader, setLoader] = useState<boolean>(false);
   const depositTakerId = location.state?.depositTakerId;
+  const pages = location.state?.pages;
   const [dataBranch, setDataBranch] = useState([]);
   const [dataManagementTeam, setDataManagementTeam] = useState([]);
   const [viewLoaders, setViewLoaders] = useState<Record<number, boolean>>({});
@@ -48,8 +49,6 @@ const DepositTakerForm = () => {
         setLoader(false);
       });
   };
-  
-  
 
   const getManagementDetails = () => {
     setLoader(true);
@@ -57,7 +56,7 @@ const DepositTakerForm = () => {
       .get(`deposit-taker/management-team/${depositTakerId}`)
       .then((res) => {
         setDataManagementTeam(res?.data?.data);
-        console.log(res.data)
+        console.log(res.data);
 
         setLoader(false);
       })
@@ -67,10 +66,9 @@ const DepositTakerForm = () => {
       });
   };
 
-
   useEffect(() => {
     getBranches();
-    getManagementDetails()
+    getManagementDetails();
   }, []);
   const fetchFormFields = () => {
     setLoader(true);
@@ -389,8 +387,12 @@ const DepositTakerForm = () => {
     { value: "LLP", label: "LLP" },
     { value: "Sole PArtnership", label: "Sole PArtnership" },
   ];
+  // const handleBackButtonClick = () => {
+  //   navigate("/rg/deposit-taker");
+  // };
   const handleBackButtonClick = () => {
-    navigate("/rg/deposit-taker");
+    const currentPage = pages || 1;
+    navigate("/rg/deposit-taker", { state: { currentPage } });
   };
   return (
     <div>
@@ -415,7 +417,9 @@ const DepositTakerForm = () => {
                         <div className="mb-[16px] " key={index}>
                           <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold">
                             <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                            {section?.sectionName === "Nodal Details"?"Nodal Officer Details":section?.sectionName}
+                              {section?.sectionName === "Nodal Details"
+                                ? "Nodal Officer Details"
+                                : section?.sectionName}
                             </p>
                             <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
                               {/* {section.buttonText} */}
@@ -482,7 +486,7 @@ const DepositTakerForm = () => {
                         ) : dataBranch?.length > 0 ? (
                           <ReactTable
                             defaultData={dataBranch}
-                            columns={columns} 
+                            columns={columns}
                             lineHeight={true}
                           />
                         ) : (
@@ -492,32 +496,32 @@ const DepositTakerForm = () => {
                         )}
                       </div>
                     </div>
-                      
-                      <div className="w-full overflow-x-auto mt-4 mb-3">
-                        <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
-                          <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                            Management Details
-                          </p>
-                        </div>
-                        <div
-                          className="custom-scrollbar"
-                          style={{ maxHeight: "200px", overflowY: "auto" }}
-                        >
-                          {loader ? (
-                            <LoaderSpin />
-                          ) : dataManagementTeam.length > 0 ? (
-                            <ReactTable
-                              defaultData={dataManagementTeam}
-                              columns={columnsMangement}
-                              lineHeight={true}
-                            />
-                          ) : (
-                            <div className=" flex justify-center items-center">
-                              <p>No data available</p>
-                            </div>
-                          )}
-                        </div>
+
+                    <div className="w-full overflow-x-auto mt-4 mb-3">
+                      <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
+                        <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                          Management Details
+                        </p>
                       </div>
+                      <div
+                        className="custom-scrollbar"
+                        style={{ maxHeight: "200px", overflowY: "auto" }}
+                      >
+                        {loader ? (
+                          <LoaderSpin />
+                        ) : dataManagementTeam.length > 0 ? (
+                          <ReactTable
+                            defaultData={dataManagementTeam}
+                            columns={columnsMangement}
+                            lineHeight={true}
+                          />
+                        ) : (
+                          <div className=" flex justify-center items-center">
+                            <p>No data available</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
 
                     <div>
                       <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
@@ -611,21 +615,21 @@ const DepositTakerForm = () => {
                   <div>
                     <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 
-<div className="text-center mt-auto">
-  <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
-    COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
-  </h1>
-  <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
-    Powered and managed by{" "}
-    <a
-      href="https://www.proteantech.in/"
-      className="underline text-gilroy-regular font-bold"
-      target="_blank"
-    >
-      Protean eGov Technologies
-    </a>{" "}
-  </p>
-</div>
+                    <div className="text-center mt-auto">
+                      <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+                        COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
+                      </h1>
+                      <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+                        Powered and managed by{" "}
+                        <a
+                          href="https://www.proteantech.in/"
+                          className="underline text-gilroy-regular font-bold"
+                          target="_blank"
+                        >
+                          Protean eGov Technologies
+                        </a>{" "}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </>

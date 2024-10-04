@@ -342,6 +342,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
             icon: "success",
           });
           fetchSchema();
+          navigate("/ca/my-task");
         } else {
           Swal.fire({
             title: "Something went wrong",

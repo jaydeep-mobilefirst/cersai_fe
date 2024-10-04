@@ -4,7 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import Eye from "../../../assets/images/eye2.svg";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import InputFields from "../../../components/ScehmaManagement/InputField";
 import searchButton from "../../../assets/images/search-normal.svg";
 import ReactTable from "../../../components/userFlow/common/ReactTable";
@@ -38,6 +38,7 @@ const MyTaskStatus = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const location = useLocation();
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
@@ -73,7 +74,8 @@ const MyTaskStatus = () => {
     checkerId: string,
     approvalDocumentId: number,
     status: string,
-    depositTakerName: string
+    depositTakerName: string,
+    page: any
   ) => {
     navigate("/rg/mytask/form", {
       state: {
@@ -82,6 +84,7 @@ const MyTaskStatus = () => {
         approvalDocumentId: approvalDocumentId,
         status: status,
         depositTakerName,
+        pages: page,
       },
     });
   };
@@ -136,7 +139,8 @@ const MyTaskStatus = () => {
                 checkerId,
                 approvalDocumentId,
                 status,
-                depositTakerName
+                depositTakerName,
+                page
               )
             }
           >
@@ -212,6 +216,17 @@ const MyTaskStatus = () => {
     setPage(1);
     myTaskRg();
   };
+  useEffect(() => {
+    const currentPageFromState = location?.state?.currentPage;
+    console.log(currentPageFromState, "currentPageFromState");
+
+    if (currentPageFromState) {
+      myTaskRg();
+      setPage(currentPageFromState);
+    } else {
+      setPage(1); // default to the first page
+    }
+  }, [location.state?.currentPage]);
 
   return (
     <div
