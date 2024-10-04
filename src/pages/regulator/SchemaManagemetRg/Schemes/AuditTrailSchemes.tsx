@@ -45,6 +45,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const createdBy = location.state?.createdBy?.substring(0, 2);
   const uniqueId = location.state?.uniqueId;
   const Status = location.state?.Status;
+  const page = location.state?.page;
   const depositTakerId = location.state?.depositTakerId;
   const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
   console.log({ Status }, "Status");
@@ -330,8 +331,12 @@ const SchemesSearchDetailsSM: React.FC = () => {
     }
   };
 
+  // const handleBackButtonClick = () => {
+  //   navigate("/rg/my-task");
+  // };
   const handleBackButtonClick = () => {
-    navigate("/rg/my-task");
+    const currentPage = page || 1;
+    navigate("/rg/my-task", { state: { currentPage } });
   };
 
   const handleStatusChange = (e: any) => {

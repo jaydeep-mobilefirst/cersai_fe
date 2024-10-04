@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import Eye from "../../../../assets/images/eye2.svg";
 import addCircle from "../../../../assets/images/new_images/add-circle.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import InputFields from "../../../../components/ScehmaManagement/InputField";
 import searchButton from "../../../../assets/images/search-normal.svg";
 import ReactTable from "../../../../components/userFlow/common/ReactTable";
@@ -43,12 +43,13 @@ const NewSchemaCreation = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const location = useLocation();
 
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
-    if (value ===""){
+    if (value === "") {
       fetchSchemes();
     }
   };
@@ -131,13 +132,18 @@ const NewSchemaCreation = () => {
       id: "action",
       cell: (info) => {
         let createdBy = info?.cell?.row?.original?.createdBy;
-        const NavigateScheme = (uniqueId: any, depositTakerId: any) => {
+        const NavigateScheme = (
+          uniqueId: any,
+          depositTakerId: any,
+          page: any
+        ) => {
           navigate("/rg/my-task/audit-rail", {
             state: {
               uniqueId: uniqueId,
               depositTakerId: depositTakerId,
               createdBy,
               Status,
+              page: page,
             },
           });
         };
@@ -148,7 +154,7 @@ const NewSchemaCreation = () => {
         return (
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}
-            <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
+            <div onClick={() => NavigateScheme(uniqueId, depositTakerId, page)}>
               <img src={EditIcon} alt="Eye " className="cursor-pointer" />
             </div>
             {/* </Link> */}
@@ -219,6 +225,17 @@ const NewSchemaCreation = () => {
     setPage(1);
     fetchSchemes();
   };
+  useEffect(() => {
+    const currentPageFromState = location.state?.currentPage;
+    console.log(currentPageFromState, "currentPageFromState");
+
+    if (currentPageFromState) {
+      fetchSchemes();
+      setPage(currentPageFromState);
+    } else {
+      setPage(1); // default to the first page
+    }
+  }, [location.state?.currentPage]);
 
   return (
     <div
