@@ -56,7 +56,7 @@ const ReturnJourney = (props: Props) => {
             console.log("Error");
           }
           // console.log(dtData, "respnse--------------");
-          let modifiedFormFields = response.data.data?.formFields?.map(
+          let modifiedFormFields = response.data.data?.formFields?.sort((a: any, b: any) => a.sortOrder - b.sortOrder)?.map(
             (o: any) => ({
               ...o,
               userInput: dtData
@@ -67,7 +67,7 @@ const ReturnJourney = (props: Props) => {
           );
 
           let modifiedFileFields =
-            response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
+            response?.data?.data?.registrationDocumentFields?.sort((a: any, b: any) => a.sortOrder - b.sortOrder)?.map((o: any) => ({
               ...o,
               file: dtData
                 ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
