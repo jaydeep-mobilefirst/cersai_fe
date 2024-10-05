@@ -118,7 +118,7 @@ const ReviewMainListing = ({
                             />
                           </div>
                           <div
-                            className={`" text-right  w-1/2 overflow-auto custom-scrollbar1" ${
+                            className={`" text-right  w-1/2 overflow-auto custom-scrollbar2 " ${
                               isPdfMode ? " p-3" : ""
                             }`}
                           >
