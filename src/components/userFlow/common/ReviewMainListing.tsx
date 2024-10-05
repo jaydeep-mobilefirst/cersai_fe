@@ -93,7 +93,7 @@ const ReviewMainListing = ({
                       isPdfMode
                         ? "flex flex-col"
                         : "grid grid-cols-1 md:grid-cols-2 gap-4"
-                    } mb-4`}
+                    } mb-8`}
                   >
                     {allFormData?.formFields?.form_fields
                       ?.filter((f: any) => f?.sectionId === section?.id)
@@ -119,7 +119,7 @@ const ReviewMainListing = ({
                           </div>
                           <div
                             className={`" text-right  w-1/2 overflow-auto custom-scrollbar2 " ${
-                              isPdfMode ? " p-3" : ""
+                              isPdfMode ? "p-4" : ""
                             }`}
                           >
                             {field?.dscFileNAme || field?.key === "dsc3"
