@@ -274,7 +274,14 @@ const SchemesSearchDetailsSM: React.FC = () => {
               >
                 Status <span className="text-red-500">*</span>
               </label>
-              <InputField value={allFormData?.other?.status==="UNDER_LETIGATION"?"UNDER LITIGATION":allFormData?.other?.status?.replace(/_/g," ")} disabled />
+              <InputField
+                value={
+                  allFormData?.other?.status === "UNDER_LETIGATION"
+                    ? "UNDER LITIGATION"
+                    : allFormData?.other?.status?.replace(/_/g, " ")
+                }
+                disabled
+              />
             </div>
             <div>
               <label
@@ -370,6 +377,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
             icon: "success",
             title: "Success",
           });
+          navigate("/dc/my-task");
           fetchSchema();
         } else {
           Swal.fire({
@@ -392,28 +400,31 @@ const SchemesSearchDetailsSM: React.FC = () => {
     }
   };
   return (
-    <div className="flex flex-col min-h-screen justify-between" style={{ minHeight: "calc(100vh - 110px)" }}>
+    <div
+      className="flex flex-col min-h-screen justify-between"
+      style={{ minHeight: "calc(100vh - 110px)" }}
+    >
       <div>
-      <div className="mt-6 mx-8">
-        <TaskTabsDc />
-      </div>
-      <div className="flex flex-row mt-3 mx-8">
-        <img
-          src={InfoIcon}
-          alt="InfoIcon"
-          className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
-        />
-        <p className="text-[#808080]">
-          Please update the comments under scheme details
-        </p>
-      </div>
-      <div className="mt-8 mb-8 mx-8">
-        {loader ? (
-          <LoaderSpin />
-        ) : (
-          <Accordion items={accordionItems} showAccordion={true} />
-        )}
-      </div>
+        <div className="mt-6 mx-8">
+          <TaskTabsDc />
+        </div>
+        <div className="flex flex-row mt-3 mx-8">
+          <img
+            src={InfoIcon}
+            alt="InfoIcon"
+            className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
+          />
+          <p className="text-[#808080]">
+            Please update the comments under scheme details
+          </p>
+        </div>
+        <div className="mt-8 mb-8 mx-8">
+          {loader ? (
+            <LoaderSpin />
+          ) : (
+            <Accordion items={accordionItems} showAccordion={true} />
+          )}
+        </div>
       </div>
       <div>
         <div
