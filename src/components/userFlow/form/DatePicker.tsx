@@ -108,11 +108,11 @@ const DatePicker = ({
         type="date"
         className="absolute opacity-0 -z-10 mt-10"
         onChange={onChangeHandler}
-        max={lastDate ? new Date(new Date(lastDate).setDate(new Date(lastDate).getDate() - 1))?.toISOString().split("T")[0] : determineMaxDate()}
+        max={lastDate ? new Date(new Date(lastDate).setDate(new Date(lastDate).getDate()))?.toISOString().split("T")[0] : determineMaxDate()}
         min={
           maxDate === "lastDate" && startDate
             ? new Date(
-                new Date(startDate).setDate(new Date(startDate).getDate() + 1)
+                new Date(startDate).setDate(new Date(startDate).getDate())
               )
                 ?.toISOString()
                 ?.split("T")[0]
