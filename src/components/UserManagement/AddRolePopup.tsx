@@ -227,7 +227,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({
                 Functionalities mapped
                 <span className="text-red-400 ml-1">*</span>
               </label>
-              <div className="mt-[8px]">
+              <div className="mt-[8px] mx-2">
                 <SelectButtonMultiselect
                   setOption={handleSetOption1}
                   options={functionalities}

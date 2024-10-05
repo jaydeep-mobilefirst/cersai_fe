@@ -690,7 +690,7 @@ const TotalFoundationLineChart: React.FC<TotalFoundationLineChartProps> = ({
             tick={{ dy: 12 }}
             className={`${intervalType==="month"?"text-[12px] md:text-[14px]":"md:text-[12px]"}`}
             interval={0}
-            padding={{ right: 15 }} 
+            padding={{ right: 25 }} 
           />
           <YAxis ticks={yAxisTicks} axisLine={false} tickLine={false} />
         </LineChart>

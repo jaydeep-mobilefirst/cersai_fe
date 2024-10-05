@@ -186,7 +186,11 @@ const SelectButtonTask = ({
           backgroundColor: bgColor,
         }}
       >
-        {selectedOption === "UNDER_LETIGATION"
+        {selectedOption === "MOD_PENDING"
+          ? "Mod Pending":selectedOption === "MOD_TRANSIT"
+          ? "Mod Transit":selectedOption === "MOD_REFER_TO_REGULATOR"
+          ? "Mod Refer to Regulator":selectedOption === "REFER_TO_REGULATOR"
+          ? "Refer to Regulator":selectedOption === "UNDER_LETIGATION"
           ? "Under Litigation"
           : selectedOption
           ? selectedOption

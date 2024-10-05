@@ -56,7 +56,7 @@ const DepositeTakerSearch: React.FC = () => {
   const navigate = useNavigate();
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const { language } = useLangugaeStore((state) => state);
-  console.log("totoal",total)
+  console.log("totoal",total,taskData)
 
   useEffect(() => {
     homePageCmsApi();
@@ -108,12 +108,21 @@ const DepositeTakerSearch: React.FC = () => {
         },
       })
       .then((res) => {
+        setLoader(false);
         if (res.status === 200) {
           let currentPage = (parseInt(res?.data?.data?.page) - 1) * pageSize;
-          setTaskData(res?.data?.data);
-          setTotal(res?.data?.total);
+          const data = res?.data?.data;
+          if (data && data?.length>0){
+            setTaskData(res?.data?.data);
+            setTotal(res?.data?.total);
+            setLoader(false);
+
+          }else{
+            setTaskData([])
+            setLoader(false);
+          }
         }
-        setLoader(false);
+        
       })
       .catch((error) => {
         console.log(error.message);
@@ -277,7 +286,7 @@ const DepositeTakerSearch: React.FC = () => {
             htmlFor='Deposit taker Search'
             className='text-base font-normal text-gilroy-medium '
           >
-            QR Search by
+            OR Search by
           </label>
           <div className=' w-[60%] sm:w-[60%] lg:w-[40%] flex items-center gap-2 flex-wrap sm:flex-nowrap'>
             {/* <SelectField
@@ -311,10 +320,10 @@ const DepositeTakerSearch: React.FC = () => {
             ) : taskData?.length > 0 ? (
               <ReactTable defaultData={taskData} columns={columns} />
             ) : (
-              // <div className=' flex justify-center items-center'>
-              //   <h1>No data available</h1>
-              // </div>
-              <LoaderSpin />
+              <div className=' flex justify-center items-center'>
+                <h1>No data available</h1>
+              </div>
+              // <LoaderSpin />
             )}
           </div>
           <div className='mt-10'>
