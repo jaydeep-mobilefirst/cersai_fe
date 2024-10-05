@@ -166,7 +166,7 @@ const SchemeSearch: React.FC = () => {
         modifiedDate = modifiedDate ? moment(modifiedDate).format('DD-MM-YYYY') : "N/A";
         return modifiedDate;
       },
-      header: () => <span>Start Date</span>,
+      header: () => <span>Scheme Start Date</span>,
     }),
     columnHelper.accessor((row: any) => row, {
       id: "action",
@@ -273,7 +273,7 @@ const SchemeSearch: React.FC = () => {
             htmlFor="Deposit taker Search"
             className="text-base font-normal text-gilroy-medium "
           >
-            QR Search by
+            OR Search by
           </label>
           <div className=" w-[60%] sm:w-[60%] lg:w-[40%] flex items-center gap-2 flex-wrap sm:flex-nowrap">
           {/* <SelectField
