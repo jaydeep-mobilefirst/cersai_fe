@@ -24,6 +24,7 @@ type TableType = {
   Name: string;
   role: string;
   isActive: boolean;
+  middleName: string;
 };
 
 interface Props {
@@ -92,7 +93,15 @@ const UserCreation: React.FC<Props> = ({ entityType }: Props) => {
       id: "name",
       cell: (info) => {
         const value: any = info.getValue();
-        return <>{value?.firstName + " " + value?.lastName}</>;
+        return (
+          <>
+            {/* {value?.firstName + " " + value?.middleName} + " " +{" "}
+            {value?.lastName}{" "} */}
+            <span>
+              {`${value?.firstName} ${value?.middleName} ${value?.lastName}`}
+            </span>
+          </>
+        );
       },
       header: () => <span>Name</span>,
     }),
