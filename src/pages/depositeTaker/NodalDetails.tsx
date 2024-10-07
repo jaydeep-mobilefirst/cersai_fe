@@ -82,7 +82,66 @@ const NodalDetails = (props: Props) => {
   //   // }
   // };
 
+  // const verifyDscWithNodalOfficer = (data: any) => {
+  //   // Extract names from the data array
+  //   const firstNameObj = data.find(
+  //     (item: { key: string }) => item.key === "nodalFirstname"
+  //   );
+  //   const middleNameObj = data.find(
+  //     (item: { key: string }) => item.key === "nodalMiddlename"
+  //   );
+  //   const lastNameObj = data.find(
+  //     (item: { key: string }) => item.key === "nodalLastname"
+  //   );
+  //   const firstName = firstNameObj
+  //     ? firstNameObj.userInput
+  //         .toUpperCase()
+  //         .split(" ")
+  //         .filter((part: string | any[]) => part.length > 0)
+  //     : [];
+  //   const middleName = middleNameObj
+  //     ? middleNameObj.userInput
+  //         .toUpperCase()
+  //         .split(" ")
+  //         .filter((part: string | any[]) => part.length > 0)
+  //     : [];
+  //   const lastName = lastNameObj
+  //     ? lastNameObj.userInput
+  //         .toUpperCase()
+  //         .split(" ")
+  //         .filter((part: string | any[]) => part.length > 0)
+  //     : [];
+
+  //   // Check if required names are provided
+  //   if (firstName.length === 0 || lastName.length === 0) {
+  //     return false;
+  //   }
+
+  //   const dscObj = data.find(
+  //     (item: { label: string }) => item.label === "DSC3 Certificate"
+  //   );
+
+  //   const dscCertName =
+  //     dscObj?.userInput?.SelCertSubject?.split(",")[0]?.toUpperCase();
+
+  //   // Extract and normalize names from the certificate name
+  //   const certNameParts = dscCertName
+  //     .replace("CN=", "")
+  //     .toUpperCase()
+  //     .split(" ")
+  //     .filter(Boolean);
+
+  //   // Combine names into a single array
+  //   const combinedNames = [...firstName, ...middleName, ...lastName].sort();
+  //   const certNameSorted = certNameParts.sort();
+  //   // Check if all parts of combined names are present in the certificate name
+  //   const isMatch =
+  //     combinedNames.length === certNameSorted.length &&
+  //     combinedNames.every((part, index) => part === certNameSorted[index]);
+  //   return isMatch;
+  // };
   const verifyDscWithNodalOfficer = (data: any) => {
+    console.log(data, "data111111");
     // Extract names from the data array
     const firstNameObj = data.find(
       (item: { key: string }) => item.key === "nodalFirstname"
@@ -117,23 +176,41 @@ const NodalDetails = (props: Props) => {
       return false;
     }
 
-    const dscObj = data.find(
-      (item: { label: string }) => item.label === "DSC3 Certificate"
-    );
+    const dscObj = data.find((item: { key: string }) => item.key === "dsc3");
+    console.log({ dscObj }, "dscObj");
+    let dscCertName: any = "";
 
-    const dscCertName =
-      dscObj?.userInput?.SelCertSubject?.split(",")[0]?.toUpperCase();
+    const userInput = dscObj.userInput;
+
+    // Check if userInput is a string or an object
+    if (typeof userInput === "string") {
+      const parsedInput = JSON?.parse(userInput);
+      dscCertName = parsedInput.SelCertSubject;
+    } else if (typeof userInput === "object") {
+      // Directly access SelCertSubject from the object
+      dscCertName = userInput.SelCertSubject;
+    }
+    console.log({ dscCertName }, "dscCertName");
 
     // Extract and normalize names from the certificate name
-    const certNameParts = dscCertName
-      .replace("CN=", "")
-      .toUpperCase()
-      .split(" ")
-      .filter(Boolean);
+    // const certNameParts = dscCertName
+    //   .replace("CN=", "")
+    //   .toUpperCase()
+    //   .split(" ")
+    //   .filter(Boolean);
+    const nameMatch = dscCertName?.match(/CN=([^,]+)/);
+    console.log({ nameMatch }, "dscCertName");
+    const certNameParts = nameMatch ? nameMatch[1].trim() : null;
+    console.log({ certNameParts }, "name");
+    // const certNameParts = dscCertName
+    //   ?.split(",")[0]
+    //   .replace("CN=", "")
+    //   .toUpperCase()
+    //   .filter(Boolean);
 
     // Combine names into a single array
     const combinedNames = [...firstName, ...middleName, ...lastName].sort();
-    const certNameSorted = certNameParts.sort();
+    const certNameSorted = certNameParts.split(" ").sort();
     // Check if all parts of combined names are present in the certificate name
     const isMatch =
       combinedNames.length === certNameSorted.length &&

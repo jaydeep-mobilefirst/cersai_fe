@@ -41,6 +41,55 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
   //   ","
   // )[0];
 
+  // const dscName = (userInput: any) => {
+  //   let dscCertName: any = "";
+  //   if (typeof userInput === "string") {
+  //     const parsedInput = JSON?.parse(userInput);
+  //     dscCertName = parsedInput?.SelCertSubject;
+  //   } else if (typeof userInput === "object") {
+  //     // Directly access SelCertSubject from the object
+  //     dscCertName = userInput?.SelCertSubject;
+  //   }
+  //   const certNameParts = dscCertName
+  //     .replace("CN=", "")
+  //     .toUpperCase()
+  //     .split(",")[0];
+
+  //   return certNameParts;
+  // };
+  const dscName = (userInput: any) => {
+    let dscCertName: any = "";
+
+    // Check if userInput is a string and not empty
+    if (typeof userInput === "string" && userInput.trim() !== "") {
+      try {
+        const parsedInput = JSON?.parse(userInput);
+        dscCertName = parsedInput?.SelCertSubject;
+      } catch (error) {
+        console.error("Invalid JSON input:", error);
+        return null; // Handle the invalid JSON case
+      }
+    } else if (typeof userInput === "object" && userInput !== null) {
+      // Directly access SelCertSubject from the object if it's an object
+      dscCertName = userInput?.SelCertSubject;
+    }
+
+    if (!dscCertName) {
+      return null; // Return null if dscCertName is not present
+    }
+
+    const certNameParts = dscCertName
+      .replace("CN=", "")
+      .toUpperCase()
+      .split(",")[0];
+
+    return certNameParts;
+  };
+
+  // console.log(dscName(fieldData?.userInput), "filed dataaaa22222222");
+
+  console.log(fieldData?.userInput, "filed dataaaa");
+
   useEffect(() => {
     const checkSignerDigital = setInterval(() => {
       if (window.SignerDigital) {
@@ -132,8 +181,10 @@ const DscKeyRegister: React.FC<DscKeyLoginProps> = ({
         <p className=" text-[black] ">
           {isDscSelected
             ? certName
-            : fieldData?.userInput?.SelCertSubject
-            ? fieldData?.userInput?.SelCertSubject?.split(",")[0]
+            : dscName(fieldData?.userInput) ||
+              fieldData?.userInput?.SelCertSubject
+            ? dscName(fieldData?.userInput) ||
+              fieldData?.userInput?.SelCertSubject?.split(",")[0]
             : "Upload DSC Certificate"}
           {/* {isDscSelected
             ? certName
