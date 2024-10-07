@@ -692,7 +692,7 @@ const TotalFoundationLineChart: React.FC<TotalFoundationLineChartProps> = ({
             interval={0}
             padding={{ right: 25 }} 
           />
-          <YAxis ticks={yAxisTicks} axisLine={false} tickLine={false} />
+          <YAxis axisLine={false} tickLine={false} domain={['auto', 'auto']}/>
         </LineChart>
       </ResponsiveContainer>
       </div>
