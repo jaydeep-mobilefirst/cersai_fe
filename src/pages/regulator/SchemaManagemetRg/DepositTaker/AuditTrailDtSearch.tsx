@@ -343,15 +343,23 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     axiosTokenInstance
       .get(`/deposit-taker/bulk-upload/sample-download`, {
         method: "GET",
-        responseType: "blob", // important
       })
       .then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", `${Date.now()}.xlsx`);
-        document.body.appendChild(link);
-        link.click();
+        const url = response?.data?.data;
+        if (url) {
+          window.open(url, "_blank")
+          Swal.fire({
+            icon: "success",
+            title: "Download successful",
+            text: "File downloaded successfully",
+          });
+        }
+        // const url = window.URL.createObjectURL(new Blob([response?.data]));
+        // const link = document.createElement("a");
+        // link.href = url;
+        // link.setAttribute("download", `${Date.now()}.xlsx`);
+        // document.body.appendChild(link);
+        // link.click();
       });
   };
 
