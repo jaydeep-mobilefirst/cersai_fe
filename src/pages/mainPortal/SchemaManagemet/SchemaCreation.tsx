@@ -208,7 +208,7 @@ const SchemaCreation = () => {
     setSelectedOption4(value);
   };
   const options = [
-    { value: "", label: "All" },
+    { value: "ALL", label: "All" },
     { value: "ACTIVE", label: "ACTIVE" },
     { value: "BANNED", label: "BANNED" },
     { value: "UNDER_LETIGATION", label: "Under Litigation" },
