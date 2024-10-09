@@ -10,7 +10,7 @@ import UmTabs from "../../../components/UserManagement/UmTabs";
 import AddRolePopup from "../../../components/UserManagement/AddRolePopup";
 import EditRolePopup from "../../../components/UserManagement/EditRolePopup"; // Import the EditRolePopup
 import useFetchFunctionalityForUAM from "../../../custom hooks/useFetchFunctionalityForUAM";
-import useFetchRoles from "../../../custom hooks/fetchRoles";
+import useFetchRoles from "../../../custom hooks/fetchRolesList";
 import ActionButton from "../../../components/buttons/ActionButton";
 import uamStore from "../../../store/uamStore";
 import InputFields from "../../../components/ScehmaManagement/InputField";
