@@ -33,7 +33,7 @@ const DepositTakerForm = () => {
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
-
+  console.log("data--allform",allFormData)
   const getBranches = () => {
     setLoader(true);
 
@@ -457,8 +457,8 @@ const DepositTakerForm = () => {
                                           ? "DSC Certification "
                                           : field?.label ===
                                               "Regulator approval Date" ||
-                                            field?.label ===
-                                              "Date of In-corporation"
+                                            (field?.label ===
+                                              "Date of In-corporation" || field?.key==="dateOfIncorporation") 
                                           ? moment(field.userInput).format(
                                               "DD/MM/YYYY"
                                             )
