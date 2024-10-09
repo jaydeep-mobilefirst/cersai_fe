@@ -77,7 +77,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   const fetchFormFields = async () => {
     try {
       const response = await axiosTokenInstance.get(
-        `/registration/field-data/${1}?status=addToRegistration`
+        `/registration/field-data/${1}?status=addToRegistration&creationBy=RGCA`
       );
       const dropdownOptionsRes = await axiosTokenInstance.get(
         `/registration/dropdown-components`
@@ -343,7 +343,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       .then((response) => {
         const url = response?.data?.data;
         if (url) {
-          window.open(url, "_blank")
+          window.open(url, "_blank");
           Swal.fire({
             icon: "success",
             title: "Download successful",
