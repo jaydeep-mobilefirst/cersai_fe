@@ -306,6 +306,21 @@ const SchemeDetails = () => {
     }
   };
 
+  const formatNumber = (num: string): string => {
+    if (!num) return "";
+
+    const x = num.split(".");
+    let lastThree = x[0].substring(x[0].length - 3);
+    const otherNumbers = x[0].substring(0, x[0].length - 3);
+    if (otherNumbers !== "") {
+      lastThree = "," + lastThree;
+    }
+    const formatted =
+      otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+
+    return x.length > 1 ? formatted + "." + x[1] : formatted;
+  };
+
   const handleOnchange = async (
     event: any,
     fieldData: any,
@@ -348,6 +363,46 @@ const SchemeDetails = () => {
           }),
         },
       });
+    } else if (fieldData?.key === "minInvestment") {
+      const inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      const formattedValue = formatNumber(inputValue);
+      console.log(formattedValue, "jaydeep");
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (f?.key === "minInvestment") {
+              return {
+                ...f,
+                userInput: formattedValue,
+              };
+            } else {
+              return f;
+            }
+          }),
+        },
+      });
+      console.log(allFormData, "jaydeep");
+    } else if (fieldData?.key === "maxInvestment") {
+      const inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      const formattedValue = formatNumber(inputValue);
+      console.log(formattedValue, "jaydeep");
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (f?.key === "maxInvestment") {
+              return {
+                ...f,
+                userInput: formattedValue,
+              };
+            } else {
+              return f;
+            }
+          }),
+        },
+      });
+      console.log(allFormData, "jaydeep");
     } else {
       onChange(event, fieldData, fieldType);
     }

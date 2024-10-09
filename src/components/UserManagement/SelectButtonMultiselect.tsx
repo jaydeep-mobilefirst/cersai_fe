@@ -57,7 +57,7 @@ const SelectButtonMultiselect = ({
   };
 
   useEffect(() => {
-    setArrowDirectionToggle(false);
+    // setArrowDirectionToggle(false);
   }, [selectedOption]);
 
   // Close the dropdown if the user clicks outside of it
@@ -87,7 +87,7 @@ const SelectButtonMultiselect = ({
   const handleMultiselect = (e: any, option: any) => {
     e.preventDefault();
     setOption(option);
-    setArrowDirectionToggle(false);
+    // setArrowDirectionToggle(false);
   };
   return (
     <div className={className}>
