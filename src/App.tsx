@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./index.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import ReactGA from "react-ga4";
 import Landing from "./pages/Landing";
 import PrivateRoutes from "./utils/PrivateRoute";
 //import DepositeTakerSignup from "./pages/depositeTaker/DepositeTakerSignup";
@@ -100,251 +106,269 @@ import UploadDSC3Designated from "./pages/mainPortal/UploadDSC3Designated";
 import UploadDSC3Regulator from "./pages/mainPortal/UploadDSC3Regulator";
 import DashboardRegulator from "./pages/mainPortal/DashboardRegulator";
 import DashboardDesignated from "./pages/mainPortal/DashboardDesignated";
+
+const TRACKING_ID = process.env.REACT_APP_GA_MEASUREMENT_ID; // Use the environment variable
+if(TRACKING_ID){
+ReactGA.initialize(TRACKING_ID);
+}
+
+// Tracking component to handle page views
+const Tracking = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname });
+  }, [location]);
+
+  return null; // This component doesn't render anything
+};
+
 function App() {
   return (
     <div>
       <Router>
+        <Tracking /> {/* Place Tracking component here */}
         <Routes>
           {/* restricted routes */}
           <Route element={<PrivateRoutes />}>
-            <Route element={<MainPortalLayout />} path="/dt">
-              <Route element={<Dashboard />} path="dashboard" />
-              <Route element={<DashboardProfile />} path="profile" />
-              <Route element={<ResetPassword />} path="resetpassword" />
-              <Route element={<UploadDSC3 />} path="uploaddsc3" />
-              <Route element={<SchemaCreation />} path="scheme" />
-              <Route element={<SchemaCreationForm />} path="scheme/form" />
-              <Route element={<SchemeMasterForm />} path="scheme/creation" />
+            <Route element={<MainPortalLayout />} path='/dt'>
+              <Route element={<Dashboard />} path='dashboard' />
+              <Route element={<DashboardProfile />} path='profile' />
+              <Route element={<ResetPassword />} path='resetpassword' />
+              <Route element={<UploadDSC3 />} path='uploaddsc3' />
+              <Route element={<SchemaCreation />} path='scheme' />
+              <Route element={<SchemaCreationForm />} path='scheme/form' />
+              <Route element={<SchemeMasterForm />} path='scheme/creation' />
               <Route
-                element={<UserCreation entityType="DT" />}
-                path="usermanagement/usercreation"
+                element={<UserCreation entityType='DT' />}
+                path='usermanagement/usercreation'
               />
               <Route
-                element={<RoleCreation entityType="DT" />}
-                path="usermanagement"
+                element={<RoleCreation entityType='DT' />}
+                path='usermanagement'
               />
 
               <Route
                 element={<UserMasterForm />}
-                path="usermanagement/usermaster"
+                path='usermanagement/usermaster'
               />
               <Route
                 element={<EditUserForm />}
-                path="usermanagement/editusermasterum"
+                path='usermanagement/editusermasterum'
               />
             </Route>
-            <Route element={<MainPortalLayoutRegulator />} path="/rg">
-              <Route element={<DashboardRegulator />} path="dashboard" />
-              <Route element={<MyTaskStatus />} path="mytask" />
-              <Route element={<MyTaskForm />} path="mytask/form" />
-              <Route element={<DepositSchemeCreation />} path="deposit-taker" />
-              <Route element={<DepositTakerForm />} path="deposit-taker/form" />
-              <Route element={<DepositSearchMg />} path="deposit-taker/audit" />
+            <Route element={<MainPortalLayoutRegulator />} path='/rg'>
+              <Route element={<DashboardRegulator />} path='dashboard' />
+              <Route element={<MyTaskStatus />} path='mytask' />
+              <Route element={<MyTaskForm />} path='mytask/form' />
+              <Route element={<DepositSchemeCreation />} path='deposit-taker' />
+              <Route element={<DepositTakerForm />} path='deposit-taker/form' />
+              <Route element={<DepositSearchMg />} path='deposit-taker/audit' />
               <Route
                 element={<FailedRecords />}
-                path="deposit-taker/failed-records"
+                path='deposit-taker/failed-records'
               />
-              <Route element={<AuditTrailRg />} path="my-task/audit-rail" />
-              <Route element={<SchemaCreationRg />} path="my-task" />
+              <Route element={<AuditTrailRg />} path='my-task/audit-rail' />
+              <Route element={<SchemaCreationRg />} path='my-task' />
 
-              <Route element={<SchemaCreationFormRg />} path="my-task/form" />
+              <Route element={<SchemaCreationFormRg />} path='my-task/form' />
               <Route
                 element={<SchemeDetailsRg />}
-                path="my-task/new-scheme-creation"
+                path='my-task/new-scheme-creation'
               />
               <Route
-                element={<RoleCreation entityType="RG" />}
-                path="usermanagement"
+                element={<RoleCreation entityType='RG' />}
+                path='usermanagement'
               />
               <Route
-                element={<UserCreation entityType="RG" />}
-                path="usermanagement/usercreation"
+                element={<UserCreation entityType='RG' />}
+                path='usermanagement/usercreation'
               />
               <Route
                 element={<UserMasterForm />}
-                path="usermanagement/usermaster"
+                path='usermanagement/usermaster'
               />
               <Route
                 element={<EditUserFormRg />}
-                path="usermanagement/editusermaster"
+                path='usermanagement/editusermaster'
               />
 
-              <Route element={<DashboardProfileRegulator />} path="profile" />
+              <Route element={<DashboardProfileRegulator />} path='profile' />
               <Route
                 element={<ResetPasswordRegulator />}
-                path="resetpassword"
+                path='resetpassword'
               />
-              <Route element={<UploadDSC3Regulator />} path="uploaddsc3" />
+              <Route element={<UploadDSC3Regulator />} path='uploaddsc3' />
             </Route>
 
-            <Route element={<MainPortalLayoutCompetent />} path="/ca">
-              <Route element={<DashboardCompetent />} path="dashboard" />
-              <Route element={<SchemaCreationCa />} path="my-task" />
-              <Route element={<SchemaCreationFormCa />} path="my-task/form" />
+            <Route element={<MainPortalLayoutCompetent />} path='/ca'>
+              <Route element={<DashboardCompetent />} path='dashboard' />
+              <Route element={<SchemaCreationCa />} path='my-task' />
+              <Route element={<SchemaCreationFormCa />} path='my-task/form' />
               <Route
                 element={<DepositSchemeCreationCa />}
-                path="deposit-taker"
+                path='deposit-taker'
               />
               <Route
                 element={<DepositTakerFormCa />}
-                path="deposit-taker/form"
+                path='deposit-taker/form'
               />
               <Route
                 element={<DepositSearchMgCa />}
-                path="deposit-taker/audit"
+                path='deposit-taker/audit'
               />
               <Route
                 element={<FailedRecordsCa />}
-                path="deposit-taker/failed-records"
+                path='deposit-taker/failed-records'
               />
-              <Route element={<AuditTrailCa />} path="my-task/audit-rail" />
+              <Route element={<AuditTrailCa />} path='my-task/audit-rail' />
               <Route
                 element={<SchemeDetailsCa />}
-                path="my-task/new-scheme-creation"
+                path='my-task/new-scheme-creation'
               />
 
               <Route
-                element={<RoleCreation entityType="CA" />}
-                path="usermanagement"
+                element={<RoleCreation entityType='CA' />}
+                path='usermanagement'
               />
               <Route
-                element={<UserCreation entityType="CA" />}
-                path="usermanagement/usercreation"
+                element={<UserCreation entityType='CA' />}
+                path='usermanagement/usercreation'
               />
               <Route
                 element={<UserMasterForm />}
-                path="usermanagement/usermaster"
+                path='usermanagement/usermaster'
               />
               <Route
                 element={<EditUserFormCa />}
-                path="usermanagement/editusermasterum"
+                path='usermanagement/editusermasterum'
               />
 
-              <Route element={<DashboardProfileCompetent />} path="profile" />
+              <Route element={<DashboardProfileCompetent />} path='profile' />
               <Route
                 element={<ResetPasswordCompetent />}
-                path="resetpassword"
+                path='resetpassword'
               />
-              <Route element={<UploadDSC3Competent />} path="uploaddsc3" />
+              <Route element={<UploadDSC3Competent />} path='uploaddsc3' />
             </Route>
-            <Route element={<MainPortalLayoutDesignated />} path="/dc">
-              <Route element={<DashboardDesignated />} path="dashboard" />
-              <Route element={<SchemaCreationDc />} path="my-task" />
+            <Route element={<MainPortalLayoutDesignated />} path='/dc'>
+              <Route element={<DashboardDesignated />} path='dashboard' />
+              <Route element={<SchemaCreationDc />} path='my-task' />
 
               <Route
                 element={<DepositSchemeCreationDc />}
-                path="deposit-taker"
+                path='deposit-taker'
               />
               <Route
                 element={<DepositTakerFormDc />}
-                path="deposit-taker/form"
+                path='deposit-taker/form'
               />
 
-              <Route element={<AuditTrailDc />} path="my-task/audit-rail" />
+              <Route element={<AuditTrailDc />} path='my-task/audit-rail' />
 
               <Route
-                element={<RoleCreation entityType="DC" />}
-                path="usermanagement"
+                element={<RoleCreation entityType='DC' />}
+                path='usermanagement'
               />
               <Route
-                element={<UserCreation entityType="DC" />}
-                path="usermanagement/usercreation"
+                element={<UserCreation entityType='DC' />}
+                path='usermanagement/usercreation'
               />
               <Route
                 element={<UserMasterForm />}
-                path="usermanagement/usermaster"
+                path='usermanagement/usermaster'
               />
               <Route
                 element={<EditRolePopupDc />}
-                path="usermanagement/editusermasterum"
+                path='usermanagement/editusermasterum'
               />
               <Route
                 element={<DashboardProfileDesignateCourt />}
-                path="profile"
+                path='profile'
               />
               <Route
                 element={<ResetPasswordDesignated />}
-                path="resetpassword"
+                path='resetpassword'
               />
-              <Route element={<UploadDSC3Designated />} path="uploaddsc3" />
+              <Route element={<UploadDSC3Designated />} path='uploaddsc3' />
             </Route>
           </Route>
 
           {/* public routes */}
           <Route
             element={<DepositTakerRegisterFlow />}
-            path="/depositetaker/signup"
+            path='/depositetaker/signup'
           >
-            <Route element={<NodalDetails />} path="nodaldetails" />
-            <Route element={<VarificationForm />} path="verification" />
-            <Route element={<EntityDetails />} path="entitydetails" />
-            <Route element={<RegularDetailsForm />} path="regulatordetails" />
-            <Route element={<ReviewMain />} path="reviewdetails" />
+            <Route element={<NodalDetails />} path='nodaldetails' />
+            <Route element={<VarificationForm />} path='verification' />
+            <Route element={<EntityDetails />} path='entitydetails' />
+            <Route element={<RegularDetailsForm />} path='regulatordetails' />
+            <Route element={<ReviewMain />} path='reviewdetails' />
           </Route>
 
-          <Route element={<RegulatorRegister />} path="/regulator">
-            <Route element={<RegulatorDetails />} path="regulatordetails" />
+          <Route element={<RegulatorRegister />} path='/regulator'>
+            <Route element={<RegulatorDetails />} path='regulatordetails' />
             <Route
               element={<UploadDocumentsRegulator />}
-              path="uploaddocuments"
+              path='uploaddocuments'
             />
-            <Route element={<NodalDetailsRegulator />} path="nodaldetails" />
-            <Route element={<ReviewDetailsRegulator />} path="reviewdetails" />
+            <Route element={<NodalDetailsRegulator />} path='nodaldetails' />
+            <Route element={<ReviewDetailsRegulator />} path='reviewdetails' />
           </Route>
 
-          <Route element={<DesignatedCourtRegister />} path="/designated/court">
+          <Route element={<DesignatedCourtRegister />} path='/designated/court'>
             <Route
               element={<DesignatedCourtDetails />}
-              path="designateddetails"
+              path='designateddetails'
             />
             <Route
               element={<UploloadDocumentsDesignated />}
-              path="uploaddocuments"
+              path='uploaddocuments'
             />
-            <Route element={<NodalDetailsDesignated />} path="nodaldetails" />
-            <Route element={<ReviewDetailsDesignated />} path="reviewdetails" />
+            <Route element={<NodalDetailsDesignated />} path='nodaldetails' />
+            <Route element={<ReviewDetailsDesignated />} path='reviewdetails' />
           </Route>
 
           <Route
             element={<CompetentAuthorityRegister />}
-            path="/competent/authority"
+            path='/competent/authority'
           >
-            <Route element={<ComponentDetails />} path="competentdetails" />
-            <Route element={<UploadDocuments />} path="uploaddocuments" />
-            <Route element={<NodalDetailsCompetent />} path="nodaldetails" />
-            <Route element={<ReviewDetails />} path="reviewdetails" />
+            <Route element={<ComponentDetails />} path='competentdetails' />
+            <Route element={<UploadDocuments />} path='uploaddocuments' />
+            <Route element={<NodalDetailsCompetent />} path='nodaldetails' />
+            <Route element={<ReviewDetails />} path='reviewdetails' />
           </Route>
-          <Route element={<Landing />} path="/" />
-          <Route element={<ReturnJourney />} path="/return-journey" />
-          <Route element={<SchemeSearch />} path="/scheme-search" />
+          <Route element={<Landing />} path='/' />
+          <Route element={<ReturnJourney />} path='/return-journey' />
+          <Route element={<SchemeSearch />} path='/scheme-search' />
           <Route
             element={<SchemeSearchDetails />}
-            path="/scheme-search-details"
+            path='/scheme-search-details'
           />
           <Route
             element={<DepositeTakerSearch />}
-            path="/deposite-taker-search"
+            path='/deposite-taker-search'
           />
           <Route
             element={<DepositTakerSearchForm />}
-            path="/deposite-taker-search-form"
+            path='/deposite-taker-search-form'
           />
           <Route
             element={<DepositeTakerSearchDetails />}
-            path="/deposite-taker-search-details"
+            path='/deposite-taker-search-details'
           />
 
           {/* <Route element={<SetPassword />} path="/set-password" /> */}
-          <Route element={<SetNewPasswordModel />} path="/set-password" />
-          <Route element={<OtpModel />} path="/otp-verification" />
-          <Route element={<Faq />} path="/faq" />
-          <Route element={<Notifications />} path="/notifications" />
-          <Route element={<Downloads />} path="/downloads" />
-          <Route element={<Training />} path="/training" />
-          <Route element={<ContactUs />} path="/contactus" />
+          <Route element={<SetNewPasswordModel />} path='/set-password' />
+          <Route element={<OtpModel />} path='/otp-verification' />
+          <Route element={<Faq />} path='/faq' />
+          <Route element={<Notifications />} path='/notifications' />
+          <Route element={<Downloads />} path='/downloads' />
+          <Route element={<Training />} path='/training' />
+          <Route element={<ContactUs />} path='/contactus' />
           <Route
             element={<OpertaingGuidelines />}
-            path="/operatingguidelines"
+            path='/operatingguidelines'
           />
           {/* <Route element={<RoleCreation />} path="/role" /> */}
         </Routes>
