@@ -288,6 +288,21 @@ const SchemeDetails = () => {
     }
   };
 
+  const formatNumber = (num: string): string => {
+    if (!num) return "";
+
+    const x = num.split(".");
+    let lastThree = x[0].substring(x[0].length - 3);
+    const otherNumbers = x[0].substring(0, x[0].length - 3);
+    if (otherNumbers !== "") {
+      lastThree = "," + lastThree;
+    }
+    const formatted =
+      otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+
+    return x.length > 1 ? formatted + "." + x[1] : formatted;
+  };
+
   const handleOnchange = async (
     event: any,
     fieldData: any,
@@ -329,6 +344,46 @@ const SchemeDetails = () => {
           }),
         },
       });
+    } else if (fieldData?.key === "minInvestment") {
+      const inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      const formattedValue = formatNumber(inputValue);
+      console.log(formattedValue, "jaydeep");
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (f?.key === "minInvestment") {
+              return {
+                ...f,
+                userInput: formattedValue,
+              };
+            } else {
+              return f;
+            }
+          }),
+        },
+      });
+      console.log(allFormData, "jaydeep");
+    } else if (fieldData?.key === "maxInvestment") {
+      const inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      const formattedValue = formatNumber(inputValue);
+      console.log(formattedValue, "jaydeep");
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (f?.key === "maxInvestment") {
+              return {
+                ...f,
+                userInput: formattedValue,
+              };
+            } else {
+              return f;
+            }
+          }),
+        },
+      });
+      console.log(allFormData, "jaydeep");
     } else {
       onChange(event, fieldData, fieldType);
     }
@@ -340,16 +395,16 @@ const SchemeDetails = () => {
   console.log("all-form-data------", allFormData);
   return (
     <div
-      className="mt-6 mx-8 relative"
+      className='mt-6 mx-8 relative'
       style={{ minHeight: "calc(100vh - 138px)" }}
     >
-      <div className="mt-2 ">
+      <div className='mt-2 '>
         <TaskTabsRg />
       </div>
-      <div className="-ml-7">
-        <div className="flex items-center justify-between flex-col h-full mx-10 my-0  ">
-          <div className="w-full mb-40">
-            <div className="mt-10 mb-0">
+      <div className='-ml-7'>
+        <div className='flex items-center justify-between flex-col h-full mx-10 my-0  '>
+          <div className='w-full mb-40'>
+            <div className='mt-10 mb-0'>
               {loader ? (
                 <LoaderSpin />
               ) : (
@@ -361,17 +416,17 @@ const SchemeDetails = () => {
               )}
             </div>
 
-            <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
-              <div className="">
+            <div className='flex flex-shrink-0 mt-[20px] justify-start items-center'>
+              <div className=''>
                 <input
-                  type="checkbox"
-                  className="h-4 w-4 accent-[#1c648e]"
+                  type='checkbox'
+                  className='h-4 w-4 accent-[#1c648e]'
                   checked={isChecked}
                   onChange={handleCheckboxChange}
-                  placeholder="ischecked"
+                  placeholder='ischecked'
                 />
               </div>
-              <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
+              <div className='leading-[24px] ml-4 text-gilroy-medium text-[14px]'>
                 I declare all the Information provided is correct as per my
                 knowledge.
               </div>
@@ -391,26 +446,26 @@ const SchemeDetails = () => {
             success={submitted}
           />
 
-          <div className="w-full absolute bottom-0">
+          <div className='w-full absolute bottom-0'>
             <div
-              className="flex w-full p-4 lg:px-[30px] flex-row justify-end items-center"
+              className='flex w-full p-4 lg:px-[30px] flex-row justify-end items-center'
               style={{
                 width: `${
                   screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"
                 }`,
               }}
             >
-              <div className="flex items-center space-x-6">
+              <div className='flex items-center space-x-6'>
                 <p
                   onClick={handleBackButtonClick}
-                  className="text-[#1c468e] text-gilroy-medium cursor-pointer"
+                  className='text-[#1c468e] text-gilroy-medium cursor-pointer'
                 >
                   Discard
                 </p>
 
                 <button
                   onClick={onSubmit}
-                  type="submit"
+                  type='submit'
                   className={`bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm text-gilroy-semibold ${
                     !isChecked
                       ? "opacity-50 cursor-not-allowed"
@@ -424,18 +479,18 @@ const SchemeDetails = () => {
               </div>
             </div>
             <div>
-              <div className="border-[#E6E6E6] border-[1px] lg:mt-4 "></div>
+              <div className='border-[#E6E6E6] border-[1px] lg:mt-4 '></div>
 
-              <div className="text-center mt-auto">
-                <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+              <div className='text-center mt-auto'>
+                <h1 className='text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal'>
                   COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
                 </h1>
-                <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+                <p className='text-[#24222B] text-xs text-wrap text-gilroy-light font-normal'>
                   Powered and managed by{" "}
                   <a
-                    href="https://www.proteantech.in/"
-                    className="underline text-gilroy-regular font-bold"
-                    target="_blank"
+                    href='https://www.proteantech.in/'
+                    className='underline text-gilroy-regular font-bold'
+                    target='_blank'
                   >
                     Protean eGov Technologies
                   </a>{" "}
