@@ -35,6 +35,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   const [uploadPopupOpen, setUploadPopupOpen] = useState(false);
   const [successUploadPopupOpen, setSuccessUploadPopupOpen] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [loader1, setLoader1] = useState(false);
   const [panSuccessModal, setPanSuccessModal] = useState(false);
   const [submitModal, setSubmitModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -364,7 +365,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
   };
 
   const handleFileUpload = (event: any) => {
-    setLoader(true);
+    setLoader1(true);
 
     // Capture file from event
     const file = event.target.files[0];
@@ -376,7 +377,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         text: "No file selected",
         title: "Error",
       });
-      setLoader(false);
+      setLoader1(false);
       return;
     }
 
@@ -486,7 +487,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
                     </div>
                     <div className="text-white text-base font-normal">
                       {" "}
-                      {loader ? <LoaderSpin /> : "Upload"}
+                      {loader1 ? <LoaderSpin /> : "Upload"}
                     </div>
                   </div>
                 </div>
