@@ -12,6 +12,7 @@ import useSidebarStore from "../../../store/SidebarStore";
 import { useCollapseStore } from "../../../store/SidebarStore";
 import Swal from "sweetalert2";
 import { axiosTokenInstance } from "../../../utils/axios";
+import useStore from "../../../store/statusStore";
 
 type Props = {
   layout: React.ReactElement | null;
@@ -32,6 +33,13 @@ const MainPortalSidebar = ({ layout }: Props) => {
   const [state, setState] = useState<boolean>(true);
   const [isActive, setIsActive] = useState<boolean>(true);
   const [timeoutId, setTimeoutId] = useState<any>(null);
+  const [dashboard, setDashboard] = useState<boolean>(false);
+  const [scheme, setScheme] = useState<boolean>(false)
+  const [schemeView, setSchemeView] = useState<boolean>(false)
+  const [user, setUser] = useState<boolean>(false)
+  const [role, setRole] = useState<boolean>(false)
+  const [mytask, setMytask] = useState<boolean>(false)
+  const [mytaskView, setMytaskView] = useState<boolean>(false)
 
   const location = useLocation();
 
@@ -41,6 +49,80 @@ const MainPortalSidebar = ({ layout }: Props) => {
   const { pathname } = location;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  const checkDislayStauts = (status: any): any => {
+    switch (status) {
+      case "Dashboard":
+        return dashboard;
+      case "Scheme Management":
+        return scheme ? true : schemeView;
+      case "User Management":
+        return role;
+      case "My Tasks":
+          return mytask ? true : mytaskView;
+      default:
+        return true;
+    }
+  };
+
+  useEffect(()=>{
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+     
+      // dashboard
+      const dashboardRoles = rolesArray.filter(role =>
+        role === "dashboard-viewer-role-regulator"
+      );
+      if(dashboardRoles?.length > 0){
+      setDashboard(true);
+      }
+
+      // scheme
+      const schemeRolesView = rolesArray.filter(role =>
+        role === "scheme-view-access-regulator"
+      );
+      if(schemeRolesView?.length > 0){
+      setSchemeView(true);
+      }
+      const schemeRoles = rolesArray.filter(role =>
+        role === "scheme-edit-access-regulator"
+      );
+      if(schemeRoles?.length > 0){
+      setScheme(true);
+      }
+
+       // uam
+       const userRoles = rolesArray.filter(role =>
+        role === "user-creation-access-regulator"
+      );
+      if(userRoles?.length > 0){
+      setUser(true);
+      }
+      const roleRoles = rolesArray.filter(role =>
+        role === "role-creation-access-regulator"
+      );
+      if(roleRoles?.length > 0){
+      setRole(true);
+      }
+
+       // scheme
+       const mytaskRolesView = rolesArray.filter(role =>
+        role === "dt-reviewer-role-regulator"
+      );
+      if(mytaskRolesView?.length > 0){
+      setMytaskView(true);
+      }
+      const mytaskRoles = rolesArray.filter(role =>
+        role === "dt-approver-role-regulator"
+      );
+      if(mytaskRoles?.length > 0){
+      setMytask(true);
+      }
+    }
+
+    
+  }, [])
 
   useEffect(() => {
     const cmsPath = location.pathname.split("/")[1];
@@ -237,7 +319,9 @@ const MainPortalSidebar = ({ layout }: Props) => {
             {portalSideBarListRegulator?.map((data, idx) => {
               return (
                 <li
-                  className={`${collapse ? "px-2 py-1" : "px-4 py-2"}`}
+                  className={`${collapse ? "px-2 py-1" : "px-4 py-2"} ${
+                    checkDislayStauts(data?.title) ? "block" : "hidden"
+                  }`}
                   key={idx}
                 >
                   <Link to={data.url}>
