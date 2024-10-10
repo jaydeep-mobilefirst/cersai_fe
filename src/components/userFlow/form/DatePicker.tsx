@@ -78,7 +78,8 @@ const DatePicker = ({
       maxDate === "Regulator approval Date" ||
       maxDate === "startDate" ||
       maxDate === "startDateByCARG" ||
-      maxDate === "startDateByDT"
+      maxDate === "startDateByDT" ||
+      maxDate === "RG-A-DATE-DT"
     ) {
       return getCurrentDate(); // Restrict to today's date if conditions are met
     }
