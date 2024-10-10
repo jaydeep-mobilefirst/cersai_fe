@@ -36,6 +36,8 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const [schemes, setSchemes] = useState<any[]>([]);
   const [selectedSchemes, setSelectedSchems] = useState<any[]>([]);
   const [loader, setLoader] = useState(true);
+  const [scheme, setScheme] = useState<boolean>(false);
+
   const screenWidth = useScreenWidth();
   const { onChange } = useContext(FormHandlerContext);
   const { setAllFormData, setAllDocumentData, allFormData } =
@@ -185,23 +187,23 @@ const SchemesSearchDetailsSM: React.FC = () => {
             console.log("Error");
           }
           let modifiedFormFields = response.data.data?.formFields
-          ?.map((o: any) => ({
-            ...o,
-            userInput: dtData
-              ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-              : "",
-            error: "",
-            disabled: true,
-          }))
-          ?.sort((a: any, b: any) => {
-            // First, sort by sectionId (numeric sorting)
-            if (a?.sectionId !== b?.sectionId) {
-              return a?.sectionId - b?.sectionId;
-            }
+            ?.map((o: any) => ({
+              ...o,
+              userInput: dtData
+                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                : "",
+              error: "",
+              disabled: true,
+            }))
+            ?.sort((a: any, b: any) => {
+              // First, sort by sectionId (numeric sorting)
+              if (a?.sectionId !== b?.sectionId) {
+                return a?.sectionId - b?.sectionId;
+              }
 
-            // Then, sort by sortOrder (numeric sorting)
-            return a?.sortOrder - b?.sortOrder;
-          });
+              // Then, sort by sortOrder (numeric sorting)
+              return a?.sortOrder - b?.sortOrder;
+            });
 
           let modifiedFileFields =
             response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
@@ -367,6 +369,21 @@ const SchemesSearchDetailsSM: React.FC = () => {
       .finally(() => setLoader(false));
   };
 
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+
+      // scheme
+      const schemeRoles = rolesArray.filter(
+        (role) => role === "scheme-edit-access-regulator"
+      );
+      if (schemeRoles?.length > 0) {
+        setScheme(true);
+      }
+    }
+  }, []);
+
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
@@ -380,49 +397,93 @@ const SchemesSearchDetailsSM: React.FC = () => {
             onChange={onChange}
           />
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
-            <div>
-              <label
-                htmlFor='Select Other Schemes'
-                className='text-base font-normal text-gilroy-medium'
-              >
-                Status
-              </label>
-              <SelectButton
-                // backgroundColor="#F2F2F2"
-                setOption={handleSetOption2}
-                options={filteredOptions}
-                selectedOption={selectedOption2}
-                placeholder='Select'
-                showSearchInput={true}
-                disabled={Status === "BANNED" ? true : false}
-              />
-              <span className='text-red-400'>{errors?.statusError}</span>
-            </div>
-
-            <div>
-              <label
-                htmlFor='Select Other Schemes'
-                className='text-base font-normal text-gilroy-medium'
-              >
-                Select Other Schemes
-              </label>
-              <SelectButtonMultiselect
-                setOption={handleSetOption1}
-                options={schemes}
-                placeholder='Select'
-                multiselect={true}
-                allSelectedOptions={selectedSchemes}
-                remove={remove}
-                className='relative'
-                disabled={
-                  Status === "BANNED" ||
-                  (Status === "UNDER_LETIGATION" &&
-                    selectedOption2 === "ACTIVE")
-                    ? true
-                    : false
-                }
-              />
-            </div>
+            {scheme ? (
+              <>
+                {" "}
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Status
+                  </label>
+                  <SelectButton
+                    // backgroundColor="#F2F2F2"
+                    setOption={handleSetOption2}
+                    options={filteredOptions}
+                    selectedOption={selectedOption2}
+                    placeholder='Select'
+                    showSearchInput={true}
+                    disabled={Status === "BANNED" ? true : false}
+                  />
+                  <span className='text-red-400'>{errors?.statusError}</span>
+                </div>
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Select Other Schemes
+                  </label>
+                  <SelectButtonMultiselect
+                    setOption={handleSetOption1}
+                    options={schemes}
+                    placeholder='Select'
+                    multiselect={true}
+                    allSelectedOptions={selectedSchemes}
+                    remove={remove}
+                    className='relative'
+                    disabled={
+                      Status === "BANNED" ||
+                      (Status === "UNDER_LETIGATION" &&
+                        selectedOption2 === "ACTIVE")
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Status
+                  </label>
+                  <SelectButton
+                    // backgroundColor="#F2F2F2"
+                    setOption={handleSetOption2}
+                    options={filteredOptions}
+                    selectedOption={selectedOption2}
+                    placeholder='Select'
+                    showSearchInput={true}
+                    disabled={true}
+                  />
+                  <span className='text-red-400'>{errors?.statusError}</span>
+                </div>
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Select Other Schemes
+                  </label>
+                  <SelectButtonMultiselect
+                    setOption={handleSetOption1}
+                    options={schemes}
+                    placeholder='Select'
+                    multiselect={true}
+                    allSelectedOptions={selectedSchemes}
+                    remove={remove}
+                    className='relative'
+                    disabled={true}
+                  />
+                </div>
+              </>
+            )}
           </div>
           <BranchDetails />
         </>
