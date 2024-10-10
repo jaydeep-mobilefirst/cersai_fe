@@ -305,7 +305,6 @@ const SchemaCreationForm = () => {
       setIsInitialLoad(false);
     }
   };
-  
 
   const formatNumber = (num: string): string => {
     if (!num) return "";
@@ -327,7 +326,7 @@ const SchemaCreationForm = () => {
     fieldData: any,
     fieldType: string
   ) => {
-     if (fieldData?.key === "minInvestment") {
+    if (fieldData?.key === "minInvestment") {
       const inputValue = event?.target.value?.replace(/[^\d]/g, "");
       const formattedValue = formatNumber(inputValue);
       console.log(formattedValue, "jaydeep");
@@ -386,6 +385,11 @@ const SchemaCreationForm = () => {
     } else {
       // returns true if no error
       const schemeValidations = await handleSchemeValidations();
+      // if (schemeValidations) {
+      //   setLoader(false);
+      //   return;
+      // }
+      console.log({ schemeValidations }, "validation");
       if (schemeValidations === false) {
         setLoader(false);
         return;
