@@ -209,6 +209,7 @@ const SchemeSearch: React.FC = () => {
   };
 
   const handleSetOption4 = (value: any) => {
+    setPage(1)
     setSelectedOption4(value);
     setSelectedOption1(value?.value)
   };
@@ -305,7 +306,7 @@ const SchemeSearch: React.FC = () => {
           {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
-              <ReactTable defaultData={schemaData} columns={columns} />
+              <ReactTable  key={JSON?.stringify(schemaData)} defaultData={schemaData} columns={columns} />
             ) : (
               <div className=" flex justify-center items-center">
                 <h1>No data available</h1>

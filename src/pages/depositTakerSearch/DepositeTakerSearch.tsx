@@ -213,6 +213,7 @@ const DepositeTakerSearch: React.FC = () => {
     setSelectedDistrict(option?.value);
   };
   const handleSetStatus = (option: any) => {
+    setPage(1)
     setSelectedStatus(option);
     setStatusForSearch(option?.value);
   };
@@ -318,7 +319,7 @@ const DepositeTakerSearch: React.FC = () => {
             {loader ? (
               <LoaderSpin />
             ) : taskData?.length > 0 ? (
-              <ReactTable defaultData={taskData} columns={columns} />
+              <ReactTable  key={JSON?.stringify(taskData)} defaultData={taskData} columns={columns} />
             ) : (
               <div className=' flex justify-center items-center'>
                 <h1>No data available</h1>
