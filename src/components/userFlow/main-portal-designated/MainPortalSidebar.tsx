@@ -215,19 +215,19 @@ const MainPortalSidebar = ({ layout }: Props) => {
     };
   }, [state]);
 
-  // useEffect(() => {
-  //   if (!isActive || refreshPage == "1") {
-  //     sessionStorage.clear();
-  //     Swal.fire({
-  //       icon: "error",
-  //       title:
-  //         refreshPage == "1"
-  //           ? "Dont refresh the page. Please login again"
-  //           : "User inactive for 10 min. Please login again",
-  //     });
-  //     navigate("/");
-  //   }
-  // });
+  useEffect(() => {
+    if (!isActive || refreshPage == "1") {
+      sessionStorage.clear();
+      Swal.fire({
+        icon: "error",
+        title:
+          refreshPage == "1"
+            ? "Dont refresh the page. Please login again"
+            : "User inactive for 10 min. Please login again",
+      });
+      navigate("/");
+    }
+  });
 
   const refreshToken = sessionStorage.getItem("refresh_token");
 
@@ -250,7 +250,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
       // Fetch data on initial render
       fetchDataRefresh();
   
-      const intervalId = setInterval(fetchDataRefresh, 580000);
+      const intervalId = setInterval(fetchDataRefresh, 10000);
   
       // Clean up the interval on component unmount
       return () => clearInterval(intervalId);
