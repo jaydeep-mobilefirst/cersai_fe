@@ -291,7 +291,11 @@ const NewSchemaCreation = () => {
             {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
-              <ReactTable defaultData={schemaData} columns={columns} />
+              <ReactTable
+                key={JSON?.stringify(schemaData)}
+                defaultData={schemaData}
+                columns={columns}
+              />
             ) : (
               <div className=" flex justify-center items-center">
                 <h1>No data available</h1>

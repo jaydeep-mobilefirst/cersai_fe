@@ -3,14 +3,14 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import ReactGA from 'react-ga4';
+import ReactGA from "react-ga4";
 
 const TRACKING_ID = process.env.REACT_APP_GA_MEASUREMENT_ID; // Use the environment variable
-if(TRACKING_ID){
-ReactGA.initialize(TRACKING_ID);
+if (TRACKING_ID) {
+  ReactGA.initialize(TRACKING_ID);
 }
 
-// console.log = () => {};
+console.log = () => {};
 
 window.alert = function () {};
 
