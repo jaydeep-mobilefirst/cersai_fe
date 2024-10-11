@@ -226,7 +226,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
       // Fetch data on initial render
       fetchDataRefresh();
   
-      const intervalId = setInterval(fetchDataRefresh, 580000);
+      const intervalId = setInterval(fetchDataRefresh, 11000);
   
       // Clean up the interval on component unmount
       return () => clearInterval(intervalId);
