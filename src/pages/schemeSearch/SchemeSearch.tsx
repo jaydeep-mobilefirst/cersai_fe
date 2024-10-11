@@ -51,8 +51,8 @@ const SchemeSearch: React.FC = () => {
   const [pageSize, setPageSize] = useState<number>(10);
 
   const [total, setTotal] = useState<number>(0);
-  const [stateId, setStateId] = useState<number | null | undefined>(null)
-  const [searchInput, setSearchInput] = useState<string>("")
+  const [stateId, setStateId] = useState<number | null | undefined>(null);
+  const [searchInput, setSearchInput] = useState<string>("");
 
   const [state, setSelectedState] = useState<string | null>(null);
 
@@ -60,25 +60,25 @@ const SchemeSearch: React.FC = () => {
 
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
   const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
-  
-  const { homePageData, setHomePageData } = useLandingStore((state) => state);
-  const {language} = useLangugaeStore((state) => state);
 
-  console.log("data-scheme",schemaData)
+  const { homePageData, setHomePageData } = useLandingStore((state) => state);
+  const { language } = useLangugaeStore((state) => state);
+
+  console.log("data-scheme", schemaData);
 
   useEffect(() => {
     homePageCmsApi();
-  }, [state,language]);
+  }, [state, language]);
 
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
     axiosTraceIdInstance
-      .get(`/websitecontent/get/name?wcname=home`,{
+      .get(`/websitecontent/get/name?wcname=home`, {
         headers: {
-          'Accept-Language': language
-        }
-    })
+          "Accept-Language": language,
+        },
+      })
       .then((response) => {
         console.log("api-response", response);
         setHomePageData(response?.data?.data?.content?.updatedStructure);
@@ -93,25 +93,33 @@ const SchemeSearch: React.FC = () => {
   const fetchSchemes = async () => {
     setLoader(true);
     try {
-      const { data } = await axiosTraceIdInstance.get(`/scheme-portal/solr-scheme`, {
-        params: {
-          page: page,
-          limit: pageSize,
-          searchText: searchInput,
-          status : selectedOption1
-        },
-      });
-      let currentPage = (parseInt(data?.page) - 1 ) * pageSize
-      setSchemaData(data?.data?.map((d : any, i: number) => ({...d, sn : (i + 1) + currentPage})));
+      const { data } = await axiosTraceIdInstance.get(
+        `/scheme-portal/solr-scheme`,
+        {
+          params: {
+            page: page,
+            limit: pageSize,
+            searchText: searchInput,
+            status: selectedOption1,
+          },
+        }
+      );
+      let currentPage = (parseInt(data?.page) - 1) * pageSize;
+      setSchemaData(
+        data?.data?.map((d: any, i: number) => ({
+          ...d,
+          sn: i + 1 + currentPage,
+        }))
+      );
       setTotal(data?.total);
       setLoader(false);
     } catch (error) {
-      setSchemaData([])
+      setSchemaData([]);
       console.error("Error fetching schemes:", error);
       setLoader(false);
     }
   };
-  
+
   useEffect(() => {
     fetchSchemes();
   }, [page, pageSize, selectedOption1]);
@@ -137,8 +145,9 @@ const SchemeSearch: React.FC = () => {
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info?.getValue();
-        const updatedValue = value ==="UNDER_LETIGATION"?"UNDER LITIGATION" : value
-        
+        const updatedValue =
+          value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value;
+
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
@@ -163,7 +172,9 @@ const SchemeSearch: React.FC = () => {
       cell: (info: any) => {
         let modifiedDate = info?.getValue();
         // Check if the date value exists before formatting
-        modifiedDate = modifiedDate ? moment(modifiedDate).format('DD-MM-YYYY') : "N/A";
+        modifiedDate = modifiedDate
+          ? moment(modifiedDate).format("DD-MM-YYYY")
+          : "N/A";
         return modifiedDate;
       },
       header: () => <span>Scheme Start Date</span>,
@@ -179,7 +190,7 @@ const SchemeSearch: React.FC = () => {
             state: {
               uniqueId: uniqueId,
               depositTakerId: depositTakerId,
-              createdBy
+              createdBy,
             },
           });
         };
@@ -198,7 +209,7 @@ const SchemeSearch: React.FC = () => {
   ];
 
   const options = [
-    {value : "", label : "All"},
+    { value: "", label: "All" },
     { value: "ACTIVE", label: "Active" },
     { value: "BANNED", label: "Banned" },
     { value: "UNDER_LETIGATION", label: "Under litigation" },
@@ -209,27 +220,30 @@ const SchemeSearch: React.FC = () => {
   };
 
   const handleSetOption4 = (value: any) => {
-    setPage(1)
+    setPage(1);
     setSelectedOption4(value);
-    setSelectedOption1(value?.value)
+    setSelectedOption1(value?.value);
   };
 
-  const handleSetState = (option : any) => {
+  const handleSetState = (option: any) => {
     setSelectedState(option?.value);
-    setStateId(option?.stateId)
+    setStateId(option?.stateId);
   };
   const handleSetDistrict = (option: any) => {
     setSelectedDistrict(option?.value);
   };
-  const handleSearchSubmit = (event : any) => {
+  const handleSearchSubmit = (event: any) => {
     event?.preventDefault();
     fetchSchemes();
-  }
-  const handleSetSearchInput = (event : any) => {
-    const {value} = event?.target;
-    setSearchInput(value)
-
-  }
+  };
+  const handleSetSearchInput = (event: any) => {
+    const { value } = event?.target;
+    setSearchInput(value);
+    if (value === "") {
+      fetchSchemes();
+      setPage(1);
+    }
+  };
 
   return (
     <div>
@@ -247,7 +261,7 @@ const SchemeSearch: React.FC = () => {
               Scheme Search
             </label>
             <div className="mt-2">
-            <InputField
+              <InputField
                 onChange={handleSetSearchInput}
                 value={searchInput}
                 height="40px"
@@ -258,8 +272,8 @@ const SchemeSearch: React.FC = () => {
           </div>
           <div className=" flex items-center self-end ">
             <button
-               type="button"
-               onClick={handleSearchSubmit} 
+              type="button"
+              onClick={handleSearchSubmit}
               className={`w-[146px] h-[56px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1c468e] cursor-pointer"} mt-2`}
             >
               <img src={searchButton} alt="searchButton" />
@@ -277,7 +291,7 @@ const SchemeSearch: React.FC = () => {
             OR Search by
           </label>
           <div className=" w-[60%] sm:w-[60%] lg:w-[40%] flex items-center gap-2 flex-wrap sm:flex-nowrap">
-          {/* <SelectField
+            {/* <SelectField
               setOption={handleSetState}
               options={[{label : "All", value : "", stateId : null}, ...states?.map((s : any) => ({value : s?.name, label : s?.name, stateId : s?.id}))]}
               selectedOption={state}
@@ -303,10 +317,14 @@ const SchemeSearch: React.FC = () => {
         </div>
         <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
           <div className="">
-          {loader ? (
+            {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
-              <ReactTable  key={JSON?.stringify(schemaData)} defaultData={schemaData} columns={columns} />
+              <ReactTable
+                key={JSON?.stringify(schemaData)}
+                defaultData={schemaData}
+                columns={columns}
+              />
             ) : (
               <div className=" flex justify-center items-center">
                 <h1>No data available</h1>
@@ -315,7 +333,7 @@ const SchemeSearch: React.FC = () => {
             )}
           </div>
           <div className="mt-10">
-          {schemaData.length > 0 && (
+            {schemaData.length > 0 && (
               <CustomPagination
                 currentPage={page}
                 setCurrentPage={setPage}
@@ -323,7 +341,7 @@ const SchemeSearch: React.FC = () => {
                 itemsPerPage={pageSize}
                 maxPageNumbersToShow={5}
               />
-          )}
+            )}
           </div>
         </div>
       </div>
