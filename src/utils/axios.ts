@@ -6,8 +6,7 @@ import Swal from "sweetalert2";
 
 const uuid = uuidv4();
 
-const token = sessionStorage.getItem("access_token");
-
+// Create an axios instance for calls without Authorization
 export const axiosTraceIdInstance = axios.create({
   baseURL: `${bffUrl}`, // Base URL for all calls
   headers: {
@@ -15,15 +14,30 @@ export const axiosTraceIdInstance = axios.create({
   },
 });
 
+// Create an axios instance for authenticated requests
 export const axiosTokenInstance = axios.create({
   baseURL: `${bffUrl}`,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
     Traceid: uuid,
   },
 });
 
+// Add a request interceptor to dynamically set the Authorization header
+axiosTokenInstance.interceptors.request.use(
+  (config) => {
+    const token = sessionStorage.getItem("access_token"); // Fetch the latest token from sessionStorage
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`; // Dynamically set the Authorization header
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Add a response interceptor to handle unauthorized responses
 axiosTokenInstance.interceptors.response.use(
   (response) => {
     return response;
@@ -43,7 +57,7 @@ axiosTokenInstance.interceptors.response.use(
     } else if (error.response && error.response.status === 403) {
       Swal.fire({
         icon: "error",
-        title: "Unauthorized",
+        title: "Forbidden",
         text: "Access forbidden: You do not have permission to access this resource. Please login again!",
       });
     }
