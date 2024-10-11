@@ -193,7 +193,6 @@ const DepositeTakerSearch: React.FC = () => {
   const status = [
     { label: "Select Status", value: "" },
     { label: "Approved", value: "APPROVED" },
-    { label: "Banned", value: "BANNED" },
     { label: "Rejected", value: "REJECTED" },
     { label: "Incomplete", value: "INCOMPLETE" },
   ];

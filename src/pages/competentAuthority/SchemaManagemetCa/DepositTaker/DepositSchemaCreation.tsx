@@ -197,7 +197,7 @@ const DepositSchemaCreation = () => {
   const options = [
     { label: "All", value: "" },
     { label: "Approved", value: "APPROVED" },
-    { label: "Banned", value: "BANNED" },
+    // { label: "Banned", value: "BANNED" },
     { label: "Rejected", value: "REJECTED" },
     { label: "Transit", value: "TRANSIT" },
     { label: "Refer to Regulator", value: "REFER_TO_REGULATOR" },
