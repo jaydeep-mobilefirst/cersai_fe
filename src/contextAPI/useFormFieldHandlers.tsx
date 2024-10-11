@@ -723,43 +723,44 @@ const FormHandlerProviders = ({ children }: Props) => {
   };
   const handleSchemeValidations = async (): Promise<boolean> => {
     let errorCount = 0;
-
     const updatedFormFields = allFormData?.formFields?.form_fields?.map(
       (field: any) => {
         const key = field?.key;
 
         switch (key) {
           case "startDate":
+          case "startDateByCARG":
+          case "startDateByDT":
           case "lastDate":
-            let startDate =
-              key === "startDate"
-                ? field?.userInput
-                : allFormData?.formFields?.form_fields?.find(
-                    (f: any) => f?.key === "startDate"
-                  )?.userInput;
-            let endDate =
-              key === "lastDate"
-                ? field?.userInput
-                : allFormData?.formFields?.form_fields?.find(
-                    (f: any) => f?.key === "lastDate"
-                  )?.userInput;
+            // Fetch the input for the start date and end date
+            let startDateInput = allFormData?.formFields?.form_fields?.find(
+              (f: any) =>
+                f?.key === "startDate" ||
+                f?.key === "startDateByCARG" ||
+                f?.key === "startDateByDT"
+            )?.userInput;
+            let endDateInput = allFormData?.formFields?.form_fields?.find(
+              (f: any) => f?.key === "lastDate"
+            )?.userInput;
 
-            if (!startDate || !endDate) {
-              return field;
+            if (!startDateInput || !endDateInput) {
+              return field; // If either date is missing, return the field as is.
             }
 
-            startDate = new Date(startDate).getTime();
-            endDate = new Date(endDate).getTime();
+            // Convert the input to timestamps for comparison
+            const startDate = new Date(startDateInput).getTime();
+            const endDate = new Date(endDateInput).getTime();
 
-            if (startDate > endDate && key === "startDate") {
+            if (startDate > endDate) {
               errorCount += 1;
-              return {
-                ...field,
-                error: "Start date should be before the last date",
-              };
+              field.error = "Start date should be before the last date";
+            } else if (startDate === endDate) {
+              errorCount += 1;
+              field.error = "Start date and last date should not be the same";
             } else {
-              return { ...field, error: "" };
+              field.error = ""; // No error
             }
+            return { ...field };
 
           case "minInvestment":
           case "maxInvestment":
@@ -777,59 +778,40 @@ const FormHandlerProviders = ({ children }: Props) => {
                     (f: any) => f?.key === "maxInvestment"
                   )?.userInput;
 
-            // Remove commas before parsing the numbers
+            // Strip commas before parsing as integers
             minInvestment = minInvestment?.replace(/,/g, "");
             maxInvestment = maxInvestment?.replace(/,/g, "");
 
             if (!minInvestment || !maxInvestment) {
-              return field;
+              return field; // Return field if either value is missing
             }
 
-            // Validate the values are integers
-            const minInvestmentParsed = parseInt(minInvestment);
-            const maxInvestmentParsed = parseInt(maxInvestment);
+            const minInvestmentValue = parseInt(minInvestment);
+            const maxInvestmentValue = parseInt(maxInvestment);
 
-            if (isNaN(minInvestmentParsed) || isNaN(maxInvestmentParsed)) {
-              if (isNaN(minInvestmentParsed) && key === "minInvestment") {
-                errorCount += 1;
-                return {
-                  ...field,
-                  error: "Minimum investment value should be a number",
-                };
-              }
-              if (isNaN(maxInvestmentParsed) && key === "maxInvestment") {
-                errorCount += 1;
-                return {
-                  ...field,
-                  error: "Maximum investment value should be a number",
-                };
-              }
-            }
-
-            // Check if minInvestment is greater than maxInvestment
-            if (minInvestmentParsed > maxInvestmentParsed) {
+            if (isNaN(minInvestmentValue) || isNaN(maxInvestmentValue)) {
               errorCount += 1;
-              return {
-                ...field,
-                error:
-                  "Minimum investment should be less than maximum investment",
-              };
+              field.error = `${
+                key === "minInvestment" ? "Minimum" : "Maximum"
+              } investment value should be a number`;
+              return { ...field };
             }
 
-            // Check if minInvestment is equal to maxInvestment
-            if (minInvestmentParsed === maxInvestmentParsed) {
+            if (minInvestmentValue > maxInvestmentValue) {
               errorCount += 1;
-              return {
-                ...field,
-                error:
-                  "Minimum and maximum investment values should not be the same",
-              };
+              field.error =
+                "Minimum investment should be less than maximum investment";
+            } else if (minInvestmentValue === maxInvestmentValue) {
+              errorCount += 1;
+              field.error =
+                "Minimum and maximum investment values should not be the same";
+            } else {
+              field.error = ""; // No error
             }
-
-            return { ...field, error: "" };
+            return { ...field };
 
           default:
-            return field;
+            return field; // Return field as is for all other cases
         }
       }
     );
@@ -842,7 +824,7 @@ const FormHandlerProviders = ({ children }: Props) => {
       },
     });
 
-    return errorCount === 0; // Return true if there are no errors, otherwise false
+    return errorCount === 0;
   };
 
   // const handleSchemeValidations = async (): Promise<boolean> => {
@@ -940,6 +922,16 @@ const FormHandlerProviders = ({ children }: Props) => {
   //             };
   //           }
 
+  //           // Check if minInvestment is equal to maxInvestment
+  //           if (minInvestmentParsed === maxInvestmentParsed) {
+  //             errorCount += 1;
+  //             return {
+  //               ...field,
+  //               error:
+  //                 "Minimum and maximum investment values should not be the same",
+  //             };
+  //           }
+
   //           return { ...field, error: "" };
 
   //         default:
@@ -957,125 +949,6 @@ const FormHandlerProviders = ({ children }: Props) => {
   //   });
 
   //   return errorCount === 0; // Return true if there are no errors, otherwise false
-  // };
-
-  // const handleSchemeValidations = async (): Promise<boolean> => {
-  //   let errorCount = 0;
-  //   let updatedFormFields = allFormData?.formFields?.form_fields?.map(
-  //     (field: any) => {
-  //       let key = field?.key;
-  //       switch (key) {
-  //         case "startDate":
-  //         case "lastDate":
-  //           let startDate =
-  //             key === "startDate"
-  //               ? field?.userInput
-  //               : allFormData?.formFields?.form_fields?.find(
-  //                   (field: any) => field?.key === "startDate"
-  //                 )?.userInput;
-  //           let endDate =
-  //             key === "lastDate"
-  //               ? field?.userInput
-  //               : allFormData?.formFields?.form_fields?.find(
-  //                   (field: any) => field?.key === "lastDate"
-  //                 )?.userInput;
-
-  //           if (!startDate || !endDate) {
-  //             return field;
-  //           }
-
-  //           startDate = new Date(startDate).getTime();
-  //           endDate = new Date(endDate).getTime();
-  //           // let today = new Date().getMilliseconds();
-
-  //           // if () {
-
-  //           // }
-
-  //           if (startDate > endDate && key === "startDate") {
-  //             errorCount += 1;
-  //             return {
-  //               ...field,
-  //               error: "Start date should be before last date",
-  //             };
-  //           } else {
-  //             return { ...field, error: "" };
-  //           }
-
-  //         case "minInvestment":
-  //         case "maxInvestment":
-  //           let minInvestment =
-  //             key === "minInvestment"
-  //               ? field?.userInput
-  //               : allFormData?.formFields?.form_fields?.find(
-  //                   (field: any) => field?.key === "minInvestment"
-  //                 )?.userInput;
-  //           let maxInvestment =
-  //             key === "maxInvestment"
-  //               ? field?.userInput
-  //               : allFormData?.formFields?.form_fields?.find(
-  //                   (field: any) => field?.key === "maxInvestment"
-  //                 )?.userInput;
-
-  //           if (!minInvestment || !maxInvestment) {
-  //             return field;
-  //           }
-
-  //           if (
-  //             !Number.isInteger(parseInt(minInvestment)) ||
-  //             !Number.isInteger(parseInt(maxInvestment))
-  //           ) {
-  //             if (
-  //               !Number.isInteger(parseInt(minInvestment)) &&
-  //               key === "minInvestment"
-  //             ) {
-  //               errorCount += 1;
-  //               return {
-  //                 ...field,
-  //                 error: "Minimum investment value should be number",
-  //               };
-  //             }
-
-  //             if (
-  //               !Number.isInteger(parseInt(maxInvestment)) &&
-  //               key === "maxInvestment"
-  //             ) {
-  //               errorCount += 1;
-  //               return {
-  //                 ...field,
-  //                 error: "Maximum investment value should be number",
-  //               };
-  //             }
-  //           }
-
-  //           minInvestment = parseInt(minInvestment);
-  //           maxInvestment = parseInt(maxInvestment);
-
-  //           if (minInvestment > maxInvestment) {
-  //             if (key === "minInvestment") {
-  //               errorCount += 1;
-  //               return {
-  //                 ...field,
-  //                 error: "Amount should be less than max investment",
-  //               };
-  //             } else {
-  //               return { ...field, error: "" };
-  //             }
-  //           } else {
-  //             return { ...field, error: "" };
-  //           }
-  //         default:
-  //           return field;
-  //       }
-  //     }
-  //   );
-  //   setAllFormData({
-  //     ...allFormData,
-  //     formFields: {
-  //       form_fields: updatedFormFields,
-  //     },
-  //   });
-  //   return errorCount === 0;
   // };
 
   return (
