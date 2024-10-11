@@ -51,9 +51,24 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const depositTakerId = location.state?.depositTakerId;
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(2);
-
   const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
-  console.log("entitydetailsssss", entityDetailsFields);
+  const [scheme, setScheme] = useState<boolean>(false);
+
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+
+      // scheme
+      const schemeRoles = rolesArray.filter(
+        (role) => role === "scheme-edit-access-competent-authority"
+      );
+      if (schemeRoles?.length > 0) {
+        setScheme(true);
+      }
+    }
+  }, []);
+
   const filteredOptions =
     Status === "ACTIVE"
       ? options2.filter((option) => option.value === "BANNED")
@@ -200,7 +215,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
               if (a?.sectionId !== b?.sectionId) {
                 return a?.sectionId - b?.sectionId;
               }
-  
+
               // Then, sort by sortOrder (numeric sorting)
               return a?.sortOrder - b?.sortOrder;
             });
@@ -377,49 +392,93 @@ const SchemesSearchDetailsSM: React.FC = () => {
             onChange={onChange}
           />
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
-            <div>
-              <label
-                htmlFor='Select Other Schemes'
-                className='text-base font-normal text-gilroy-medium'
-              >
-                Status
-              </label>
-              <SelectButton
-                // backgroundColor="#F2F2F2"
-                setOption={handleSetOption2}
-                options={filteredOptions}
-                selectedOption={selectedOption2}
-                placeholder='Select'
-                showSearchInput={true}
-                disabled={Status === "BANNED" ? true : false}
-              />
-              <span className='text-red-400'>{errors?.statusError}</span>
-            </div>
-
-            <div>
-              <label
-                htmlFor='Select Other Schemes'
-                className='text-base font-normal text-gilroy-medium'
-              >
-                Select Other Schemes
-              </label>
-              <SelectButtonMultiselect
-                setOption={handleSetOption1}
-                options={schemes}
-                placeholder='Select'
-                multiselect={true}
-                allSelectedOptions={selectedSchemes}
-                remove={remove}
-                className='relative'
-                disabled={
-                  Status === "BANNED" ||
-                  (Status === "UNDER_LETIGATION" &&
-                    selectedOption2 === "ACTIVE")
-                    ? true
-                    : false
-                }
-              />
-            </div>
+            {scheme ? (
+              <>
+                {" "}
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Status
+                  </label>
+                  <SelectButton
+                    // backgroundColor="#F2F2F2"
+                    setOption={handleSetOption2}
+                    options={filteredOptions}
+                    selectedOption={selectedOption2}
+                    placeholder='Select'
+                    showSearchInput={true}
+                    disabled={Status === "BANNED" ? true : false}
+                  />
+                  <span className='text-red-400'>{errors?.statusError}</span>
+                </div>
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Select Other Schemes
+                  </label>
+                  <SelectButtonMultiselect
+                    setOption={handleSetOption1}
+                    options={schemes}
+                    placeholder='Select'
+                    multiselect={true}
+                    allSelectedOptions={selectedSchemes}
+                    remove={remove}
+                    className='relative'
+                    disabled={
+                      Status === "BANNED" ||
+                      (Status === "UNDER_LETIGATION" &&
+                        selectedOption2 === "ACTIVE")
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Status
+                  </label>
+                  <SelectButton
+                    // backgroundColor="#F2F2F2"
+                    setOption={handleSetOption2}
+                    options={filteredOptions}
+                    selectedOption={selectedOption2}
+                    placeholder='Select'
+                    showSearchInput={true}
+                    disabled={true}
+                  />
+                  <span className='text-red-400'>{errors?.statusError}</span>
+                </div>
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Select Other Schemes
+                  </label>
+                  <SelectButtonMultiselect
+                    setOption={handleSetOption1}
+                    options={schemes}
+                    placeholder='Select'
+                    multiselect={true}
+                    allSelectedOptions={selectedSchemes}
+                    remove={remove}
+                    className='relative'
+                    disabled={true}
+                  />
+                </div>
+              </>
+            )}
           </div>
           <BranchDetails />
         </>

@@ -183,16 +183,14 @@ const SchemeSearchDetails: React.FC = () => {
               disabled: true,
             }))
             ?.sort((a: any, b: any) => {
-              // Sort by companyName, panNumber, and dateOfIncorporation
-              const sortOrder = ["companyName", "panNumber", "dateOfIncorporation","Type of Entity", "Unique ID Number","GST Number","Registered Address Line 1","Registered Address Line 2","pincode","State","District","regulatorName","Regulator Number (Provided by Regulator)","Regulator approval Date","User Email","nodalFirstname","nodalMiddlename","nodalLastname","nodalMobile","nodalEmail",];
-              const aIndex = sortOrder.indexOf(a.key || a.label);
-              const bIndex = sortOrder.indexOf(b.key || b.label);
-    
-              if (aIndex === -1 && bIndex === -1) return 0; // No sorting for non-prioritized fields
-              if (aIndex === -1) return 1; // a comes after b
-              if (bIndex === -1) return -1; // a comes before b
-              return aIndex - bIndex; // Sort based on index in sortOrder
-            })
+              // First, sort by sectionId (numeric sorting)
+              if (a?.sectionId !== b?.sectionId) {
+                return a?.sectionId - b?.sectionId;
+              }
+  
+              // Then, sort by sortOrder (numeric sorting)
+              return a?.sortOrder - b?.sortOrder;
+            });
 
           // let modifiedFileFields =
           //   response?.data?.data?.registrationDocumentFields?.map((o: any) => ({

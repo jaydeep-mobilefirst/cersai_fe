@@ -45,6 +45,23 @@ const NewSchemaCreation = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const [scheme, setScheme] = useState<boolean>(false);
+
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+
+      // scheme
+      const schemeRoles = rolesArray.filter(
+        (role) => role === "scheme-edit-access-competent-authority"
+      );
+      if (schemeRoles?.length > 0) {
+        setScheme(true);
+      }
+    }
+  }, []);
+
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
@@ -112,10 +129,10 @@ const NewSchemaCreation = () => {
           value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value;
         return (
           <div
-            className="flex flex-col md:flex-row justify-center gap-3"
+            className='flex flex-col md:flex-row justify-center gap-3'
             key={Math.random()}
           >
-            <span className="text-sm">{updatedValue}</span>
+            <span className='text-sm'>{updatedValue}</span>
           </div>
         );
       },
@@ -148,10 +165,10 @@ const NewSchemaCreation = () => {
         const depositTakerId = info?.row?.original?.depositTakerId;
         const Status = info?.row?.original?.status;
         return (
-          <div className="flex justify-center items-center ">
+          <div className='flex justify-center items-center '>
             {/* <Link to={"/dt/schema/creation"}> */}
             <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
-              <img src={EditIcon} alt="Eye " className="cursor-pointer" />
+              <img src={EditIcon} alt='Eye ' className='cursor-pointer' />
             </div>
             {/* </Link> */}
           </div>
@@ -239,65 +256,70 @@ const NewSchemaCreation = () => {
 
   return (
     <div
-      className="relative xl:ml-[40px]"
+      className='relative xl:ml-[40px]'
       style={{ minHeight: "calc(100vh - 110px)" }}
     >
-      <div className="mt-6">
+      <div className='mt-6'>
         <TaskTabsCa />
       </div>
       <div>
-        <div className=" mt-2">
-          <div className=" flex  space-x-2  items-center flex-wrap">
-            <div className="md:w-[500px] lg:w-[600px] sm:w-[350px] w-[300px]">
-              <div className="mb-2">
+        <div className=' mt-2'>
+          <div className=' flex  space-x-2  items-center flex-wrap'>
+            <div className='md:w-[500px] lg:w-[600px] sm:w-[350px] w-[300px]'>
+              <div className='mb-2'>
                 <label
-                  htmlFor="Deposit taker Search"
-                  className="text-base font-normal text-gilroy-medium "
+                  htmlFor='Deposit taker Search'
+                  className='text-base font-normal text-gilroy-medium '
                 >
                   Scheme Search
                 </label>
               </div>
 
               <InputFields
-                height="40px"
+                height='40px'
                 // width="550px"
-                padding="10px"
+                padding='10px'
                 onChange={handleSearchInput}
-                placeholder="Search by Unique ID/name"
+                placeholder='Search by Unique ID/name'
                 value={searchInput}
               />
             </div>
-            <div className=" flex items-center mt-7">
+            <div className=' flex items-center mt-7'>
               <button
                 onClick={handleClickSearch}
                 className={`w-40 h-[45px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1c468e] cursor-pointer"} mt-2`}
               >
-                <img src={searchButton} alt="searchButton" />
-                <span className="ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium ">
+                <img src={searchButton} alt='searchButton' />
+                <span className='ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium '>
                   Search
                 </span>
               </button>
             </div>
-            <div className=" flex items-center mt-7">
-              <Link to="/ca/my-task/new-scheme-creation">
-                <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
-                  <img src={addCircle} alt="icon" />
-                  <span className="ml-1 text-sm  md:text-[10px] font-normal text-[#1c468e] lg:text-[13px] text-gilroy-medium ">
-                    New Scheme
-                  </span>
-                </div>
-              </Link>
+            <div className=' flex items-center mt-7'>
+              {scheme && (
+                <>
+                  {" "}
+                  <Link to='/ca/my-task/new-scheme-creation'>
+                    <div className='w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer'>
+                      <img src={addCircle} alt='icon' />
+                      <span className='ml-1 text-sm  md:text-[10px] font-normal text-[#1c468e] lg:text-[13px] text-gilroy-medium '>
+                        New Scheme
+                      </span>
+                    </div>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
         <div>
-          <div className="mt-[25px] mb-[35px] ">
-            <div className="">
-              <p className="text-sm font-normal text-gilroy-medium ">
+          <div className='mt-[25px] mb-[35px] '>
+            <div className=''>
+              <p className='text-sm font-normal text-gilroy-medium '>
                 OR search by Status
               </p>
             </div>
-            <div className="flex items-center flex-wrap gap-4">
+            <div className='flex items-center flex-wrap gap-4'>
               {/* <div className="">
                 <SelectButtonTask
                   setOption={handleSetOption1}
@@ -332,14 +354,14 @@ const NewSchemaCreation = () => {
                   setOption={handleSetStatus}
                   options={options}
                   selectedOption={selectedStatus}
-                  placeholder="Status"
+                  placeholder='Status'
                 />
               </div>
             </div>
           </div>
         </div>
-        <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-          <div className=" mb-12">
+        <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
+          <div className=' mb-12'>
             {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
@@ -349,13 +371,13 @@ const NewSchemaCreation = () => {
                 columns={columns}
               />
             ) : (
-              <div className=" flex justify-center items-center">
+              <div className=' flex justify-center items-center'>
                 <h1>No data available</h1>
               </div>
             )}
           </div>
           {schemaData.length > 0 && (
-            <div className="absolute bottom-0 w-full">
+            <div className='absolute bottom-0 w-full'>
               <CustomPagination
                 currentPage={page}
                 setCurrentPage={setPage}
