@@ -40,6 +40,22 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const [pageSize, setPageSize] = useState<number>(2);
   const depositTakerId = location.state?.depositTakerId;
   const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
+  const [scheme, setScheme] = useState<boolean>(false);
+
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+
+      // scheme
+      const schemeRoles = rolesArray.filter(
+        (role) => role === "scheme-edit-access-designated-court"
+      );
+      if (schemeRoles?.length > 0) {
+        setScheme(true);
+      }
+    }
+  }, []);
 
   const handleChangeComment = (e: any) => {
     const { value } = e?.target;
@@ -190,7 +206,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
               if (a?.sectionId !== b?.sectionId) {
                 return a?.sectionId - b?.sectionId;
               }
-  
+
               // Then, sort by sortOrder (numeric sorting)
               return a?.sortOrder - b?.sortOrder;
             });
@@ -243,56 +259,108 @@ const SchemesSearchDetailsSM: React.FC = () => {
             allFormData={allFormData}
             onChange={onChange}
           />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div>
-              <label
-                htmlFor="Status"
-                className="text-base font-normal text-gilroy-medium"
-              >
-                Status <span className="text-red-500">*</span>
-              </label>
-              <InputField
-                value={
-                  allFormData?.other?.status === "UNDER_LETIGATION"
-                    ? "UNDER LITIGATION"
-                    : allFormData?.other?.status?.replace(/_/g, " ")
-                }
-                disabled
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="Select Other Schemes"
-                className="text-base font-normal text-gilroy-medium"
-              >
-                Comment <span className="text-red-500">*</span>
-              </label>
-              <TextArea
-                id="Select Other Schemes"
-                placeholder="type comment "
-                onChange={handleChangeComment}
-                disabled={
-                  allFormData?.other?.status === "BANNED" ? false : true
-                }
-              />
-              <span className="text-red-400">{error}</span>
-            </div>
-
-            <div>
-              <label
-                htmlFor=""
-                className="text-base font-normal text-gilroy-medium mb-1"
-              >
-                Upload File
-              </label>
-              <FileUploadOpenKm
-                setFileData={setFileData}
-                fileData={fileData}
-                setDisable={
-                  allFormData?.other?.status === "BANNED" ? false : true
-                }
-              />
-            </div>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
+            {scheme ? (
+              <>
+                {" "}
+                <div>
+                  <label
+                    htmlFor='Status'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Status <span className='text-red-500'>*</span>
+                  </label>
+                  <InputField
+                    value={
+                      allFormData?.other?.status === "UNDER_LETIGATION"
+                        ? "UNDER LITIGATION"
+                        : allFormData?.other?.status?.replace(/_/g, " ")
+                    }
+                    disabled
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Comment <span className='text-red-500'>*</span>
+                  </label>
+                  <TextArea
+                    id='Select Other Schemes'
+                    placeholder='type comment '
+                    onChange={handleChangeComment}
+                    disabled={
+                      allFormData?.other?.status === "BANNED" ? false : true
+                    }
+                  />
+                  <span className='text-red-400'>{error}</span>
+                </div>
+                <div>
+                  <label
+                    htmlFor=''
+                    className='text-base font-normal text-gilroy-medium mb-1'
+                  >
+                    Upload File
+                  </label>
+                  <FileUploadOpenKm
+                    setFileData={setFileData}
+                    fileData={fileData}
+                    setDisable={
+                      allFormData?.other?.status === "BANNED" ? false : true
+                    }
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <div>
+                  <label
+                    htmlFor='Status'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Status <span className='text-red-500'>*</span>
+                  </label>
+                  <InputField
+                    value={
+                      allFormData?.other?.status === "UNDER_LETIGATION"
+                        ? "UNDER LITIGATION"
+                        : allFormData?.other?.status?.replace(/_/g, " ")
+                    }
+                    disabled
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Comment <span className='text-red-500'>*</span>
+                  </label>
+                  <TextArea
+                    id='Select Other Schemes'
+                    placeholder='type comment '
+                    onChange={handleChangeComment}
+                    disabled={true}
+                  />
+                  <span className='text-red-400'>{error}</span>
+                </div>
+                <div>
+                  <label
+                    htmlFor=''
+                    className='text-base font-normal text-gilroy-medium mb-1'
+                  >
+                    Upload File
+                  </label>
+                  <FileUploadOpenKm
+                    setFileData={setFileData}
+                    fileData={fileData}
+                    setDisable={true}
+                  />
+                </div>
+              </>
+            )}
           </div>
 
           <BranchDetails />
@@ -378,24 +446,24 @@ const SchemesSearchDetailsSM: React.FC = () => {
   };
   return (
     <div
-      className="flex flex-col min-h-screen justify-between"
+      className='flex flex-col min-h-screen justify-between'
       style={{ minHeight: "calc(100vh - 110px)" }}
     >
       <div>
-        <div className="mt-6 mx-8">
+        <div className='mt-6 mx-8'>
           <TaskTabsDc />
         </div>
-        <div className="flex flex-row mt-3 mx-8">
+        <div className='flex flex-row mt-3 mx-8'>
           <img
             src={InfoIcon}
-            alt="InfoIcon"
-            className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
+            alt='InfoIcon'
+            className='h-6 w-6 sm:h-8 sm:w-8 mr-2'
           />
-          <p className="text-[#808080]">
+          <p className='text-[#808080]'>
             Please update the comments under scheme details
           </p>
         </div>
-        <div className="mt-8 mb-8 mx-8">
+        <div className='mt-8 mb-8 mx-8'>
           {loader ? (
             <LoaderSpin />
           ) : (
@@ -405,42 +473,42 @@ const SchemesSearchDetailsSM: React.FC = () => {
       </div>
       <div>
         <div
-          className="flex w-full p-8 lg:px-[30px] flex-row justify-between items-center "
+          className='flex w-full p-8 lg:px-[30px] flex-row justify-between items-center '
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
           }}
         >
-          <div className="flex flex-row items-center space-x-2">
+          <div className='flex flex-row items-center space-x-2'>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              className="shrink-0"
+              xmlns='http://www.w3.org/2000/svg'
+              width='24'
+              height='24'
+              viewBox='0 0 24 24'
+              fill='none'
+              className='shrink-0'
             >
               <path
-                d="M15 6L9 12L15 18"
-                stroke="#1D1D1B"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                d='M15 6L9 12L15 18'
+                stroke='#1D1D1B'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
               />
             </svg>
             <button
               onClick={handleBackButtonClick}
-              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+              className='text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]'
             >
               Back
             </button>
           </div>
           {allFormData?.other?.status === "BANNED" ? (
-            <div className="flex items-center">
+            <div className='flex items-center'>
               <button
                 onClick={handleAddCommnent}
                 disabled={loader2}
-                type="submit"
-                className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+                type='submit'
+                className='bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold '
               >
                 {loader2 ? <LoaderSpin /> : "Submit"}
               </button>
@@ -459,18 +527,18 @@ const SchemesSearchDetailsSM: React.FC = () => {
           </div> */}
         </div>
         <div>
-          <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
+          <div className='border-[#E6E6E6] border-[1px] lg:mt-4'></div>
 
-          <div className="text-center mt-auto">
-            <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+          <div className='text-center mt-auto'>
+            <h1 className='text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal'>
               COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
             </h1>
-            <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+            <p className='text-[#24222B] text-xs text-wrap text-gilroy-light font-normal'>
               Powered and managed by{" "}
               <a
-                href="https://www.proteantech.in/"
-                className="underline text-gilroy-regular font-bold"
-                target="_blank"
+                href='https://www.proteantech.in/'
+                className='underline text-gilroy-regular font-bold'
+                target='_blank'
               >
                 Protean eGov Technologies
               </a>{" "}

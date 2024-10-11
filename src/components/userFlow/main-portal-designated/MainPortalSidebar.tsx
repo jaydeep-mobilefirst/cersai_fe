@@ -32,6 +32,11 @@ const MainPortalSidebar = ({ layout }: Props) => {
   const [state, setState] = useState<boolean>(true);
   const [isActive, setIsActive] = useState<boolean>(true);
   const [timeoutId, setTimeoutId] = useState<any>(null);
+  const [dashboard, setDashboard] = useState<boolean>(false);
+  const [scheme, setScheme] = useState<boolean>(false)
+  const [schemeView, setSchemeView] = useState<boolean>(false)
+  const [user, setUser] = useState<boolean>(false)
+  const [role, setRole] = useState<boolean>(false)
 
   const location = useLocation();
   const collapse = useCollapseStore((state: any) => state.collapse);
@@ -40,6 +45,64 @@ const MainPortalSidebar = ({ layout }: Props) => {
   const { pathname } = location;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  const checkDislayStauts = (status: any): any => {
+    switch (status) {
+      case "Dashboard":
+        return dashboard;
+      case "Scheme Management":
+        return scheme ? true : schemeView;
+      case "User Management":
+        return role;
+      default:
+        return true;
+    }
+  };
+
+  useEffect(()=>{
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+     
+      // dashboard
+      const dashboardRoles = rolesArray.filter(role =>
+        role === "dashboard-viewer-role-designated-court"
+      );
+      if(dashboardRoles?.length > 0){
+      setDashboard(true);
+      }
+
+      // scheme
+      const schemeRolesView = rolesArray.filter(role =>
+        role === "scheme-view-access-designated-court"
+      );
+      if(schemeRolesView?.length > 0){
+      setSchemeView(true);
+      }
+      const schemeRoles = rolesArray.filter(role =>
+        role === "scheme-edit-access-designated-court"
+      );
+      if(schemeRoles?.length > 0){
+      setScheme(true);
+      }
+
+       // uam
+       const userRoles = rolesArray.filter(role =>
+        role === "role-creation-access-designated-court"
+      );
+      if(userRoles?.length > 0){
+      setUser(true);
+      }
+      const roleRoles = rolesArray.filter(role =>
+        role === "user-creation-access-designated-court"
+      );
+      if(roleRoles?.length > 0){
+      setRole(true);
+      }
+    }
+
+    
+  }, [])
 
   // useEffect(() => {
   //   const cmsPath = location.pathname.split("/")[1];
@@ -152,19 +215,19 @@ const MainPortalSidebar = ({ layout }: Props) => {
     };
   }, [state]);
 
-  // useEffect(() => {
-  //   if (!isActive || refreshPage == "1") {
-  //     sessionStorage.clear();
-  //     Swal.fire({
-  //       icon: "error",
-  //       title:
-  //         refreshPage == "1"
-  //           ? "Dont refresh the page. Please login again"
-  //           : "User inactive for 10 min. Please login again",
-  //     });
-  //     navigate("/");
-  //   }
-  // });
+  useEffect(() => {
+    if (!isActive || refreshPage == "1") {
+      sessionStorage.clear();
+      Swal.fire({
+        icon: "error",
+        title:
+          refreshPage == "1"
+            ? "Dont refresh the page. Please login again"
+            : "User inactive for 10 min. Please login again",
+      });
+      navigate("/");
+    }
+  });
 
   const refreshToken = sessionStorage.getItem("refresh_token");
 
@@ -187,7 +250,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
       // Fetch data on initial render
       fetchDataRefresh();
   
-      const intervalId = setInterval(fetchDataRefresh, 580000);
+      const intervalId = setInterval(fetchDataRefresh, 10000);
   
       // Clean up the interval on component unmount
       return () => clearInterval(intervalId);
@@ -243,7 +306,9 @@ const MainPortalSidebar = ({ layout }: Props) => {
             {portalSideBarListDesignated?.map((data, idx) => {
               return (
                 <li
-                  className={`${collapse ? "px-2 py-1" : "px-4 py-2"}`}
+                  className={`${collapse ? "px-2 py-1" : "px-4 py-2"} ${
+                    checkDislayStauts(data?.title) ? "block" : "hidden"
+                  }`}
                   key={idx}
                 >
                   <Link to={data.url}>

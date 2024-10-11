@@ -226,19 +226,19 @@ const MainPortalSidebar = ({ layout }: Props) => {
     };
   }, [state]);
 
-  // useEffect(() => {
-  //   if (!isActive || refreshPage == "1") {
-  //     sessionStorage.clear();
-  //     Swal.fire({
-  //       icon: "error",
-  //       title:
-  //         refreshPage == "1"
-  //           ? "Dont refresh the page. Please login again"
-  //           : "User inactive for 10 min. Please login again",
-  //     });
-  //     navigate("/");
-  //   }
-  // });
+  useEffect(() => {
+    if (!isActive || refreshPage == "1") {
+      sessionStorage.clear();
+      Swal.fire({
+        icon: "error",
+        title:
+          refreshPage == "1"
+            ? "Dont refresh the page. Please login again"
+            : "User inactive for 10 min. Please login again",
+      });
+      navigate("/");
+    }
+  });
 
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
 
