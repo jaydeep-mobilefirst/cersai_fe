@@ -148,8 +148,8 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
         // Check if the input type supports selection
         setTimeout(() => {
           if (inputRef.current) {
-            inputRef.current.selectionStart = cursorPosition;
-            inputRef.current.selectionEnd = cursorPosition;
+            inputRef.current.selectionStart = inputRef.current.value.length;
+            inputRef.current.selectionEnd = inputRef.current.value.length;
           }
         }, 0);
       }

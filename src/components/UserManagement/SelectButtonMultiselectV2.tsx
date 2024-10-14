@@ -46,9 +46,9 @@ const SelectButtonMultiselect = ({
   console.log({ selectedOptionsArray }, "selectedOptionsArray");
 
   const variantOptions = {
-    basic: `w-full h-[50px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
-    outline: `w-full h-[36px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
-    multiselect: `w-full h-[56px] px-[8px] py-[16px] pr-[17px] flex flex-wrap gap-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
+    basic: `w-full min-h-[50px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
+    outline: `w-full min-h-[36px] px-[8px] py-[16px] flex justify-between items-center bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
+    multiselect: `w-full min-h-[56px] px-[8px] py-[16px] pr-[17px] flex flex-wrap gap-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 hover:bg-gray-50 focus:ring-1 focus:ring-gray-300 text-left`,
   };
 
   const variantDropdown = {
@@ -200,7 +200,7 @@ const SelectButtonMultiselect = ({
               />
             </div>
           )}
-          <div className="overflow-auto max-h-40 custom-scrollbar flex flex-col absolute bg-white w-full rounded-md z-100">
+          <div className="overflow-auto max-h-40 custom-scrollbar flex flex-col absolute bg-white w-full rounded-md z-100 mr-2">
             {filteredOptions.map((option, index) => (
               <a
                 key={index}
