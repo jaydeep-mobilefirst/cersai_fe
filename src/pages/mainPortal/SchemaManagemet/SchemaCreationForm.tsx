@@ -327,7 +327,11 @@ const SchemaCreationForm = () => {
     fieldType: string
   ) => {
     if (fieldData?.key === "minInvestment") {
-      const inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      let inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      if (inputValue === "0") {
+        // Handle the case where "0" is entered, maybe clear the field or show an error
+        inputValue = ""; // Clear the field or handle as required
+      }
       const formattedValue = formatNumber(inputValue);
       console.log(formattedValue, "jaydeep");
       setAllFormData({
@@ -347,7 +351,11 @@ const SchemaCreationForm = () => {
       });
       console.log(allFormData, "jaydeep");
     } else if (fieldData?.key === "maxInvestment") {
-      const inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      let inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      if (inputValue === "0") {
+        // Handle the case for maxInvestment as well
+        inputValue = ""; // Clear or handle accordingly
+      }
       const formattedValue = formatNumber(inputValue);
       console.log(formattedValue, "jaydeep");
       setAllFormData({

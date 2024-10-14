@@ -172,7 +172,15 @@ const NewSchemaCreation = () => {
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}
             <div onClick={() => NavigateScheme(uniqueId, depositTakerId, page)}>
-              <img src={EditIcon} alt="Eye " className="cursor-pointer" />
+              {Status === "BANNED" ? (
+                <img src={Eye} alt="Eye " className="cursor-pointer h-6 w-6" />
+              ) : (
+                <img
+                  src={EditIcon}
+                  alt="Eye "
+                  className="cursor-pointer h-8 w-8"
+                />
+              )}
             </div>
             {/* </Link> */}
           </div>
