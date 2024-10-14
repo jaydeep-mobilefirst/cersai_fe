@@ -210,7 +210,7 @@ const SchemeSearch: React.FC = () => {
 
   const options = [
     { value: "", label: "All" },
-    { value: "ACTIVE", label: "Active" },
+    { value: "ACTIVE,ACTIVE_DEPOSIT_NOT_TAKEN", label: "Active" },
     { value: "BANNED", label: "Banned" },
     { value: "UNDER_LETIGATION", label: "Under litigation" },
   ];
