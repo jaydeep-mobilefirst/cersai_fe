@@ -146,7 +146,7 @@ const SchemeSearch: React.FC = () => {
       cell: (info: any) => {
         const value = info?.getValue();
         const updatedValue =
-          value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value;
+          value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value?.replace(/_/g, " ");
 
         return (
           <div

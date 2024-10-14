@@ -158,7 +158,20 @@ const DepositeTakerSearch: React.FC = () => {
       ),
     }),
     columnHelper.accessor("status", {
-      cell: (info) => (info.renderValue() ? info.renderValue() : "N/A"),
+      cell: (info: any) => {
+        const value = info?.getValue();
+        const updatedValue =
+          value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value?.replace(/_/g, " ");
+
+        return (
+          <div
+            className="flex flex-col md:flex-row justify-center gap-3"
+            key={Math.random()}
+          >
+            <span className="text-sm">{updatedValue}</span>
+          </div>
+        );
+      },
       header: () => (
         <div className="flex justify-center items-center">
           <p> Status</p>
