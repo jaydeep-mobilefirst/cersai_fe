@@ -41,6 +41,18 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const depositTakerId = location.state?.depositTakerId;
   const [entityDetailsFields, setEntityDetailsFields] = useState<any[]>([]);
   const [scheme, setScheme] = useState<boolean>(false);
+  const [isUserInputValid, setIsUserInputValid] = useState(true);
+  console.log({ isUserInputValid }, "checking  in dc");
+  useEffect(() => {
+    // Check if any input is undefined or empty using optional chaining
+    const isEmptyOrUndefined = allFormData?.formFields?.form_fields?.some(
+      (field: any) => field.userInput === "" || field.userInput === undefined
+    );
+
+    console.log(allFormData?.formFields?.form_fields, "formFields");
+
+    setIsUserInputValid(!isEmptyOrUndefined);
+  }, [allFormData]);
 
   useEffect(() => {
     const sessionData = sessionStorage.getItem("roles");
@@ -246,6 +258,10 @@ const SchemesSearchDetailsSM: React.FC = () => {
   useEffect(() => {
     fetchFormFields();
   }, [depositTakerId]);
+  function determineDisabledState(status: string, isUserInputValid: boolean) {
+    // Enable the textarea only if the status is "BANNED" and all user inputs are valid
+    return !(status === "BANNED" && isUserInputValid);
+  }
 
   const accordionItems: AccordionItem[] = [
     {
@@ -259,16 +275,16 @@ const SchemesSearchDetailsSM: React.FC = () => {
             allFormData={allFormData}
             onChange={onChange}
           />
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             {scheme ? (
               <>
                 {" "}
                 <div>
                   <label
-                    htmlFor='Status'
-                    className='text-base font-normal text-gilroy-medium'
+                    htmlFor="Status"
+                    className="text-base font-normal text-gilroy-medium"
                   >
-                    Status <span className='text-red-500'>*</span>
+                    Status <span className="text-red-500">*</span>
                   </label>
                   <InputField
                     value={
@@ -281,34 +297,43 @@ const SchemesSearchDetailsSM: React.FC = () => {
                 </div>
                 <div>
                   <label
-                    htmlFor='Select Other Schemes'
-                    className='text-base font-normal text-gilroy-medium'
+                    htmlFor="Select Other Schemes"
+                    className="text-base font-normal text-gilroy-medium"
                   >
-                    Comment <span className='text-red-500'>*</span>
+                    Comment <span className="text-red-500">*</span>
                   </label>
                   <TextArea
-                    id='Select Other Schemes'
-                    placeholder='type comment '
+                    id="Select Other Schemes"
+                    placeholder="type comment "
                     onChange={handleChangeComment}
-                    disabled={
-                      allFormData?.other?.status === "BANNED" ? false : true
-                    }
+                    // disabled={
+                    //   allFormData?.other?.status === "BANNED" ? false : true
+                    // }
+
+                    disabled={determineDisabledState(
+                      allFormData?.other?.status,
+                      isUserInputValid
+                    )}
                   />
-                  <span className='text-red-400'>{error}</span>
+                  <span className="text-red-400">{error}</span>
                 </div>
                 <div>
                   <label
-                    htmlFor=''
-                    className='text-base font-normal text-gilroy-medium mb-1'
+                    htmlFor=""
+                    className="text-base font-normal text-gilroy-medium mb-1"
                   >
                     Upload File
                   </label>
                   <FileUploadOpenKm
                     setFileData={setFileData}
                     fileData={fileData}
-                    setDisable={
-                      allFormData?.other?.status === "BANNED" ? false : true
-                    }
+                    // setDisable={
+                    //   allFormData?.other?.status === "BANNED" ? false : true
+                    // }
+                    setDisable={determineDisabledState(
+                      allFormData?.other?.status,
+                      isUserInputValid
+                    )}
                   />
                 </div>
               </>
@@ -317,10 +342,10 @@ const SchemesSearchDetailsSM: React.FC = () => {
                 {" "}
                 <div>
                   <label
-                    htmlFor='Status'
-                    className='text-base font-normal text-gilroy-medium'
+                    htmlFor="Status"
+                    className="text-base font-normal text-gilroy-medium"
                   >
-                    Status <span className='text-red-500'>*</span>
+                    Status <span className="text-red-500">*</span>
                   </label>
                   <InputField
                     value={
@@ -333,23 +358,23 @@ const SchemesSearchDetailsSM: React.FC = () => {
                 </div>
                 <div>
                   <label
-                    htmlFor='Select Other Schemes'
-                    className='text-base font-normal text-gilroy-medium'
+                    htmlFor="Select Other Schemes"
+                    className="text-base font-normal text-gilroy-medium"
                   >
-                    Comment <span className='text-red-500'>*</span>
+                    Comment <span className="text-red-500">*</span>
                   </label>
                   <TextArea
-                    id='Select Other Schemes'
-                    placeholder='type comment '
+                    id="Select Other Schemes"
+                    placeholder="type comment "
                     onChange={handleChangeComment}
                     disabled={true}
                   />
-                  <span className='text-red-400'>{error}</span>
+                  <span className="text-red-400">{error}</span>
                 </div>
                 <div>
                   <label
-                    htmlFor=''
-                    className='text-base font-normal text-gilroy-medium mb-1'
+                    htmlFor=""
+                    className="text-base font-normal text-gilroy-medium mb-1"
                   >
                     Upload File
                   </label>
@@ -446,24 +471,24 @@ const SchemesSearchDetailsSM: React.FC = () => {
   };
   return (
     <div
-      className='flex flex-col min-h-screen justify-between'
+      className="flex flex-col min-h-screen justify-between"
       style={{ minHeight: "calc(100vh - 110px)" }}
     >
       <div>
-        <div className='mt-6 mx-8'>
+        <div className="mt-6 mx-8">
           <TaskTabsDc />
         </div>
-        <div className='flex flex-row mt-3 mx-8'>
+        <div className="flex flex-row mt-3 mx-8">
           <img
             src={InfoIcon}
-            alt='InfoIcon'
-            className='h-6 w-6 sm:h-8 sm:w-8 mr-2'
+            alt="InfoIcon"
+            className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
           />
-          <p className='text-[#808080]'>
+          <p className="text-[#808080]">
             Please update the comments under scheme details
           </p>
         </div>
-        <div className='mt-8 mb-8 mx-8'>
+        <div className="mt-8 mb-8 mx-8">
           {loader ? (
             <LoaderSpin />
           ) : (
@@ -473,47 +498,70 @@ const SchemesSearchDetailsSM: React.FC = () => {
       </div>
       <div>
         <div
-          className='flex w-full p-8 lg:px-[30px] flex-row justify-between items-center '
+          className="flex w-full p-8 lg:px-[30px] flex-row justify-between items-center "
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
           }}
         >
-          <div className='flex flex-row items-center space-x-2'>
+          <div className="flex flex-row items-center space-x-2">
             <svg
-              xmlns='http://www.w3.org/2000/svg'
-              width='24'
-              height='24'
-              viewBox='0 0 24 24'
-              fill='none'
-              className='shrink-0'
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="shrink-0"
             >
               <path
-                d='M15 6L9 12L15 18'
-                stroke='#1D1D1B'
-                strokeWidth='2'
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                d="M15 6L9 12L15 18"
+                stroke="#1D1D1B"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
             <button
               onClick={handleBackButtonClick}
-              className='text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]'
+              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
             >
               Back
             </button>
           </div>
-          {allFormData?.other?.status === "BANNED" ? (
-            <div className='flex items-center'>
+          {/* {allFormData?.other?.status === "BANNED" ? (
+            <div className="flex items-center">
+              <button
+                onClick={handleAddCommnent}
+                // disabled={loader2}
+                disabled={
+                  determineDisabledState(
+                    allFormData?.other?.status,
+                    isUserInputValid
+                  ) || loader2
+                }
+                type="submit"
+                className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
+              >
+                {loader2 ? <LoaderSpin /> : "Submit"}
+              </button>
+            </div>
+          ) : null} */}
+          {allFormData?.other?.status === "BANNED" &&
+          !determineDisabledState(
+            allFormData?.other?.status,
+            isUserInputValid
+          ) ? (
+            <div className="flex items-center">
               <button
                 onClick={handleAddCommnent}
                 disabled={loader2}
-                type='submit'
-                className='bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold '
+                type="submit"
+                className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
               >
                 {loader2 ? <LoaderSpin /> : "Submit"}
               </button>
             </div>
           ) : null}
+
           {/* 
           <div className="flex items-center">
             <button
@@ -527,18 +575,18 @@ const SchemesSearchDetailsSM: React.FC = () => {
           </div> */}
         </div>
         <div>
-          <div className='border-[#E6E6E6] border-[1px] lg:mt-4'></div>
+          <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
 
-          <div className='text-center mt-auto'>
-            <h1 className='text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal'>
+          <div className="text-center mt-auto">
+            <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
               COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
             </h1>
-            <p className='text-[#24222B] text-xs text-wrap text-gilroy-light font-normal'>
+            <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
               Powered and managed by{" "}
               <a
-                href='https://www.proteantech.in/'
-                className='underline text-gilroy-regular font-bold'
-                target='_blank'
+                href="https://www.proteantech.in/"
+                className="underline text-gilroy-regular font-bold"
+                target="_blank"
               >
                 Protean eGov Technologies
               </a>{" "}
