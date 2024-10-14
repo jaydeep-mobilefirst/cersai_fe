@@ -364,7 +364,10 @@ const SchemeDetails = () => {
         },
       });
     } else if (fieldData?.key === "minInvestment") {
-      const inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      let inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      if (inputValue === "0") {
+        inputValue = "";
+      }
       const formattedValue = formatNumber(inputValue);
       console.log(formattedValue, "jaydeep");
       setAllFormData({
@@ -384,7 +387,10 @@ const SchemeDetails = () => {
       });
       console.log(allFormData, "jaydeep");
     } else if (fieldData?.key === "maxInvestment") {
-      const inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      let inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      if (inputValue === "0") {
+        inputValue = "";
+      }
       const formattedValue = formatNumber(inputValue);
       console.log(formattedValue, "jaydeep");
       setAllFormData({
