@@ -193,17 +193,19 @@ const DepositSchemaCreation = () => {
   const handleSetOption4 = (value: string) => {
     setSelectedOption4(value);
   };
+
   const options = [
     { label: "All", value: "" },
     { label: "Approved", value: "APPROVED" },
+    { label: "Banned", value: "BANNED" },
     { label: "Rejected", value: "REJECTED" },
     { label: "Transit", value: "TRANSIT" },
     { label: "Refer to Regulator", value: "REFER_TO_REGULATOR" },
     { label: "Incomplete", value: "INCOMPLETE" },
     { label: "Pending", value: "PENDING" },
     { label: "Return", value: "RETURNED" },
-    {label:"Mod Pending",value:"MOD_PENDING"},
-    {label:"Mod Transit",value:"MOD_TRANSIT"},
+    { label: "Mod Pending", value: "MOD_PENDING" },
+    { label: "Mod Transit", value: "MOD_TRANSIT" },
     { label: "Mod Refer to Regulator", value: "MOD_REFER_TO_REGULATOR" },
   ];
   const handleSetStatus = (option: any) => {
