@@ -119,12 +119,21 @@ const SelectButtonMultiselect = ({
               return (
                 <span className="bg-blue-100 py-1 px-1" key={s.value}>
                   {s.label}
-                  <span
+          {/* Only show the cross icon if the label is not "Dashboard View Access" */}
+          {s.label !== "Dashboard View Access" && (
+            <span
+              className="text-red-500 ml-1 hover:bg-red-100 p-1"
+              onClick={() => remove(s)}
+            >
+              X
+            </span>
+          )}
+                  {/* <span
                     className="text-red-500 ml-1 hover:bg-red-100 p-1"
                     onClick={() => remove(s)}
                   >
                     X
-                  </span>
+                  </span> */}
                 </span>
               );
             })
