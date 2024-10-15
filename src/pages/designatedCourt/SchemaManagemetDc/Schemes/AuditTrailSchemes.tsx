@@ -293,6 +293,7 @@ const SchemesSearchDetailsSM: React.FC = () => {
                         : allFormData?.other?.status?.replace(/_/g, " ")
                     }
                     disabled
+                    className="bg-[#E5E4E2]"
                   />
                 </div>
                 <div>
