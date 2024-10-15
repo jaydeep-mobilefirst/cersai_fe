@@ -34,6 +34,8 @@ type SchemeType = {
   createdBy: string | null;
   status: string;
   active: boolean;
+  depositTakerName:string;
+  createdByName: string;
 };
 
 const columnHelper = createColumnHelper<SchemeType>();
@@ -111,12 +113,12 @@ const DepositSearchDetails: React.FC = () => {
       },
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor("depositTakerId", {
+    columnHelper.accessor("depositTakerName", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
-      header: () => <span>Deposit Taker</span>,
+      header: () => <span>Deposit Taker Name</span>,
     }),
 
-    columnHelper.accessor("createdBy", {
+    columnHelper.accessor("createdByName", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
     }),
@@ -229,7 +231,7 @@ const DepositSearchDetails: React.FC = () => {
       });
       let currentPage = (parseInt(data?.page) - 1 ) * pageSize
       setSchemaData(data?.data?.map((d : any, i: number) => ({...d, id : (i + 1) + currentPage})));
-      setTotal(data?.data?.length);
+      setTotal(data?.totalCount);
       setLoader2(false);
       setPage(parseInt(data?.page))
     } catch (error) {
@@ -265,7 +267,7 @@ const DepositSearchDetails: React.FC = () => {
             )}
           </div>
           <div className="mt-10">
-          {schemaData.length > 0 && (
+          {schemaData?.length > 0 && (
               <CustomPagination
                 currentPage={page}
                 setCurrentPage={setPage}
