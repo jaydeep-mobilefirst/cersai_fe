@@ -176,8 +176,8 @@ const DynamicFileUpload = ({ data }: Props) => {
     var disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
       ? disabledField == "RETURNED"
         ? false
-        : !data?.profileUpdate
-      : !data?.profileUpdate;
+        : data?.profileUpdate
+      : data?.profileUpdate;
   } else {
     disableFieldStatus = checkPathName(pathname)
     ? isConfigurable === 'true' ? true : checkStatus(disabledField)
