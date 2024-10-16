@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoaderSpin from "../../../components/LoaderSpin";
+import useStore from "../../../store/statusStore";
 
 interface FooterProps {
   onSubmit?: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -24,6 +25,30 @@ const FooterDT: React.FC<FooterProps> = ({
   backNavigation,
 }) => {
   const Navigate = useNavigate();
+  const location = useLocation();
+  const { pathname } = location;
+  const { data, loading, error, fetchData } = useStore();
+
+  const checkPathName = (status: any): any => {
+    switch (pathname) {
+      case "/dt/profile":
+        return true;
+      case "/rg/profile":
+        return true;
+      case "/dc/profile":
+        return true;
+      case "/ca/profile":
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  useEffect(() => {
+    if (checkPathName(pathname)) {
+      fetchData(); // Trigger the API call when the component mounts
+    }
+  }, [fetchData]);
   return (
     <div>
       {" "}
@@ -64,8 +89,7 @@ const FooterDT: React.FC<FooterProps> = ({
 
         <div className="flex items-center">
           <>
-            <>
-              <button
+          {data?.profileUpdate == "false" && (<><button
                 disabled={disabled}
                 onClick={onSubmit}
                 type="submit"
@@ -74,8 +98,8 @@ const FooterDT: React.FC<FooterProps> = ({
                 } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
               >
                 {loader ? <LoaderSpin /> : "Save and continue"}
-              </button>
-            </>
+              </button></>)}
+          
           </>
         </div>
       </div>
