@@ -242,6 +242,10 @@ const SchemaCreation = () => {
   const options = [
     { value: "ALL", label: "All" },
     { value: "ACTIVE", label: "ACTIVE" },
+    {
+      value: "ACTIVE_DEPOSIT_NOT_TAKEN",
+      label: "Active-Deposit not being taken",
+    },
     { value: "BANNED", label: "BANNED" },
     { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];

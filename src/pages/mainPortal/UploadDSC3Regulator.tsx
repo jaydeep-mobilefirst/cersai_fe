@@ -51,74 +51,119 @@ const UploadDSC3Regulator = () => {
       setError(false);
     }
   }, [isDscSelected]);
+  const verifyDscWithNodalOfficer = () => {
+    // Extract names from the decoded token and split the first name if necessary
+    const firstName = sessionStorage.getItem("firstName")?.toUpperCase() || "";
+    const lastName = sessionStorage.getItem("lastName")?.toUpperCase() || "";
+    const middleName =
+      sessionStorage.getItem("middleName")?.toUpperCase() || "";
 
-  const verifyDscWithNodalOfficer = (data: any) => {
-    const firstNameObj = data.find(
-      (item: { key: string }) => item.key === "nodalFirstname"
-    );
-    const middleNameObj = data.find(
-      (item: { key: string }) => item.key === "nodalMiddlename"
-    );
-    const lastNameObj = data.find(
-      (item: { key: string }) => item.key === "nodalLastname"
-    );
+    console.log(firstName, middleName, lastName, "all names from token");
 
-    const firstName = firstNameObj
-      ? firstNameObj.userInput
-          .toUpperCase()
-          .split(" ")
-          .filter((part: string | any[]) => part.length > 0)
-      : [];
-
-    const middleName = middleNameObj
-      ? middleNameObj.userInput
-          .toUpperCase()
-          .split(" ")
-          .filter((part: string | any[]) => part.length > 0)
-      : [];
-
-    const lastName = lastNameObj
-      ? lastNameObj.userInput
-          .toUpperCase()
-          .split(" ")
-          .filter((part: string | any[]) => part.length > 0)
-      : [];
-
-    // const firstName = sessionStorage.getItem("firstName")?.toUpperCase();
-    // const lastName = sessionStorage.getItem("lastName")?.toUpperCase();
-    // const mName = sessionStorage.getItem("middleName")?.toUpperCase();
-
-    // console.log(firstName, lastName);
-    // const middleName = mName ? mName : "";
-
-    if (!firstName || !lastName) {
-      return false;
+    // Check if the required first and last names are provided
+    if (firstName.length === 0 || lastName.length === 0) {
+      return false; // Return false if required names are missing
     }
 
+    // Split first name into parts (in case it's "OWAIS AHMAD")
+    const firstNameParts = firstName.split(" ").filter(Boolean);
+
+    // Combine the names from the token into a single array
+    const combinedNames = [...firstNameParts, middleName, lastName]
+      .filter((name) => name.length > 0) // Filter out empty middle name if not present
+      .sort();
+
+    console.log(combinedNames, "combinedNames from token");
+
+    // Extract and normalize names from the DSC certificate
     const dscCertName =
       dscCertificate?.SelCertSubject?.split(",")[0]?.toUpperCase();
-    // console.log(dscCertName, "dsc update name");
-
     if (!dscCertName) {
-      return false;
+      return false; // Return false if the certificate name is missing
     }
 
-    // Extract and normalize names from the certificate name
+    // Extract the common name (CN) part from the certificate and normalize
     const certNameParts = dscCertName
       .replace("CN=", "")
-      .toUpperCase()
       .split(" ")
-      .filter(Boolean);
+      .filter(Boolean) // Filter out empty parts
+      .sort();
 
-    // Combine names into a single array
-    const combinedNames = [...firstName, ...middleName, ...lastName].sort();
-    const certNameSorted = certNameParts.sort();
-    // Check if all parts of combined names are present in the certificate name
-    const isMatch =
-      combinedNames.length === certNameSorted.length &&
-      combinedNames.every((part, index) => part === certNameSorted[index]);
+    console.log(certNameParts, "certNameSorted from certificate");
+
+    // Check if each part of combinedNames exists in certNameParts, regardless of order
+    const isMatch = combinedNames.every((name) => certNameParts.includes(name));
+
     return isMatch;
   };
+
+  // const verifyDscWithNodalOfficer = (data: any) => {
+  //   const firstNameObj = data.find(
+  //     (item: { key: string }) => item.key === "nodalFirstname"
+  //   );
+  //   const middleNameObj = data.find(
+  //     (item: { key: string }) => item.key === "nodalMiddlename"
+  //   );
+  //   const lastNameObj = data.find(
+  //     (item: { key: string }) => item.key === "nodalLastname"
+  //   );
+
+  //   const firstName = firstNameObj
+  //     ? firstNameObj.userInput
+  //         .toUpperCase()
+  //         .split(" ")
+  //         .filter((part: string | any[]) => part.length > 0)
+  //     : [];
+
+  //   const middleName = middleNameObj
+  //     ? middleNameObj.userInput
+  //         .toUpperCase()
+  //         .split(" ")
+  //         .filter((part: string | any[]) => part.length > 0)
+  //     : [];
+
+  //   const lastName = lastNameObj
+  //     ? lastNameObj.userInput
+  //         .toUpperCase()
+  //         .split(" ")
+  //         .filter((part: string | any[]) => part.length > 0)
+  //     : [];
+
+  //   // const firstName = sessionStorage.getItem("firstName")?.toUpperCase();
+  //   // const lastName = sessionStorage.getItem("lastName")?.toUpperCase();
+  //   // const mName = sessionStorage.getItem("middleName")?.toUpperCase();
+
+  //   // console.log(firstName, lastName);
+  //   // const middleName = mName ? mName : "";
+
+  //   if (!firstName || !lastName) {
+  //     return false;
+  //   }
+
+  //   const dscCertName =
+  //     dscCertificate?.SelCertSubject?.split(",")[0]?.toUpperCase();
+  //   // console.log(dscCertName, "dsc update name");
+
+  //   if (!dscCertName) {
+  //     return false;
+  //   }
+
+  //   // Extract and normalize names from the certificate name
+  //   const certNameParts = dscCertName
+  //     .replace("CN=", "")
+  //     .toUpperCase()
+  //     .split(" ")
+  //     .filter(Boolean);
+
+  //   // Combine names into a single array
+  //   const combinedNames = [...firstName, ...middleName, ...lastName].sort();
+  //   const certNameSorted = certNameParts.sort();
+  //   // Check if all parts of combined names are present in the certificate name
+  //   const isMatch =
+  //     combinedNames.length === certNameSorted.length &&
+  //     combinedNames.every((part, index) => part === certNameSorted[index]);
+  //   return isMatch;
+  // };
   const handleFileUpload = (file: File | null) => {
     if (file) {
       setIsFileUploaded(true);
@@ -150,7 +195,7 @@ const UploadDSC3Regulator = () => {
       return;
     }
 
-    if (isDscKeyAvbl === "true" && !verifyDscWithNodalOfficer(formFields)) {
+    if (isDscKeyAvbl === "true" && !verifyDscWithNodalOfficer()) {
       Swal.fire({
         icon: "error",
         title: "Invalid Name",

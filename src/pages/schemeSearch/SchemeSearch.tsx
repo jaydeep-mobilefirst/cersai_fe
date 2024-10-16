@@ -146,7 +146,9 @@ const SchemeSearch: React.FC = () => {
       cell: (info: any) => {
         const value = info?.getValue();
         const updatedValue =
-          value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value?.replace(/_/g, " ");
+          value === "UNDER_LETIGATION"
+            ? "UNDER LITIGATION"
+            : value?.replace(/_/g, " ");
 
         return (
           <div
@@ -211,6 +213,10 @@ const SchemeSearch: React.FC = () => {
   const options = [
     { value: "", label: "All" },
     { value: "ACTIVE,ACTIVE_DEPOSIT_NOT_TAKEN", label: "Active" },
+    {
+      value: "ACTIVE_DEPOSIT_NOT_TAKEN",
+      label: "Active-Deposit not being taken",
+    },
     { value: "BANNED", label: "Banned" },
     { value: "UNDER_LETIGATION", label: "Under litigation" },
   ];

@@ -124,7 +124,9 @@ const NewSchemaCreation = () => {
       cell: (info: any) => {
         const value = info.getValue();
         const updatedValue =
-          value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value?.replace(/_/g, " ");
+          value === "UNDER_LETIGATION"
+            ? "UNDER LITIGATION"
+            : value?.replace(/_/g, " ");
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
@@ -236,6 +238,10 @@ const NewSchemaCreation = () => {
   const options = [
     { value: "", label: "All" },
     { value: "ACTIVE", label: "ACTIVE" },
+    {
+      value: "ACTIVE_DEPOSIT_NOT_TAKEN",
+      label: "Active-Deposit not being taken",
+    },
     { value: "BANNED", label: "BANNED" },
     { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];

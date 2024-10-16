@@ -117,7 +117,19 @@ const MyTaskStatus = () => {
       header: () => <span>Deposit Taker Name</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info) => <span>{info.getValue()?.replace(/_/g, " ")}</span>,
+      // cell: (info) => <span>{info.getValue()?.replace(/_/g, " ")}</span>,
+      cell: (info) => {
+        let value = info.renderValue();
+        // Check for specific combination of "MOD" and "TRANSIT"
+        if (value && /mod_transit/i.test(value)) {
+          // Using a case-insensitive regex to match "MOD_TRANSIT"
+          value = "Modification in Transit";
+        } else if (value && /mod/i.test(value)) {
+          // Similarly applying a case-insensitive check for any "MOD" occurrences
+          value = value.replace(/mod/i, "Modification"); // Replace "MOD" with "Modification" case-insensitively
+        }
+        return value ? value.replace(/_/g, " ") : "N/A"; // Replace underscores with spaces for any other statuses
+      },
       header: () => <span>Status</span>,
     }),
     columnHelper.accessor((row) => row, {
@@ -211,7 +223,10 @@ const MyTaskStatus = () => {
     // { label: "Return", value: "RETURNED" },
     // {label:"Mod Pending",value:"MOD_PENDING"},
     // {label:"Mod Transit",value:"MOD_TRANSIT"},
-    { label: "Mod Refer to Regulator", value: "MOD_REFER_TO_REGULATOR" },
+    {
+      label: "Modification Refer to Regulator",
+      value: "MOD_REFER_TO_REGULATOR",
+    },
   ];
   const handleSetStatus = (option: any) => {
     console.log(option, "option");

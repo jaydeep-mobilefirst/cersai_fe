@@ -102,7 +102,9 @@ const NewSchemaCreation = () => {
       cell: (info) => {
         const value = info.getValue();
         // Replace underscores with spaces if the value is "UNDER_LETIGATION"
-        return value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value?.replace(/_/g, " ");
+        return value === "UNDER_LETIGATION"
+          ? "UNDER LITIGATION"
+          : value?.replace(/_/g, " ");
       },
     }),
 
@@ -180,6 +182,10 @@ const NewSchemaCreation = () => {
   const options = [
     { value: "", label: "All" },
     { value: "ACTIVE", label: "ACTIVE" },
+    {
+      value: "ACTIVE_DEPOSIT_NOT_TAKEN",
+      label: "Active-Deposit not being taken",
+    },
     { value: "BANNED", label: "BANNED" },
     { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];

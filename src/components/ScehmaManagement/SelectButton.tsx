@@ -135,7 +135,7 @@ const SelectButtonTask = ({
   searchInputOnchange,
   searchInputValue,
   bgColor = "#FFFFFF", // Default background color
-  mdWidth = "md:w-[210px]", // Default width in md
+  mdWidth = "md:w-[280px]", // Default width in md
   borderColor = "#E6E6E6", // Default border color
 }: Props) => {
   const [arrowDirectionToggle, setArrowDirectionToggle] = useState(false);
@@ -187,10 +187,14 @@ const SelectButtonTask = ({
         }}
       >
         {selectedOption === "MOD_PENDING"
-          ? "Mod Pending":selectedOption === "MOD_TRANSIT"
-          ? "Mod Transit":selectedOption === "MOD_REFER_TO_REGULATOR"
-          ? "Mod Refer to Regulator":selectedOption === "REFER_TO_REGULATOR"
-          ? "Refer to Regulator":selectedOption === "UNDER_LETIGATION"
+          ? "Modification Pending"
+          : selectedOption === "MOD_TRANSIT"
+          ? "Modification In Transit"
+          : selectedOption === "MOD_REFER_TO_REGULATOR"
+          ? "Modification Refer to Regulator"
+          : selectedOption === "REFER_TO_REGULATOR"
+          ? "Refer to Regulator"
+          : selectedOption === "UNDER_LETIGATION"
           ? "Under Litigation"
           : selectedOption
           ? selectedOption
