@@ -290,6 +290,14 @@ const DepositSearchDetails: React.FC = () => {
   const onNavigateToBack = () => {
     navigate("/deposite-taker-search");
   };
+
+  function maskLastFiveDigits(mobile: string): string {
+    if (mobile.length < 5) {
+      return mobile;
+    }
+    return mobile.slice(0, -5) + '*****';
+  }
+  
   return (
     <div className="flex flex-col min-h-screen">
       <LanguageBar />
@@ -337,7 +345,7 @@ const DepositSearchDetails: React.FC = () => {
                                       {field.label ===
                                         "DSC3 Certificate"
                                         ? "DSC Certification Approved"
-                                        : field.userInput}
+                                        : field.label === "Nodal Officer Mobile Number" ? maskLastFiveDigits(field.userInput) : field.userInput}
                                     </div>
                                   </div>
                                 ))}

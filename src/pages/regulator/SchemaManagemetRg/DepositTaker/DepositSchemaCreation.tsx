@@ -47,8 +47,6 @@ const DepositSchemaCreation = () => {
   const navigate = useNavigate();
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
-  const [DT, setDT] = useState<boolean>(false);
-  const [DTView, setDTView] = useState<boolean>(false);
   const [scheme, setScheme] = useState<boolean>(false);
   const [schemeView, setSchemeView] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
@@ -255,19 +253,6 @@ const DepositSchemaCreation = () => {
     if (sessionData) {
       const rolesArray: string[] = sessionData.split(",");
 
-      // dt
-      const mytaskRoles = rolesArray.filter(
-        (role) => role === "dt-approver-role-regulator"
-      );
-      if (mytaskRoles?.length > 0) {
-        setDT(true);
-      }
-      const mytaskRolesView = rolesArray.filter(
-        (role) => role === "dt-reviewer-role-regulator"
-      );
-      if (mytaskRolesView?.length > 0) {
-        setDTView(true);
-      }
 
       // scheme
       const schemeRolesView = rolesArray.filter(
@@ -285,15 +270,6 @@ const DepositSchemaCreation = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (scheme || schemeView) {
-      if (DT == false) {
-        if (DTView == false) {
-          navigate("/rg/my-task");
-        }
-      }
-    }
-  });
 
   return (
     <div
@@ -337,7 +313,7 @@ const DepositSchemaCreation = () => {
               </button>
             </div>
             <div className=' flex items-center mt-7'>
-              {DT && (
+              {scheme && (
                 <Link to='/rg/deposit-taker/audit'>
                   <div className='w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer'>
                     <img src={addCircle} alt='icon' />

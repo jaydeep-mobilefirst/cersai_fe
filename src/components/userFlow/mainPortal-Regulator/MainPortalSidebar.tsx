@@ -55,11 +55,11 @@ const MainPortalSidebar = ({ layout }: Props) => {
       case "Dashboard":
         return dashboard;
       case "Scheme Management":
-        return scheme || schemeView || mytask || mytaskView
+        return scheme || schemeView 
       case "User Management":
         return role;
       case "My Tasks":
-          return true
+          return mytask || mytaskView
       default:
         return true;
     }

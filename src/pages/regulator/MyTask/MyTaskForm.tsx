@@ -50,6 +50,20 @@ const MyTaskForm = () => {
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
+  const [mytask, setMytask] = useState<boolean>(false);
+
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+      const mytaskRoles = rolesArray.filter(
+        (role) => role === "dt-approver-role-regulator"
+      );
+      if (mytaskRoles?.length > 0) {
+        setMytask(true);
+      }
+    }
+  }, []);
 
   const getBranches = () => {
     setLoader(true);
@@ -373,17 +387,17 @@ const MyTaskForm = () => {
 
   return (
     <div>
-      <div className="relative mx-4 xl:ml-[40px]">
+      <div className='relative mx-4 xl:ml-[40px]'>
         <div>
           <>
             {loader ? (
               <LoaderSpin />
             ) : (
               <>
-                <div className="container mx-auto">
-                  <div id="reviewContent">
+                <div className='container mx-auto'>
+                  <div id='reviewContent'>
                     {status === "TRANSIT" && (
-                      <p className="text-[#24222B] text-sm mt-3 font-normal text-gilroy-bold">
+                      <p className='text-[#24222B] text-sm mt-3 font-normal text-gilroy-bold'>
                         This record has been approved by {approverRelation} on
                         &nbsp;
                         {moment(approveTimeStamp).format("L")} basis supporting
@@ -391,26 +405,26 @@ const MyTaskForm = () => {
                       </p>
                     )}
 
-                    <h1 className=" text-gilroy-bold text-[#24222B] text-2xl font-bold  my-2"></h1>
+                    <h1 className=' text-gilroy-bold text-[#24222B] text-2xl font-bold  my-2'></h1>
                     {allFormData?.entitySections
                       ?.filter(
                         (s: any) => s?.sectionName !== "Upload Documents"
                       )
                       ?.map((section: any, index: number) => (
-                        <div className="mb-[16px] " key={index}>
-                          <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold">
-                            <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                        <div className='mb-[16px] ' key={index}>
+                          <div className='rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold'>
+                            <p className='lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap'>
                               {section?.sectionName === "Nodal Details"
                                 ? "Nodal Officer Details"
                                 : section?.sectionName}
                             </p>
-                            <button className="text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal ">
+                            <button className='text-[#385723] text-[16px] lg:text-[20px] mr-[13px] font-normal '>
                               {/* {section.buttonText} */}
                             </button>
                           </div>
-                          <div className="shadow-sm p-5 rounded-md">
-                            <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                              <div className="w-full grid grid-cols-2">
+                          <div className='shadow-sm p-5 rounded-md'>
+                            <div className='flex flex-col justify-between w-full sm:flex-row gap-y-[16px]'>
+                              <div className='w-full grid grid-cols-2'>
                                 {allFormData?.formFields?.form_fields
                                   ?.filter(
                                     (f: any) => f?.sectionId === section?.id
@@ -424,7 +438,7 @@ const MyTaskForm = () => {
                                       } flex justify-between`}
                                       key={idx}
                                     >
-                                      <div className="opacity-60">
+                                      <div className='opacity-60'>
                                         {field.label}
                                         {/* <span className="text-[#ff0000]">
                                               *
@@ -435,7 +449,7 @@ const MyTaskForm = () => {
                                           ? "DSC Certification "
                                           : field.userInput}
                                       </div> */}
-                                      <div className="break-all">
+                                      <div className='break-all'>
                                         {field.label === "DSC3 Certificate"
                                           ? "DSC Certification "
                                           : field?.label ===
@@ -455,14 +469,14 @@ const MyTaskForm = () => {
                         </div>
                       ))}
                   </div>
-                  <div className="w-full overflow-x-auto ">
-                    <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
-                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                  <div className='w-full overflow-x-auto '>
+                    <div className='rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4'>
+                      <p className='lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap'>
                         Branches
                       </p>
                     </div>
                     <div
-                      className="custom-scrollbar"
+                      className='custom-scrollbar'
                       style={{ maxHeight: "200px", overflowY: "auto" }}
                     >
                       {loader ? (
@@ -473,21 +487,21 @@ const MyTaskForm = () => {
                           columns={columns}
                         />
                       ) : (
-                        <div className=" flex justify-center items-center">
+                        <div className=' flex justify-center items-center'>
                           <p>No data available</p>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="w-full overflow-x-auto mt-4 mb-3">
-                    <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
-                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
+                  <div className='w-full overflow-x-auto mt-4 mb-3'>
+                    <div className='rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4'>
+                      <p className='lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap'>
                         Management Details
                       </p>
                     </div>
                     <div
-                      className="custom-scrollbar"
+                      className='custom-scrollbar'
                       style={{ maxHeight: "200px", overflowY: "auto" }}
                     >
                       {loader ? (
@@ -498,15 +512,15 @@ const MyTaskForm = () => {
                           columns={columnsMangement}
                         />
                       ) : (
-                        <div className=" flex justify-center items-center">
+                        <div className=' flex justify-center items-center'>
                           <p>No data available</p>
                         </div>
                       )}
                     </div>
                   </div>
                   <div>
-                    <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4">
-                      <p className="lg:w-[152px] ml-[16px] mt-[16px] text-xl lg:text-[20px] pb-2 text-nowrap">
+                    <div className='rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold mb-4'>
+                      <p className='lg:w-[152px] ml-[16px] mt-[16px] text-xl lg:text-[20px] pb-2 text-nowrap'>
                         Upload Documents
                       </p>
                     </div>
@@ -515,18 +529,18 @@ const MyTaskForm = () => {
                         <>
                           <div
                             key={index}
-                            className="rounded-t-lg rounded-b-lg bg-[#e7f0ff] flex justify-between items-center h-16 text-gilroy-bold mb-4"
+                            className='rounded-t-lg rounded-b-lg bg-[#e7f0ff] flex justify-between items-center h-16 text-gilroy-bold mb-4'
                           >
-                            <div className="flex p-7 space-x-2 items-center">
-                              <div className="">
+                            <div className='flex p-7 space-x-2 items-center'>
+                              <div className=''>
                                 <img
                                   src={FolderIcon}
                                   alt={FolderIcon}
-                                  className="w-12"
+                                  className='w-12'
                                 />
                               </div>
-                              <div className="">
-                                <h1 className="text-sm font-normal text-gilroy-medium text-[#1D1D1B]">
+                              <div className=''>
+                                <h1 className='text-sm font-normal text-gilroy-medium text-[#1D1D1B]'>
                                   {uploadItem?.documentName}
                                 </h1>
                                 {/* <p className="text-base font-normal text-gilroy-medium text-gray-400">
@@ -534,15 +548,15 @@ const MyTaskForm = () => {
                                 </p> */}
                               </div>
                             </div>
-                            <div className="mr-3">
+                            <div className='mr-3'>
                               <Button
                                 disabled={
                                   uploadItem.uploadFileId === undefined &&
                                   uploadItem.file === undefined
                                 }
-                                label="View"
-                                type="button"
-                                width="100px"
+                                label='View'
+                                type='button'
+                                width='100px'
                                 loader={viewLoaders[index]}
                                 onClick={() =>
                                   handleOnClikcView(
@@ -560,48 +574,50 @@ const MyTaskForm = () => {
                 </div>
               </>
             )}
-            <div className="my-11 flex flex-col lg:flex-row lg:items-center justify-between">
+            <div className='my-11 flex flex-col lg:flex-row lg:items-center justify-between'>
               <div
-                className="flex items-center cursor-pointer space-x-2 mb-3 lg:mb-0 md:ml-[5rem]"
+                className='flex items-center cursor-pointer space-x-2 mb-3 lg:mb-0 md:ml-[5rem]'
                 // onClick={() => navigate(-1)}
                 onClick={handleBack}
               >
-                <img src={BackArrow} alt="Back Arrow" />
-                <p className="text-sm font-normal text-gilroy-regular">Back</p>
+                <img src={BackArrow} alt='Back Arrow' />
+                <p className='text-sm font-normal text-gilroy-regular'>Back</p>
               </div>
-              <div className="flex flex-wrap justify-center lg:flex-nowrap lg:w-auto items-center space-x-3 lg:justify-end">
-                <div className="mb-3 lg:mb-0">
-                  <Button
-                    type="button"
-                    label="Return"
-                    width="100px"
-                    textColor="#F5BD0B"
-                    borderColor="#F5BD0B"
-                    backgroundColor="white"
-                    onClick={handleReturn}
-                  />
+              {mytask && (
+                <div className='flex flex-wrap justify-center lg:flex-nowrap lg:w-auto items-center space-x-3 lg:justify-end'>
+                  <div className='mb-3 lg:mb-0'>
+                    <Button
+                      type='button'
+                      label='Return'
+                      width='100px'
+                      textColor='#F5BD0B'
+                      borderColor='#F5BD0B'
+                      backgroundColor='white'
+                      onClick={handleReturn}
+                    />
+                  </div>
+                  <div className='mb-3 lg:mb-0'>
+                    <Button
+                      type='button'
+                      label='Reject'
+                      width='100px'
+                      textColor='#E63312'
+                      borderColor='#E63312'
+                      backgroundColor='white'
+                      onClick={handleRejectModel}
+                    />
+                  </div>
+                  <div className='mb-3 lg:mb-0'>
+                    <Button
+                      type='button'
+                      label='Approve'
+                      width='100px'
+                      backgroundColor='#1C468E'
+                      onClick={handleApproveModel}
+                    />
+                  </div>
                 </div>
-                <div className="mb-3 lg:mb-0">
-                  <Button
-                    type="button"
-                    label="Reject"
-                    width="100px"
-                    textColor="#E63312"
-                    borderColor="#E63312"
-                    backgroundColor="white"
-                    onClick={handleRejectModel}
-                  />
-                </div>
-                <div className="mb-3 lg:mb-0">
-                  <Button
-                    type="button"
-                    label="Approve"
-                    width="100px"
-                    backgroundColor="#1C468E"
-                    onClick={handleApproveModel}
-                  />
-                </div>
-              </div>
+              )}
             </div>
 
             {returnModel && (
