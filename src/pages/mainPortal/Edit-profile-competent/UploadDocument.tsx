@@ -149,8 +149,9 @@ const UploadDocument = (props: Props) => {
         return false;
     }
   };
+  const isConfigurable = sessionStorage.getItem("isConfigurable")
+  const disableFieldStatus = isConfigurable === 'true' ? true : checkStatus(disabledField);
 
-  const disableFieldStatus = checkStatus(disabledField);
 
   return (
     <>
