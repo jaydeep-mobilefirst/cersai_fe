@@ -193,6 +193,7 @@ const ProfileBranchForm: React.FC<Props> = ({
   ];
 
   const disabledField = sessionStorage.getItem("user_status");
+  const isConfigurable = sessionStorage.getItem("isConfigurable")
 
   const checkStatus = (status: any): any => {
     switch (disabledField) {
@@ -229,13 +230,13 @@ const ProfileBranchForm: React.FC<Props> = ({
   };
 
   if (pathname == "/dt/profile") {
-    var disableFieldStatus = checkPathName(pathname)
+    var disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
       ? disabledField == "RETURNED"
         ? false
         : !data?.profileUpdate
       : !data?.profileUpdate;
   } else {
-    disableFieldStatus = checkPathName(pathname)
+    disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
       ? checkStatus(disabledField)
       : false;
   }

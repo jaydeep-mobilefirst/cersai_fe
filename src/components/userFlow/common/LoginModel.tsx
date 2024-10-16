@@ -110,6 +110,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
       sessionStorage.setItem("emailId", response.data.user?.emailId);
       sessionStorage.setItem("entityType", response.data.user?.entityType);
       sessionStorage.setItem("roles", response.data?.response?.role);
+      sessionStorage.setItem("isConfigurable", response.data?.user?.isConfigurable);
       sessionStorage.setItem(
         "entityUniqueId",
         response.data.user?.entityUniqueId

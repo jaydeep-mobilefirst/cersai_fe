@@ -47,6 +47,7 @@ const DepositSchemaCreation = () => {
   const navigate = useNavigate();
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
+  const [DT, setDT] = useState<boolean>(false)
   const [searchInput, setSearchInput] = useState<string>("");
   const location = useLocation();
   const handleSearchInput = (event: any) => {
@@ -246,6 +247,24 @@ const DepositSchemaCreation = () => {
     }
   }, [location.state?.currentPage]);
 
+  useEffect(()=>{
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+     
+
+       // dt
+      const mytaskRoles = rolesArray.filter(role =>
+        role === "dt-approver-role-regulator"
+      );
+      if(mytaskRoles?.length > 0){
+      setDT(true);
+      }
+    }
+
+    
+  }, [])
+
   return (
     <div
       className="relative xl:ml-[40px]"
@@ -288,14 +307,15 @@ const DepositSchemaCreation = () => {
               </button>
             </div>
             <div className=" flex items-center mt-7">
-              <Link to="/rg/deposit-taker/audit">
+              {DT && (  <Link to="/rg/deposit-taker/audit">
                 <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
                   <img src={addCircle} alt="icon" />
                   <span className="ml-1 text-sm  md:text-[10px] font-normal text-[#1c468e] lg:text-[13px] text-gilroy-medium ">
                     New Deposit taker
                   </span>
                 </div>
-              </Link>
+              </Link>)}
+            
             </div>
           </div>
         </div>

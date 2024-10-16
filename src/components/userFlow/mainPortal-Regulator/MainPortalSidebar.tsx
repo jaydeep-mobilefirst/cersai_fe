@@ -55,11 +55,11 @@ const MainPortalSidebar = ({ layout }: Props) => {
       case "Dashboard":
         return dashboard;
       case "Scheme Management":
-        return scheme ? true : schemeView;
+        return scheme || schemeView || mytask || mytaskView
       case "User Management":
         return role;
       case "My Tasks":
-          return mytask ? true : mytaskView;
+          return true
       default:
         return true;
     }
@@ -106,7 +106,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
       setRole(true);
       }
 
-       // scheme
+       // dt
        const mytaskRolesView = rolesArray.filter(role =>
         role === "dt-reviewer-role-regulator"
       );
@@ -202,7 +202,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
   useEffect(() => {
     const reloadToken = sessionStorage.getItem("reload");
     if (reloadToken) {
-      window.location.reload();
+      // window.location.reload();
       sessionStorage.setItem("reload", "");
     }
   }, []);
@@ -263,7 +263,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
       // Fetch data on initial render
       fetchDataRefresh();
   
-      const intervalId = setInterval(fetchDataRefresh, 11000);
+      const intervalId = setInterval(fetchDataRefresh, 10000);
   
       // Clean up the interval on component unmount
       return () => clearInterval(intervalId);
