@@ -55,11 +55,11 @@ const MainPortalSidebar = ({ layout }: Props) => {
       case "Dashboard":
         return dashboard;
       case "Scheme Management":
-        return scheme ? true : schemeView;
+        return scheme || schemeView || mytask || mytaskView
       case "User Management":
         return role;
       case "My Tasks":
-          return mytask ? true : mytaskView;
+          return true
       default:
         return true;
     }
@@ -106,7 +106,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
       setRole(true);
       }
 
-       // scheme
+       // dt
        const mytaskRolesView = rolesArray.filter(role =>
         role === "dt-reviewer-role-regulator"
       );

@@ -128,6 +128,7 @@ const ProfileUploadDocuments = (props: Props) => {
   };
 
   const disabledField = sessionStorage.getItem("user_status");
+  const isConfigurable = sessionStorage.getItem("isConfigurable")
 
   const checkStatus = (status: any): any => {
     switch (disabledField) {
@@ -148,7 +149,7 @@ const ProfileUploadDocuments = (props: Props) => {
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const disableFieldStatus = isConfigurable === 'true' ? true : checkStatus(disabledField) 
 
   return (
     <>
