@@ -191,7 +191,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
   useEffect(() => {
     const reloadToken = sessionStorage.getItem("reload");
     if (reloadToken) {
-      window.location.reload();
+      // window.location.reload();
       sessionStorage.setItem("reload", "");
     }
   }, []);

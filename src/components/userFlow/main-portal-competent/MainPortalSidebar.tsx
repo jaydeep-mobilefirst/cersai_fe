@@ -193,7 +193,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
   useEffect(() => {
     const reloadToken = sessionStorage.getItem("reload");
     if (reloadToken) {
-      window.location.reload();
+      // window.location.reload();
       sessionStorage.setItem("reload", "");
     }
   }, []);
@@ -251,7 +251,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
       // Fetch data on initial render
       fetchDataRefresh();
   
-      const intervalId = setInterval(fetchDataRefresh, 580000);
+      const intervalId = setInterval(fetchDataRefresh, 10000);
   
       // Clean up the interval on component unmount
       return () => clearInterval(intervalId);

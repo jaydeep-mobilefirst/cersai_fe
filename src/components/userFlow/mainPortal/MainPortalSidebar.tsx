@@ -24,6 +24,9 @@ const MainPortalSidebar = ({ layout }: Props) => {
   const [isActive, setIsActive] = useState<boolean>(true);
   const [timeoutId, setTimeoutId] = useState<any>(null);
   const [fetchedRoles, setFetchedRoles] = useState<any>(false);
+  const [schemeView, setSchemeView] = useState<boolean>(false)
+  const [scheme, setScheme] = useState<boolean>(false)
+
   const location = useLocation();
   const { pathname } = location;
   const navigate = useNavigate();
@@ -59,7 +62,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
       case "Dashboard":
         return true;
       case "Scheme Management":
-        return data?.schemeManagement;
+        return data?.schemeManagement ? scheme ? true : schemeView : data?.schemeManagement
       case "User Management":
         return data?.uam ? fetchedRoles : data?.uam;
       default:
@@ -78,7 +81,23 @@ const MainPortalSidebar = ({ layout }: Props) => {
       if(filteredRoles?.length > 0){
       setFetchedRoles(true);
       }
+
+       // scheme
+       const schemeRolesView = rolesArray.filter(role =>
+        role === "scheme-view-access-deposit-taker"
+      );
+      if(schemeRolesView?.length > 0){
+      setSchemeView(true);
+      }
+      const schemeRoles = rolesArray.filter(role =>
+        role === "scheme-edit-access-deposit-taker"
+      );
+      if(schemeRoles?.length > 0){
+      setScheme(true);
+      }
+
     }
+    
 
     
   }, [])
@@ -166,7 +185,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
   useEffect(() => {
     const reloadToken = sessionStorage.getItem("reload");
     if (reloadToken) {
-      window.location.reload();
+      // window.location.reload();
       sessionStorage.setItem("reload", "");
     }
   }, []);
@@ -226,7 +245,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
       // Fetch data on initial render
       fetchDataRefresh();
   
-      const intervalId = setInterval(fetchDataRefresh, 11000);
+      const intervalId = setInterval(fetchDataRefresh, 10000);
   
       // Clean up the interval on component unmount
       return () => clearInterval(intervalId);
