@@ -196,6 +196,8 @@ const SelectButtonTask = ({
           ? "Refer to Regulator"
           : selectedOption === "UNDER_LETIGATION"
           ? "Under Litigation"
+          : selectedOption === "ACTIVE_DEPOSIT_NOT_TAKEN" // Add new status here
+          ? "Active-Deposit not being taken"
           : selectedOption
           ? selectedOption
           : placeholder}
