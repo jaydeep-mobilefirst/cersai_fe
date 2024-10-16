@@ -84,9 +84,9 @@ const Footer: React.FC<FooterProps> = ({
         : !data?.profileUpdate
       : !data?.profileUpdate;
   } else {
-    disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
-      ? checkStatus(disabledField)
-      : false;
+    disableFieldStatus = checkPathName(pathname)
+    ? isConfigurable === 'true' ? true : checkStatus(disabledField)
+    : false;
   }
 
   return (

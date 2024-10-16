@@ -471,8 +471,8 @@ const ProfileBranches = () => {
         : !data?.profileUpdate
       : !data?.profileUpdate;
   } else {
-    disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
-      ? checkStatus(disabledField)
+    disableFieldStatus = checkPathName(pathname)
+      ? isConfigurable === 'true' ? true : checkStatus(disabledField)
       : false;
   }
 
