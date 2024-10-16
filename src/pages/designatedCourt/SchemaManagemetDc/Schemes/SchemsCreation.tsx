@@ -99,12 +99,37 @@ const NewSchemaCreation = () => {
     }),
     columnHelper.accessor("status", {
       header: () => "Status",
-      cell: (info) => {
-        const value = info.getValue();
-        // Replace underscores with spaces if the value is "UNDER_LETIGATION"
-        return value === "UNDER_LETIGATION"
-          ? "UNDER LITIGATION"
-          : value?.replace(/_/g, " ");
+      // cell: (info) => {
+      //   const value = info.getValue();
+      //   // Replace underscores with spaces if the value is "UNDER_LETIGATION"
+      //   return value === "UNDER_LETIGATION"
+      //     ? "UNDER LITIGATION"
+      //     : value?.replace(/_/g, " ");
+      // },
+      cell: (info: any) => {
+        // const value = info?.getValue();
+        // const updatedValue =
+        //   value === "UNDER_LETIGATION"
+        //     ? "UNDER LITIGATION"
+        //     : value?.replace(/_/g, " ");
+        let value = info?.getValue();
+
+        // Replace underscores with spaces and handle the specific status case
+        if (value === "ACTIVE_DEPOSIT_NOT_TAKEN") {
+          value = "Active-Deposit not being taken";
+        } else if (value === "UNDER_LETIGATION") {
+          value = "UNDER LITIGATION";
+        } else {
+          value = value?.replace(/_/g, " ");
+        }
+        return (
+          <div
+            className="flex flex-col md:flex-row justify-center gap-3"
+            key={Math.random()}
+          >
+            <span className="text-sm">{value}</span>
+          </div>
+        );
       },
     }),
 

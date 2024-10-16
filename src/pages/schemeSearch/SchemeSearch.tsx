@@ -144,21 +144,59 @@ const SchemeSearch: React.FC = () => {
 
     columnHelper.accessor("status", {
       cell: (info: any) => {
-        const value = info?.getValue();
-        const updatedValue =
-          value === "UNDER_LETIGATION"
-            ? "UNDER LITIGATION"
-            : value?.replace(/_/g, " ");
+        let value = info?.getValue();
+
+        if (value === "ACTIVE_DEPOSIT_NOT_TAKEN") {
+          value = "Active-Deposit not being taken";
+        } else if (value === "UNDER_LETIGATION") {
+          value = "UNDER LITIGATION";
+        } else if (value && /mod_transit/i.test(value)) {
+          value = "Modification in Transit";
+        } else if (value && /mod/i.test(value)) {
+          value = value.replace(/mod/i, "Modification");
+        }
+
+        // Ensure replacement of underscores as fallback
+        value = value?.replace(/_/g, " ");
 
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span className="text-sm">{updatedValue}</span>
+            <span className="text-sm">{value || "N/A"}</span>
           </div>
         );
       },
+
+      // cell: (info: any) => {
+      //   let value = info?.getValue();
+
+      //   // Replace underscores with spaces and handle specific status cases
+      //   if (value === "ACTIVE_DEPOSIT_NOT_TAKEN") {
+      //     value = "Active-Deposit not being taken";
+      //   } else if (value === "UNDER_LETIGATION") {
+      //     value = "UNDER LITIGATION";
+      //   } else if (value && /mod_transit/i.test(value)) {
+      //     // Check for specific combination of "MOD" and "TRANSIT"
+      //     value = "Modification in Transit";
+      //   } else if (value && /mod/i.test(value)) {
+      //     // Case-insensitive replacement of "MOD" with "Modification"
+      //     value = value.replace(/mod/i, "Modification");
+      //   } else {
+      //     // Default replacement of underscores with spaces
+      //     value = value?.replace(/_/g, " ");
+      //   }
+
+      //   return (
+      //     <div
+      //       className="flex flex-col md:flex-row justify-center gap-3"
+      //       key={Math.random()}
+      //     >
+      //       <span className="text-sm">{value || "N/A"}</span>
+      //     </div>
+      //   );
+      // },
       header: () => <span>Status</span>,
     }),
     columnHelper.accessor("depositTakerName", {
@@ -212,13 +250,25 @@ const SchemeSearch: React.FC = () => {
 
   const options = [
     { value: "", label: "All" },
-    { value: "ACTIVE,ACTIVE_DEPOSIT_NOT_TAKEN", label: "Active" },
+    { value: "ACTIVE", label: "Active" },
     {
       value: "ACTIVE_DEPOSIT_NOT_TAKEN",
       label: "Active-Deposit not being taken",
     },
+    { label: "Approved", value: "APPROVED" },
+    { label: "Banned", value: "BANNED" },
+    { label: "Rejected", value: "REJECTED" },
     { value: "BANNED", label: "Banned" },
+    { label: "Pending", value: "PENDING" },
+    { label: "Incomplete", value: "INCOMPLETE" },
     { value: "UNDER_LETIGATION", label: "Under litigation" },
+    { label: "Refer to Regulator", value: "REFER_TO_REGULATOR" },
+    { label: "Modification Pending", value: "MOD_PENDING" },
+    { label: "Modification in Transit", value: "MOD_TRANSIT" },
+    {
+      label: "Modification Refer to Regulator",
+      value: "MOD_REFER_TO_REGULATOR",
+    },
   ];
 
   const handleSetOption1 = (value: string) => {
