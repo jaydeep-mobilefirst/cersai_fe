@@ -249,6 +249,7 @@ const DepositeTakerSearch: React.FC = () => {
     { label: "Rejected", value: "REJECTED" },
     { label: "Incomplete", value: "INCOMPLETE" },
     { label: "Pending", value: "PENDING" },
+    { label: "In Transit", value: "TRANSIT" },
     { value: "UNDER_LETIGATION", label: "Under litigation" },
     { label: "Refer to Regulator", value: "REFER_TO_REGULATOR" },
     { label: "Modification Pending", value: "MOD_PENDING" },
