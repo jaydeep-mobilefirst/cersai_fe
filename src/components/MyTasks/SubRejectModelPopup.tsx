@@ -63,7 +63,7 @@ const SubRejectModelPopup: React.FC<ReturnModelPopupProps> = ({
 
   const apiCall = () => {
     axiosTokenInstance
-      .post("/approval-engine/reason-code?reasonFor=REJECT")
+      .post("/approval-engine/reason-code?entityType=DT")
       .then((response: any) => {
         if (response.data.success) {
           setOptionData(
