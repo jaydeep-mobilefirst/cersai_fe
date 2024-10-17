@@ -131,9 +131,8 @@ const SchemeSearchDetails: React.FC = () => {
 
         formFields = await Promise.all(formFields);
 
-
-      // Sort form fields based on the sortOrder
-      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+        // Sort form fields based on the sortOrder
+        formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
         setAllFormData({
           ...response?.data?.data,
@@ -156,6 +155,7 @@ const SchemeSearchDetails: React.FC = () => {
       fetchSchema();
     }
   }, [uniqueId]);
+
   const fetchFormFields = () => {
     setLoader2(true);
     axiosTraceIdInstance
@@ -171,60 +171,126 @@ const SchemeSearchDetails: React.FC = () => {
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
             console.log("dtData", dtData);
           } catch (error) {
-            console.log("Error");
+            console.log("Error fetching deposit taker data:", error);
           }
+
+          // Masking function for mobile numbers
+          // const maskMobileNumber = (number: any) => {
+          //   if (typeof number === "string" && number) {
+          //     return number.replace(/(\d{2})\d*(\d{2})/, "$1******$2");
+          //   }
+          //   return number;
+          // };
+
+          const maskMobileNumber = (mobile: string): string => {
+            if (mobile.length < 5) {
+              return mobile;
+            }
+            return mobile.slice(0, -5) + "*****";
+          };
+
           let modifiedFormFields = response.data.data?.formFields
-            ?.map((o: any) => ({
-              ...o,
+            ?.map((field: any) => ({
+              ...field,
               userInput: dtData
-                ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+                ? dtData.find((data: any) => data?.fieldId === field?.id)?.value
                 : "",
               error: "",
               disabled: true,
             }))
-            ?.sort((a: any, b: any) => {
-              // First, sort by sectionId (numeric sorting)
-              if (a?.sectionId !== b?.sectionId) {
-                return a?.sectionId - b?.sectionId;
+            .map((field: any) => ({
+              ...field,
+              userInput:
+                field.key === "nodalMobile" ? field.userInput : field.userInput,
+            }))
+            .sort((a: any, b: any) => {
+              if (a.sectionId !== b.sectionId) {
+                return a.sectionId - b.sectionId;
               }
-  
-              // Then, sort by sortOrder (numeric sorting)
-              return a?.sortOrder - b?.sortOrder;
+              return a.sortOrder - b.sortOrder;
             });
 
-          // let modifiedFileFields =
-          //   response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
-          //     ...o,
-          //     file: dtData
-          //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-          //       : "",
-          //     error: "",
-          //     fileName: dtData
-          //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-          //       : "",
-          //     uploadFileId: dtData
-          //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-          //       : "",
-          //     disabled: true,
-          //   }));
-
-          // let obj = {
-          //   ...response?.data?.data,
-          //   formFields: { form_fields: modifiedFormFields },
-          // };
           setEntityDetailsFields(modifiedFormFields);
           setLoader2(false);
-          // setAllDocumentData(modifiedFileFields);
         } else {
           setLoader2(false);
           alert("Error getting data, Please try later!");
         }
       })
-      .catch((error: any) => {
-        console.log(error);
-        setLoader2(true);
+      .catch((error) => {
+        console.log("Error processing request:", error);
+        setLoader2(false);
       });
   };
+  // const fetchFormFields = () => {
+  //   setLoader2(true);
+  //   axiosTraceIdInstance
+  //     .get(`/registration/field-data/1?status=addToProfile`)
+  //     .then(async (response) => {
+  //       if (response?.data?.success) {
+  //         let dtData: any = [];
+  //         try {
+  //           let depositTakerData = await axiosTraceIdInstance.get(
+  //             `/deposit-taker/${depositTakerId}`
+  //           );
+  //           dtData =
+  //             depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
+  //           console.log("dtData", dtData);
+  //         } catch (error) {
+  //           console.log("Error");
+  //         }
+  //         let modifiedFormFields = response.data.data?.formFields
+  //           ?.map((o: any) => ({
+  //             ...o,
+  //             userInput: dtData
+  //               ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+  //               : "",
+  //             error: "",
+  //             disabled: true,
+  //           }))
+  //           ?.sort((a: any, b: any) => {
+  //             // First, sort by sectionId (numeric sorting)
+  //             if (a?.sectionId !== b?.sectionId) {
+  //               return a?.sectionId - b?.sectionId;
+  //             }
+
+  //             // Then, sort by sortOrder (numeric sorting)
+  //             return a?.sortOrder - b?.sortOrder;
+  //           });
+
+  //         // let modifiedFileFields =
+  //         //   response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
+  //         //     ...o,
+  //         //     file: dtData
+  //         //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+  //         //       : "",
+  //         //     error: "",
+  //         //     fileName: dtData
+  //         //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+  //         //       : "",
+  //         //     uploadFileId: dtData
+  //         //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
+  //         //       : "",
+  //         //     disabled: true,
+  //         //   }));
+
+  //         // let obj = {
+  //         //   ...response?.data?.data,
+  //         //   formFields: { form_fields: modifiedFormFields },
+  //         // };
+  //         setEntityDetailsFields(modifiedFormFields);
+  //         setLoader2(false);
+  //         // setAllDocumentData(modifiedFileFields);
+  //       } else {
+  //         setLoader2(false);
+  //         alert("Error getting data, Please try later!");
+  //       }
+  //     })
+  //     .catch((error: any) => {
+  //       console.log(error);
+  //       setLoader2(true);
+  //     });
+  // };
 
   useEffect(() => {
     if (allFormData?.other?.depositTakerId) {
@@ -310,7 +376,7 @@ const SchemeSearchDetails: React.FC = () => {
       <TopDetail />
       <Navbar />
       <div className="mt-8 mb-8 mx-8">
-        <Accordion items={accordionItems} showAccordion={true}/>
+        <Accordion items={accordionItems} showAccordion={true} />
       </div>
 
       {/* <div className="mb-8">
