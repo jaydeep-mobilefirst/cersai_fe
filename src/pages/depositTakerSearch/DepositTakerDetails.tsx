@@ -169,7 +169,7 @@ const DepositSearchDetails: React.FC = () => {
           let dtData: any = [];
           try {
             let depositTakerData = await axiosTraceIdInstance.get(
-              `/deposit-taker/${depositTakerId}`
+              `/deposit-taker/open/${depositTakerId}`
             );
 
             dtData =
@@ -290,13 +290,6 @@ const DepositSearchDetails: React.FC = () => {
   const onNavigateToBack = () => {
     navigate("/deposite-taker-search");
   };
-
-  function maskLastFiveDigits(mobile: string): string {
-    if (mobile.length < 5) {
-      return mobile;
-    }
-    return mobile.slice(0, -5) + '*****';
-  }
   
   return (
     <div className="flex flex-col min-h-screen">
@@ -345,7 +338,7 @@ const DepositSearchDetails: React.FC = () => {
                                       {field.label ===
                                         "DSC3 Certificate"
                                         ? "DSC Certification Approved"
-                                        : field.label === "Nodal Officer Mobile Number" ? maskLastFiveDigits(field.userInput) : field.userInput}
+                                        : field.userInput}
                                     </div>
                                   </div>
                                 ))}

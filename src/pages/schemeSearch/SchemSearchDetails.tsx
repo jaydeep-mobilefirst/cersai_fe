@@ -165,7 +165,7 @@ const SchemeSearchDetails: React.FC = () => {
           let dtData: any = [];
           try {
             let depositTakerData = await axiosTraceIdInstance.get(
-              `/deposit-taker/${depositTakerId}`
+              `/deposit-taker/open/${depositTakerId}`
             );
             dtData =
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
@@ -192,26 +192,6 @@ const SchemeSearchDetails: React.FC = () => {
               return a?.sortOrder - b?.sortOrder;
             });
 
-          // let modifiedFileFields =
-          //   response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
-          //     ...o,
-          //     file: dtData
-          //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-          //       : "",
-          //     error: "",
-          //     fileName: dtData
-          //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-          //       : "",
-          //     uploadFileId: dtData
-          //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-          //       : "",
-          //     disabled: true,
-          //   }));
-
-          // let obj = {
-          //   ...response?.data?.data,
-          //   formFields: { form_fields: modifiedFormFields },
-          // };
           setEntityDetailsFields(modifiedFormFields);
           setLoader2(false);
           // setAllDocumentData(modifiedFileFields);
