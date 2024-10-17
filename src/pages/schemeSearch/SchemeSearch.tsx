@@ -161,10 +161,10 @@ const SchemeSearch: React.FC = () => {
 
         return (
           <div
-            className="flex flex-col md:flex-row justify-center gap-3"
+            className='flex flex-col md:flex-row justify-center gap-3'
             key={Math.random()}
           >
-            <span className="text-sm">{value || "N/A"}</span>
+            <span className='text-sm'>{value || "N/A"}</span>
           </div>
         );
       },
@@ -235,10 +235,10 @@ const SchemeSearch: React.FC = () => {
           });
         };
         return (
-          <div className="flex justify-center items-center ">
+          <div className='flex justify-center items-center '>
             {/* <Link to={"/dt/schema/creation"}> */}
             <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
-              <img src={Eye} alt="Eye " className="cursor-pointer" />
+              <img src={Eye} alt='Eye ' className='cursor-pointer' />
             </div>
             {/* </Link> */}
           </div>
@@ -255,20 +255,8 @@ const SchemeSearch: React.FC = () => {
       value: "ACTIVE_DEPOSIT_NOT_TAKEN",
       label: "Active-Deposit not being taken",
     },
-    { label: "Approved", value: "APPROVED" },
     { label: "Banned", value: "BANNED" },
-    { label: "Rejected", value: "REJECTED" },
-    { value: "BANNED", label: "Banned" },
-    { label: "Pending", value: "PENDING" },
-    { label: "Incomplete", value: "INCOMPLETE" },
     { value: "UNDER_LETIGATION", label: "Under litigation" },
-    { label: "Refer to Regulator", value: "REFER_TO_REGULATOR" },
-    { label: "Modification Pending", value: "MOD_PENDING" },
-    { label: "Modification in Transit", value: "MOD_TRANSIT" },
-    {
-      label: "Modification Refer to Regulator",
-      value: "MOD_REFER_TO_REGULATOR",
-    },
   ];
 
   const handleSetOption1 = (value: string) => {
@@ -306,34 +294,34 @@ const SchemeSearch: React.FC = () => {
       <LanguageBar />
       <TopDetail />
       <Navbar />
-      <div className="w-[100%] p-[50px] flex flex-col gap-[40px]">
+      <div className='w-[100%] p-[50px] flex flex-col gap-[40px]'>
         <SchemeSearchTabsContainer />
-        <div className="flex items-center gap-4 flex-wrap">
-          <div className="w-[60%] min-w-[200px]">
+        <div className='flex items-center gap-4 flex-wrap'>
+          <div className='w-[60%] min-w-[200px]'>
             <label
-              htmlFor="Deposit taker Search"
-              className="text-base font-normal text-gilroy-medium "
+              htmlFor='Deposit taker Search'
+              className='text-base font-normal text-gilroy-medium '
             >
               Scheme Search
             </label>
-            <div className="mt-2">
+            <div className='mt-2'>
               <InputField
                 onChange={handleSetSearchInput}
                 value={searchInput}
-                height="40px"
-                padding="10px"
-                placeholder="Search by Unique ID/name"
+                height='40px'
+                padding='10px'
+                placeholder='Search by Unique ID/name'
               />
             </div>
           </div>
-          <div className=" flex items-center self-end ">
+          <div className=' flex items-center self-end '>
             <button
-              type="button"
+              type='button'
               onClick={handleSearchSubmit}
               className={`w-[146px] h-[56px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1c468e] cursor-pointer"} mt-2`}
             >
-              <img src={searchButton} alt="searchButton" />
-              <span className="ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium ">
+              <img src={searchButton} alt='searchButton' />
+              <span className='ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium '>
                 Search
               </span>
             </button>
@@ -341,12 +329,12 @@ const SchemeSearch: React.FC = () => {
         </div>
         <div>
           <label
-            htmlFor="Deposit taker Search"
-            className="text-base font-normal text-gilroy-medium "
+            htmlFor='Deposit taker Search'
+            className='text-base font-normal text-gilroy-medium '
           >
             OR Search by
           </label>
-          <div className=" w-[60%] sm:w-[60%] lg:w-[40%] flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <div className=' w-[60%] sm:w-[60%] lg:w-[40%] flex items-center gap-2 flex-wrap sm:flex-nowrap'>
             {/* <SelectField
               setOption={handleSetState}
               options={[{label : "All", value : "", stateId : null}, ...states?.map((s : any) => ({value : s?.name, label : s?.name, stateId : s?.id}))]}
@@ -366,13 +354,13 @@ const SchemeSearch: React.FC = () => {
               setOption={handleSetOption4}
               options={options}
               selectedOption={selectedOption4}
-              placeholder="Status"
-              height="40px"
+              placeholder='Status'
+              height='40px'
             />
           </div>
         </div>
-        <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-          <div className="">
+        <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
+          <div className=''>
             {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
@@ -382,13 +370,13 @@ const SchemeSearch: React.FC = () => {
                 columns={columns}
               />
             ) : (
-              <div className=" flex justify-center items-center">
+              <div className=' flex justify-center items-center'>
                 <h1>No data available</h1>
               </div>
               // <LoaderSpin />
             )}
           </div>
-          <div className="mt-10">
+          <div className='mt-10'>
             {schemaData.length > 0 && (
               <CustomPagination
                 currentPage={page}
@@ -401,7 +389,7 @@ const SchemeSearch: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="mt-[100px]">
+      <div className='mt-[100px]'>
         <Footer />
       </div>
     </div>
