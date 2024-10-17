@@ -197,7 +197,6 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         placeholder={field?.placeholder}
                         specialKey={field?.key}
                       />
-                      <span>{field?.key}</span>
                       <span className="text-red-500">{field?.error}</span>
                     </div>
                   </Tooltip>
