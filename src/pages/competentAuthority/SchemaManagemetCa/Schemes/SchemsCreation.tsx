@@ -92,7 +92,7 @@ const NewSchemaCreation = () => {
 
   useEffect(() => {
     fetchSchemes();
-  }, [page, pageSize]);
+  }, [page, pageSize, statusForSearch]);
   let count: number;
   const serialNoGen = (page: number) => {
     count = (page - 1) * 10;
