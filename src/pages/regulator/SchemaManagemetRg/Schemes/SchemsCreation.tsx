@@ -79,7 +79,7 @@ const NewSchemaCreation = () => {
 
   useEffect(() => {
     fetchSchemes();
-  }, [page, pageSize]);
+  }, [page, pageSize, statusForSearch]);
 
   useEffect(() => {
     const sessionData = sessionStorage.getItem("roles");

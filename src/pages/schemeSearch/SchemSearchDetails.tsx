@@ -131,9 +131,8 @@ const SchemeSearchDetails: React.FC = () => {
 
         formFields = await Promise.all(formFields);
 
-
-      // Sort form fields based on the sortOrder
-      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+        // Sort form fields based on the sortOrder
+        formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
         setAllFormData({
           ...response?.data?.data,
@@ -156,6 +155,7 @@ const SchemeSearchDetails: React.FC = () => {
       fetchSchema();
     }
   }, [uniqueId]);
+
   const fetchFormFields = () => {
     setLoader2(true);
     axiosTraceIdInstance
@@ -187,7 +187,7 @@ const SchemeSearchDetails: React.FC = () => {
               if (a?.sectionId !== b?.sectionId) {
                 return a?.sectionId - b?.sectionId;
               }
-  
+
               // Then, sort by sortOrder (numeric sorting)
               return a?.sortOrder - b?.sortOrder;
             });
@@ -310,7 +310,7 @@ const SchemeSearchDetails: React.FC = () => {
       <TopDetail />
       <Navbar />
       <div className="mt-8 mb-8 mx-8">
-        <Accordion items={accordionItems} showAccordion={true}/>
+        <Accordion items={accordionItems} showAccordion={true} />
       </div>
 
       {/* <div className="mb-8">

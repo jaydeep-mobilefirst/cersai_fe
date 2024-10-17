@@ -68,7 +68,7 @@ const MyTaskStatus = () => {
 
   useEffect(() => {
     myTaskRg();
-  }, [page, pageSize]);
+  }, [page, pageSize, statusForSearch]);
   const NavigateDepositStaus = (
     id: string,
     checkerId: string,

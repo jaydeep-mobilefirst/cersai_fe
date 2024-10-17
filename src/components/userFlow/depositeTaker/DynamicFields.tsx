@@ -66,7 +66,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   }, [fetchData]);
 
   const disabledField = sessionStorage.getItem("user_status");
-  const isConfigurable = sessionStorage.getItem("isConfigurable")
+  const isConfigurable = sessionStorage.getItem("isConfigurable");
 
   const checkStatus = (status: any): any => {
     switch (disabledField) {
@@ -103,17 +103,22 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
   };
 
   if (pathname == "/dt/profile") {
-    var disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
-      ? disabledField == "RETURNED"
-        ? false
-        : !data?.profileUpdate
-      : !data?.profileUpdate;
+    var disableFieldStatus =
+      isConfigurable === "true"
+        ? true
+        : checkPathName(pathname)
+        ? disabledField == "RETURNED"
+          ? false
+          : !data?.profileUpdate
+        : !data?.profileUpdate;
   } else {
     disableFieldStatus = checkPathName(pathname)
-      ? isConfigurable === 'true' ? true : checkStatus(disabledField)
+      ? isConfigurable === "true"
+        ? true
+        : checkStatus(disabledField)
       : false;
   }
-  
+
   const handleSearchBranchChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -190,6 +195,7 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                         type={fieldType}
                         id={field?.label}
                         placeholder={field?.placeholder}
+                        specialKey={field?.key}
                       />
                       <span className="text-red-500">{field?.error}</span>
                     </div>
@@ -302,7 +308,6 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                               selectedOption={field?.userInput}
                               placeholder={field?.placeholder}
                               disabled={
-                                
                                 disableFieldStatus
                                   ? disableFieldStatus
                                   : field?.disabled
@@ -328,8 +333,10 @@ const DynamicFields = ({ formFields, onChange, sectionId, disable }: Props) => {
                               selectedOption={field?.userInput}
                               placeholder={field?.placeholder}
                               disabled={
-                                 field?.label === "State" || field?.label === "District"?true:
-                                disableFieldStatus
+                                field?.label === "State" ||
+                                field?.label === "District"
+                                  ? true
+                                  : disableFieldStatus
                                   ? disableFieldStatus
                                   : field?.disabled
                               }
