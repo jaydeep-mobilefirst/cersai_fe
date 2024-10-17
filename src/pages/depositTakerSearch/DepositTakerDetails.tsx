@@ -280,10 +280,10 @@ const DepositSearchDetails: React.FC = () => {
         </div>
       </>,
     },
-    {
-      header: "Management Details",
-      content: <MangementDetails />,
-    },
+    // {
+    //   header: "Management Details",
+    //   content: <MangementDetails />,
+    // },
 
   ];
 
