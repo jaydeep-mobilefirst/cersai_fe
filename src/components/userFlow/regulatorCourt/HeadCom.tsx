@@ -11,6 +11,7 @@
 // export default HeadComp;
 import Logo from "../../../assets/images/logo.svg";
 import CrossIcon from "../../../assets/images/CrossIcon.svg";
+import React from "react";
 interface HeadCompProps {
   isMenuOpen?: boolean;
   toggleMenu?: () => void;

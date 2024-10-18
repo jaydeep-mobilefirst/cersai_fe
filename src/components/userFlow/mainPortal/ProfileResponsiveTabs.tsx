@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import TaskTabsItem from "./TaskTabItems";
 import { profileSideBarList } from "../../../utils/hardText/portalText";
+import React from "react";
 
 type Props = {
   clickableSidebarStatus: boolean;

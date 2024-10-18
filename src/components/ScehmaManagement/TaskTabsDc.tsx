@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import TaskTabsItem from "./TaskTabItems";
+import React from "react";
 
 type Props = {};
 
@@ -16,6 +17,7 @@ const tabs = [
     rurl: "/dc/my-task",
   },
 ];
+
 const TaskTabsDc = (props: Props) => {
   const [activeTab, setActiveTab] = useState<string>("my-task");
   const [url, setUrl] = useState<String>("");
@@ -36,9 +38,10 @@ const TaskTabsDc = (props: Props) => {
     <div className="flex-col justify-center items-start max-sm:items-center inline-flex border-b w-full">
       <ul className="justify-start items-center gap-5 md:gap-10 inline-flex flex-wrap">
         {tabs.map((menuItem, index) => (
-          <Link to={menuItem.rurl} key={index}>
+          <Link to={menuItem.rurl} key={index} data-testid="task-tabs-dc">
             <TaskTabsItem
               key={index}
+              data-testid="task-tabs-dc"
               text={menuItem.title}
               isActive={menuItem.url === url}
               onClick={() => handleTabClick(menuItem.title)}

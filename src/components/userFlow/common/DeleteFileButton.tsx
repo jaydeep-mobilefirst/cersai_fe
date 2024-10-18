@@ -2,6 +2,7 @@ import { useState } from "react";
 import trashIcon from "../../../assets/images/trash.svg";
 import LoaderSpin from "../../LoaderSpin";
 import Swal from "sweetalert2";
+import React from "react";
 
 type Props = {
   fieldData: any;
@@ -44,6 +45,7 @@ const DeleteFileButton = ({ fieldData, fieldType, onFileChange }: Props) => {
     <div
       onClick={deleteFile}
       className="bg-white mt-1 mr-1 flex justify-center items-center h-10 w-10 rounded"
+      data-testid="delete-button"
     >
       {loader === true ? (
         <LoaderSpin />

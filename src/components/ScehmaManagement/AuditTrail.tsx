@@ -9,6 +9,7 @@ import {
   isUUID,
 } from "../../utils/commonFunction";
 import LoaderSpin from "../LoaderSpin";
+import React from "react";
 
 interface TableType {
   id: string;

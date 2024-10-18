@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-interface Option {
+export interface Option {
   value: string;
   label: string;
 }

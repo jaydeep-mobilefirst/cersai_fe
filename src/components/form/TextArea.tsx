@@ -1,5 +1,5 @@
 import React, { FC, InputHTMLAttributes, forwardRef } from "react";
-import "./textarea.css";
+// import "./textarea.css";
 
 interface InputProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   backgroundColor?: string; // Optional backgroundColor prop

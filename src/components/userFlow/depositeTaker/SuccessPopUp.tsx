@@ -29,6 +29,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
         alignItems: "center",
         justifyContent: "center",
       }}
+      
     >
       <Box
         sx={{
@@ -38,7 +39,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
           height: "100vh",
         }}
       >
-        <div className="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <div className="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" data-testid="success-popup">
           <div className="bg-white rounded-lg p-8 w-[90%] max-w-[500px] relative">
             <div className="text-right">
               {/* <img

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import TaskTabsItem from "./TaskTabItems";
+import React from "react";
 
 type Props = {};
 
@@ -37,6 +38,7 @@ const TaskTabs = (props: Props) => {
               key={index}
               text={menuItem.title}
               isActive={menuItem.url === url}
+              data-testid={menuItem.url === url ? "active-tab" : "tab-item"}  // Pass the correct test ID here
               onClick={() => handleTabClick(menuItem.title)}
             />
           </Link>

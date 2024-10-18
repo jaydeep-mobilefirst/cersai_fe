@@ -44,6 +44,7 @@ const UploadButtonSimple: FC<ButtonProps> = forwardRef<
       <input
         type="file"
         ref={fileInputRef}
+        data-testid="file-input"
         style={{ display: "none" }}
         className="absolute left-0 border"
         onChange={handleFileChange}

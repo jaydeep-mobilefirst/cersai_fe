@@ -4,6 +4,7 @@ import {
   aboutBudsHeadingComp1,
 } from "../../utils/hardText/landingpageText";
 import { useLandingStore } from "../../zust/useLandingStore";
+import React from "react";
 
 const AboutBudsHeadingComp = () => {
   const { homePageData } = useLandingStore((state) => state);

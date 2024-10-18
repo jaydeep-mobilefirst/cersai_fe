@@ -10,6 +10,7 @@ interface AccordionProps {
   showEdit?: boolean; // New prop to show/hide edit button
   hasError?: boolean;
   showAccordion?: boolean,
+  handleEditClick?: () => void;
 }
 
 const Accordion: React.FC<AccordionProps> = ({

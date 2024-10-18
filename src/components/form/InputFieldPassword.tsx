@@ -1,6 +1,7 @@
 import { FC, InputHTMLAttributes, forwardRef, useState } from "react";
 import Eye from "../../assets/images/eye2.svg";
 import EyeHide from "../../assets/images/eye-slash.svg";
+import React from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;

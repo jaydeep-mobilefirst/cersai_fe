@@ -5,6 +5,7 @@ import SelectButton from "../userFlow/form/SelectButton";
 import { EntityDetailschema } from "../../formValidationSchema/deposit_taker/EntityValidation.schema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import React from "react";
 
 const CreatedBy = () => {
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);

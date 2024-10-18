@@ -5,6 +5,7 @@ import Loginticketcircel from "../../../assets/images/Login-tick-circle.svg";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
 interface PasswordUpdateModelProps {
   closeUpdatePasswordModel?: () => void;

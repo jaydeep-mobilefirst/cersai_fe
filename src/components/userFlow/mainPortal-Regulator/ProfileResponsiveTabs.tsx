@@ -3,6 +3,7 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 import { profileSideBarListRegulator } from "../../../utils/hardText/portalText";
 import TaskTabsItem from "./TaskTabItem";
+import React from "react";
 
 type Props = {};
 

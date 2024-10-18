@@ -5,6 +5,7 @@ import {
   profileSideBarList,
   profileSideBarListCompetent,
 } from "../../../utils/hardText/portalText";
+import React from "react";
 
 type Props = {};
 

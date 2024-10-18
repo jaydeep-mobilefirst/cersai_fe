@@ -3,6 +3,7 @@ import { createColumnHelper } from "@tanstack/table-core";
 // import DirectBox from "../../assets/images/send.png";
 import DirectBox from "../../assets/images/send.png";
 import ReactTable from "../userFlow/common/ReactTable";
+import React from "react";
 
 interface TableType {
   sno: string;

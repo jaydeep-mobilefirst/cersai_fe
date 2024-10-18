@@ -7,6 +7,7 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import rightArrow from "../../../assets/images/ArrowDark.svg";
 import whiteRightArrow from "../../../assets/images/rightArrowWhiteallWhite.svg";
+import React from "react";
 type Props = {
   fetchFormFields: () => void;
 };

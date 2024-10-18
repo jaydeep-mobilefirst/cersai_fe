@@ -1,3 +1,5 @@
+import React from "react";
+
 interface DepositeSearchTabProps {
   text: string;
   value: string;

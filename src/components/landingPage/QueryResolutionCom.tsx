@@ -1,3 +1,4 @@
+import React from "react";
 import { queryResolutionComp } from "../../utils/hardText/landingpageText";
 
 const QueryResolutionComp = () => {

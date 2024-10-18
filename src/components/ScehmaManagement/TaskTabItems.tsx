@@ -1,34 +1,23 @@
 import React from "react";
 
-interface MenuItemProps {
+type TaskTabsItemProps = {
   text: string;
   isActive: boolean;
   onClick: () => void;
-}
+  "data-testid"?: string;
+};
 
-const TaskTabsItem: React.FC<MenuItemProps> = ({ text, isActive, onClick }) => {
+const TaskTabsItem = ({ text, isActive, onClick, "data-testid": testId }: TaskTabsItemProps) => {
   return (
     <li
-      className={`parentLi flex-col text-[20px] text-[#666666] justify-start items-start gap-3.5 inline-flex text-nowrap cursor-pointer
-      `}
       onClick={onClick}
+      className={`parentLi flex-col text-[20px] text-[#666666] justify-start items-start gap-3.5 inline-flex text-nowrap cursor-pointer ${isActive ? "active-class" : ""}`}
+      data-testid={testId}  // Apply the data-testid here
     >
-      <div
-        className={`hover:text-gilroy-bold 
-                       ${
-                         isActive
-                           ? "font-bold text-[#1c468e]"
-                           : "text-[#666666] "
-                       }
-      `}
-      >
+      <div className={`hover:text-gilroy-bold ${isActive ? "text-[#000000]" : "text-[#666666]"}`}>
         {text}
       </div>
-      <div
-        className={` self-stretch h-1 rounded-sm ${
-          isActive ? "bg-[#1c468e]" : "bg-white"
-        }`}
-      ></div>
+      <div className={`${isActive ? "bg-black" : "bg-white"} self-stretch h-1 rounded-sm`} />
     </li>
   );
 };

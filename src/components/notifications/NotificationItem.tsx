@@ -64,6 +64,7 @@ interface NotificationProps {
   date: string;
   links: string | null;
   buttons: Notifications[];
+  notificationType: string;
 }
 
 const NotificationItem: React.FC<NotificationProps> = ({

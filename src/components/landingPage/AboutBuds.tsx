@@ -1,4 +1,5 @@
 import VideoComp from "./VideoComp";
+import React from "react"
 import { aboutBuds } from "../../utils/hardText/landingpageText";
 import { useLandingStore } from "../../zust/useLandingStore";
 import { Link } from "react-router-dom";

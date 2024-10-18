@@ -170,6 +170,7 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
         {...rest}
         ref={inputRef}
         onChange={handleInputChange}
+        data-testid="input-field"
       />
     );
   }

@@ -11,6 +11,7 @@ import Header from "./Header";
 import useSidebarStore from "../../../store/SidebarStore";
 import { useCollapseStore } from "../../../store/SidebarStore";
 import Swal from "sweetalert2";
+import React from "react";
 
 type Props = {
   layout: React.ReactElement | null;

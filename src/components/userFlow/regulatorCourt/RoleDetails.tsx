@@ -9,6 +9,7 @@ import { EntityDetailschema } from "../../../formValidationSchema/deposit_taker/
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useScreenWidth } from "../../../utils/screenSize";
+import React from "react";
 
 const TableType = {
   sno: String,

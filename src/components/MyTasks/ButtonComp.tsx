@@ -8,6 +8,7 @@ interface ButtonCompProps {
   disabled?: boolean;
   loader?: boolean;
   isAllFields?: boolean;
+  handleSave?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const ButtonComp: React.FC<ButtonCompProps> = ({

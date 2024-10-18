@@ -1,4 +1,5 @@
 import { createColumnHelper } from "@tanstack/table-core";
+import React from "react";
 
 // import DirectBox from "../../assets/images/send.png";
 import DirectBox from "../../assets/images/send.png";

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import TaskTabsItem from "./TaskTabItems";
+import React from "react";
 
 type Props = {};
 
@@ -34,7 +35,10 @@ const TaskTabsRg = (props: Props) => {
   };
 
   return (
-    <div className="flex-col justify-center items-start max-sm:items-center inline-flex border-b w-full">
+    <div
+      className="flex-col justify-center items-start max-sm:items-center inline-flex border-b w-full"
+      data-testid="task-tabs-rg" // Container test ID
+    >
       <ul className="justify-start items-center gap-5 md:gap-10 inline-flex flex-wrap">
         {tabs.map((menuItem, index) => (
           <Link to={menuItem.rurl} key={index}>
@@ -43,6 +47,7 @@ const TaskTabsRg = (props: Props) => {
               text={menuItem.title}
               isActive={menuItem.url === url}
               onClick={() => handleTabClick(menuItem.title)}
+              data-testid={menuItem.url === url ? "active-tab" : "task-tab-item"} // Active tab test ID
             />
           </Link>
         ))}
