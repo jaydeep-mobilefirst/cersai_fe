@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -50,15 +50,25 @@ const DepositSchemaCreation = () => {
   const [scheme, setScheme] = useState<boolean>(false);
   const [schemeView, setSchemeView] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
   const location = useLocation();
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
-    if (value === "") {
+    // if (value === "") {
+    //   myTaskRg();
+    // }
+  };
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if(searchInput===""){
       myTaskRg();
     }
-  };
+  },[searchInput])
   const myTaskRg = async () => {
     setLoader(true);
     try {

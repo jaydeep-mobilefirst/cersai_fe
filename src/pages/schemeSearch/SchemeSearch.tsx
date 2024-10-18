@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Eye from "../../assets/images/eye2.svg";
 import VerticalLine from "../../assets/images/verticalLine.png";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import LoaderSpin from "../../components/LoaderSpin";
 import useFetchStates from "../../contextAPI/useFetchStates";
@@ -23,6 +23,7 @@ import { useLandingStore } from "../../zust/useLandingStore";
 import { useLangugaeStore } from "../../zust/useLanguageUsStore";
 import { axiosTraceIdInstance } from "../../utils/axios";
 import moment from "moment";
+import { useDebounce } from "../../utils/commonFunction";
 
 type SchemeType = {
   sn: number;
@@ -63,6 +64,7 @@ const SchemeSearch: React.FC = () => {
 
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const { language } = useLangugaeStore((state) => state);
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
 
   console.log("data-scheme", schemaData);
 
@@ -280,14 +282,34 @@ const SchemeSearch: React.FC = () => {
     event?.preventDefault();
     fetchSchemes();
   };
-  const handleSetSearchInput = (event: any) => {
-    const { value } = event?.target;
-    setSearchInput(value);
-    if (value === "") {
+
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if (searchInput===""){
       fetchSchemes();
       setPage(1);
+
     }
+  },[searchInput])
+  const handleSetSearchInput = (event: any) => {
+    const { value } = event?.target;
+    setSearchInput(event?.target?.value);
+    console.log(value,"value")
+    // if (value === "") {
+    //   fetchSchemes();
+    //   setPage(1);
+    // }
   };
+
+
+// Call the search API only when the user stops typing
+// const handleDebouncedSearchInput = useDebounce((event: any) => {
+//   handleSetSearchInput(event);
+//   fetchSchemes();
+// }, 300);
 
   return (
     <div>

@@ -274,10 +274,10 @@ const SchemeSearchDetails: React.FC = () => {
       header: "Audit Trail",
       content: <AuditTrail />,
     },
-    {
-      header: "Management Details",
-      content: <MangementDetails />,
-    },
+    // {
+    //   header: "Management Details",
+    //   content: <MangementDetails />,
+    // },
   ];
 
   const onNavigateToBack = () => {

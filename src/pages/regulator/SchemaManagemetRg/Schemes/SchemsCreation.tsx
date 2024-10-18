@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import Eye from "../../../../assets/images/eye2.svg";
 import addCircle from "../../../../assets/images/new_images/add-circle.png";
@@ -45,15 +45,17 @@ const NewSchemaCreation = () => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [scheme, setScheme] = useState<boolean>(false);
   const location = useLocation();
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
 
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
-    if (value === "") {
-      fetchSchemes();
-    }
+    // if (value === "") {
+    //   fetchSchemes();
+    // }
   };
+
   const navigate = useNavigate();
 
   const fetchSchemes = async () => {
@@ -96,6 +98,15 @@ const NewSchemaCreation = () => {
     }
   }, []);
 
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if(searchInput===""){
+      fetchSchemes();
+    }
+  },[searchInput])
   let count: number;
   const serialNoGen = (page: number) => {
     count = (page - 1) * 10;

@@ -16,7 +16,7 @@ import Eye from "../../assets/images/eye2.svg";
 import VerticalLine from "../../assets/images/verticalLine.png";
 import ArrangeSquare from "../../assets/images/arrangeSquare.png";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LoaderSpin from "../../components/LoaderSpin";
 import useFetchStates from "../../contextAPI/useFetchStates";
 import useFetchDistrict from "../../contextAPI/useFetchDistrict";
@@ -56,6 +56,7 @@ const DepositeTakerSearch: React.FC = () => {
   const navigate = useNavigate();
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const { language } = useLangugaeStore((state) => state);
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
   console.log("totoal", total, taskData);
 
   useEffect(() => {
@@ -286,11 +287,22 @@ const DepositeTakerSearch: React.FC = () => {
   const handleSetSearchInput = (event: any) => {
     const { value } = event?.target;
     setSearchInput(value);
-    if (value === "") {
+    // if (value === "") {
+    //   setPage(1);
+    //   apiCall();
+    // }
+  };
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if(searchInput===""){
       setPage(1);
       apiCall();
+
     }
-  };
+  },[searchInput])
 
   return (
     <div>

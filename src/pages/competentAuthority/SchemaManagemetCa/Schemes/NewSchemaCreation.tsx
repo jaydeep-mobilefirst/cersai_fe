@@ -349,6 +349,8 @@ const SchemeDetails = () => {
               };
             } else if (f?.key === "depositTakerId") {
               return { ...f, userInput: event?.value };
+            } else if (f?.label ==="Entity Unique ID") {
+              return { ...f, userInput: event?.value };
             } else if (f?.key === "regulator") {
               return { ...f, userInput: fetchRegulatorData };
             } else if (

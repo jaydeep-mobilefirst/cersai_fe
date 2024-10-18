@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import Eye from "../../../../assets/images/eye2.svg";
 import InputFields from "../../../../components/ScehmaManagement/InputField";
@@ -35,11 +35,23 @@ const NewSchemaCreation = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
   };
+
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if(searchInput===""){
+      setPage(1);
+      fetchSchemes();
+    }
+  },[searchInput])
 
   const fetchSchemes = async () => {
     setLoader(true);
