@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -36,6 +36,7 @@ const SchemaCreation = () => {
   const [statusForSearch, setStatusForSearch] = useState<string | null>("ALL");
   const [fetchedRoles, setFetchedRoles] = useState<any>(false);
   const [scheme, setScheme] = useState<boolean>(false);
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
 
   useEffect(() => {
     const sessionData = sessionStorage.getItem("roles");
@@ -57,6 +58,17 @@ const SchemaCreation = () => {
     const { value } = event?.target;
     setSearchInput(value);
   };
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if(searchInput===""){
+      setPage(1);
+      fetchSchemes()
+    }
+  },[searchInput])
+
   const navigate = useNavigate();
 
   const fetchSchemes = async () => {
