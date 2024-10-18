@@ -254,8 +254,8 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
           <ul className="flex flex-wrap justify-center items-center space-x-4 ">
             {pageNumbersToShow.map((pageNumber, index) => (
               <li key={index}>
-                {pageNumber === "ellipsis" ? (
-                  <span className="px-3 py-1">...</span>
+                {pageNumber === "..." ? (
+                  <span  className="px-3 py-1 cursor_disable">...</span>
                 ) : (
                   <button
                     onClick={() => handlePageChange(pageNumber as number)}

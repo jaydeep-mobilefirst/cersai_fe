@@ -12,6 +12,8 @@ import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton"
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
+import moment from "moment";
+import SortIcon from '../../../assets/images/arrange-square-2.svg';
 
 type TableType = {
   id: number;
@@ -23,6 +25,7 @@ type TableType = {
   approvalDocumentId: number;
   status: string;
   action: boolean;
+  createdAt: string;
 };
 
 const columnHelper = createColumnHelper<TableType>();
@@ -105,6 +108,17 @@ const MyTaskStatus = () => {
   };
   serialNoGen(page);
 
+  const sortByDate = () => {
+    const sortedData = [...myTaskData].sort((a: any, b: any) => {
+      const dateA = new Date(a.createdAt); // Assuming 'date' is the key for the date field
+      const dateB = new Date(b.createdAt);
+      return dateA.getTime() - dateB.getTime(); // Ascending order
+    });
+
+    setMyTaskData(sortedData);
+    console.log("sorted by date", sortedData);
+  };
+
   const columns = [
     // columnHelper.accessor("id", {
     //   cell: (info) => info.renderValue(),
@@ -142,6 +156,24 @@ const MyTaskStatus = () => {
         return value ? value.replace(/_/g, " ") : "N/A"; // Replace underscores with spaces for any other statuses
       },
       header: () => <span>Status</span>,
+    }),
+
+    columnHelper.accessor("createdAt", {
+      header: () => (
+        <div className="flex justify-center items-center mx-4">
+          <p> Registration Date</p>
+          <img
+            src={SortIcon}
+            alt="Status Icon"
+            className="ml-2 cursor-pointer"
+            onClick={sortByDate}
+          />
+        </div>
+      ),
+      cell: (info) => {
+        const value = info.renderValue();
+        return value ? moment(value).format("DD-MM-YYYY HH:mm") : "N/A";
+      },
     }),
     columnHelper.accessor((row) => row, {
       id: "action",
@@ -356,7 +388,8 @@ const MyTaskStatus = () => {
             {loader ? (
               <LoaderSpin />
             ) : myTaskData?.length > 0 ? (
-              <ReactTable defaultData={myTaskData} columns={columns} />
+              <ReactTable 
+              key={JSON.stringify(myTaskData)} defaultData={myTaskData} columns={columns} />
             ) : (
               <div className=" flex justify-center items-center">
                 <h1>No data available</h1>
