@@ -211,7 +211,7 @@ const NodalDetailsDesignated = () => {
 
     // Combine names into a single array
     const combinedNames = [...firstName, ...middleName, ...lastName].sort();
-    const certNameSorted = certNameParts.split(" ").sort();
+    const certNameSorted = certNameParts?.toUpperCase()?.split(" ").sort();
     // Check if all parts of combined names are present in the certificate name
     const isMatch =
       combinedNames.length === certNameSorted.length &&
