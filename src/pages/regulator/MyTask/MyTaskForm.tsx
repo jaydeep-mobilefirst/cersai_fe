@@ -52,6 +52,9 @@ const MyTaskForm = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [mytask, setMytask] = useState<boolean>(false);
 
+  const [place, setPlace] = useState<any>();
+  const [date, setDate] = useState<any>();
+
   useEffect(() => {
     const sessionData = sessionStorage.getItem("roles");
     if (sessionData) {
@@ -72,6 +75,8 @@ const MyTaskForm = () => {
       .get(`deposit-taker/branch/${depositTakerId}`)
       .then((res) => {
         setDataBranch(res?.data?.data?.branches);
+        setPlace(res?.data?.branchCreatePlace);
+        setDate(res?.data?.branchCreateDate);
 
         setLoader(false);
       })
@@ -574,6 +579,21 @@ const MyTaskForm = () => {
                 </div>
               </>
             )}
+            
+
+            <div className="flex  justify-between items-center flex-wrap">
+                  <div>
+                    <span className="text-sm font-normal text-gilroy-medium ">
+                      Date :{" "}
+                      {date && ` ${moment(date).format("DD-MM-YYYY HH:mm")}`}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-sm font-normal text-gilroy-medium ">
+                      Place : {place}
+                    </span>
+                  </div>
+                </div>
             <div className='my-11 flex flex-col lg:flex-row lg:items-center justify-between'>
               <div
                 className='flex items-center cursor-pointer space-x-2 mb-3 lg:mb-0 md:ml-[5rem]'
