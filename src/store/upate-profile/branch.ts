@@ -66,7 +66,8 @@ export const useBranchStore = create<BranchState>(
         set((state) => ({ isChecked: !state.isChecked }));
       },
       clearBranch: () => {
-        set({ ...initialBranchState });
+        // set({ ...initialBranchState });
+        set({ branches: [], isChecked: initialBranchState.isChecked });
         sessionStorage.removeItem("branch-storage"); // Clear persisted data
       },
     }),
