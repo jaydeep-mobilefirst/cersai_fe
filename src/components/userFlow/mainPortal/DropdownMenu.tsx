@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
-import { axiosTokenInstance} from "../../../utils/axios";
+import { axiosTokenInstance } from "../../../utils/axios";
+import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
+import { useBranchStore } from "../../../store/upate-profile/branch";
 
 type DropdownMenuProps = {
   toggleDropdown: () => void; // This is a function prop
@@ -18,7 +20,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const [loader, setLoader] = useState<boolean>(false);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const clearStore = useManagementStore((state) => state.clearStore);
+  const clearBranch = useBranchStore((state) => state.clearBranch);
   // const toggleDropdown = () => {
   //   setIsOpen(!isOpen);
   // };
@@ -49,6 +52,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 
   const logoutApiHandle = () => {
     setLoader(true);
+    clearStore();
+    clearBranch();
     const refreshToken = sessionStorage.getItem("refresh_token");
     axiosTokenInstance
       .post(`/logout`, {

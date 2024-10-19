@@ -230,6 +230,7 @@ const ProfileManagement = () => {
               members: membersToSubmit,
             }
           );
+          await fetchBranches();
           await axiosTokenInstance.patch(
             `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
             { formData: combinedFormData }
