@@ -13,6 +13,7 @@ interface BranchState {
   setBranches: (newBranches: Branch[]) => void;
   setChecked: (value: boolean) => void;
   toggleChecked: () => void;
+  clearBranch: () => void;
 }
 
 type BranchStoreCreator = StateCreator<BranchState>;
@@ -25,6 +26,7 @@ const initialBranchState: BranchState = {
   setBranches: () => {},
   setChecked: () => {},
   toggleChecked: () => {},
+  clearBranch: () => {},
 };
 
 export const useBranchStore = create<BranchState>(
@@ -62,6 +64,10 @@ export const useBranchStore = create<BranchState>(
       },
       toggleChecked: () => {
         set((state) => ({ isChecked: !state.isChecked }));
+      },
+      clearBranch: () => {
+        set({ ...initialBranchState });
+        sessionStorage.removeItem("branch-storage"); // Clear persisted data
       },
     }),
     {
