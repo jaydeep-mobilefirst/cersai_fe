@@ -115,6 +115,10 @@ const ProfileBranchForm: React.FC<Props> = ({
   };
   const fetchLocationData = async (pinCode: string): Promise<void> => {
     if (!pinCode || pinCode.length !== 6) {
+
+      // Clear state and district if pin code is less than 6 digits
+      setValue(`branches[${i}].state`, "");
+      setValue(`branches[${i}].district`, "");
       setPinCodeError("Pin code must be 6 digits");
       return;
     }
