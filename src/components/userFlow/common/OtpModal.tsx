@@ -213,15 +213,15 @@ const OtpModel: React.FC<LoginModelProps> = ({}) => {
                         <br />
                       </span>
                       <div className="text-black text-base font-normal text-gilroy-medium mt-2">
-                        {/* {decodedToken?.email} */}
-                        {decodedToken?.email
-                          ? maskEmail(decodedToken.email)
-                          : ""}
-                      </div>
-                      <div className="text-black text-base font-normal text-gilroy-medium mt-2">
                         {/* {decodedToken?.mobile} */}
                         {decodedToken?.mobile
                           ? maskMobile(decodedToken.mobile)
+                          : ""}
+                      </div>
+                      <div className="text-black text-base font-normal text-gilroy-medium mt-2">
+                        {/* {decodedToken?.email} */}
+                        {decodedToken?.email
+                          ? maskEmail(decodedToken.email)
                           : ""}
                       </div>
                     </div>
