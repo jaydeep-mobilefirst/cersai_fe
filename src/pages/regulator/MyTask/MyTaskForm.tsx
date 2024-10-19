@@ -433,7 +433,7 @@ const MyTaskForm = () => {
                                 {allFormData?.formFields?.form_fields
                                   ?.filter(
                                     (f: any) => f?.sectionId === section?.id
-                                  )
+                                  )?.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
                                   ?.map((field: any, idx: number) => (
                                     <div
                                       className={`${
