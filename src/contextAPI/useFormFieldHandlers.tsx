@@ -54,7 +54,7 @@ const FormHandlerProviders = ({ children }: Props) => {
     masterEntityId,
     setMasterEntityId,
   } = useDepositTakerRegistrationStore((state) => state);
-
+  console.log("all-data",allFormData)
   const updateValue = (
     value: string | any[],
     fieldId: number,
@@ -293,6 +293,33 @@ const FormHandlerProviders = ({ children }: Props) => {
       if (value?.length <= 6) {
         updateValue(value, fieldData?.id);
       }
+
+      // Clear state and district fields when pincode is removed (value.length < 6)
+      if (value.length < 6) {
+        let stateFormField = allFormData?.formFields?.form_fields?.find(
+          (o: any) =>
+            o?.label?.toLowerCase() === "state" &&
+            fieldData?.sectionId === o?.sectionId
+        );
+        let districtFormField = allFormData?.formFields?.form_fields?.find(
+          (o: any) =>
+            o?.label?.toLowerCase() === "district" &&
+            fieldData?.sectionId === o?.sectionId
+        );
+        
+        handlePincodeSucess(
+          {
+            districtField: districtFormField,
+            stateField: stateFormField,
+            stateValue: "",
+            districtValue: "",
+            pinCodeField: fieldData,
+            pinCodeValue: value,
+          },
+          false
+        );
+      }
+
       if (value.length === 6) {
         try {
           const response = await axiosTraceIdInstance.get(
@@ -529,7 +556,7 @@ const FormHandlerProviders = ({ children }: Props) => {
             validationName: allFormData?.validations?.find(
               (vd: any) => vd?.id === v?.validationId
             )?.vld_type_name,
-            value: v?.patternValue,
+            value: field?.userInput !== ""?v?.patternValue:"",
           };
         }),
       };
@@ -782,10 +809,16 @@ const FormHandlerProviders = ({ children }: Props) => {
             minInvestment = minInvestment?.replace(/,/g, "");
             maxInvestment = maxInvestment?.replace(/,/g, "");
 
+            // Skip validation if the field is not required and the value is empty
+            if (!field?.required && (!minInvestment || !maxInvestment)) {
+              field.error = ""; // Ensure no error is displayed
+              return { ...field }; // Return the field without validation
+            }
+
             if (!minInvestment || !maxInvestment) {
               return field; // Return field if either value is missing
             }
-
+            console.log("abc",field)
             const minInvestmentValue = parseInt(minInvestment);
             const maxInvestmentValue = parseInt(maxInvestment);
 
@@ -811,6 +844,7 @@ const FormHandlerProviders = ({ children }: Props) => {
             return { ...field };
 
           default:
+
             return field; // Return field as is for all other cases
         }
       }
