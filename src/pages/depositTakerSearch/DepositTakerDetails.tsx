@@ -100,7 +100,9 @@ const DepositSearchDetails: React.FC = () => {
       cell: (info: any) => {
         const value = info?.getValue();
         const updatedValue =
-          value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value?.replace(/_/g, " ");
+          value === "UNDER_LETIGATION" ? "UNDER LITIGATION" :
+          value === "ACTIVE_DEPOSIT_NOT_TAKEN"
+          ? "Active-Deposit not being taken":  value?.replace(/_/g, " ");
 
         return (
           <div
