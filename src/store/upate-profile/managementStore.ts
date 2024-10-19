@@ -105,7 +105,8 @@ export const useBranchStore = create<BranchState>(
         set({ removedBranches: [] }); // Clears the removedBranches array
       },
       clearStore: () => {
-        set({ ...initialBranchState });
+        // set({ ...initialBranchState });
+        set({ branches: [], isChecked: initialBranchState.isChecked });
         sessionStorage.removeItem("management-store"); // Clear persisted data
       },
     }),
