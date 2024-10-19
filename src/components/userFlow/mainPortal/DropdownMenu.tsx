@@ -52,14 +52,14 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 
   const logoutApiHandle = () => {
     setLoader(true);
+    clearStore();
+    clearBranch();
     const refreshToken = sessionStorage.getItem("refresh_token");
     axiosTokenInstance
       .post(`/logout`, {
         refresh_token: refreshToken,
       })
       .then((responce) => {
-        clearStore();
-        clearBranch();
         navigate("/");
         sessionStorage.clear();
       })
