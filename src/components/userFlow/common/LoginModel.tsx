@@ -155,7 +155,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
     axiosTraceIdInstance
       .post(`/auth/mfa`, {
         entityType: selected,
-        username: getValues("email"),
+        username: getValues("email").replace(/\s+/g, ''),
         dscCertificateFile:
           isDscKeyAvbl === "true" ? dscCertificate : base64Data,
       })
