@@ -97,7 +97,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
     try {
       const response = await axiosTraceIdInstance.post(`/auth/login`, {
         // username: data.email,
-        username: watch("email"),
+        username: watch("email").replace(/\s+/g, ''),
         // password: data.password,
         password: watch("password"),
         entityType: selected,
@@ -310,7 +310,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                         required: "Email address or Mobile number is required",
                         pattern: {
                           value:
-                            /^(\+?\d{1,4}[\s-]?)?(\d{10})|([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})$/i,
+                            /^\s*(\+?\d{1,4}[\s-]?)?(\d{10})|([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\s*$/i,
                           message: "Invalid email address or mobile number",
                         },
                       })}
