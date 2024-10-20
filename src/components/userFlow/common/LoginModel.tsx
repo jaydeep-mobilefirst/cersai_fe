@@ -7,6 +7,7 @@ import CrossIcon from "../../../assets/images/CrossIcon.svg";
 import MobileIcon from "../../../assets/images/MobileIcon.svg";
 import InputFields from "./InputField";
 import InputFieldPassword from "./InputFieldPassword";
+import EmailInputField from "./EmailInputField";
 import Button from "./Button";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -303,7 +304,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
                     >
                       Email id / Mobile no.
                     </label>
-                    <InputFields
+                    <EmailInputField
                       disabled={dscApiInProgress}
                       {...register("email", {
                         required: "Email address or Mobile number is required",
