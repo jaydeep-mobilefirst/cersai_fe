@@ -82,13 +82,14 @@ const UploadDocument = (props: Props) => {
           confirmButtonText: "Ok",
         });
         setLoader(false);
+        sessionStorage.setItem("user_status", "PENDING");
         Navigate("/dt/profile?current=branches");
       })
       .catch((err) => {
         setLoader(false);
         Swal.fire({
           icon: "error",
-          text: err?.response?.data?.detail?.message,
+          text: err?.response?.data?.detail?.message || err?.response?.data?.message[0],
           confirmButtonText: "Ok",
         });
       });
@@ -206,7 +207,7 @@ const UploadDocument = (props: Props) => {
                           loader ? "bg-gray-500" : "bg-[#1C468E]"
                         } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
                       >
-                        {loader ? <LoaderSpin /> : " Save and Continue"}
+                        {loader ? <LoaderSpin /> : " Save and Submit"}
                       </button>
                     )}
                   </div>
