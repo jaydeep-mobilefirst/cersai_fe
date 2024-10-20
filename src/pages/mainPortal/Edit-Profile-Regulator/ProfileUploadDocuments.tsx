@@ -75,6 +75,7 @@ const ProfileUploadDocuments = (props: Props) => {
       })
       .then((response) => {
         console.log(response?.data?.message, "response");
+        sessionStorage.setItem("user_status", "PENDING");
         Swal.fire({
           icon: "success",
           text: response?.data?.message || "Documents uploaded successfully",

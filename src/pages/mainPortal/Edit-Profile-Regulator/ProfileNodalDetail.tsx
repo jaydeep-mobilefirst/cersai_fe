@@ -102,6 +102,7 @@ const ProfileNodalDetails = (props: Props) => {
               "Nodal Officer details updated successfully",
             confirmButtonText: "Ok",
           });
+          sessionStorage.setItem("user_status", "PENDING");
           Navigate("/rg/profile?current=document");
         })
         .catch((err) => {

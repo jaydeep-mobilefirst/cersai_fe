@@ -94,6 +94,7 @@ const NodalDetails = (props: Props) => {
           }
         )
         .then((response) => {
+          sessionStorage.setItem("user_status", "PENDING");
           Swal.fire({
             icon: "success",
             text:

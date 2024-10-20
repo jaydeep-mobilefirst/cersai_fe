@@ -100,6 +100,7 @@ const CompetentDetails = (props: Props) => {
               "Competent Details updated successfully",
             confirmButtonText: "Ok",
           });
+          sessionStorage.setItem("user_status", "PENDING");
           Navigate("/ca/profile?current=document");
         })
         .catch((err) => {

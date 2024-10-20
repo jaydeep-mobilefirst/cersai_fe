@@ -67,6 +67,7 @@ const ProfileRegulatorDetails = (props: Props) => {
               "Regulator Details updated successfully",
             confirmButtonText: "Ok",
           });
+          sessionStorage.setItem("user_status", "PENDING");
           Navigate("/rg/profile?current=nodal");
         })
         .catch((err) => {

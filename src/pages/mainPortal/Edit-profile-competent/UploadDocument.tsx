@@ -81,6 +81,7 @@ const UploadDocument = (props: Props) => {
           confirmButtonText: "Ok",
         });
         setLoader(false);
+        sessionStorage.setItem("user_status", "PENDING");
         Navigate("/ca/profile?current=nodal");
       })
       .catch((err) => {
@@ -204,7 +205,7 @@ const UploadDocument = (props: Props) => {
                           loader ? "bg-gray-500" : "bg-[#1C468E]"
                         } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
                       >
-                        {loader ? <LoaderSpin /> : " Save and Continue"}
+                        {loader ? <LoaderSpin /> : " Save and Submit"}
                       </button>
                     )}
                   </div>
