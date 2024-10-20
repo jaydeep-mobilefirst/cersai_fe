@@ -288,8 +288,8 @@ const SchemesSearchDetailsSM: React.FC = () => {
                   </label>
                   <InputField
                     value={
-                      allFormData?.other?.status === "UNDER_LETIGATION"
-                        ? "UNDER LITIGATION"
+                      allFormData?.other?.status === "ACTIVE_DEPOSIT_NOT_TAKEN"
+                        ? "Active-Deposit not being taken"
                         : allFormData?.other?.status?.replace(/_/g, " ")
                     }
                     disabled
