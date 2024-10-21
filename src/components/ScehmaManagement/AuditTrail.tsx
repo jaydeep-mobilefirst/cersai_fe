@@ -58,6 +58,8 @@ const AuditTrail = () => {
         const value = info.renderValue();
         return value === "UNDER_LETIGATION"
           ? "UNDER LITIGATION"
+          :value === "ACTIVE_DEPOSIT_NOT_TAKEN"
+          ? "Active-Deposit not being taken"
           : value?.replace(/_/g, " ");
       },
       header: () => <span>From</span>,
@@ -67,7 +69,8 @@ const AuditTrail = () => {
         const value = info.renderValue();
         return value === "UNDER_LETIGATION"
           ? "UNDER LITIGATION"
-          : value?.replace(/_/g, " ");
+          :value === "ACTIVE_DEPOSIT_NOT_TAKEN"
+          ? "Active-Deposit not being taken": value?.replace(/_/g, " ");
       },
       header: () => <span>To</span>,
     }),

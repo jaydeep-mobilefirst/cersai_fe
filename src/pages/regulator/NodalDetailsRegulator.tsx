@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import DynamicFields from "../../components/userFlow/depositeTaker/DynamicFields";
 import OtpPage from "../depositeTaker/OtpPage";
 import { axiosTraceIdInstance } from "../../utils/axios";
+import { boolean } from "yup";
 
 const NodalDetailsRegulator = () => {
   const isDscKeyAvbl = process.env.REACT_APP_IS_DSC_KEY_AVBL;
@@ -82,6 +83,7 @@ const NodalDetailsRegulator = () => {
   // };
 
   const verifyDscWithNodalOfficer = (data: any) => {
+    console.log(data, "data111111");
     // Extract names from the data array
     const firstNameObj = data.find(
       (item: { key: string }) => item.key === "nodalFirstname"
@@ -116,23 +118,41 @@ const NodalDetailsRegulator = () => {
       return false;
     }
 
-    const dscObj = data.find(
-      (item: { label: string }) => item.label === "DSC3 Certificate"
-    );
+    const dscObj = data.find((item: { key: string }) => item.key === "dsc3");
+    console.log({ dscObj }, "dscObj");
+    let dscCertName: any = "";
 
-    const dscCertName =
-      dscObj?.userInput?.SelCertSubject?.split(",")[0]?.toUpperCase();
+    const userInput = dscObj.userInput;
+
+    // Check if userInput is a string or an object
+    if (typeof userInput === "string") {
+      const parsedInput = JSON?.parse(userInput);
+      dscCertName = parsedInput.SelCertSubject;
+    } else if (typeof userInput === "object") {
+      // Directly access SelCertSubject from the object
+      dscCertName = userInput.SelCertSubject;
+    }
+    console.log({ dscCertName }, "dscCertName");
 
     // Extract and normalize names from the certificate name
-    const certNameParts = dscCertName
-      .replace("CN=", "")
-      .toUpperCase()
-      .split(" ")
-      .filter(Boolean);
+    // const certNameParts = dscCertName
+    //   .replace("CN=", "")
+    //   .toUpperCase()
+    //   .split(" ")
+    //   .filter(Boolean);
+    const nameMatch = dscCertName?.match(/CN=([^,]+)/);
+    console.log({ nameMatch }, "dscCertName");
+    const certNameParts = nameMatch ? nameMatch[1].trim() : null;
+    console.log({ certNameParts }, "name");
+    // const certNameParts = dscCertName
+    //   ?.split(",")[0]
+    //   .replace("CN=", "")
+    //   .toUpperCase()
+    //   .filter(Boolean);
 
     // Combine names into a single array
     const combinedNames = [...firstName, ...middleName, ...lastName].sort();
-    const certNameSorted = certNameParts.sort();
+    const certNameSorted = certNameParts?.toUpperCase()?.split(" ").sort();
     // Check if all parts of combined names are present in the certificate name
     const isMatch =
       combinedNames.length === certNameSorted.length &&

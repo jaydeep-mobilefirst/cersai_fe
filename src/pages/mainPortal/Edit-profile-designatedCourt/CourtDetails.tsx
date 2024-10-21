@@ -95,10 +95,16 @@ const CourtDetails = (props: Props) => {
           Swal.fire({
             icon: "success",
             text:
-              response?.data?.message || "Court Details updated successfully",
+              // response?.data?.message ||
+               "Court Details updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
             confirmButtonText: "Ok",
           });
+          sessionStorage.setItem("user_status", "PENDING");
           Navigate("/dc/profile?current=document");
+          setTimeout(() => {
+            sessionStorage.clear()
+            Navigate("/");
+          },3000)  
         })
         .catch((err) => {
           Swal.fire({

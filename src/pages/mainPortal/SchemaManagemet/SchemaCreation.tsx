@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -34,6 +34,23 @@ const SchemaCreation = () => {
   const [total, setTotal] = useState<number>(0);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>("ALL");
+  const [fetchedRoles, setFetchedRoles] = useState<any>(false);
+  const [scheme, setScheme] = useState<boolean>(false);
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
+
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+
+      const schemeRoles = rolesArray.filter(
+        (role) => role === "scheme-edit-access-deposit-taker"
+      );
+      if (schemeRoles?.length > 0) {
+        setScheme(true);
+      }
+    }
+  }, []);
 
   const [searchInput, setSearchInput] = useState<string>("");
   const handleSearchInput = (event: any) => {
@@ -41,6 +58,17 @@ const SchemaCreation = () => {
     const { value } = event?.target;
     setSearchInput(value);
   };
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if(searchInput===""){
+      setPage(1);
+      fetchSchemes()
+    }
+  },[searchInput])
+
   const navigate = useNavigate();
 
   const fetchSchemes = async () => {
@@ -70,7 +98,21 @@ const SchemaCreation = () => {
 
   useEffect(() => {
     fetchSchemes();
-  }, [page, pageSize]);
+  }, [page, pageSize, statusForSearch]);
+
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+
+      const filteredRoles = rolesArray.filter(
+        (role) => role === "scheme-edit-access-deposit-taker"
+      );
+      if (filteredRoles?.length > 0) {
+        setFetchedRoles(true);
+      }
+    }
+  }, []);
 
   const NavigateScheme = (uniqueId: any, createdBy: any) => {
     navigate("/dt/scheme/creation", {
@@ -107,10 +149,38 @@ const SchemaCreation = () => {
     }),
     columnHelper.accessor("status", {
       header: () => "Status",
-      cell: (info) => {
-        const value = info.getValue();
-        // Replace underscores with spaces if the value is "UNDER_LETIGATION"
-        return value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value;
+      // cell: (info) => {
+      //   const value = info.getValue();
+      //   // Replace underscores with spaces if the value is "UNDER_LETIGATION"
+      //   return value === "UNDER_LETIGATION"
+      //     ? "UNDER LITIGATION"
+      //     : value?.replace(/_/g, " ");
+      // },
+      cell: (info: any) => {
+        // const value = info?.getValue();
+        // const updatedValue =
+        //   value === "UNDER_LETIGATION"
+        //     ? "UNDER LITIGATION"
+        //     : value?.replace(/_/g, " ");
+        let value = info?.getValue();
+
+        // Replace underscores with spaces and handle the specific status case
+        if (value === "ACTIVE_DEPOSIT_NOT_TAKEN") {
+          value = "Active-Deposit not being taken";
+        } else if (value === "UNDER_LETIGATION") {
+          value = "UNDER LITIGATION";
+        } else {
+          value = value?.replace(/_/g, " ");
+        }
+
+        return (
+          <div
+            className="flex flex-col md:flex-row justify-center gap-3"
+            key={Math.random()}
+          >
+            <span className="text-sm">{value}</span>
+          </div>
+        );
       },
     }),
     // columnHelper.accessor("id", {
@@ -208,8 +278,12 @@ const SchemaCreation = () => {
     setSelectedOption4(value);
   };
   const options = [
-    { value: "", label: "All" },
+    { value: "ALL", label: "All" },
     { value: "ACTIVE", label: "ACTIVE" },
+    {
+      value: "ACTIVE_DEPOSIT_NOT_TAKEN",
+      label: "Active-Deposit not being taken",
+    },
     { value: "BANNED", label: "BANNED" },
     { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];
@@ -265,16 +339,23 @@ const SchemaCreation = () => {
                 </span>
               </button>
             </div>
-            <div className=" flex items-center mt-7">
-              <Link to="/dt/scheme/form">
-                <div className="w-40 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
-                  <img src={addCircle} alt="icon" />
-                  <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
-                    New Scheme
-                  </span>
+            {fetchedRoles && (
+              <>
+                {" "}
+                <div className=" flex items-center mt-7">
+                  {scheme && (
+                    <Link to="/dt/scheme/form">
+                      <div className="w-40 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
+                        <img src={addCircle} alt="icon" />
+                        <span className="ml-1 text-[14px] md:text-base font-normal text-[#1c468e] lg:text-[16px] text-gilroy-medium ">
+                          New Scheme
+                        </span>
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </Link>
-            </div>
+              </>
+            )}
           </div>
         </div>
         <div>
@@ -330,7 +411,11 @@ const SchemaCreation = () => {
             {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
-              <ReactTable defaultData={schemaData} columns={columns} />
+              <ReactTable
+                key={JSON?.stringify(schemaData)}
+                defaultData={schemaData}
+                columns={columns}
+              />
             ) : (
               <div className=" flex justify-center items-center">
                 <h1>No data available</h1>

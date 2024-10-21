@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -46,11 +46,24 @@ const DepositSchemaCreation = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
   };
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+
+    if(searchInput===""){
+      setPage(1);
+      myTaskRg();
+
+    }
+  },[searchInput])
   const navigate = useNavigate();
   const myTaskRg = async () => {
     setLoader(true);
@@ -86,7 +99,7 @@ const DepositSchemaCreation = () => {
 
   useEffect(() => {
     myTaskRg();
-  }, [page, pageSize]);
+  }, [page, pageSize, statusForSearch]);
   let count: number;
   const serialNoGen = (page: number) => {
     count = (page - 1) * 10;
@@ -119,7 +132,19 @@ const DepositSchemaCreation = () => {
       header: () => <span>PAN</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info: any) => info.renderValue().replace(/_/g, " "),
+      // cell: (info: any) => info.renderValue().replace(/_/g, " "),
+      cell: (info) => {
+        let value = info.renderValue();
+        // Check for specific combination of "MOD" and "TRANSIT"
+        if (value && /mod_transit/i.test(value)) {
+          // Using a case-insensitive regex to match "MOD_TRANSIT"
+          value = "Modification in Transit";
+        } else if (value && /mod/i.test(value)) {
+          // Similarly applying a case-insensitive check for any "MOD" occurrences
+          value = value.replace(/mod/i, "Modification"); // Replace "MOD" with "Modification" case-insensitively
+        }
+        return value ? value.replace(/_/g, " ") : "N/A"; // Replace underscores with spaces for any other statuses
+      },
 
       header: () => <span>Status</span>,
     }),
@@ -193,11 +218,23 @@ const DepositSchemaCreation = () => {
   const handleSetOption4 = (value: string) => {
     setSelectedOption4(value);
   };
+  // const options = [
+  //   { value: "", label: "All" },
+  //   { value: "ACTIVE", label: "ACTIVE" },
+  //   { value: "BANNED", label: "BANNED" },
+  //   { value: "UNDER_LETIGATION", label: "Under Litigation" },
+  // ];
   const options = [
-    { value: "", label: "All" },
-    { value: "ACTIVE", label: "ACTIVE" },
-    { value: "BANNED", label: "BANNED" },
-    { value: "UNDER_LETIGATION", label: "Under Litigation" },
+    { label: "All", value: "" },
+    { label: "Approved", value: "APPROVED" },
+    // { label: "Banned", value: "BANNED" },
+    // { label: "Rejected", value: "REJECTED" },
+    { label: "Transit", value: "TRANSIT" },
+    // { label: "Incomplete", value: "INCOMPLETE" },
+    { label: "Pending", value: "PENDING" },
+    { label: "Returned", value: "RETURNED" },
+    { label: "Modification Pending", value: "MOD_PENDING" },
+    { label: "Modification in Transit", value: "MOD_TRANSIT" },
   ];
   const handleSetStatus = (option: any) => {
     console.log(option, "option");

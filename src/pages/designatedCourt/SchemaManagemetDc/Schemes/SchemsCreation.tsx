@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import Eye from "../../../../assets/images/eye2.svg";
 import InputFields from "../../../../components/ScehmaManagement/InputField";
@@ -35,11 +35,23 @@ const NewSchemaCreation = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
   };
+
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if(searchInput===""){
+      setPage(1);
+      fetchSchemes();
+    }
+  },[searchInput])
 
   const fetchSchemes = async () => {
     setLoader(true);
@@ -72,7 +84,7 @@ const NewSchemaCreation = () => {
 
   useEffect(() => {
     fetchSchemes();
-  }, [page, pageSize]);
+  }, [page, pageSize, statusForSearch]);
   let count: number;
   const serialNoGen = (page: number) => {
     count = (page - 1) * 10;
@@ -99,10 +111,37 @@ const NewSchemaCreation = () => {
     }),
     columnHelper.accessor("status", {
       header: () => "Status",
-      cell: (info) => {
-        const value = info.getValue();
-        // Replace underscores with spaces if the value is "UNDER_LETIGATION"
-        return value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value;
+      // cell: (info) => {
+      //   const value = info.getValue();
+      //   // Replace underscores with spaces if the value is "UNDER_LETIGATION"
+      //   return value === "UNDER_LETIGATION"
+      //     ? "UNDER LITIGATION"
+      //     : value?.replace(/_/g, " ");
+      // },
+      cell: (info: any) => {
+        // const value = info?.getValue();
+        // const updatedValue =
+        //   value === "UNDER_LETIGATION"
+        //     ? "UNDER LITIGATION"
+        //     : value?.replace(/_/g, " ");
+        let value = info?.getValue();
+
+        // Replace underscores with spaces and handle the specific status case
+        if (value === "ACTIVE_DEPOSIT_NOT_TAKEN") {
+          value = "Active-Deposit not being taken";
+        } else if (value === "UNDER_LETIGATION") {
+          value = "UNDER LITIGATION";
+        } else {
+          value = value?.replace(/_/g, " ");
+        }
+        return (
+          <div
+            className="flex flex-col md:flex-row justify-center gap-3"
+            key={Math.random()}
+          >
+            <span className="text-sm">{value}</span>
+          </div>
+        );
       },
     }),
 
@@ -180,6 +219,10 @@ const NewSchemaCreation = () => {
   const options = [
     { value: "", label: "All" },
     { value: "ACTIVE", label: "ACTIVE" },
+    {
+      value: "ACTIVE_DEPOSIT_NOT_TAKEN",
+      label: "Active-Deposit not being taken",
+    },
     { value: "BANNED", label: "BANNED" },
     { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];
@@ -291,7 +334,11 @@ const NewSchemaCreation = () => {
             {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
-              <ReactTable defaultData={schemaData} columns={columns} />
+              <ReactTable
+                key={JSON?.stringify(schemaData)}
+                defaultData={schemaData}
+                columns={columns}
+              />
             ) : (
               <div className=" flex justify-center items-center">
                 <h1>No data available</h1>

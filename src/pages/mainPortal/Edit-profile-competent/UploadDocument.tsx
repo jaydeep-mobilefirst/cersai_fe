@@ -77,11 +77,18 @@ const UploadDocument = (props: Props) => {
       .then((response) => {
         Swal.fire({
           icon: "success",
-          text: response?.data?.message || "Documents uploaded successfully",
+          text: 
+          // response?.data?.message ||
+           "Documents uploaded successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
           confirmButtonText: "Ok",
         });
         setLoader(false);
+        sessionStorage.setItem("user_status", "PENDING");
         Navigate("/ca/profile?current=nodal");
+        setTimeout(() => {
+          sessionStorage.clear()
+          Navigate("/");
+        },3000)
       })
       .catch((err) => {
         setLoader(false);
@@ -149,8 +156,9 @@ const UploadDocument = (props: Props) => {
         return false;
     }
   };
+  const isConfigurable = sessionStorage.getItem("isConfigurable")
+  const disableFieldStatus = isConfigurable === 'true' ? true : checkStatus(disabledField);
 
-  const disableFieldStatus = checkStatus(disabledField);
 
   return (
     <>
@@ -203,7 +211,7 @@ const UploadDocument = (props: Props) => {
                           loader ? "bg-gray-500" : "bg-[#1C468E]"
                         } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
                       >
-                        {loader ? <LoaderSpin /> : " Save and Continue"}
+                        {loader ? <LoaderSpin /> : " Save and Submit"}
                       </button>
                     )}
                   </div>

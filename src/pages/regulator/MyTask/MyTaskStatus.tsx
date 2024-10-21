@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -12,6 +12,8 @@ import SelectButtonTask from "../../../components/ScehmaManagement/SelectButton"
 import CustomPagination from "../../../components/CustomPagination/CustomPagination";
 import LoaderSpin from "../../../components/LoaderSpin";
 import { axiosTokenInstance } from "../../../utils/axios";
+import moment from "moment";
+import SortIcon from '../../../assets/images/arrange-square-2.svg';
 
 type TableType = {
   id: number;
@@ -23,6 +25,7 @@ type TableType = {
   approvalDocumentId: number;
   status: string;
   action: boolean;
+  createdAt: string;
 };
 
 const columnHelper = createColumnHelper<TableType>();
@@ -38,12 +41,23 @@ const MyTaskStatus = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
   const location = useLocation();
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
   };
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if (searchInput===""){
+      setPage(1)
+      myTaskRg();
+    }
+  },[searchInput])
   const myTaskRg = async () => {
     setLoader(true);
     try {
@@ -68,7 +82,7 @@ const MyTaskStatus = () => {
 
   useEffect(() => {
     myTaskRg();
-  }, [page, pageSize]);
+  }, [page, pageSize, statusForSearch]);
   const NavigateDepositStaus = (
     id: string,
     checkerId: string,
@@ -94,6 +108,17 @@ const MyTaskStatus = () => {
   };
   serialNoGen(page);
 
+  const sortByDate = () => {
+    const sortedData = [...myTaskData].sort((a: any, b: any) => {
+      const dateA = new Date(a.createdAt); // Assuming 'date' is the key for the date field
+      const dateB = new Date(b.createdAt);
+      return dateA.getTime() - dateB.getTime(); // Ascending order
+    });
+
+    setMyTaskData(sortedData);
+    console.log("sorted by date", sortedData);
+  };
+
   const columns = [
     // columnHelper.accessor("id", {
     //   cell: (info) => info.renderValue(),
@@ -117,8 +142,38 @@ const MyTaskStatus = () => {
       header: () => <span>Deposit Taker Name</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info) => <span>{info.getValue()?.replace(/_/g, " ")}</span>,
+      // cell: (info) => <span>{info.getValue()?.replace(/_/g, " ")}</span>,
+      cell: (info) => {
+        let value = info.renderValue();
+        // Check for specific combination of "MOD" and "TRANSIT"
+        if (value && /mod_transit/i.test(value)) {
+          // Using a case-insensitive regex to match "MOD_TRANSIT"
+          value = "Modification in Transit";
+        } else if (value && /mod/i.test(value)) {
+          // Similarly applying a case-insensitive check for any "MOD" occurrences
+          value = value.replace(/mod/i, "Modification"); // Replace "MOD" with "Modification" case-insensitively
+        }
+        return value ? value.replace(/_/g, " ") : "N/A"; // Replace underscores with spaces for any other statuses
+      },
       header: () => <span>Status</span>,
+    }),
+
+    columnHelper.accessor("createdAt", {
+      header: () => (
+        <div className="flex justify-center items-center mx-4">
+          <p> Registration Date</p>
+          <img
+            src={SortIcon}
+            alt="Status Icon"
+            className="ml-2 cursor-pointer"
+            onClick={sortByDate}
+          />
+        </div>
+      ),
+      cell: (info) => {
+        const value = info.renderValue();
+        return value ? moment(value).format("DD-MM-YYYY HH:mm") : "N/A";
+      },
     }),
     columnHelper.accessor((row) => row, {
       id: "action",
@@ -211,7 +266,10 @@ const MyTaskStatus = () => {
     // { label: "Return", value: "RETURNED" },
     // {label:"Mod Pending",value:"MOD_PENDING"},
     // {label:"Mod Transit",value:"MOD_TRANSIT"},
-    { label: "Mod Refer to Regulator", value: "MOD_REFER_TO_REGULATOR" },
+    {
+      label: "Modification Refer to Regulator",
+      value: "MOD_REFER_TO_REGULATOR",
+    },
   ];
   const handleSetStatus = (option: any) => {
     console.log(option, "option");
@@ -330,7 +388,8 @@ const MyTaskStatus = () => {
             {loader ? (
               <LoaderSpin />
             ) : myTaskData?.length > 0 ? (
-              <ReactTable defaultData={myTaskData} columns={columns} />
+              <ReactTable 
+              key={JSON.stringify(myTaskData)} defaultData={myTaskData} columns={columns} />
             ) : (
               <div className=" flex justify-center items-center">
                 <h1>No data available</h1>

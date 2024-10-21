@@ -20,6 +20,8 @@ import { axiosTraceIdInstance } from "../../utils/axios";
 import { useLandingStore } from "../../zust/useLandingStore";
 import { useLangugaeStore } from "../../zust/useLanguageUsStore";
 import MangementDetails from "./ManagementDetails";
+import moment from "moment";
+
 interface AccordionItem {
   header: React.ReactNode;
   content: React.ReactNode;
@@ -34,6 +36,8 @@ type SchemeType = {
   createdBy: string | null;
   status: string;
   active: boolean;
+  depositTakerName: string;
+  createdByName: string;
 };
 
 const columnHelper = createColumnHelper<SchemeType>();
@@ -75,7 +79,7 @@ const DepositSearchDetails: React.FC = () => {
       });
   };
 
-  // Scheme 
+  // Scheme
   const columns = [
     // columnHelper.accessor("id", {
     //   cell: (info: any) => info.renderValue(),
@@ -97,24 +101,30 @@ const DepositSearchDetails: React.FC = () => {
     columnHelper.accessor("status", {
       cell: (info: any) => {
         const value = info?.getValue();
+        const updatedValue =
+          value === "UNDER_LETIGATION"
+            ? "UNDER LITIGATION"
+            : value === "ACTIVE_DEPOSIT_NOT_TAKEN"
+            ? "Active-Deposit not being taken"
+            : value?.replace(/_/g, " ");
 
         return (
           <div
-            className="flex flex-col md:flex-row justify-center gap-3"
+            className='flex flex-col md:flex-row justify-center gap-3'
             key={Math.random()}
           >
-            <span className="text-sm">{value}</span>
+            <span className='text-sm'>{updatedValue}</span>
           </div>
         );
       },
       header: () => <span>Status</span>,
     }),
-    columnHelper.accessor("depositTakerId", {
+    columnHelper.accessor("depositTakerName", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
-      header: () => <span>Deposit Taker</span>,
+      header: () => <span>Deposit Taker Name</span>,
     }),
 
-    columnHelper.accessor("createdBy", {
+    columnHelper.accessor("createdByName", {
       cell: (info: any) => (info.renderValue() ? info.renderValue() : "N/A"),
       header: () => <span>Created By</span>,
     }),
@@ -127,7 +137,7 @@ const DepositSearchDetails: React.FC = () => {
             state: {
               uniqueId: uniqueId,
               depositTakerId: depositTakerId,
-              createdBy
+              createdBy,
             },
           });
         };
@@ -135,10 +145,10 @@ const DepositSearchDetails: React.FC = () => {
         const depositTakerId = info?.row?.original?.depositTakerId;
         console.log("display", info?.row?.original);
         return (
-          <div className="flex justify-center items-center ">
+          <div className='flex justify-center items-center '>
             {/* <Link to={"/dt/schema/creation"}> */}
             <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
-              <img src={Eye} alt="Eye " className="cursor-pointer" />
+              <img src={Eye} alt='Eye ' className='cursor-pointer' />
             </div>
             {/* </Link> */}
           </div>
@@ -165,7 +175,7 @@ const DepositSearchDetails: React.FC = () => {
           let dtData: any = [];
           try {
             let depositTakerData = await axiosTraceIdInstance.get(
-              `/deposit-taker/${depositTakerId}`
+              `/deposit-taker/open/${depositTakerId}`
             );
 
             dtData =
@@ -218,18 +228,26 @@ const DepositSearchDetails: React.FC = () => {
   const fetchSchemes = async () => {
     setLoader2(true);
     try {
-      const { data } = await axiosTraceIdInstance.get(`/scheme-portal/scheme-by/${depositTakerId}`, {
-        params: {
-          page: page,
-          limit: pageSize,
-          status:'ALL'
-        },
-      });
-      let currentPage = (parseInt(data?.page) - 1 ) * pageSize
-      setSchemaData(data?.data?.map((d : any, i: number) => ({...d, id : (i + 1) + currentPage})));
-      setTotal(data?.data?.length);
+      const { data } = await axiosTraceIdInstance.get(
+        `/scheme-portal/scheme-by/${depositTakerId}`,
+        {
+          params: {
+            page: page,
+            limit: pageSize,
+            status: "ALL",
+          },
+        }
+      );
+      let currentPage = (parseInt(data?.page) - 1) * pageSize;
+      setSchemaData(
+        data?.data?.map((d: any, i: number) => ({
+          ...d,
+          id: i + 1 + currentPage,
+        }))
+      );
+      setTotal(data?.totalCount);
       setLoader2(false);
-      setPage(parseInt(data?.page))
+      setPage(parseInt(data?.page));
     } catch (error) {
       console.error("Error fetching schemes:", error);
       setLoader2(false);
@@ -248,105 +266,139 @@ const DepositSearchDetails: React.FC = () => {
 
   const accordionItems: AccordionItem[] = [
     {
-      header: <h1 className="font-bold text-xl">Scheme Details</h1>,
-      content: <>
-               <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-          <div className="">
-          {loader2 ? (
-              <LoaderSpin />
-            ) : schemaData?.length > 0 ? (
-              <ReactTable defaultData={schemaData} columns={columns} />
-            ) : (
-              <div className=" flex justify-center items-center">
-                <h1>No data available</h1>
-              </div>
-            )}
+      header: <h1 className='font-bold text-xl'>Scheme Details</h1>,
+      content: (
+        <>
+          <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
+            <div className=''>
+              {loader2 ? (
+                <LoaderSpin />
+              ) : schemaData?.length > 0 ? (
+                <ReactTable defaultData={schemaData} columns={columns} />
+              ) : (
+                <div className=' flex justify-center items-center'>
+                  <h1>No data available</h1>
+                </div>
+              )}
+            </div>
+            <div className='mt-10'>
+              {schemaData?.length > 0 && (
+                <CustomPagination
+                  currentPage={page}
+                  setCurrentPage={setPage}
+                  totalItems={total}
+                  itemsPerPage={10}
+                  maxPageNumbersToShow={5}
+                />
+              )}
+            </div>
           </div>
-          <div className="mt-10">
-          {schemaData.length > 0 && (
-              <CustomPagination
-                currentPage={page}
-                setCurrentPage={setPage}
-                totalItems={total}
-                itemsPerPage={10}
-                maxPageNumbersToShow={5}
-              />
-          )}
-          </div>
-        </div>
-      </>,
+        </>
+      ),
     },
-    {
-      header: "Management Details",
-      content: <MangementDetails />,
-    },
-
+    // {
+    //   header: "Management Details",
+    //   content: <MangementDetails />,
+    // },
   ];
 
   const onNavigateToBack = () => {
     navigate("/deposite-taker-search");
   };
+
+  // moment(
+  //   field.userInput
+  // ).format("DD/MM/YYYY")
+
+  // dateOfIncorporation
+  // RG-A-DATE-DT
+
+  const handleDateOfIncorporation = (value: any) => {
+    switch (value) {
+      case "RG-A-DATE-DT":
+        return true;
+
+      case "dateOfIncorporation":
+        return true;
+
+      default:
+        return false;
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className='flex flex-col min-h-screen'>
       <LanguageBar />
       <TopDetail />
       <Navbar />
-      <div className="mt-8 mb-5">
-        <div className="relative mx-4 xl:ml-[40px]">
+      <div className='mt-8 mb-5'>
+        <div className='relative mx-4 xl:ml-[40px]'>
           <div>
             <>
-              <div className="container mx-auto">
-                <div id="reviewContent">
-                  <h1 className=" text-gilroy-bold text-[#24222B] text-2xl font-bold  my-7"></h1>
-                  {loader ? <LoaderSpin/> : allFormData?.entitySections
-                    ?.filter(
-                      (s: any) => s?.sectionName !== "Upload Documents"
-                    )
-                    ?.map((section: any, index: number) => (
-                      <div className="mb-[16px] " key={index}>
-                        <div className="rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold">
-                          <p className="lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap">
-                            {section?.sectionName}
-                          </p>
-
-                        </div>
-                        <div className="shadow-sm p-5 rounded-md">
-                          <div className="flex flex-col justify-between w-full sm:flex-row gap-y-[16px]">
-                            <div className="w-full grid grid-cols-2">
-                              {allFormData?.formFields?.form_fields
-                                ?.filter(
-                                  (f: any) =>
-                                    f?.sectionId === section?.id
-                                )
-                                ?.map((field: any, idx: number) => (
-                                  <div
-                                    className={`${idx % 2 === 0
-                                        ? "pr-4 pt-2 sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
-                                        : "pl-4 pt-2"
+              <div className='container mx-auto'>
+                <div id='reviewContent'>
+                  <h1 className=' text-gilroy-bold text-[#24222B] text-2xl font-bold  my-7'></h1>
+                  {loader ? (
+                    <LoaderSpin />
+                  ) : (
+                    allFormData?.entitySections
+                      ?.filter(
+                        (s: any) => s?.sectionName !== "Upload Documents"
+                      )
+                      ?.map((section: any, index: number) => (
+                        <div className='mb-[16px] ' key={index}>
+                          <div className='rounded-t-lg bg-[#e7f0ff] flex justify-between h-[57px] font-bold'>
+                            <p className='lg:w-[152px] ml-[16px] mt-[16px] text-[16px] lg:text-[20px] pb-2 text-nowrap'>
+                              {section?.sectionName}
+                            </p>
+                          </div>
+                          <div className='shadow-sm p-5 rounded-md'>
+                            <div className='flex flex-col justify-between w-full sm:flex-row gap-y-[16px]'>
+                              <div className='w-full grid grid-cols-2'>
+                                {allFormData?.formFields?.form_fields
+                                  ?.filter(
+                                    (f: any) => f?.sectionId === section?.id
+                                  )
+                                  ?.sort(
+                                    (a: any, b: any) =>
+                                      a.sortOrder - b.sortOrder
+                                  )
+                                  ?.map((field: any, idx: number) => (
+                                    <div
+                                      className={`${
+                                        idx % 2 === 0
+                                          ? "pr-4 pt-2 sm:border-r-[0.5px] border-r-[#385723] border-opacity-20"
+                                          : "pl-4 pt-2"
                                       } flex justify-between`}
-                                    key={idx}
-                                  >
-                                    <div className="opacity-60">
-                                      {field.label}
+                                      key={idx}
+                                    >
+                                      <div className='opacity-60'>
+                                        {field.label}
+                                      </div>
+                                      <div className='break-all'>
+                                        {field.label === "DSC3 Certificate"
+                                          ? "DSC Certification Approved"
+                                          : handleDateOfIncorporation(
+                                              field?.key
+                                            )
+                                          ? moment(field.userInput).format(
+                                              "DD/MM/YYYY"
+                                            )
+                                          : field.userInput}
+                                      </div>
                                     </div>
-                                    <div className="break-all">
-                                      {field.label ===
-                                        "DSC3 Certificate"
-                                        ? "DSC Certification Approved"
-                                        : field.userInput}
-                                    </div>
-                                  </div>
-                                ))}
+                                  ))}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                  )}
                 </div>
 
-                <div className="mb-[16px] shadow-sm  rounded-md">
+                <div className='mb-[16px] shadow-sm  rounded-md'>
                   <div>
-                    <div className="mt-5">
+                    <div className='mt-5'>
                       <Accordion items={accordionItems} showEdit={false} />
                     </div>
                   </div>
@@ -400,7 +452,7 @@ const DepositSearchDetails: React.FC = () => {
         </div>
       </div> */}
 
-      <div className="mt-[100px]">
+      <div className='mt-[100px]'>
         <Footer />
       </div>
     </div>

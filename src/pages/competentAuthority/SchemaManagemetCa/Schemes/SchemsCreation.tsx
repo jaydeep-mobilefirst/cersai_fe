@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -45,11 +45,40 @@ const NewSchemaCreation = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const [scheme, setScheme] = useState<boolean>(false);
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
+
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+
+      // scheme
+      const schemeRoles = rolesArray.filter(
+        (role) => role === "scheme-edit-access-competent-authority"
+      );
+      if (schemeRoles?.length > 0) {
+        setScheme(true);
+      }
+    }
+  }, []);
+
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
   };
+
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if(searchInput===""){
+      setPage(1)
+      fetchSchemes();
+    }
+  },[searchInput])
   const navigate = useNavigate();
 
   const fetchSchemes = async () => {
@@ -75,7 +104,7 @@ const NewSchemaCreation = () => {
 
   useEffect(() => {
     fetchSchemes();
-  }, [page, pageSize]);
+  }, [page, pageSize, statusForSearch]);
   let count: number;
   const serialNoGen = (page: number) => {
     count = (page - 1) * 10;
@@ -107,15 +136,27 @@ const NewSchemaCreation = () => {
 
     columnHelper.accessor("status", {
       cell: (info: any) => {
-        const value = info?.getValue();
-        const updatedValue =
-          value === "UNDER_LETIGATION" ? "UNDER LITIGATION" : value;
+        // const value = info?.getValue();
+        // const updatedValue =
+        //   value === "UNDER_LETIGATION"
+        //     ? "UNDER LITIGATION"
+        //     : value?.replace(/_/g, " ");
+        let value = info?.getValue();
+
+        // Replace underscores with spaces and handle the specific status case
+        if (value === "ACTIVE_DEPOSIT_NOT_TAKEN") {
+          value = "Active-Deposit not being taken";
+        } else if (value === "UNDER_LETIGATION") {
+          value = "UNDER LITIGATION";
+        } else {
+          value = value?.replace(/_/g, " ");
+        }
         return (
           <div
             className="flex flex-col md:flex-row justify-center gap-3"
             key={Math.random()}
           >
-            <span className="text-sm">{updatedValue}</span>
+            <span className="text-sm">{value}</span>
           </div>
         );
       },
@@ -151,7 +192,15 @@ const NewSchemaCreation = () => {
           <div className="flex justify-center items-center ">
             {/* <Link to={"/dt/schema/creation"}> */}
             <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
-              <img src={EditIcon} alt="Eye " className="cursor-pointer" />
+              {Status === "BANNED" ? (
+                <img src={Eye} alt="Eye " className="cursor-pointer h-6 w-6" />
+              ) : (
+                <img
+                  src={EditIcon}
+                  alt="Eye "
+                  className="cursor-pointer h-10 w-10"
+                />
+              )}
             </div>
             {/* </Link> */}
           </div>
@@ -222,6 +271,10 @@ const NewSchemaCreation = () => {
   const options = [
     { value: "", label: "All" },
     { value: "ACTIVE", label: "ACTIVE" },
+    {
+      value: "ACTIVE_DEPOSIT_NOT_TAKEN",
+      label: "Active-Deposit not being taken",
+    },
     { value: "BANNED", label: "BANNED" },
     { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];
@@ -279,14 +332,19 @@ const NewSchemaCreation = () => {
               </button>
             </div>
             <div className=" flex items-center mt-7">
-              <Link to="/ca/my-task/new-scheme-creation">
-                <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
-                  <img src={addCircle} alt="icon" />
-                  <span className="ml-1 text-sm  md:text-[10px] font-normal text-[#1c468e] lg:text-[13px] text-gilroy-medium ">
-                    New Scheme
-                  </span>
-                </div>
-              </Link>
+              {scheme && (
+                <>
+                  {" "}
+                  <Link to="/ca/my-task/new-scheme-creation">
+                    <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
+                      <img src={addCircle} alt="icon" />
+                      <span className="ml-1 text-sm  md:text-[10px] font-normal text-[#1c468e] lg:text-[13px] text-gilroy-medium ">
+                        New Scheme
+                      </span>
+                    </div>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -343,7 +401,11 @@ const NewSchemaCreation = () => {
             {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
-              <ReactTable defaultData={schemaData} columns={columns} />
+              <ReactTable
+                key={JSON?.stringify(schemaData)}
+                defaultData={schemaData}
+                columns={columns}
+              />
             ) : (
               <div className=" flex justify-center items-center">
                 <h1>No data available</h1>

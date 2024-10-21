@@ -24,7 +24,7 @@ function useFetchRoles(entityId : string, perPage ?: number) {
         setLoading(false)
         return { roles : [], loading : false }
       }
-      const response = await axiosTokenInstance.get(`/role/list/${entityId}?page=${page}&pageSize=${pageSize}&search=${searchString}&functionality=${functionalitySearch}&active=true`);
+      const response = await axiosTokenInstance.get(`/role/list/${entityId}?page=${page}&pageSize=${pageSize}&search=${searchString}&functionality=${functionalitySearch}`);
       setData(response.data?.roles)
       setTotal(response.data?.totalData)
       setPage(response.data.currentPage);

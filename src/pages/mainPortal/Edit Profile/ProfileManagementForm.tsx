@@ -101,6 +101,10 @@ const ProfileManagementForm: React.FC<Props> = ({
   };
   const fetchLocationData = async (pinCode: string): Promise<void> => {
     if (!pinCode || pinCode.length !== 6) {
+
+      // Clear state and district if pin code is less than 6 digits
+      setValue(`branches[${i}].state`, "");
+      setValue(`branches[${i}].district`, "");
       setPinCodeError("Pin code must be 6 digits");
       return;
     }
@@ -173,6 +177,7 @@ const ProfileManagementForm: React.FC<Props> = ({
   ];
 
   const disabledField = sessionStorage.getItem("user_status");
+  const isConfigurable = sessionStorage.getItem("isConfigurable")
 
   const checkStatus = (status: any): any => {
     switch (disabledField) {
@@ -209,15 +214,15 @@ const ProfileManagementForm: React.FC<Props> = ({
   };
 
   if (pathname == "/dt/profile") {
-    var disableFieldStatus = checkPathName(pathname)
+    var disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
       ? disabledField == "RETURNED"
         ? false
         : !data?.profileUpdate
       : !data?.profileUpdate;
   } else {
     disableFieldStatus = checkPathName(pathname)
-      ? checkStatus(disabledField)
-      : false;
+    ? isConfigurable === 'true' ? true : checkStatus(disabledField)
+    : false;
   }
 
   const maxBranches = parseInt(

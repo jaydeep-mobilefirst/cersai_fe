@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -47,16 +47,28 @@ const DepositSchemaCreation = () => {
   const navigate = useNavigate();
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
+  const [scheme, setScheme] = useState<boolean>(false);
+  const [schemeView, setSchemeView] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
   const location = useLocation();
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
     setSearchInput(value);
-    if (value === "") {
+    // if (value === "") {
+    //   myTaskRg();
+    // }
+  };
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if(searchInput===""){
       myTaskRg();
     }
-  };
+  },[searchInput])
   const myTaskRg = async () => {
     setLoader(true);
     try {
@@ -90,7 +102,7 @@ const DepositSchemaCreation = () => {
 
   useEffect(() => {
     myTaskRg();
-  }, [page, pageSize]);
+  }, [page, pageSize, statusForSearch]);
   const NavigateDepositTaker = (id: string, page: any) => {
     navigate("/rg/deposit-taker/form", {
       state: {
@@ -131,7 +143,19 @@ const DepositSchemaCreation = () => {
       header: () => <span>PAN</span>,
     }),
     columnHelper.accessor("status", {
-      cell: (info: any) => info.renderValue().replace(/_/g, " "),
+      // cell: (info: any) => info.renderValue().replace(/_/g, " "),
+      cell: (info) => {
+        let value = info.renderValue();
+        // Check for specific combination of "MOD" and "TRANSIT"
+        if (value && /mod_transit/i.test(value)) {
+          // Using a case-insensitive regex to match "MOD_TRANSIT"
+          value = "Modification in Transit";
+        } else if (value && /mod/i.test(value)) {
+          // Similarly applying a case-insensitive check for any "MOD" occurrences
+          value = value.replace(/mod/i, "Modification"); // Replace "MOD" with "Modification" case-insensitively
+        }
+        return value ? value.replace(/_/g, " ") : "N/A"; // Replace underscores with spaces for any other statuses
+      },
 
       header: () => <span>Status</span>,
     }),
@@ -198,16 +222,18 @@ const DepositSchemaCreation = () => {
   const options = [
     { label: "All", value: "" },
     { label: "Approved", value: "APPROVED" },
-    { label: "Banned", value: "BANNED" },
     { label: "Rejected", value: "REJECTED" },
     { label: "Transit", value: "TRANSIT" },
     { label: "Refer to Regulator", value: "REFER_TO_REGULATOR" },
     { label: "Incomplete", value: "INCOMPLETE" },
     { label: "Pending", value: "PENDING" },
     { label: "Return", value: "RETURNED" },
-    {label:"Mod Pending",value:"MOD_PENDING"},
-    {label:"Mod Transit",value:"MOD_TRANSIT"},
-    { label: "Mod Refer to Regulator", value: "MOD_REFER_TO_REGULATOR" },
+    { label: "Modification Pending", value: "MOD_PENDING" },
+    { label: "Modification In Transit", value: "MOD_TRANSIT" },
+    {
+      label: "Modification Refer to Regulator",
+      value: "MOD_REFER_TO_REGULATOR",
+    },
   ];
   const handleSetStatus = (option: any) => {
     console.log(option, "option");
@@ -231,6 +257,27 @@ const DepositSchemaCreation = () => {
       setPage(1); // default to the first page
     }
   }, [location.state?.currentPage]);
+
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+
+      // scheme
+      const schemeRolesView = rolesArray.filter(
+        (role) => role === "scheme-view-access-regulator"
+      );
+      if (schemeRolesView?.length > 0) {
+        setSchemeView(true);
+      }
+      const schemeRoles = rolesArray.filter(
+        (role) => role === "scheme-edit-access-regulator"
+      );
+      if (schemeRoles?.length > 0) {
+        setScheme(true);
+      }
+    }
+  }, []);
 
   return (
     <div
@@ -274,14 +321,16 @@ const DepositSchemaCreation = () => {
               </button>
             </div>
             <div className=" flex items-center mt-7">
-              <Link to="/rg/deposit-taker/audit">
-                <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
-                  <img src={addCircle} alt="icon" />
-                  <span className="ml-1 text-sm  md:text-[10px] font-normal text-[#1c468e] lg:text-[13px] text-gilroy-medium ">
-                    New Deposit taker
-                  </span>
-                </div>
-              </Link>
+              {scheme && (
+                <Link to="/rg/deposit-taker/audit">
+                  <div className="w-44 h-[40px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] border-[#1c468e] flex justify-center items-center mt-2 cursor-pointer">
+                    <img src={addCircle} alt="icon" />
+                    <span className="ml-1 text-sm  md:text-[10px] font-normal text-[#1c468e] lg:text-[13px] text-gilroy-medium ">
+                      New Deposit taker
+                    </span>
+                  </div>
+                </Link>
+              )}
             </div>
           </div>
         </div>

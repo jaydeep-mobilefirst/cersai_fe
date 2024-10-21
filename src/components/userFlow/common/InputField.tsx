@@ -108,6 +108,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
   disabled?: boolean;
   backgroundColor?: string;
+  specialKey?: string;
 }
 
 const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
@@ -120,18 +121,19 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
       error,
       disabled,
       backgroundColor,
+      specialKey,
       type = "text", // Ensure the default type is text or a type that supports selection
       ...rest
     },
     ref
   ) => {
     const inputRef = useRef<HTMLInputElement>(null);
+    console.log({ specialKey }, "key");
     const errorClasses = error ? "border-red-500 text-red-500" : "";
 
     const effectiveBackgroundColor = disabled
       ? "#E0E0E0"
       : backgroundColor || "white";
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const cursorPosition = e.target.selectionStart;
       if (ref) {
@@ -144,8 +146,19 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
       }
       rest.onChange && rest.onChange(e);
 
-      if (inputRef.current && inputRef.current.type === "text") {
-        // Check if the input type supports selection
+      // Set cursor to the end if the specialKey is 'minInvestment' or 'maxInvestment'
+      if (
+        inputRef.current &&
+        (specialKey === "minInvestment" || specialKey === "maxInvestment")
+      ) {
+        setTimeout(() => {
+          if (inputRef.current) {
+            inputRef.current.selectionStart = inputRef.current.value.length;
+            inputRef.current.selectionEnd = inputRef.current.value.length;
+          }
+        }, 0);
+      } else if (inputRef.current && inputRef.current.type === "text") {
+        // If not specialKey, keep the cursor at the current position
         setTimeout(() => {
           if (inputRef.current) {
             inputRef.current.selectionStart = cursorPosition;
@@ -154,6 +167,31 @@ const InputFields: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
         }, 0);
       }
     };
+
+    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //   const cursorPosition = e.target.selectionStart;
+    //   if (ref) {
+    //     if (typeof ref === "function") {
+    //       ref(inputRef.current);
+    //     } else if (inputRef.current) {
+    //       (ref as React.MutableRefObject<HTMLInputElement>).current =
+    //         inputRef.current;
+    //     }
+    //   }
+    //   rest.onChange && rest.onChange(e);
+
+    //   if (inputRef.current && inputRef.current.type === "text") {
+    //     // Check if the input type supports selection
+    //     setTimeout(() => {
+    //       if (inputRef.current) {
+    //         // inputRef.current.selectionStart = inputRef.current.value.length;
+    //         // inputRef.current.selectionStart = inputRef.current.value.length;
+    //         inputRef.current.selectionEnd = cursorPosition;
+    //         inputRef.current.selectionEnd = cursorPosition;
+    //       }
+    //     }, 0);
+    //   }
+    // };
 
     return (
       <input

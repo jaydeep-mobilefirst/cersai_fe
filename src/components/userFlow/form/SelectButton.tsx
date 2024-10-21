@@ -129,11 +129,26 @@ const SelectButton = ({
     }
   };
   // Prevent default behavior on Enter keypress in search input
-const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-  }
-};
+  // const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault();
+  //   }
+  // };
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (searchInputValue.trim() !== "" && optionsToShow.length > 0) {
+        const selected = optionsToShow[0];
+        if (setOption) {
+          setOption(selected.value);
+        }
+        if (onSelect) {
+          onSelect(selected);
+        }
+        setArrowDirectionToggle(false);
+      }
+    }
+  };
 
   return (
     <div className="w-full relative" ref={buttonRef}>
@@ -196,7 +211,9 @@ const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
                 type="search"
                 ref={searchInputRef} // Attach the ref to the input
                 value={searchInputValue}
-                className={`w-full pl-10 pr-4 py-2 rounded-md border  focus:border-blue focus:ring-1 focus:ring-gray-100 focus:outline-none ${optionsToShow?"border-[blue]":"border-gray-300"}`}
+                className={`w-full pl-10 pr-4 py-2 rounded-md border  focus:border-blue focus:ring-1 focus:ring-gray-100 focus:outline-none ${
+                  optionsToShow ? "border-[blue]" : "border-gray-300"
+                }`}
                 placeholder="Search"
                 style={{ paddingLeft: "2.5rem" }}
                 onChange={handleSearch}

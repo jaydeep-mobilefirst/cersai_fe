@@ -40,6 +40,8 @@ const Footer: React.FC<FooterProps> = ({
     }
   }, [fetchData]);
 
+  const isConfigurable = sessionStorage.getItem("isConfigurable")
+
   const checkStatus = (status: any): any => {
     switch (disabledField) {
       case "TRANSIT":
@@ -76,15 +78,15 @@ const Footer: React.FC<FooterProps> = ({
   const showbtn = checkPathName(pathname);
 
   if (pathname == "/dt/profile") {
-    var disableFieldStatus = checkPathName(pathname)
+    var disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
       ? disabledField == "RETURNED"
         ? false
         : !data?.profileUpdate
       : !data?.profileUpdate;
   } else {
     disableFieldStatus = checkPathName(pathname)
-      ? checkStatus(disabledField)
-      : false;
+    ? isConfigurable === 'true' ? true : checkStatus(disabledField)
+    : false;
   }
 
   return (

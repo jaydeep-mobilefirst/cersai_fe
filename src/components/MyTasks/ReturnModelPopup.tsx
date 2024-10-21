@@ -63,7 +63,7 @@ const ReturnModelPopup: React.FC<ReturnModelPopupProps> = ({
 
   const apiCall = () => {
     axiosTokenInstance
-      .post("/approval-engine/reason-code?reasonFor=RETURN")
+      .post("/approval-engine/reason-code?entityType=DT")
       .then((response: any) => {
         if (response.data.success) {
           setOptionData(

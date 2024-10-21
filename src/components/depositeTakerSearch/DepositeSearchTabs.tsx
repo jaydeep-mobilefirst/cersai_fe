@@ -21,7 +21,7 @@ useEffect(() => {
         "totalDepositTakerRegistered",
         "totalDepositTakerApproved",
         "totalDepositTakerPending",
-        "totalDepositTakerBanned",
+        // "totalDepositTakerBanned",
       ],
     }).then((response)=>{
       setData(response?.data?.data)
@@ -32,7 +32,7 @@ useEffect(() => {
 
   const tabsData: TabData[] = [
     { text: "Deposit taker Registered", value: data[0]?.totalDepositTakerRegistered, bgColor: true },
-    { text: "Banned", value: data[3]?.totalDepositTakerBanned, bgColor: false },
+    // { text: "Banned", value: data[3]?.totalDepositTakerBanned, bgColor: false },
     { text: "Active", value: data[1]?.totalDepositTakerApproved, bgColor: true },
     { text: "Pending", value: data[2]?.totalDepositTakerPending, bgColor: false },
   ];

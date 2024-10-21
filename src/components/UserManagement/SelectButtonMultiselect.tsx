@@ -57,7 +57,7 @@ const SelectButtonMultiselect = ({
   };
 
   useEffect(() => {
-    setArrowDirectionToggle(false);
+    // setArrowDirectionToggle(false);
   }, [selectedOption]);
 
   // Close the dropdown if the user clicks outside of it
@@ -87,7 +87,7 @@ const SelectButtonMultiselect = ({
   const handleMultiselect = (e: any, option: any) => {
     e.preventDefault();
     setOption(option);
-    setArrowDirectionToggle(false);
+    // setArrowDirectionToggle(false);
   };
   return (
     <div className={className}>
@@ -119,12 +119,21 @@ const SelectButtonMultiselect = ({
               return (
                 <span className="bg-blue-100 py-1 px-1" key={s.value}>
                   {s.label}
-                  <span
+          {/* Only show the cross icon if the label is not "Dashboard View Access" */}
+          {s.label !== "Dashboard View Access" && (
+            <span
+              className="text-red-500 ml-1 hover:bg-red-100 p-1"
+              onClick={() => remove(s)}
+            >
+              X
+            </span>
+          )}
+                  {/* <span
                     className="text-red-500 ml-1 hover:bg-red-100 p-1"
                     onClick={() => remove(s)}
                   >
                     X
-                  </span>
+                  </span> */}
                 </span>
               );
             })

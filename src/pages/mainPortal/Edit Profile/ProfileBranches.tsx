@@ -256,72 +256,82 @@ const ProfileBranches = () => {
             return branch.id ? { id, ...branchData } : branchData;
           });
 
-          const response = await axiosTokenInstance.post(
-            `/deposit-taker/branch/${entityUniqueId}`,
+          const depositTaker = await axiosTokenInstance.patch(
+            `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
             {
-              branches: branchesToSubmit,
-              place: place, // assuming you want to send place as part of the request
+              formData: combinedFormData,
             }
           );
-
-          if (callapi) {
-            const membersToSubmit = managementData?.branches?.map(
-              (member: any) => {
-                const { id, ...memberData } = member;
-                return member.id ? { id, ...memberData } : memberData;
-              }
-            );
-
-            await axiosTokenInstance.post(
-              `/deposit-taker/management-team/${entityUniqueId}`,
+          console.log(depositTaker?.data?.success, "depositTaker");
+          if (depositTaker?.data?.success === true) {
+            const response = await axiosTokenInstance.post(
+              `/deposit-taker/branch/${entityUniqueId}`,
               {
-                members: membersToSubmit, // Changed from branches to members
+                branches: branchesToSubmit,
+                place: place, // assuming you want to send place as part of the request
               }
             );
 
-            await axiosTokenInstance.patch(
-              `/deposit-taker/${sessionStorage?.getItem("entityUniqueId")}`,
-              {
-                formData: combinedFormData,
-              }
-            );
+            if (callapi) {
+              const membersToSubmit = managementData?.branches?.map(
+                (member: any) => {
+                  const { id, ...memberData } = member;
+                  return member.id ? { id, ...memberData } : memberData;
+                }
+              );
 
-            Swal.fire({
-              icon: "success",
-              text:
-                "Deposit Taker Updated Successfully " ||
-                response?.data?.message,
-              confirmButtonText: "Ok",
-            });
+              await axiosTokenInstance.post(
+                `/deposit-taker/management-team/${entityUniqueId}`,
+                {
+                  members: membersToSubmit, // Changed from branches to members
+                }
+              );
 
-            sessionStorage.setItem("user_status", "PENDING");
-            Navigate("/dt/dashboard");
+              Swal.fire({
+                icon: "success",
+                text:
+                  "Deposit Taker Updated Successfully " ||
+                  response?.data?.message,
+                confirmButtonText: "Ok",
+              });
 
-            if (
-              Array.isArray(filterManagement) &&
-              filterManagement.some(
-                (management: any) => management.id && management.firstName
-              )
-            ) {
-              // Collect all ids in an array format like [10, 5, 8]
-              const idsToRemove = filterManagement
-                .filter(
+              sessionStorage.setItem("user_status", "PENDING");
+              Navigate("/dt/dashboard");
+
+              if (
+                Array.isArray(filterManagement) &&
+                filterManagement.some(
                   (management: any) => management.id && management.firstName
                 )
-                .map((management: any) => management.id);
+              ) {
+                // Collect all ids in an array format like [10, 5, 8]
+                const idsToRemove = filterManagement
+                  .filter(
+                    (management: any) => management.id && management.firstName
+                  )
+                  .map((management: any) => management.id);
 
-              // Pass the collected ids to your removal function
-              if (idsToRemove.length > 0) {
-                removeManagement(idsToRemove); // Adjust according to your actual removal logic
-                clearRemovedBranches();
+                // Pass the collected ids to your removal function
+                if (idsToRemove.length > 0) {
+                  removeManagement(idsToRemove); // Adjust according to your actual removal logic
+                  clearRemovedBranches();
+                }
               }
+            } else {
+              Swal.fire({
+                icon: "success",
+                text:
+                  "Deposit Taker Updated Successfully " ||
+                  response?.data?.message,
+                confirmButtonText: "Ok",
+              });
             }
           } else {
             Swal.fire({
-              icon: "success",
+              icon: "error",
               text:
-                "Deposit Taker Updated Successfully " ||
-                response?.data?.message,
+                depositTaker?.data?.message ||
+                "Failed to update Entity Details",
               confirmButtonText: "Ok",
             });
           }
@@ -418,6 +428,7 @@ const ProfileBranches = () => {
   };
 
   const disabledField = sessionStorage.getItem("user_status");
+  const isConfigurable = sessionStorage.getItem("isConfigurable")
 
   const checkStatus = (status: any): any => {
     switch (disabledField) {
@@ -454,14 +465,14 @@ const ProfileBranches = () => {
   };
 
   if (pathname == "/dt/profile") {
-    var disableFieldStatus = checkPathName(pathname)
+    var disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
       ? disabledField == "RETURNED"
         ? false
         : !data?.profileUpdate
       : !data?.profileUpdate;
   } else {
     disableFieldStatus = checkPathName(pathname)
-      ? checkStatus(disabledField)
+      ? isConfigurable === 'true' ? true : checkStatus(disabledField)
       : false;
   }
 

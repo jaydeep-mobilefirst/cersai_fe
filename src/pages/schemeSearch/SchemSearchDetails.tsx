@@ -131,9 +131,8 @@ const SchemeSearchDetails: React.FC = () => {
 
         formFields = await Promise.all(formFields);
 
-
-      // Sort form fields based on the sortOrder
-      formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
+        // Sort form fields based on the sortOrder
+        formFields.sort((a: any, b: any) => a.sortOrder - b.sortOrder);
 
         setAllFormData({
           ...response?.data?.data,
@@ -156,6 +155,7 @@ const SchemeSearchDetails: React.FC = () => {
       fetchSchema();
     }
   }, [uniqueId]);
+
   const fetchFormFields = () => {
     setLoader2(true);
     axiosTraceIdInstance
@@ -165,7 +165,7 @@ const SchemeSearchDetails: React.FC = () => {
           let dtData: any = [];
           try {
             let depositTakerData = await axiosTraceIdInstance.get(
-              `/deposit-taker/${depositTakerId}`
+              `/deposit-taker/open/${depositTakerId}`
             );
             dtData =
               depositTakerData?.data?.data?.depositTaker?.depositTakerFormData;
@@ -183,37 +183,15 @@ const SchemeSearchDetails: React.FC = () => {
               disabled: true,
             }))
             ?.sort((a: any, b: any) => {
-              // Sort by companyName, panNumber, and dateOfIncorporation
-              const sortOrder = ["companyName", "panNumber", "dateOfIncorporation","Type of Entity", "Unique ID Number","GST Number","Registered Address Line 1","Registered Address Line 2","pincode","State","District","regulatorName","Regulator Number (Provided by Regulator)","Regulator approval Date","User Email","nodalFirstname","nodalMiddlename","nodalLastname","nodalMobile","nodalEmail",];
-              const aIndex = sortOrder.indexOf(a.key || a.label);
-              const bIndex = sortOrder.indexOf(b.key || b.label);
-    
-              if (aIndex === -1 && bIndex === -1) return 0; // No sorting for non-prioritized fields
-              if (aIndex === -1) return 1; // a comes after b
-              if (bIndex === -1) return -1; // a comes before b
-              return aIndex - bIndex; // Sort based on index in sortOrder
-            })
+              // First, sort by sectionId (numeric sorting)
+              if (a?.sectionId !== b?.sectionId) {
+                return a?.sectionId - b?.sectionId;
+              }
 
-          // let modifiedFileFields =
-          //   response?.data?.data?.registrationDocumentFields?.map((o: any) => ({
-          //     ...o,
-          //     file: dtData
-          //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-          //       : "",
-          //     error: "",
-          //     fileName: dtData
-          //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-          //       : "",
-          //     uploadFileId: dtData
-          //       ? dtData?.find((data: any) => data?.fieldId === o?.id)?.value
-          //       : "",
-          //     disabled: true,
-          //   }));
+              // Then, sort by sortOrder (numeric sorting)
+              return a?.sortOrder - b?.sortOrder;
+            });
 
-          // let obj = {
-          //   ...response?.data?.data,
-          //   formFields: { form_fields: modifiedFormFields },
-          // };
           setEntityDetailsFields(modifiedFormFields);
           setLoader2(false);
           // setAllDocumentData(modifiedFileFields);
@@ -296,10 +274,10 @@ const SchemeSearchDetails: React.FC = () => {
       header: "Audit Trail",
       content: <AuditTrail />,
     },
-    {
-      header: "Management Details",
-      content: <MangementDetails />,
-    },
+    // {
+    //   header: "Management Details",
+    //   content: <MangementDetails />,
+    // },
   ];
 
   const onNavigateToBack = () => {
@@ -312,7 +290,7 @@ const SchemeSearchDetails: React.FC = () => {
       <TopDetail />
       <Navbar />
       <div className="mt-8 mb-8 mx-8">
-        <Accordion items={accordionItems} showAccordion={true}/>
+        <Accordion items={accordionItems} showAccordion={true} />
       </div>
 
       {/* <div className="mb-8">

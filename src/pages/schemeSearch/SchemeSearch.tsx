@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Eye from "../../assets/images/eye2.svg";
 import VerticalLine from "../../assets/images/verticalLine.png";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDepositTakerRegistrationStore } from "../../zust/deposit-taker-registration/registrationStore";
 import LoaderSpin from "../../components/LoaderSpin";
 import useFetchStates from "../../contextAPI/useFetchStates";
@@ -23,6 +23,7 @@ import { useLandingStore } from "../../zust/useLandingStore";
 import { useLangugaeStore } from "../../zust/useLanguageUsStore";
 import { axiosTraceIdInstance } from "../../utils/axios";
 import moment from "moment";
+import { useDebounce } from "../../utils/commonFunction";
 
 type SchemeType = {
   sn: number;
@@ -51,8 +52,8 @@ const SchemeSearch: React.FC = () => {
   const [pageSize, setPageSize] = useState<number>(10);
 
   const [total, setTotal] = useState<number>(0);
-  const [stateId, setStateId] = useState<number | null | undefined>(null)
-  const [searchInput, setSearchInput] = useState<string>("")
+  const [stateId, setStateId] = useState<number | null | undefined>(null);
+  const [searchInput, setSearchInput] = useState<string>("");
 
   const [state, setSelectedState] = useState<string | null>(null);
 
@@ -60,25 +61,26 @@ const SchemeSearch: React.FC = () => {
 
   const [selectedOption1, setSelectedOption1] = useState<string | null>(null);
   const [selectedOption4, setSelectedOption4] = useState<string | null>(null);
-  
-  const { homePageData, setHomePageData } = useLandingStore((state) => state);
-  const {language} = useLangugaeStore((state) => state);
 
-  console.log("data-scheme",schemaData)
+  const { homePageData, setHomePageData } = useLandingStore((state) => state);
+  const { language } = useLangugaeStore((state) => state);
+  const isFirstRender = useRef(true); // Flag to track if it's the first render
+
+  console.log("data-scheme", schemaData);
 
   useEffect(() => {
     homePageCmsApi();
-  }, [state,language]);
+  }, [state, language]);
 
   const homePageCmsApi = () => {
     setLoader(true);
     // setHomePageData(data.data.content)
     axiosTraceIdInstance
-      .get(`/websitecontent/get/name?wcname=home`,{
+      .get(`/websitecontent/get/name?wcname=home`, {
         headers: {
-          'Accept-Language': language
-        }
-    })
+          "Accept-Language": language,
+        },
+      })
       .then((response) => {
         console.log("api-response", response);
         setHomePageData(response?.data?.data?.content?.updatedStructure);
@@ -93,25 +95,33 @@ const SchemeSearch: React.FC = () => {
   const fetchSchemes = async () => {
     setLoader(true);
     try {
-      const { data } = await axiosTraceIdInstance.get(`/scheme-portal/solr-scheme`, {
-        params: {
-          page: page,
-          limit: pageSize,
-          searchText: searchInput,
-          status : selectedOption1
-        },
-      });
-      let currentPage = (parseInt(data?.page) - 1 ) * pageSize
-      setSchemaData(data?.data?.map((d : any, i: number) => ({...d, sn : (i + 1) + currentPage})));
+      const { data } = await axiosTraceIdInstance.get(
+        `/scheme-portal/solr-scheme`,
+        {
+          params: {
+            page: page,
+            limit: pageSize,
+            searchText: searchInput,
+            status: selectedOption1,
+          },
+        }
+      );
+      let currentPage = (parseInt(data?.page) - 1) * pageSize;
+      setSchemaData(
+        data?.data?.map((d: any, i: number) => ({
+          ...d,
+          sn: i + 1 + currentPage,
+        }))
+      );
       setTotal(data?.total);
       setLoader(false);
     } catch (error) {
-      setSchemaData([])
+      setSchemaData([]);
       console.error("Error fetching schemes:", error);
       setLoader(false);
     }
   };
-  
+
   useEffect(() => {
     fetchSchemes();
   }, [page, pageSize, selectedOption1]);
@@ -136,18 +146,59 @@ const SchemeSearch: React.FC = () => {
 
     columnHelper.accessor("status", {
       cell: (info: any) => {
-        const value = info?.getValue();
-        const updatedValue = value ==="UNDER_LETIGATION"?"UNDER LITIGATION" : value
-        
+        let value = info?.getValue();
+
+        if (value === "ACTIVE_DEPOSIT_NOT_TAKEN") {
+          value = "Active-Deposit not being taken";
+        } else if (value === "UNDER_LETIGATION") {
+          value = "UNDER LITIGATION";
+        } else if (value && /mod_transit/i.test(value)) {
+          value = "Modification in Transit";
+        } else if (value && /mod/i.test(value)) {
+          value = value.replace(/mod/i, "Modification");
+        }
+
+        // Ensure replacement of underscores as fallback
+        value = value?.replace(/_/g, " ");
+
         return (
           <div
-            className="flex flex-col md:flex-row justify-center gap-3"
+            className='flex flex-col md:flex-row justify-center gap-3'
             key={Math.random()}
           >
-            <span className="text-sm">{updatedValue}</span>
+            <span className='text-sm'>{value || "N/A"}</span>
           </div>
         );
       },
+
+      // cell: (info: any) => {
+      //   let value = info?.getValue();
+
+      //   // Replace underscores with spaces and handle specific status cases
+      //   if (value === "ACTIVE_DEPOSIT_NOT_TAKEN") {
+      //     value = "Active-Deposit not being taken";
+      //   } else if (value === "UNDER_LETIGATION") {
+      //     value = "UNDER LITIGATION";
+      //   } else if (value && /mod_transit/i.test(value)) {
+      //     // Check for specific combination of "MOD" and "TRANSIT"
+      //     value = "Modification in Transit";
+      //   } else if (value && /mod/i.test(value)) {
+      //     // Case-insensitive replacement of "MOD" with "Modification"
+      //     value = value.replace(/mod/i, "Modification");
+      //   } else {
+      //     // Default replacement of underscores with spaces
+      //     value = value?.replace(/_/g, " ");
+      //   }
+
+      //   return (
+      //     <div
+      //       className="flex flex-col md:flex-row justify-center gap-3"
+      //       key={Math.random()}
+      //     >
+      //       <span className="text-sm">{value || "N/A"}</span>
+      //     </div>
+      //   );
+      // },
       header: () => <span>Status</span>,
     }),
     columnHelper.accessor("depositTakerName", {
@@ -163,7 +214,9 @@ const SchemeSearch: React.FC = () => {
       cell: (info: any) => {
         let modifiedDate = info?.getValue();
         // Check if the date value exists before formatting
-        modifiedDate = modifiedDate ? moment(modifiedDate).format('DD-MM-YYYY') : "N/A";
+        modifiedDate = modifiedDate
+          ? moment(modifiedDate).format("DD-MM-YYYY")
+          : "N/A";
         return modifiedDate;
       },
       header: () => <span>Scheme Start Date</span>,
@@ -179,15 +232,15 @@ const SchemeSearch: React.FC = () => {
             state: {
               uniqueId: uniqueId,
               depositTakerId: depositTakerId,
-              createdBy
+              createdBy,
             },
           });
         };
         return (
-          <div className="flex justify-center items-center ">
+          <div className='flex justify-center items-center '>
             {/* <Link to={"/dt/schema/creation"}> */}
             <div onClick={() => NavigateScheme(uniqueId, depositTakerId)}>
-              <img src={Eye} alt="Eye " className="cursor-pointer" />
+              <img src={Eye} alt='Eye ' className='cursor-pointer' />
             </div>
             {/* </Link> */}
           </div>
@@ -198,9 +251,13 @@ const SchemeSearch: React.FC = () => {
   ];
 
   const options = [
-    {value : "", label : "All"},
+    { value: "", label: "All" },
     { value: "ACTIVE", label: "Active" },
-    { value: "BANNED", label: "Banned" },
+    {
+      value: "ACTIVE_DEPOSIT_NOT_TAKEN",
+      label: "Active-Deposit not being taken",
+    },
+    { label: "Banned", value: "BANNED" },
     { value: "UNDER_LETIGATION", label: "Under litigation" },
   ];
 
@@ -209,60 +266,84 @@ const SchemeSearch: React.FC = () => {
   };
 
   const handleSetOption4 = (value: any) => {
+    setPage(1);
     setSelectedOption4(value);
-    setSelectedOption1(value?.value)
+    setSelectedOption1(value?.value);
   };
 
-  const handleSetState = (option : any) => {
+  const handleSetState = (option: any) => {
     setSelectedState(option?.value);
-    setStateId(option?.stateId)
+    setStateId(option?.stateId);
   };
   const handleSetDistrict = (option: any) => {
     setSelectedDistrict(option?.value);
   };
-  const handleSearchSubmit = (event : any) => {
+  const handleSearchSubmit = (event: any) => {
     event?.preventDefault();
     fetchSchemes();
-  }
-  const handleSetSearchInput = (event : any) => {
-    const {value} = event?.target;
-    setSearchInput(value)
+  };
 
-  }
+  useEffect(()=>{
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // Set flag to false after the first render
+      return; // Exit early to prevent running the effect on the first load
+    }
+    if (searchInput===""){
+      fetchSchemes();
+      setPage(1);
+
+    }
+  },[searchInput])
+  const handleSetSearchInput = (event: any) => {
+    const { value } = event?.target;
+    setSearchInput(event?.target?.value);
+    console.log(value,"value")
+    // if (value === "") {
+    //   fetchSchemes();
+    //   setPage(1);
+    // }
+  };
+
+
+// Call the search API only when the user stops typing
+// const handleDebouncedSearchInput = useDebounce((event: any) => {
+//   handleSetSearchInput(event);
+//   fetchSchemes();
+// }, 300);
 
   return (
     <div>
       <LanguageBar />
       <TopDetail />
       <Navbar />
-      <div className="w-[100%] p-[50px] flex flex-col gap-[40px]">
+      <div className='w-[100%] p-[50px] flex flex-col gap-[40px]'>
         <SchemeSearchTabsContainer />
-        <div className="flex items-center gap-4 flex-wrap">
-          <div className="w-[60%] min-w-[200px]">
+        <div className='flex items-center gap-4 flex-wrap'>
+          <div className='w-[60%] min-w-[200px]'>
             <label
-              htmlFor="Deposit taker Search"
-              className="text-base font-normal text-gilroy-medium "
+              htmlFor='Deposit taker Search'
+              className='text-base font-normal text-gilroy-medium '
             >
               Scheme Search
             </label>
-            <div className="mt-2">
-            <InputField
+            <div className='mt-2'>
+              <InputField
                 onChange={handleSetSearchInput}
                 value={searchInput}
-                height="40px"
-                padding="10px"
-                placeholder="Search by Unique ID/name"
+                height='40px'
+                padding='10px'
+                placeholder='Search by Unique ID/name'
               />
             </div>
           </div>
-          <div className=" flex items-center self-end ">
+          <div className=' flex items-center self-end '>
             <button
-               type="button"
-               onClick={handleSearchSubmit} 
+              type='button'
+              onClick={handleSearchSubmit}
               className={`w-[146px] h-[56px] border-[2px] rounded-[8px] py-[10.5px] px-2 xl:px-[16px] flex justify-center items-center ${"bg-[#1c468e] cursor-pointer"} mt-2`}
             >
-              <img src={searchButton} alt="searchButton" />
-              <span className="ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium ">
+              <img src={searchButton} alt='searchButton' />
+              <span className='ml-1 text-[14px] md:text-base font-normal text-[#fff] lg:text-[16px] text-gilroy-medium '>
                 Search
               </span>
             </button>
@@ -270,13 +351,13 @@ const SchemeSearch: React.FC = () => {
         </div>
         <div>
           <label
-            htmlFor="Deposit taker Search"
-            className="text-base font-normal text-gilroy-medium "
+            htmlFor='Deposit taker Search'
+            className='text-base font-normal text-gilroy-medium '
           >
             OR Search by
           </label>
-          <div className=" w-[60%] sm:w-[60%] lg:w-[40%] flex items-center gap-2 flex-wrap sm:flex-nowrap">
-          {/* <SelectField
+          <div className=' w-[60%] sm:w-[60%] lg:w-[40%] flex items-center gap-2 flex-wrap sm:flex-nowrap'>
+            {/* <SelectField
               setOption={handleSetState}
               options={[{label : "All", value : "", stateId : null}, ...states?.map((s : any) => ({value : s?.name, label : s?.name, stateId : s?.id}))]}
               selectedOption={state}
@@ -295,26 +376,30 @@ const SchemeSearch: React.FC = () => {
               setOption={handleSetOption4}
               options={options}
               selectedOption={selectedOption4}
-              placeholder="Status"
-              height="40px"
+              placeholder='Status'
+              height='40px'
             />
           </div>
         </div>
-        <div className="h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto">
-          <div className="">
-          {loader ? (
+        <div className='h-screen md:h-auto sm:h-auto overflow-x-hidden overflow-y-auto'>
+          <div className=''>
+            {loader ? (
               <LoaderSpin />
             ) : schemaData?.length > 0 ? (
-              <ReactTable defaultData={schemaData} columns={columns} />
+              <ReactTable
+                key={JSON?.stringify(schemaData)}
+                defaultData={schemaData}
+                columns={columns}
+              />
             ) : (
-              <div className=" flex justify-center items-center">
+              <div className=' flex justify-center items-center'>
                 <h1>No data available</h1>
               </div>
               // <LoaderSpin />
             )}
           </div>
-          <div className="mt-10">
-          {schemaData.length > 0 && (
+          <div className='mt-10'>
+            {schemaData.length > 0 && (
               <CustomPagination
                 currentPage={page}
                 setCurrentPage={setPage}
@@ -322,11 +407,11 @@ const SchemeSearch: React.FC = () => {
                 itemsPerPage={pageSize}
                 maxPageNumbersToShow={5}
               />
-          )}
+            )}
           </div>
         </div>
       </div>
-      <div className="mt-[100px]">
+      <div className='mt-[100px]'>
         <Footer />
       </div>
     </div>

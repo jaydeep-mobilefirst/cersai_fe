@@ -306,6 +306,21 @@ const SchemeDetails = () => {
     }
   };
 
+  const formatNumber = (num: string): string => {
+    if (!num) return "";
+
+    const x = num.split(".");
+    let lastThree = x[0].substring(x[0].length - 3);
+    const otherNumbers = x[0].substring(0, x[0].length - 3);
+    if (otherNumbers !== "") {
+      lastThree = "," + lastThree;
+    }
+    const formatted =
+      otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+
+    return x.length > 1 ? formatted + "." + x[1] : formatted;
+  };
+
   const handleOnchange = async (
     event: any,
     fieldData: any,
@@ -334,6 +349,8 @@ const SchemeDetails = () => {
               };
             } else if (f?.key === "depositTakerId") {
               return { ...f, userInput: event?.value };
+            } else if (f?.label ==="Entity Unique ID") {
+              return { ...f, userInput: event?.value };
             } else if (f?.key === "regulator") {
               return { ...f, userInput: fetchRegulatorData };
             } else if (
@@ -348,6 +365,52 @@ const SchemeDetails = () => {
           }),
         },
       });
+    } else if (fieldData?.key === "minInvestment") {
+      let inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      if (inputValue === "0") {
+        inputValue = "";
+      }
+      const formattedValue = formatNumber(inputValue);
+      console.log(formattedValue, "jaydeep");
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (f?.key === "minInvestment") {
+              return {
+                ...f,
+                userInput: formattedValue,
+              };
+            } else {
+              return f;
+            }
+          }),
+        },
+      });
+      console.log(allFormData, "jaydeep");
+    } else if (fieldData?.key === "maxInvestment") {
+      let inputValue = event?.target.value?.replace(/[^\d]/g, "");
+      if (inputValue === "0") {
+        inputValue = "";
+      }
+      const formattedValue = formatNumber(inputValue);
+      console.log(formattedValue, "jaydeep");
+      setAllFormData({
+        ...allFormData,
+        formFields: {
+          form_fields: allFormData?.formFields?.form_fields?.map((f: any) => {
+            if (f?.key === "maxInvestment") {
+              return {
+                ...f,
+                userInput: formattedValue,
+              };
+            } else {
+              return f;
+            }
+          }),
+        },
+      });
+      console.log(allFormData, "jaydeep");
     } else {
       onChange(event, fieldData, fieldType);
     }
@@ -374,16 +437,17 @@ const SchemeDetails = () => {
                 />
               )}
             </div>
-            <div className="flex flex-shrink-0 mt-[20px]">
-              <div className="opacity-30 w-[24px] h-[24px] justify-center align-center">
+            <div className="flex flex-shrink-0 mt-[20px] justify-start items-center">
+              <div className="">
                 <input
                   type="checkbox"
+                  className="h-4 w-4 accent-[#1c648e]"
                   checked={isChecked}
                   onChange={handleCheckboxChange}
                   placeholder="ischecked"
                 />
               </div>
-              <div className="leading-[24px]">
+              <div className="leading-[24px] ml-4 text-gilroy-medium text-[14px]">
                 I declare all the Information provided is correct as per my
                 knowledge.
               </div>

@@ -36,6 +36,8 @@ const SchemesSearchDetailsSM: React.FC = () => {
   const [schemes, setSchemes] = useState<any[]>([]);
   const [selectedSchemes, setSelectedSchems] = useState<any[]>([]);
   const [loader, setLoader] = useState(true);
+  const [scheme, setScheme] = useState<boolean>(false);
+
   const screenWidth = useScreenWidth();
   const { onChange } = useContext(FormHandlerContext);
   const { setAllFormData, setAllDocumentData, allFormData } =
@@ -194,36 +196,13 @@ const SchemesSearchDetailsSM: React.FC = () => {
               disabled: true,
             }))
             ?.sort((a: any, b: any) => {
-              // Sort by companyName, panNumber, and dateOfIncorporation
-              const sortOrder = [
-                "companyName",
-                "panNumber",
-                "dateOfIncorporation",
-                "Type of Entity",
-                "Unique ID Number",
-                "GST Number",
-                "Registered Address Line 1",
-                "Registered Address Line 2",
-                "pincode",
-                "State",
-                "District",
-                "regulatorName",
-                "Regulator Number (Provided by Regulator)",
-                "Regulator approval Date",
-                "User Email",
-                "nodalFirstname",
-                "nodalMiddlename",
-                "nodalLastname",
-                "nodalMobile",
-                "nodalEmail",
-              ];
-              const aIndex = sortOrder.indexOf(a.key || a.label);
-              const bIndex = sortOrder.indexOf(b.key || b.label);
+              // First, sort by sectionId (numeric sorting)
+              if (a?.sectionId !== b?.sectionId) {
+                return a?.sectionId - b?.sectionId;
+              }
 
-              if (aIndex === -1 && bIndex === -1) return 0; // No sorting for non-prioritized fields
-              if (aIndex === -1) return 1; // a comes after b
-              if (bIndex === -1) return -1; // a comes before b
-              return aIndex - bIndex; // Sort based on index in sortOrder
+              // Then, sort by sortOrder (numeric sorting)
+              return a?.sortOrder - b?.sortOrder;
             });
 
           let modifiedFileFields =
@@ -390,6 +369,21 @@ const SchemesSearchDetailsSM: React.FC = () => {
       .finally(() => setLoader(false));
   };
 
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("roles");
+    if (sessionData) {
+      const rolesArray: string[] = sessionData.split(",");
+
+      // scheme
+      const schemeRoles = rolesArray.filter(
+        (role) => role === "scheme-edit-access-regulator"
+      );
+      if (schemeRoles?.length > 0) {
+        setScheme(true);
+      }
+    }
+  }, []);
+
   const accordionItems: AccordionItem[] = [
     {
       header: "Scheme Details",
@@ -402,50 +396,94 @@ const SchemesSearchDetailsSM: React.FC = () => {
             allFormData={allFormData}
             onChange={onChange}
           />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div>
-              <label
-                htmlFor="Select Other Schemes"
-                className="text-base font-normal text-gilroy-medium"
-              >
-                Status
-              </label>
-              <SelectButton
-                // backgroundColor="#F2F2F2"
-                setOption={handleSetOption2}
-                options={filteredOptions}
-                selectedOption={selectedOption2}
-                placeholder="Select"
-                showSearchInput={true}
-                disabled={Status === "BANNED" ? true : false}
-              />
-              <span className="text-red-400">{errors?.statusError}</span>
-            </div>
-
-            <div>
-              <label
-                htmlFor="Select Other Schemes"
-                className="text-base font-normal text-gilroy-medium"
-              >
-                Select Other Schemes
-              </label>
-              <SelectButtonMultiselect
-                setOption={handleSetOption1}
-                options={schemes}
-                placeholder="Select"
-                multiselect={true}
-                allSelectedOptions={selectedSchemes}
-                remove={remove}
-                className="relative"
-                disabled={
-                  Status === "BANNED" ||
-                  (Status === "UNDER_LETIGATION" &&
-                    selectedOption2 === "ACTIVE")
-                    ? true
-                    : false
-                }
-              />
-            </div>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
+            {scheme ? (
+              <>
+                {" "}
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Status
+                  </label>
+                  <SelectButton
+                    // backgroundColor="#F2F2F2"
+                    setOption={handleSetOption2}
+                    options={filteredOptions}
+                    selectedOption={selectedOption2}
+                    placeholder='Select'
+                    showSearchInput={true}
+                    disabled={Status === "BANNED" ? true : false}
+                  />
+                  <span className='text-red-400'>{errors?.statusError}</span>
+                </div>
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Select Other Schemes
+                  </label>
+                  <SelectButtonMultiselect
+                    setOption={handleSetOption1}
+                    options={schemes}
+                    placeholder='Select'
+                    multiselect={true}
+                    allSelectedOptions={selectedSchemes}
+                    remove={remove}
+                    className='relative'
+                    disabled={
+                      Status === "BANNED" ||
+                      (Status === "UNDER_LETIGATION" &&
+                        selectedOption2 === "ACTIVE")
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Status
+                  </label>
+                  <SelectButton
+                    // backgroundColor="#F2F2F2"
+                    setOption={handleSetOption2}
+                    options={filteredOptions}
+                    selectedOption={selectedOption2}
+                    placeholder='Select'
+                    showSearchInput={true}
+                    disabled={true}
+                  />
+                  <span className='text-red-400'>{errors?.statusError}</span>
+                </div>
+                <div>
+                  <label
+                    htmlFor='Select Other Schemes'
+                    className='text-base font-normal text-gilroy-medium'
+                  >
+                    Select Other Schemes
+                  </label>
+                  <SelectButtonMultiselect
+                    setOption={handleSetOption1}
+                    options={schemes}
+                    placeholder='Select'
+                    multiselect={true}
+                    allSelectedOptions={selectedSchemes}
+                    remove={remove}
+                    className='relative'
+                    disabled={true}
+                  />
+                </div>
+              </>
+            )}
           </div>
           <BranchDetails />
         </>
@@ -473,15 +511,15 @@ const SchemesSearchDetailsSM: React.FC = () => {
 
   return (
     <div
-      className="flex flex-col min-h-screen justify-between"
+      className='flex flex-col min-h-screen justify-between'
       style={{ minHeight: "calc(100vh - 110px)" }}
     >
-      <div className="">
-        <div className="mt-6 mx-8">
+      <div className=''>
+        <div className='mt-6 mx-8'>
           <TaskTabsRg />
         </div>
-        <div className="flex  flex-row mt-3 mx-8"></div>
-        <div className="mt-8 mb-8 mx-8">
+        <div className='flex  flex-row mt-3 mx-8'></div>
+        <div className='mt-8 mb-8 mx-8'>
           {loader ? (
             <LoaderSpin />
           ) : (
@@ -489,61 +527,68 @@ const SchemesSearchDetailsSM: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="">
+      <div className=''>
         <div
-          className="flex w-full p-4 px-8 lg:px-[30px] flex-row justify-between items-center "
+          className='flex w-full p-4 px-8 lg:px-[30px] flex-row justify-between items-center '
           style={{
             width: `${screenWidth > 1024 ? "calc(100vw - 349px)" : "100vw"}`,
           }}
         >
-          <div className="flex flex-row items-center space-x-2">
+          <div className='flex flex-row items-center space-x-2'>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              className="shrink-0"
+              xmlns='http://www.w3.org/2000/svg'
+              width='24'
+              height='24'
+              viewBox='0 0 24 24'
+              fill='none'
+              className='shrink-0'
             >
               <path
-                d="M15 6L9 12L15 18"
-                stroke="#1D1D1B"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                d='M15 6L9 12L15 18'
+                stroke='#1D1D1B'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
               />
             </svg>
             <button
               onClick={handleBackButtonClick}
-              className="text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]"
+              className='text-black transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#385723]'
             >
               Back
             </button>
           </div>
-          <div className="flex items-center">
-            <button
-              disabled={loader}
-              type="submit"
-              onClick={handleStatusChange}
-              className="bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
-            >
-              {loader ? <LoaderSpin /> : "Submit"}
-            </button>
+          <div className='flex items-center'>
+            {Status === "BANNED" ? (
+              <></>
+            ) : (
+              <>
+                {" "}
+                <button
+                  disabled={loader}
+                  type='submit'
+                  onClick={handleStatusChange}
+                  className='bg-[#1C468E] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold '
+                >
+                  {loader ? <LoaderSpin /> : "Submit"}
+                </button>
+              </>
+            )}
           </div>
         </div>
         <div>
-          <div className="border-[#E6E6E6] border-[1px] lg:mt-4"></div>
+          <div className='border-[#E6E6E6] border-[1px] lg:mt-4'></div>
 
-          <div className="text-center mt-auto">
-            <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
+          <div className='text-center mt-auto'>
+            <h1 className='text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal'>
               COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
             </h1>
-            <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
+            <p className='text-[#24222B] text-xs text-wrap text-gilroy-light font-normal'>
               Powered and managed by{" "}
               <a
-                href="https://www.proteantech.in/"
-                className="underline text-gilroy-regular font-bold"
-                target="_blank"
+                href='https://www.proteantech.in/'
+                className='underline text-gilroy-regular font-bold'
+                target='_blank'
               >
                 Protean eGov Technologies
               </a>{" "}

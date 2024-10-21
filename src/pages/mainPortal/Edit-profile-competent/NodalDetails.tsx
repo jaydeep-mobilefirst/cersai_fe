@@ -94,13 +94,19 @@ const NodalDetails = (props: Props) => {
           }
         )
         .then((response) => {
+          sessionStorage.setItem("user_status", "PENDING");
           Swal.fire({
             icon: "success",
             text:
-              response?.data?.message ||
-              "Nodal Officer details updated successfully",
+              // response?.data?.message ||
+              "Nodal Officer details updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
             confirmButtonText: "Ok",
           });
+          Navigate("/ca/dashboard");
+          setTimeout(() => {
+            sessionStorage.clear()
+            Navigate("/");
+          },3000)
         })
         .catch((err) => {
           Swal.fire({

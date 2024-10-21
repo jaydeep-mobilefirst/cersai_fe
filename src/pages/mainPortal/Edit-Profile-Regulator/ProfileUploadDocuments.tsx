@@ -75,11 +75,19 @@ const ProfileUploadDocuments = (props: Props) => {
       })
       .then((response) => {
         console.log(response?.data?.message, "response");
+        sessionStorage.setItem("user_status", "PENDING");
         Swal.fire({
           icon: "success",
-          text: response?.data?.message || "Documents uploaded successfully",
+          text: 
+          // response?.data?.message || 
+          "Regulator documents updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
           confirmButtonText: "Ok",
         });
+        Navigate("/rg/dashboard");
+        setTimeout(() => {
+          sessionStorage.clear()
+          Navigate("/");
+        },3000)
       })
       .catch((err) => {
         setLoader(false);
@@ -128,6 +136,7 @@ const ProfileUploadDocuments = (props: Props) => {
   };
 
   const disabledField = sessionStorage.getItem("user_status");
+  const isConfigurable = sessionStorage.getItem("isConfigurable")
 
   const checkStatus = (status: any): any => {
     switch (disabledField) {
@@ -148,7 +157,7 @@ const ProfileUploadDocuments = (props: Props) => {
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const disableFieldStatus = isConfigurable === 'true' ? true : checkStatus(disabledField) 
 
   return (
     <>

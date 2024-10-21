@@ -78,17 +78,24 @@ const UploadDocument = (props: Props) => {
       .then((response) => {
         Swal.fire({
           icon: "success",
-          text: response?.data?.message || "Documents uploaded successfully",
+          text: 
+          // response?.data?.message || 
+          "Documents uploaded successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
           confirmButtonText: "Ok",
         });
         setLoader(false);
+        sessionStorage.setItem("user_status", "PENDING");
         Navigate("/dt/profile?current=branches");
+        setTimeout(() => {
+          sessionStorage.clear()
+          Navigate("/");
+        },3000)
       })
       .catch((err) => {
         setLoader(false);
         Swal.fire({
           icon: "error",
-          text: err?.response?.data?.detail?.message,
+          text: err?.response?.data?.detail?.message || err?.response?.data?.message[0],
           confirmButtonText: "Ok",
         });
       });
@@ -151,7 +158,9 @@ const UploadDocument = (props: Props) => {
     }
   };
 
-  const disableFieldStatus = checkStatus(disabledField);
+  const isConfigurable = sessionStorage.getItem("isConfigurable")
+
+  const disableFieldStatus = isConfigurable === 'true' ? true : checkStatus(disabledField);
 
   return (
     <>
@@ -204,7 +213,7 @@ const UploadDocument = (props: Props) => {
                           loader ? "bg-gray-500" : "bg-[#1C468E]"
                         } rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs`}
                       >
-                        {loader ? <LoaderSpin /> : " Save and Continue"}
+                        {loader ? <LoaderSpin /> : " Save and Submit"}
                       </button>
                     )}
                   </div>

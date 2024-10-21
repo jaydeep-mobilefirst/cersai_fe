@@ -44,6 +44,10 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({
     roleName: "",
     dropdown: "",
   });
+
+  // Prepopulate default functionality "Dashboard View Access"
+  const defaultFunc = functionalities.find((f) => f.label === "Dashboard View Access");
+
   const [nameOfRole, setNameOfRole] = useState<string>(
     roleName ? roleName : ""
   );
@@ -56,7 +60,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({
     }
     setNameOfRole(value);
   };
-
+  console.log("func",functionalities)
   const handleSetOption1 = (value: any) => {
     if (
       functionalities.length > 0 &&
@@ -69,6 +73,9 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({
   };
 
   const remove = (data: any) => {
+    // Prevent removal of "Dashboard View Access"
+    if (data.label === "Dashboard View Access") return;
+
     const filtered = selectedFunctionalities.filter(
       (f) => f.value !== data.value
     );
@@ -85,7 +92,8 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({
 
   useEffect(() => {
     if (operation === "add") {
-      setSelectedFunctionalities([]);
+      setSelectedFunctionalities(defaultFunc ? [defaultFunc] : []);
+      // setSelectedFunctionalities([]);
       setErrors({ roleName: "", dropdown: "" });
       setNameOfRole("");
     }
