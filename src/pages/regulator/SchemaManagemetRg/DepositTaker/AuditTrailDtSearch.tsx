@@ -52,6 +52,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
 
   const { setAllFormData, setAllDocumentData, allFormData, masterEntityId } =
     useDepositTakerRegistrationStore((state) => state);
+  const [dedupErrors, setDedupErrors] = useState<any>();
   console.log({ allFormData }, "allFormData");
 
   useEffect(() => {
@@ -103,10 +104,21 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
             error: "",
             fileName: "",
           }));
+
+        const currentEntityDt = {
+          id: 1,
+          autoApproval: false,
+          entityCode: "DT",
+          path: "/depositetaker/signup/verification",
+          entityName: "Deposit Taker",
+          registrationAllowed: true,
+        };
+
         setAllFormData({
           ...response.data.data,
           formFields: { form_fields: modifiedFormFields },
           dropdownData,
+          currentEntity: currentEntityDt,
         });
         setAllDocumentData(modifiedFileFields);
         setAccordionLoading(false);
@@ -138,6 +150,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
                 allFormData={allFormData}
                 formFields={formFields}
                 onChange={onChange}
+                dedupErrors={dedupErrors}
               />
             </div>
           ),
@@ -259,6 +272,61 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     return isMatch;
   };
 
+  const dedupcheck = async (email: string, mobile: string, pan: string) => {
+    let errors = [];
+
+    // Check email duplication
+    try {
+      const emailResponse = await axiosTokenInstance.post(`user/dedup`, {
+        value: email,
+      });
+
+      if (!emailResponse.data.success) {
+        errors.push(
+          ` ${emailResponse.data.message} (${emailResponse.data.data.value})`
+        );
+      }
+    } catch (error: any) {
+      console.error("Email deduplication check failed:", error);
+      errors.push(error.response?.data?.message || "Unknown error");
+    }
+
+    // Check mobile duplication
+    try {
+      const mobileResponse = await axiosTokenInstance.post(`user/dedup`, {
+        value: mobile,
+      });
+      if (!mobileResponse.data.success) {
+        errors.push(
+          ` ${mobileResponse.data.message} (${mobileResponse.data.data.value})`
+        );
+      }
+    } catch (error: any) {
+      console.error("Mobile deduplication check failed:", error);
+      errors.push(error.response?.data?.message || "Unknown error");
+    }
+
+    // Check PAN duplication
+    try {
+      const panResponse = await axiosTokenInstance.post(
+        `deposit-taker/dedupcheck`,
+        {
+          value: pan,
+        }
+      );
+      if (!panResponse.data.success) {
+        errors.push(
+          ` ${panResponse.data.message} (${panResponse.data.data.value})`
+        );
+      }
+    } catch (error: any) {
+      console.error("PAN deduplication check failed:", error);
+      errors.push(error.response?.data?.message || "Unknown error");
+    }
+
+    return errors;
+  };
+
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoader(true);
@@ -269,10 +337,33 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       setLoader(false);
       return;
     }
+
+    const nodalMobile = allFormData?.formFields?.form_fields?.find(
+      (field: any) => field?.key === "nodalMobile"
+    )?.userInput;
+    const nodalEmail = allFormData?.formFields?.form_fields?.find(
+      (field: any) => field?.key === "nodalEmail"
+    )?.userInput;
+    const panNumber = allFormData?.formFields?.form_fields?.find(
+      (field: any) => field?.key === "panNumber"
+    )?.userInput;
     const details = allFormData?.formFields?.form_fields;
     const gstObj = details.find(
       (item: { label: string }) => item.label === "GST Number"
     );
+
+    const dedupErrors = await dedupcheck(nodalEmail, nodalMobile, panNumber);
+    console.log({ dedupErrors });
+    if (dedupErrors.length > 0) {
+      setDedupErrors(dedupErrors);
+      // Swal.fire({
+      //   icon: "error",
+      //   title: "Duplication Error",
+      //   html: dedupErrors.join("<br />"), // Display all error messages using line breaks
+      // });
+      setLoader(false);
+      return;
+    }
     const gstNum = gstObj?.userInput?.toUpperCase();
     if (gstNum?.length > 0) {
       if (!verifyPanWithGST()) {
@@ -298,8 +389,8 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         return;
       }
     }
-    const panVerified = await verifyPan();
-    if (panVerified) {
+    // const panVerified = await verifyPan();
+    if (true) {
       // Process submission if PAN is verified
       try {
         let formData = allFormData.formFields.form_fields.map((field: any) => ({
@@ -434,36 +525,35 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
 
   return (
     <div
-      className='flex flex-col justify-between'
+      className="flex flex-col justify-between"
       style={{ minHeight: "calc(100vh - 110px)" }}
     >
       <div>
-        <div className='mt-6 mx-2'>
-          {/* <TaskTabsCa /> */}
+        <div className="mt-6 mx-2">
           <TaskTabsRg />
         </div>
         {accordionLoading ? (
           <>
-            <div className='flex justify-center items-center'>
+            <div className="flex justify-center items-center">
               <LoaderSpin />
             </div>
           </>
         ) : (
           <>
-            <div className='mx-8 mt-4 mb-1'>
-              <div className='flex flex-col xl:flex-row md:flex-row lg:flex-row items-center justify-between'>
-                <div className='flex flex-row'>
+            <div className="mx-8 mt-4 mb-1">
+              <div className="flex flex-col xl:flex-row md:flex-row lg:flex-row items-center justify-between">
+                <div className="flex flex-row">
                   <img
                     src={InfoIcon}
-                    alt='InfoIcon'
-                    className='h-6 w-6 sm:h-8 sm:w-8 mr-2'
+                    alt="InfoIcon"
+                    className="h-6 w-6 sm:h-8 sm:w-8 mr-2"
                   />
-                  <p className='text-[#808080]'>
+                  <p className="text-[#808080]">
                     You can Upload Deposit Takers data in bulk. Please use this
                     given
                     <span
                       onClick={handleDownloadTemplate}
-                      className='text-blue-400 hover:cursor-pointer'
+                      className="text-blue-400 hover:cursor-pointer"
                     >
                       &nbsp;Template.
                     </span>
@@ -473,26 +563,26 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
                   onClick={() => {
                     uploadButtonRef.current?.click();
                   }}
-                  className='w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer'
+                  className="w-[133px] h-10 px-6 py-2 bg-blue-900 rounded-lg flex-col justify-start items-start gap-2 inline-flex cursor-pointer"
                 >
                   <input
                     onChange={handleFileUpload}
-                    type='file'
-                    name=''
-                    id=''
-                    className='hidden'
-                    accept='.xls, .xlsx'
+                    type="file"
+                    name=""
+                    id=""
+                    className="hidden"
+                    accept=".xls, .xlsx"
                     ref={uploadButtonRef}
                     key={uploadInputKey}
                     disabled={loader}
                   />
-                  <div className='justify-start items-center gap-1.5 inline-flex'>
-                    <div className='w-6 h-6 justify-center items-center flex'>
-                      <div className='w-6 h-6 relative'>
-                        <img src={UploadIcon} alt='' />
+                  <div className="justify-start items-center gap-1.5 inline-flex">
+                    <div className="w-6 h-6 justify-center items-center flex">
+                      <div className="w-6 h-6 relative">
+                        <img src={UploadIcon} alt="" />
                       </div>
                     </div>
-                    <div className='text-white text-base font-normal'>
+                    <div className="text-white text-base font-normal">
                       {" "}
                       {loader1 ? <LoaderSpin /> : "Upload"}
                     </div>
@@ -500,61 +590,61 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className='m-2 lg:m-4'>
+            <div className="m-2 lg:m-4">
               <Accordion items={accordionItems} />
             </div>
           </>
         )}
       </div>
-      <div className='mt-8 mb-8 mx-8'>
+      <div className="mt-8 mb-8 mx-8">
         {accordionLoading ? (
           <>
-            <div className='flex justify-center items-center'>
+            <div className="flex justify-center items-center">
               <LoaderSpin />
             </div>
           </>
         ) : (
           <>
-            <div className='flex flex-col lg:flex-row lg:items-center justify-between '>
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between ">
               <div>
                 <div
-                  className='flex w-full flex-row justify-end items-center'
+                  className="flex w-full flex-row justify-end items-center"
                   style={{
                     width: `${
                       screenWidth > 1024 ? "calc(100vw - 400px)" : "100vw"
                     }`,
                   }}
                 >
-                  <div className='flex items-center space-x-6 mb-4 pr-4'>
+                  <div className="flex items-center space-x-6 mb-4 pr-4">
                     <p
                       onClick={handleCancelClick}
-                      className='text-[#1c468e]  rounded-xl p-3 border border-[#1c468e] text-gilroy-medium cursor-pointer text-sm w-full sm:w-auto sm:max-w-xs '
+                      className="text-[#1c468e]  rounded-xl p-3 border border-[#1c468e] text-gilroy-medium cursor-pointer text-sm w-full sm:w-auto sm:max-w-xs "
                     >
                       Cancel
                     </p>
 
                     <button
                       onClick={onSubmit}
-                      type='submit'
-                      className='bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold '
+                      type="submit"
+                      className="bg-[#1c468e] rounded-xl p-3 text-white font-semibold text-sm w-full sm:w-auto sm:max-w-xs text-gilroy-semibold "
                     >
                       {loader ? <LoaderSpin /> : " Submit"}
                     </button>
                   </div>
                 </div>
-                <div className='mt-auto'>
-                  <div className='border-[#E6E6E6] border-[1px]'></div>
+                <div className="mt-auto">
+                  <div className="border-[#E6E6E6] border-[1px]"></div>
 
-                  <div className='text-center mt-auto'>
-                    <h1 className='text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal'>
+                  <div className="text-center mt-auto">
+                    <h1 className="text-[#24222B] text-xs text-wrap text-gilroy-light mt-3 font-normal">
                       COPYRIGHT © 2024 CERSAI. ALL RIGHTS RESERVED.
                     </h1>
-                    <p className='text-[#24222B] text-xs text-wrap text-gilroy-light font-normal'>
+                    <p className="text-[#24222B] text-xs text-wrap text-gilroy-light font-normal">
                       Powered and managed by{" "}
                       <a
-                        href='https://www.proteantech.in/'
-                        className='underline text-gilroy-regular font-bold'
-                        target='_blank'
+                        href="https://www.proteantech.in/"
+                        className="underline text-gilroy-regular font-bold"
+                        target="_blank"
                       >
                         Protean eGov Technologies
                       </a>{" "}
