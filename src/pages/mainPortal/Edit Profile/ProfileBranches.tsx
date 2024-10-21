@@ -105,6 +105,9 @@ const ProfileBranches = () => {
     })
   );
 
+  const clearStore = useManagementStore((state) => state.clearStore);
+  const clearBranch = useBranchStore((state) => state.clearBranch);
+  
   const filterManagementID: any = removedBranchesData?.map(({ id }: any) => id);
   console.log(
     { filterManagement, filterManagementID },
@@ -290,13 +293,19 @@ const ProfileBranches = () => {
               Swal.fire({
                 icon: "success",
                 text:
-                  "Deposit Taker Updated Successfully " ||
-                  response?.data?.message,
+                  // response?.data?.message ||   
+                  "Deposit Taker Updated Successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
                 confirmButtonText: "Ok",
               });
 
               sessionStorage.setItem("user_status", "PENDING");
               Navigate("/dt/dashboard");
+              setTimeout(() => {
+                clearStore();
+                clearBranch();
+                sessionStorage.clear()
+                Navigate("/");
+              },3000)
 
               if (
                 Array.isArray(filterManagement) &&

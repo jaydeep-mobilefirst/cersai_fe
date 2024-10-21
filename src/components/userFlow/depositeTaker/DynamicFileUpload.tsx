@@ -175,6 +175,8 @@ const DynamicFileUpload = ({ data }: Props) => {
   if (pathname == "/dt/profile") {
     if(disabledField == "APPROVED"){
       var disableFieldStatus = isConfigurable === "true" ? true : false
+    }else if(disabledField == "INCOMPLETE"){
+      disableFieldStatus = isConfigurable === "true" ? true : false
     } else {
       disableFieldStatus =
       isConfigurable === "true"

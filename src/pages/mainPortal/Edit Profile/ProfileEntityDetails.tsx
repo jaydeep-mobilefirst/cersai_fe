@@ -45,6 +45,8 @@ const ProfileEntityDetails = (props: Props) => {
     clearRemovedBranches: state.clearRemovedBranches,
     branches: state.branches,
   }));
+  const clearStore = useManagementStore((state) => state.clearStore);
+  const clearBranch = useBranchStore((state) => state.clearBranch);
 
   const entityDetailsSectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Entity Details"
@@ -278,11 +280,17 @@ const ProfileEntityDetails = (props: Props) => {
 
             Swal.fire({
               icon: "success",
-              text: "Profile Details updated successfully",
+              text: "Profile Details updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
               confirmButtonText: "Ok",
             });
             sessionStorage.setItem("user_status", "PENDING");
             Navigate("/dt/profile?current=nodal");
+            setTimeout(() => {
+              clearStore();
+              clearBranch();
+              sessionStorage.clear()
+              Navigate("/");
+            },3000)
           } catch (err) {
             Swal.fire({
               icon: "error",

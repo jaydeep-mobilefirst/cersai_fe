@@ -17,6 +17,7 @@ import useProfileRegulatorStore from "../../../zust/useProfileRegulatorStore";
 import { stat } from "fs";
 import FooterDT from "./FooterDT";
 import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
+import { useBranchStore } from "../../../store/upate-profile/branch";
 
 type Props = {};
 
@@ -42,6 +43,9 @@ const ProfileRegulatorDetails = (props: Props) => {
     branches: state.branches,
   }));
   const { onChange, handleValidationChecks } = useContext(FormHandlerContext);
+
+  const clearStore = useManagementStore((state) => state.clearStore);
+  const clearBranch = useBranchStore((state) => state.clearBranch);
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Regulators Details"
@@ -186,13 +190,19 @@ const ProfileRegulatorDetails = (props: Props) => {
                 Swal.fire({
                   icon: "success",
                   text:
-                    response?.data?.message ||
-                    "Profile Details updated successfully",
+                    // response?.data?.message ||
+                    "Profile Details updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
                   confirmButtonText: "Ok",
                 });
 
                 sessionStorage.setItem("user_status", "PENDING");
                 Navigate("/dt/profile?current=management");
+                setTimeout(() => {
+                  clearStore();
+                  clearBranch();
+                  sessionStorage.clear()
+                  Navigate("/");
+                },3000)
               })
               .catch((err) => {
                 Swal.fire({

@@ -16,6 +16,7 @@ import FooterDT from "./FooterDT";
 import useStore from "../../../store/statusStore";
 import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
 import FooterText from "../../../components/userFlow/common/FooterText";
+import { useBranchStore } from "../../../store/upate-profile/branch";
 
 type Props = {};
 
@@ -45,6 +46,9 @@ const ProfileUploadDocuments = (props: Props) => {
   const status = sessionStorage.getItem("user_status");
 
   const setFormData = userProfileUploadStore((state) => state.setFormData);
+
+  const clearStore = useManagementStore((state) => state.clearStore);
+  const clearBranch = useBranchStore((state) => state.clearBranch);
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Upload Documents"
@@ -159,12 +163,19 @@ const ProfileUploadDocuments = (props: Props) => {
             Swal.fire({
               icon: "success",
               text:
-                response?.data?.message || "Documents uploaded successfully",
+                // response?.data?.message || 
+                "Documents uploaded successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
               confirmButtonText: "Ok",
             });
             setLoader(false);
             sessionStorage.setItem("user_status", "PENDING");
             Navigate("/dt/profile?current=branches");
+            setTimeout(() => {
+              clearStore();
+              clearBranch();
+              sessionStorage.clear()
+              Navigate("/");
+            },3000)
           })
           .catch((err) => {
             setLoader(false);

@@ -16,6 +16,7 @@ import LoaderSpin from "../../../components/LoaderSpin";
 import useProfileNodalStore from "../../../zust/useProfileNodalStore";
 import FooterDT from "./FooterDT";
 import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
+import { useBranchStore } from "../../../store/upate-profile/branch";
 
 type Props = {};
 
@@ -43,6 +44,8 @@ const ProfileNodalDetails = (props: Props) => {
     clearRemovedBranches: state.clearRemovedBranches,
     branches: state.branches,
   }));
+  const clearStore = useManagementStore((state) => state.clearStore);
+  const clearBranch = useBranchStore((state) => state.clearBranch);
 
   const sectionId = allFormData?.entitySections?.find(
     (s: any) => s?.sectionName === "Nodal Details"
@@ -186,12 +189,18 @@ const ProfileNodalDetails = (props: Props) => {
               .then((response) => {
                 Swal.fire({
                   icon: "success",
-                  text: "Profile details updated successfully",
+                  text: "Profile details updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
                   confirmButtonText: "Ok",
                 });
 
                 sessionStorage.setItem("user_status", "PENDING");
                 Navigate("/dt/profile?current=regulator");
+                setTimeout(() => {
+                  clearStore();
+                  clearBranch();
+                  sessionStorage.clear()
+                  Navigate("/");
+                },3000)
               });
             if (membersToSubmit !== null) {
               await axiosTokenInstance.post(
