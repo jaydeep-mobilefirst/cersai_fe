@@ -791,10 +791,12 @@ const FormHandlerProviders = ({ children }: Props) => {
             if (startDate > endDate) {
               errorCount += 1;
               field.error = "Start date should be before the last date";
-            } else if (startDate === endDate) {
-              errorCount += 1;
-              field.error = "Start date and last date should not be the same";
-            } else {
+            } 
+            // else if (startDate === endDate) {
+            //   errorCount += 1;
+            //   field.error = "Start date and last date should not be the same";
+            // } 
+            else {
               field.error = ""; // No error
             }
             return { ...field };
