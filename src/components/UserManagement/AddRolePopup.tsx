@@ -113,8 +113,12 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({
     onClose();
   };
   const handleOnSubmit = (e: any) => {
+
+    setLoader(true);
     e.preventDefault();
     if (selectedFunctionalities.length === 0) {
+      
+      setLoader(false)
       setErrors((prev) => ({
         ...prev,
         dropdown: "Please select at least 1 functionality",
@@ -124,12 +128,12 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({
     }
 
     if (nameOfRole === "") {
+      
+      setLoader(false)
       setErrors((prev) => ({ ...prev, roleName: "Please enter name" }));
     } else {
       setErrors((prev) => ({ ...prev, roleName: "" }));
     }
-
-    setLoader(true);
     let resultObject;
     let entityId = sessionStorage.getItem("entityUniqueId");
     if (roleId) {
@@ -169,10 +173,11 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({
               icon: "success",
             });
             setNameOfRole("");
+            setLoader(false)
           }
 
           if (!res?.data?.success) {
-            handleClose();
+            // handleClose();
             Swal.fire({
               title: "Error",
               icon: "error",
@@ -181,6 +186,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({
           }
         })
         .catch((e: any) => {
+          setLoader(false)
           console.log("role error", e);
           handleClose();
           Swal.fire({
@@ -260,6 +266,7 @@ const AddRolePopup: React.FC<AddRolePopupProps> = ({
                   type="submit"
                   className="ml-6 md:ml-[32px] w-[40%] md:w-[224px] h-[56px] bg-[#1C468E] rounded-xl text-white"
                   onClick={handleOnSubmit}
+                  disabled={loader}
                 >
                   {loader ? <LoaderSpin /> : "Save"}
                 </button>

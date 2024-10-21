@@ -38,7 +38,7 @@ const DatePicker = ({
       item?.key === "startDateByCARG" || item?.key === "startDateByDT"
   )?.userInput;
   const lastDate = allFormData?.formFields?.form_fields?.find(
-    (item: any) => item?.key === "lastDate"
+    (item: any) => item?.key === "lastDate" ||  item?.key ==="lastDateDT" ||  item?.key==="lastDateCARG"
   )?.userInput;
   console.log({ startDate, lastDate });
   useEffect(() => {
@@ -93,7 +93,7 @@ const DatePicker = ({
     <div className=" flex justify-start items-center h-14 w-full max-w-[35rem] sm:max-w-[100%] md:max-w-md lg:max-w-2xl border rounded-md">
       <button
         type="button"
-        disabled={disabled}
+        disabled={ disabled}
         onClick={handleDateButtonClick}
         className={`flex justify-between items-center h-full w-full px-2 py-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none`}
         style={{
@@ -106,22 +106,22 @@ const DatePicker = ({
         </div>
       </button>
       <input
-        disabled={disabled}
+        disabled={ disabled}
         ref={hiddenDateInput}
         type="date"
         className="absolute opacity-0 -z-10 mt-10"
         onChange={onChangeHandler}
         max={
           lastDate
-            ? new Date(new Date(lastDate).setDate(new Date(lastDate).getDate()))
+            ? new Date(new Date(lastDate)?.setDate(new Date(lastDate)?.getDate()))
                 ?.toISOString()
-                .split("T")[0]
+                ?.split("T")[0]
             : determineMaxDate()
         }
         min={
-          maxDate === "lastDate" && startDate
+          maxDate === "lastDate" || maxDate ==="lastDateDT" || maxDate==="lastDateCARG" && startDate
             ? new Date(
-                new Date(startDate).setDate(new Date(startDate).getDate())
+                new Date(startDate)?.setDate(new Date(startDate)?.getDate())
               )
                 ?.toISOString()
                 ?.split("T")[0]

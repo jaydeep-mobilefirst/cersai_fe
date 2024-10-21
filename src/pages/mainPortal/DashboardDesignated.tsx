@@ -85,7 +85,7 @@ const DashboardDesignated = (props: Props) => {
     { text: "Deposit Taker Registered", value: `${state.totalDepositTakerRegistered}`, bgColor: true },
     { text: "Total Deposit Taker Approved", value: `${state.totalDepositTakerApproved}`, bgColor: false },
     { text: "Total Schemes Registered", value: `${state.totalSchemeRegistered}`, bgColor: false },
-    { text: "Total Active Schemes", value: `${state.totalSchemeActive}`, bgColor: true },
+    { text: "Total Active + Active-Deposit not being taken Schemes", value: `${state.totalSchemeActive}`, bgColor: true },
     { text: "Total Schemes Banned", value: `${state.totalSchemeBanned}`, bgColor: false },
     { text: "Total Schemes Under Litigation", value: `${state.totalSchemeUnderLetigation}`, bgColor: true },
   ];

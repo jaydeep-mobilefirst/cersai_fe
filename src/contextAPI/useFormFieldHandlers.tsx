@@ -759,6 +759,8 @@ const FormHandlerProviders = ({ children }: Props) => {
           case "startDateByCARG":
           case "startDateByDT":
           case "lastDate":
+          case "lastDateCARG":
+          case "lastDateDT":
             // Fetch the input for the start date and end date
             let startDateInput = allFormData?.formFields?.form_fields?.find(
               (f: any) =>
@@ -767,7 +769,7 @@ const FormHandlerProviders = ({ children }: Props) => {
                 f?.key === "startDateByDT"
             )?.userInput;
             let endDateInput = allFormData?.formFields?.form_fields?.find(
-              (f: any) => f?.key === "lastDate"
+              (f: any) => f?.key === "lastDate" || f?.key === "lastDateCARG" || f?.key === "lastDateDT"
             )?.userInput;
 
             if (!startDateInput || !endDateInput) {
