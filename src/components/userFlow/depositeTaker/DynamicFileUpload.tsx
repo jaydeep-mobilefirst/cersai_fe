@@ -194,7 +194,7 @@ const DynamicFileUpload = ({ data }: Props) => {
             the various constitution types. To know the document to upload for
             your constitution type, please
             <span className='underline text-blue-400'>
-              <Link target={"_blank"} to='https://www.google.com'>
+              <Link target={"_blank"} to='https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf'>
                 {" "}
                 click here
               </Link>
