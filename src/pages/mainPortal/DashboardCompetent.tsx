@@ -103,7 +103,7 @@ const DashboardCompetent = (props: Props) => {
       bgColor: false,
     },
     {
-      text: "Total Active Schemes",
+      text: "Total Active + Active-Deposit not being taken Schemes",
       value: `${state.totalSchemeActive}`,
       bgColor: true,
     },

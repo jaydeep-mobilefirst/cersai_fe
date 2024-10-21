@@ -50,6 +50,7 @@ const NewSchemaCreation = () => {
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
     const { value } = event?.target;
+    setPage(1);
     setSearchInput(value);
     // if (value === "") {
     //   fetchSchemes();

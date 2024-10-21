@@ -42,7 +42,7 @@ const SchemeSearchTabsContainer: React.FC = () => {
       bgColor: true,
     },
     { text: "Banned", value: data[2]?.totalSchemeBanned, bgColor: false },
-    { text: "Active", value: data[3]?.totalSchemeActive, bgColor: true },
+    { text: "Active + Active-Deposit not being taken", value: data[3]?.totalSchemeActive, bgColor: true },
     {
       text: "Under litigation",
       value: data[0]?.totalSchemeUnderLetigation,
@@ -51,7 +51,7 @@ const SchemeSearchTabsContainer: React.FC = () => {
   ];
 
   return (
-    <div className=' bg-[#E7F0FF] rounded-[24px] flex items-center gap-8 flex-wrap px-[26px] py-[24px] 2xl:justify-between'>
+    <div className='min-h-40 bg-[#E7F0FF] rounded-[24px] flex items-center gap-8 flex-wrap px-[26px] py-[24px] 2xl:justify-between'>
       {tabsData.map((each, idx) => (
         <SchemeSearchTab
           key={idx}
