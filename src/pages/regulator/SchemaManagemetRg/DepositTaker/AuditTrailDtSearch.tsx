@@ -104,10 +104,19 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
             error: "",
             fileName: "",
           }));
+        const currentEntityDt = {
+          id: 1,
+          autoApproval: false,
+          entityCode: "DT",
+          path: "/depositetaker/signup/verification",
+          entityName: "Deposit Taker",
+          registrationAllowed: true,
+        };
         setAllFormData({
           ...response.data.data,
           formFields: { form_fields: modifiedFormFields },
           dropdownData,
+          currentEntity: currentEntityDt,
         });
         setAllDocumentData(modifiedFileFields);
         setAccordionLoading(false);
@@ -141,7 +150,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
                 allFormData={allFormData}
                 formFields={formFields}
                 onChange={onChange}
-                dedupErrors={dedupErrors}
+                // dedupErrors={dedupErrors}
               />
             </div>
           ),
@@ -331,29 +340,29 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       return;
     }
 
-    const nodalMobile = allFormData?.formFields?.form_fields?.find(
-      (field: any) => field?.key === "nodalMobile"
-    )?.userInput;
-    const nodalEmail = allFormData?.formFields?.form_fields?.find(
-      (field: any) => field?.key === "nodalEmail"
-    )?.userInput;
-    const panNumber = allFormData?.formFields?.form_fields?.find(
-      (field: any) => field?.key === "panNumber"
-    )?.userInput;
-    console.log(panNumber, "deduppanapi");
+    // const nodalMobile = allFormData?.formFields?.form_fields?.find(
+    //   (field: any) => field?.key === "nodalMobile"
+    // )?.userInput;
+    // const nodalEmail = allFormData?.formFields?.form_fields?.find(
+    //   (field: any) => field?.key === "nodalEmail"
+    // )?.userInput;
+    // const panNumber = allFormData?.formFields?.form_fields?.find(
+    //   (field: any) => field?.key === "panNumber"
+    // )?.userInput;
+    // console.log(panNumber, "deduppanapi");
 
-    const dedupErrors = await dedupcheck(nodalEmail, nodalMobile, panNumber);
-    console.log({ dedupErrors });
-    if (dedupErrors.length > 0) {
-      setDedupErrors(dedupErrors);
-      // Swal.fire({
-      //   icon: "error",
-      //   title: "Duplication Error",
-      //   html: dedupErrors.join("<br />"), // Display all error messages using line breaks
-      // });
-      setLoader(false);
-      return;
-    }
+    // const dedupErrors = await dedupcheck(nodalEmail, nodalMobile, panNumber);
+    // console.log({ dedupErrors });
+    // if (dedupErrors.length > 0) {
+    //   setDedupErrors(dedupErrors);
+    //   // Swal.fire({
+    //   //   icon: "error",
+    //   //   title: "Duplication Error",
+    //   //   html: dedupErrors.join("<br />"), // Display all error messages using line breaks
+    //   // });
+    //   setLoader(false);
+    //   return;
+    // }
     const details = allFormData?.formFields?.form_fields;
     const gstObj = details.find(
       (item: { label: string }) => item.label === "GST Number"

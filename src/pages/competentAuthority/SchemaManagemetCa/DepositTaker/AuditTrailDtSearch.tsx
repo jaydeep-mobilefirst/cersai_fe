@@ -324,35 +324,37 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     event.preventDefault();
     setLoader(true);
     const isFormValid = await handleValidationChecks(
-      allFormData?.formFields?.form_fields, true, false
+      allFormData?.formFields?.form_fields,
+      true,
+      false
     );
     if (!isFormValid) {
       setLoader(false);
       return;
     }
 
-    const nodalMobile = allFormData?.formFields?.form_fields?.find(
-      (field: any) => field?.key === "nodalMobile"
-    )?.userInput;
-    const nodalEmail = allFormData?.formFields?.form_fields?.find(
-      (field: any) => field?.key === "nodalEmail"
-    )?.userInput;
-    const panNumber = allFormData?.formFields?.form_fields?.find(
-      (field: any) => field?.key === "panNumber"
-    )?.userInput;
+    // const nodalMobile = allFormData?.formFields?.form_fields?.find(
+    //   (field: any) => field?.key === "nodalMobile"
+    // )?.userInput;
+    // const nodalEmail = allFormData?.formFields?.form_fields?.find(
+    //   (field: any) => field?.key === "nodalEmail"
+    // )?.userInput;
+    // const panNumber = allFormData?.formFields?.form_fields?.find(
+    //   (field: any) => field?.key === "panNumber"
+    // )?.userInput;
 
-    const dedupErrors = await dedupcheck(nodalEmail, nodalMobile, panNumber);
-    console.log({ dedupErrors });
-    if (dedupErrors.length > 0) {
-      setDedupErrors(dedupErrors);
-      // Swal.fire({
-      //   icon: "error",
-      //   title: "Duplication Error",
-      //   html: dedupErrors.join("<br />"), // Display all error messages using line breaks
-      // });
-      setLoader(false);
-      return;
-    }
+    // const dedupErrors = await dedupcheck(nodalEmail, nodalMobile, panNumber);
+    // console.log({ dedupErrors });
+    // if (dedupErrors.length > 0) {
+    //   setDedupErrors(dedupErrors);
+    //   // Swal.fire({
+    //   //   icon: "error",
+    //   //   title: "Duplication Error",
+    //   //   html: dedupErrors.join("<br />"), // Display all error messages using line breaks
+    //   // });
+    //   setLoader(false);
+    //   return;
+    // }
 
     const details = allFormData?.formFields?.form_fields;
     const gstObj = details.find(

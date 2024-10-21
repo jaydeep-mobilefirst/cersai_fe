@@ -274,10 +274,10 @@ const DynamicFields = ({
                             ? entityName?.userInput
                             : field?.userInput
                         }
-                        // onChange={(e) =>
-                        //   onChange && onChange && onChange(e, field, fieldType)
-                        // }
-                        onChange={(e) => handleInputChange(e, field, fieldType)}
+                        onChange={(e) =>
+                          onChange && onChange && onChange(e, field, fieldType)
+                        }
+                        // onChange={(e) => handleInputChange(e, field, fieldType)}
                         type={
                           checkPhoneType(pathname) &&
                           field?.key === "nodalMobile"
@@ -289,9 +289,9 @@ const DynamicFields = ({
                         specialKey={field?.key}
                       />
                       <span className="text-red-500">{field?.error}</span>
-                      <span className="text-red-500">
+                      {/* <span className="text-red-500">
                         {getDedupErrorMessage(field.key, dedupErrors)}
-                      </span>
+                      </span> */}
                     </div>
                   </Tooltip>
                 );
