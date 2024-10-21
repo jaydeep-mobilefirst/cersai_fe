@@ -55,7 +55,7 @@ const FormHandlerProviders = ({ children }: Props) => {
     masterEntityId,
     setMasterEntityId,
   } = useDepositTakerRegistrationStore((state) => state);
-  console.log("all-data",allFormData)
+  console.log("all-data", allFormData);
   const updateValue = (
     value: string | any[],
     fieldId: number,
@@ -307,7 +307,7 @@ const FormHandlerProviders = ({ children }: Props) => {
             o?.label?.toLowerCase() === "district" &&
             fieldData?.sectionId === o?.sectionId
         );
-        
+
         handlePincodeSucess(
           {
             districtField: districtFormField,
@@ -558,7 +558,7 @@ const FormHandlerProviders = ({ children }: Props) => {
             validationName: allFormData?.validations?.find(
               (vd: any) => vd?.id === v?.validationId
             )?.vld_type_name,
-            value: field?.userInput !== ""?v?.patternValue:"",
+            value: field?.userInput !== "" ? v?.patternValue : "",
           };
         }),
       };
@@ -638,6 +638,8 @@ const FormHandlerProviders = ({ children }: Props) => {
         f?.key === "panNumber" ||
         f?.key === "nodalEmail"
     );
+
+    console.log({ URL }, "URL");
     let dataFromServer = JSON.parse(sessionStorage.getItem("original") ?? "{}");
     let keys = Object.keys(dataFromServer);
 
@@ -826,7 +828,7 @@ const FormHandlerProviders = ({ children }: Props) => {
             if (!minInvestment || !maxInvestment) {
               return field; // Return field if either value is missing
             }
-            console.log("abc",field)
+            console.log("abc", field);
             const minInvestmentValue = parseInt(minInvestment);
             const maxInvestmentValue = parseInt(maxInvestment);
 
@@ -852,7 +854,6 @@ const FormHandlerProviders = ({ children }: Props) => {
             return { ...field };
 
           default:
-
             return field; // Return field as is for all other cases
         }
       }
