@@ -102,7 +102,7 @@ const DashboardProfileSidebar = ({ fetchFormFields }: Props) => {
                   Completed{" "}
                 </p>
                 <div className="mt-[8px] md:w-[291px] h-2 bg-white rounded-[32px] border border-black-200">
-                  <div
+                  <div role="progressbar" 
                     className={` ${widthPercentage[percent]} h-2 bg-[#1C468E] rounded-[32px] `}
                   />
                 </div>

@@ -104,15 +104,16 @@ describe("SelectButtonUserManagement Component", () => {
         placeholder={texts.placeholder}
       />
     );
-
+  
     // Open the dropdown
     const button = screen.getByRole("button");
     fireEvent.click(button);
-
+  
     // Click outside the dropdown to close it
     fireEvent.mouseDown(document);
-
-    // Verify that the dropdown is closed
-    expect(screen.queryByText(texts.options[0].label)).not.toBeVisible();
+  
+    // Verify that the dropdown is closed by checking that the option is not present in the DOM
+    expect(screen.queryByText(texts.options[0].label)).not.toBeInTheDocument();
   });
+  
 });
