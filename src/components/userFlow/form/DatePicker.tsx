@@ -56,7 +56,7 @@ const DatePicker = ({
   };
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
+    const { value } = event?.target;
     if (onChange) {
       onChange(event); // Call the passed-in onChange function with the event
     }
@@ -68,9 +68,9 @@ const DatePicker = ({
 
   const getCurrentDate = (): string => {
     const today = new Date();
-    const day = String(today.getDate()).padStart(2, "0");
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const year = today.getFullYear();
+    const day = String(today?.getDate())?.padStart(2, "0");
+    const month = String(today?.getMonth() + 1)?.padStart(2, "0");
+    const year = today?.getFullYear();
     return `${year}-${month}-${day}`; // Format as YYYY-MM-DD for the input[type="date"]
   };
 
@@ -93,11 +93,11 @@ const DatePicker = ({
     <div className=" flex justify-start items-center h-14 w-full max-w-[35rem] sm:max-w-[100%] md:max-w-md lg:max-w-2xl border rounded-md">
       <button
         type="button"
-        disabled={ disabled}
+        disabled={!startDate && (maxDate === "lastDate" || maxDate === "lastDateDT" || maxDate === "lastDateCARG") || disabled}
         onClick={handleDateButtonClick}
         className={`flex justify-between items-center h-full w-full px-2 py-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none`}
         style={{
-          backgroundColor: disabled ? "#E5E4E2" : backgroundColor || "white",
+          backgroundColor: !startDate && (maxDate === "lastDate" || maxDate === "lastDateDT" || maxDate === "lastDateCARG") ||disabled ? "#E5E4E2" : backgroundColor || "white",
         }}
       >
         {dateSelected || "Select Date"}
@@ -113,18 +113,13 @@ const DatePicker = ({
         onChange={onChangeHandler}
         max={
           lastDate
-            ? new Date(new Date(lastDate)?.setDate(new Date(lastDate)?.getDate()))
-                ?.toISOString()
-                ?.split("T")[0]
+            ? new Date(lastDate)?.toISOString()?.split("T")[0]
             : determineMaxDate()
         }
+        
         min={
-          maxDate === "lastDate" || maxDate ==="lastDateDT" || maxDate==="lastDateCARG" && startDate
-            ? new Date(
-                new Date(startDate)?.setDate(new Date(startDate)?.getDate())
-              )
-                ?.toISOString()
-                ?.split("T")[0]
+          (maxDate === "lastDate" || maxDate === "lastDateDT" || maxDate === "lastDateCARG") && startDate
+            ? new Date(startDate)?.toISOString()?.split("T")[0]
             : undefined
         }
       />
