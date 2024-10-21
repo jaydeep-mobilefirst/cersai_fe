@@ -347,10 +347,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     const panNumber = allFormData?.formFields?.form_fields?.find(
       (field: any) => field?.key === "panNumber"
     )?.userInput;
-    const details = allFormData?.formFields?.form_fields;
-    const gstObj = details.find(
-      (item: { label: string }) => item.label === "GST Number"
-    );
+    console.log(panNumber, "deduppanapi");
 
     const dedupErrors = await dedupcheck(nodalEmail, nodalMobile, panNumber);
     console.log({ dedupErrors });
@@ -364,6 +361,10 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
       setLoader(false);
       return;
     }
+    const details = allFormData?.formFields?.form_fields;
+    const gstObj = details.find(
+      (item: { label: string }) => item.label === "GST Number"
+    );
     const gstNum = gstObj?.userInput?.toUpperCase();
     if (gstNum?.length > 0) {
       if (!verifyPanWithGST()) {
@@ -389,8 +390,8 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         return;
       }
     }
-    // const panVerified = await verifyPan();
-    if (true) {
+    const panVerified = await verifyPan();
+    if (panVerified) {
       // Process submission if PAN is verified
       try {
         let formData = allFormData.formFields.form_fields.map((field: any) => ({
@@ -522,6 +523,8 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
         setUploadKey(uploadInputKey + 1);
       });
   };
+
+  console.log({ allFormData }, "allFormData");
 
   return (
     <div

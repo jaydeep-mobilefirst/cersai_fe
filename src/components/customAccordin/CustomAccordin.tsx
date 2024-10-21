@@ -9,7 +9,7 @@ interface AccordionProps {
   items: AccordionItem[];
   showEdit?: boolean; // New prop to show/hide edit button
   hasError?: boolean;
-  showAccordion?: boolean,
+  showAccordion?: boolean;
 }
 
 const Accordion: React.FC<AccordionProps> = ({
@@ -18,24 +18,24 @@ const Accordion: React.FC<AccordionProps> = ({
   showAccordion = false,
   hasError,
 }) => {
-  // const [activeIndex, setActiveIndex] = useState<number | null>(0);
-
-  // const toggleAccordion = (index: number) => {
-  //   setActiveIndex(activeIndex === index ? null : index);
-  // };
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    // Automatically open the first section with an error
-    const errorIndex = items.findIndex((item: any) => item.hasError);
-    if (errorIndex !== -1) {
-      setActiveIndex(errorIndex);
-    }
-  }, [items]);
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
   const toggleAccordion = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
+  // const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  // useEffect(() => {
+  //   // Automatically open the first section with an error
+  //   const errorIndex = items.findIndex((item: any) => item.hasError);
+  //   if (errorIndex !== -1) {
+  //     setActiveIndex(errorIndex);
+  //   }
+  // }, [items]);
+
+  // const toggleAccordion = (index: number) => {
+  //   setActiveIndex(activeIndex === index ? null : index);
+  // };
 
   useEffect(() => {
     if (showAccordion) {

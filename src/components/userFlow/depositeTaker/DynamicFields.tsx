@@ -145,10 +145,54 @@ const DynamicFields = ({
 
   console.log(allFormData, dedupErrors, "allFormData");
 
+  // const getDedupErrorMessage = (
+  //   key: string,
+  //   dedupErrors: any[] | undefined
+  // ): string => {
+  //   if (
+  //     ["nodalMobile", "nodalEmail", "panNumber"].includes(key) &&
+  //     dedupErrors
+  //   ) {
+  //     const isErrorPresent = dedupErrors.some((error) => {
+  //       return (
+  //         error.includes("Mobile number is already registered") ||
+  //         error.includes("Email Id is already registered") ||
+  //         error.includes("PAN is already registered")
+  //       );
+  //     });
+
+  //     if (isErrorPresent) {
+  //       return "The entered value is already registered";
+  //     }
+  //   }
+  //   return "";
+  // };
+  const clearDedupError = (key: string) => {
+    setFieldErrors((prevErrors) => ({
+      ...prevErrors,
+      [key]: "",
+    }));
+  };
+
+  const handleInputChange = (e: any, field: any, fieldType: any) => {
+    const value = e.target.value;
+    if (onChange) {
+      onChange(e, field, fieldType);
+    }
+    if (value.trim() === "") {
+      clearDedupError(field.key);
+    }
+  };
+
   const getDedupErrorMessage = (
     key: string,
     dedupErrors: any[] | undefined
   ): string => {
+    const userInput = formFields?.find((field) => field.key === key)?.userInput;
+    if (!userInput?.trim()) {
+      return "";
+    }
+
     if (
       ["nodalMobile", "nodalEmail", "panNumber"].includes(key) &&
       dedupErrors
@@ -230,9 +274,10 @@ const DynamicFields = ({
                             ? entityName?.userInput
                             : field?.userInput
                         }
-                        onChange={(e) =>
-                          onChange && onChange && onChange(e, field, fieldType)
-                        }
+                        // onChange={(e) =>
+                        //   onChange && onChange && onChange(e, field, fieldType)
+                        // }
+                        onChange={(e) => handleInputChange(e, field, fieldType)}
                         type={
                           checkPhoneType(pathname) &&
                           field?.key === "nodalMobile"
