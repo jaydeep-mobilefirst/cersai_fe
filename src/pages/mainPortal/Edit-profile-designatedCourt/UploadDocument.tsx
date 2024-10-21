@@ -78,12 +78,18 @@ const UploadDocument = (props: Props) => {
       .then((response) => {
         Swal.fire({
           icon: "success",
-          text: response?.data?.message || "Documents uploaded successfully",
+          text: 
+          // response?.data?.message || 
+          "Documents uploaded successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
           confirmButtonText: "Ok",
         });
         setLoader(false);
         sessionStorage.setItem("user_status", "PENDING");
         Navigate("/dt/profile?current=branches");
+        setTimeout(() => {
+          sessionStorage.clear()
+          Navigate("/");
+        },3000)
       })
       .catch((err) => {
         setLoader(false);

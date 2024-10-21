@@ -173,18 +173,25 @@ const DynamicFileUpload = ({ data }: Props) => {
   };
 
   if (pathname == "/dt/profile") {
-    var disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
-      ? disabledField == "RETURNED"
-        ? false
-        : data?.profileUpdate
-      : data?.profileUpdate;
+    if(disabledField == "APPROVED"){
+      var disableFieldStatus = isConfigurable === "true" ? true : false
+    } else {
+      disableFieldStatus =
+      isConfigurable === "true"
+        ? true
+        : checkPathName(pathname)
+        ? disabledField == "RETURNED"
+          ? false
+          : !data?.profileUpdate
+        : data?.profileUpdate;
+    }
   } else {
     disableFieldStatus = checkPathName(pathname)
     ? isConfigurable === 'true' ? true : checkStatus(disabledField)
     : false;
   }
 
-  console.log(dataAccess, "disableFieldStatus");
+  console.log(disableFieldStatus, "disableFieldStatus");
   return (
     <Tooltip
       title={
