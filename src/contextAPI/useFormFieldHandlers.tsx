@@ -29,7 +29,8 @@ interface IContextProps {
   ) => Promise<boolean>;
   handleValidationChecks: (
     formFields: any[],
-    isAdding?: boolean
+    isAdding?: boolean,
+    reVerifyForDedup?:boolean
   ) => Promise<boolean>;
   handleDocumentValidations: (sectionId: number | number[]) => Promise<boolean>;
   handleSectionCompletionTrack: (
@@ -513,7 +514,8 @@ const FormHandlerProviders = ({ children }: Props) => {
 
   const handleValidationChecks = async (
     formFields: any[],
-    isAdding: boolean = true
+    isAdding: boolean = true,
+    reVerifyForDedup : boolean = true
   ): Promise<boolean> => {
     const formFieldsForValidations = formFields?.map((field: any) => {
       let validations = field?.regFormFieldsValidations
@@ -555,7 +557,8 @@ const FormHandlerProviders = ({ children }: Props) => {
               emailRegex.test(field?.userInput) ||
               panRegex.test(field?.userInput) ||
               /^-?\d+$/.test(field?.userInput)
-          )
+          ),
+          reVerifyForDedup
         );
 
     if (formValidations && documentValidations && deDupCheck) {
@@ -580,7 +583,7 @@ const FormHandlerProviders = ({ children }: Props) => {
     });
     setSections(updated);
   };
-  const ValidateDeDup = async (formFields: any[]): Promise<boolean> => {
+  const ValidateDeDup = async (formFields: any[], reVerifyForDedup : boolean): Promise<boolean> => {   
     const errors: any[] = [];
     const deDupURLs: any = {
       DT: "deposit-taker/dedupcheck",
@@ -589,15 +592,16 @@ const FormHandlerProviders = ({ children }: Props) => {
       RG: "regulator/dedupcheck",
       nodal: "user/dedup",
     };
-
+    
     // Section is nodal then use nodal url else use usual url for that entity
     const isNodalSection = formFields?.some((field: any) =>
       /nodal/i.test(field?.label)
-    );
-    let URL = isNodalSection
-      ? deDupURLs["nodal"]
-      : deDupURLs[allFormData?.currentEntity?.entityCode];
-    let filteredFields = formFields?.filter(
+  );
+  let URL = isNodalSection
+  ? deDupURLs["nodal"]
+  : deDupURLs[allFormData?.currentEntity?.entityCode];
+
+  let filteredFields = formFields?.filter(
       (f: any) =>
         /mobile/i.test(f?.label) ||
         /email/i.test(f?.label) ||
@@ -617,12 +621,14 @@ const FormHandlerProviders = ({ children }: Props) => {
       }
     });
 
-    if (dedupCheckFormFields?.length === 0) {
-      sessionStorage.setItem("needToVerify", "no");
-      return true;
-    } else {
-      sessionStorage.setItem("needToVerify", "yes");
-      filteredFields = dedupCheckFormFields;
+    if (reVerifyForDedup) {
+      if (dedupCheckFormFields?.length === 0) {
+        sessionStorage.setItem("needToVerify", "no");
+        return true;
+      } else {
+        sessionStorage.setItem("needToVerify", "yes");
+        filteredFields = dedupCheckFormFields;
+      }
     }
 
     const promises = filteredFields.map(async (field: any) => {
@@ -658,7 +664,7 @@ const FormHandlerProviders = ({ children }: Props) => {
       }
     });
 
-    await Promise.all(promises);
+    await Promise.allSettled(promises);
     await handleValidations(errors);
     return errors.length === 0;
   };

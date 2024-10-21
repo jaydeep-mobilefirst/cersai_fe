@@ -102,10 +102,19 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
             error: "",
             fileName: "",
           }));
+          const currentEntityDt = {
+            id: 1,
+            autoApproval: false,
+            entityCode: "DT",
+            path: "/depositetaker/signup/verification",
+            entityName: "Deposit Taker",
+            registrationAllowed: true,
+          };
         setAllFormData({
           ...response.data.data,
           formFields: { form_fields: modifiedFormFields },
           dropdownData,
+          currentEntity : currentEntityDt
         });
         setAllDocumentData(modifiedFileFields);
         setAccordionLoading(false);
@@ -118,6 +127,8 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
 
   const excludedSectionNames = ["Upload Documents"];
 
+  console.log({allFormData});
+  
   const accordionItems =
     allFormData?.entitySections
       ?.filter(
@@ -262,21 +273,21 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     event.preventDefault();
     setLoader(true);
     const isFormValid = await handleValidationChecks(
-      allFormData?.formFields?.form_fields
+      allFormData?.formFields?.form_fields, true, false
     );
     if (!isFormValid) {
       setLoader(false);
       return;
     }
-    if (!verifyPanWithGST()) {
-      setLoader(false);
-      Swal.fire({
-        icon: "error",
-        title: "Invalid GST",
-        text: "GST Number should be aligned with PAN ",
-      });
-      return;
-    }
+    // if (!verifyPanWithGST()) {
+    //   setLoader(false);
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Invalid GST",
+    //     text: "GST Number should be aligned with PAN ",
+    //   });
+    //   return;
+    // }
     if (isDscKeyAvbl === "true" && !isFormValid) {
       if (verifyDscWithNodalOfficer(allFormData?.formFields?.form_fields)) {
         console.log("name checked");

@@ -258,7 +258,7 @@ const DepositeTakerSearchDetailsSM: React.FC = () => {
     event.preventDefault();
     setLoader(true);
     const isFormValid = await handleValidationChecks(
-      allFormData?.formFields?.form_fields
+      allFormData?.formFields?.form_fields, true, false
     );
     if (!isFormValid) {
       setLoader(false);
