@@ -64,7 +64,7 @@ const Dashboard = (props: Props) => {
             bgColor: true,
           },
           {
-            text: "Total Active Schemes",
+            text: "Total Active + Active-Deposit not being taken Schemes",
             value: response?.data?.data[1].totalSchemeActive.toString(),
             bgColor: true,
           },

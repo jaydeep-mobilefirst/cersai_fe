@@ -173,18 +173,25 @@ const DynamicFileUpload = ({ data }: Props) => {
   };
 
   if (pathname == "/dt/profile") {
-    var disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
-      ? disabledField == "RETURNED"
-        ? false
-        : data?.profileUpdate
-      : data?.profileUpdate;
+    if(disabledField == "APPROVED"){
+      var disableFieldStatus = isConfigurable === "true" ? true : false
+    } else {
+      disableFieldStatus =
+      isConfigurable === "true"
+        ? true
+        : checkPathName(pathname)
+        ? disabledField == "RETURNED"
+          ? false
+          : !data?.profileUpdate
+        : data?.profileUpdate;
+    }
   } else {
     disableFieldStatus = checkPathName(pathname)
     ? isConfigurable === 'true' ? true : checkStatus(disabledField)
     : false;
   }
 
-  console.log(dataAccess, "disableFieldStatus");
+  console.log(disableFieldStatus, "disableFieldStatus");
   return (
     <Tooltip
       title={
@@ -193,12 +200,12 @@ const DynamicFileUpload = ({ data }: Props) => {
             The document to be uploaded in this section may vary according to
             the various constitution types. To know the document to upload for
             your constitution type, please
-            {/* <span className='underline text-blue-400'>
-              <Link target={"_blank"} to='https://www.google.com'>
+            <span className='underline text-blue-400'>
+              <Link target={"_blank"} to='https://storage.googleapis.com/cersai-buds/files/termsandcondition.pdf'>
                 {" "}
                 click here
               </Link>
-            </span> */}
+            </span>
           </p>
         ) : (
           ""
