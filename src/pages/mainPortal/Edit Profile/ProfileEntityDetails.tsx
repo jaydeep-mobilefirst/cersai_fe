@@ -282,6 +282,7 @@ const ProfileEntityDetails = (props: Props) => {
               icon: "success",
               text: "Profile Details updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
               confirmButtonText: "Ok",
+              timer: 5000,
             });
             sessionStorage.setItem("user_status", "PENDING");
             Navigate("/dt/profile?current=nodal");
@@ -290,7 +291,7 @@ const ProfileEntityDetails = (props: Props) => {
               clearBranch();
               sessionStorage.clear()
               Navigate("/");
-            },3000)
+            },5000)
           } catch (err) {
             Swal.fire({
               icon: "error",

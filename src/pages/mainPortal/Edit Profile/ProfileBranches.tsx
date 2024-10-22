@@ -296,6 +296,7 @@ const ProfileBranches = () => {
                   // response?.data?.message ||   
                   "Deposit Taker Updated Successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
                 confirmButtonText: "Ok",
+                timer: 5000,
               });
 
               sessionStorage.setItem("user_status", "PENDING");
@@ -305,7 +306,7 @@ const ProfileBranches = () => {
                 clearBranch();
                 sessionStorage.clear()
                 Navigate("/");
-              },3000)
+              },5000)
 
               if (
                 Array.isArray(filterManagement) &&
