@@ -230,6 +230,7 @@ const NewSchemaCreation = () => {
     { value: "UNDER_LETIGATION", label: "Under Litigation" },
   ];
   const handleSetStatus = (option: any) => {
+    setPage(1);
     console.log(option, "option");
     setSelectedStatus(option);
 
