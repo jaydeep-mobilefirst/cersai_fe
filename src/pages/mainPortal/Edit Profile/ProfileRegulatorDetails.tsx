@@ -193,6 +193,7 @@ const ProfileRegulatorDetails = (props: Props) => {
                     // response?.data?.message ||
                     "Profile Details updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
                   confirmButtonText: "Ok",
+                  timer: 5000,
                 });
 
                 sessionStorage.setItem("user_status", "PENDING");
@@ -202,7 +203,7 @@ const ProfileRegulatorDetails = (props: Props) => {
                   clearBranch();
                   sessionStorage.clear()
                   Navigate("/");
-                },3000)
+                },5000)
               })
               .catch((err) => {
                 Swal.fire({

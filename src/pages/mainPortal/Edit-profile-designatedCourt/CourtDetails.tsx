@@ -98,13 +98,14 @@ const CourtDetails = (props: Props) => {
               // response?.data?.message ||
                "Court Details updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
             confirmButtonText: "Ok",
+            timer: 5000,
           });
           sessionStorage.setItem("user_status", "PENDING");
           Navigate("/dc/profile?current=document");
           setTimeout(() => {
             sessionStorage.clear()
             Navigate("/");
-          },3000)  
+          },5000)  
         })
         .catch((err) => {
           Swal.fire({

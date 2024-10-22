@@ -166,6 +166,7 @@ const ProfileUploadDocuments = (props: Props) => {
                 // response?.data?.message || 
                 "Documents uploaded successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
               confirmButtonText: "Ok",
+              timer: 5000,
             });
             setLoader(false);
             sessionStorage.setItem("user_status", "PENDING");
@@ -175,7 +176,7 @@ const ProfileUploadDocuments = (props: Props) => {
               clearBranch();
               sessionStorage.clear()
               Navigate("/");
-            },3000)
+            },5000)
           })
           .catch((err) => {
             setLoader(false);
