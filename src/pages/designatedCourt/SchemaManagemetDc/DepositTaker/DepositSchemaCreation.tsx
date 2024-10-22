@@ -237,6 +237,7 @@ const DepositSchemaCreation = () => {
     { label: "Modification in Transit", value: "MOD_TRANSIT" },
   ];
   const handleSetStatus = (option: any) => {
+    setPage(1)
     console.log(option, "option");
     setSelectedStatus(option);
 
