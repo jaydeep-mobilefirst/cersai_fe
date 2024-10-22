@@ -17,6 +17,9 @@ import { useNavigate } from "react-router-dom";
 import { useBranchStore } from "../../../store/upate-profile/managementStore";
 import FooterDT from "./FooterDT";
 import { useDepositTakerRegistrationStore } from "../../../zust/deposit-taker-registration/registrationStore";
+import { useBranchStore as useBranch2Store } from "../../../store/upate-profile/branch";
+import { useBranchStore as useManagementStore } from "../../../store/upate-profile/managementStore";
+
 const ProfileManagement = () => {
   const screenWidth = useScreenWidth();
   const entityUniqueId = sessionStorage.getItem("entityUniqueId");
@@ -49,12 +52,16 @@ const ProfileManagement = () => {
     clearRemovedBranches: state.clearRemovedBranches,
   }));
   console.log({ branches }, "branches");
+  
   // const [isChecked, setChecked] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [loader1, setLoader1] = useState(false);
   const [uploadInputKey, setUploadKey] = useState<number>(0);
   const uploadButtonRef = useRef<HTMLInputElement>(null);
   console.log(removedBranches, "removedBranches");
+
+  const clearStore = useManagementStore((state) => state.clearStore);
+  const clearBranch = useBranch2Store((state) => state.clearBranch);
 
   const filterManagement: any = removedBranches?.map(
     ({ id, firstName }: any) => ({
@@ -266,10 +273,17 @@ const ProfileManagement = () => {
           setLoader(false);
           Swal.fire({
             icon: "success",
-            text: response?.data?.message,
+            text: response?.data?.message + " Please log in again when you receive a confirmation email regarding the approved changes.",
             confirmButtonText: "Ok",
+            timer: 5000,
           }).then(() => {
             Navigate("/dt/profile?current=documents");
+            setTimeout(() => {
+              clearStore();
+              clearBranch();
+              sessionStorage.clear()
+              Navigate("/");
+            },5000)
           });
         } catch (error) {
           console.error("Failed to submit members:", error);

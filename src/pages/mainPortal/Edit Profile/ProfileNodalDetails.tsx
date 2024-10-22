@@ -191,6 +191,7 @@ const ProfileNodalDetails = (props: Props) => {
                   icon: "success",
                   text: "Profile details updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
                   confirmButtonText: "Ok",
+                  timer: 5000,
                 });
 
                 sessionStorage.setItem("user_status", "PENDING");
@@ -200,7 +201,7 @@ const ProfileNodalDetails = (props: Props) => {
                   clearBranch();
                   sessionStorage.clear()
                   Navigate("/");
-                },3000)
+                },5000)
               });
             if (membersToSubmit !== null) {
               await axiosTokenInstance.post(
