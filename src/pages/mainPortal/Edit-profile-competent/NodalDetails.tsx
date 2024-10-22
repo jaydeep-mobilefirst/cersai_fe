@@ -101,12 +101,13 @@ const NodalDetails = (props: Props) => {
               // response?.data?.message ||
               "Nodal Officer details updated successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
             confirmButtonText: "Ok",
+            timer: 5000,
           });
           Navigate("/ca/dashboard");
           setTimeout(() => {
             sessionStorage.clear()
             Navigate("/");
-          },3000)
+          },5000)
         })
         .catch((err) => {
           Swal.fire({
