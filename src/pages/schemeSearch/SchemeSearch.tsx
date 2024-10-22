@@ -64,6 +64,7 @@ const SchemeSearch: React.FC = () => {
 
   const { homePageData, setHomePageData } = useLandingStore((state) => state);
   const { language } = useLangugaeStore((state) => state);
+  const [searchButtonClick, setSearchButtonClick] = useState<boolean>(false);
   const isFirstRender = useRef(true); // Flag to track if it's the first render
 
   console.log("data-scheme", schemaData);
@@ -99,7 +100,7 @@ const SchemeSearch: React.FC = () => {
         `/scheme-portal/solr-scheme`,
         {
           params: {
-            page: page,
+            page: searchButtonClick?1:page,
             limit: pageSize,
             searchText: searchInput,
             status: selectedOption1,
@@ -115,10 +116,12 @@ const SchemeSearch: React.FC = () => {
       );
       setTotal(data?.total);
       setLoader(false);
+      setSearchButtonClick(false);
     } catch (error) {
       setSchemaData([]);
       console.error("Error fetching schemes:", error);
       setLoader(false);
+      setSearchButtonClick(false);
     }
   };
 
@@ -279,7 +282,9 @@ const SchemeSearch: React.FC = () => {
     setSelectedDistrict(option?.value);
   };
   const handleSearchSubmit = (event: any) => {
+    setSearchButtonClick(true);
     event?.preventDefault();
+    setPage(1)
     fetchSchemes();
   };
 
