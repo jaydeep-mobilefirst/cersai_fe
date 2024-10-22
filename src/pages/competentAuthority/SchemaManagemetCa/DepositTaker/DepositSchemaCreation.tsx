@@ -253,6 +253,7 @@ const DepositSchemaCreation = () => {
     },
   ];
   const handleSetStatus = (option: any) => {
+    setPage(1);
     console.log(option, "option");
     setSelectedStatus(option);
 
