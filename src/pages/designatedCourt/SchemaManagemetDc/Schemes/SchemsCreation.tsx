@@ -35,6 +35,7 @@ const NewSchemaCreation = () => {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [statusForSearch, setStatusForSearch] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState<string>("");
+  const [searchButtonClick, setSearchButtonClick] = useState<boolean>(false);
   const isFirstRender = useRef(true); // Flag to track if it's the first render
   const handleSearchInput = (event: any) => {
     event?.preventDefault();
@@ -59,7 +60,7 @@ const NewSchemaCreation = () => {
       // const uniqueId = sessionStorage.getItem("entityUniqueId");
       const { data } = await axiosTokenInstance.get(`/scheme-portal/scheme`, {
         params: {
-          page: page,
+          page: searchButtonClick?1:page,
           limit: pageSize,
           searchText: searchInput,
           status: statusForSearch,
@@ -76,9 +77,11 @@ const NewSchemaCreation = () => {
       setSchemaData(data?.data);
       setTotal(data?.total);
       setLoader(false);
+      setSearchButtonClick(false);
     } catch (error) {
       console.error("Error fetching schemes:", error);
       setLoader(false);
+      setSearchButtonClick(false);
     }
   };
 
@@ -234,6 +237,7 @@ const NewSchemaCreation = () => {
   };
 
   const handleClickSearch = () => {
+    setSearchButtonClick(true);
     setPage(1);
     fetchSchemes();
   };
