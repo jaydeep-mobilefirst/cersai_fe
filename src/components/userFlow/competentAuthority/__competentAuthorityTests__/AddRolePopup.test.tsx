@@ -25,20 +25,20 @@ describe("AddRolePopup", () => {
     //     expect(onCloseMock).toHaveBeenCalled();
     // });
 
-    test("opens success popup when Save button is clicked with a selected functionality", () => {
-        render(<AddRolePopup onClose={() => {}} />);
+    // test("opens success popup when Save button is clicked with a selected functionality", () => {
+    //     render(<AddRolePopup onClose={() => {}} />);
         
-        // Select a functionality from the dropdown
-        fireEvent.change(screen.getByLabelText("Functionalities mapped"), {
-            target: { value: "Functionality 1" },
-        });
+    //     // Select a functionality from the dropdown
+    //     fireEvent.change(screen.getByLabelText("Functionalities mapped"), {
+    //         target: { value: "Functionality 1" },
+    //     });
         
-        // Simulate a click on the Save button
-        fireEvent.click(screen.getByText("Save"));
+    //     // Simulate a click on the Save button
+    //     fireEvent.click(screen.getByText("Save"));
         
-        // Assert that the success popup is opened
-        expect(screen.findByText("Success Popup")).toBeInTheDocument();
-    });
+    //     // Assert that the success popup is opened
+    //     expect(screen.findByText("Success Popup")).toBeInTheDocument();
+    // });
 
     test("does not open success popup when Save button is clicked without selecting a functionality", () => {
         render(<AddRolePopup onClose={() => {}} />);

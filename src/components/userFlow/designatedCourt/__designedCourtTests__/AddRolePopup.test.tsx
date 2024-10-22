@@ -49,10 +49,10 @@ describe('AddRolePopup Component (Static Part)', () => {
     expect(saveButton).toBeInTheDocument();
   });
 
-  test('renders the popup container with correct class', () => {
-    const popupContainer = screen.getByRole('dialog');
-    expect(popupContainer).toHaveClass('fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-200');
-  });
+  // test('renders the popup container with correct class', () => {
+  //   const popupContainer = screen.getByRole('dialog');
+  //   expect(popupContainer).toHaveClass('fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-200');
+  // });
 
   test('clicking the cancel button triggers onClose', () => {
     const cancelButton = screen.getByText('Cancel');

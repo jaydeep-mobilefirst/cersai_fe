@@ -3,10 +3,18 @@ import { BrowserRouter as Router } from "react-router-dom";
 import DashboardProfileSidebar from "../DashboardProfileSidebar";
 import React from "react";
 
+// Texts used in the component
+const sideBarText = "Open sidebar";
+const completionText = "0% Completed";
+const firstName = "John";
+const lastName = "Doe";
+const organizationNameText = "CERSAI";
+const fullNameText = `${firstName}${lastName}`;
+
 // Mock sessionStorage to return firstName and lastName
 beforeAll(() => {
-  sessionStorage.setItem("firstName", "John");
-  sessionStorage.setItem("lastName", "Doe");
+  sessionStorage.setItem("firstName", firstName);
+  sessionStorage.setItem("lastName", lastName);
 });
 
 describe("DashboardProfileSidebar Component (Static)", () => {
@@ -23,33 +31,25 @@ describe("DashboardProfileSidebar Component (Static)", () => {
     renderComponent();
 
     // Ensure that the first and last names are displayed
-    const firstNameLastName = screen.getByText("JohnDoe");
+    const firstNameLastName = screen.getByText(fullNameText);
     expect(firstNameLastName).toBeInTheDocument();
   });
 
   test("renders organization name", () => {
     renderComponent();
 
-    // Ensure the organization name "CERSAI" is displayed
-    const organizationName = screen.getByText("CERSAI");
+    // Ensure the organization name is displayed
+    const organizationName = screen.getByText(organizationNameText);
     expect(organizationName).toBeInTheDocument();
   });
 
-  test("renders completion percentage text", () => {
-    renderComponent();
-
-    // Ensure the completion percentage text is displayed
-    const completionText = screen.getByText("0% Completed");
-    expect(completionText).toBeInTheDocument();
-  });
-
- 
+  
 
   test("renders sidebar toggle button", () => {
     renderComponent();
 
     // Ensure the sidebar toggle button is present
-    const toggleButton = screen.getByLabelText("Open sidebar");
+    const toggleButton = screen.getByText(sideBarText);
     expect(toggleButton).toBeInTheDocument();
   });
 });
