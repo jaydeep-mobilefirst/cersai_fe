@@ -210,18 +210,22 @@ const MainPortalSidebar = ({ layout }: Props) => {
   }, [state]);
 
   useEffect(() => {
-    if (!isActive || refreshPage == "5") {
-      sessionStorage.clear();
+    if (!isActive || refreshPage == "1") {
+      
       Swal.fire({
         icon: "error",
         title:
-          refreshPage == "5"
+          refreshPage == "1"
             ? "Dont refresh the page. Please login again"
             : "User inactive for 10 min. Please login again",
       });
-      navigate("/");
+      setTimeout(() => {
+        navigate("/");
+        sessionStorage.clear();
+      }, 2000)
+     
     }
-  });
+  }, []);
 
 
   const refreshToken = sessionStorage.getItem("refresh_token");
