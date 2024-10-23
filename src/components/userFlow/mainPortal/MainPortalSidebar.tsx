@@ -218,6 +218,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
           refreshPage == "1"
             ? "Dont refresh the page. Please login again"
             : "User inactive for 10 min. Please login again",
+        timer: 5000,
       });
       setTimeout(() => {
         navigate("/");
