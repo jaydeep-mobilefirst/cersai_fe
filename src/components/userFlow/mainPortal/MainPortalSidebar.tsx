@@ -211,7 +211,6 @@ const MainPortalSidebar = ({ layout }: Props) => {
 
   useEffect(() => {
     if (!isActive || refreshPage == "1") {
-      
       Swal.fire({
         icon: "error",
         title:
