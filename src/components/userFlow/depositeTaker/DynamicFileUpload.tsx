@@ -193,11 +193,11 @@ const DynamicFileUpload = ({ data }: Props) => {
     : false;
   }
 
-  console.log(disableFieldStatus, "disableFieldStatus");
+  console.log(data, "data123");
   return (
     <Tooltip
       title={
-        data?.documentName === "Certificate of Incorporation" ? (
+        data?.key === "COI" ? (
           <p>
             The document to be uploaded in this section may vary according to
             the various constitution types. To know the document to upload for
