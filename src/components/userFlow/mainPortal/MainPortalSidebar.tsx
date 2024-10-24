@@ -210,11 +210,11 @@ const MainPortalSidebar = ({ layout }: Props) => {
   }, [state]);
 
   useEffect(() => {
-    if (!isActive || refreshPage == "1") {
+    if (!isActive || refreshPage == "5") {
       Swal.fire({
         icon: "error",
         title:
-          refreshPage == "1"
+          refreshPage == "5"
             ? "Dont refresh the page. Please login again"
             : "User inactive for 10 min. Please login again",
         timer: 5000,
