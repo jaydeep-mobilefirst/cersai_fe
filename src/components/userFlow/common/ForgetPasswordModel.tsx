@@ -12,6 +12,7 @@ import Modal from "@mui/material/Modal";
 import SelectButton from "../form/SelectButton";
 import { axiosTraceIdInstance } from "../../../utils/axios";
 import Swal from "sweetalert2";
+import EmailInputField from "./EmailInputField";
 
 interface ForgetPasswordModelProps {
   closeForgetModel: () => void;
@@ -172,13 +173,8 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
                     >
                       Email id / Mobile no.
                     </label>
-                    <InputFields
+                    <EmailInputField
                       {...register("email", {
-                        // required: "Email is required",
-                        // pattern: {
-                        //   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        //   message: "Invalid email address",
-                        // },
                         required: "Email address or Mobile number is required",
                         pattern: {
                           value:
@@ -187,7 +183,7 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
                         },
                       })}
                       placeholder="Email id / Mobile no."
-                      onChange={handleEmailChange}
+                      // onChange={handleEmailChange}
                       error={error}
                     />
 
