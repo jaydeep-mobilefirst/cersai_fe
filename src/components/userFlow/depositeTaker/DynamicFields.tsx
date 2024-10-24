@@ -51,6 +51,7 @@ const DynamicFields = ({
 
   const location = useLocation();
   const { pathname } = location;
+  console.log({ pathname }, "pathname");
 
   const { allFormData, documentData } = useDepositTakerRegistrationStore(
     (state) => state
@@ -145,72 +146,8 @@ const DynamicFields = ({
 
   console.log(allFormData, dedupErrors, "allFormData");
 
-  // const getDedupErrorMessage = (
-  //   key: string,
-  //   dedupErrors: any[] | undefined
-  // ): string => {
-  //   if (
-  //     ["nodalMobile", "nodalEmail", "panNumber"].includes(key) &&
-  //     dedupErrors
-  //   ) {
-  //     const isErrorPresent = dedupErrors.some((error) => {
-  //       return (
-  //         error.includes("Mobile number is already registered") ||
-  //         error.includes("Email Id is already registered") ||
-  //         error.includes("PAN is already registered")
-  //       );
-  //     });
-
-  //     if (isErrorPresent) {
-  //       return "The entered value is already registered";
-  //     }
-  //   }
-  //   return "";
-  // };
-  const clearDedupError = (key: string) => {
-    setFieldErrors((prevErrors) => ({
-      ...prevErrors,
-      [key]: "",
-    }));
-  };
-
-  const handleInputChange = (e: any, field: any, fieldType: any) => {
-    const value = e.target.value;
-    if (onChange) {
-      onChange(e, field, fieldType);
-    }
-    if (value.trim() === "") {
-      clearDedupError(field.key);
-    }
-  };
-
-  const getDedupErrorMessage = (
-    key: string,
-    dedupErrors: any[] | undefined
-  ): string => {
-    const userInput = formFields?.find((field) => field.key === key)?.userInput;
-    if (!userInput?.trim()) {
-      return "";
-    }
-
-    if (
-      ["nodalMobile", "nodalEmail", "panNumber"].includes(key) &&
-      dedupErrors
-    ) {
-      const isErrorPresent = dedupErrors.some((error) => {
-        return (
-          error.includes("Mobile number is already registered") ||
-          error.includes("Email Id is already registered") ||
-          error.includes("PAN is already registered")
-        );
-      });
-
-      if (isErrorPresent) {
-        return "The entered value is already registered";
-      }
-    }
-    return "";
-  };
+  const rgName = checkPathName(pathname);
+  console.log({ rgName });
 
   return (
     <>
@@ -289,9 +226,6 @@ const DynamicFields = ({
                         specialKey={field?.key}
                       />
                       <span className="text-red-500">{field?.error}</span>
-                      {/* <span className="text-red-500">
-                        {getDedupErrorMessage(field.key, dedupErrors)}
-                      </span> */}
                     </div>
                   </Tooltip>
                 );
@@ -412,35 +346,66 @@ const DynamicFields = ({
                               enableSearch={fieldType === "select_with_search"}
                             />
                           ) : (
-                            <SelectButton
-                              data={field}
-                              onSelect={(data) =>
-                                onChange && onChange(data, field, fieldType)
-                              }
-                              options={field?.dropdown_options?.options?.map(
-                                (d: any) => ({
-                                  value: d?.name || d?.uniqueId,
-                                  label: d?.name || d?.companyName,
-                                  id: d?.id,
-                                })
+                            <>
+                              {rgName && field?.key === "regulatorNameRG" ? (
+                                <>
+                                  <InputFields
+                                    disabled={
+                                      disableFieldStatus
+                                        ? disableFieldStatus
+                                        : field?.disabled
+                                        ? field?.disabled
+                                        : false
+                                    }
+                                    // disabled={(field?.label === "PAN NUMBER" || field?.label ==="Company Name (As per Pan)")}
+                                    value={field?.userInput}
+                                    onChange={(e) =>
+                                      onChange &&
+                                      onChange &&
+                                      onChange(e, field, fieldType)
+                                    }
+                                    // onChange={(e) => handleInputChange(e, field, fieldType)}
+                                    type={fieldType}
+                                    id={field?.label}
+                                    placeholder={field?.placeholder}
+                                    specialKey={field?.key}
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  <SelectButton
+                                    data={field}
+                                    onSelect={(data) =>
+                                      onChange &&
+                                      onChange(data, field, fieldType)
+                                    }
+                                    options={field?.dropdown_options?.options?.map(
+                                      (d: any) => ({
+                                        value: d?.name || d?.uniqueId,
+                                        label: d?.name || d?.companyName,
+                                        id: d?.id,
+                                      })
+                                    )}
+                                    selectedOption={field?.userInput}
+                                    placeholder={field?.placeholder}
+                                    disabled={
+                                      field?.label === "State" ||
+                                      field?.label === "District"
+                                        ? true
+                                        : disableFieldStatus
+                                        ? disableFieldStatus
+                                        : field?.disabled
+                                    }
+                                    //  searchInputOnchange={handleSearchInputChange3}
+                                    //  searchInputValue={searchInputValue3}
+                                    // showSearchInput={true}
+                                    // enableSearch={fieldType === "select_with_search"}
+                                    enableSearch={true}
+                                    showSearchInput={true}
+                                  />
+                                </>
                               )}
-                              selectedOption={field?.userInput}
-                              placeholder={field?.placeholder}
-                              disabled={
-                                field?.label === "State" ||
-                                field?.label === "District"
-                                  ? true
-                                  : disableFieldStatus
-                                  ? disableFieldStatus
-                                  : field?.disabled
-                              }
-                              //  searchInputOnchange={handleSearchInputChange3}
-                              //  searchInputValue={searchInputValue3}
-                              // showSearchInput={true}
-                              // enableSearch={fieldType === "select_with_search"}
-                              enableSearch={true}
-                              showSearchInput={true}
-                            />
+                            </>
                           )}
                         </>
                       )}
