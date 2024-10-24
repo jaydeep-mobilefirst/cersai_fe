@@ -190,42 +190,7 @@ const MainPortalSidebar = ({ layout }: Props) => {
     }
   }, []);
 
-  useEffect(() => {
-    const refreshCount = () => {
-      // Get the current count from sessionStorage
-      const count = parseInt(sessionStorage.getItem("refreshCount") || "0", 10);
 
-      // Update the count and save it back to sessionStorage
-      const newCount = count + 1;
-      sessionStorage.setItem("refreshCount", newCount.toString());
-    };
-
-    // Add event listener for beforeunload
-    window.addEventListener("beforeunload", refreshCount);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener("beforeunload", refreshCount);
-    };
-  }, [state]);
-
-  useEffect(() => {
-    if (!isActive || refreshPage == "5") {
-      Swal.fire({
-        icon: "error",
-        title:
-          refreshPage == "5"
-            ? "Dont refresh the page. Please login again"
-            : "User inactive for 10 min. Please login again",
-        timer: 5000,
-      });
-      setTimeout(() => {
-        navigate("/");
-        sessionStorage.clear();
-      }, 2000)
-     
-    }
-  }, []);
 
 
   const refreshToken = sessionStorage.getItem("refresh_token");

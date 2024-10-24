@@ -194,41 +194,41 @@ const MainPortalSidebar = ({ layout }: Props) => {
     }
   }, []);
 
-  useEffect(() => {
-    const refreshCount = () => {
-      // Get the current count from sessionStorage
-      const count = parseInt(sessionStorage.getItem("refreshCount") || "0", 10);
+  // useEffect(() => {
+  //   const refreshCount = () => {
+  //     // Get the current count from sessionStorage
+  //     const count = parseInt(sessionStorage.getItem("refreshCount") || "0", 10);
 
-      // Update the count and save it back to sessionStorage
-      const newCount = count + 1;
-      sessionStorage.setItem("refreshCount", newCount.toString());
-    };
+  //     // Update the count and save it back to sessionStorage
+  //     const newCount = count + 1;
+  //     sessionStorage.setItem("refreshCount", newCount.toString());
+  //   };
 
-    // Add event listener for beforeunload
-    window.addEventListener("beforeunload", refreshCount);
+  //   // Add event listener for beforeunload
+  //   window.addEventListener("beforeunload", refreshCount);
 
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener("beforeunload", refreshCount);
-    };
-  }, [state]);
+  //   // Cleanup event listener on component unmount
+  //   return () => {
+  //     window.removeEventListener("beforeunload", refreshCount);
+  //   };
+  // }, [state]);
 
-  useEffect(() => {
-    if (!isActive || refreshPage == "5") {
-      Swal.fire({
-        icon: "error",
-        title:
-          refreshPage == "5"
-            ? "Dont refresh the page. Please login again"
-            : "User inactive for 10 min. Please login again",
-        timer: 5000,
-      });
-      setTimeout(() => {
-        navigate("/");
-        sessionStorage.clear();
-      }, 2000);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isActive || refreshPage == "5") {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title:
+  //         refreshPage == "5"
+  //           ? "Dont refresh the page. Please login again"
+  //           : "User inactive for 10 min. Please login again",
+  //       timer: 5000,
+  //     });
+  //     setTimeout(() => {
+  //       navigate("/");
+  //       sessionStorage.clear();
+  //     }, 2000);
+  //   }
+  // }, []);
 
   const refreshToken = sessionStorage.getItem("refresh_token");
 
@@ -260,36 +260,36 @@ const MainPortalSidebar = ({ layout }: Props) => {
   return (
     <>
       <button
-        data-drawer-target='default-sidebar'
-        data-drawer-toggle='default-sidebar'
-        aria-controls='default-sidebar'
-        type='button'
+        data-drawer-target="default-sidebar"
+        data-drawer-toggle="default-sidebar"
+        aria-controls="default-sidebar"
+        type="button"
         onClick={onToggleSideBar}
-        className='inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
+        className="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
-        <span className='sr-only'>Open sidebar</span>
-        <img src={HamburgerMenu} alt='hamburger menu' className='w-6 h-6' />
+        <span className="sr-only">Open sidebar</span>
+        <img src={HamburgerMenu} alt="hamburger menu" className="w-6 h-6" />
       </button>
 
       <aside
-        id='default-sidebar'
+        id="default-sidebar"
         className={`fixed top-0 left-0 z-100  transition-transform ${
           mSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         } ${collapse ? "w-[100px]" : "w-[322px]"} h-screen`}
-        aria-label='Sidebar'
+        aria-label="Sidebar"
       >
         <div
           className={`h-full overflow-y-auto bg-[#E7F0FF] ${
             collapse ? "w-[75px]" : "w-[322px]"
           }`}
         >
-          <ul className=''>
+          <ul className="">
             <li
               className={`relative border-b border-[#E6E6E6] mb-2 ${
                 collapse ? "pt-2 pr-2 pl-2 pb-1 mt-4" : "pb-4 pl-4 pr-4 pt-3"
               }`}
             >
-              <img src={Logo} alt='logo' className='max-h-[52px]' />
+              <img src={Logo} alt="logo" className="max-h-[52px]" />
 
               <button
                 onClick={onToggleSideBar}
@@ -299,8 +299,8 @@ const MainPortalSidebar = ({ layout }: Props) => {
               >
                 <img
                   src={CrossIcon}
-                  alt='Close sidebar'
-                  className='w-6 h-6 mr-2'
+                  alt="Close sidebar"
+                  className="w-6 h-6 mr-2"
                 />
               </button>
             </li>
@@ -319,13 +319,13 @@ const MainPortalSidebar = ({ layout }: Props) => {
                         activeTab === data.url ? "bg-[#1C468E]" : ""
                       } rounded-lg flex items-center  cursor-pointer`}
                     >
-                      <div className='m-4 h-[24px] w-[24px]'>
+                      <div className="m-4 h-[24px] w-[24px]">
                         <img
                           src={
                             activeTab === data.url ? data.selectlogo : data.logo
                           }
-                          alt='logo'
-                          className='object-fit'
+                          alt="logo"
+                          className="object-fit"
                         />
                       </div>
                       {!collapse && (
@@ -358,14 +358,14 @@ const MainPortalSidebar = ({ layout }: Props) => {
           >
             <img
               src={ArrowClose}
-              alt='collapsed'
+              alt="collapsed"
               className={`bg-[#E7F0FF] rounded-full cursor-pointer ${
                 collapse ? "rotate-180" : "rotate-0"
               }`}
             />
           </div>
         </div>
-        <div className='overflow-x-hidden p-3'>{layout}</div>
+        <div className="overflow-x-hidden p-3">{layout}</div>
       </div>
     </>
   );
