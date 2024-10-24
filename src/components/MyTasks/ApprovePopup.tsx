@@ -185,8 +185,6 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
           approverId: Number(userid),
         }
       );
-
-      setLoader(false);
       if (response.status === 201) {
         setApiSuccess(true);
         setApiError(false);
@@ -196,6 +194,8 @@ const ApprovePopup: React.FC<ReturnModelPopupProps> = ({ onClose, onSave }) => {
           onSave();
           // navigate("/mytask/deposit");
           navigate(-1);
+
+          setLoader(false);
         }, 2500);
       } else {
       }

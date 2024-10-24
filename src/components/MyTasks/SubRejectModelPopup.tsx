@@ -126,7 +126,6 @@ const SubRejectModelPopup: React.FC<ReturnModelPopupProps> = ({
           reason: text,
         }
       );
-      setLoader(false);
       if (response.status === 201) {
         setApiSuccess(true);
         setApiError(false);
@@ -135,6 +134,7 @@ const SubRejectModelPopup: React.FC<ReturnModelPopupProps> = ({
           onClose();
           onSave();
           navigate(-1);
+          setLoader(false);
         }, 2500);
       } else {
       }
