@@ -39,6 +39,7 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
     setValue,
     reset,
     watch,
+    clearErrors,
     getValues,
     formState: { errors },
   } = useForm({
@@ -57,6 +58,7 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setValue("email", value, { shouldValidate: true });
+    clearErrors("email");
   };
 
   const handleFormSubmit = async (data: any) => {
@@ -67,7 +69,7 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
     setLoader(true);
     try {
       const response = await axiosTraceIdInstance.post(`/user/forgotpassword`, {
-        username: data.email,
+        username: data.email.replace(/\s+/g, ""),
         entityType: selected,
       });
       setLoader(false);
@@ -172,16 +174,28 @@ const ForgetPasswordModel: React.FC<ForgetPasswordModelProps> = ({
                     </label>
                     <InputFields
                       {...register("email", {
-                        required: "Email is required",
+                        // required: "Email is required",
+                        // pattern: {
+                        //   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        //   message: "Invalid email address",
+                        // },
+                        required: "Email address or Mobile number is required",
                         pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: "Invalid email address",
+                          value:
+                            /^\s*(\+?\d{1,4}[\s-]?)?(\d{10})|([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\s*$/i,
+                          message: "Invalid email address or mobile number",
                         },
                       })}
                       placeholder="Email id / Mobile no."
                       onChange={handleEmailChange}
                       error={error}
                     />
+
+                    {errors.email && (
+                      <p className="text-red-500 text-sm mt-2">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex justify-center items-center mt-14 ">

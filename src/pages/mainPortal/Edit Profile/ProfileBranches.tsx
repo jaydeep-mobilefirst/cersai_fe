@@ -32,6 +32,7 @@ const ProfileBranches = () => {
   const managementData = location.state?.managementData;
   const status = sessionStorage.getItem("user_status");
   const Navigate = useNavigate();
+  const newBranchRef = useRef<HTMLDivElement | null>(null);
 
   const { pathname } = location;
 
@@ -107,7 +108,7 @@ const ProfileBranches = () => {
 
   const clearStore = useManagementStore((state) => state.clearStore);
   const clearBranch = useBranchStore((state) => state.clearBranch);
-  
+
   const filterManagementID: any = removedBranchesData?.map(({ id }: any) => id);
   console.log(
     { filterManagement, filterManagementID },
@@ -293,7 +294,7 @@ const ProfileBranches = () => {
               Swal.fire({
                 icon: "success",
                 text:
-                  // response?.data?.message ||   
+                  // response?.data?.message ||
                   "Deposit Taker Updated Successfully. Please log in again when you receive a confirmation email regarding the approved changes.",
                 confirmButtonText: "Ok",
                 timer: 5000,
@@ -304,9 +305,9 @@ const ProfileBranches = () => {
               setTimeout(() => {
                 clearStore();
                 clearBranch();
-                sessionStorage.clear()
+                sessionStorage.clear();
                 Navigate("/");
-              },5000)
+              }, 5000);
 
               if (
                 Array.isArray(filterManagement) &&
@@ -438,7 +439,7 @@ const ProfileBranches = () => {
   };
 
   const disabledField = sessionStorage.getItem("user_status");
-  const isConfigurable = sessionStorage.getItem("isConfigurable")
+  const isConfigurable = sessionStorage.getItem("isConfigurable");
 
   const checkStatus = (status: any): any => {
     switch (disabledField) {
@@ -475,19 +476,32 @@ const ProfileBranches = () => {
   };
 
   if (pathname == "/dt/profile") {
-    var disableFieldStatus = isConfigurable === 'true' ? true : checkPathName(pathname)
-      ? disabledField == "RETURNED"
-        ? false
-        : !data?.profileUpdate
-      : !data?.profileUpdate;
+    var disableFieldStatus =
+      isConfigurable === "true"
+        ? true
+        : checkPathName(pathname)
+        ? disabledField == "RETURNED"
+          ? false
+          : !data?.profileUpdate
+        : !data?.profileUpdate;
   } else {
     disableFieldStatus = checkPathName(pathname)
-      ? isConfigurable === 'true' ? true : checkStatus(disabledField)
+      ? isConfigurable === "true"
+        ? true
+        : checkStatus(disabledField)
       : false;
   }
 
   const backNavigation = () => {
     Navigate("/dt/profile?current=documents");
+  };
+
+  const addBranchRef = () => {
+    addBranch();
+    setTimeout(() => {
+      // Scroll into view of the last added branch
+      newBranchRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
 
   return (
@@ -547,19 +561,21 @@ const ProfileBranches = () => {
         ) : (
           <>
             {branches?.map((branch: any, index: any) => (
-              <ProfileBranchForm
-                key={branch.id || index} // Use index as key if branch.id is undefined
-                branch={branch}
-                branchId={branch.id}
-                i={index}
-                control={control}
-                register={register}
-                errors={errors}
-                setValue={setValue}
-                getValues={getValues}
-                removeBranch={() => removeBranch(branch.id || index)}
-                addBranch={addBranch}
-              />
+              <div ref={index === branches.length - 1 ? newBranchRef : null}>
+                <ProfileBranchForm
+                  key={branch.id || index} // Use index as key if branch.id is undefined
+                  branch={branch}
+                  branchId={branch.id}
+                  i={index}
+                  control={control}
+                  register={register}
+                  errors={errors}
+                  setValue={setValue}
+                  getValues={getValues}
+                  removeBranch={() => removeBranch(branch.id || index)}
+                  addBranch={addBranchRef}
+                />
+              </div>
             ))}
 
             <div className="mt-4">
