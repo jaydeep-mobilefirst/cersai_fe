@@ -97,7 +97,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
     try {
       const response = await axiosTraceIdInstance.post(`/auth/login`, {
         // username: data.email,
-        username: watch("email").replace(/\s+/g, ''),
+        username: watch("email").replace(/\s+/g, ""),
         // password: data.password,
         password: watch("password"),
         entityType: selected,
@@ -111,12 +111,16 @@ const LoginModel: React.FC<LoginModelProps> = ({
       sessionStorage.setItem("emailId", response.data.user?.emailId);
       sessionStorage.setItem("entityType", response.data.user?.entityType);
       sessionStorage.setItem("roles", response.data?.response?.role);
-      sessionStorage.setItem("isConfigurable", response.data?.user?.isConfigurable);
+      sessionStorage.setItem(
+        "isConfigurable",
+        response.data?.user?.isConfigurable
+      );
       sessionStorage.setItem(
         "entityUniqueId",
         response.data.user?.entityUniqueId
       );
       sessionStorage.setItem("userId", response?.data?.user?.id);
+      sessionStorage.removeItem("refreshCount");
 
       setRoles(response?.data?.user?.UserRoles);
       setDsc(true);
@@ -155,7 +159,7 @@ const LoginModel: React.FC<LoginModelProps> = ({
     axiosTraceIdInstance
       .post(`/auth/mfa`, {
         entityType: selected,
-        username: getValues("email").replace(/\s+/g, ''),
+        username: getValues("email").replace(/\s+/g, ""),
         dscCertificateFile:
           isDscKeyAvbl === "true" ? dscCertificate : base64Data,
       })
