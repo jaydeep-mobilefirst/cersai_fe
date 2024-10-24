@@ -54,7 +54,7 @@ describe('AddRolePopup Component (Static Part)', () => {
   //   expect(popupContainer).toHaveClass('fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-200');
   // });
 
-  test('clicking the cancel button triggers onClose', () => {
+  test('clicking the cancel abutton triggers onClose', () => {
     const cancelButton = screen.getByText('Cancel');
     fireEvent.click(cancelButton);
     expect(mockOnClose).toHaveBeenCalled();
